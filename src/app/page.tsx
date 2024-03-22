@@ -1,7 +1,3 @@
-const page = () => (
-  <div className="text-lg" about="as">
-    Parcel Market
-  </div>
-);
+const Page = () => <div className="text-lg">Parcel Market</div>;
 
-export default page;
+export default Page;
