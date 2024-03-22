@@ -1,9 +1,21 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// eslint-disable-next-line camelcase
+import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
+import clsx from "clsx";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-inter",
+});
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-bricolage",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +29,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={clsx(inter.className, inter.variable, bricolage.variable)}
+      >
+        {children}
+      </body>
     </html>
   );
 }

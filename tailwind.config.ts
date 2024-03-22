@@ -8,7 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
-    
+      fontFamily: {
+        inter: ["var(--font-inter)"],
+        bricolage: ["var(--font-bricolage)"],
+      },
     },
   },
   plugins: [],

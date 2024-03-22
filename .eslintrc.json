@@ -24,6 +24,7 @@
       {
         "ignoreFunctionalComponents": true
       }
-    ]
+    ],
+    "import/no-extraneous-dependencies": 0
   }
 }
