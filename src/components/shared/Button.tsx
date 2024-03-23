@@ -17,7 +17,7 @@ const generateClassNames = (params: ButtonProps) => {
 };
 
 const Button = (params: ButtonProps) => {
-  const { type = "primary", disabled, children } = params;
+  const { type = "primary", disabled, children, classNames } = params;
 
   return (
     <button
@@ -25,7 +25,8 @@ const Button = (params: ButtonProps) => {
       disabled={disabled}
       className={clsx(
         "font-semibold p-4 rounded-lg transition-colors",
-        generateClassNames({ ...params, type })
+        generateClassNames({ ...params, type }),
+        classNames
       )}
     >
       {children}

@@ -6,4 +6,5 @@ export interface ButtonProps {
   type?: ButtonType;
   disabled?: boolean;
   children: ReactNode;
+  classNames?: string;
 }
