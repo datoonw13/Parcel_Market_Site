@@ -1,17 +1,13 @@
 import Button from "@/components/shared/Button";
 
 const LandingNavigation = () => (
-  <ul className="w-full flex items-center justify-end gap-4 text-dark-green font-semibold">
-    <li className="cursor-pointer px-4">Sell your property</li>
-    <li className="cursor-pointer px-4">Find a Preferred Land Agent</li>
-    <li className="cursor-pointer px-4">About Us</li>
-    <li className="cursor-pointer">
-      <Button>Value my land for free</Button>
-    </li>
-    <li className="cursor-pointer">
-      <Button type="tertiary">Sign In</Button>
-    </li>
-  </ul>
+  <div className="w-full flex items-center justify-end gap-4 text-dark-green font-semibold">
+    <Button type="text">Sell your property</Button>
+    <Button type="text">Find a Preferred Land Agent</Button>
+    <Button type="text">About Us</Button>
+    <Button>Value my land for free</Button>
+    <Button type="tertiary">Sign In</Button>
+  </div>
 );
 
 export default LandingNavigation;
