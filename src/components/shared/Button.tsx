@@ -17,7 +17,7 @@ const generateClassNames = (params: ButtonProps) => {
 };
 
 const Button = (params: ButtonProps) => {
-  const { type = "primary", disabled } = params;
+  const { type = "primary", disabled, children } = params;
 
   return (
     <button
@@ -28,7 +28,7 @@ const Button = (params: ButtonProps) => {
         generateClassNames({ ...params, type })
       )}
     >
-      Button
+      {children}
     </button>
   );
 };

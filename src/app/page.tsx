@@ -1,9 +1,9 @@
-import Button from "@/components/shared/Button";
+import LandingHeader from "@/components/landing/header/LandingHeader";
 
 const Landing = () => (
   <>
-    <section className="h-screen bg-neutral-400 p-12">
-      <Button type="text" disabled />
+    <section className="h-screen bg-neutral-400">
+      <LandingHeader />
     </section>
   </>
 );
