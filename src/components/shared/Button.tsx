@@ -9,6 +9,8 @@ const generateClassNames = (params: ButtonProps) => {
       return "bg-green-100 text-dark-green hover:bg-green-300 disabled:bg-grey-200 disabled:text-dark-green-100 disabled:cursor-not-allowed";
     case "tertiary":
       return "bg-white text-dark-green hover:bg-green-300 border border-solid border-green disabled:border-grey-200 disabled:bg-grey-200 disabled:text-dark-green-100 disabled:cursor-not-allowed";
+    case "text":
+      return "text-dark-green py-2.5 px-4 disabled:text-dark-green-100 disabled:cursor-not-allowed";
     default:
       return "";
   }
