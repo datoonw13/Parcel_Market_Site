@@ -23,11 +23,7 @@ const Button = (params: ButtonProps) => {
     <button
       type="button"
       disabled={disabled}
-      className={clsx(
-        "font-semibold p-4 rounded-lg transition-colors",
-        generateClassNames({ ...params, type }),
-        classNames
-      )}
+      className={clsx("font-semibold p-4 rounded-lg transition-colors", generateClassNames({ ...params, type }), classNames)}
     >
       {children}
     </button>
