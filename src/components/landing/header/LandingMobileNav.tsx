@@ -9,7 +9,7 @@ const LandingMobileNav = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="xl:hidden">
-      <div className="w-[40px] ml-2 cursor-pointer" onClick={() => setOpen(!open)}>
+      <div className="w-[30px] sm:w-[40px] ml-2 cursor-pointer" onClick={() => setOpen(!open)}>
         <BurgerIcon />
       </div>
       <div id="dialog-right" className="relative z-10" onClick={() => setOpen(!open)}>
