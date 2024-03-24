@@ -7,8 +7,8 @@ const LandingMain = () => (
       <h1 className="font-bricolage text-green-800 font-extrabold text-4xl text-center">Value, buy, and sell vacant land</h1>
       <Button classNames="py-6">Value My Land</Button>
     </div>
-    <div className="relative w-full h-[550px]">
-      <Image alt="" src="/home-mobile.png" layout="fill" className="!top-10 !left-4" />
+    <div className="relative w-full h-[100%] overflow-hidden mt-10">
+      <Image alt="" src="/home-mobile.png" layout="fill" className="!left-4" />
     </div>
   </div>
 );
