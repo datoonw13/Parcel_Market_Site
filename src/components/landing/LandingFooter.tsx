@@ -100,15 +100,15 @@ const LandingFooter = () => (
   <div>
     <div
       className="bg-dark-green px-4 sm:px-6 lg:px-[23px] lg:px-[43px] xl:px-[86px] 2xl:px-[120px] py-6 sm:py-8 lg:py-14 md:py-20 xl:py-24 xl: flex flex-col 
-    sm:flex-row-reverse sm:justify-between"
+    md:flex-row-reverse sm:justify-between"
     >
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 md:gap-x-18 lg:md:gap-x-24">
+      <div className="grid grid-cols-2 xs:grid-cols-3 gap-8 md:gap-x-18 lg:gap-x-24">
         {data.map((item) => (
           <div key={item.title}>
             <h4 className="text-green font-medium mb-2">{item.title}</h4>
             <ul>
               {item.children.map((child) => (
-                <li className="text-grey-100 font-medium cursor-pointer" key={child.label}>
+                <li className="text-grey-100 font-medium cursor-pointer mb-1" key={child.label}>
                   {child.label}
                 </li>
               ))}
@@ -116,13 +116,13 @@ const LandingFooter = () => (
           </div>
         ))}
       </div>
-      <div className="w-[126px] md:w-[160px] lg:w-[220px] m-auto mt-12 sm:m-0">
+      <div className="w-[140px] md:w-[180px] lg:w-[220px] m-auto mt-12 md:m-0">
         <LogoTwo />
       </div>
     </div>
     <div
       className="px-4 sm:px-6 lg:px-[23px] lg:px-[43px] xl:px-[86px] 2xl:px-[120px] bg-dark-green-400 text-center 
-    sm:text-start text-white py-6 lg:text-start md:wpx-28"
+    sm:text-start text-white py-6 lg:text-start md:px-28"
     >
       ©2024 Parcel Market. All rights reserved.
     </div>
