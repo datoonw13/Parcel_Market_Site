@@ -47,6 +47,14 @@ const config: Config = {
         400: "#A1AAA3",
       },
     },
+    screens: {
+      xs: "430px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
     extend: {
       fontFamily: {
         inter: ["var(--font-inter)"],

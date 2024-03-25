@@ -5,7 +5,7 @@ const LandingMain = () => (
   <div className="flex flex-col lg:flex-row justify-between lg:items-center lg:pb-20">
     <div
       className="
-      px-[10px] lg:pr-0 lg:pl-[23px] lg:pl-[43px] xl:pl-[86px] 2xl:pl-[120px] lg:pr-0 flex flex-col gap-6 pt-14 lg:pt-0 
+      px-[10px] lg:pr-0 lg:pl-[23px] lg:pl-[43px] xl:pl-[86px] 2xl:pl-[120px] flex flex-col gap-6 pt-14 lg:pt-0 
       w-[60%] md:w-[100%] 2xl:w-[80%]  m-auto"
     >
       <h1 className="font-bricolage text-green-800 font-extrabold text-4xl lg:text-6xl 2xl:text-8xl  text-center lg:text-start">
