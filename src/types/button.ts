@@ -7,4 +7,5 @@ export interface ButtonProps {
   disabled?: boolean;
   children: ReactNode;
   classNames?: string;
+  startIcon?: ReactNode;
 }

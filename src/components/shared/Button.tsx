@@ -17,14 +17,19 @@ const generateClassNames = (params: ButtonProps) => {
 };
 
 const Button = (params: ButtonProps) => {
-  const { type = "primary", disabled, children, classNames } = params;
+  const { type = "primary", disabled, children, classNames, startIcon: StartIcon } = params;
 
   return (
     <button
       type="button"
       disabled={disabled}
-      className={clsx("font-semibold p-4 rounded-lg transition-colors", generateClassNames({ ...params, type }), classNames)}
+      className={clsx(
+        "font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2.5",
+        generateClassNames({ ...params, type }),
+        classNames
+      )}
     >
+      {StartIcon && <div className="w-[24px]">{StartIcon}</div>}
       {children}
     </button>
   );
