@@ -5,13 +5,13 @@ import SearchLandingIcon from "@/icons/SearchLandingIcon";
 import Button from "../shared/Button";
 
 const RenderOfferBox = ({ icon, title, desc, buttonLabel }: { icon: ReactNode; title: string; desc: string; buttonLabel: string }) => (
-  <div className="bg-neutral-400 hover:bg-neutral transition-all px-6 pt-6 pb-8 w-full h-[355px] xs:h-[312px] rounded-3xl cursor-pointer flex flex-col justify-between align-center">
+  <div className="bg-neutral-400 hover:bg-neutral transition-all px-6 pt-6 pb-8 w-full h-[355px] xs:h-[312px] lg:h-[355px] xl:h-[312px] rounded-3xl cursor-pointer flex flex-col justify-between align-center">
     <div>
-      <div className="w-[46px] m-auto md:m-0">{icon}</div>
-      <p className="mt-12 mb-1 text-xl text-green-900 font-bold text-center md:text-start">{title}</p>
-      <p className="text-dark-green mb-4 text-center md:text-start">{desc}</p>
+      <div className="w-[46px] m-auto lg:m-0">{icon}</div>
+      <p className="mt-12 mb-1 text-xl text-green-900 font-bold text-center lg:text-start">{title}</p>
+      <p className="text-dark-green mb-4 text-center lg:text-start">{desc}</p>
     </div>
-    <Button classNames="md:w-fit">{buttonLabel}</Button>
+    <Button classNames="md:w-fit m-auto lg:m-0">{buttonLabel}</Button>
   </div>
 );
 
