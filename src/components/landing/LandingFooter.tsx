@@ -105,10 +105,10 @@ const LandingFooter = () => (
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 md:gap-x-18 lg:md:gap-x-24">
         {data.map((item) => (
           <div key={item.title}>
-            <h4 className="text-green font-medium">{item.title}</h4>
+            <h4 className="text-green font-medium mb-2">{item.title}</h4>
             <ul>
               {item.children.map((child) => (
-                <li className="text-grey-100 font-medium" key={child.label}>
+                <li className="text-grey-100 font-medium cursor-pointer" key={child.label}>
                   {child.label}
                 </li>
               ))}
