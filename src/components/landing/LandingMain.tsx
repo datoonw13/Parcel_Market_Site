@@ -16,8 +16,8 @@ const LandingMain = () => (
       <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
     </div>
     <div className="relative w-full h-[100%] lg:h-[80%] xl:h-[90%] 2xl:h-[100%] overflow-hidden mt-10 lg:mt-0">
-      <Image alt="" src="/home-mobile.png" layout="fill" className="!left-4 lg:hidden" />
-      <Image alt="" src="/home.png" layout="fill" className="hidden lg:block" />
+      <Image alt="" src="/home-mobile.png" fill className="!left-4 lg:hidden" />
+      <Image alt="" src="/home.png" fill className="hidden lg:block" />
     </div>
   </div>
 );
