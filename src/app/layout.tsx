@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, inter.variable, bricolage.variable, "flex flex-col justify-between h-screen")}>
+      <body className={clsx(inter.className, inter.variable, bricolage.variable)}>
         {children}
         <section>
           <LandingFooter />

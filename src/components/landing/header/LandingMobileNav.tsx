@@ -3,6 +3,7 @@
 import Button from "@/components/shared/Button";
 import BurgerIcon from "@/icons/BurgerIcon";
 import clsx from "clsx";
+import Link from "next/link";
 import { useState } from "react";
 
 const LandingMobileNav = () => {
@@ -37,7 +38,9 @@ const LandingMobileNav = () => {
                   <Button type="text" classNames="rounded-none">
                     About Us
                   </Button>
-                  <Button type="text">Sign In</Button>
+                  <Button type="text">
+                    <Link href="/sign-in"> Sign In</Link>
+                  </Button>
                 </div>
               </div>
             </div>
