@@ -8,7 +8,7 @@ const FindPropertyLayout = ({
 }: Readonly<{
   children: ReactNode;
 }>) => (
-  <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] lg:grid-cols-[2fr_1fr] h-full">
+  <div className="grid grid-cols-1 md:grid-cols-[1.8fr_1fr] lg:grid-cols-[2fr_1fr] h-full">
     <div>
       <LogoHeader classNames="md:bg-white md:!justify-start px-4 md:px-8 lg:px-12 lx:px-16 2xl:px-20" />
       <div className="px-4 md:px-8 lg:px-12 lx:px-16 2xl:px-20 py-10 flex flex-col gap-10">

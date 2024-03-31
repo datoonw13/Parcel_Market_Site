@@ -9,7 +9,7 @@ const FindPropertyInfo = () => (
       <TextField info="your info here" label="Country" placeholder="Country" />
     </div>
     <TextField info="your info here" label="Parcel Number" placeholder="Enter parcel Number" />
-    <Button classNames="mt-4">Continue</Button>
+    <Button classNames="mt-4 md:w-fit">Continue</Button>
   </div>
 );
 
