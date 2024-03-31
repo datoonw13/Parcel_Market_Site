@@ -1,5 +1,17 @@
-import { ButtonProps } from "@/types/button";
 import clsx from "clsx";
+
+import { ReactNode } from "react";
+
+type ButtonType = "primary" | "secondary" | "tertiary" | "text";
+
+interface ButtonProps {
+  type?: ButtonType;
+  disabled?: boolean;
+  children: ReactNode;
+  classNames?: string;
+  startIcon?: ReactNode;
+  onClick?: () => void;
+}
 
 const generateClassNames = (params: ButtonProps) => {
   switch (params.type) {
@@ -17,12 +29,13 @@ const generateClassNames = (params: ButtonProps) => {
 };
 
 const Button = (params: ButtonProps) => {
-  const { type = "primary", disabled, children, classNames, startIcon: StartIcon } = params;
+  const { type = "primary", disabled, children, classNames, startIcon: StartIcon, onClick } = params;
 
   return (
     <button
       type="button"
       disabled={disabled}
+      onClick={onClick}
       className={clsx(
         "font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2.5",
         generateClassNames({ ...params, type }),
