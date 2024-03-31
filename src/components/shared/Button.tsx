@@ -37,7 +37,7 @@ const Button = (params: ButtonProps) => {
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        "font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2.5",
+        "font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2",
         generateClassNames({ ...params, type }),
         classNames
       )}

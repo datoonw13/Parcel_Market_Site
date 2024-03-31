@@ -27,8 +27,8 @@ const TextField = (props: Props) => {
           </>
         )}
       </div>
-      <div className="text-grey-500 border border-[#9CA3AF] px-4 py-3 focus-visible:outline-none rounded-lg w-full flex gap-4">
-        <input value={value || ""} placeholder={placeholder} className="text-grey-500 focus-visible:outline-none w-full" />
+      <div className="text-grey-500 border border-[#9CA3AF] px-4 py-3 focus-visible:outline-none rounded-lg w-full flex gap-4 bg-[#F3F4F6]">
+        <input value={value || ""} placeholder={placeholder} className="text-grey-500 focus-visible:outline-none w-full bg-[#F3F4F6]" />
         {endIcon && endIcon}
       </div>
     </div>

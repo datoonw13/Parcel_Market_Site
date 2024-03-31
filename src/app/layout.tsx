@@ -5,6 +5,7 @@ import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import LandingFooter from "@/components/landing/LandingFooter";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,12 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, inter.variable, bricolage.variable)}>
-        {children}
-        <section>
-          <LandingFooter />
-        </section>
-      </body>
+      <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>{children}</body>
     </html>
   );
 }
