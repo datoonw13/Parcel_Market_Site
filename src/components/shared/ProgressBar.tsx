@@ -10,13 +10,14 @@ interface Props {
 
 const ProgressBar = (props: Props) => {
   const { currentStep, goBack, totalSteps } = props;
+  const completedPercent = (100 / totalSteps) * currentStep;
   return (
     <div>
       <div className="flex items-center gap-8 justify-between mb-4">
         <Button startIcon={<ArrowCircleIcon />} type="text" classNames="!p-0">
           Back
         </Button>
-        <p className="text-green-600 font-medium">{100 / totalSteps}% complete</p>
+        <p className="text-green-600 font-medium">{completedPercent}% complete</p>
       </div>
       <div className="flex gap-1">
         {new Array(totalSteps).fill(totalSteps).map((_, i) => (
