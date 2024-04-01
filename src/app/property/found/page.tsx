@@ -1,7 +1,7 @@
 import Button from "@/components/shared/Button";
 import Image from "next/image";
 
-const FindPropertySelect = () => (
+const PropertyFound = () => (
   <div className="flex flex-col gap-10">
     <div className="relative w-full h-[315px] rounded-2xl">
       <Image alt="" src="/property-map.png" fill />
@@ -21,4 +21,4 @@ const FindPropertySelect = () => (
   </div>
 );
 
-export default FindPropertySelect;
+export default PropertyFound;

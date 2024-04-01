@@ -1,7 +1,7 @@
 import Button from "@/components/shared/Button";
 import TextField from "@/components/shared/TextField";
 
-const FindPropertyInfo = () => (
+const PropertyInfo = () => (
   <div className="flex flex-col gap-6">
     <TextField info="your info here" label="Name of the owner" placeholder="Enter name of the owner" />
     <div className="flex items-center gap-6">
@@ -13,4 +13,4 @@ const FindPropertyInfo = () => (
   </div>
 );
 
-export default FindPropertyInfo;
+export default PropertyInfo;
