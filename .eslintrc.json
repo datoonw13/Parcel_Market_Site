@@ -38,6 +38,7 @@
     "prettier/prettier": ["error", { "printWidth": 140 }],
     "no-unused-vars": "off",
     "import/prefer-default-export": "off",
-    "import/no-named-as-default": "off"
+    "import/no-named-as-default": "off",
+    "no-empty": "off"
   }
 }

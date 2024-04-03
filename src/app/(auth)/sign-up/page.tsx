@@ -8,8 +8,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "@/lib/features/apis/authApi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
+  const router = useRouter();
   const [registerUser, { isLoading }] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
@@ -20,16 +23,13 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<ISignUp>({ resolver: yupResolver(signUpSchema) });
 
-  const onSubmit = handleSubmit(
-    async (data) => {
-      try {
-        await registerUser(data).unwrap();
-      } catch (error) {
-        console.log(error, 123);
-      }
-    },
-    (err) => console.log(err)
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const res = await registerUser(data).unwrap();
+      toast.success(res.message);
+      router.push(`/sign-in`);
+    } catch (error) {}
+  });
   return (
     <>
       <TextField
@@ -104,7 +104,9 @@ const SignUp = () => {
         error={!!errors.confirmPassword}
         helperText={errors.confirmPassword?.message}
       />
-      <Button onClick={onSubmit}>Create Account</Button>
+      <Button loading={isLoading} onClick={onSubmit}>
+        Create Account
+      </Button>
     </>
   );
 };
