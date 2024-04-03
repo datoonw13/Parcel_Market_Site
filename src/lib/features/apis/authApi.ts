@@ -1,16 +1,17 @@
+import { ISignUp } from "@/types/auth";
 import baseApi from "./baseApi";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    test: build.query<any, void>({
+    register: build.mutation<void, ISignUp>({
       query: (arg) => ({
-        url: "auth/sign-in",
-        method: "GET",
+        url: "user/register",
+        method: "POST",
         body: arg,
       }),
     }),
   }),
 });
 
-export const { useTestQuery } = authApi;
+export const { useRegisterMutation } = authApi;
 export default authApi;

@@ -7,12 +7,13 @@ import { signUpSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTestQuery } from "@/lib/features/apis/authApi";
+import { useRegisterMutation } from "@/lib/features/apis/authApi";
 
 const SignUp = () => {
+  const [registerUser, { isLoading }] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
-  const x = useTestQuery();
+
   const {
     register,
     handleSubmit,
@@ -20,8 +21,12 @@ const SignUp = () => {
   } = useForm<ISignUp>({ resolver: yupResolver(signUpSchema) });
 
   const onSubmit = handleSubmit(
-    (data) => {
-      console.log(data);
+    async (data) => {
+      try {
+        await registerUser(data).unwrap();
+      } catch (error) {
+        console.log(error, 123);
+      }
     },
     (err) => console.log(err)
   );
