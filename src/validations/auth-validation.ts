@@ -1,4 +1,3 @@
-import { UserRoles } from "@/types/auth";
 import * as yup from "yup";
 
 export const signUpSchema = yup.object().shape({
@@ -13,7 +12,7 @@ export const signUpSchema = yup.object().shape({
     )
     .nullable(),
   mailingAddress: yup.string().required("Mailing address is a required field").nullable(),
-  mobileNumber: yup.string().required("Mobile number is a required field").nullable(),
+  // mobileNumber: yup.string().required("Mobile number is a required field").nullable(),
   password: yup.string().required("Password is a required field").nullable(),
   confirmPassword: yup
     .string()
@@ -22,5 +21,5 @@ export const signUpSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Your passwords do not match."),
   state: yup.string().required("State is a required field").nullable(),
   county: yup.string().required("County is a required field").nullable(),
-  role: yup.mixed<UserRoles>().oneOf(Object.values(UserRoles)).required(),
+  // role: yup.mixed<UserRoles>().oneOf(Object.values(UserRoles)).required(),
 });
