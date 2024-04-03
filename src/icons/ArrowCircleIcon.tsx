@@ -6,7 +6,7 @@ const ArrowCircleIcon = () => (
       stroke-width="1.5"
       stroke-miterlimit="10"
     />
-    <path d="M13.5 8.94318L9.75 12.3182L13.5 15.6932" stroke="#04471C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M13.5 8.94318L9.75 12.3182L13.5 15.6932" stroke="#04471C" stroke-width="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 

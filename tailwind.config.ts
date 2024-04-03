@@ -6,6 +6,7 @@ const config: Config = {
     colors: {
       white: "#FFFFFF",
       backdrop: "rgba(22, 28, 36, 0.4)",
+      error: "red",
       green: {
         DEFAULT: "#16DB65",
         100: "#E4F8E9",
