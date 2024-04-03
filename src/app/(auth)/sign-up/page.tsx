@@ -7,10 +7,12 @@ import { signUpSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTestQuery } from "@/lib/features/apis/authApi";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
+  const x = useTestQuery();
   const {
     register,
     handleSubmit,

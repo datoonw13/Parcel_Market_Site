@@ -6,6 +6,7 @@ import "./globals.css";
 import clsx from "clsx";
 import LandingFooter from "@/components/landing/LandingFooter";
 import { usePathname } from "next/navigation";
+import StoreProvider from "./StoreProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,8 +33,12 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>{children}</body>
-    </html>
+    <>
+      <StoreProvider>
+        <html lang="en">
+          <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>{children}</body>
+        </html>
+      </StoreProvider>
+    </>
   );
 }
