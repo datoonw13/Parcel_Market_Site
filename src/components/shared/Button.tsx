@@ -1,3 +1,4 @@
+import LoadingDotsIcon from "@/icons/LoadingDotsIcon";
 import clsx from "clsx";
 
 import { ReactNode } from "react";
@@ -11,6 +12,7 @@ interface ButtonProps {
   classNames?: string;
   startIcon?: ReactNode;
   onClick?: () => void;
+  loading?: boolean;
 }
 
 const generateClassNames = (params: ButtonProps) => {
@@ -29,7 +31,7 @@ const generateClassNames = (params: ButtonProps) => {
 };
 
 const Button = (params: ButtonProps) => {
-  const { type = "primary", disabled, children, classNames, startIcon: StartIcon, onClick } = params;
+  const { type = "primary", disabled, children, classNames, startIcon: StartIcon, onClick, loading } = params;
 
   return (
     <button
@@ -37,13 +39,18 @@ const Button = (params: ButtonProps) => {
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        "font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2",
+        "relative font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2",
         generateClassNames({ ...params, type }),
         classNames
       )}
     >
       {StartIcon && <div className="w-[24px]">{StartIcon}</div>}
-      {children}
+      <div className={clsx(loading ? "opacity-0" : "opacity-100")}> {children}</div>
+      {loading && (
+        <div className="w-[50px] absolute">
+          <LoadingDotsIcon />
+        </div>
+      )}
     </button>
   );
 };
