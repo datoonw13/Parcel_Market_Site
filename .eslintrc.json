@@ -39,6 +39,7 @@
     "no-unused-vars": "off",
     "import/prefer-default-export": "off",
     "import/no-named-as-default": "off",
-    "no-empty": "off"
+    "no-empty": "off",
+    "camelcase": "off"
   }
 }

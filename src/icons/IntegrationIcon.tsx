@@ -1,6 +1,6 @@
 const IntegrationIcon = () => (
   <svg viewBox="0 0 65 53" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_158_1319)">
+    <g clipPath="url(#clip0_158_1319)">
       <path d="M0.339966 16.9565H64.34" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />
       <path d="M0.339966 21.9565H7.33997" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />
       <path d="M0.339966 26.9565H5.33997" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />

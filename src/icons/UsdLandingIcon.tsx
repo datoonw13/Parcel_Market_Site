@@ -1,6 +1,6 @@
 const UsdLandingIcon = () => (
   <svg viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_158_1411)">
+    <g clipPath="url(#clip0_158_1411)">
       <path
         d="M5 9.39648C7.20914 9.39648 9 7.60562 9 5.39648C9 3.18735 7.20914 1.39648 5 1.39648C2.79086 1.39648 1 3.18735 1 5.39648C1 7.60562 2.79086 9.39648 5 9.39648Z"
         stroke="#0A622D"

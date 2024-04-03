@@ -1,6 +1,6 @@
 const SearchLandingIcon = () => (
   <svg viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_158_1441)">
+    <g clipPath="url(#clip0_158_1441)">
       <path
         d="M26.5 52.3965C40.5833 52.3965 52 40.9797 52 26.8965C52 12.8132 40.5833 1.39648 26.5 1.39648C12.4167 1.39648 1 12.8132 1 26.8965C1 40.9797 12.4167 52.3965 26.5 52.3965Z"
         stroke="#0A622D"

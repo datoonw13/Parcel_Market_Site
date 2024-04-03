@@ -11,3 +11,18 @@ export interface ISignUp {
   password: string | null;
   confirmPassword: string | null;
 }
+
+export interface ISignIn {
+  email: string | null;
+  password: string | null;
+}
+
+export interface ISignInResponse {
+  access_token: string;
+  payload: {
+    email: string;
+    name: string;
+    role: null;
+    sub: number;
+  };
+}

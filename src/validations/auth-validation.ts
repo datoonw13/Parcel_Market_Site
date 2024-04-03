@@ -23,3 +23,8 @@ export const signUpSchema = yup.object().shape({
   county: yup.string().required("County is a required field").nullable(),
   // role: yup.mixed<UserRoles>().oneOf(Object.values(UserRoles)).required(),
 });
+
+export const signInSchema = yup.object().shape({
+  email: yup.string().required("Email is a required field").nullable(),
+  password: yup.string().required("Password is a required field").nullable(),
+});
