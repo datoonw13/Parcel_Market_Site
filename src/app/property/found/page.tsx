@@ -8,8 +8,8 @@ const PropertyFound = () => (
     </div>
     <div className="grid gap-6">
       {new Array(5).fill(0).map((_, i) => (
-        <div className="flex itesm-center justify-between" key={Math.random()}>
-          <div className="flex itesm-center gap-2">
+        <div className="flex items-center justify-between" key={Math.random()}>
+          <div className="flex items-center gap-2">
             <p className="bg-green w-[24px] h-[24px] rounded-[50%] flex items-center justify-center text-dark-green-500 font-medium">
               {i + 1}
             </p>
