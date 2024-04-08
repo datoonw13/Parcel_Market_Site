@@ -21,7 +21,10 @@ const ProgressBar = (props: Props) => {
       </div>
       <div className="flex gap-1">
         {new Array(totalSteps).fill(totalSteps).map((_, i) => (
-          <div className={clsx("bg-green h-[12px] w-full first:rounded-l-lg last:rounded-r-lg", i + 1 > currentStep && "opacity-20")} key={Math.random()} />
+          <div
+            className={clsx("bg-green h-[12px] w-full first:rounded-l-lg last:rounded-r-lg", i + 1 > currentStep && "opacity-20")}
+            key={Math.random()}
+          />
         ))}
       </div>
     </div>

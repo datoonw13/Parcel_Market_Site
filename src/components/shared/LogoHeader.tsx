@@ -10,7 +10,12 @@ const LogoHeader = ({ hideLogo, classNames }: { hideLogo?: boolean; classNames?:
         pointerEvents: hideLogo ? "none" : "auto",
       }}
     >
-      <div className={clsx("w-[145px] h-[40px] sm:w-[160px] sm:h-auto md:w-[180px] lg:w-[220px] xl:w-[240px] 2xl:w-[280px]", hideLogo && "opacity-0")}>
+      <div
+        className={clsx(
+          "w-[145px] h-[40px] sm:w-[160px] sm:h-auto md:w-[180px] lg:w-[220px] xl:w-[240px] 2xl:w-[280px]",
+          hideLogo && "opacity-0"
+        )}
+      >
         <Logo />
       </div>
     </Link>

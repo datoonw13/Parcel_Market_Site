@@ -10,7 +10,9 @@ const PropertyFound = () => (
       {new Array(5).fill(0).map((_, i) => (
         <div className="flex itesm-center justify-between" key={Math.random()}>
           <div className="flex itesm-center gap-2">
-            <p className="bg-green w-[24px] h-[24px] rounded-[50%] flex items-center justify-center text-dark-green-500 font-medium">{i + 1}</p>
+            <p className="bg-green w-[24px] h-[24px] rounded-[50%] flex items-center justify-center text-dark-green-500 font-medium">
+              {i + 1}
+            </p>
             <p className="text-grey-500 font-medium">Parcel Number: #123456789</p>
           </div>
           <p className="text-green-600 font-medium">58.78 Acres</p>

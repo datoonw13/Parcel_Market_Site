@@ -11,7 +11,9 @@ const LandingMain = () => (
       <h1 className="font-bricolage text-green-800 font-extrabold text-4xl lg:text-6xl 2xl:text-8xl  text-center lg:text-start">
         Value, buy, and sell vacant land
       </h1>
-      <p className="hidden sm:block text-xl md:text-2xl text-dark-green-500 text-center lg:text-start">Value your land for FREE in less than 3 minutes!</p>
+      <p className="hidden sm:block text-xl md:text-2xl text-dark-green-500 text-center lg:text-start">
+        Value your land for FREE in less than 3 minutes!
+      </p>
       <Button classNames="py-6 lg:hidden max-w-[500px] w-full m-auto">Value My Land</Button>
       <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
     </div>

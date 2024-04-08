@@ -18,7 +18,9 @@ const RenderOfferBox = ({ icon, title, desc, buttonLabel }: { icon: ReactNode; t
 const LandingOffer = () => (
   <div className="flex flex-col items-center px-8 lg:px-10 lg:px-12 xl:px-14 2xl:px-[120px] ">
     <h2 className="text-green text-lg md:text-xl lg:text-2xl font-bold">OUR OFFER</h2>
-    <h1 className="text-dark-green font-semibold text-4xl lg:text-5xl mt-6 mb-11 md:mb-12 lg:mb-14 xl:mb-16 text-center">Connect to your favourite tools</h1>
+    <h1 className="text-dark-green font-semibold text-4xl lg:text-5xl mt-6 mb-11 md:mb-12 lg:mb-14 xl:mb-16 text-center">
+      Connect to your favourite tools
+    </h1>
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-sm md:max-w-none w-full">
       <RenderOfferBox
         title="See your property’s value"

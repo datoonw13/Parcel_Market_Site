@@ -59,7 +59,9 @@ const PropertyAbout = () => (
       </div>
     </div>
     <div>
-      <p className="mb-4 text-grey-500 font-semibold text-lg">Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.</p>
+      <p className="mb-4 text-grey-500 font-semibold text-lg">
+        Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.
+      </p>
       <TextField value="$150,000" />
     </div>
     <Button classNames="mt-4 md:w-fit">Find out Your Estimated Sale Price</Button>

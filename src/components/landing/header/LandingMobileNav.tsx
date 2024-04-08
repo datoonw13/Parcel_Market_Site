@@ -14,7 +14,12 @@ const LandingMobileNav = () => {
         <BurgerIcon />
       </div>
       <div id="dialog-right" className="relative z-10" onClick={() => setOpen(!open)}>
-        <div className={clsx("fixed inset-0 bg-backdrop transition-all duration-500 ease-in-out ", open ? "opacity-100 visibl" : "opacity-0 invisible ")} />
+        <div
+          className={clsx(
+            "fixed inset-0 bg-backdrop transition-all duration-500 ease-in-out ",
+            open ? "opacity-100 visibl" : "opacity-0 invisible "
+          )}
+        />
         <div className={clsx({ "fixed inset-0 overflow-hidden": open })}>
           <div className="absolute inset-0 overflow-hidden">
             <div className={clsx("pointer-events-none fixed max-w-full", "inset-y-0 right-0")}>
