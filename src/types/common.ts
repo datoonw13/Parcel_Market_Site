@@ -1,7 +1,6 @@
 export interface ResponseType<T> {
-  error?: string;
   data: T;
-  errors?: string[];
+  errors: string[];
   message: string;
   statusCode: number;
 }

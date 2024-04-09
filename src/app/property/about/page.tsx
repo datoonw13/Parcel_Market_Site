@@ -58,7 +58,7 @@ const PropertyAbout = () => {
           value={watch("improvementsValue") || ""}
           onChange={(value) => {
             if (/^-?\d+\.?\d*$/.test(value) || value === "") {
-              setValue("improvementsValue", value);
+              setValue("improvementsValue", Number(value), { shouldDirty: true, shouldValidate: true });
             }
           }}
         />

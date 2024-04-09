@@ -9,7 +9,7 @@ export const findPropertyInfoSchema = yup.object().shape(
     state: yup.string().required("State is a required field"),
     county: yup.string().required("County is a required field"),
     parcelNumber: yup
-      .string()
+      .number()
       .required("Parcel number or owner name is a required field")
       .when("name_owner", ([name_owner], schema) => (name_owner ? yup.string() : schema)),
   },
@@ -24,5 +24,5 @@ export const findPropertyAboutSchema = yup.object().shape({
   wetProperty: yup.string().required(),
   propertyRestriction: yup.string().required(),
   propertyAccess: yup.string().required(),
-  improvementsValue: yup.string(),
+  improvementsValue: yup.number().required(),
 });

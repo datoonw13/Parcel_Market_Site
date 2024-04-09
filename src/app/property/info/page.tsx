@@ -27,7 +27,7 @@ const PropertyInfo = () => {
     defaultValues: {
       county: "",
       name_owner: "",
-      parcelNumber: "",
+      parcelNumber: NaN,
       state: "",
     },
   });
@@ -85,10 +85,12 @@ const PropertyInfo = () => {
       </div>
       <TextField
         name="parcelNumber"
-        value={watch("parcelNumber")}
+        value={watch("parcelNumber") || ""}
         onChange={(value) => {
-          setValue("parcelNumber", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-          isSubmitted && trigger("name_owner");
+          if (/^-?\d+\.?\d*$/.test(value) || value === "") {
+            setValue("parcelNumber", Number(value), { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+            isSubmitted && trigger("name_owner");
+          }
         }}
         error={!!errors.parcelNumber}
         helperText={errors.parcelNumber?.message}

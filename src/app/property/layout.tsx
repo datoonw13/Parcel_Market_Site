@@ -49,7 +49,7 @@ const FindPropertyLayout = ({
   }, [findProperty.info, path, router]);
 
   useEffect(() => {
-    handleNavigate();
+    // handleNavigate();
   }, [handleNavigate, findProperty]);
 
   return (

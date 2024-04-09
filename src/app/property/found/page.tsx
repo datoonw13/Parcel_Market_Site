@@ -1,33 +1,66 @@
 "use client";
 
+import Map from "@/components/Map";
 import Button from "@/components/shared/Button";
-import Image from "next/image";
+import LoadingCircle from "@/icons/LoadingCircle";
+import { useLazyGetRegridQuery } from "@/lib/features/apis/propertyApi";
+import { useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
 
 const PropertyFound = () => {
   const router = useRouter();
+  const findProperty = useAppSelector((state) => state.findProperty);
+
+  const [getRergid, { isLoading, data, isError }] = useLazyGetRegridQuery();
+
+  const getData = useCallback(async () => {
+    try {
+      const sendObj = {
+        radius: 250,
+        county: findProperty.info?.county,
+        ...(!!findProperty.info?.name_owner && { owner: findProperty.info?.name_owner }),
+        ...(!Number.isNaN(Number(findProperty.info?.parcelNumber)) && { parcelNumber: findProperty.info?.parcelNumber }),
+      };
+      await getRergid(sendObj).unwrap();
+    } catch (error) {
+      router.push("/property/info");
+    }
+  }, [findProperty.info?.county, findProperty.info?.name_owner, findProperty.info?.parcelNumber, getRergid, router]);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="relative w-full h-[315px] rounded-2xl">
-        <Image alt="" src="/property-map.png" fill />
-      </div>
-      <div className="grid gap-6">
-        {new Array(5).fill(0).map((_, i) => (
-          <div className="flex items-center justify-between" key={Math.random()}>
-            <div className="flex items-center gap-2">
-              <p className="bg-green w-[24px] h-[24px] rounded-[50%] flex items-center justify-center text-dark-green-500 font-medium">
-                {i + 1}
-              </p>
-              <p className="text-grey-500 font-medium">Parcel Number: #123456789</p>
-            </div>
-            <p className="text-green-600 font-medium">58.78 Acres</p>
+      {isLoading ? (
+        <div className="w-[150px] m-auto mt-8">
+          <LoadingCircle />
+        </div>
+      ) : (
+        <>
+          <div className="relative w-full h-[315px] rounded-2xl">
+            <Map data={data?.data} />
           </div>
-        ))}
-      </div>
-      <Button classNames="md:w-fit" onClick={() => router.push("/property/about")}>
-        Tell us about your property
-      </Button>
+          <div className="grid gap-6">
+            {data?.data.map((el, i) => (
+              <div className="flex items-center justify-between" key={el.properties.fields.parcelnumb}>
+                <div className="flex items-center gap-2">
+                  <p className="bg-green w-[24px] h-[24px] rounded-[50%] flex items-center justify-center text-dark-green-500 font-medium">
+                    {i + 1}
+                  </p>
+                  <p className="text-grey-500 font-medium">Parcel Number: #{el.properties.fields.parcelnumb}</p>
+                </div>
+                <p className="text-green-600 font-medium">58.78 Acres</p>
+              </div>
+            ))}
+          </div>
+          <Button classNames="md:w-fit" onClick={() => router.push("/property/about")}>
+            Tell us about your property
+          </Button>
+        </>
+      )}
     </div>
   );
 };

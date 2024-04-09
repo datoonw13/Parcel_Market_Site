@@ -13,7 +13,7 @@ interface Props {
   label?: string;
   placeholder?: string;
   defaultValue?: string;
-  value?: string;
+  value?: string | number;
   info?: string;
   endIcon?: ReactNode;
   startIcon?: ReactNode;
