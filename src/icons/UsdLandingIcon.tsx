@@ -5,35 +5,35 @@ const UsdLandingIcon = () => (
         d="M5 9.39648C7.20914 9.39648 9 7.60562 9 5.39648C9 3.18735 7.20914 1.39648 5 1.39648C2.79086 1.39648 1 3.18735 1 5.39648C1 7.60562 2.79086 9.39648 5 9.39648Z"
         stroke="#0A622D"
         strokeWidth="2"
-        stroke-miterlimit="10"
+        strokeMiterlimit="10"
       />
       <path
         d="M59 9.39648C61.2091 9.39648 63 7.60562 63 5.39648C63 3.18735 61.2091 1.39648 59 1.39648C56.7909 1.39648 55 3.18735 55 5.39648C55 7.60562 56.7909 9.39648 59 9.39648Z"
         stroke="#0A622D"
         strokeWidth="2"
-        stroke-miterlimit="10"
+        strokeMiterlimit="10"
       />
       <path
         d="M5 63.3965C7.20914 63.3965 9 61.6056 9 59.3965C9 57.1873 7.20914 55.3965 5 55.3965C2.79086 55.3965 1 57.1873 1 59.3965C1 61.6056 2.79086 63.3965 5 63.3965Z"
         stroke="#0A622D"
         strokeWidth="2"
-        stroke-miterlimit="10"
+        strokeMiterlimit="10"
       />
       <path
         d="M59 63.3965C61.2091 63.3965 63 61.6056 63 59.3965C63 57.1873 61.2091 55.3965 59 55.3965C56.7909 55.3965 55 57.1873 55 59.3965C55 61.6056 56.7909 63.3965 59 63.3965Z"
         stroke="#0A622D"
         strokeWidth="2"
-        stroke-miterlimit="10"
+        strokeMiterlimit="10"
       />
-      <path d="M5 55.3965V9.39648" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />
-      <path d="M55 59.3965H9" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />
-      <path d="M59 9.39648V55.3965" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />
-      <path d="M9 5.39648H55" stroke="#0A622D" strokeWidth="2" stroke-miterlimit="10" />
+      <path d="M5 55.3965V9.39648" stroke="#0A622D" strokeWidth="2" strokeMiterlimit="10" />
+      <path d="M55 59.3965H9" stroke="#0A622D" strokeWidth="2" strokeMiterlimit="10" />
+      <path d="M59 9.39648V55.3965" stroke="#0A622D" strokeWidth="2" strokeMiterlimit="10" />
+      <path d="M9 5.39648H55" stroke="#0A622D" strokeWidth="2" strokeMiterlimit="10" />
       <path
         d="M43.58 38.5463C43.58 33.8263 39.59 31.7463 35 30.3463V21.9363C36.67 22.0763 38.33 22.4662 40.03 23.1362L41.54 19.3062C39.34 18.4362 37.19 17.9562 35 17.8162V15.4062H31V17.9562C25.16 18.7562 22.45 22.1662 22.45 25.3862C22.45 30.3262 27.22 32.3362 31 33.4862V42.7763C30.84 42.7763 30.68 42.7862 30.51 42.7862C28.17 42.7862 24.94 41.9863 22.15 40.6863L20.42 44.4163C23.77 45.9663 27.57 46.8962 30.51 46.8962C30.68 46.8962 30.83 46.8863 31 46.8863V49.4062H35V46.5063C41.21 45.3663 43.58 41.8663 43.58 38.5463ZM26.56 25.3662C26.56 24.0262 28.1 22.6363 31 22.0963V29.1262C28.21 28.1362 26.56 27.0262 26.56 25.3662ZM35 42.2963V34.6863C39.06 36.1263 39.46 37.4263 39.46 38.5463C39.46 40.3063 37.79 41.6263 35 42.2963Z"
         stroke="#0A622D"
         strokeWidth="2"
-        stroke-miterlimit="10"
+        strokeMiterlimit="10"
       />
     </g>
     <defs>
