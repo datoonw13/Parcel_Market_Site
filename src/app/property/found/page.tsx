@@ -15,21 +15,17 @@ const PropertyFound = () => {
   const router = useRouter();
   const findProperty = useAppSelector((state) => state.findProperty);
 
-  const [getRergid, { isLoading, data, isError }] = useLazyGetRegridQuery();
+  const [getRergid, { isLoading, data }] = useLazyGetRegridQuery();
 
   const getData = useCallback(async () => {
     try {
-      const sendObj = {
-        radius: 250,
-        county: findProperty.info?.county?.split(" ")[0]?.toLowerCase(),
-        ...(!!findProperty.info?.name_owner && { owner: findProperty.info?.name_owner }),
-        ...(!Number.isNaN(Number(findProperty.info?.parcelNumber)) && { parcelNumber: findProperty.info?.parcelNumber }),
-      };
-      await getRergid(sendObj).unwrap();
+      if (findProperty.info) {
+        await getRergid(findProperty.info).unwrap();
+      }
     } catch (error) {
       router.push("/property/info");
     }
-  }, [findProperty.info?.county, findProperty.info?.name_owner, findProperty.info?.parcelNumber, getRergid, router]);
+  }, [findProperty.info, getRergid, router]);
 
   useEffect(() => {
     getData();

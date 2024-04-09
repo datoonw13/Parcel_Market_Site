@@ -13,12 +13,25 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
-    getRegrid: build.query<ResponseType<IMap>, { county?: string; parcelNumber?: number; radius: number; owner?: string }>({
-      query: (arg) => ({
-        url: "regrid/search",
-        method: "GET",
-        params: { ...arg },
-      }),
+    getRegrid: build.query<ResponseType<IMap>, IFindPropertyInfo>({
+      query: (arg) => {
+        const { name_owner, parcelNumber, ...rest } = arg;
+        let api = "";
+
+        const params: Partial<IFindPropertyInfo> = { ...rest };
+        if (parcelNumber) {
+          params.parcelNumber = parcelNumber;
+          api = "searchByStateAndCountyAndParcel";
+        } else {
+          params.name_owner = name_owner;
+          api = "searchByStateAndCountyAndOwner";
+        }
+        return {
+          url: `regrid/${api}`,
+          method: "GET",
+          params: { ...params },
+        };
+      },
     }),
   }),
 });
