@@ -8,6 +8,7 @@ import { useAuthMutation } from "@/lib/features/apis/authApi";
 import { ISignIn } from "@/types/auth";
 import { signInSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -67,7 +68,9 @@ const SignIn = () => {
       <Divider />
       <div className="flex items-center justify-between">
         <p>Don’t have an account yet?</p>
-        <Button type="tertiary">Get Started</Button>
+        <Link href="/sign-up">
+          <Button type="tertiary">Get Started</Button>
+        </Link>
       </div>
     </>
   );

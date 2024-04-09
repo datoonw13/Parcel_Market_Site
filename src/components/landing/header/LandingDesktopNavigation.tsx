@@ -13,7 +13,9 @@ const LandingDesktopNavigation = () => (
       About Us
     </Button>
     <Button classNames="xl:hidden">Value my land</Button>
-    <Button classNames="hidden xl:block">Value my land for free</Button>
+    <Link href="/property/info">
+      <Button classNames="hidden xl:block">Value my land for free</Button>
+    </Link>
     <Link href="/sign-in">
       <Button type="tertiary" classNames="hidden xl:block">
         Sign In

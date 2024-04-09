@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Button from "../shared/Button";
 
 const LandingMain = () => (
@@ -15,7 +16,9 @@ const LandingMain = () => (
         Value your land for FREE in less than 3 minutes!
       </p>
       <Button classNames="py-6 lg:hidden max-w-[500px] w-full m-auto">Value My Land</Button>
-      <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
+      <Link href="/property/info">
+        <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
+      </Link>
     </div>
     <div className="relative w-full h-[100%] lg:h-[80%] xl:h-[90%] 2xl:h-[100%] overflow-hidden mt-10 lg:mt-0">
       <Image alt="" src="/home-mobile.png" fill className="!left-4 lg:hidden" />
