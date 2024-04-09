@@ -13,7 +13,7 @@ import { useEffect } from "react";
 
 const PropertyEstimatedPrice = () => {
   const findProperty = useAppSelector((state) => state.findProperty);
-  const [calculatePrice, { isLoading }] = useCalculatePriceMutation();
+  const [calculatePrice, { isLoading, data }] = useCalculatePriceMutation();
 
   useEffect(() => {
     if (findProperty.info && findProperty.about) {
@@ -30,7 +30,7 @@ const PropertyEstimatedPrice = () => {
       ) : (
         <>
           <div className="bg-green-100 flex flex-col items-center py-10 px-4 md:px-6 lg:px-8 xl:px-10 rounded-2xl">
-            <h1 className="text-dark-green font-bold text-6xl">$95.000</h1>
+            <h1 className="text-dark-green font-bold text-6xl">${data?.data?.price}</h1>
             <p className="text-dark-green font-semibold my-4">30-45 days to close</p>
             <div className="w-[35px] mb-6">
               <ArrowIcon />

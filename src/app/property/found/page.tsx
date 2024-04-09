@@ -1,12 +1,15 @@
 "use client";
 
-import Map from "@/components/Map";
 import Button from "@/components/shared/Button";
 import LoadingCircle from "@/icons/LoadingCircle";
 import { useLazyGetRegridQuery } from "@/lib/features/apis/propertyApi";
 import { useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
+
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
 const PropertyFound = () => {
   const router = useRouter();
@@ -18,7 +21,7 @@ const PropertyFound = () => {
     try {
       const sendObj = {
         radius: 250,
-        county: findProperty.info?.county,
+        county: findProperty.info?.county?.split(" ")[0]?.toLowerCase(),
         ...(!!findProperty.info?.name_owner && { owner: findProperty.info?.name_owner }),
         ...(!Number.isNaN(Number(findProperty.info?.parcelNumber)) && { parcelNumber: findProperty.info?.parcelNumber }),
       };
