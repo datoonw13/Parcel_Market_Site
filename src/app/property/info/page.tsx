@@ -12,6 +12,34 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { usaStatesFull } from "typed-usa-states";
 
+const getAllStates = () =>
+  usaStatesFull
+    .filter((el) => el.contiguous)
+    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
+
+const getCounties = (state: string | null) => {
+  if (!state) {
+    return [];
+  }
+  const counties = getAllStates().find(({ value }) => value === state)?.counties || [];
+  const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
+  return formattedCounties;
+};
+
+const getStateValue = (state: string | null) => {
+  if (!state) {
+    return null;
+  }
+  return getAllStates().find((el) => el.value === state) || null;
+};
+
+const getCountyValue = (county: string | null, state: string | null) => {
+  if (!county || !state) {
+    return null;
+  }
+  return getCounties(state).find(({ value }) => value === county) || null;
+};
+
 const PropertyInfo = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -25,15 +53,20 @@ const PropertyInfo = () => {
   } = useForm<IFindPropertyInfo>({
     resolver: yupResolver(findPropertyInfoSchema),
     defaultValues: {
-      county: "",
-      name_owner: "",
-      parcelNumber: NaN,
-      state: "",
+      county: null,
+      name_owner: null,
+      parcelNumber: null,
+      state: null,
     },
   });
 
-  const states = usaStatesFull.filter((el) => el.contiguous);
-  const counties = usaStatesFull.find((el) => el.name === watch("state"))?.counties?.map((el) => ({ label: el, value: el })) || [];
+  const states = usaStatesFull
+    .filter((el) => el.contiguous)
+    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase() }));
+  const counties =
+    usaStatesFull
+      .find(({ abbreviation }) => abbreviation.toLowerCase() === watch("state"))
+      ?.counties?.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() })) || [];
 
   const onSubmit = handleSubmit((data) => {
     dispatch(setInfo(data));
@@ -44,7 +77,7 @@ const PropertyInfo = () => {
     <div className="flex flex-col gap-6">
       <TextField
         name="name_owner"
-        value={watch("name_owner")}
+        value={watch("name_owner") || ""}
         onChange={(value) => {
           setValue("name_owner", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
           isSubmitted && trigger("parcelNumber");
@@ -57,7 +90,7 @@ const PropertyInfo = () => {
       />
       <div className="flex items-baseline gap-6">
         <Select
-          options={states.map((el) => ({ label: el.name, value: el.name }))}
+          options={getAllStates()}
           name="state"
           info="your info here"
           label="State"
@@ -65,14 +98,14 @@ const PropertyInfo = () => {
           error={!!errors.state}
           helperText={errors.state?.message}
           onChange={(value) => {
-            setValue("state", value || "", { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-            setValue("county", "");
+            setValue("state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+            setValue("county", null);
           }}
-          value={watch("state") ? { label: watch("state"), value: watch("state") } : null}
+          value={getStateValue(watch("state"))}
         />
         <Select
-          options={counties}
-          value={watch("county") ? { label: watch("county"), value: watch("county") } : null}
+          options={getCounties(watch("state"))}
+          value={getCountyValue(watch("county"), watch("state"))}
           name="county"
           info="your info here"
           label="County"
@@ -80,7 +113,7 @@ const PropertyInfo = () => {
           error={!!errors.county}
           helperText={errors.county?.message}
           disabled={!watch("state")}
-          onChange={(value) => setValue("county", value || "", { shouldDirty: true, shouldValidate: true })}
+          onChange={(value) => setValue("county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true })}
         />
       </div>
       <TextField
@@ -88,7 +121,7 @@ const PropertyInfo = () => {
         value={watch("parcelNumber") || ""}
         onChange={(value) => {
           if (/^-?\d+\.?\d*$/.test(value) || value === "") {
-            setValue("parcelNumber", Number(value), { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+            setValue("parcelNumber", value === "" ? null : Number(value), { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
             isSubmitted && trigger("name_owner");
           }
         }}

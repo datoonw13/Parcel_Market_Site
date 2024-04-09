@@ -1,8 +1,8 @@
 export interface IFindPropertyInfo {
-  name_owner: string;
-  state: string;
-  county: string;
-  parcelNumber: number;
+  name_owner: string | null;
+  state: string | null;
+  county: string | null;
+  parcelNumber: number | null;
 }
 
 export interface IFindPropertyAbout {
