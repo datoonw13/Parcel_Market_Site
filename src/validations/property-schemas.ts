@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 export const findPropertyInfoSchema = yup.object().shape(
   {
-    name_owner: yup
+    owner: yup
       .string()
       .required("Owner name or parcel number is a required field")
       .nullable()
@@ -15,11 +15,9 @@ export const findPropertyInfoSchema = yup.object().shape(
       .number()
       .required("Parcel number or owner name is a required field")
       .nullable()
-      .when("name_owner", ([name_owner], schema) =>
-        name_owner ? schema : schema.notOneOf([null], "Parcel number or owner name is a required field")
-      ),
+      .when("owner", ([owner], schema) => (owner ? schema : schema.notOneOf([null], "Parcel number or owner name is a required field"))),
   },
-  [["name_owner", "parcelNumber"]]
+  [["owner", "parcelNumber"]]
 );
 
 export const findPropertyAboutSchema = yup.object().shape({

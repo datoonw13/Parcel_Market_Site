@@ -54,7 +54,7 @@ const PropertyInfo = () => {
     resolver: yupResolver(findPropertyInfoSchema),
     defaultValues: {
       county: null,
-      name_owner: null,
+      owner: null,
       parcelNumber: null,
       state: null,
     },
@@ -76,14 +76,14 @@ const PropertyInfo = () => {
   return (
     <div className="flex flex-col gap-6">
       <TextField
-        name="name_owner"
-        value={watch("name_owner") || ""}
+        name="owner"
+        value={watch("owner") || ""}
         onChange={(value) => {
-          setValue("name_owner", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+          setValue("owner", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
           isSubmitted && trigger("parcelNumber");
         }}
-        error={!!errors.name_owner}
-        helperText={errors.name_owner?.message}
+        error={!!errors.owner}
+        helperText={errors.owner?.message}
         info="your info here"
         label="Name of the owner"
         placeholder="Enter name of the owner"
@@ -122,7 +122,7 @@ const PropertyInfo = () => {
         onChange={(value) => {
           if (/^-?\d+\.?\d*$/.test(value) || value === "") {
             setValue("parcelNumber", value === "" ? null : Number(value), { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-            isSubmitted && trigger("name_owner");
+            isSubmitted && trigger("owner");
           }
         }}
         error={!!errors.parcelNumber}

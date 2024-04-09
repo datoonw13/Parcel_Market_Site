@@ -15,7 +15,7 @@ const propertyApi = baseApi.injectEndpoints({
     }),
     getRegrid: build.query<ResponseType<IMap>, IFindPropertyInfo>({
       query: (arg) => {
-        const { name_owner, parcelNumber, ...rest } = arg;
+        const { owner, parcelNumber, ...rest } = arg;
         let api = "";
 
         const params: Partial<IFindPropertyInfo> = { ...rest };
@@ -23,7 +23,7 @@ const propertyApi = baseApi.injectEndpoints({
           params.parcelNumber = parcelNumber;
           api = "searchByStateAndCountyAndParcel";
         } else {
-          params.name_owner = name_owner;
+          params.owner = owner;
           api = "searchByStateAndCountyAndOwner";
         }
         return {
