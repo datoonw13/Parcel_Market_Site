@@ -16,6 +16,7 @@ interface Props {
   value?: string;
   info?: string;
   endIcon?: ReactNode;
+  startIcon?: ReactNode;
   onChange?: (value: string) => void;
   register?: any;
   name: string;
@@ -25,7 +26,21 @@ interface Props {
 }
 
 const TextField = (props: Props) => {
-  const { defaultValue, label, placeholder, info, endIcon, value, onChange, register, name, error, helperText, type = "text" } = props;
+  const {
+    defaultValue,
+    label,
+    placeholder,
+    info,
+    endIcon,
+    value,
+    onChange,
+    register,
+    name,
+    error,
+    helperText,
+    type = "text",
+    startIcon,
+  } = props;
   const labelId = `${name}-select-label`;
 
   return (
@@ -47,6 +62,7 @@ const TextField = (props: Props) => {
           error ? "border-error" : "border-[#9CA3AF]"
         )}
       >
+        {startIcon && startIcon}
         <input
           type={type}
           defaultValue={defaultValue}

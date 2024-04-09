@@ -3,6 +3,8 @@
 import Button from "@/components/shared/Button";
 import Select from "@/components/shared/Select";
 import TextField from "@/components/shared/TextField";
+import { setInfo } from "@/lib/features/slices/findPropertySlice";
+import { useAppDispatch } from "@/lib/hooks";
 import { IFindPropertyInfo } from "@/types/property";
 import { findPropertyInfoSchema } from "@/validations/property-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +14,8 @@ import { usaStatesFull } from "typed-usa-states";
 
 const PropertyInfo = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const {
     handleSubmit,
     formState: { errors, isSubmitted },
@@ -32,6 +36,7 @@ const PropertyInfo = () => {
   const counties = usaStatesFull.find((el) => el.name === watch("state"))?.counties?.map((el) => ({ label: el, value: el })) || [];
 
   const onSubmit = handleSubmit((data) => {
+    dispatch(setInfo(data));
     router.push("/property/found");
   });
 

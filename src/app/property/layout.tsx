@@ -2,9 +2,10 @@
 
 import LogoHeader from "@/components/shared/LogoHeader";
 import ProgressBar from "@/components/shared/ProgressBar";
+import { useAppSelector } from "@/lib/hooks";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 
 type Steps = "info" | "found" | "about" | "estimated-price";
 
@@ -15,6 +16,8 @@ const FindPropertyLayout = ({
 }>) => {
   const path = usePathname();
   const router = useRouter();
+  const findProperty = useAppSelector((state) => state.findProperty);
+
   const steps: Steps[] = ["info", "found", "about", "estimated-price"];
 
   const currentStep = () => {
@@ -38,6 +41,16 @@ const FindPropertyLayout = ({
     const newStepName = steps[newStepIndex];
     router.push(`/property/${newStepName}`);
   };
+
+  const handleNavigate = useCallback(() => {
+    if (path !== "/property/info" && !findProperty.info) {
+      router.push("/property/info");
+    }
+  }, [findProperty.info, path, router]);
+
+  useEffect(() => {
+    handleNavigate();
+  }, [handleNavigate, findProperty]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1.8fr_1fr] lg:grid-cols-[2fr_1fr] h-full">

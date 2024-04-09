@@ -15,3 +15,14 @@ export const findPropertyInfoSchema = yup.object().shape(
   },
   [["name_owner", "parcelNumber"]]
 );
+
+export const findPropertyAboutSchema = yup.object().shape({
+  waterFeature: yup.boolean().required(),
+  waterFront: yup.boolean().required(),
+  langCoverType: yup.string().required(),
+  propertyCondition: yup.string().required(),
+  wetProperty: yup.string().required(),
+  propertyRestriction: yup.string().required(),
+  propertyAccess: yup.string().required(),
+  improvementsValue: yup.string(),
+});
