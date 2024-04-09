@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { ReactNode, forwardRef } from "react";
 import { ChangeHandler, FieldValues, UseFormRegister } from "react-hook-form";
 import { Tooltip } from "react-tooltip";
+import uuid from "short-uuid";
 
 type RegisterType = UseFormRegister<any>;
 
@@ -17,7 +18,7 @@ interface Props {
   endIcon?: ReactNode;
   onChange?: (value: string) => void;
   register?: any;
-  name?: string;
+  name: string;
   error?: boolean;
   helperText?: string;
   type?: string;
@@ -25,16 +26,18 @@ interface Props {
 
 const TextField = (props: Props) => {
   const { defaultValue, label, placeholder, info, endIcon, value, onChange, register, name, error, helperText, type = "text" } = props;
+  const labelId = `${name}-select-label`;
+
   return (
     <div>
       <div className="flex items-center mb-2 gap-2">
         {label && <p className={clsx("font-medium", error ? "text-error" : "text-grey-500")}>{label}</p>}
         {info && (
           <>
-            <div id="input-info" className="w-[16px]">
+            <div id={labelId} className="w-[16px]">
               <WarningCircleIcon />
             </div>
-            <Tooltip anchorSelect="#input-info" content={info} className="!bg-white drop-shadow-lg rounded !text-dark-green-500" />
+            <Tooltip anchorSelect={`#${labelId}`} content={info} className="!bg-white drop-shadow-lg rounded !text-dark-green-500" />
           </>
         )}
       </div>
