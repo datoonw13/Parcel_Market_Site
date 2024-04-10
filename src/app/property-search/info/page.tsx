@@ -71,6 +71,9 @@ const PropertyInfo = () => {
 
   const onSubmit = handleSubmit((data) => {
     dispatch(setInfo(data));
+    if (data.parcelNumber) {
+      dispatch(setSelectedParcelNumber(data.parcelNumber));
+    }
     router.push("/property-search/found");
   });
 
@@ -84,7 +87,7 @@ const PropertyInfo = () => {
         name="owner"
         value={watch("owner") || ""}
         onChange={(value) => {
-          setValue("owner", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+          setValue("owner", value || null, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
           isSubmitted && trigger("parcelNumber");
         }}
         error={!!errors.owner}

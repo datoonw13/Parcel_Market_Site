@@ -6,8 +6,6 @@ import "leaflet-defaulticon-compatibility";
 import { MapContainer, Marker, TileLayer, Polygon, FeatureGroup, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import { IMap } from "@/types/map";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import Button from "../shared/Button";
 
 interface IMapProps {
