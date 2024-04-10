@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
 import dynamic from "next/dynamic";
-import { setInfo, setSelectedParcelNumber } from "@/lib/features/slices/findPropertySlice";
+import { setSelectedParcelNumber } from "@/lib/features/slices/findPropertySlice";
 
 const Map = dynamic(() => import("@/components/property-search/Map"), { ssr: false });
 
