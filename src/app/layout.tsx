@@ -5,6 +5,7 @@ import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
+import useAuthCheck from "@/hooks/useAuthCheck";
 import StoreProvider from "./StoreProvider";
 
 const inter = Inter({

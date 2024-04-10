@@ -30,7 +30,7 @@ const SignIn = () => {
       const res = await authUser(data).unwrap();
       toast.success("You have successfully logged in");
       router.push("/");
-      localStorage.setItem("token", res.access_token);
+      localStorage.setItem("token", res.data.access_token);
     } catch (error) {}
   });
 

@@ -61,14 +61,6 @@ const PropertyInfo = () => {
     },
   });
 
-  const states = usaStatesFull
-    .filter((el) => el.contiguous)
-    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase() }));
-  const counties =
-    usaStatesFull
-      .find(({ abbreviation }) => abbreviation.toLowerCase() === watch("state"))
-      ?.counties?.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() })) || [];
-
   const onSubmit = handleSubmit((data) => {
     dispatch(setInfo(data));
     if (data.parcelNumber) {

@@ -5,7 +5,7 @@ const LoadingCircle = () => (
     <circle fill="none" strokeOpacity="1" stroke="#16DB65" strokeWidth=".5" cx="100" cy="100" r="0">
       <animate attributeName="r" calcMode="spline" dur="2" values="1;80" keyTimes="0;1" keySplines="0 .2 .5 1" repeatCount="indefinite" />
       <animate
-        attributeName="stroke-width"
+        attributeName="strokeWidth"
         calcMode="spline"
         dur="2"
         values="0;25"

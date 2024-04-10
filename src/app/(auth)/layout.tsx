@@ -2,8 +2,11 @@
 
 import LandingFooter from "@/components/landing/LandingFooter";
 import LogoHeader from "@/components/shared/LogoHeader";
-import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import useAuthCheck from "@/hooks/useAuthCheck";
+import LoadingCircle from "@/icons/LoadingCircle";
+import { useAppSelector } from "@/lib/hooks";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 
 const AuthLayout = ({
   children,
@@ -11,7 +14,17 @@ const AuthLayout = ({
   children: ReactNode;
 }>) => {
   const path = usePathname();
+  const router = useRouter();
+  const { pending, user } = useAppSelector((state) => state.authedUser);
   const isSignUp = path.includes("sign-up");
+
+  useAuthCheck();
+
+  useEffect(() => {
+    if (!pending && user) {
+      router.push("/");
+    }
+  }, [pending, router, user]);
 
   return (
     <>
@@ -28,7 +41,13 @@ const AuthLayout = ({
                 : "Enter the email address associated with your account."}
             </p>
           </div>
-          {children}
+          {pending ? (
+            <div className="w-[260px] flex m-auto">
+              <LoadingCircle />
+            </div>
+          ) : (
+            children
+          )}
         </div>
       </div>
       <section>

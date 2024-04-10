@@ -26,3 +26,10 @@ export interface ISignInResponse {
     sub: number;
   };
 }
+
+export interface UserModel {
+  email: string;
+  name: string;
+  role: "user" | "admin";
+  mobileNumber: string;
+}
