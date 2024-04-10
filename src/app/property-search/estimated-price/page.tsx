@@ -17,9 +17,9 @@ const PropertyEstimatedPrice = () => {
 
   useEffect(() => {
     if (findProperty.info && findProperty.about) {
-      calculatePrice({ ...findProperty.info, ...findProperty.about });
+      calculatePrice({ ...findProperty.info, ...findProperty.about, parcelNumber: findProperty.selectedParcelNumber });
     }
-  }, [calculatePrice, findProperty.about, findProperty.info]);
+  }, [calculatePrice, findProperty.about, findProperty.info, findProperty.selectedParcelNumber]);
 
   return (
     <div className="flex flex-col gap-10">

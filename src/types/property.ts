@@ -2,7 +2,7 @@ export interface IFindPropertyInfo {
   owner: string | null;
   state: string | null;
   county: string | null;
-  parcelNumber: number | null;
+  parcelNumber: string | null;
 }
 
 export interface IFindPropertyAbout {

@@ -3,12 +3,13 @@
 import Button from "@/components/shared/Button";
 import Select from "@/components/shared/Select";
 import TextField from "@/components/shared/TextField";
-import { setInfo } from "@/lib/features/slices/findPropertySlice";
+import { setInfo, setSelectedParcelNumber } from "@/lib/features/slices/findPropertySlice";
 import { useAppDispatch } from "@/lib/hooks";
 import { IFindPropertyInfo } from "@/types/property";
 import { findPropertyInfoSchema } from "@/validations/property-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { usaStatesFull } from "typed-usa-states";
 
@@ -70,8 +71,12 @@ const PropertyInfo = () => {
 
   const onSubmit = handleSubmit((data) => {
     dispatch(setInfo(data));
-    router.push("/property/found");
+    router.push("/property-search/found");
   });
+
+  useEffect(() => {
+    dispatch(setSelectedParcelNumber(null));
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -121,7 +126,7 @@ const PropertyInfo = () => {
         value={watch("parcelNumber") || ""}
         onChange={(value) => {
           if (/^-?\d+\.?\d*$/.test(value) || value === "") {
-            setValue("parcelNumber", value === "" ? null : Number(value), { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+            setValue("parcelNumber", value === "" ? null : value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
             isSubmitted && trigger("owner");
           }
         }}

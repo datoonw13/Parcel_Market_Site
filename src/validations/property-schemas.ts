@@ -12,7 +12,7 @@ export const findPropertyInfoSchema = yup.object().shape(
     state: yup.string().required("State is a required field").nullable().notOneOf([null], "State is a required field"),
     county: yup.string().required("County is a required field").nullable().notOneOf([null], "County is a required field"),
     parcelNumber: yup
-      .number()
+      .string()
       .required("Parcel number or owner name is a required field")
       .nullable()
       .when("owner", ([owner], schema) => (owner ? schema : schema.notOneOf([null], "Parcel number or owner name is a required field"))),

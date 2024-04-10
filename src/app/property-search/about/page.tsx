@@ -27,7 +27,7 @@ const PropertyAbout = () => {
 
   const onSubmit = handleSubmit((data) => {
     dispatch(setAbout(data));
-    router.push("/property/estimated-price");
+    router.push("/property-search/estimated-price");
   });
 
   return (

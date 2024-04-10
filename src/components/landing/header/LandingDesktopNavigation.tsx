@@ -12,9 +12,11 @@ const LandingDesktopNavigation = () => (
     <Button type="text" classNames="hidden xl:block">
       About Us
     </Button>
-    <Button classNames="xl:hidden">Value my land</Button>
-    <Link href="/property/info">
-      <Button classNames="hidden xl:block">Value my land for free</Button>
+    <Link href="/property-search/info" className="xl:hidden">
+      <Button>Value my land</Button>
+    </Link>
+    <Link href="/property/info" className="hidden xl:block">
+      <Button>Value my land for free</Button>
     </Link>
     <Link href="/sign-in">
       <Button type="tertiary" classNames="hidden xl:block">
