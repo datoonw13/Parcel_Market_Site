@@ -43,8 +43,13 @@ const FindPropertyLayout = ({
   };
 
   const handleNavigate = useCallback(() => {
-    if (path !== "/property-search/info" && !findProperty.info) {
+    if (
+      ["/property-search/info", "/property-search/found", "/property-search/about", "/property-search/estimated-price"].includes(path) &&
+      !findProperty.info
+    ) {
       router.push("/property-search/info");
+    }
+    if (path.includes("signature")) {
     }
   }, [findProperty.info, path, router]);
 
@@ -57,11 +62,15 @@ const FindPropertyLayout = ({
       <div className="relative">
         <LogoHeader classNames="md:bg-white md:!justify-start px-4 md:px-8 lg:px-12 lx:px-16 2xl:px-20" />
         <div className="px-4 md:px-8 lg:px-12 lx:px-16 2xl:px-20 py-10 flex flex-col gap-10">
-          <ProgressBar currentStep={currentStep()} totalSteps={4} goBack={handleGoBack} />
-          <div>
-            <h1 className="text-dark-green font-bricolage font-bold text-2xl mb-6">Property information</h1>
-            <h2 className="text-dark-green-500 font-medium text-xl">Let’s find your property using some basic property information</h2>
-          </div>
+          {!path.includes("signature") && (
+            <>
+              <ProgressBar currentStep={currentStep()} totalSteps={4} goBack={handleGoBack} />
+              <div>
+                <h1 className="text-dark-green font-bricolage font-bold text-2xl mb-6">Property information</h1>
+                <h2 className="text-dark-green-500 font-medium text-xl">Let’s find your property using some basic property information</h2>
+              </div>
+            </>
+          )}
           {children}
         </div>
       </div>
