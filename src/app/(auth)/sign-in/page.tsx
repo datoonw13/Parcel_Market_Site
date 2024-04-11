@@ -5,6 +5,7 @@ import Divider from "@/components/shared/Divider";
 import TextField from "@/components/shared/TextField";
 import GoogleIcon from "@/icons/GoogleIcon";
 import { useAuthMutation } from "@/lib/features/apis/authApi";
+import { useAppSelector } from "@/lib/hooks";
 import { ISignIn } from "@/types/auth";
 import { signInSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,6 +17,7 @@ import toast from "react-hot-toast";
 
 const SignIn = () => {
   const router = useRouter();
+  const redirectUrl = useAppSelector((state) => state.authedUser.redirectUrl);
   const [showPassword, setShowPassword] = useState(false);
   const [authUser, { isLoading }] = useAuthMutation();
 
@@ -29,9 +31,11 @@ const SignIn = () => {
     try {
       const res = await authUser(data).unwrap();
       toast.success("You have successfully logged in");
-      router.push("/");
+      router.push(redirectUrl);
       localStorage.setItem("token", res.data.access_token);
-    } catch (error) {}
+    } catch (error) {
+      localStorage.removeItem("token");
+    }
   });
 
   return (

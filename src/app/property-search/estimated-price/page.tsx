@@ -8,11 +8,16 @@ import LoadingCircle from "@/icons/LoadingCircle";
 import SearchLandingIcon from "@/icons/SearchLandingIcon";
 import UsdLandingIcon from "@/icons/UsdLandingIcon";
 import { useCalculatePriceMutation } from "@/lib/features/apis/propertyApi";
-import { useAppSelector } from "@/lib/hooks";
+import { setRedirectUrl } from "@/lib/features/slices/authedUserSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const PropertyEstimatedPrice = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const findProperty = useAppSelector((state) => state.findProperty);
+  const isAuthed = useAppSelector((state) => !!state.authedUser.user);
   const [calculatePrice, { isLoading, data }] = useCalculatePriceMutation();
 
   useEffect(() => {
@@ -21,6 +26,13 @@ const PropertyEstimatedPrice = () => {
     }
   }, [calculatePrice, findProperty.about, findProperty.info, findProperty.selectedParcelNumber]);
 
+  const handleSubmit = () => {
+    if (!isAuthed) {
+      router.push("/sign-in");
+      dispatch(setRedirectUrl("/property-search/signature"));
+    } else {
+    }
+  };
   return (
     <div className="flex flex-col gap-10">
       {isLoading ? (
@@ -44,7 +56,9 @@ const PropertyEstimatedPrice = () => {
             </div>
           </div>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.5fr] xl:grid-cols-[1fr_2.3fr]">
-            <Button classNames="w-full h-fit">Sell your property NOW</Button>
+            <Button onClick={handleSubmit} classNames="w-full h-fit">
+              Sell your property NOW
+            </Button>
             <p className="text-grey-500 font-medium text-xl text-center lg:text-start lg:max-w-[400px]">
               Sell your property NOW, hassle free and no closing costs for $57,000
             </p>

@@ -6,12 +6,14 @@ interface IInitialState {
   user: UserModel | null;
   pending: boolean;
   token: string | null;
+  redirectUrl: string;
 }
 
 const initialState: IInitialState = {
   user: null,
   pending: true,
   token: null,
+  redirectUrl: "",
 };
 
 export const authedUserSlice = createSlice({
@@ -31,6 +33,9 @@ export const authedUserSlice = createSlice({
       localStorage.removeItem("token");
       return { ...initialState, pending: false };
     },
+    setRedirectUrl: (state, action: PayloadAction<string>) => {
+      state.redirectUrl = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(authApi.endpoints.auth.matchFulfilled, (state) => {
@@ -39,6 +44,6 @@ export const authedUserSlice = createSlice({
   },
 });
 
-export const { setAuthPending, setAuthedUser, setToken, logOut } = authedUserSlice.actions;
+export const { setAuthPending, setAuthedUser, setToken, logOut, setRedirectUrl } = authedUserSlice.actions;
 
 export default authedUserSlice.reducer;

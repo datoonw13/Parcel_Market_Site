@@ -17,6 +17,7 @@ const FindPropertyLayout = ({
   const path = usePathname();
   const router = useRouter();
   const findProperty = useAppSelector((state) => state.findProperty);
+  const authedUser = useAppSelector((state) => state.authedUser);
 
   const steps: Steps[] = ["info", "found", "about", "estimated-price"];
 
@@ -43,15 +44,16 @@ const FindPropertyLayout = ({
   };
 
   const handleNavigate = useCallback(() => {
-    if (
-      ["/property-search/info", "/property-search/found", "/property-search/about", "/property-search/estimated-price"].includes(path) &&
-      !findProperty.info
-    ) {
-      router.push("/property-search/info");
-    }
-    if (path.includes("signature")) {
-    }
-  }, [findProperty.info, path, router]);
+    // if (
+    //   ["/property-search/info", "/property-search/found", "/property-search/about", "/property-search/estimated-price"].includes(path) &&
+    //   !findProperty.info
+    // ) {
+    //   router.push("/property-search/info");
+    // }
+    // if (path.includes("signature") && !authedUser.user) {
+    //   router.push("/property-search/info");
+    // }
+  }, [findProperty.info, path, router, authedUser]);
 
   useEffect(() => {
     handleNavigate();
