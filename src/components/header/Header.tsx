@@ -2,10 +2,10 @@
 
 import Logo from "@/icons/Logo";
 import useAuthCheck from "@/hooks/useAuthCheck";
-import LandingDesktopNavigation from "./LandingDesktopNavigation";
-import LandingMobileNav from "./LandingMobileNav";
+import DesktopNavigation from "./DesktopNavigation";
+import MobileNav from "./MobileNav";
 
-const LandingHeader = () => {
+const Header = () => {
   useAuthCheck();
 
   return (
@@ -13,10 +13,10 @@ const LandingHeader = () => {
       <div className="min-w-[130px] w-[130px] xs:min-w-[145px] xs:w-[145px] lg:w-[180px] 2xl:w-[220px] h-[40px] lg:h-[60px] flex cursor-pointer">
         <Logo />
       </div>
-      <LandingDesktopNavigation />
-      <LandingMobileNav />
+      <DesktopNavigation />
+      <MobileNav />
     </div>
   );
 };
 
-export default LandingHeader;
+export default Header;

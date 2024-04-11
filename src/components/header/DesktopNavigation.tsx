@@ -5,7 +5,7 @@ import UserNavbarMenu from "@/components/user/UserNavbarMenu";
 import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
 
-const LandingDesktopNavigation = () => {
+const DesktopNavigation = () => {
   const { pending, user } = useAppSelector((state) => state.authedUser);
   return (
     <div className="w-full flex items-center justify-end gap-4 text-dark-green font-semibold">
@@ -33,4 +33,4 @@ const LandingDesktopNavigation = () => {
   );
 };
 
-export default LandingDesktopNavigation;
+export default DesktopNavigation;

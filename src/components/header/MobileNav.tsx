@@ -6,7 +6,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useState } from "react";
 
-const LandingMobileNav = () => {
+const MobileNav = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="xl:hidden">
@@ -56,4 +56,4 @@ const LandingMobileNav = () => {
   );
 };
 
-export default LandingMobileNav;
+export default MobileNav;
