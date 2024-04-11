@@ -1,4 +1,3 @@
-import { ISignIn, ISignInResponse, ISignUp } from "@/types/auth";
 import { ResponseType } from "@/types/common";
 import { IMap } from "@/types/map";
 import { ISearchPropertyCalculatePrice, ISearchPropertyCalculatePriceResponse, ISearchPropertyInfo } from "@/types/property";

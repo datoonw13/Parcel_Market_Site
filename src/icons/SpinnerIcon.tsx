@@ -8,6 +8,7 @@ const SpinnerIcon = ({ color }: { color: string }) => (
       <stop offset="1" stopColor={color || "#FF156D"} stopOpacity="0" />
     </radialGradient>
     <circle
+      // @ts-ignore
       transformOrigin="center"
       fill="none"
       stroke="url(#a12)"
@@ -31,6 +32,7 @@ const SpinnerIcon = ({ color }: { color: string }) => (
       />
     </circle>
     <circle
+      // @ts-ignore
       transformOrigin="center"
       fill="none"
       opacity=".2"
