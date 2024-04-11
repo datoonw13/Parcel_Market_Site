@@ -2,12 +2,17 @@
 
 import Button from "@/components/shared/Button";
 import Divider from "@/components/shared/Divider";
+import routes from "@/helpers/routes";
 import ArrowIcon from "@/icons/ArrowIcon";
 import LoadingCircle from "@/icons/LoadingCircle";
 import SearchLandingIcon from "@/icons/SearchLandingIcon";
 import UsdLandingIcon from "@/icons/UsdLandingIcon";
 import { useCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
+import { setSelectedParcelNumber } from "@/lib/features/slices/authedUserSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { ISearchProperty } from "@/types/property";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { UseFormWatch } from "react-hook-form";
 
 interface IPropertySearchEstimatedPrice {
@@ -15,18 +20,21 @@ interface IPropertySearchEstimatedPrice {
 }
 
 const PropertySearchEstimatedPrice = ({ watch }: IPropertySearchEstimatedPrice) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authedUser.user);
   const info = watch("info");
   const about = watch("about");
   const parcelNumber = watch("found.parcelNumber");
   const { isFetching, data } = useCalculatePriceQuery({ ...info, ...about, parcelNumber });
 
   const handleSubmit = () => {
-    // if (!isAuthed) {
-    //   router.push(routes.auth.signIn);
-    //   dispatch(setRedirectUrl(routes.propertySearch.signature));
-    // } else {
-    // }
+    dispatch(setSelectedParcelNumber(watch("found.parcelNumber")));
+    if (!user) {
+      router.push(routes.auth.signIn);
+    }
   };
+
   return (
     <div className="flex flex-col gap-10">
       {isFetching ? (

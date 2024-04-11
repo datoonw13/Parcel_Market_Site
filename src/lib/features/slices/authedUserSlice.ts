@@ -6,14 +6,14 @@ interface IInitialState {
   user: UserModel | null;
   pending: boolean;
   token: string | null;
-  redirectUrl: string;
+  selectedParcelNumber: string | null;
 }
 
 const initialState: IInitialState = {
   user: null,
   pending: true,
   token: null,
-  redirectUrl: "",
+  selectedParcelNumber: "",
 };
 
 export const authedUserSlice = createSlice({
@@ -33,8 +33,8 @@ export const authedUserSlice = createSlice({
       localStorage.removeItem("token");
       return { ...initialState, pending: false };
     },
-    setRedirectUrl: (state, action: PayloadAction<string>) => {
-      state.redirectUrl = action.payload;
+    setSelectedParcelNumber: (state, action: PayloadAction<string | null>) => {
+      state.selectedParcelNumber = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -44,6 +44,6 @@ export const authedUserSlice = createSlice({
   },
 });
 
-export const { setAuthPending, setAuthedUser, setToken, logOut, setRedirectUrl } = authedUserSlice.actions;
+export const { setAuthPending, setAuthedUser, setToken, logOut, setSelectedParcelNumber } = authedUserSlice.actions;
 
 export default authedUserSlice.reducer;

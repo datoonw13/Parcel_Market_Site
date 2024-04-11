@@ -2,7 +2,7 @@ import TextField from "@/components/shared/TextField";
 import React from "react";
 
 const PropertySearchSignature = () => (
-  <div className="flex flex-col gap-10">
+  <div className="flex flex-col gap-10 px-4 md:px-8 lg:px-12 lx:px-16 2xl:px-20 py-10 flex flex-col gap-10">
     <div className="bg-green-900 rounded-2xl py-10 px-4 flex flex-col justify-center items-center gap-6">
       <h2 className="text-green text-2xl sm:text-3xl lg:text-4xl font-semibold">Your free valuation</h2>
       <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white">$95.000</h1>

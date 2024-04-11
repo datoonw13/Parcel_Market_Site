@@ -52,5 +52,4 @@ export interface ISearchProperty {
     parcelNumber: string | null;
   };
   about: ISearchPropertyAbout;
-  signature: string | null;
 }

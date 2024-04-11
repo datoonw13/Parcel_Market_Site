@@ -33,5 +33,4 @@ export const searchPropertySchema = yup.object().shape({
     propertyAccess: yup.string().required().nullable().notOneOf([null]),
     improvementsValue: yup.number().required().nullable().notOneOf([null]),
   }),
-  signature: yup.string().required().nullable().notOneOf([null]),
 });

@@ -52,7 +52,6 @@ const PropertySearch = () => {
       found: {
         parcelNumber: null,
       },
-      signature: null,
     },
     reValidateMode: "onChange",
   });
