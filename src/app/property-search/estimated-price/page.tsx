@@ -3,6 +3,7 @@
 import Button from "@/components/shared/Button";
 import Divider from "@/components/shared/Divider";
 import TextField from "@/components/shared/TextField";
+import routes from "@/helpers/routes";
 import ArrowIcon from "@/icons/ArrowIcon";
 import LoadingCircle from "@/icons/LoadingCircle";
 import SearchLandingIcon from "@/icons/SearchLandingIcon";
@@ -28,8 +29,8 @@ const PropertyEstimatedPrice = () => {
 
   const handleSubmit = () => {
     if (!isAuthed) {
-      router.push("/sign-in");
-      dispatch(setRedirectUrl("/property-search/signature"));
+      router.push(routes.auth.signIn);
+      dispatch(setRedirectUrl(routes.propertySearch.signature));
     } else {
     }
   };

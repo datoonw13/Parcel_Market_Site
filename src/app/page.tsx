@@ -1,5 +1,5 @@
 import Header from "@/components/header/Header";
-import LandingFooter from "@/components/landing/LandingFooter";
+import Footer from "@/components/Footer";
 import LandingMain from "@/components/landing/LandingMain";
 import Container from "@/components/shared/Container";
 
@@ -12,7 +12,7 @@ const Landing = () => (
       <LandingMain />
     </section>
     <section>
-      <LandingFooter />
+      <Footer />
     </section>
   </>
 );

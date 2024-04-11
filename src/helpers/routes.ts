@@ -15,6 +15,10 @@ const routes = {
     estimatedPrice: "/property-search/estimated-price",
     signature: "/property-search/signature",
   },
+  user: {
+    root: "/user",
+    profile: "/user/profile",
+  },
 };
 
 export default routes;

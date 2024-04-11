@@ -1,6 +1,6 @@
 "use client";
 
-import LandingFooter from "@/components/landing/LandingFooter";
+import Footer from "@/components/Footer";
 import LogoHeader from "@/components/shared/LogoHeader";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import LoadingCircle from "@/icons/LoadingCircle";
@@ -51,7 +51,7 @@ const AuthLayout = ({
         </div>
       </div>
       <section>
-        <LandingFooter />
+        <Footer />
       </section>
     </>
   );

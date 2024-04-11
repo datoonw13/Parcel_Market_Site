@@ -48,14 +48,11 @@ const FindPropertyLayout = ({
     ) {
       router.push("/property-search/info");
     }
-    if (path.includes("signature") && !authedUser.user) {
-      router.push("/property-search/info");
-    }
-  }, [findProperty.info, path, router, authedUser]);
+  }, [findProperty.info, path, router]);
 
   useEffect(() => {
     handleNavigate();
-  }, [handleNavigate, findProperty]);
+  }, [handleNavigate, findProperty, authedUser.user]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1.8fr_1fr] lg:grid-cols-[2fr_1fr] h-full">

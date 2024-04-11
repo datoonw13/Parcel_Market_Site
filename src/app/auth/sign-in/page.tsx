@@ -3,6 +3,7 @@
 import Button from "@/components/shared/Button";
 import Divider from "@/components/shared/Divider";
 import TextField from "@/components/shared/TextField";
+import routes from "@/helpers/routes";
 import GoogleIcon from "@/icons/GoogleIcon";
 import { useAuthMutation } from "@/lib/features/apis/authApi";
 import { useAppSelector } from "@/lib/hooks";
@@ -72,7 +73,7 @@ const SignIn = () => {
       <Divider />
       <div className="flex items-center justify-between">
         <p>Don’t have an account yet?</p>
-        <Link href="/sign-up">
+        <Link href={routes.auth.signUp}>
           <Button type="tertiary">Get Started</Button>
         </Link>
       </div>

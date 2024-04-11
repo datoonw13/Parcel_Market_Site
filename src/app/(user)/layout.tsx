@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/header/Header";
+import Footer from "@/components/Footer";
 import Container from "@/components/shared/Container";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -13,10 +14,13 @@ const FindPropertyLayout = ({
   const path = usePathname();
 
   return (
-    <Container className="bg-neutral-400 min-h-screen">
-      <Header />
-      {children}
-    </Container>
+    <div className="bg-neutral-400 min-h-screen">
+      <Container>
+        <Header />
+        {children}
+      </Container>
+      <Footer />
+    </div>
   );
 };
 

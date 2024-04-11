@@ -2,6 +2,7 @@
 
 import Button from "@/components/shared/Button";
 import UserNavbarMenu from "@/components/user/UserNavbarMenu";
+import routes from "@/helpers/routes";
 import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
 
@@ -18,11 +19,11 @@ const DesktopNavigation = () => {
       <Button type="text" classNames="hidden xl:block">
         About Us
       </Button>
-      <Link href="/property-search/info" className="hidden xl:block">
-        <Button>Value my land</Button>
+      <Link href={routes.propertySearch.info} className="hidden xl:block">
+        <Button>Value my land for free</Button>
       </Link>
       {!user && (
-        <Link href="/sign-in">
+        <Link href={routes.auth.signIn}>
           <Button loading={pending} type="tertiary" classNames="hidden xl:block">
             Sign In
           </Button>

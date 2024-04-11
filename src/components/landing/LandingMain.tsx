@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import routes from "@/helpers/routes";
 import Button from "../shared/Button";
 
 const LandingMain = () => (
@@ -15,10 +16,10 @@ const LandingMain = () => (
       <p className="hidden sm:block text-xl md:text-2xl text-dark-green-500 text-center lg:text-start">
         Value your land for FREE in less than 3 minutes!
       </p>
-      <Link href="/property-search/info">
+      <Link href={routes.propertySearch.info}>
         <Button classNames="py-6 lg:hidden max-w-[500px] w-full m-auto">Value My Land</Button>
       </Link>
-      <Link href="/property-search/info">
+      <Link href={routes.propertySearch.info}>
         <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
       </Link>
     </div>

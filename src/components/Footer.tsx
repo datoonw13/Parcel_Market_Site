@@ -1,5 +1,5 @@
 import LogoTwo from "@/icons/LogoTwo";
-import Container from "../shared/Container";
+import Container from "./shared/Container";
 
 const data = [
   {
@@ -97,7 +97,7 @@ const data = [
   },
 ];
 
-const LandingFooter = () => (
+const Footer = () => (
   <div>
     <Container
       className="bg-dark-green py-6 sm:py-8 lg:py-14 md:py-20 xl:py-24 flex flex-col 
@@ -130,4 +130,4 @@ const LandingFooter = () => (
   </div>
 );
 
-export default LandingFooter;
+export default Footer;

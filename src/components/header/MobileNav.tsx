@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/shared/Button";
+import routes from "@/helpers/routes";
 import BurgerIcon from "@/icons/BurgerIcon";
 import clsx from "clsx";
 import Link from "next/link";
@@ -17,7 +18,7 @@ const MobileNav = () => {
         <div
           className={clsx(
             "fixed inset-0 bg-backdrop transition-all duration-500 ease-in-out ",
-            open ? "opacity-100 visibl" : "opacity-0 invisible "
+            open ? "opacity-100 visible" : "opacity-0 invisible "
           )}
         />
         <div className={clsx({ "fixed inset-0 overflow-hidden": open })}>
@@ -44,7 +45,7 @@ const MobileNav = () => {
                     About Us
                   </Button>
                   <Button type="text">
-                    <Link href="/sign-in"> Sign In</Link>
+                    <Link href={routes.auth.signIn}> Sign In</Link>
                   </Button>
                 </div>
               </div>
