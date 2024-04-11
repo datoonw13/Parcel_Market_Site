@@ -57,7 +57,12 @@ const PropertySearch = () => {
   });
 
   const onSubmit = handleSubmit(
-    (data) => {},
+    (data) => {
+      if (step === StepsEnum.ABOUT) {
+        setStep(StepsEnum.ESTIMATED_PRICE);
+        clearErrors();
+      }
+    },
     (error) => {
       if (step === StepsEnum.INFO && !error.info) {
         setStep(StepsEnum.FOUND);
@@ -65,10 +70,6 @@ const PropertySearch = () => {
       }
       if (step === StepsEnum.FOUND && !error.found) {
         setStep(StepsEnum.ABOUT);
-        clearErrors();
-      }
-      if (step === StepsEnum.ABOUT && !error.about) {
-        setStep(StepsEnum.ESTIMATED_PRICE);
         clearErrors();
       }
     }

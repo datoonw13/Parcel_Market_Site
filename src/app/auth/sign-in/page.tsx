@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 
 const SignIn = () => {
   const router = useRouter();
-  const redirectUrl = useAppSelector((state) => state.authedUser.redirectUrl);
+  const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
   const [showPassword, setShowPassword] = useState(false);
   const [authUser, { isLoading }] = useAuthMutation();
 
@@ -32,7 +32,7 @@ const SignIn = () => {
     try {
       const res = await authUser(data).unwrap();
       toast.success("You have successfully logged in");
-      router.push(redirectUrl);
+      router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
       localStorage.setItem("token", res.data.access_token);
     } catch (error) {
       localStorage.removeItem("token");

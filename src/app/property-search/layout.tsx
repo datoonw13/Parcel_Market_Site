@@ -1,3 +1,5 @@
+"use client";
+
 import LogoHeader from "@/components/shared/LogoHeader";
 import Image from "next/image";
 import { ReactNode } from "react";

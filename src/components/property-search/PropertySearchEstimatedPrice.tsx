@@ -32,6 +32,8 @@ const PropertySearchEstimatedPrice = ({ watch }: IPropertySearchEstimatedPrice) 
     dispatch(setSelectedParcelNumber(watch("found.parcelNumber")));
     if (!user) {
       router.push(routes.auth.signIn);
+    } else {
+      router.push(routes.propertySearch.signature);
     }
   };
 

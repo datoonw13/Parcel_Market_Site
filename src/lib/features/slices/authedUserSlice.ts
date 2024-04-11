@@ -13,7 +13,7 @@ const initialState: IInitialState = {
   user: null,
   pending: true,
   token: null,
-  selectedParcelNumber: "",
+  selectedParcelNumber: null,
 };
 
 export const authedUserSlice = createSlice({

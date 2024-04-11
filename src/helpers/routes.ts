@@ -9,6 +9,7 @@ const routes = {
   },
   propertySearch: {
     root: "/property-search",
+    signature: "/property-search/signature",
   },
   user: {
     root: "/user",
