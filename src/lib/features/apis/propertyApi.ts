@@ -33,8 +33,15 @@ const propertyApi = baseApi.injectEndpoints({
         };
       },
     }),
+    signature: build.mutation<ResponseType<void>, { parcelNumber: string; signature: string }>({
+      query: (arg) => ({
+        url: "user/signature",
+        method: "POST",
+        body: arg,
+      }),
+    }),
   }),
 });
 
-export const { useCalculatePriceQuery, useLazyGetRegridQuery } = propertyApi;
+export const { useCalculatePriceQuery, useLazyGetRegridQuery, useSignatureMutation } = propertyApi;
 export default propertyApi;
