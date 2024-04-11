@@ -1,7 +1,7 @@
 import TextField from "@/components/shared/TextField";
 import React from "react";
 
-const page = () => (
+const PropertySearchSignature = () => (
   <div className="flex flex-col gap-10">
     <div className="bg-green-900 rounded-2xl py-10 px-4 flex flex-col justify-center items-center gap-6">
       <h2 className="text-green text-2xl sm:text-3xl lg:text-4xl font-semibold">Your free valuation</h2>
@@ -41,4 +41,4 @@ const page = () => (
   </div>
 );
 
-export default page;
+export default PropertySearchSignature;

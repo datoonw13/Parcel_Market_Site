@@ -2,41 +2,34 @@
 
 import Button from "@/components/shared/Button";
 import Divider from "@/components/shared/Divider";
-import TextField from "@/components/shared/TextField";
-import routes from "@/helpers/routes";
 import ArrowIcon from "@/icons/ArrowIcon";
 import LoadingCircle from "@/icons/LoadingCircle";
 import SearchLandingIcon from "@/icons/SearchLandingIcon";
 import UsdLandingIcon from "@/icons/UsdLandingIcon";
-import { useCalculatePriceMutation } from "@/lib/features/apis/propertyApi";
-import { setRedirectUrl } from "@/lib/features/slices/authedUserSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
+import { ISearchProperty } from "@/types/property";
+import { UseFormWatch } from "react-hook-form";
 
-const PropertyEstimatedPrice = () => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const findProperty = useAppSelector((state) => state.findProperty);
-  const isAuthed = useAppSelector((state) => !!state.authedUser.user);
-  const [calculatePrice, { isLoading, data }] = useCalculatePriceMutation();
+interface IPropertySearchEstimatedPrice {
+  watch: UseFormWatch<ISearchProperty>;
+}
 
-  useEffect(() => {
-    if (findProperty.info && findProperty.about) {
-      calculatePrice({ ...findProperty.info, ...findProperty.about, parcelNumber: findProperty.selectedParcelNumber });
-    }
-  }, [calculatePrice, findProperty.about, findProperty.info, findProperty.selectedParcelNumber]);
+const PropertySearchEstimatedPrice = ({ watch }: IPropertySearchEstimatedPrice) => {
+  const info = watch("info");
+  const about = watch("about");
+  const parcelNumber = watch("found.parcelNumber");
+  const { isFetching, data } = useCalculatePriceQuery({ ...info, ...about, parcelNumber });
 
   const handleSubmit = () => {
-    if (!isAuthed) {
-      router.push(routes.auth.signIn);
-      dispatch(setRedirectUrl(routes.propertySearch.signature));
-    } else {
-    }
+    // if (!isAuthed) {
+    //   router.push(routes.auth.signIn);
+    //   dispatch(setRedirectUrl(routes.propertySearch.signature));
+    // } else {
+    // }
   };
   return (
     <div className="flex flex-col gap-10">
-      {isLoading ? (
+      {isFetching ? (
         <div className="w-[150px] m-auto mt-8">
           <LoadingCircle />
         </div>
@@ -51,8 +44,8 @@ const PropertyEstimatedPrice = () => {
             <div className="w-full">
               <div style={{ background: "linear-gradient(270deg, #F59E0B 0%, #17DB66 100%)" }} className="h-[10px] rounded-lg w-full" />
               <div className="flex justify-between mt-4">
-                <p className="text-dark-green text-2xl font-semibold">$85.000</p>
-                <p className="text-dark-green text-2xl font-semibold">$125.000</p>
+                <p className="text-dark-green text-2xl font-semibold">${data?.data.range.min}</p>
+                <p className="text-dark-green text-2xl font-semibold">${data?.data.range.max}</p>
               </div>
             </div>
           </div>
@@ -92,4 +85,4 @@ const PropertyEstimatedPrice = () => {
   );
 };
 
-export default PropertyEstimatedPrice;
+export default PropertySearchEstimatedPrice;

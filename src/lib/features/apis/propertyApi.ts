@@ -1,24 +1,24 @@
 import { ISignIn, ISignInResponse, ISignUp } from "@/types/auth";
 import { ResponseType } from "@/types/common";
-import { ICalculatePrice, IFindPropertyAbout, IFindPropertyInfo } from "@/types/property";
 import { IMap } from "@/types/map";
+import { ISearchPropertyCalculatePrice, ISearchPropertyCalculatePriceResponse, ISearchPropertyInfo } from "@/types/property";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    calculatePrice: build.mutation<ResponseType<ICalculatePrice>, IFindPropertyInfo & IFindPropertyAbout>({
+    calculatePrice: build.query<ResponseType<ISearchPropertyCalculatePriceResponse>, ISearchPropertyCalculatePrice>({
       query: (arg) => ({
         url: "properties/calculate/price",
         method: "POST",
         body: arg,
       }),
     }),
-    getRegrid: build.query<ResponseType<IMap>, IFindPropertyInfo>({
+    getRegrid: build.query<ResponseType<IMap>, ISearchPropertyInfo>({
       query: (arg) => {
         const { owner, parcelNumber, ...rest } = arg;
         let api = "";
 
-        const params: Partial<IFindPropertyInfo> = { ...rest };
+        const params: Partial<ISearchPropertyInfo> = { ...rest };
         if (parcelNumber) {
           params.parcelNumber = parcelNumber;
           api = "searchByStateAndCountyAndParcel";
@@ -36,5 +36,5 @@ const propertyApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCalculatePriceMutation, useLazyGetRegridQuery } = propertyApi;
+export const { useCalculatePriceQuery, useLazyGetRegridQuery } = propertyApi;
 export default propertyApi;
