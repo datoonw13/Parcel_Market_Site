@@ -2,12 +2,11 @@
 
 import LogoHeader from "@/components/shared/LogoHeader";
 import ProgressBar from "@/components/shared/ProgressBar";
+import routes from "@/helpers/routes";
 import { useAppSelector } from "@/lib/hooks";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useCallback, useEffect } from "react";
-
-type Steps = "info" | "found" | "about" | "estimated-price";
 
 const FindPropertyLayout = ({
   children,
@@ -19,40 +18,39 @@ const FindPropertyLayout = ({
   const findProperty = useAppSelector((state) => state.findProperty);
   const authedUser = useAppSelector((state) => state.authedUser);
 
-  const steps: Steps[] = ["info", "found", "about", "estimated-price"];
+  const steps = Object.values(routes.propertySearch);
 
   const currentStep = () => {
-    const stepName = path.split("/").reverse()[0] as Steps;
-    if (stepName === "found") {
+    if (path === routes.propertySearch.found) {
       return 2;
     }
 
-    if (stepName === "about") {
+    if (path === routes.propertySearch.about) {
       return 3;
     }
 
-    if (stepName === "estimated-price") {
+    if (path === routes.propertySearch.estimatedPrice) {
       return 4;
     }
     return 1;
   };
 
   const handleGoBack = () => {
-    const newStepIndex = steps.findIndex((el) => el === steps[(currentStep() - 1) as any]) - 1;
+    const newStepIndex = steps.findIndex((el) => el === steps[(currentStep() - 1) as any]);
     const newStepName = steps[newStepIndex];
-    router.push(`/property-search/${newStepName}`);
+    router.push(`${newStepName}`);
   };
 
   const handleNavigate = useCallback(() => {
-    // if (
-    //   ["/property-search/info", "/property-search/found", "/property-search/about", "/property-search/estimated-price"].includes(path) &&
-    //   !findProperty.info
-    // ) {
-    //   router.push("/property-search/info");
-    // }
-    // if (path.includes("signature") && !authedUser.user) {
-    //   router.push("/property-search/info");
-    // }
+    if (
+      ["/property-search/info", "/property-search/found", "/property-search/about", "/property-search/estimated-price"].includes(path) &&
+      !findProperty.info
+    ) {
+      router.push("/property-search/info");
+    }
+    if (path.includes("signature") && !authedUser.user) {
+      router.push("/property-search/info");
+    }
   }, [findProperty.info, path, router, authedUser]);
 
   useEffect(() => {
