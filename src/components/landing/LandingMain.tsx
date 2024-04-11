@@ -16,10 +16,10 @@ const LandingMain = () => (
       <p className="hidden sm:block text-xl md:text-2xl text-dark-green-500 text-center lg:text-start">
         Value your land for FREE in less than 3 minutes!
       </p>
-      <Link href={routes.propertySearch.info}>
+      <Link href={routes.propertySearch.root}>
         <Button classNames="py-6 lg:hidden max-w-[500px] w-full m-auto">Value My Land</Button>
       </Link>
-      <Link href={routes.propertySearch.info}>
+      <Link href={routes.propertySearch.root}>
         <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
       </Link>
     </div>

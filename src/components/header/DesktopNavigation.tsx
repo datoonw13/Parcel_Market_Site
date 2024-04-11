@@ -19,7 +19,7 @@ const DesktopNavigation = () => {
       <Button type="text" classNames="hidden xl:block">
         About Us
       </Button>
-      <Link href={routes.propertySearch.info} className="hidden xl:block">
+      <Link href={routes.propertySearch.root} className="hidden xl:block">
         <Button>Value my land for free</Button>
       </Link>
       {!user && (

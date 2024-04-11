@@ -6,6 +6,7 @@ import "leaflet-defaulticon-compatibility";
 import { MapContainer, Marker, TileLayer, Polygon, FeatureGroup, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import { IMap } from "@/types/map";
+import { Fragment } from "react";
 import Button from "../shared/Button";
 
 interface IMapProps {
@@ -35,7 +36,7 @@ const Map = ({ data, handleParcelSelect, selectedParcelNumber }: IMapProps) => (
     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
     <FeatureGroup pathOptions={{ color: "green" }}>
       {data?.map((x) => (
-        <>
+        <Fragment key={x.properties.fields.parcelnumb}>
           <Polygon stroke key={Math.random()} fillColor="blue" positions={x.geometry.coordinates} />
           <Marker
             icon={selectedParcelNumber === x.properties.fields.parcelnumb ? markerIconRed : markerIcon}
@@ -52,7 +53,7 @@ const Map = ({ data, handleParcelSelect, selectedParcelNumber }: IMapProps) => (
               </Button>
             </Popup>
           </Marker>
-        </>
+        </Fragment>
       ))}
     </FeatureGroup>
   </MapContainer>

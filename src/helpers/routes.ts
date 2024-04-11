@@ -9,11 +9,6 @@ const routes = {
   },
   propertySearch: {
     root: "/property-search",
-    info: "/property-search/info",
-    found: "/property-search/found",
-    about: "/property-search/about",
-    estimatedPrice: "/property-search/estimated-price",
-    signature: "/property-search/signature",
   },
   user: {
     root: "/user",

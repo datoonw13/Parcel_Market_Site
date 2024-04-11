@@ -43,6 +43,7 @@
     "camelcase": "off",
     "no-use-before-define": "off",
     "no-unused-expressions": "off",
-    "no-param-reassign" : "off"
+    "no-param-reassign" : "off",
+    "no-shadow":"off"
   }
 }

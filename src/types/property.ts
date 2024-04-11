@@ -26,3 +26,25 @@ export interface ICalculatePrice extends IFindPropertyInfo, IFindPropertyAbout {
   saleYear: Date | null;
   user_id: string | null;
 }
+
+export interface ISearchProperty {
+  info: {
+    owner: string | null;
+    state: string | null;
+    county: string | null;
+    parcelNumber: string | null;
+  };
+  found: {
+    parcelNumber: string | null;
+  };
+  about: {
+    waterFeature: boolean | null;
+    waterFront: boolean | null;
+    langCoverType: string | null;
+    propertyCondition: string | null;
+    wetProperty: string | null;
+    propertyRestriction: string | null;
+    propertyAccess: string | null;
+    improvementsValue: number | null;
+  };
+}
