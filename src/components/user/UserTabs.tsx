@@ -17,6 +17,7 @@ const UserTabs = ({ selectedTab, setSelectedTab }: IUserTabs) => (
       classNames="w-fit [&>div:nth-child(2)]:hidden lg:[&>div:nth-child(2)]:block"
       type={selectedTab === TabsEnum.PROPERTIES ? "primary" : "tertiary"}
       startIcon={<BookMarkIcon />}
+      disabled
     >
       My Listed properties
     </Button>
@@ -25,6 +26,7 @@ const UserTabs = ({ selectedTab, setSelectedTab }: IUserTabs) => (
       classNames="w-fit [&>div:nth-child(2)]:hidden lg:[&>div:nth-child(2)]:block"
       type={selectedTab === TabsEnum.OFFERS ? "primary" : "tertiary"}
       startIcon={<FlagIcon />}
+      disabled
     >
       My Offers
     </Button>
@@ -33,6 +35,7 @@ const UserTabs = ({ selectedTab, setSelectedTab }: IUserTabs) => (
       classNames="w-fit [&>div:nth-child(2)]:hidden lg:[&>div:nth-child(2)]:block"
       type={selectedTab === TabsEnum.MESSAGES ? "primary" : "tertiary"}
       startIcon={<MailBoxIcon />}
+      disabled
     >
       My Messages
     </Button>

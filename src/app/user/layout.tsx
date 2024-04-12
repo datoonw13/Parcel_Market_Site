@@ -14,7 +14,7 @@ const FindPropertyLayout = ({
   const path = usePathname();
 
   return (
-    <div className="bg-neutral-400 min-h-screen">
+    <div className="bg-white min-h-screen">
       <Container>
         <Header />
         {children}

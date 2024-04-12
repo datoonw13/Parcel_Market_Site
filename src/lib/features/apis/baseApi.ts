@@ -13,7 +13,7 @@ const baseQuery = fetchBaseQuery({
 
 export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) => (action: any) => {
   if (action.type.includes("rejected")) {
-    toast.error("Something went wrong");
+    toast.error(action?.payload?.data?.errors?.[0] || "Something went wrong");
   }
 
   return next(action);
