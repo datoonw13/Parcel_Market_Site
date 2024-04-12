@@ -9,7 +9,7 @@ const UserPage = () => {
   const [selectedTab, setSelectedTab] = useState<TabsEnum>(TabsEnum.ACCOUNT);
 
   return (
-    <div className="flex gap-10 flex-col mb-10">
+    <div className="flex gap-10 flex-col my-10">
       <UserTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       <UserAccountTab />
     </div>

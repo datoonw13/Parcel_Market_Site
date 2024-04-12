@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "../shared/Button";
 import Divider from "../shared/Divider";
+import Avatar from "../shared/Avatar";
 
 const UserAccountTab = () => (
   <div className="border border-grey-100 rounded p-10">
@@ -15,7 +16,11 @@ const UserAccountTab = () => (
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 justify-between">
         <p className="text-lg font-bold m-auto sm:m-0">Profile Image</p>
-        <div className="w-[80px] h-[80px] rounded-full bg-error flex items-center justify-center m-auto">IM</div>
+        <div className="rounded-full flex items-center justify-center m-auto">
+          <Avatar className="w-[80px] h-[80px]" src="/home.png">
+            LG
+          </Avatar>
+        </div>
         <div className="w-full sm:w-fit ml-auto">
           <Button type="tertiary" classNames="w-full sm:w-[95px]">
             Change
