@@ -54,7 +54,7 @@ const SignIn = () => {
         label="Password"
         placeholder="Enter password"
         endIcon={
-          <Button classNames="!p-0" type="text" onClick={() => setShowPassword(!showPassword)}>
+          <Button type="none" classNames="!p-0 text-dark-green" onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? "hidden" : "show"}
           </Button>
         }

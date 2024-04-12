@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import { ReactNode } from "react";
 
-type ButtonType = "primary" | "alternate" | "tertiary";
+type ButtonType = "primary" | "alternate" | "tertiary" | "none";
 
 interface ButtonProps {
   type?: ButtonType;
