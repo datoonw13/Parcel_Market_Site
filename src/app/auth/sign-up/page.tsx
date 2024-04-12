@@ -81,7 +81,7 @@ const SignUp = () => {
         label="Password"
         placeholder="Enter password"
         endIcon={
-          <Button classNames="!p-0" type="text" onClick={() => setShowPassword(!showPassword)}>
+          <Button classNames="!p-0" type="none" onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? "hidden" : "show"}
           </Button>
         }
@@ -95,7 +95,7 @@ const SignUp = () => {
         label="Repeat"
         placeholder="Repeat password"
         endIcon={
-          <Button classNames="!p-0" type="text" onClick={() => setConfirmShowPassword(!showPassword)}>
+          <Button classNames="!p-0" type="none" onClick={() => setConfirmShowPassword(!showPassword)}>
             {showConfirmPassword ? "hidden" : "show"}
           </Button>
         }

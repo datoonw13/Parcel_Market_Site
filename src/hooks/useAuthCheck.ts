@@ -8,7 +8,7 @@ import { useCallback, useEffect } from "react";
 const useAuthCheck = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.authedUser.user);
-  const [getAuthedUser] = useLazyGetAuthedUserQuery();
+  const [getAuthedUser, { data }] = useLazyGetAuthedUserQuery();
 
   const checkToken = useCallback(async () => {
     try {

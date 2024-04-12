@@ -13,7 +13,6 @@ const routes = {
   },
   user: {
     root: "/user",
-    profile: "/user/profile",
   },
 };
 

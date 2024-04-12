@@ -35,16 +35,16 @@ const MobileNav = () => {
                 }}
               >
                 <div className="flex h-full bg-neutral-400 shadow-lg w-[300px] flex-col">
-                  <Button type="text" classNames="rounded-none">
+                  <Button type="none" classNames="rounded-none">
                     Sell your property
                   </Button>
-                  <Button type="text" classNames="rounded-none">
+                  <Button type="none" classNames="rounded-none">
                     Find a Preferred Land Agent
                   </Button>
-                  <Button type="text" classNames="rounded-none">
+                  <Button type="none" classNames="rounded-none">
                     About Us
                   </Button>
-                  <Button type="text">
+                  <Button type="none">
                     <Link href={routes.auth.signIn}> Sign In</Link>
                   </Button>
                 </div>

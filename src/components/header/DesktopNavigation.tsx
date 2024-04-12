@@ -10,13 +10,13 @@ const DesktopNavigation = () => {
   const { pending, user } = useAppSelector((state) => state.authedUser);
   return (
     <div className="w-full flex items-center justify-end gap-4 text-dark-green font-semibold">
-      <Button type="text" classNames="hidden xl:block">
+      <Button type="none" classNames="hidden xl:block">
         Sell your property
       </Button>
-      <Button type="text" classNames="hidden xl:block">
+      <Button type="none" classNames="hidden xl:block">
         Find a Preferred Land Agent
       </Button>
-      <Button type="text" classNames="hidden xl:block">
+      <Button type="none" classNames="hidden xl:block">
         About Us
       </Button>
       <Link href={routes.propertySearch.root} className="hidden xl:block">

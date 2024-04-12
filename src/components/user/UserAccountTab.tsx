@@ -1,11 +1,25 @@
 import React, { useState } from "react";
+import { useAppSelector } from "@/lib/hooks";
+import { useUpdateProfileMutation } from "@/lib/features/apis/authApi";
 import Button from "../shared/Button";
 import Divider from "../shared/Divider";
 import Avatar from "../shared/Avatar";
 
 const UserAccountTab = () => {
+  const { user } = useAppSelector((state) => state.authedUser);
   const [newImage, setNewImage] = useState<File | null>(null);
-  console.log(newImage, 11);
+
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
+  const handleImageUpdate = async () => {
+    try {
+      if (!newImage) {
+        throw new Error();
+      }
+      await updateProfile(newImage).unwrap();
+      setNewImage(null);
+    } catch (error) {}
+  };
 
   return (
     <div className="border border-grey-100 rounded p-10">
@@ -21,15 +35,17 @@ const UserAccountTab = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 justify-between">
           <p className="text-lg font-bold m-auto sm:m-0">Profile Image</p>
           <div className="rounded-full flex items-center justify-center m-auto">
-            <Avatar className="w-[80px] h-[80px]" src="/home.png">
-              LG
-            </Avatar>
+            <Avatar className="w-[80px] h-[80px]" src={newImage ? URL.createObjectURL(newImage) : null} />
           </div>
-          <div className="w-full sm:w-fit ml-auto">
+          <div className="w-full sm:w-fit ml-auto flex gap-2">
             {newImage ? (
               <>
-                <Button>Cancel</Button>
-                <Button>Save</Button>
+                <Button disabled={isLoading} color="error" type="tertiary" classNames="w-[95px]" onClick={() => setNewImage(null)}>
+                  Cancel
+                </Button>
+                <Button type="tertiary" classNames="w-[95px]" onClick={handleImageUpdate} loading={isLoading}>
+                  Save
+                </Button>
               </>
             ) : (
               <Button type="tertiary" classNames="w-full sm:w-[95px] relative">
@@ -37,7 +53,7 @@ const UserAccountTab = () => {
                   onChange={(e) => setNewImage(e?.target?.files?.[0] || null)}
                   type="file"
                   accept="image/png, image/jpeg"
-                  className="absolute w-full left-0 top-0 indent-[-999px] cursor-pointer"
+                  className="absolute w-full left-0 top-0 indent-[-999px] cursor-pointer h-full"
                 />
                 Change
               </Button>
@@ -47,7 +63,7 @@ const UserAccountTab = () => {
         <Divider />
         <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 justify-between">
           <p className="text-lg font-bold m-auto sm:m-0">Profile Name</p>
-          <p className="text-lg text-center truncate">John Doe</p>
+          <p className="text-lg text-center truncate">{`${user?.name}`}</p>
           <div className="w-full sm:w-fit ml-auto">
             <Button type="tertiary" classNames="w-full sm:w-[95px]">
               Change
@@ -76,7 +92,7 @@ const UserAccountTab = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 justify-between">
           <p className="text-lg font-bold m-auto sm:m-0">Email</p>
-          <p className="text-lg text-center truncate w-full">johndoe@parcelmarket.com</p>
+          <p className="text-lg text-center truncate w-full">{user?.email}</p>
           <div className="w-full sm:w-fit ml-auto">
             <Button type="tertiary" classNames="w-full sm:w-[95px]">
               Change
@@ -86,7 +102,7 @@ const UserAccountTab = () => {
         <Divider />
         <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 justify-between">
           <p className="text-lg font-bold m-auto sm:m-0">Contact Number</p>
-          <p className="text-lg text-center truncate">+1 23456789</p>
+          <p className="text-lg text-center truncate">{user?.mobileNumber || "-"}</p>
           <div className="w-full sm:w-fit ml-auto">
             <Button type="tertiary" classNames="w-full sm:w-[95px]">
               Change

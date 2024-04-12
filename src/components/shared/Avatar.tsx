@@ -1,17 +1,17 @@
+import NoAvatarIcon from "@/icons/NoAvatarIcon";
 import clsx from "clsx";
 import Image from "next/image";
-import React, { ReactNode } from "react";
+import React from "react";
 
 interface IAvatar {
-  src?: string;
-  children?: ReactNode;
+  src: string | null;
   className?: string;
 }
 
-const Avatar = ({ children, src, className }: IAvatar) => (
+const Avatar = ({ src, className }: IAvatar) => (
   <div className={clsx("flex items-center justify-center bg-green-100 rounded-full relative", className)}>
-    {children}
-    {src && <Image src={src} alt="" fill objectFit="contain" className="w-full h-full rounded-full" />}
+    {src && <Image src={src} alt="" fill objectFit="unser" className="w-full h-full rounded-full" />}
+    {!src && <NoAvatarIcon />}
   </div>
 );
 

@@ -1,6 +1,7 @@
 import { ISignIn, ISignInResponse, ISignUp, UserModel } from "@/types/auth";
 import { ResponseType } from "@/types/common";
 import baseApi from "./baseApi";
+import { setAuthedUser } from "../slices/authedUserSlice";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -24,8 +25,30 @@ const authApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    updateProfile: build.mutation<ResponseType<{ image: string }>, File>({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append("image", file);
+        return {
+          url: "user/profile",
+          method: "PUT",
+          body: formData,
+        };
+      },
+      async onQueryStarted(file, { dispatch, queryFulfilled, getState }) {
+        try {
+          const res = await queryFulfilled;
+          dispatch(
+            authApi.util.updateQueryData("getAuthedUser", undefined, (draft) => {
+              draft.data.image = res.data.data.image;
+              dispatch(setAuthedUser({ ...draft.data }));
+            })
+          );
+        } catch {}
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation, useAuthMutation, useLazyGetAuthedUserQuery } = authApi;
+export const { useRegisterMutation, useAuthMutation, useLazyGetAuthedUserQuery, useUpdateProfileMutation } = authApi;
 export default authApi;

@@ -32,4 +32,5 @@ export interface UserModel {
   name: string;
   role: "user" | "admin";
   mobileNumber: string;
+  image: string | null;
 }
