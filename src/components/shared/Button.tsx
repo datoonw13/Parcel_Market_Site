@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import { ReactNode } from "react";
 
-type ButtonType = "primary" | "secondary" | "tertiary" | "text";
+type ButtonType = "primary" | "alternate" | "tertiary";
 
 interface ButtonProps {
   type?: ButtonType;
@@ -13,61 +13,63 @@ interface ButtonProps {
   startIcon?: ReactNode;
   onClick?: () => void;
   loading?: boolean;
+  color?: "error" | "default";
 }
 
-const generateClassNames = (params: ButtonProps) => {
-  switch (params.type) {
-    case "primary":
-      return `
-      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:hover:stroke-white [&_div_svg_*]:disabled:stroke-dark-green-100 [&_div_svg_*]:transition-all
-      bg-green hover:bg-green-900 disabled:bg-grey-200
-      text-dark-green hover:text-white disabled:text-dark-green-100 
-      disabled:cursor-not-allowed
-      border-transparent
-      `;
-    case "secondary":
-      return `
-      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:disabled:stroke-dark-green-100
-      bg-green-100 hover:bg-green-300 disabled:bg-grey-200
-      text-dark-green disabled:text-dark-green-100
-      disabled:cursor-not-allowed
-      border-transparent
-      `;
-    case "tertiary":
-      return `
-      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:disabled:stroke-dark-green-100
-      bg-white hover:bg-green-300 disabled:bg-grey-200
-      text-dark-green disabled:text-dark-green-100
-      border border-solid border-green disabled:border-grey-200   
-      disabled:cursor-not-allowed`;
-    case "text":
-      return `
-      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:disabled:stroke-dark-green-100
-      text-dark-green disabled:text-dark-green-100 
-      py-2.5 px-4  
-      disabled:cursor-not-allowed
-      border-transparent
-      `;
-    default:
-      return "";
+const primaryButtonStyles = (color: ButtonProps["color"]) => {
+  if (color === "error") {
+    return `text-white bg-error hover:bg-error-900`;
   }
+  return `text-dark-green hover:text-white bg-green hover:bg-green-900`;
+};
+
+const alternateButtonStyles = (color: ButtonProps["color"]) => {
+  if (color === "error") {
+    return `bg-error-100 hover:bg-error-300 text-white`;
+  }
+  return `bg-green-100 hover:bg-green-300 text-dark-green`;
+};
+
+const tertiaryButtonStyles = (color: ButtonProps["color"]) => {
+  if (color === "error") {
+    return `border border-solid border-error bg-white hover:bg-error-100 text-error hover:text-white`;
+  }
+  return `text-dark-green border border-solid border-green bg-white hover:bg-green-300`;
+};
+
+const styles = (color: ButtonProps["color"]) => ({
+  primary: clsx(`
+  ${color === "error" && "text-white bg-error hover:bg-error-900"} 
+  ${color === "default" && "text-dark-green hover:text-white bg-green hover:bg-green-900"}`),
+  secondary: `${color === "error" ? "bg-error-100 hover:bg-error-300" : "bg-green-100 hover:bg-green-300"} text-white disabled:bg-grey-200`,
+  tertiary: `bg-white ${color === "error" ? "hover:bg-error-100" : "hover:bg-green-300"} disabled:bg-grey-200 border border-solid ${
+    color === "error" ? "border-error" : "border-green"
+  } disabled:border-grey-200`,
+  text: "text-dark-green",
+});
+
+const buttonStyles = (color: ButtonProps["color"], type: ButtonProps["type"]) => {
+  const baseClassnames = `relative font-semibold p-4 border-transparent  disabled:border-grey-200 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:text-dark-green-100 disabled:cursor-not-allowed disabled:bg-grey-200`;
+  const startIconClassnames = `[&_div_svg]:w-[24px] [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:hover:stroke-white [&_div_svg_*]:disabled:stroke-dark-green-100 [&_div_svg_*]:transition-all`;
+  let classNames = `${baseClassnames} ${startIconClassnames}`;
+  if (type === "primary") {
+    classNames += ` ${primaryButtonStyles(color)}`;
+  }
+  if (type === "alternate") {
+    classNames += ` ${alternateButtonStyles(color)}`;
+  }
+  if (type === "tertiary") {
+    classNames += ` ${tertiaryButtonStyles(color)}`;
+  }
+  return classNames;
 };
 
 const Button = (params: ButtonProps) => {
-  const { type = "primary", disabled, children, classNames, startIcon: StartIcon, onClick, loading } = params;
+  const { type = "primary", color = "default", disabled, children, classNames, startIcon: StartIcon, onClick, loading } = params;
 
   return (
-    <button
-      type="button"
-      disabled={disabled || loading}
-      onClick={onClick}
-      className={clsx(
-        "relative font-semibold p-4 rounded-lg transition-colors flex items-center justify-center gap-2",
-        generateClassNames({ ...params, type }),
-        classNames
-      )}
-    >
-      {StartIcon && <div className="w-[24px]">{StartIcon}</div>}
+    <button type="button" disabled={disabled || loading} onClick={onClick} className={clsx(buttonStyles(color, type), classNames)}>
+      {StartIcon && <div>{StartIcon}</div>}
       <div className={clsx(loading ? "opacity-0" : "opacity-100")}> {children}</div>
       {loading && (
         <div className="w-[40px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]">

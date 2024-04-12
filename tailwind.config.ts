@@ -3,7 +3,17 @@ import type { Config } from "tailwindcss";
 export const colors = {
   white: "#FFFFFF",
   backdrop: "rgba(22, 28, 36, 0.4)",
-  error: "red",
+  error: {
+    100: "#ff6666",
+    200: "#ff4d4d",
+    300: "#ff3333",
+    400: "#ff1a1a",
+    DEFAULT: "#ff0000",
+    600: "#e60000",
+    700: "#cc0000",
+    800: "#b30000",
+    900: "#990000",
+  },
   green: {
     DEFAULT: "#16DB65",
     100: "#E4F8E9",
