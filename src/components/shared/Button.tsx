@@ -1,5 +1,3 @@
-import LoadingCircle from "@/icons/LoadingCircle";
-import LoadingDotsIcon from "@/icons/LoadingDotsIcon";
 import SpinnerIcon from "@/icons/SpinnerIcon";
 import clsx from "clsx";
 
@@ -20,13 +18,36 @@ interface ButtonProps {
 const generateClassNames = (params: ButtonProps) => {
   switch (params.type) {
     case "primary":
-      return "bg-green text-dark-green hover:bg-green-900 hover:text-white disabled:bg-grey-200 disabled:text-dark-green-100 disabled:cursor-not-allowed";
+      return `
+      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:hover:stroke-white [&_div_svg_*]:disabled:stroke-dark-green-100 [&_div_svg_*]:transition-all
+      bg-green hover:bg-green-900 disabled:bg-grey-200
+      text-dark-green hover:text-white disabled:text-dark-green-100 
+      disabled:cursor-not-allowed
+      border-transparent
+      `;
     case "secondary":
-      return "bg-green-100 text-dark-green hover:bg-green-300 disabled:bg-grey-200 disabled:text-dark-green-100 disabled:cursor-not-allowed";
+      return `
+      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:disabled:stroke-dark-green-100
+      bg-green-100 hover:bg-green-300 disabled:bg-grey-200
+      text-dark-green disabled:text-dark-green-100
+      disabled:cursor-not-allowed
+      border-transparent
+      `;
     case "tertiary":
-      return "bg-white text-dark-green hover:bg-green-300 border border-solid border-green disabled:border-grey-200 disabled:bg-grey-200 disabled:text-dark-green-100 disabled:cursor-not-allowed";
+      return `
+      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:disabled:stroke-dark-green-100
+      bg-white hover:bg-green-300 disabled:bg-grey-200
+      text-dark-green disabled:text-dark-green-100
+      border border-solid border-green disabled:border-grey-200   
+      disabled:cursor-not-allowed`;
     case "text":
-      return "text-dark-green py-2.5 px-4 disabled:text-dark-green-100 disabled:cursor-not-allowed";
+      return `
+      [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:disabled:stroke-dark-green-100
+      text-dark-green disabled:text-dark-green-100 
+      py-2.5 px-4  
+      disabled:cursor-not-allowed
+      border-transparent
+      `;
     default:
       return "";
   }
