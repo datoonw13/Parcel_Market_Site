@@ -72,7 +72,7 @@ const Button = (params: ButtonProps) => {
       {StartIcon && <div>{StartIcon}</div>}
       <div className={clsx(loading ? "opacity-0" : "opacity-100")}> {children}</div>
       {loading && (
-        <div className="w-[40px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]">
+        <div className="w-[40px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] flex justify-center">
           <SpinnerIcon color="green" />
         </div>
       )}
