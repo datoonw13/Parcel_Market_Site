@@ -7,7 +7,7 @@ import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
 
 const DesktopNavigation = () => {
-  const { pending, user } = useAppSelector((state) => state.authedUser);
+  const { user } = useAppSelector((state) => state.authedUser);
   return (
     <div className="w-full flex items-center justify-end gap-4 text-dark-green font-semibold">
       <Button type="none" classNames="hidden xl:block">
@@ -24,7 +24,7 @@ const DesktopNavigation = () => {
       </Link>
       {!user && (
         <Link href={routes.auth.signIn}>
-          <Button loading={pending} type="tertiary" classNames="hidden xl:block">
+          <Button type="tertiary" classNames="hidden xl:block">
             Sign In
           </Button>
         </Link>
