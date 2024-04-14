@@ -37,17 +37,6 @@ const tertiaryButtonStyles = (color: ButtonProps["color"]) => {
   return `text-dark-green border border-solid border-green bg-white hover:bg-green-300`;
 };
 
-const styles = (color: ButtonProps["color"]) => ({
-  primary: clsx(`
-  ${color === "error" && "text-white bg-error hover:bg-error-900"} 
-  ${color === "default" && "text-dark-green hover:text-white bg-green hover:bg-green-900"}`),
-  secondary: `${color === "error" ? "bg-error-100 hover:bg-error-300" : "bg-green-100 hover:bg-green-300"} text-white disabled:bg-grey-200`,
-  tertiary: `bg-white ${color === "error" ? "hover:bg-error-100" : "hover:bg-green-300"} disabled:bg-grey-200 border border-solid ${
-    color === "error" ? "border-error" : "border-green"
-  } disabled:border-grey-200`,
-  text: "text-dark-green",
-});
-
 const buttonStyles = (color: ButtonProps["color"], type: ButtonProps["type"]) => {
   const baseClassnames = `relative font-semibold p-4 border-transparent  disabled:border-grey-200 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:text-dark-green-100 disabled:cursor-not-allowed disabled:bg-grey-200`;
   const startIconClassnames = `[&_div_svg]:w-[24px] [&_div_svg_*]:stroke-dark-green [&_div_svg_*]:hover:stroke-white [&_div_svg_*]:disabled:stroke-dark-green-100 [&_div_svg_*]:transition-all`;

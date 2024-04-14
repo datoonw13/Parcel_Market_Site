@@ -14,7 +14,13 @@ const ProgressBar = (props: Props) => {
   return (
     <div>
       <div className="flex items-center gap-8 justify-between mb-4">
-        <Button startIcon={<ArrowCircleIcon />} type="none" classNames="!p-0 text-dark-green" onClick={goBack} disabled={currentStep === 1}>
+        <Button
+          startIcon={<ArrowCircleIcon />}
+          type="primary"
+          classNames="!p-0 text-dark-green !bg-white"
+          onClick={goBack}
+          disabled={currentStep === 1}
+        >
           Back
         </Button>
         <p className="text-green-600 font-medium">{completedPercent}% complete</p>

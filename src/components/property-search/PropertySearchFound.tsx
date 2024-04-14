@@ -20,7 +20,7 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
 
   const getData = useCallback(async () => {
     try {
-      await getRegrid(watch("info")).unwrap();
+      await getRegrid({ ...watch("info") }).unwrap();
     } catch (error) {
       onError();
     }
