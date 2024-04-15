@@ -5,6 +5,7 @@ import LogoHeader from "@/components/shared/LogoHeader";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import LoadingCircle from "@/icons/LoadingCircle";
 import { useAppSelector } from "@/lib/hooks";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
@@ -27,7 +28,7 @@ const AuthLayout = ({
   }, [pending, router, user]);
 
   return (
-    <>
+    <GoogleOAuthProvider clientId="428513511195-dcmr74bq5f6sitpidje63os8kq58ktpe.apps.googleusercontent.com">
       <div>
         <LogoHeader />
         <div className="px-4 py-8 md:pb-12 lg:pb-16 xl:pb-18 2xl:pb-20 flex flex-col gap-10 max-w-[430px] m-auto">
@@ -53,7 +54,7 @@ const AuthLayout = ({
       <section>
         <Footer />
       </section>
-    </>
+    </GoogleOAuthProvider>
   );
 };
 

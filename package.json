@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.3",
+    "add": "^2.0.6",
     "clsx": "^2.1.0",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
@@ -26,6 +28,7 @@
     "short-uuid": "^4.2.2",
     "typed-usa-states": "^2.1.0",
     "uuid": "^9.0.1",
+    "yarn": "^1.22.22",
     "yup": "^1.4.0"
   },
   "devDependencies": {

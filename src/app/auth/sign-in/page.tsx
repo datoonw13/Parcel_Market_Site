@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 
 const SignIn = () => {
   const router = useRouter();
@@ -37,6 +38,10 @@ const SignIn = () => {
     } catch (error) {
       localStorage.removeItem("token");
     }
+  });
+
+  const onGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => console.log(tokenResponse),
   });
 
   return (
@@ -67,7 +72,7 @@ const SignIn = () => {
         Continue
       </Button>
       <Divider label="OR" />
-      <Button type="tertiary" startIcon={<GoogleIcon />}>
+      <Button type="tertiary" startIcon={<GoogleIcon />} disableStartIconColor onClick={onGoogleLogin}>
         Sign in with google
       </Button>
       <Divider />
