@@ -39,9 +39,6 @@ const UserNavbarMenu = () => {
             <Link href={routes.user.root}>
               <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">User Profile</li>
             </Link>
-            <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">Menu Item</li>
-            <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">Menu Item</li>
-            <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">Menu Item</li>
             <Divider />
             <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500 rounded-bl rounded-br" onClick={() => dispatch(logOut())}>
               Log Out
