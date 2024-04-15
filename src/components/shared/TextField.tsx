@@ -66,7 +66,7 @@ const TextField = (props: Props) => {
         <input
           type={type}
           defaultValue={defaultValue}
-          value={value}
+          value={value || ""}
           placeholder={placeholder}
           className={clsx("focus-visible:outline-none w-full bg-[#F3F4F6]", error ? "text-error" : "text-grey-500")}
           onChange={(e) => onChange && onChange(e.target.value)}

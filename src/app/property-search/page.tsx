@@ -58,6 +58,14 @@ const PropertySearch = () => {
 
   const onSubmit = handleSubmit(
     (data) => {
+      if (step === StepsEnum.INFO) {
+        setStep(StepsEnum.FOUND);
+        clearErrors();
+      }
+      if (step === StepsEnum.FOUND) {
+        setStep(StepsEnum.ABOUT);
+        clearErrors();
+      }
       if (step === StepsEnum.ABOUT) {
         setStep(StepsEnum.ESTIMATED_PRICE);
         clearErrors();
@@ -83,7 +91,7 @@ const PropertySearch = () => {
     if (step === StepsEnum.FOUND && !watch("found.parcelNumber")) {
       return true;
     }
-    if (step === StepsEnum.ABOUT && Object.values(watch("about")).some((el) => !el)) {
+    if (step === StepsEnum.ABOUT && Object.values(watch("about")).some((el) => el === null)) {
       return true;
     }
     return false;

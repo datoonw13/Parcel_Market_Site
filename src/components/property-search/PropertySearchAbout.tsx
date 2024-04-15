@@ -10,7 +10,6 @@ interface IPropertySearchAbout {
   setValue: UseFormSetValue<ISearchProperty>;
   watch: UseFormWatch<ISearchProperty>;
 }
-
 const PropertySearchAbout = ({ setValue, watch }: IPropertySearchAbout) => (
   <div className="flex flex-col gap-6">
     {list.map((el) => (
@@ -36,10 +35,10 @@ const PropertySearchAbout = ({ setValue, watch }: IPropertySearchAbout) => (
       <TextField
         name="improvements-value"
         startIcon="$"
-        value={watch("about.improvementsValue") || ""}
+        value={watch("about.improvementsValue") === 0 ? "0" : watch("about.improvementsValue") || ""}
         onChange={(value) => {
-          if (/^-?\d+\.?\d*$/.test(value) || value === "") {
-            setValue("about.improvementsValue", Number(value), { shouldDirty: true, shouldValidate: true });
+          if (!Number.isNaN(value) || value === "" || value === "0") {
+            setValue("about.improvementsValue", value || value === "0" ? Number(value) : null, { shouldDirty: true, shouldValidate: true });
           }
         }}
       />
