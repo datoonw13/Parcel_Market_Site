@@ -21,6 +21,16 @@ const UserAccountTab = () => {
     } catch (error) {}
   };
 
+  const generateImageUrl = () => {
+    if (newImage) {
+      return URL.createObjectURL(newImage);
+    }
+    if (user?.image) {
+      return `http://64.23.229.149:4000/${user.image}`;
+    }
+    return null;
+  };
+
   return (
     <div className="border border-grey-100 rounded p-10">
       <div className="flex flex-col gap-6">
@@ -35,7 +45,7 @@ const UserAccountTab = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 justify-between">
           <p className="text-lg font-bold m-auto sm:m-0">Profile Image</p>
           <div className="rounded-full flex items-center justify-center m-auto">
-            <Avatar className="w-[80px] h-[80px]" src={newImage ? URL.createObjectURL(newImage) : null} />
+            <Avatar className="w-[80px] h-[80px]" src={generateImageUrl()} />
           </div>
           <div className="w-full sm:w-fit ml-auto flex gap-2">
             {newImage ? (
