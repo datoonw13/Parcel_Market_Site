@@ -8,7 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "@/lib/features/apis/authApi";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usaStatesFull } from "typed-usa-states";
 import Select from "@/components/shared/Select";
@@ -53,13 +52,23 @@ const SignUp = () => {
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
 
   const {
-    register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitted },
     setValue,
     getValues,
-  } = useForm<ISignUp>({ resolver: yupResolver(signUpSchema) });
+  } = useForm<ISignUp>({
+    resolver: yupResolver(signUpSchema),
+    defaultValues: {
+      confirmPassword: null,
+      county: null,
+      email: null,
+      mailingAddress: null,
+      name: null,
+      password: null,
+      state: null,
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -75,7 +84,8 @@ const SignUp = () => {
       <TextField
         label="Name"
         placeholder="Enter your name"
-        register={register}
+        onChange={(value) => setValue("name", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+        value={watch("name") || ""}
         name="name"
         error={!!errors.name}
         helperText={errors.name?.message}
@@ -83,7 +93,8 @@ const SignUp = () => {
       <TextField
         label="Email"
         placeholder="Enter your email"
-        register={register}
+        onChange={(value) => setValue("email", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+        value={watch("email") || ""}
         name="email"
         error={!!errors.email}
         helperText={errors.email?.message}
@@ -91,7 +102,8 @@ const SignUp = () => {
       <TextField
         label="Mailing Address"
         placeholder="Your address"
-        register={register}
+        onChange={(value) => setValue("mailingAddress", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+        value={watch("mailingAddress") || ""}
         name="mailingAddress"
         error={!!errors.mailingAddress}
         helperText={errors.mailingAddress?.message}
@@ -108,7 +120,7 @@ const SignUp = () => {
           helperText={errors?.state?.message}
           onChange={(value) => {
             setValue("state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-            setValue("county", "");
+            setValue("county", null);
           }}
         />
         <Select
@@ -133,7 +145,8 @@ const SignUp = () => {
             {showPassword ? "hidden" : "show"}
           </Button>
         }
-        register={register}
+        onChange={(value) => setValue("password", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+        value={watch("password") || ""}
         name="password"
         error={!!errors.password}
         helperText={errors.password?.message}
@@ -147,7 +160,8 @@ const SignUp = () => {
             {showConfirmPassword ? "hidden" : "show"}
           </Button>
         }
-        register={register}
+        onChange={(value) => setValue("confirmPassword", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+        value={watch("confirmPassword") || ""}
         name="confirmPassword"
         error={!!errors.confirmPassword}
         helperText={errors.confirmPassword?.message}

@@ -2,12 +2,8 @@
 
 import WarningCircleIcon from "@/icons/WarningCircleIcon";
 import clsx from "clsx";
-import { ReactNode, forwardRef } from "react";
-import { ChangeHandler, FieldValues, UseFormRegister } from "react-hook-form";
+import { ReactNode } from "react";
 import { Tooltip } from "react-tooltip";
-import uuid from "short-uuid";
-
-type RegisterType = UseFormRegister<any>;
 
 interface Props {
   label?: string;
@@ -18,7 +14,6 @@ interface Props {
   endIcon?: ReactNode;
   startIcon?: ReactNode;
   onChange?: (value: string) => void;
-  register?: any;
   name: string;
   error?: boolean;
   helperText?: string;
@@ -26,21 +21,7 @@ interface Props {
 }
 
 const TextField = (props: Props) => {
-  const {
-    defaultValue,
-    label,
-    placeholder,
-    info,
-    endIcon,
-    value,
-    onChange,
-    register,
-    name,
-    error,
-    helperText,
-    type = "text",
-    startIcon,
-  } = props;
+  const { defaultValue, label, placeholder, info, endIcon, value, onChange, name, error, helperText, type = "text", startIcon } = props;
   const labelId = `${name}-select-label`;
 
   return (
@@ -70,7 +51,6 @@ const TextField = (props: Props) => {
           placeholder={placeholder}
           className={clsx("focus-visible:outline-none w-full bg-[#F3F4F6]", error ? "text-error" : "text-grey-500")}
           onChange={(e) => onChange && onChange(e.target.value)}
-          {...(register && name && { ...register(name) })}
         />
         {endIcon && endIcon}
       </div>

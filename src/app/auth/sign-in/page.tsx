@@ -26,8 +26,17 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<ISignIn>({ resolver: yupResolver(signInSchema) });
+    formState: { errors, isSubmitted },
+    getValues,
+    setValue,
+    watch,
+  } = useForm<ISignIn>({
+    resolver: yupResolver(signInSchema),
+    defaultValues: {
+      email: null,
+      password: null,
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -49,10 +58,11 @@ const SignIn = () => {
       <TextField
         label="Email"
         placeholder="Enter your email"
-        register={register}
         name="email"
         error={!!errors.email}
         helperText={errors.email?.message}
+        onChange={(value) => setValue("email", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+        value={watch("email") || ""}
       />
       <TextField
         type={showPassword ? "text" : "password"}
@@ -63,10 +73,11 @@ const SignIn = () => {
             {showPassword ? "hidden" : "show"}
           </Button>
         }
-        register={register}
+        onChange={(value) => setValue("password", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
         name="password"
         error={!!errors.password}
         helperText={errors.password?.message}
+        value={watch("password") || ""}
       />
       <Button onClick={onSubmit} loading={isLoading}>
         Continue
