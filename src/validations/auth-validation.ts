@@ -21,7 +21,6 @@ export const signUpSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Your passwords do not match."),
   state: yup.string().required("State is a required field").nullable(),
   county: yup.string().required("County is a required field").nullable(),
-  // role: yup.mixed<UserRoles>().oneOf(Object.values(UserRoles)).required(),
 });
 
 export const signInSchema = yup.object().shape({

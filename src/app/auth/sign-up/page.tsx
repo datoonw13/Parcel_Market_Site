@@ -12,6 +12,9 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usaStatesFull } from "typed-usa-states";
 import Select from "@/components/shared/Select";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import routes from "@/helpers/routes";
+import { setAuthPending, setAuthedUser } from "@/lib/features/slices/authedUserSlice";
 
 const getAllStates = () =>
   usaStatesFull
@@ -43,6 +46,8 @@ const getCountyValue = (county: string | null, state: string | null) => {
 
 const SignUp = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
   const [registerUser, { isLoading }] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
@@ -53,15 +58,18 @@ const SignUp = () => {
     watch,
     formState: { errors, isSubmitted },
     setValue,
+    getValues,
   } = useForm<ISignUp>({ resolver: yupResolver(signUpSchema) });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       const res = await registerUser(data).unwrap();
-      toast.success(res.message);
-      router.push(`/sign-in`);
+      router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
+      localStorage.setItem("token", res.data.user.token);
+      dispatch(setAuthPending(true));
     } catch (error) {}
   });
+
   return (
     <>
       <TextField
@@ -100,7 +108,7 @@ const SignUp = () => {
           helperText={errors?.state?.message}
           onChange={(value) => {
             setValue("state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-            setValue("county", null);
+            setValue("county", "");
           }}
         />
         <Select

@@ -1,11 +1,11 @@
-import { ISignIn, ISignInResponse, ISignUp, UserModel } from "@/types/auth";
+import { ISignIn, ISignInResponse, ISignUp, ISignUpResponse, UserModel } from "@/types/auth";
 import { ResponseType } from "@/types/common";
 import baseApi from "./baseApi";
 import { setAuthedUser } from "../slices/authedUserSlice";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    register: build.mutation<ResponseType<null>, ISignUp>({
+    register: build.mutation<ResponseType<ISignUpResponse>, ISignUp>({
       query: (arg) => ({
         url: "user/register",
         method: "POST",

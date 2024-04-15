@@ -33,4 +33,11 @@ export interface UserModel {
   role: "user" | "admin";
   mobileNumber: string;
   image: string | null;
+  mailingAddress: string;
+  state: string;
+  county: string;
+}
+
+export interface ISignUpResponse {
+  user: UserModel & { token: string };
 }
