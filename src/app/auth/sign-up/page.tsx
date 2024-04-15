@@ -10,6 +10,36 @@ import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "@/lib/features/apis/authApi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { usaStatesFull } from "typed-usa-states";
+import Select from "@/components/shared/Select";
+
+const getAllStates = () =>
+  usaStatesFull
+    .filter((el) => el.contiguous)
+    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
+
+const getCounties = (state: string | null) => {
+  if (!state) {
+    return [];
+  }
+  const counties = getAllStates().find(({ value }) => value === state)?.counties || [];
+  const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
+  return formattedCounties;
+};
+
+const getStateValue = (state: string | null) => {
+  if (!state) {
+    return null;
+  }
+  return getAllStates().find((el) => el.value === state) || null;
+};
+
+const getCountyValue = (county: string | null, state: string | null) => {
+  if (!county || !state) {
+    return null;
+  }
+  return getCounties(state).find(({ value }) => value === county) || null;
+};
 
 const SignUp = () => {
   const router = useRouter();
@@ -20,7 +50,9 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isSubmitted },
+    setValue,
   } = useForm<ISignUp>({ resolver: yupResolver(signUpSchema) });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -56,24 +88,32 @@ const SignUp = () => {
         error={!!errors.mailingAddress}
         helperText={errors.mailingAddress?.message}
       />
-      <div className="flex gap-6">
-        <TextField
+      <div className="flex items-baseline gap-6">
+        <Select
+          value={getStateValue(watch("state"))}
+          options={getAllStates()}
+          name="state"
           info="your info here"
           label="State"
           placeholder="State"
-          register={register}
-          name="state"
-          error={!!errors.state}
-          helperText={errors.state?.message}
+          error={!!errors?.state}
+          helperText={errors?.state?.message}
+          onChange={(value) => {
+            setValue("state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+            setValue("county", null);
+          }}
         />
-        <TextField
+        <Select
+          options={getCounties(watch("state"))}
+          value={getCountyValue(watch("county"), watch("state"))}
+          name="county"
           info="your info here"
           label="County"
           placeholder="County"
-          register={register}
-          name="county"
-          error={!!errors.county}
-          helperText={errors.county?.message}
+          error={!!errors?.county}
+          helperText={errors?.county?.message}
+          disabled={!watch("state")}
+          onChange={(value) => setValue("county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true })}
         />
       </div>
       <TextField
