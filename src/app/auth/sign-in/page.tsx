@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const SignIn = () => {
   const router = useRouter();
@@ -23,13 +23,10 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [authUser, { isLoading }] = useAuthMutation();
   const [googleAuth, { isLoading: googleAuthLoading, data }] = useGoogleAuthMutation();
-  console.log(data, 22);
 
   const {
-    register,
     handleSubmit,
     formState: { errors, isSubmitted },
-    getValues,
     setValue,
     watch,
   } = useForm<ISignIn>({
