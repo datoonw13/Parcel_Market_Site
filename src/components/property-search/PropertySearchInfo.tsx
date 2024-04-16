@@ -44,72 +44,68 @@ interface IPropertySearchInfo {
   watch: UseFormWatch<ISearchProperty>;
 }
 
-const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: IPropertySearchInfo) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-
-  return (
-    <div className="flex flex-col gap-6">
-      <TextField
-        value={watch("info.owner") || ""}
-        name="owner"
-        onChange={(value) => {
-          setValue("info.owner", value || null, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-          isSubmitted && trigger("info.parcelNumber");
-        }}
-        error={!!errors?.info?.owner}
-        helperText={errors?.info?.owner?.message}
+const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: IPropertySearchInfo) => (
+  <div className="flex flex-col gap-6">
+    <TextField
+      value={watch("info.owner") || ""}
+      name="owner"
+      onChange={(value) => {
+        setValue("info.owner", value || null, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+        isSubmitted && trigger("info.parcelNumber");
+      }}
+      error={!!errors?.info?.owner}
+      helperText={errors?.info?.owner?.message}
+      info="your info here"
+      label="Name of the owner"
+      placeholder="Enter name of the owner"
+      disabled={!!watch("info.parcelNumber")}
+    />
+    <div className="flex items-baseline gap-6">
+      <Select
+        value={getStateValue(watch("info.state"))}
+        options={getAllStates()}
+        name="state"
         info="your info here"
-        label="Name of the owner"
-        placeholder="Enter name of the owner"
+        label="State"
+        placeholder="State"
+        error={!!errors?.info?.state}
+        helperText={errors?.info?.state?.message}
+        onChange={(value) => {
+          setValue("info.state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+          setValue("info.county", null);
+        }}
       />
-      <div className="flex items-baseline gap-6">
-        <Select
-          value={getStateValue(watch("info.state"))}
-          options={getAllStates()}
-          name="state"
-          info="your info here"
-          label="State"
-          placeholder="State"
-          error={!!errors?.info?.state}
-          helperText={errors?.info?.state?.message}
-          onChange={(value) => {
-            setValue("info.state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-            setValue("info.county", null);
-          }}
-        />
-        <Select
-          options={getCounties(watch("info.state"))}
-          value={getCountyValue(watch("info.county"), watch("info.state"))}
-          name="county"
-          info="your info here"
-          label="County"
-          placeholder="County"
-          error={!!errors?.info?.county}
-          helperText={errors?.info?.county?.message}
-          disabled={!watch("info.state")}
-          onChange={(value) =>
-            setValue("info.county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true })
-          }
-        />
-      </div>
-      <TextField
-        name="parcelNumber"
-        value={watch("info.parcelNumber") || ""}
-        onChange={(value) => {
-          if (/^-?\d+\.?\d*$/.test(value) || value === "") {
-            setValue("info.parcelNumber", value === "" ? null : value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
-            isSubmitted && trigger("info.owner");
-          }
-        }}
-        error={!!errors?.info?.parcelNumber}
-        helperText={errors?.info?.parcelNumber?.message}
+      <Select
+        options={getCounties(watch("info.state"))}
+        value={getCountyValue(watch("info.county"), watch("info.state"))}
+        name="county"
         info="your info here"
-        label="Parcel Number"
-        placeholder="Enter parcel Number"
+        label="County"
+        placeholder="County"
+        error={!!errors?.info?.county}
+        helperText={errors?.info?.county?.message}
+        disabled={!watch("info.state")}
+        onChange={(value) =>
+          setValue("info.county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true })
+        }
       />
     </div>
-  );
-};
+    <TextField
+      name="parcelNumber"
+      value={watch("info.parcelNumber") || ""}
+      onChange={(value) => {
+        if (/^-?\d+\.?\d*$/.test(value) || value === "") {
+          setValue("info.parcelNumber", value === "" ? null : value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
+          isSubmitted && trigger("info.owner");
+        }
+      }}
+      error={!!errors?.info?.parcelNumber}
+      helperText={errors?.info?.parcelNumber?.message}
+      info="your info here"
+      label="Parcel Number"
+      placeholder="Enter parcel Number"
+    />
+  </div>
+);
 
 export default PropertySearchInfo;
