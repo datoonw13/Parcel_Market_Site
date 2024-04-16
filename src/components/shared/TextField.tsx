@@ -18,10 +18,25 @@ interface Props {
   error?: boolean;
   helperText?: string;
   type?: string;
+  disabled?: boolean;
 }
 
 const TextField = (props: Props) => {
-  const { defaultValue, label, placeholder, info, endIcon, value, onChange, name, error, helperText, type = "text", startIcon } = props;
+  const {
+    defaultValue,
+    label,
+    placeholder,
+    info,
+    endIcon,
+    value,
+    onChange,
+    name,
+    error,
+    helperText,
+    type = "text",
+    startIcon,
+    disabled,
+  } = props;
   const labelId = `${name}-select-label`;
 
   return (
@@ -40,16 +55,22 @@ const TextField = (props: Props) => {
       <div
         className={clsx(
           "text-grey-500 border px-4 py-3 focus-visible:outline-none rounded-lg w-full flex gap-4 bg-[#F3F4F6]",
-          error ? "border-error" : "border-[#9CA3AF]"
+          error ? "border-error" : "border-[#9CA3AF]",
+          disabled && "opacity-70 cursor-not-allowed"
         )}
       >
         {startIcon && startIcon}
         <input
+          disabled={disabled}
           type={type}
           defaultValue={defaultValue}
           value={value || ""}
           placeholder={placeholder}
-          className={clsx("focus-visible:outline-none w-full bg-[#F3F4F6]", error ? "text-error" : "text-grey-500")}
+          className={clsx(
+            "focus-visible:outline-none w-full bg-[#F3F4F6]",
+            error ? "text-error" : "text-grey-500",
+            disabled && "opacity-70 cursor-not-allowed"
+          )}
           onChange={(e) => onChange && onChange(e.target.value)}
         />
         {endIcon && endIcon}

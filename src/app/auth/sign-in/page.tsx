@@ -5,7 +5,7 @@ import Divider from "@/components/shared/Divider";
 import TextField from "@/components/shared/TextField";
 import routes from "@/helpers/routes";
 import GoogleIcon from "@/icons/GoogleIcon";
-import { useAuthMutation } from "@/lib/features/apis/authApi";
+import { useAuthMutation, useGoogleAuthMutation } from "@/lib/features/apis/authApi";
 import { useAppSelector } from "@/lib/hooks";
 import { ISignIn } from "@/types/auth";
 import { signInSchema } from "@/validations/auth-validation";
@@ -22,6 +22,8 @@ const SignIn = () => {
   const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
   const [showPassword, setShowPassword] = useState(false);
   const [authUser, { isLoading }] = useAuthMutation();
+  const [googleAuth, { isLoading: googleAuthLoading, data }] = useGoogleAuthMutation();
+  console.log(data, 22);
 
   const {
     register,
@@ -50,7 +52,18 @@ const SignIn = () => {
   });
 
   const onGoogleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => console.log(tokenResponse),
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await googleAuth(tokenResponse.access_token).unwrap();
+        if ("access_token" in res.data) {
+          toast.success("You have successfully logged in");
+          router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
+          localStorage.setItem("token", res.data.access_token);
+        } else {
+          router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
+        }
+      } catch (error) {}
+    },
   });
 
   return (
@@ -83,7 +96,7 @@ const SignIn = () => {
         Continue
       </Button>
       <Divider label="OR" />
-      <Button type="tertiary" startIcon={<GoogleIcon />} disableStartIconColor onClick={onGoogleLogin}>
+      <Button loading={googleAuthLoading} type="tertiary" startIcon={<GoogleIcon />} disableStartIconColor onClick={onGoogleLogin}>
         Sign in with google
       </Button>
       <Divider />

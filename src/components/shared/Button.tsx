@@ -78,7 +78,7 @@ const Button = (params: ButtonProps) => {
       onClick={onClick}
       className={clsx(buttonStyles(color, type, disableStartIconColor), classNames)}
     >
-      {StartIcon && <div>{StartIcon}</div>}
+      {StartIcon && <div className={clsx(loading ? "opacity-0" : "opacity-100")}>{StartIcon}</div>}
       <div className={clsx(loading ? "opacity-0" : "opacity-100")}> {children}</div>
       {loading && (
         <div className="w-[40px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] flex justify-center">

@@ -10,6 +10,7 @@ export interface ISignUp {
   county: string | null;
   password: string | null;
   confirmPassword: string | null;
+  token?: string;
 }
 
 export interface ISignIn {
@@ -40,4 +41,18 @@ export interface UserModel {
 
 export interface ISignUpResponse {
   user: UserModel & { token: string };
+}
+
+export interface GoogleAuthNotRegisteredResponse {
+  email: string;
+  name: string;
+  picture: string;
+  token: string;
+}
+
+export interface IRegisterGoogleUser {
+  token: string | null;
+  state: string | null;
+  county: string | null;
+  mailingAddress: string | null;
 }

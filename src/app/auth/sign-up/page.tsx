@@ -5,10 +5,10 @@ import Button from "@/components/shared/Button";
 import TextField from "@/components/shared/TextField";
 import { signUpSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRegisterMutation } from "@/lib/features/apis/authApi";
-import { useRouter } from "next/navigation";
+import { useRegisterGoogleUserMutation, useRegisterMutation } from "@/lib/features/apis/authApi";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { usaStatesFull } from "typed-usa-states";
 import Select from "@/components/shared/Select";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -45,20 +45,27 @@ const getCountyValue = (county: string | null, state: string | null) => {
 
 const SignUp = () => {
   const router = useRouter();
+  const params = useSearchParams();
+
   const dispatch = useAppDispatch();
   const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
   const [registerUser, { isLoading }] = useRegisterMutation();
+  const [registerGoogleUser, { isLoading: registerGoogleUserLoading }] = useRegisterGoogleUserMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmShowPassword] = useState(false);
+  const googleAuthToken = params.get("token");
+  const googleAuthName = params.get("name");
+  const googleAuthEmail = params.get("email");
+  const isGoogleUser = !!(googleAuthToken && googleAuthName && googleAuthEmail);
 
   const {
     handleSubmit,
     watch,
     formState: { errors, isSubmitted },
     setValue,
-    getValues,
+    reset,
   } = useForm<ISignUp>({
-    resolver: yupResolver(signUpSchema),
+    resolver: yupResolver(signUpSchema(isGoogleUser)),
     defaultValues: {
       confirmPassword: null,
       county: null,
@@ -72,12 +79,33 @@ const SignUp = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await registerUser(data).unwrap();
+      const res = isGoogleUser
+        ? await registerGoogleUser({
+            token: googleAuthToken,
+            state: data.state,
+            county: data.county,
+            mailingAddress: data.mailingAddress,
+          }).unwrap()
+        : await registerUser({ ...data }).unwrap();
       router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
       localStorage.setItem("token", res.data.user.token);
       dispatch(setAuthPending(true));
     } catch (error) {}
   });
+
+  useEffect(() => {
+    if (googleAuthEmail && googleAuthName && googleAuthToken) {
+      reset({
+        confirmPassword: null,
+        county: null,
+        email: googleAuthEmail,
+        mailingAddress: null,
+        name: googleAuthName,
+        password: null,
+        state: null,
+      });
+    }
+  }, [googleAuthEmail, googleAuthName, googleAuthToken, params, reset]);
 
   return (
     <>
@@ -89,6 +117,7 @@ const SignUp = () => {
         name="name"
         error={!!errors.name}
         helperText={errors.name?.message}
+        disabled={isGoogleUser}
       />
       <TextField
         label="Email"
@@ -98,6 +127,7 @@ const SignUp = () => {
         name="email"
         error={!!errors.email}
         helperText={errors.email?.message}
+        disabled={isGoogleUser}
       />
       <TextField
         label="Mailing Address"
@@ -136,37 +166,41 @@ const SignUp = () => {
           onChange={(value) => setValue("county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true })}
         />
       </div>
-      <TextField
-        type={showPassword ? "text" : "password"}
-        label="Password"
-        placeholder="Enter password"
-        endIcon={
-          <Button classNames="!p-0" type="none" onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? "hidden" : "show"}
-          </Button>
-        }
-        onChange={(value) => setValue("password", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
-        value={watch("password") || ""}
-        name="password"
-        error={!!errors.password}
-        helperText={errors.password?.message}
-      />
-      <TextField
-        type={showConfirmPassword ? "text" : "password"}
-        label="Repeat"
-        placeholder="Repeat password"
-        endIcon={
-          <Button classNames="!p-0" type="none" onClick={() => setConfirmShowPassword(!showPassword)}>
-            {showConfirmPassword ? "hidden" : "show"}
-          </Button>
-        }
-        onChange={(value) => setValue("confirmPassword", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
-        value={watch("confirmPassword") || ""}
-        name="confirmPassword"
-        error={!!errors.confirmPassword}
-        helperText={errors.confirmPassword?.message}
-      />
-      <Button loading={isLoading} onClick={onSubmit}>
+      {!isGoogleUser && (
+        <>
+          <TextField
+            type={showPassword ? "text" : "password"}
+            label="Password"
+            placeholder="Enter password"
+            endIcon={
+              <Button classNames="!p-0" type="none" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? "hidden" : "show"}
+              </Button>
+            }
+            onChange={(value) => setValue("password", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+            value={watch("password") || ""}
+            name="password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
+          <TextField
+            type={showConfirmPassword ? "text" : "password"}
+            label="Repeat"
+            placeholder="Repeat password"
+            endIcon={
+              <Button classNames="!p-0" type="none" onClick={() => setConfirmShowPassword(!showPassword)}>
+                {showConfirmPassword ? "hidden" : "show"}
+              </Button>
+            }
+            onChange={(value) => setValue("confirmPassword", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
+            value={watch("confirmPassword") || ""}
+            name="confirmPassword"
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+          />
+        </>
+      )}
+      <Button loading={isLoading || registerGoogleUserLoading} onClick={onSubmit}>
         Create Account
       </Button>
     </>
