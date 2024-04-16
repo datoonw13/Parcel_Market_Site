@@ -38,7 +38,7 @@ const authApi = baseApi.injectEndpoints({
     }),
     registerGoogleUser: build.mutation<ResponseType<ISignUpResponse>, IRegisterGoogleUser>({
       query: (args) => ({
-        url: "auth/google",
+        url: "user/register",
         method: "POST",
         body: args,
       }),
