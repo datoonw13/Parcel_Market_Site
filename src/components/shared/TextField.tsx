@@ -66,6 +66,7 @@ const TextField = (props: Props) => {
           defaultValue={defaultValue}
           value={value || ""}
           placeholder={placeholder}
+          autoComplete="new-password"
           className={clsx(
             "focus-visible:outline-none w-full bg-[#F3F4F6]",
             error ? "text-error" : "text-grey-500",
