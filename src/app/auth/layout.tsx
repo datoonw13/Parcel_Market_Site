@@ -28,7 +28,7 @@ const AuthLayout = ({
   }, [pending, router, user]);
 
   return (
-    <GoogleOAuthProvider clientId="428513511195-dcmr74bq5f6sitpidje63os8kq58ktpe.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_API || ""}>
       <div>
         <LogoHeader />
         <div className="px-4 py-8 md:pb-12 lg:pb-16 xl:pb-18 2xl:pb-20 flex flex-col gap-10 max-w-[430px] m-auto">
