@@ -19,8 +19,15 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
   const [getRegrid, { isLoading, data }] = useLazyGetRegridQuery();
 
   const getData = useCallback(async () => {
+    const { entityName, firstName, lastName, isLegalEntity, ...rest } = { ...watch("info") };
+    const reqData = {
+      ...rest,
+      owner: isLegalEntity
+        ? entityName?.trim().replaceAll(" ", "").toUpperCase() || ""
+        : `${firstName?.trim().replaceAll(" ", "").toUpperCase()}${lastName?.trim().replaceAll(" ", "").toUpperCase()}`,
+    };
     try {
-      await getRegrid({ ...watch("info") }).unwrap();
+      await getRegrid({ ...reqData }).unwrap();
     } catch (error) {
       onError();
     }

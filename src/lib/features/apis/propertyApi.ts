@@ -12,17 +12,18 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
-    getRegrid: build.query<ResponseType<IMap>, ISearchPropertyInfo>({
+    getRegrid: build.query<
+      ResponseType<IMap>,
+      Partial<Omit<ISearchPropertyInfo, "entityName" | "lastName" | "firstName" | "isLegalEntity">> & { owner?: string }
+    >({
       query: (arg) => {
-        const { owner, parcelNumber, ...rest } = arg;
         let api = "";
 
-        const params: Partial<ISearchPropertyInfo> = { ...rest };
-        if (parcelNumber) {
-          params.parcelNumber = parcelNumber;
+        const params = { ...arg };
+        if (arg.parcelNumber) {
+          delete params.owner;
           api = "searchByStateAndCountyAndParcel";
         } else {
-          params.owner = owner;
           api = "searchByStateAndCountyAndOwner";
         }
         return {
