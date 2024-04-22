@@ -33,7 +33,7 @@ const propertyApi = baseApi.injectEndpoints({
         };
       },
     }),
-    signature: build.mutation<ResponseType<void>, { parcelNumber: string; signature: string }>({
+    signature: build.mutation<ResponseType<void>, { parcelNumber: string; accepted: boolean }>({
       query: (arg) => ({
         url: "user/signature",
         method: "POST",

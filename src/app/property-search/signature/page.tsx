@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/shared/Button";
+import CheckBox from "@/components/shared/CheckBox";
 import TextField from "@/components/shared/TextField";
 import routes from "@/helpers/routes";
 import { useSignatureMutation } from "@/lib/features/apis/propertyApi";
@@ -12,13 +13,13 @@ import toast from "react-hot-toast";
 const PropertySearchSignature = () => {
   const router = useRouter();
   const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
-  const [signature, setSignature] = useState<null | string>(null);
+  const [accepted, setAccepted] = useState<boolean>(false);
   const [sendSignature, { isLoading }] = useSignatureMutation();
 
   const handleSubmit = async () => {
-    if (signature && selectedParcelNumber) {
+    if (accepted && selectedParcelNumber) {
       try {
-        await sendSignature({ signature, parcelNumber: selectedParcelNumber }).unwrap();
+        await sendSignature({ accepted, parcelNumber: selectedParcelNumber }).unwrap();
         toast.success("Check your email");
         router.push(routes.home.root);
       } catch {}
@@ -54,12 +55,11 @@ const PropertySearchSignature = () => {
         elementum sed. Aenean posuere luctus augue eu interdum. Donec pretium felis et massa dapibus dignissim. Nullam in tortor congue
         velit tempor bibendum. Nulla facilisi.
       </p>
-      <TextField
-        value={signature || ""}
-        label="Your signature"
-        info="Test"
-        name="signature"
-        onChange={(value) => setSignature(value || null)}
+      <CheckBox
+        classNames="font-semibold"
+        checked={accepted}
+        onChange={() => setAccepted(!accepted)}
+        label="I agree to the terms and conditions"
       />
       <p className="text-sm">
         Sed commodo convallis tellus, sed finibus odio porta ut. Aliquam eu tempor ante, id eleifend mi. Phasellus consectetur tellus non
@@ -67,7 +67,7 @@ const PropertySearchSignature = () => {
         accumsan imperdiet. Donec euismod lorem et quam bibendum, in aliquam nibh fringilla. Cras aliquam risus tortor, id lobortis orci
         ornare ut.
       </p>
-      <Button loading={isLoading} disabled={!signature} onClick={handleSubmit}>
+      <Button loading={isLoading} disabled={!accepted} onClick={handleSubmit}>
         SUBMIT
       </Button>
     </div>
