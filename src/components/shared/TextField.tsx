@@ -19,6 +19,7 @@ interface Props {
   helperText?: string;
   type?: string;
   disabled?: boolean;
+  fullWidth?: boolean;
 }
 
 const TextField = (props: Props) => {
@@ -36,11 +37,12 @@ const TextField = (props: Props) => {
     type = "text",
     startIcon,
     disabled,
+    fullWidth,
   } = props;
   const labelId = `${name}-select-label`;
 
   return (
-    <div>
+    <div className={clsx(fullWidth && "w-full")}>
       <div className="flex items-center mb-2 gap-2">
         {label && <p className={clsx("font-medium", error ? "text-error" : "text-grey-500")}>{label}</p>}
         {info && (

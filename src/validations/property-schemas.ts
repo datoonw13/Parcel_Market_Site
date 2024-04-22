@@ -3,13 +3,37 @@ import * as yup from "yup";
 export const searchPropertySchema = yup.object().shape({
   info: yup.object().shape(
     {
-      owner: yup
+      isLegalEntity: yup.boolean().required(),
+      entityName: yup
         .string()
         .required("Owner name or parcel number is a required field")
         .nullable()
-        .when("parcelNumber", ([parcelNumber], schema) =>
-          parcelNumber ? schema : schema.notOneOf([null], "Owner name or parcel number is a required field")
-        ),
+        .when(["parcelNumber", "isLegalEntity"], ([parcelNumber, isLegalEntity], schema) => {
+          if (parcelNumber || !isLegalEntity) {
+            return schema;
+          }
+          return schema.notOneOf([null], "Owner name or parcel number is a required field");
+        }),
+      firstName: yup
+        .string()
+        .required("firstName or parcel number is a required field")
+        .nullable()
+        .when(["parcelNumber", "isLegalEntity"], ([parcelNumber, isLegalEntity], schema) => {
+          if (parcelNumber || isLegalEntity) {
+            return schema;
+          }
+          return schema.notOneOf([null], "First name or parcel number is a required field");
+        }),
+      lastName: yup
+        .string()
+        .required("Last name or parcel number is a required field")
+        .nullable()
+        .when(["parcelNumber", "isLegalEntity"], ([parcelNumber, isLegalEntity], schema) => {
+          if (parcelNumber || isLegalEntity) {
+            return schema;
+          }
+          return schema.notOneOf([null], "Last name or parcel number is a required field");
+        }),
       state: yup.string().required("State is a required field").nullable().notOneOf([null], "State is a required field"),
       county: yup.string().required("County is a required field").nullable().notOneOf([null], "County is a required field"),
       parcelNumber: yup

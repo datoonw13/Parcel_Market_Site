@@ -35,9 +35,12 @@ const PropertySearch = () => {
     defaultValues: {
       info: {
         county: null,
-        owner: null,
         parcelNumber: null,
         state: null,
+        entityName: null,
+        firstName: null,
+        isLegalEntity: false,
+        lastName: null,
       },
       about: {
         improvementsValue: null,

@@ -29,10 +29,13 @@ export interface ISearchPropertyCalculatePriceResponse {
 }
 
 export interface ISearchPropertyInfo {
-  owner: string | null;
   state: string | null;
   county: string | null;
   parcelNumber: string | null;
+  entityName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  isLegalEntity: boolean;
 }
 
 export interface ISearchPropertyAbout {
