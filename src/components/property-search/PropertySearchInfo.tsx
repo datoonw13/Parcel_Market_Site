@@ -107,6 +107,7 @@ const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: I
         setValue("info.lastName", null, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
       }}
       checked={watch("info.isLegalEntity")}
+      classNames="ml-auto"
     />
     <div className="flex items-baseline gap-6">
       <Select
