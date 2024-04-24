@@ -60,7 +60,7 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
                   <p className="text-grey-500 font-medium">Parcel Number: #{el.properties.fields.parcelnumb}</p>
                 </div>
                 <div className="flex items-center gap-8">
-                  <p className="text-green-600 font-medium hidden sm:block">58.78 Acres</p>
+                  <p className="text-green-600 font-medium hidden sm:block">{el.properties.fields.ll_gisacre.toFixed(2)} Acres</p>
                   <Button
                     disabled={watch("found.parcelNumber") === el.properties.fields.parcelnumb}
                     classNames="!py-2"

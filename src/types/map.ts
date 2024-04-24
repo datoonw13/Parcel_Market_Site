@@ -11,6 +11,7 @@ export type IMap = Array<{
       parcelnumb: string;
       lon: string;
       lat: string;
+      ll_gisacre: number;
     };
   };
 }>;
