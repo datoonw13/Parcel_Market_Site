@@ -1,4 +1,11 @@
-export interface ISearchPropertyCalculatePrice extends ISearchPropertyInfo, ISearchPropertyAbout {}
+export interface ISearchPropertyCalculatePrice {
+  body: ISearchPropertyAbout & Pick<ISearchPropertyInfo, "state" | "county"> & { owner?: string; parcelNumber: string };
+  queryParams: {
+    lat: string;
+    lon: string;
+    acres: string;
+  };
+}
 
 export interface ISearchPropertyCalculatePriceResponse {
   state: string;

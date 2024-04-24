@@ -9,7 +9,10 @@ const propertyApi = baseApi.injectEndpoints({
       query: (arg) => ({
         url: "properties/calculate/price",
         method: "POST",
-        body: arg,
+        body: { ...arg.body },
+        params: {
+          ...arg.queryParams,
+        },
       }),
     }),
     getRegrid: build.query<ResponseType<IMap>, ICalculatePriceReq>({

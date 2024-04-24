@@ -10,23 +10,44 @@ import UsdLandingIcon from "@/icons/UsdLandingIcon";
 import { useCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
 import { setSelectedParcelNumber } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { ISearchProperty } from "@/types/property";
+import { IMapItem } from "@/types/map";
+import { ISearchProperty, ISearchPropertyCalculatePrice } from "@/types/property";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { UseFormWatch } from "react-hook-form";
 
 interface IPropertySearchEstimatedPrice {
   watch: UseFormWatch<ISearchProperty>;
+  selectedRegridItem: IMapItem;
+  goBack: () => void;
 }
 
-const PropertySearchEstimatedPrice = ({ watch }: IPropertySearchEstimatedPrice) => {
+const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, goBack }: IPropertySearchEstimatedPrice) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.authedUser.user);
-  const info = watch("info");
-  const about = watch("about");
-  const parcelNumber = watch("found.parcelNumber");
-  const { isFetching, data } = useCalculatePriceQuery({ ...info, ...about, parcelNumber });
+
+  const getReqData = (): ISearchPropertyCalculatePrice => {
+    const reqData: ISearchPropertyCalculatePrice = {
+      body: {
+        ...watch("about"),
+        county: watch("info.county"),
+        state: watch("info.state"),
+        parcelNumber: watch("found.parcelNumber") || "",
+        owner: selectedRegridItem.properties.fields.owner,
+        improvementsValue: watch("about.improvementsValue") || 0,
+      },
+      queryParams: {
+        acres: selectedRegridItem.properties.fields.ll_gisacre.toString(),
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
+      },
+    };
+
+    return reqData;
+  };
+
+  const { isFetching, data, isError } = useCalculatePriceQuery({ ...getReqData() });
 
   const handleSubmit = () => {
     dispatch(setSelectedParcelNumber(watch("found.parcelNumber")));
@@ -36,6 +57,12 @@ const PropertySearchEstimatedPrice = ({ watch }: IPropertySearchEstimatedPrice) 
       router.push(routes.propertySearch.signature);
     }
   };
+
+  useEffect(() => {
+    if (isError) {
+      goBack();
+    }
+  }, [goBack, isError]);
 
   return (
     <div className="flex flex-col gap-10">

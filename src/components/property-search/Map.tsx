@@ -5,14 +5,14 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-defaulticon-compatibility";
 import { MapContainer, Marker, TileLayer, Polygon, FeatureGroup, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
-import { IMap } from "@/types/map";
+import { IMap, IMapItem } from "@/types/map";
 import { Fragment } from "react";
 import Button from "../shared/Button";
 
 interface IMapProps {
   data: IMap;
   selectedParcelNumber: string | null;
-  handleParcelSelect: (parcelNumber: string) => void;
+  handleParcelSelect: (parcel: IMapItem) => void;
 }
 
 const markerIcon = new Icon({
@@ -47,7 +47,7 @@ const Map = ({ data, handleParcelSelect, selectedParcelNumber }: IMapProps) => (
               <Button
                 classNames="py-2 mt-6 ml-auto"
                 disabled={selectedParcelNumber === x.properties.fields.parcelnumb}
-                onClick={() => handleParcelSelect(x.properties.fields.parcelnumb)}
+                onClick={() => handleParcelSelect(x)}
               >
                 {selectedParcelNumber === x.properties.fields.parcelnumb ? "Selected" : "Select"}
               </Button>

@@ -1,11 +1,12 @@
 import Button from "@/components/shared/Button";
 import LoadingCircle from "@/icons/LoadingCircle";
 import { useLazyGetRegridQuery } from "@/lib/features/apis/propertyApi";
-import { useCallback, useEffect } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
 import dynamic from "next/dynamic";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { ICalculatePriceReq, ISearchProperty, ISearchPropertyInfo } from "@/types/property";
+import { IMapItem } from "@/types/map";
 
 const Map = dynamic(() => import("@/components/property-search/Map"), { ssr: false });
 
@@ -13,9 +14,10 @@ interface IPropertySearchFound {
   setValue: UseFormSetValue<ISearchProperty>;
   watch: UseFormWatch<ISearchProperty>;
   onError: () => void;
+  setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
 }
 
-const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound) => {
+const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }: IPropertySearchFound) => {
   const [getRegrid, { isLoading, data }] = useLazyGetRegridQuery();
 
   const getData = useCallback(async () => {
@@ -42,10 +44,6 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
     }
   }, [getRegrid, onError, watch]);
 
-  const handleParcelSelect = (parcelNumber: string) => {
-    setValue("found.parcelNumber", parcelNumber, { shouldValidate: true });
-  };
-
   useEffect(() => {
     getData();
   }, [getData]);
@@ -59,7 +57,16 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
       ) : (
         <>
           <div className="relative w-full h-[315px] rounded-2xl">
-            {data && <Map data={data.data} selectedParcelNumber={watch("found.parcelNumber")} handleParcelSelect={handleParcelSelect} />}
+            {data && (
+              <Map
+                data={data.data}
+                selectedParcelNumber={watch("found.parcelNumber")}
+                handleParcelSelect={(parcel) => {
+                  setValue("found.parcelNumber", parcel.properties.fields.parcelnumb, { shouldValidate: true });
+                  setSelectedRegridItem(parcel);
+                }}
+              />
+            )}
           </div>
           <div className="grid gap-6">
             {data?.data.map((el, i) => (
@@ -75,7 +82,10 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
                   <Button
                     disabled={watch("found.parcelNumber") === el.properties.fields.parcelnumb}
                     classNames="!py-2"
-                    onClick={() => handleParcelSelect(el.properties.fields.parcelnumb)}
+                    onClick={() => {
+                      setValue("found.parcelNumber", el.properties.fields.parcelnumb, { shouldValidate: true });
+                      setSelectedRegridItem(el);
+                    }}
                   >
                     {watch("found.parcelNumber") === el.properties.fields.parcelnumb ? "Selected" : "Select"}
                   </Button>

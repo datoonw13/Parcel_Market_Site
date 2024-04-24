@@ -6,6 +6,7 @@ import PropertySearchFound from "@/components/property-search/PropertySearchFoun
 import PropertySearchInfo from "@/components/property-search/PropertySearchInfo";
 import Button from "@/components/shared/Button";
 import ProgressBar from "@/components/shared/ProgressBar";
+import { IMapItem } from "@/types/map";
 import { ISearchProperty, ISearchPropertyAbout } from "@/types/property";
 import { searchPropertySchema } from "@/validations/property-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -23,6 +24,7 @@ enum StepsEnum {
 
 const PropertySearch = () => {
   const [step, setStep] = useState<StepsEnum>(StepsEnum.INFO);
+  const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
   const {
     handleSubmit,
     formState: { errors, isSubmitted },
@@ -158,9 +160,13 @@ const PropertySearch = () => {
       {step === StepsEnum.INFO && (
         <PropertySearchInfo setValue={setValue} trigger={trigger} errors={errors} isSubmitted={isSubmitted} watch={watch} />
       )}
-      {step === StepsEnum.FOUND && <PropertySearchFound setValue={setValue} watch={watch} onError={onRegridError} />}
+      {step === StepsEnum.FOUND && (
+        <PropertySearchFound setSelectedRegridItem={setSelectedRegridItem} setValue={setValue} watch={watch} onError={onRegridError} />
+      )}
       {step === StepsEnum.ABOUT && <PropertySearchAbout setValue={setValue} watch={watch} />}
-      {step === StepsEnum.ESTIMATED_PRICE && <PropertySearchEstimatedPrice watch={watch} />}
+      {step === StepsEnum.ESTIMATED_PRICE && selectedRegridItem && (
+        <PropertySearchEstimatedPrice selectedRegridItem={selectedRegridItem} watch={watch} goBack={() => setStep(step - 1)} />
+      )}
 
       <div
         className={clsx(

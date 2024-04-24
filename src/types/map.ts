@@ -1,6 +1,6 @@
 import { PolygonProps } from "react-leaflet";
 
-export type IMap = Array<{
+export interface IMapItem {
   type: "Feature";
   geometry: {
     type: "Polygon";
@@ -12,6 +12,9 @@ export type IMap = Array<{
       lon: string;
       lat: string;
       ll_gisacre: number;
+      owner: string;
     };
   };
-}>;
+}
+
+export type IMap = Array<IMapItem>;
