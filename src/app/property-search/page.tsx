@@ -31,6 +31,7 @@ const PropertySearch = () => {
     setValue,
     trigger,
     watch,
+    reset,
     clearErrors,
   } = useForm<ISearchProperty>({
     resolver: yupResolver(searchPropertySchema),
@@ -148,6 +149,12 @@ const PropertySearch = () => {
     };
   };
 
+  const onReset = () => {
+    setStep(StepsEnum.INFO);
+    setSelectedRegridItem(null);
+    reset();
+  };
+
   return (
     <div className="px-4 md:px-8 lg:px-12 lx:px-16 2xl:px-20 py-10 flex flex-col gap-10">
       <>
@@ -165,7 +172,7 @@ const PropertySearch = () => {
       )}
       {step === StepsEnum.ABOUT && <PropertySearchAbout setValue={setValue} watch={watch} />}
       {step === StepsEnum.ESTIMATED_PRICE && selectedRegridItem && (
-        <PropertySearchEstimatedPrice selectedRegridItem={selectedRegridItem} watch={watch} goBack={() => setStep(step - 1)} />
+        <PropertySearchEstimatedPrice selectedRegridItem={selectedRegridItem} watch={watch} reset={onReset} />
       )}
 
       <div

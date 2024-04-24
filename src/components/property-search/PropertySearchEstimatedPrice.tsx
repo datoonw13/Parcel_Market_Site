@@ -7,7 +7,7 @@ import ArrowIcon from "@/icons/ArrowIcon";
 import LoadingCircle from "@/icons/LoadingCircle";
 import SearchLandingIcon from "@/icons/SearchLandingIcon";
 import UsdLandingIcon from "@/icons/UsdLandingIcon";
-import { useCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
+import propertyApi, { useCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
 import { setSelectedParcelNumber } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { IMapItem } from "@/types/map";
@@ -20,10 +20,10 @@ import toast from "react-hot-toast";
 interface IPropertySearchEstimatedPrice {
   watch: UseFormWatch<ISearchProperty>;
   selectedRegridItem: IMapItem;
-  goBack: () => void;
+  reset: () => void;
 }
 
-const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, goBack }: IPropertySearchEstimatedPrice) => {
+const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPropertySearchEstimatedPrice) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.authedUser.user);
@@ -61,16 +61,16 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, goBack }: IPr
 
   useEffect(() => {
     if (isError) {
-      goBack();
+      reset();
     }
-  }, [goBack, isError]);
+  }, [reset, isError]);
 
   useEffect(() => {
     if (data?.data.price === 0) {
       toast.error("Price calculation failed....");
-      goBack();
+      reset();
     }
-  }, [data?.data.price, goBack]);
+  }, [data?.data.price, reset]);
 
   return (
     <div className="flex flex-col gap-10">
