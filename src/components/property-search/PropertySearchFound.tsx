@@ -35,7 +35,7 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }
       } else if (isLegalEntity && entityName) {
         reqData.owner = entityName.toUpperCase();
       } else if (!isLegalEntity && firstName && lastName) {
-        reqData.owner = `${firstName} ${lastName}`.toUpperCase();
+        reqData.owner = `${lastName} ${firstName}`.toUpperCase();
       } else {
         return;
       }
