@@ -5,7 +5,7 @@ import { useCallback, useEffect } from "react";
 
 import dynamic from "next/dynamic";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { ISearchProperty } from "@/types/property";
+import { ICalculatePriceReq, ISearchProperty, ISearchPropertyInfo } from "@/types/property";
 
 const Map = dynamic(() => import("@/components/property-search/Map"), { ssr: false });
 
@@ -19,15 +19,26 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
   const [getRegrid, { isLoading, data }] = useLazyGetRegridQuery();
 
   const getData = useCallback(async () => {
-    const { entityName, firstName, lastName, isLegalEntity, ...rest } = { ...watch("info") };
-    const reqData = {
-      ...rest,
-      owner: isLegalEntity ? entityName?.trim().toUpperCase() || "" : `${firstName?.trim().toUpperCase()}${lastName?.trim().toUpperCase()}`,
-    };
-    try {
-      await getRegrid({ ...reqData }).unwrap();
-    } catch (error) {
-      onError();
+    const { county, state, entityName, firstName, isLegalEntity, lastName, parcelNumber } = { ...watch("info") };
+    if (county && state) {
+      const reqData: ICalculatePriceReq = {
+        county,
+        state,
+      };
+      if (parcelNumber) {
+        reqData.parcelNumber = parcelNumber;
+      } else if (isLegalEntity && entityName) {
+        reqData.owner = entityName.toUpperCase();
+      } else if (!isLegalEntity && firstName && lastName) {
+        reqData.owner = `${firstName} ${lastName}`.toUpperCase();
+      } else {
+        return;
+      }
+      try {
+        await getRegrid({ ...reqData }).unwrap();
+      } catch (error) {
+        onError();
+      }
     }
   }, [getRegrid, onError, watch]);
 

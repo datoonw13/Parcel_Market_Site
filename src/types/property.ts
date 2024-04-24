@@ -56,3 +56,10 @@ export interface ISearchProperty {
   };
   about: ISearchPropertyAbout;
 }
+
+export interface ICalculatePriceReq {
+  state: string;
+  county: string;
+  owner?: string;
+  parcelNumber?: string;
+}

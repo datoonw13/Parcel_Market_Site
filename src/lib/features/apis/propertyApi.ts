@@ -1,6 +1,6 @@
 import { ResponseType } from "@/types/common";
 import { IMap } from "@/types/map";
-import { ISearchPropertyCalculatePrice, ISearchPropertyCalculatePriceResponse, ISearchPropertyInfo } from "@/types/property";
+import { ICalculatePriceReq, ISearchPropertyCalculatePrice, ISearchPropertyCalculatePriceResponse } from "@/types/property";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
@@ -12,25 +12,18 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
-    getRegrid: build.query<
-      ResponseType<IMap>,
-      Partial<Omit<ISearchPropertyInfo, "entityName" | "lastName" | "firstName" | "isLegalEntity">> & { owner?: string }
-    >({
+    getRegrid: build.query<ResponseType<IMap>, ICalculatePriceReq>({
       query: (arg) => {
         let api = "";
-
-        const params = { ...arg };
         if (arg.parcelNumber && arg.parcelNumber !== null) {
-          delete params.owner;
           api = "searchByStateAndCountyAndParcel";
         } else {
-          delete params.parcelNumber;
           api = "searchByStateAndCountyAndOwner";
         }
         return {
           url: `regrid/${api}`,
           method: "GET",
-          params: { ...params },
+          params: { ...arg },
         };
       },
     }),
