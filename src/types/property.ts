@@ -3,7 +3,7 @@ export interface ISearchPropertyCalculatePrice {
   queryParams: {
     lat: string;
     lon: string;
-    acres: string;
+    acre: string;
   };
 }
 

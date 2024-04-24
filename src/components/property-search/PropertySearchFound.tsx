@@ -23,8 +23,6 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }
   const getData = useCallback(async () => {
     const { county, state, entityName, firstName, isLegalEntity, lastName, parcelNumber } = { ...watch("info") };
     if (parcelNumber === data?.data[0].properties.fields.parcelnumb) {
-      console.log("aqaa");
-
       return;
     }
     if (county && state) {
@@ -47,7 +45,7 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }
         onError();
       }
     }
-  }, [getRegrid, onError, watch]);
+  }, [data?.data, getRegrid, onError, watch]);
 
   useEffect(() => {
     getData();

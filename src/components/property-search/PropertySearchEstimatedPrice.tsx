@@ -38,7 +38,7 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, goBack }: IPr
         improvementsValue: watch("about.improvementsValue") || 0,
       },
       queryParams: {
-        acres: selectedRegridItem.properties.fields.ll_gisacre.toString(),
+        acre: selectedRegridItem.properties.fields.ll_gisacre.toString(),
         lat: selectedRegridItem.properties.fields.lat,
         lon: selectedRegridItem.properties.fields.lon,
       },
