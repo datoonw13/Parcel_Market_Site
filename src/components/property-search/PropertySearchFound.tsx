@@ -22,9 +22,7 @@ const PropertySearchFound = ({ setValue, watch, onError }: IPropertySearchFound)
     const { entityName, firstName, lastName, isLegalEntity, ...rest } = { ...watch("info") };
     const reqData = {
       ...rest,
-      owner: isLegalEntity
-        ? entityName?.trim().replaceAll(" ", "").toUpperCase() || ""
-        : `${firstName?.trim().replaceAll(" ", "").toUpperCase()}${lastName?.trim().replaceAll(" ", "").toUpperCase()}`,
+      owner: isLegalEntity ? entityName?.trim().toUpperCase() || "" : `${firstName?.trim().toUpperCase()}${lastName?.trim().toUpperCase()}`,
     };
     try {
       await getRegrid({ ...reqData }).unwrap();

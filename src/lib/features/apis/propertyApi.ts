@@ -20,10 +20,11 @@ const propertyApi = baseApi.injectEndpoints({
         let api = "";
 
         const params = { ...arg };
-        if (arg.parcelNumber) {
+        if (arg.parcelNumber && arg.parcelNumber !== null) {
           delete params.owner;
           api = "searchByStateAndCountyAndParcel";
         } else {
+          delete params.parcelNumber;
           api = "searchByStateAndCountyAndOwner";
         }
         return {
