@@ -15,6 +15,7 @@ import { ISearchProperty, ISearchPropertyCalculatePrice } from "@/types/property
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { UseFormWatch } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface IPropertySearchEstimatedPrice {
   watch: UseFormWatch<ISearchProperty>;
@@ -63,6 +64,13 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, goBack }: IPr
       goBack();
     }
   }, [goBack, isError]);
+
+  useEffect(() => {
+    if (data?.data.price === 0) {
+      toast.error("Price calculation failed....");
+      goBack();
+    }
+  }, [data?.data.price, goBack]);
 
   return (
     <div className="flex flex-col gap-10">
