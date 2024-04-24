@@ -17,7 +17,7 @@ const ProgressBar = (props: Props) => {
         <Button
           startIcon={<ArrowCircleIcon />}
           type="primary"
-          classNames="!p-0 text-dark-green !bg-white"
+          classNames="!p-0 !text-dark-green !bg-white [&_div_svg_*]:hover:!stroke-dark-green"
           onClick={goBack}
           disabled={currentStep === 1}
         >

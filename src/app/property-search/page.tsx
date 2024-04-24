@@ -6,7 +6,7 @@ import PropertySearchFound from "@/components/property-search/PropertySearchFoun
 import PropertySearchInfo from "@/components/property-search/PropertySearchInfo";
 import Button from "@/components/shared/Button";
 import ProgressBar from "@/components/shared/ProgressBar";
-import { ISearchProperty } from "@/types/property";
+import { ISearchProperty, ISearchPropertyAbout } from "@/types/property";
 import { searchPropertySchema } from "@/validations/property-schemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import clsx from "clsx";
@@ -94,7 +94,12 @@ const PropertySearch = () => {
     if (step === StepsEnum.FOUND && !watch("found.parcelNumber")) {
       return true;
     }
-    if (step === StepsEnum.ABOUT && Object.values(watch("about")).some((el) => el === null)) {
+    if (
+      step === StepsEnum.ABOUT &&
+      Object.keys(watch("about"))
+        .filter((el) => (el as keyof ISearchPropertyAbout) !== "improvementsValue")
+        .some((el) => watch("about")[el as keyof ISearchPropertyAbout] === null)
+    ) {
       return true;
     }
     return false;
