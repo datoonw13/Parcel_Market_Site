@@ -143,7 +143,7 @@ const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: I
       name="parcelNumber"
       value={watch("info.parcelNumber") || ""}
       onChange={(value) => {
-        if (/^-?\d+\.?\d*$/.test(value) || value === "") {
+        if (!value.includes(" ")) {
           setValue("info.parcelNumber", value === "" ? null : value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
           isSubmitted && trigger("info.entityName");
           isSubmitted && trigger("info.firstName");
@@ -154,7 +154,7 @@ const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: I
       helperText={errors?.info?.parcelNumber?.message}
       info="your info here"
       label="Parcel Number"
-      placeholder="Enter parcel Number"
+      placeholder="Enter parcel Id"
     />
   </div>
 );

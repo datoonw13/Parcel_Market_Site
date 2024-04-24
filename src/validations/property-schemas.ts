@@ -39,6 +39,7 @@ export const searchPropertySchema = yup.object().shape({
       parcelNumber: yup
         .string()
         .required("Parcel number or owner name is a required field")
+        .min(6, "Min 6 character")
         .nullable()
         .when(["entityName", "firstName", "lastName"], ([entityName, firstName, lastName], schema) =>
           entityName || (firstName && lastName) ? schema : schema.notOneOf([null], "Parcel number or owner name is a required field")
@@ -61,6 +62,6 @@ export const searchPropertySchema = yup.object().shape({
     wetProperty: yup.string().required().nullable().notOneOf([null]),
     propertyRestriction: yup.string().required().nullable().notOneOf([null]),
     propertyAccess: yup.string().required().nullable().notOneOf([null]),
-    improvementsValue: yup.number().required().nullable().notOneOf([null]),
+    improvementsValue: yup.number().required().nullable(),
   }),
 });
