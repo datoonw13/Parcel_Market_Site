@@ -37,12 +37,12 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
         parcelNumber: watch("found.parcelNumber") || "",
         owner: selectedRegridItem.properties.fields.owner,
         improvementsValue: watch("about.improvementsValue") || 0,
+        propertyType: selectedRegridItem.properties.fields.zoning_description,
       },
       queryParams: {
         acre: selectedRegridItem.properties.fields.ll_gisacre.toString(),
         lat: selectedRegridItem.properties.fields.lat,
         lon: selectedRegridItem.properties.fields.lon,
-        propertyType: selectedRegridItem.properties.fields.zoning_description,
       },
     };
 

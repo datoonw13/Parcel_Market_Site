@@ -1,10 +1,10 @@
 export interface ISearchPropertyCalculatePrice {
-  body: ISearchPropertyAbout & Pick<ISearchPropertyInfo, "state" | "county"> & { owner?: string; parcelNumber: string };
+  body: ISearchPropertyAbout &
+    Pick<ISearchPropertyInfo, "state" | "county"> & { owner?: string; parcelNumber: string; propertyType: string };
   queryParams: {
     lat: string;
     lon: string;
     acre: string;
-    propertyType: string;
   };
 }
 
