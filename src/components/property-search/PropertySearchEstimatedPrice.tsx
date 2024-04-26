@@ -42,6 +42,7 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
         acre: selectedRegridItem.properties.fields.ll_gisacre.toString(),
         lat: selectedRegridItem.properties.fields.lat,
         lon: selectedRegridItem.properties.fields.lon,
+        propertyType: selectedRegridItem.properties.fields.zoning_description,
       },
     };
 

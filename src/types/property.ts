@@ -4,6 +4,7 @@ export interface ISearchPropertyCalculatePrice {
     lat: string;
     lon: string;
     acre: string;
+    propertyType: string;
   };
 }
 

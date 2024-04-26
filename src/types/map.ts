@@ -13,6 +13,7 @@ export interface IMapItem {
       lat: string;
       ll_gisacre: number;
       owner: string;
+      zoning_description: string;
     };
   };
 }
