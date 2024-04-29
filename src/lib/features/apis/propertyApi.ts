@@ -29,6 +29,12 @@ const propertyApi = baseApi.injectEndpoints({
           params: { ...arg },
         };
       },
+      transformResponse: (response: any) => {
+        if (response.data) {
+          response.data = response.data.filter((el: any) => el);
+        }
+        return response;
+      },
     }),
     signature: build.mutation<ResponseType<void>, { parcelNumber: string; accepted: boolean }>({
       query: (arg) => ({
