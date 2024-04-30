@@ -10,13 +10,13 @@ import StoreProvider from "./StoreProvider";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
 });
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-bricolage",
   display: "swap",
   adjustFontFallback: false,

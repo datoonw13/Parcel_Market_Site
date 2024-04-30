@@ -6,7 +6,7 @@ interface IContainer {
   className?: string;
 }
 const Container = ({ children, className }: IContainer) => (
-  <div className={clsx("px-[10px] md:px-[20px] lg:px-[40px] xl:px-[80px] 2xl:px-[100px]", className)}>{children}</div>
+  <div className={clsx("px-[20px] lg:px-[40px] xl:px-[80px] 2xl:px-[100px]", className)}>{children}</div>
 );
 
 export default Container;
