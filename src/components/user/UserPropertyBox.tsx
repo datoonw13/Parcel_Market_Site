@@ -23,10 +23,6 @@ const UserPropertyBox = () => (
     <div className="flex flex-col md:justify-between gap-6 md:gap-8">
       <div className="w-full h-[230px] md:h-[340px] md:w-full lg:min-w-[350px] relative">
         <Image src="/no-parcel-image.png" alt="" fill />
-        <div className="absolute bg-[#363636] top-[24px] left-[24px] bg-opacity-85 z-10 py-1 px-4 text-white font-medium text-sm flex items-center gap-2">
-          <Eye />
-          1245 Views
-        </div>
       </div>
       <div className="flex flex-col gap-4 md:w-full">
         <h2 className="text-lg font-medium text-[#363636] md:hidden">General Information</h2>
