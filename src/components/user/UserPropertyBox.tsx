@@ -5,7 +5,7 @@ import WarningCircleIcon from "@/icons/WarningCircleIcon";
 import Button from "../shared/Button";
 
 const UserPropertyBox = () => (
-  <div className="border border-[#DFDFDF] rounded-2xl p-4 flex flex-col gap-6 w-full">
+  <div className="border border-[#DFDFDF] rounded-2xl p-4 md:p-8 flex flex-col gap-6 w-full">
     <div className="flex flex-col gap-3">
       <div className="flex flex-col  md:flex-row md:justify-between gap-2">
         <h1 className="text-xl md:text-2xl text-[#363636] font-medium">59-acres Property for sale available in MC CALLA, AL</h1>
