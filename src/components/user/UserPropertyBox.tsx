@@ -2,7 +2,11 @@ import { Calendar1, Eye, Location, Warning2 } from "iconsax-react";
 import Image from "next/image";
 import React from "react";
 import WarningCircleIcon from "@/icons/WarningCircleIcon";
+import dynamic from "next/dynamic";
+import { MapContainer, TileLayer } from "react-leaflet";
 import Button from "../shared/Button";
+
+const Map = dynamic(() => import("@/components/shared/EmptyMap"), { ssr: false });
 
 const UserPropertyBox = () => (
   <div className="border border-[#DFDFDF] rounded-2xl p-4 md:p-8 flex flex-col gap-6 w-full">
@@ -22,7 +26,7 @@ const UserPropertyBox = () => (
     </div>
     <div className="flex flex-col md:justify-between gap-6 md:gap-8">
       <div className="w-full h-[230px] md:h-[340px] md:w-full lg:min-w-[350px] relative">
-        <Image src="/no-parcel-image.png" alt="" fill />
+        <Map />
       </div>
       <div className="flex flex-col gap-4 md:w-full">
         <h2 className="text-lg font-medium text-[#363636] md:hidden">General Information</h2>
