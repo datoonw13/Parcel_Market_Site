@@ -27,9 +27,9 @@ const UserPropertyBox = ({ data }: { data: ISellingProperty }) => {
           <h3 className="text-[#868686] text-sm font-medium flex items-center gap-1">
             <Location variant="Outline" color="#868686" size={17} /> {`${data.state}, ${data.county}; USA`}
           </h3>
-          <h4 className="text-[#868686] text-sm font-medium flex items-center gap-1">
+          {/* <h4 className="text-[#868686] text-sm font-medium flex items-center gap-1">
             <Eye variant="Outline" color="#868686" size={17} /> Total Views: <p className="text-[black]">N/A</p>
-          </h4>
+          </h4> */}
         </div>
       </div>
       <div className="flex flex-col md:justify-between gap-6 md:gap-8">
@@ -73,14 +73,23 @@ const UserPropertyBox = ({ data }: { data: ISellingProperty }) => {
             Date Posted: <span className="text-[black]">{moment(data.dataCreated).format("D MMM, YYYY")}</span>
           </p>
         </div>
-        <Button classNames="!text-[#363636] hover:!text-white !font-medium !py-3 !text-sm !px-6 w-full md:w-fit">View On Map</Button>
+        <Button
+          onClick={() => {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${data.lat},${data.lon}`, "_blank");
+          }}
+          classNames="!text-[#363636] hover:!text-white !font-medium !py-3 !text-sm !px-6 w-full md:w-fit"
+        >
+          View On Map
+        </Button>
       </div>
       <div className="bg-[#FFF4DC] p-4 rounded-lg">
         <div className="flex flex-row gap-3">
           <Warning2 size={24} color="#FFBD23" />
           <div className="flex gap-1 flex-col">
             <p className="text-[#363636] font-semibold text-sm">your application is being processed</p>
-            <p className="text-xs text-[#363636]/[.9]">Site administration will contact you within 3 working days</p>
+            <p className="text-xs text-[#363636]/[.9]">
+              Site administration will contact you within {3 - moment(new Date()).diff(data.dataCreated)} working days
+            </p>
           </div>
         </div>
       </div>

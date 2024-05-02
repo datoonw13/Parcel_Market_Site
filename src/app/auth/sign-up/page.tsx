@@ -48,7 +48,7 @@ const SignUp = () => {
   const params = useSearchParams();
 
   const dispatch = useAppDispatch();
-  const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
   const [registerUser, { isLoading }] = useRegisterMutation();
   const [registerGoogleUser, { isLoading: registerGoogleUserLoading }] = useRegisterGoogleUserMutation();
   const [showPassword, setShowPassword] = useState(false);
@@ -87,7 +87,7 @@ const SignUp = () => {
             mailingAddress: data.mailingAddress,
           }).unwrap()
         : await registerUser({ ...data }).unwrap();
-      router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
+      router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
       localStorage.setItem("token", res.data.user.token);
       dispatch(setAuthPending(true));
     } catch (error) {}
