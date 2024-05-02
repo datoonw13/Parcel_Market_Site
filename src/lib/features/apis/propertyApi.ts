@@ -46,5 +46,5 @@ const propertyApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCalculatePriceQuery, useLazyGetRegridQuery, useSignatureMutation } = propertyApi;
+export const { useCalculatePriceQuery, useGetRegridQuery, useSignatureMutation } = propertyApi;
 export default propertyApi;

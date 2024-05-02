@@ -1,6 +1,6 @@
 import Button from "@/components/shared/Button";
 import LoadingCircle from "@/icons/LoadingCircle";
-import { useLazyGetRegridQuery } from "@/lib/features/apis/propertyApi";
+import { useGetRegridQuery } from "@/lib/features/apis/propertyApi";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
 import dynamic from "next/dynamic";
@@ -18,42 +18,27 @@ interface IPropertySearchFound {
 }
 
 const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }: IPropertySearchFound) => {
-  const [getRegrid, { isLoading, data }] = useLazyGetRegridQuery();
-
-  const getData = useCallback(async () => {
+  const reqData = useCallback(() => {
     const { county, state, entityName, firstName, isLegalEntity, lastName, parcelNumber } = { ...watch("info") };
-    if (parcelNumber === data?.data[0].properties.fields.parcelnumb) {
-      return;
+    const data: ICalculatePriceReq = {
+      county: county || "",
+      state: state || "",
+    };
+    if (parcelNumber) {
+      data.parcelNumber = parcelNumber;
+    } else if (isLegalEntity && entityName) {
+      data.owner = entityName.toUpperCase();
+    } else if (!isLegalEntity && firstName && lastName) {
+      data.owner = `${lastName} ${firstName}`.toUpperCase();
     }
-    if (county && state) {
-      const reqData: ICalculatePriceReq = {
-        county,
-        state,
-      };
-      if (parcelNumber) {
-        reqData.parcelNumber = parcelNumber;
-      } else if (isLegalEntity && entityName) {
-        reqData.owner = entityName.toUpperCase();
-      } else if (!isLegalEntity && firstName && lastName) {
-        reqData.owner = `${lastName} ${firstName}`.toUpperCase();
-      } else {
-        return;
-      }
-      try {
-        await getRegrid({ ...reqData }).unwrap();
-      } catch (error) {
-        onError();
-      }
-    }
-  }, [data?.data, getRegrid, onError, watch]);
+    return data;
+  }, [watch]);
 
-  useEffect(() => {
-    getData();
-  }, [getData]);
+  const { isFetching, isLoading, data } = useGetRegridQuery({ ...reqData() });
 
   return (
     <div className="flex flex-col gap-10 pb-20">
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <div className="w-[150px] m-auto mt-8">
           <LoadingCircle />
         </div>
