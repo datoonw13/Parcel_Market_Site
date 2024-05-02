@@ -64,6 +64,8 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
         salePrice: data?.data.price || 0,
         accepted: true,
         coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
       })
     );
     if (!user) {

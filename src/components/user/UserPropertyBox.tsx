@@ -16,11 +16,10 @@ const UserPropertyBox = ({ data }: { data: ISellingProperty }) => {
 
   return (
     <div className="border border-[#DFDFDF] rounded-2xl p-4 md:p-8 flex flex-col gap-6 w-full">
-    
       <div className="flex flex-col gap-3">
         <div className="flex flex-col  md:flex-row md:justify-between gap-2">
           <h1 className="text-xl md:text-2xl text-[#363636] font-medium">
-            {`${data.acrage.toFixed(2)}-acres Property for sale available in ${data.state}, ${data.county}`}
+            {`${data.acrage}-acres Property for sale available in ${data.state}, ${data.county}`}
           </h1>
           <h2 className="text-xl md:text-2xl font-semibold text-[#0E8B40]">{`$${data.marketPrice} USD`}</h2>
         </div>
@@ -34,7 +33,9 @@ const UserPropertyBox = ({ data }: { data: ISellingProperty }) => {
         </div>
       </div>
       <div className="flex flex-col md:justify-between gap-6 md:gap-8">
-        <div className="w-full h-[230px] md:h-[340px] md:w-full lg:min-w-[350px] relative">{/* <SharedMap /> */}</div>
+        <div className="w-full h-[230px] md:h-[340px] md:w-full lg:min-w-[350px] relative">
+          <SharedMap polygons={JSON.parse(data.coordinates)} center={[data.lat, data.lon] as any} />
+        </div>
         <div className="flex flex-col gap-4 md:w-full">
           <h2 className="text-lg font-medium text-[#363636] md:hidden">General Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

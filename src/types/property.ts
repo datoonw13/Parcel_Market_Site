@@ -85,6 +85,8 @@ export interface ISellProperty {
   salePrice: number;
   accepted: boolean;
   coordinates: string;
+  lat: string;
+  lon: string;
 }
 
 export interface ISellingProperty extends ISellProperty {

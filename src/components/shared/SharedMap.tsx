@@ -20,6 +20,7 @@ const SharedMap = ({ center, polygons }: IMap) => (
       {polygons?.map((polygon) => (
         <Fragment key={Math.random()}>
           <Polygon stroke key={Math.random()} fillColor="blue" positions={polygon} />
+          <Marker position={center} />
         </Fragment>
       ))}
     </FeatureGroup>
