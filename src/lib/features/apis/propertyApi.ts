@@ -1,6 +1,12 @@
 import { ResponseType } from "@/types/common";
 import { IMap } from "@/types/map";
-import { ICalculatePriceReq, ISearchPropertyCalculatePrice, ISearchPropertyCalculatePriceResponse, ISellProperty } from "@/types/property";
+import {
+  ICalculatePriceReq,
+  ISearchPropertyCalculatePrice,
+  ISearchPropertyCalculatePriceResponse,
+  ISellProperty,
+  IUserSellingPropertiesResponse,
+} from "@/types/property";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
@@ -50,8 +56,21 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
+    getUserSellingProperties: build.query<IUserSellingPropertiesResponse, void>({
+      query: (arg) => ({
+        url: "/selling-properties",
+        method: "GET",
+        body: arg,
+      }),
+    }),
   }),
 });
 
-export const { useCalculatePriceQuery, useGetRegridQuery, useSignatureMutation, useSellPropertyTypeMutation } = propertyApi;
+export const {
+  useCalculatePriceQuery,
+  useGetRegridQuery,
+  useSignatureMutation,
+  useSellPropertyTypeMutation,
+  useGetUserSellingPropertiesQuery,
+} = propertyApi;
 export default propertyApi;

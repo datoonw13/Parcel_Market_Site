@@ -61,11 +61,9 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
         parcelNumber: watch("found.parcelNumber")!,
         sellerType: "instantsale",
         owner: selectedRegridItem.properties.fields.owner,
-        lat: selectedRegridItem.properties.fields.lat,
-        lon: selectedRegridItem.properties.fields.lon,
         salePrice: data?.data.price || 0,
         accepted: true,
-        coordinates: selectedRegridItem.geometry.coordinates,
+        coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
       })
     );
     if (!user) {

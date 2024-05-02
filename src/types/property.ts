@@ -1,4 +1,4 @@
-import { PolygonProps } from "react-leaflet";
+import { IPagination, ResponseType } from "./common";
 
 export interface ISearchPropertyCalculatePrice {
   body: ISearchPropertyAbout &
@@ -82,9 +82,18 @@ export interface ISellProperty {
   parcelNumber: string;
   sellerType: "instantsale" | "saleonmarketplace";
   owner: string;
-  lat: string;
-  lon: string;
   salePrice: number;
   accepted: boolean;
-  coordinates: PolygonProps["positions"];
+  coordinates: string;
 }
+
+export interface ISellingProperty extends ISellProperty {
+  user: { id: string; name: string; email: string };
+  dataCreated: Date;
+  marketPrice: string;
+}
+
+export type IUserSellingPropertiesResponse = ResponseType<{
+  sellingProperties: Array<ISellingProperty>;
+  pagination: IPagination;
+}>;

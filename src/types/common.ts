@@ -4,3 +4,11 @@ export interface ResponseType<T> {
   message: string;
   statusCode: number;
 }
+
+export interface IPagination {
+  pagination: {
+    totalCount: number;
+    pageSize: number;
+    page: number;
+  };
+}
