@@ -63,6 +63,15 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
+    checkParcelSellingStatus: build.mutation<ResponseType<{ data: boolean }>, string>({
+      query: (parcelNumber) => ({
+        url: "/selling-properties/instant-sale",
+        method: "GET",
+        params: {
+          parcelNumber,
+        },
+      }),
+    }),
   }),
 });
 
@@ -72,5 +81,6 @@ export const {
   useSignatureMutation,
   useSellPropertyTypeMutation,
   useGetUserSellingPropertiesQuery,
+  useCheckParcelSellingStatusMutation,
 } = propertyApi;
 export default propertyApi;
