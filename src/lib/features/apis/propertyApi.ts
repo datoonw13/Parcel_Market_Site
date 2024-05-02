@@ -58,7 +58,7 @@ const propertyApi = baseApi.injectEndpoints({
     }),
     getUserSellingProperties: build.query<IUserSellingPropertiesResponse, void>({
       query: (arg) => ({
-        url: "/selling-properties",
+        url: "/selling-properties/for-sale",
         method: "GET",
         body: arg,
       }),

@@ -14,7 +14,7 @@ interface IMap {
 }
 
 const SharedMap = ({ center, polygons }: IMap) => (
-  <MapContainer preferCanvas center={center} zoom={10} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
+  <MapContainer preferCanvas center={center} zoom={16} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
     <FeatureGroup pathOptions={{ color: "green" }}>
       {polygons?.map((polygon) => (
