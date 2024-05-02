@@ -19,7 +19,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 
 const SignIn = () => {
   const router = useRouter();
-  const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
   const [showPassword, setShowPassword] = useState(false);
   const [authUser, { isLoading }] = useAuthMutation();
   const [googleAuth, { isLoading: googleAuthLoading, data }] = useGoogleAuthMutation();
@@ -41,7 +41,7 @@ const SignIn = () => {
     try {
       const res = await authUser(data).unwrap();
       toast.success("You have successfully logged in");
-      router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
+      router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
       localStorage.setItem("token", res.data.access_token);
     } catch (error) {
       localStorage.removeItem("token");
@@ -54,7 +54,7 @@ const SignIn = () => {
         const res = await googleAuth(tokenResponse.access_token).unwrap();
         if ("access_token" in res.data) {
           toast.success("You have successfully logged in");
-          router.push(selectedParcelNumber ? routes.propertySearch.signature : routes.home.root);
+          router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
           localStorage.setItem("token", res.data.access_token);
         } else {
           router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);

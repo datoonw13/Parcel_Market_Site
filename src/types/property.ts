@@ -1,3 +1,5 @@
+import { PolygonProps } from "react-leaflet";
+
 export interface ISearchPropertyCalculatePrice {
   body: ISearchPropertyAbout &
     Pick<ISearchPropertyInfo, "state" | "county"> & { owner?: string; parcelNumber: string; propertyType: string };
@@ -70,4 +72,19 @@ export interface ICalculatePriceReq {
   county: string;
   owner?: string;
   parcelNumber?: string;
+}
+
+export interface ISellProperty {
+  state: string;
+  county: string;
+  propertyType: string;
+  acrage: number;
+  parcelNumber: string;
+  sellerType: "instantsale" | "saleonmarketplace";
+  owner: string;
+  lat: string;
+  lon: string;
+  salePrice: number;
+  accepted: boolean;
+  coordinates: PolygonProps["positions"];
 }

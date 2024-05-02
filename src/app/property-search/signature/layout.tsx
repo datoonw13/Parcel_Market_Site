@@ -1,6 +1,6 @@
 "use client";
 
-import { setSelectedParcelNumber } from "@/lib/features/slices/authedUserSlice";
+import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -12,17 +12,17 @@ const PropertySearchSignatureLayout = ({
 }>) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
 
   useEffect(() => {
-    if (!selectedParcelNumber) {
+    if (!selectedParcelOptions) {
       router.push("/");
     }
-  }, [router, selectedParcelNumber]);
+  }, [router, selectedParcelOptions]);
 
   useEffect(
     () => () => {
-      dispatch(setSelectedParcelNumber(null));
+      dispatch(setSelectedParcelOptions(null));
     },
     [dispatch]
   );

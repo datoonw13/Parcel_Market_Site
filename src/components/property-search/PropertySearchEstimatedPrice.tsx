@@ -8,7 +8,7 @@ import LoadingCircle from "@/icons/LoadingCircle";
 import SearchLandingIcon from "@/icons/SearchLandingIcon";
 import UsdLandingIcon from "@/icons/UsdLandingIcon";
 import propertyApi, { useCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
-import { setSelectedParcelNumber } from "@/lib/features/slices/authedUserSlice";
+import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { IMapItem } from "@/types/map";
 import { ISearchProperty, ISearchPropertyCalculatePrice } from "@/types/property";
@@ -52,7 +52,22 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
   const { isFetching, data, isError } = useCalculatePriceQuery({ ...getReqData() });
 
   const handleSubmit = () => {
-    dispatch(setSelectedParcelNumber(watch("found.parcelNumber")));
+    dispatch(
+      setSelectedParcelOptions({
+        state: watch("info.state")!,
+        county: watch("info.county")!,
+        propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
+        acrage: selectedRegridItem.properties.fields.ll_gisacre,
+        parcelNumber: watch("found.parcelNumber")!,
+        sellerType: "instantsale",
+        owner: selectedRegridItem.properties.fields.owner,
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
+        salePrice: data?.data.price || 0,
+        accepted: true,
+        coordinates: selectedRegridItem.geometry.coordinates,
+      })
+    );
     if (!user) {
       router.push(routes.auth.signIn);
     } else {

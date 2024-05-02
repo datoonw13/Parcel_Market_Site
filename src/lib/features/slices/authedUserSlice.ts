@@ -1,19 +1,12 @@
-import { UserModel } from "@/types/auth";
+import { IAuthSliceInitial, UserModel } from "@/types/auth";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authApi from "../apis/authApi";
 
-interface IInitialState {
-  user: UserModel | null;
-  pending: boolean;
-  token: string | null;
-  selectedParcelNumber: string | null;
-}
-
-const initialState: IInitialState = {
+const initialState: IAuthSliceInitial = {
   user: null,
   pending: true,
   token: null,
-  selectedParcelNumber: null,
+  selectedParcelOptions: null,
 };
 
 export const authedUserSlice = createSlice({
@@ -33,8 +26,8 @@ export const authedUserSlice = createSlice({
       localStorage.removeItem("token");
       return { ...initialState, pending: false };
     },
-    setSelectedParcelNumber: (state, action: PayloadAction<string | null>) => {
-      state.selectedParcelNumber = action.payload;
+    setSelectedParcelOptions: (state, action: PayloadAction<IAuthSliceInitial["selectedParcelOptions"] | null>) => {
+      state.selectedParcelOptions = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -44,6 +37,6 @@ export const authedUserSlice = createSlice({
   },
 });
 
-export const { setAuthPending, setAuthedUser, setToken, logOut, setSelectedParcelNumber } = authedUserSlice.actions;
+export const { setAuthPending, setAuthedUser, setToken, logOut, setSelectedParcelOptions } = authedUserSlice.actions;
 
 export default authedUserSlice.reducer;

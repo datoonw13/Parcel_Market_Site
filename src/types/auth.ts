@@ -2,6 +2,8 @@
 //   USER = "user",
 // }
 
+import { ISellProperty } from "./property";
+
 export interface ISignUp {
   name: string | null;
   email: string | null;
@@ -56,3 +58,10 @@ export interface IRegisterGoogleUser {
   county: string | null;
   mailingAddress: string | null;
 }
+
+export type IAuthSliceInitial = {
+  user: UserModel | null;
+  pending: boolean;
+  token: string | null;
+  selectedParcelOptions: ISellProperty | null;
+};

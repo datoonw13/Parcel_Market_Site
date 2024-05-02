@@ -4,7 +4,7 @@ import Button from "@/components/shared/Button";
 import CheckBox from "@/components/shared/CheckBox";
 import TextField from "@/components/shared/TextField";
 import routes from "@/helpers/routes";
-import { useSignatureMutation } from "@/lib/features/apis/propertyApi";
+import { useSellPropertyTypeMutation } from "@/lib/features/apis/propertyApi";
 import { useAppSelector } from "@/lib/hooks";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -12,16 +12,16 @@ import toast from "react-hot-toast";
 
 const PropertySearchSignature = () => {
   const router = useRouter();
-  const { selectedParcelNumber } = useAppSelector((state) => state.authedUser);
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
   const [accepted, setAccepted] = useState<boolean>(false);
-  const [sendSignature, { isLoading }] = useSignatureMutation();
+  const [sellProperty, { isLoading }] = useSellPropertyTypeMutation();
 
   const handleSubmit = async () => {
-    if (accepted && selectedParcelNumber) {
+    if (accepted && selectedParcelOptions) {
       try {
-        await sendSignature({ accepted, parcelNumber: selectedParcelNumber }).unwrap();
+        await sellProperty({ ...selectedParcelOptions }).unwrap();
         toast.success("Check your email");
-        router.push(routes.home.root);
+        router.push(routes.user.properties);
       } catch {}
     }
   };
