@@ -168,7 +168,13 @@ const PropertySearch = () => {
         <PropertySearchInfo setValue={setValue} trigger={trigger} errors={errors} isSubmitted={isSubmitted} watch={watch} />
       )}
       {step === StepsEnum.FOUND && (
-        <PropertySearchFound setSelectedRegridItem={setSelectedRegridItem} setValue={setValue} watch={watch} onError={onRegridError} />
+        <PropertySearchFound
+          reset={onReset}
+          setSelectedRegridItem={setSelectedRegridItem}
+          setValue={setValue}
+          watch={watch}
+          onError={onRegridError}
+        />
       )}
       {step === StepsEnum.ABOUT && <PropertySearchAbout setValue={setValue} watch={watch} />}
       {step === StepsEnum.ESTIMATED_PRICE && selectedRegridItem && (

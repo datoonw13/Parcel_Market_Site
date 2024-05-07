@@ -1,6 +1,6 @@
 import Button from "@/components/shared/Button";
 import LoadingCircle from "@/icons/LoadingCircle";
-import { useCheckParcelSellingStatusMutation, useGetRegridQuery } from "@/lib/features/apis/propertyApi";
+import propertyApi, { useCheckParcelSellingStatusMutation, useGetRegridQuery } from "@/lib/features/apis/propertyApi";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
 import dynamic from "next/dynamic";
@@ -8,6 +8,7 @@ import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { ICalculatePriceReq, ISearchProperty, ISearchPropertyInfo } from "@/types/property";
 import { IMapItem } from "@/types/map";
 import toast from "react-hot-toast";
+import { useAppDispatch } from "@/lib/hooks";
 
 const Map = dynamic(() => import("@/components/property-search/Map"), { ssr: false });
 
@@ -16,10 +17,12 @@ interface IPropertySearchFound {
   watch: UseFormWatch<ISearchProperty>;
   onError: () => void;
   setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
+  reset: () => void;
 }
 
-const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }: IPropertySearchFound) => {
-  const [checkParcel, { isLoading: checkLoading }] = useCheckParcelSellingStatusMutation();
+const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem, reset }: IPropertySearchFound) => {
+  const dispatch = useAppDispatch();
+  // const [checkParcel, { isLoading: checkLoading }] = useCheckParcelSellingStatusMutation();
   const reqData = useCallback(() => {
     const { county, state, entityName, firstName, isLegalEntity, lastName, parcelNumber } = { ...watch("info") };
     const data: ICalculatePriceReq = {
@@ -36,21 +39,30 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }
     return data;
   }, [watch]);
 
-  const { isFetching, isLoading, data } = useGetRegridQuery({ ...reqData() });
+  const { isFetching, isLoading, data, isError, refetch } = useGetRegridQuery({ ...reqData() }, {});
 
   const handleSelect = async (item: IMapItem) => {
-    try {
-      const { data } = await checkParcel(item.properties.fields.parcelnumb).unwrap();
-      if (!data.data) {
-        toast.error("Parcel sell already requested...");
-        return;
-      }
-      setSelectedRegridItem(item);
-      setValue("found.parcelNumber", item.properties.fields.parcelnumb, { shouldValidate: true });
-    } catch (error) {
-      toast.error("Something went wrong...");
-    }
+    // try {
+    //   const { data } = await checkParcel(item.properties.fields.parcelnumb).unwrap();
+    //   if (!data.data) {
+    //     toast.error("Parcel sell already requested...");
+    //     return;
+    //   }
+    //   setSelectedRegridItem(item);
+    //   setValue("found.parcelNumber", item.properties.fields.parcelnumb, { shouldValidate: true });
+    // } catch (error) {
+    //   toast.error("Something went wrong...");
+    // }
+    setSelectedRegridItem(item);
+    setValue("found.parcelNumber", item.properties.fields.parcelnumb, { shouldValidate: true });
   };
+
+  useEffect(() => {
+    if (isError) {
+      reset();
+      dispatch(propertyApi.util.resetApiState());
+    }
+  }, [dispatch, isError, reset]);
 
   return (
     <div className="flex flex-col gap-10 pb-20">
@@ -77,7 +89,7 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem }
                   <Button
                     disabled={watch("found.parcelNumber") === el.properties.fields.parcelnumb}
                     classNames="!py-2"
-                    loading={checkLoading}
+                    // loading={checkLoading}
                     onClick={() => {
                       handleSelect(el);
                     }}
