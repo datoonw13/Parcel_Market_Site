@@ -29,6 +29,7 @@ const propertyApi = baseApi.injectEndpoints({
         } else {
           api = "searchByStateAndCountyAndOwner";
         }
+
         return {
           url: `regrid/${api}`,
           method: "GET",

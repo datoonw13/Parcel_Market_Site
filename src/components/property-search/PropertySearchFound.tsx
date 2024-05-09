@@ -27,7 +27,7 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem, 
     const { county, state, entityName, firstName, isLegalEntity, lastName, parcelNumber } = { ...watch("info") };
     const data: ICalculatePriceReq = {
       county: county || "",
-      state: state || "",
+      state: state?.toUpperCase() || "",
     };
     if (parcelNumber) {
       data.parcelNumber = parcelNumber;
