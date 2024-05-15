@@ -36,6 +36,23 @@ export interface ISearchPropertyCalculatePriceResponse {
     min: number;
     max: number;
   };
+  properties: {
+    owner: string | null;
+    parselId: string;
+    propertyType: string;
+    arcage: number;
+    price: number;
+    isValid: boolean;
+    lastSalesPrice: number;
+    lastSalesDate: string;
+    address: string;
+    isMedianValid: boolean;
+    lat: string;
+    lng: string;
+    property_id: number;
+    id: number;
+    dateCreated: Date;
+  }[];
 }
 
 export interface ISearchPropertyInfo {

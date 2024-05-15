@@ -12,10 +12,15 @@ import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { IMapItem } from "@/types/map";
 import { ISearchProperty, ISearchPropertyCalculatePrice } from "@/types/property";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { UseFormWatch } from "react-hook-form";
 import toast from "react-hot-toast";
+
+const PropertySearchCalculatedPriceMap = dynamic(() => import("@/components/property-search/PropertySearchCalculatedPriceMap"), {
+  ssr: false,
+});
 
 interface IPropertySearchEstimatedPrice {
   watch: UseFormWatch<ISearchProperty>;
@@ -90,7 +95,7 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
 
   return (
     <div className="flex flex-col gap-10">
-      {isFetching ? (
+      {isFetching || !data?.data || !selectedRegridItem ? (
         <div className="w-[150px] m-auto mt-8">
           <LoadingCircle />
         </div>
@@ -109,6 +114,9 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
                 <p className="text-dark-green text-2xl font-semibold">${data?.data.range.max}</p>
               </div>
             </div>
+          </div>
+          <div>
+            <PropertySearchCalculatedPriceMap mainParcel={selectedRegridItem} parcels={data.data.properties} />
           </div>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.5fr] xl:grid-cols-[1fr_2.3fr]">
             <Button onClick={handleSubmit} classNames="w-full h-fit">
