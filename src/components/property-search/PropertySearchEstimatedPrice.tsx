@@ -115,7 +115,7 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
               </div>
             </div>
           </div>
-          <div>
+          <div className="w-full h-[230px] md:h-[340px] md:w-full lg:min-w-[350px] relative">
             <PropertySearchCalculatedPriceMap mainParcel={selectedRegridItem} parcels={data.data.properties} />
           </div>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.5fr] xl:grid-cols-[1fr_2.3fr]">
