@@ -88,7 +88,7 @@ const PropertySearchEstimatedPrice = ({ watch, selectedRegridItem, reset }: IPro
 
   useEffect(() => {
     if (data?.data.price === 0) {
-      toast.error("Price calculation failed....");
+      toast.error("There is no enough data in that area to calculate the price");
       reset();
     }
   }, [data?.data.price, reset]);
