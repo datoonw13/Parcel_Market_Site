@@ -88,6 +88,13 @@ const theme = createTheme({
   },
   palette: customPalette,
   components: {
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -120,6 +127,7 @@ const theme = createTheme({
           fontSize: 12,
           borderRadius: `${spacing(1)} !important`,
           backgroundColor: `transparent !important`,
+          border: `1px solid ${customPalette.grey[200]}`,
         },
       },
     },
@@ -130,7 +138,6 @@ const theme = createTheme({
       styleOverrides: {
         input: {
           borderRadius: `${spacing(1)} !important`,
-          border: `1px solid ${customPalette.grey[200]}`,
         },
       },
     },
