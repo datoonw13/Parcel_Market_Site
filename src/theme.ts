@@ -1,7 +1,7 @@
 "use client";
 
 import { Inter } from "next/font/google";
-import { PaletteColorOptions, createTheme } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
