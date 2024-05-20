@@ -28,13 +28,17 @@ const inter = Inter({
   display: "swap",
 });
 
-const { palette } = createTheme();
+const { palette, spacing } = createTheme();
 
 const theme = createTheme({
   typography: {
     fontFamily: inter.style.fontFamily,
   },
   palette: {
+    action: {
+      disabled: "rgba(34, 34, 34, 0.2)",
+      disabledBackground: "#F4F4F4",
+    },
     primary: {
       "50": "#F3F9F5",
       "100": "#E7F3EC",
@@ -85,6 +89,24 @@ const theme = createTheme({
     //     main: "#00ff00"
     //   }
     // })
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          padding: spacing(1.5, 3),
+          borderRadius: spacing(1),
+        },
+        outlined: {
+          background: "#FFFFFF",
+          color: "#222222",
+          border: "1px solid #9FD1B3",
+          "&:hover": {
+            background: "#CFE8D9",
+          },
+        },
+      },
+    },
   },
 });
 
