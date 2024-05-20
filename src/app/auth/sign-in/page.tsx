@@ -1,8 +1,8 @@
 "use client";
 
-import Button from "@/components/shared/Button";
+// import Button from "@/components/shared/Button";
 import Divider from "@/components/shared/Divider";
-import TextField from "@/components/shared/TextField";
+// import TextField from "@/components/shared/TextField";
 import routes from "@/helpers/routes";
 import GoogleIcon from "@/icons/GoogleIcon";
 import { useAuthMutation, useGoogleAuthMutation } from "@/lib/features/apis/authApi";
@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
+import { Button, TextField } from "@mui/material";
 
 const SignIn = () => {
   const router = useRouter();
@@ -65,7 +66,7 @@ const SignIn = () => {
 
   return (
     <>
-      <TextField
+      {/* <TextField
         label="Email"
         placeholder="Enter your email"
         name="email"
@@ -73,8 +74,9 @@ const SignIn = () => {
         helperText={errors.email?.message}
         onChange={(value) => setValue("email", value || null, { shouldValidate: isSubmitted, shouldDirty: isSubmitted })}
         value={watch("email") || ""}
-      />
-      <TextField
+      /> */}
+      <TextField label="aee" />
+      {/* <TextField
         type={showPassword ? "text" : "password"}
         label="Password"
         placeholder="Enter password"
@@ -102,7 +104,7 @@ const SignIn = () => {
         <Link href={routes.auth.signUp}>
           <Button type="tertiary">Get Started</Button>
         </Link>
-      </div>
+      </div> */}
     </>
   );
 };

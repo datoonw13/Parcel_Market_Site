@@ -30,66 +30,63 @@ const inter = Inter({
 
 const { palette, spacing } = createTheme();
 
+const customPalette = {
+  ...palette,
+  action: {
+    disabled: "rgba(34, 34, 34, 0.2)",
+    disabledBackground: "#F4F4F4",
+  },
+  primary: {
+    "50": "#F3F9F5",
+    "100": "#E7F3EC",
+    "200": "#CFE8D9",
+    "400": "#9FD1B3",
+    "600": "#6EB98C",
+    light: "#3EA266",
+    main: "#0E8B40",
+    dark: "#084E24",
+  },
+  darkGreen: palette.augmentColor({
+    color: {
+      "50": "#F2F6F4",
+      "100": "#E6EDE8",
+      "200": "#CDDAD2",
+      "400": "#9BB5A4",
+      light: "#699177",
+      main: "#376C49",
+      dark: "#05471C",
+    },
+  }),
+  grey: {
+    A100: "#F8F8F8",
+    "50": "#F4F4F4",
+    "100": "#E9E9E9",
+    "200": "#D3D3D3",
+    "400": "#A7A7A7",
+    "600": "#7A7A7A",
+    "800": "#4E4E4E",
+  },
+  black: "#222222",
+  white: "#FFFFFF",
+  success: {
+    main: "#16DB65",
+  },
+  info: {
+    main: "#4BB3FF",
+  },
+  warning: {
+    main: "#FF9900",
+  },
+  error: {
+    main: "#D3220B",
+  },
+};
+
 const theme = createTheme({
   typography: {
     fontFamily: inter.style.fontFamily,
   },
-  palette: {
-    action: {
-      disabled: "rgba(34, 34, 34, 0.2)",
-      disabledBackground: "#F4F4F4",
-    },
-    primary: {
-      "50": "#F3F9F5",
-      "100": "#E7F3EC",
-      "200": "#CFE8D9",
-      "400": "#9FD1B3",
-      "600": "#6EB98C",
-      light: "#3EA266",
-      main: "#0E8B40",
-      dark: "#084E24",
-    },
-    darkGreen: palette.augmentColor({
-      color: {
-        "50": "#F2F6F4",
-        "100": "#E6EDE8",
-        "200": "#CDDAD2",
-        "400": "#9BB5A4",
-        light: "#699177",
-        main: "#376C49",
-        dark: "#05471C",
-      },
-    }),
-    grey: {
-      A100: "#F8F8F8",
-      "50": "#F4F4F4",
-      "100": "#E9E9E9",
-      "200": "#D3D3D3",
-      "400": "#A7A7A7",
-      "600": "#7A7A7A",
-      "800": "#4E4E4E",
-    },
-    black: "#222222",
-    white: "#FFFFFF",
-    success: {
-      main: "#16DB65",
-    },
-    info: {
-      main: "#4BB3FF",
-    },
-    warning: {
-      main: "#FF9900",
-    },
-    error: {
-      main: "#D3220B",
-    },
-    // Use this code if you want to use an arbitrary color
-    // myAwesomeColor: palette.augmentColor({
-    //   color: {
-    //     main: "#00ff00"
-    //   }
-    // })
-  },
+  palette: customPalette,
   components: {
     MuiButton: {
       styleOverrides: {
@@ -98,12 +95,42 @@ const theme = createTheme({
           borderRadius: spacing(1),
         },
         outlined: {
-          background: "#FFFFFF",
-          color: "#222222",
-          border: "1px solid #9FD1B3",
+          background: customPalette.white,
+          color: customPalette.black,
+          border: `1px solid ${customPalette.primary[400]}`,
           "&:hover": {
-            background: "#CFE8D9",
+            background: customPalette.primary[200],
           },
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: "filled",
+      },
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+          borderRadius: `${spacing(1)} !important`,
+          backgroundColor: `transparent !important`,
+        },
+      },
+    },
+    MuiFilledInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
+      styleOverrides: {
+        input: {
+          borderRadius: `${spacing(1)} !important`,
+          border: `1px solid ${customPalette.grey[200]}`,
         },
       },
     },
