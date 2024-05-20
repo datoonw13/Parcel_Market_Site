@@ -5,7 +5,9 @@ import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
-import useAuthCheck from "@/hooks/useAuthCheck";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { ThemeProvider } from "@mui/material";
+import theme from "@/theme";
 import StoreProvider from "./StoreProvider";
 
 const inter = Inter({
@@ -37,8 +39,12 @@ export default function RootLayout({
       <StoreProvider>
         <html lang="en">
           <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
-            <Toaster position="top-right" />
-            {children}
+            <AppRouterCacheProvider>
+              <ThemeProvider theme={theme}>
+                <Toaster position="top-right" />
+                {children}
+              </ThemeProvider>
+            </AppRouterCacheProvider>
           </body>
         </html>
       </StoreProvider>
