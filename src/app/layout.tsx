@@ -32,8 +32,6 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_API, 222);
-
   return (
     <>
       <StoreProvider>

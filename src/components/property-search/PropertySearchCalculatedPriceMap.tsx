@@ -31,51 +31,47 @@ const markerIconGreen = new Icon({
 
 const formatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
-const PropertySearchCalculatedPriceMap = ({ parcels, mainParcel }: IMap) => {
-  console.log(mainParcel);
-
-  return (
-    <MapContainer
-      preferCanvas
-      center={[Number(mainParcel.properties.fields.lat), Number(mainParcel.properties.fields.lon)]}
-      zoom={8}
-      scrollWheelZoom
-      style={{ height: "100%", width: "100%" }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <FeatureGroup pathOptions={{ color: "green" }}>
-        <Polygon stroke key={Math.random()} fillColor="blue" positions={mainParcel.geometry.coordinates} />
-        <Marker icon={markerIconGreen} position={[Number(mainParcel.properties.fields.lat), Number(mainParcel.properties.fields.lon)]}>
-          <Popup>
-            Parcel number: <b>#{mainParcel.properties.fields.parcelnumb}</b>
-          </Popup>
-        </Marker>
-      </FeatureGroup>
-      <FeatureGroup pathOptions={{ color: "green" }}>
-        {parcels?.map((parcel) => (
-          <Fragment key={Math.random()}>
-            {/* <Polygon stroke key={Math.random()} fillColor="blue" positions={[parcel.lat as any, parcel.lng as any]} /> */}
-            <Marker position={[parcel.lat as any, parcel.lng as any]}>
-              <Popup>
-                <div>
-                  Owner: <b>{parcel.owner}</b>
-                </div>
-                <div>
-                  Arcage: <b>#{parcel.arcage}</b>
-                </div>
-                <div>
-                  Last Sale Date: <b>{parcel.lastSalesDate}</b>
-                </div>
-                <div>
-                  Last Sale Price: <b>{formatter.format(parcel.lastSalesPrice)}</b>
-                </div>
-              </Popup>
-            </Marker>
-          </Fragment>
-        ))}
-      </FeatureGroup>
-    </MapContainer>
-  );
-};
+const PropertySearchCalculatedPriceMap = ({ parcels, mainParcel }: IMap) => (
+  <MapContainer
+    preferCanvas
+    center={[Number(mainParcel.properties.fields.lat), Number(mainParcel.properties.fields.lon)]}
+    zoom={8}
+    scrollWheelZoom
+    style={{ height: "100%", width: "100%" }}
+  >
+    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <FeatureGroup pathOptions={{ color: "green" }}>
+      <Polygon stroke key={Math.random()} fillColor="blue" positions={mainParcel.geometry.coordinates} />
+      <Marker icon={markerIconGreen} position={[Number(mainParcel.properties.fields.lat), Number(mainParcel.properties.fields.lon)]}>
+        <Popup>
+          Parcel number: <b>#{mainParcel.properties.fields.parcelnumb}</b>
+        </Popup>
+      </Marker>
+    </FeatureGroup>
+    <FeatureGroup pathOptions={{ color: "green" }}>
+      {parcels?.map((parcel) => (
+        <Fragment key={Math.random()}>
+          {/* <Polygon stroke key={Math.random()} fillColor="blue" positions={[parcel.lat as any, parcel.lng as any]} /> */}
+          <Marker position={[parcel.lat as any, parcel.lng as any]}>
+            <Popup>
+              <div>
+                Owner: <b>{parcel.owner}</b>
+              </div>
+              <div>
+                Arcage: <b>#{parcel.arcage}</b>
+              </div>
+              <div>
+                Last Sale Date: <b>{parcel.lastSalesDate}</b>
+              </div>
+              <div>
+                Last Sale Price: <b>{formatter.format(parcel.lastSalesPrice)}</b>
+              </div>
+            </Popup>
+          </Marker>
+        </Fragment>
+      ))}
+    </FeatureGroup>
+  </MapContainer>
+);
 
 export default PropertySearchCalculatedPriceMap;
