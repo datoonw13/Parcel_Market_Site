@@ -25,8 +25,6 @@ const Header = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          px: { xs: 2.5, md: 5 },
-          py: { xs: 2, sm: 2.5, md: 3, lg: 3 },
           m: "auto",
         }}
       >

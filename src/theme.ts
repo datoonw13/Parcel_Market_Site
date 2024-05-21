@@ -28,7 +28,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const { palette, spacing } = createTheme();
+const { palette, spacing, breakpoints } = createTheme();
 
 const customPalette = {
   ...palette,
@@ -138,6 +138,28 @@ const theme = createTheme({
       styleOverrides: {
         input: {
           borderRadius: `${spacing(1)} !important`,
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          px: { xs: 2.5, md: 5 },
+          py: { xs: 2, sm: 2.5, md: 3 },
+          paddingLeft: spacing(2.5),
+          paddingRight: spacing(2.5),
+          paddingTop: spacing(2),
+          paddingBottom: spacing(2),
+          [breakpoints.up("sm")]: {
+            paddingTop: spacing(2),
+            paddingBottom: spacing(2),
+          },
+          [breakpoints.up("md")]: {
+            paddingLeft: spacing(5),
+            paddingRight: spacing(5),
+            paddingTop: spacing(3),
+            paddingBottom: spacing(3),
+          },
         },
       },
     },
