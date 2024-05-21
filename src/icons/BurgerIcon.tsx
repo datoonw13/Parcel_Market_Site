@@ -1,8 +1,17 @@
 const BurgerIcon = () => (
-  <svg viewBox="0 0 40 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <line y1="1.51123" x2="40" y2="1.51123" stroke="#044019" strokeWidth="2" />
-    <line y1="13.5112" x2="40" y2="13.5112" stroke="#044019" strokeWidth="2" />
-    <line y1="25.5112" x2="40" y2="25.5112" stroke="#044019" strokeWidth="2" />
+  <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M21 2L7 2C6.44772 2 6 1.55228 6 1C6 0.447715 6.44772 0 7 0H21C21.5523 0 22 0.447717 22 1C22 1.55229 21.5523 2 21 2Z"
+      fill="#363636"
+    />
+    <path
+      d="M18 8L4 8C3.44772 8 3 7.55228 3 7C3 6.44772 3.44772 6 4 6L18 6C18.5523 6 19 6.44772 19 7C19 7.55229 18.5523 8 18 8Z"
+      fill="#363636"
+    />
+    <path
+      d="M1 12C0.447715 12 0 12.4477 0 13C0 13.5523 0.447715 14 1 14L15 14C15.5523 14 16 13.5523 16 13C16 12.4477 15.5523 12 15 12L1 12Z"
+      fill="#363636"
+    />
   </svg>
 );
 export default BurgerIcon;

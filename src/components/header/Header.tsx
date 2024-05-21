@@ -3,24 +3,134 @@
 import Logo from "@/icons/Logo";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import Link from "next/link";
-import DesktopNavigation from "./DesktopNavigation";
-import MobileNav from "./MobileNav";
-import Container from "../shared/Container";
+import { Box, Button, ClickAwayListener, Container, Drawer, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import BurgerIcon from "@/icons/BurgerIcon";
+import { forwardRef, useEffect, useRef, useState } from "react";
+// import Container from "../shared/Container";
 
 const Header = () => {
-  useAuthCheck();
+  const theme = useTheme();
+  const upMd = useMediaQuery(theme.breakpoints.up("lg"));
 
+  useAuthCheck();
   return (
-    <div className="pt-10 md:pt-6 py-6 flex space-between gap-4 w-full items-center">
-      <Link href="/">
-        <div className="min-w-[130px] w-[130px] xs:min-w-[145px] xs:w-[145px] lg:w-[180px] 2xl:w-[220px] h-[40px] lg:h-[60px] flex cursor-pointer">
+    <Box
+      sx={{
+        bgcolor: "white",
+      }}
+      id="root-header"
+    >
+      <Container
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: { xs: 2.5, md: 5 },
+          py: { xs: 2, sm: 2.5, md: 3, lg: 3 },
+          m: "auto",
+        }}
+      >
+        <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }}>
           <Logo />
-        </div>
-      </Link>
-      <DesktopNavigation />
-      <MobileNav />
-    </div>
+        </Box>
+        <Box>
+          {!upMd && <ResponsiveHeaderMenuItems />}
+          {upMd && <HeaderMenuItems />}
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
 export default Header;
+
+const HeaderMenuItems = () => (
+  <Box sx={{ display: "flex", gap: 4, alignItems: "center", "& > a": { fontWeight: 500 } }}>
+    <Link href="/">Sell your property</Link>
+    <Link href="/">Find a Preferred Land Agent</Link>
+    <Link href="/">About Us</Link>
+    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <Button sx={{ textTransform: "none" }} variant="contained">
+        Value my land for free
+      </Button>
+      <Button sx={{ textTransform: "none" }} variant="outlined">
+        Sign In
+      </Button>
+    </Box>
+  </Box>
+);
+
+const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement, any>((props, ref) => {
+  const [open, setOpen] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState<number>(20);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const setInitialHeaderHeight = () => {
+    const el = document.getElementById("root-header");
+    if (el) {
+      setHeaderHeight(el.getBoundingClientRect().height);
+    }
+  };
+
+  const setHeaderHeightOnResize = () => {
+    const el = document.getElementById("root-header");
+    if (el) {
+      setHeaderHeight(el.getBoundingClientRect().height);
+    }
+  };
+
+  useEffect(() => {
+    setInitialHeaderHeight();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", setHeaderHeightOnResize);
+    return () => {
+      window.removeEventListener("resize", setHeaderHeightOnResize);
+    };
+  }, []);
+
+  return (
+    <ClickAwayListener
+      onClickAway={(e) => {
+        setOpen(false);
+      }}
+    >
+      <Box sx={{ display: "flex", gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative" }}>
+        <>
+          <IconButton ref={buttonRef} sx={{ p: { xs: 0, sm: 1 } }} onClick={() => setOpen(!open)}>
+            <BurgerIcon />
+          </IconButton>
+
+          <Drawer
+            sx={{
+              transform: `translateY(${headerHeight}px)`,
+            }}
+            anchor="top"
+            open={open}
+            onClose={() => setOpen(false)}
+            PaperProps={{
+              elevation: 0,
+              sx: (theme) => ({
+                borderTop: `1px solid ${theme.palette.grey[100]}`,
+                p: 2.5,
+                borderBottomRightRadius: 12,
+                borderBottomLeftRadius: 12,
+              }),
+            }}
+          >
+            <Box
+              sx={{ display: "flex", flexDirection: "column", alignItems: "start", "& > a": { fontSize: { xs: 14, sm: 16 }, py: 1.25 } }}
+            >
+              <Link href="/">Sell your property</Link>
+              <Link href="/">Find a Preferred Land Agent</Link>
+              <Link href="/">About Us</Link>
+              <Link href="/">Value my land for free</Link>
+              <Link href="/"> Sign In</Link>
+            </Box>
+          </Drawer>
+        </>
+      </Box>
+    </ClickAwayListener>
+  );
+});
