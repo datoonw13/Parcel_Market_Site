@@ -1,33 +1,121 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
-import routes from "@/helpers/routes";
-import Button from "../shared/Button";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import { Box, Button, Container, Typography, alpha } from "@mui/material";
 
 const LandingMain = () => (
-  <div className="flex flex-col lg:flex-row justify-between lg:items-center lg:pb-20">
-    <div
-      className="
-      px-[10px] lg:pr-0 lg:pl-[20px] lg:pl-[40px] xl:pl-[80px] 2xl:pl-[100px] flex flex-col gap-6 pt-14 lg:pt-0 
-      w-[60%] md:w-[100%] 2xl:w-[80%]  m-auto"
-    >
-      <h1 className="font-bricolage text-green-800 font-extrabold text-4xl lg:text-6xl 2xl:text-8xl  text-center lg:text-start">
-        Value, buy, and sell vacant land
-      </h1>
-      <p className="hidden sm:block text-xl md:text-2xl text-dark-green-500 text-center lg:text-start">
-        Value your land for FREE in less than 3 minutes!
-      </p>
-      <Link href={routes.propertySearch.root}>
-        <Button classNames="py-6 lg:hidden max-w-[500px] w-full m-auto">Value My Land</Button>
-      </Link>
-      <Link href={routes.propertySearch.root}>
-        <Button classNames="hidden lg:block py-6 h-[84px] w-fit">Get Started</Button>
-      </Link>
-    </div>
-    <div className="relative w-full h-[100%] lg:h-[80%] xl:h-[90%] 2xl:h-[100%] overflow-hidden mt-10 lg:mt-0">
-      <Image alt="" src="/home-mobile.png" fill className="!left-4 lg:hidden" />
-      <Image alt="" src="/home.png" fill className="hidden lg:block" />
-    </div>
-  </div>
+  <Box sx={{ position: "relative", width: "100%", height: { xs: 400, sm: 450, md: 500, lg: 660 }, display: "flex", alignItems: "center" }}>
+    <Box sx={{ display: { xs: "none", md: "block" } }}>
+      <Image alt="" src="/cover.png" fill style={{ height: "100%", width: "100%", objectFit: "unset" }} />
+    </Box>
+    <Box sx={{ display: { xs: "block", md: "none" } }}>
+      <Image alt="" src="/cover-responsive.png" fill style={{ height: "100%", width: "100%", objectFit: "unset" }} />
+    </Box>
+    <Box sx={{ bgcolor: "red", position: "absolute", width: "100%", height: "100%", background: alpha("#222222", 0.3) }} />
+    <Container>
+      <Swiper
+        pagination={{
+          type: "bullets",
+          clickable: true,
+          bulletClass: "cover-slider-bullets",
+          bulletActiveClass: "cover-slider-bullets-active",
+        }}
+        modules={[Pagination, Autoplay]}
+        className="mySwiper"
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        loop
+      >
+        <SwiperSlide>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+            <Typography
+              sx={{
+                lineHeight: 1.2,
+                textAlign: "start",
+                fontWeight: { xs: 600, lg: 800 },
+                fontSize: { xs: 36, sm: 46, md: 66, lg: 76, xl: 96 },
+              }}
+            >
+              Value, Buy & Sell &#10;&#13; vacant land
+            </Typography>
+            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 16 }, mt: 1 }}>
+              Value your land for FREE in less than 3 minutes!
+            </Typography>
+            <Button variant="contained" sx={{ textTransform: "none", mt: 8 }}>
+              Get Started
+            </Button>
+          </Box>
+        </SwiperSlide>
+        <SwiperSlide>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+            <Typography
+              sx={{
+                lineHeight: 1.2,
+                textAlign: "start",
+                fontWeight: { xs: 600, lg: 800 },
+                fontSize: { xs: 36, sm: 46, md: 66, lg: 76, xl: 96 },
+              }}
+            >
+              Value, Buy & Sell <br /> vacant land
+            </Typography>
+            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 16 }, mt: 1 }}>
+              Value your land for FREE in less than 3 minutes!
+            </Typography>
+            <Button variant="contained" sx={{ textTransform: "none", mt: 8 }}>
+              Get Started
+            </Button>
+          </Box>
+        </SwiperSlide>
+        <SwiperSlide>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+            <Typography
+              sx={{
+                lineHeight: 1.2,
+                textAlign: "start",
+                fontWeight: { xs: 600, lg: 800 },
+                fontSize: { xs: 36, sm: 46, md: 66, lg: 76, xl: 96 },
+              }}
+            >
+              Value, Buy & Sell <br /> vacant land
+            </Typography>
+            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 16 }, mt: 1 }}>
+              Value your land for FREE in less than 3 minutes!
+            </Typography>
+            <Button variant="contained" sx={{ textTransform: "none", mt: 8 }}>
+              Get Started
+            </Button>
+          </Box>
+        </SwiperSlide>
+        <SwiperSlide>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+            <Typography
+              sx={{
+                lineHeight: 1.2,
+                textAlign: "start",
+                fontWeight: { xs: 600, lg: 800 },
+                fontSize: { xs: 36, sm: 46, md: 66, lg: 76, xl: 96 },
+              }}
+            >
+              Value, Buy & Sell <br /> vacant land
+            </Typography>
+            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 16 }, mt: 1 }}>
+              Value your land for FREE in less than 3 minutes!
+            </Typography>
+            <Button variant="contained" sx={{ textTransform: "none", mt: 8 }}>
+              Get Started
+            </Button>
+          </Box>
+        </SwiperSlide>
+      </Swiper>
+    </Container>
+  </Box>
 );
 
 export default LandingMain;

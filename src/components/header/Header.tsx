@@ -11,6 +11,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 const Header = () => {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up("lg"));
+  console.log(upMd, 22);
 
   useAuthCheck();
   return (
@@ -32,8 +33,8 @@ const Header = () => {
           <Logo />
         </Box>
         <Box>
-          {!upMd && <ResponsiveHeaderMenuItems />}
-          {upMd && <HeaderMenuItems />}
+          <ResponsiveHeaderMenuItems />
+          <HeaderMenuItems />
         </Box>
       </Container>
     </Box>
@@ -43,7 +44,7 @@ const Header = () => {
 export default Header;
 
 const HeaderMenuItems = () => (
-  <Box sx={{ display: "flex", gap: 4, alignItems: "center", "& > a": { fontWeight: 500 } }}>
+  <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 4, alignItems: "center", "& > a": { fontWeight: 500, fontSize: 14 } }}>
     <Link href="/">Sell your property</Link>
     <Link href="/">Find a Preferred Land Agent</Link>
     <Link href="/">About Us</Link>
@@ -94,7 +95,7 @@ const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement, any>((props, ref) =
         setOpen(false);
       }}
     >
-      <Box sx={{ display: "flex", gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative" }}>
+      <Box sx={{ display: { xs: "flex", lg: "none" }, gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative" }}>
         <>
           <IconButton ref={buttonRef} sx={{ p: { xs: 0, sm: 1 } }} onClick={() => setOpen(!open)}>
             <BurgerIcon />
@@ -117,9 +118,7 @@ const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement, any>((props, ref) =
               }),
             }}
           >
-            <Box
-              sx={{ display: "flex", flexDirection: "column", alignItems: "start", "& > a": { fontSize: { xs: 14, sm: 16 }, py: 1.25 } }}
-            >
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", "& > a": { fontSize: { xs: 14 }, py: 1.25 } }}>
               <Link href="/">Sell your property</Link>
               <Link href="/">Find a Preferred Land Agent</Link>
               <Link href="/">About Us</Link>
