@@ -26,6 +26,7 @@ const Header = () => {
           alignItems: "center",
           justifyContent: "space-between",
           m: "auto",
+          py: { xs: 2, md: 3 },
         }}
       >
         <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }}>

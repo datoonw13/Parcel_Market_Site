@@ -1,7 +1,7 @@
 "use client";
 
 import { Inter } from "next/font/google";
-import { createTheme } from "@mui/material/styles";
+import { Shadows, createTheme } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -28,7 +28,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const { palette, spacing, breakpoints } = createTheme();
+const { palette, spacing, breakpoints, shadows } = createTheme();
 
 const customPalette = {
   ...palette,
@@ -82,6 +82,9 @@ const customPalette = {
   },
 };
 
+const newShadows = shadows;
+shadows[1] = "0px 0px 30px 0px rgba(0, 0, 0, 0.08)";
+
 const theme = createTheme({
   typography: {
     fontFamily: inter.style.fontFamily,
@@ -100,6 +103,7 @@ const theme = createTheme({
         root: {
           padding: spacing(1.5, 3),
           borderRadius: spacing(1),
+          textTransform: "none",
         },
         outlined: {
           background: customPalette.white,
@@ -148,22 +152,15 @@ const theme = createTheme({
           py: { xs: 2, sm: 2.5, md: 3 },
           paddingLeft: spacing(2.5),
           paddingRight: spacing(2.5),
-          paddingTop: spacing(2),
-          paddingBottom: spacing(2),
-          [breakpoints.up("sm")]: {
-            paddingTop: spacing(2),
-            paddingBottom: spacing(2),
-          },
           [breakpoints.up("md")]: {
             paddingLeft: spacing(5),
             paddingRight: spacing(5),
-            paddingTop: spacing(3),
-            paddingBottom: spacing(3),
           },
         },
       },
     },
   },
+  shadows: [...newShadows],
 });
 
 export default theme;

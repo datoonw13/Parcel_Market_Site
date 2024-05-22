@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import LandingMain from "@/components/landing/LandingMain";
 import Container from "@/components/shared/Container";
 import { Box, Button, Typography } from "@mui/material";
+import LandingSection1 from "@/components/landing/LandingSection1";
 
 const Landing = () => (
   <>
@@ -10,9 +11,7 @@ const Landing = () => (
       <Header />
       <LandingMain />
     </Box>
-    <section>
-      <Footer />
-    </section>
+    <LandingSection1 />
   </>
 );
 
