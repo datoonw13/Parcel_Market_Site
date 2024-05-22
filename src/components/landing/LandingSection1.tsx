@@ -9,11 +9,11 @@ const LandingSection1 = () => (
       gridTemplateColumns: { xs: "1fr", md: "1.2fr 1fr" },
       alignItems: "center",
       gap: { xs: 3, md: 6, lg: 8 },
-      py: { xs: 8, md: 10, lg: 12.5 },
+      py: { xs: 10, md: 11, lg: 12.5 },
     }}
   >
     <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28 }, textAlign: "center", display: { md: "none" } }}>
-      The Parcel Market value of land tool
+      The Parcel Market <br /> value of land tool
     </Typography>
     <Box boxShadow={1} sx={{ position: "relative", width: "100%", height: { xs: 230, sm: "45vw", md: 350, lg: 400 }, borderRadius: 4 }}>
       <Image alt="" src="/volt.png" fill />
