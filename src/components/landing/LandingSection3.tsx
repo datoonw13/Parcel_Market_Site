@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography, alpha } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import "swiper/css";
@@ -27,7 +27,7 @@ const LandingSection3 = () => {
 
   return (
     <Box sx={{ pr: 0, display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 2fr" }, gap: 4 }} ref={ref}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 4, position: "relative" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 4, position: "relative", pr: { xs: 2.5, md: 0 } }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28, md: 32, lg: 36 } }}>Buy land near you</Typography>
           <Typography sx={{ color: "grey.800", fontSize: 14 }}>
@@ -35,7 +35,9 @@ const LandingSection3 = () => {
             place to start when making decisions regarding vacant land.
           </Typography>
         </Box>
-        <Button variant="contained">View All</Button>
+        <Button variant="contained" sx={{ width: { md: "fit-content" } }}>
+          View All
+        </Button>
       </Box>
       <Box sx={{ display: "grid", justifyContent: "center", pl: { xs: 2.5 } }}>
         <Swiper
@@ -58,7 +60,54 @@ const LandingSection3 = () => {
         >
           {images.map((el) => (
             <SwiperSlide key={el.src}>
-              <Box>
+              <Box
+                sx={{
+                  cursor: "pointer",
+                  "& > div": {
+                    position: "relative",
+                    "&::before": {
+                      position: "absolute",
+                      bgcolor: alpha("#222222", 0.4),
+                      content: '" "',
+                      display: "block",
+                      width: "100%",
+                      height: "100%",
+                      opacity: 0,
+                      zIndex: 2,
+                      borderRadius: 4,
+                      transition: "all 0.3s",
+                    },
+                  },
+                  "& > p": {
+                    position: "relative",
+                    "&::before": {
+                      position: "absolute",
+                      bgcolor: "black",
+                      content: '" "',
+                      display: "block",
+                      width: "100%",
+                      height: "1px !important",
+                      opacity: 0,
+                      zIndex: 2,
+                      borderRadius: 4,
+                      transition: "all 0.3s",
+                      bottom: 0,
+                    },
+                  },
+                  "&:hover": {
+                    "& > div": {
+                      "&::before": {
+                        opacity: 1,
+                      },
+                    },
+                    "& > p": {
+                      "&::before": {
+                        opacity: 1,
+                      },
+                    },
+                  },
+                }}
+              >
                 <Box sx={{ position: "relative", width: "100%", height: 253 }}>
                   <Image alt="" src={el.src} fill style={{ borderRadius: 16 }} />
                 </Box>
