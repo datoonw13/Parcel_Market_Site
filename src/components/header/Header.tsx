@@ -11,7 +11,6 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 const Header = () => {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up("lg"));
-  console.log(upMd, 22);
 
   useAuthCheck();
   return (
@@ -44,7 +43,14 @@ const Header = () => {
 export default Header;
 
 const HeaderMenuItems = () => (
-  <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 4, alignItems: "center", "& > a": { fontWeight: 500, fontSize: 14 } }}>
+  <Box
+    sx={{
+      display: { xs: "none", lg: "flex" },
+      gap: 4,
+      alignItems: "center",
+      "& > a": { fontWeight: 500, fontSize: 14, "&:hover": { color: "primary.main" }, transition: "all 0.1s" },
+    }}
+  >
     <Link href="/">Sell your property</Link>
     <Link href="/">Find a Preferred Land Agent</Link>
     <Link href="/">About Us</Link>
@@ -59,7 +65,7 @@ const HeaderMenuItems = () => (
   </Box>
 );
 
-const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement, any>((props, ref) => {
+const ResponsiveHeaderMenuItems = () => {
   const [open, setOpen] = useState(false);
   const [headerHeight, setHeaderHeight] = useState<number>(20);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -118,7 +124,14 @@ const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement, any>((props, ref) =
               }),
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", "& > a": { fontSize: { xs: 14 }, py: 1.25 } }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "start",
+                "& > a": { fontSize: { xs: 14 }, py: 1.25, "&:hover": { color: "primary.main" }, transition: "all 0.1s" },
+              }}
+            >
               <Link href="/">Sell your property</Link>
               <Link href="/">Find a Preferred Land Agent</Link>
               <Link href="/">About Us</Link>
@@ -130,4 +143,4 @@ const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement, any>((props, ref) =
       </Box>
     </ClickAwayListener>
   );
-});
+};
