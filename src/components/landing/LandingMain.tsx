@@ -34,7 +34,7 @@ const LandingMain = () => {
           {images.map((image) => (
             <SwiperSlide key={image}>
               <Box sx={{ position: "relative", height: { xs: 400, sm: 450, md: 500, lg: 550, xl: 660 } }}>
-                <Image alt="" src={image} fill />
+                <Image alt="" src={image} fill loading="eager" />
                 <Box
                   sx={(theme) => ({
                     bgcolor: alpha(theme.palette.black, 0.3),
