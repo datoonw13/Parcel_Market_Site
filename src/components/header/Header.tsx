@@ -29,7 +29,7 @@ const Header = () => {
           py: { xs: 2, md: 3 },
         }}
       >
-        <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }}>
+        <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }} id="root-header-logo">
           <Logo />
         </Box>
         <Box>
