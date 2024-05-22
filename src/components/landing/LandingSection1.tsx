@@ -19,7 +19,7 @@ const LandingSection1 = () => (
       <Image alt="" src="/volt.png" fill />
     </Box>
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography sx={{ fontWeight: 600, fontSize: 36, mb: 1.5, display: { xs: "none", md: "flex" } }}>
+      <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, mb: 1.5, display: { xs: "none", md: "flex" } }}>
         VOLT - Value of Land Tool
       </Typography>
       <Typography sx={{ fontSize: 14, color: "grey.800" }}>

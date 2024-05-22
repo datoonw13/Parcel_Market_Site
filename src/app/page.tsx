@@ -2,6 +2,7 @@ import Header from "@/components/header/Header";
 import LandingMain from "@/components/landing/LandingMain";
 import { Box } from "@mui/material";
 import LandingSection1 from "@/components/landing/LandingSection1";
+import LandingSection2 from "@/components/landing/LandingSection2";
 
 const Landing = () => (
   <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 10, md: 11, lg: 12.5 } }}>
@@ -10,6 +11,8 @@ const Landing = () => (
       <LandingMain />
     </Box>
     <LandingSection1 />
+    <LandingSection2 />
+    <div />
   </Box>
 );
 
