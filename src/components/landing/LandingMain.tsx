@@ -16,8 +16,6 @@ const LandingMain = () => {
 
   return (
     <>
-      {/* <Button onClick={() => swiper?.slideTo(0)}>next</Button> */}
-
       <Box sx={{ position: "relative" }}>
         <Swiper
           modules={[Autoplay, EffectFade]}

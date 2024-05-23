@@ -6,10 +6,11 @@ import LandingSection2 from "@/components/landing/LandingSection2";
 import dynamic from "next/dynamic";
 
 const LandingSection3 = dynamic(() => import("../components/landing/LandingSection3"), { ssr: false });
+const LandingSection4 = dynamic(() => import("../components/landing/LandingSection4"), { ssr: false });
 
 const Landing = () => (
   <Box sx={{ display: "flex", flexDirection: "column" }}>
-    <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
+    <Box sx={{ bgcolor: "white" }}>
       <Header />
       <LandingMain />
     </Box>
@@ -21,6 +22,9 @@ const Landing = () => (
     </Box>
     <Box sx={{ bgcolor: "grey.A100", py: { xs: 10, md: 11, lg: 12.5 } }}>
       <LandingSection3 />
+    </Box>
+    <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
+      <LandingSection4 />
     </Box>
     <div />
   </Box>
