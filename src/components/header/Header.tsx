@@ -29,9 +29,11 @@ const Header = () => {
           py: { xs: 2, md: 3 },
         }}
       >
-        <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }} id="root-header-logo">
-          <Logo />
-        </Box>
+        <Link href="/">
+          <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }} id="root-header-logo">
+            <Logo />
+          </Box>
+        </Link>
         <Box>
           <ResponsiveHeaderMenuItems />
           <HeaderMenuItems />
@@ -54,7 +56,7 @@ const HeaderMenuItems = () => (
   >
     <Link href="/">Sell your property</Link>
     <Link href="/">Find a Preferred Land Agent</Link>
-    <Link href="/">About Us</Link>
+    <Link href="/about-us">About Us</Link>
     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
       <Button sx={{ textTransform: "none" }} variant="contained">
         Value my land for free
@@ -135,7 +137,7 @@ const ResponsiveHeaderMenuItems = () => {
             >
               <Link href="/">Sell your property</Link>
               <Link href="/">Find a Preferred Land Agent</Link>
-              <Link href="/">About Us</Link>
+              <Link href="/about-us">About Us</Link>
               <Link href="/">Value my land for free</Link>
               <Link href="/"> Sign In</Link>
             </Box>
