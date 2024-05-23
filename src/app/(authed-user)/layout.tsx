@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/components/header/Header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import Container from "@/components/shared/Container";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -28,7 +28,7 @@ const FindPropertyLayout = ({
         <Header />
         {children}
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
