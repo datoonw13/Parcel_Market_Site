@@ -13,10 +13,6 @@ const LandingSection4 = dynamic(() => import("../components/landing/LandingSecti
 
 const Landing = () => (
   <Box sx={{ display: "flex", flexDirection: "column" }}>
-    <Box sx={{ bgcolor: "white" }}>
-      <Header />
-      <LandingMain />
-    </Box>
     <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
       <LandingSection1 />
     </Box>
@@ -32,10 +28,7 @@ const Landing = () => (
     <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
       <LandingSection5 />
     </Box>
-    <LandingSection6 />
-    <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
-      <Footer />
-    </Box>
+
     <div />
   </Box>
 );

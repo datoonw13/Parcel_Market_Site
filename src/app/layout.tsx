@@ -6,8 +6,12 @@ import "./globals.css";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import theme from "@/theme";
+import Header from "@/components/header/Header";
+import LandingMain from "@/components/landing/LandingMain";
+import LandingSection6 from "@/components/landing/LandingSection6";
+import Footer from "@/components/landing/Footer";
 import StoreProvider from "./StoreProvider";
 
 const inter = Inter({
@@ -42,7 +46,15 @@ export default function RootLayout({
             <AppRouterCacheProvider>
               <ThemeProvider theme={theme}>
                 <Toaster position="top-right" />
+                <Box sx={{ bgcolor: "white" }}>
+                  <Header />
+                  <LandingMain />
+                </Box>
                 {children}
+                <LandingSection6 />
+                <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
+                  <Footer />
+                </Box>
               </ThemeProvider>
             </AppRouterCacheProvider>
           </body>
