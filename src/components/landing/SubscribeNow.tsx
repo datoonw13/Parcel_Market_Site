@@ -2,7 +2,7 @@ import { Box, Button, Container, InputAdornment, Paper, TextField, Typography } 
 import Image from "next/image";
 import React from "react";
 
-const LandingSection6 = () => (
+const SubscribeNow = () => (
   <Box>
     <Box sx={{ height: { xs: 352, sm: 362, md: 372, lg: 392, position: "relative" } }}>
       <Image alt="" src="/stadium.png" fill loading="eager" />
@@ -49,4 +49,4 @@ const LandingSection6 = () => (
   </Box>
 );
 
-export default LandingSection6;
+export default SubscribeNow;

@@ -5,7 +5,7 @@ import LandingSection1 from "@/components/landing/LandingSection1";
 import LandingSection2 from "@/components/landing/LandingSection2";
 import dynamic from "next/dynamic";
 import LandingSection5 from "@/components/landing/LandingSection5";
-import LandingSection6 from "@/components/landing/LandingSection6";
+import SubscribeNow from "@/components/landing/SubscribeNow";
 import Footer from "@/components/landing/Footer";
 
 const LandingSection3 = dynamic(() => import("../components/landing/LandingSection3"), { ssr: false });
@@ -30,7 +30,7 @@ const Landing = () => (
     <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
       <LandingSection5 />
     </Box>
-    <LandingSection6 />
+    <SubscribeNow />
     <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
       <Footer />
     </Box>
