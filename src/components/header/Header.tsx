@@ -5,8 +5,7 @@ import useAuthCheck from "@/hooks/useAuthCheck";
 import Link from "next/link";
 import { Box, Button, ClickAwayListener, Container, Drawer, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import BurgerIcon from "@/icons/BurgerIcon";
-import { forwardRef, useEffect, useRef, useState } from "react";
-// import Container from "../shared/Container";
+import { useEffect, useRef, useState } from "react";
 
 const Header = () => {
   const theme = useTheme();

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const LandingSection3 = () => {
@@ -53,6 +54,11 @@ const LandingSection3 = () => {
             1200: {
               slidesPerView: 3.5,
             },
+          }}
+          modules={[Autoplay]}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
           }}
           pagination={{
             clickable: true,
