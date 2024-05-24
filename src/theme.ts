@@ -159,6 +159,28 @@ const theme = createTheme({
         },
       },
     },
+    MuiRadio: {
+      defaultProps: {
+        color: "success",
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        paper: {
+          borderRadius: spacing(1.5),
+          maxHeight: "25vh",
+          marginTop: spacing(0.5),
+        },
+        listbox: {
+          padding: 0,
+        },
+        option: {
+          padding: "12px 16px !important",
+          fontSize: 12,
+          fontWeight: 500,
+        },
+      },
+    },
   },
   shadows: [...newShadows],
 });

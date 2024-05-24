@@ -9,6 +9,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { Box, ThemeProvider } from "@mui/material";
 import theme from "@/theme";
 import StoreProvider from "./StoreProvider";
+import "simplebar-react/dist/simplebar.min.css";
 
 const inter = Inter({
   subsets: ["latin"],
