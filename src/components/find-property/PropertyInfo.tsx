@@ -19,7 +19,7 @@ const Label = ({ label, sx }: { label: string; sx?: SxProps }) => (
 
 const PropertyInfo = () => (
   <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
-    <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>
+    <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 }, height: "100%" }}>
       <Box
         sx={(theme) => ({
           border: { xs: `1px solid transparent`, md: `1px solid ${theme.palette.grey[100]}` },
