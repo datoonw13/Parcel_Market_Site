@@ -3,6 +3,7 @@
 import { Box, Divider, Paper, Step, StepLabel, Stepper, Typography } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { CheckCircleOutlineOutlined, DoneOutlined } from "@mui/icons-material";
+import PropertyInfo from "@/components/find-property/PropertyInfo";
 
 enum Steps {
   PROPERTY_INFO,
@@ -11,8 +12,35 @@ enum Steps {
   CALCULATED_PRICE,
 }
 
+const getStepInfo = (step: Steps) => {
+  if (step === Steps.FOUNDED_PROPERTIES) {
+    return {
+      stepTitle: "Did we find your property?",
+      stepDesc: "Select your property from the list below",
+    };
+  }
+  if (step === Steps.ABOUT_PROPERTY) {
+    return {
+      stepTitle: "Tell us about your property",
+      stepDesc:
+        "Please provide us with a little information about the land. Parcel Market's unique algorithms use this information to give you the best valuation possible.",
+    };
+  }
+  if (step === Steps.CALCULATED_PRICE) {
+    return {
+      stepTitle: "The average sale price for similar property in your area",
+      stepDesc: "",
+    };
+  }
+  return {
+    stepTitle: "Property information",
+    stepDesc: "Let’s find your property using some basic property information",
+  };
+};
+
 const FindProperty = () => {
   const [step, setStep] = useState(Steps.PROPERTY_INFO);
+  const { stepDesc, stepTitle } = getStepInfo(step);
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%", p: 10 }}>
       <Paper sx={{ borderRadius: 4, py: 3 }}>
@@ -77,14 +105,13 @@ const FindProperty = () => {
             ))}
         </Stepper>
         <Divider sx={{ my: 3 }} />
-        <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>
-          <Typography sx={{ fontWeight: 700, fontSize: { xs: 18, sm: 20, md: 22, lg: 24 }, mb: 1.5 }}>
-            Did we find your property?
-          </Typography>
-          <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>
-            Select your property from the list below
-          </Typography>
+        <Box sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
+          {stepTitle && (
+            <Typography sx={{ fontWeight: 700, fontSize: { xs: 18, sm: 20, md: 22, lg: 24 }, mb: 1.5 }}>{stepTitle}</Typography>
+          )}
+          {stepDesc && <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>{stepDesc}</Typography>}
         </Box>
+        <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 }, mt: 3 }}>{step === Steps.PROPERTY_INFO && <PropertyInfo />}</Box>
       </Paper>
     </Box>
   );
