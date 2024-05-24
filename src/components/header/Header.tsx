@@ -8,9 +8,6 @@ import BurgerIcon from "@/icons/BurgerIcon";
 import { useEffect, useRef, useState } from "react";
 
 const Header = () => {
-  const theme = useTheme();
-  const upMd = useMediaQuery(theme.breakpoints.up("lg"));
-
   useAuthCheck();
   return (
     <Box
@@ -33,8 +30,10 @@ const Header = () => {
             <Logo />
           </Box>
         </Link>
-        <Box>
+        <Box sx={{ ml: "auto", display: { xs: "flex", lg: "none" } }}>
           <ResponsiveHeaderMenuItems />
+        </Box>
+        <Box sx={{ display: { xs: "none", lg: "flex" } }}>
           <HeaderMenuItems />
         </Box>
       </Container>
@@ -47,10 +46,10 @@ export default Header;
 const HeaderMenuItems = () => (
   <Box
     sx={{
-      display: { xs: "none", lg: "flex" },
       gap: 4,
       alignItems: "center",
       "& > a": { fontWeight: 500, fontSize: 14, "&:hover": { color: "primary.main" }, transition: "all 0.1s" },
+      display: "flex",
     }}
   >
     <Link href="/">Sell your property</Link>
@@ -103,7 +102,7 @@ const ResponsiveHeaderMenuItems = () => {
         setOpen(false);
       }}
     >
-      <Box sx={{ display: { xs: "flex", lg: "none" }, gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative" }}>
+      <Box sx={{ gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative", display: "flex" }}>
         <>
           <IconButton ref={buttonRef} sx={{ p: { xs: 0, sm: 1 } }} onClick={() => setOpen(!open)}>
             <BurgerIcon />
