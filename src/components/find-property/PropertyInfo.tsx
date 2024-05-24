@@ -1,7 +1,7 @@
 "use client";
 
 import { Info } from "@mui/icons-material";
-import { Autocomplete, Box, Divider, FormControlLabel, Radio, RadioGroup, SxProps, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Divider, FormControlLabel, Radio, RadioGroup, SxProps, TextField } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { usaStatesFull } from "typed-usa-states";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
@@ -64,7 +64,23 @@ const PropertyInfo = () => (
       </Box>
     </Box>
     <Divider sx={{ mt: 4 }} />
-    <Box sx={{ mt: 2, px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>Footer</Box>
+    <Box
+      sx={{
+        mt: 2,
+        px: { xs: 2, md: 3, lg: 4, mb: 3 },
+        display: "flex",
+        justifyContent: "flex-end",
+        gap: 1.5,
+        flexDirection: { xs: "column", sm: "row" },
+      }}
+    >
+      <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined">
+        Back
+      </Button>
+      <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
+        Continue
+      </Button>
+    </Box>
   </Box>
 );
 
