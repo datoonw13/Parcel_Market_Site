@@ -95,6 +95,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: 12,
+          top: "2px",
         },
       },
     },
