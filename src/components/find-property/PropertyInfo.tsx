@@ -52,7 +52,12 @@ const PropertyInfo = () => (
             renderInput={(params) => <TextField {...params} label="Movie" />}
             ListboxComponent={AutoCompleteListboxComponent}
           />
-          <Autocomplete options={getAllStates()} fullWidth renderInput={(params) => <TextField {...params} label="Movie" />} />
+          <Autocomplete
+            options={getAllStates()}
+            ListboxComponent={AutoCompleteListboxComponent}
+            fullWidth
+            renderInput={(params) => <TextField {...params} label="Movie" />}
+          />
         </Box>
       </Box>
     </Box>
