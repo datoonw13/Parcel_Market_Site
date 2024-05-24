@@ -82,7 +82,7 @@ const FindProperty = () => {
                       fontWeight: 500,
                     })}
                   >
-                    1
+                    {Number(key) + 1}
                   </Box>
                 )}
                 {Number(key) > step && (
@@ -98,7 +98,7 @@ const FindProperty = () => {
                       fontWeight: 500,
                     })}
                   >
-                    1
+                    {Number(key) + 1}
                   </Box>
                 )}
               </Step>
