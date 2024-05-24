@@ -1,9 +1,9 @@
 "use client";
 
-import { Box, Divider, Paper, Step, StepLabel, Stepper, Typography } from "@mui/material";
-import React, { ReactNode, useState } from "react";
-import { CheckCircleOutlineOutlined, DoneOutlined } from "@mui/icons-material";
+import { Box, Divider, Paper, Typography } from "@mui/material";
+import React, { useState } from "react";
 import PropertyInfo from "@/components/find-property/PropertyInfo";
+import FindPropertyStepper from "@/components/find-property/FindPropertyStepper";
 
 enum Steps {
   PROPERTY_INFO,
@@ -44,66 +44,12 @@ const FindProperty = () => {
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
       <Paper sx={{ borderRadius: 4, py: 3, display: "flex", flexDirection: "column" }}>
-        <Stepper activeStep={1} sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
-          {Object.values(Steps)
-            .filter((el) => !Number.isNaN(Number(el)))
-            .map((key) => (
-              <Step
-                key={key}
-                sx={(theme) => ({
-                  p: 0,
-                })}
-              >
-                {Number(key) < step && (
-                  <Box
-                    sx={(theme) => ({
-                      width: 32,
-                      height: 32,
-                      borderRadius: "50%",
-                      bgcolor: "success.main",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    })}
-                  >
-                    <DoneOutlined sx={{ color: "white" }} />
-                  </Box>
-                )}
-                {Number(key) === step && (
-                  <Box
-                    sx={(theme) => ({
-                      width: 32,
-                      height: 32,
-                      borderRadius: "50%",
-                      border: `1px solid ${theme.palette.success.main}`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 500,
-                    })}
-                  >
-                    {Number(key) + 1}
-                  </Box>
-                )}
-                {Number(key) > step && (
-                  <Box
-                    sx={(theme) => ({
-                      width: 32,
-                      height: 32,
-                      borderRadius: "50%",
-                      border: `1px solid ${theme.palette.divider}`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 500,
-                    })}
-                  >
-                    {Number(key) + 1}
-                  </Box>
-                )}
-              </Step>
-            ))}
-        </Stepper>
+        <FindPropertyStepper
+          activeStep={step}
+          steps={Object.keys(Steps)
+            .map((x) => Number(x))
+            .filter((el) => !Number.isNaN(el))}
+        />
         <Divider sx={{ my: 3 }} />
         <Box sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
           {stepTitle && (
