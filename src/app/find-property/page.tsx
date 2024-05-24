@@ -42,7 +42,7 @@ const FindProperty = () => {
   const [step, setStep] = useState(Steps.PROPERTY_INFO);
   const { stepDesc, stepTitle } = getStepInfo(step);
   return (
-    <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%", p: 10 }}>
+    <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
       <Paper sx={{ borderRadius: 4, py: 3, display: "flex", flexDirection: "column" }}>
         <Stepper activeStep={1} sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
           {Object.values(Steps)
@@ -111,7 +111,7 @@ const FindProperty = () => {
           )}
           {stepDesc && <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>{stepDesc}</Typography>}
         </Box>
-        <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 }, mt: 3, height: "100%" }}>{step === Steps.PROPERTY_INFO && <PropertyInfo />}</Box>
+        <Box sx={{ mt: 3, height: "100%" }}>{step === Steps.PROPERTY_INFO && <PropertyInfo />}</Box>
       </Paper>
     </Box>
   );

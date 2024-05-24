@@ -18,51 +18,53 @@ const Label = ({ label, sx }: { label: string; sx?: SxProps }) => (
 );
 
 const PropertyInfo = () => (
-  <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-    <Box
-      sx={(theme) => ({
-        border: { xs: `1px solid transparent`, md: `1px solid ${theme.palette.grey[100]}` },
-        borderRadius: 4,
-        p: { md: 3, lg: 4 },
-        height: "100%",
-      })}
-    >
-      <Box>
-        <Label label="Search By" />
-        <RadioGroup sx={{ display: "flex", flexDirection: "row", columnGap: 1, rowGap: 2, mt: 1.5 }}>
-          <FormControlLabel
-            value="parcelNumber"
-            control={<Radio size="small" />}
-            label={<Label label="Parcel Number" sx={{ fontSize: 16 }} />}
-          />
-          <FormControlLabel value="fullName" control={<Radio size="small" />} label={<Label label="Full Name" sx={{ fontSize: 16 }} />} />
-          <FormControlLabel
-            value="legalEntity"
-            control={<Radio size="small" />}
-            label={<Label label="Legal Entity" sx={{ fontSize: 16 }} />}
-          />
-        </RadioGroup>{" "}
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 3 }}>
-        <TextField fullWidth label="Enter parcel ID" />
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Autocomplete
-            options={getAllStates()}
-            fullWidth
-            renderInput={(params) => <TextField {...params} label="Movie" />}
-            ListboxComponent={AutoCompleteListboxComponent}
-          />
-          <Autocomplete
-            options={getAllStates()}
-            ListboxComponent={AutoCompleteListboxComponent}
-            fullWidth
-            renderInput={(params) => <TextField {...params} label="Movie" />}
-          />
+  <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
+    <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>
+      <Box
+        sx={(theme) => ({
+          border: { xs: `1px solid transparent`, md: `1px solid ${theme.palette.grey[100]}` },
+          borderRadius: 4,
+          p: { md: 3, lg: 4 },
+          height: "100%",
+        })}
+      >
+        <Box>
+          <Label label="Search By" />
+          <RadioGroup sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, columnGap: 1, rowGap: 2, mt: 1.5 }}>
+            <FormControlLabel
+              value="parcelNumber"
+              control={<Radio size="small" />}
+              label={<Label label="Parcel Number" sx={{ fontSize: 16 }} />}
+            />
+            <FormControlLabel value="fullName" control={<Radio size="small" />} label={<Label label="Full Name" sx={{ fontSize: 16 }} />} />
+            <FormControlLabel
+              value="legalEntity"
+              control={<Radio size="small" />}
+              label={<Label label="Legal Entity" sx={{ fontSize: 16 }} />}
+            />
+          </RadioGroup>{" "}
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 3 }}>
+          <TextField fullWidth label="Enter parcel ID" />
+          <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
+            <Autocomplete
+              options={getAllStates()}
+              fullWidth
+              renderInput={(params) => <TextField {...params} label="Movie" />}
+              ListboxComponent={AutoCompleteListboxComponent}
+            />
+            <Autocomplete
+              options={getAllStates()}
+              ListboxComponent={AutoCompleteListboxComponent}
+              fullWidth
+              renderInput={(params) => <TextField {...params} label="Movie" />}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>
     <Divider sx={{ mt: 4 }} />
-    <Box sx={{ mt: 2 }}>Footer</Box>
+    <Box sx={{ mt: 2, px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>Footer</Box>
   </Box>
 );
 
