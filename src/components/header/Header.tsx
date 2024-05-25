@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Box, Button, ClickAwayListener, Container, Drawer, IconButton } from "@mui/material";
 import BurgerIcon from "@/icons/BurgerIcon";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { Input } from "@mui/icons-material";
 
 const Header = () => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -119,14 +120,24 @@ const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement | null, any>((_, ref
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "start",
-                "& > a": { fontSize: { xs: 14 }, py: 1.25, "&:hover": { color: "primary.main" }, transition: "all 0.1s" },
+                "& > a": {
+                  fontSize: { xs: 14 },
+                  py: 1.25,
+                  "&:hover": { color: "primary.main" },
+                  transition: "all 0.1s",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                },
               }}
             >
               <Link href="/">Sell your property</Link>
               <Link href="/">Find a Preferred Land Agent</Link>
               <Link href="/about-us">About Us</Link>
               <Link href="/">Value my land for free</Link>
-              <Link href="/"> Sign In</Link>
+              <Link href="/">
+                <Input fontSize="small" /> Sign In
+              </Link>
             </Box>
           </Drawer>
         </>
