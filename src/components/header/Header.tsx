@@ -68,7 +68,7 @@ const HeaderMenuItems = () => (
   </Box>
 );
 
-const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement | null, any>((_, ref) => {
+export const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement | null, any>((_, ref) => {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const parentEl = (ref as any)?.current as HTMLDivElement;

@@ -1,5 +1,6 @@
 "use client";
 
+import FindPropertyHeader from "@/components/find-property/FindPropertyHeader";
 import FbIcon from "@/icons/FbIcon";
 import TwitterIcon from "@/icons/TwitterIcon";
 import { Box, Divider, Typography, alpha } from "@mui/material";
@@ -9,6 +10,7 @@ import React, { ReactElement } from "react";
 const FindPropertyLayout = ({ children }: { children: ReactElement }) => (
   <Box sx={{ height: "100vh", display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 400px", xl: "1fr 544px" } }}>
     <Box sx={{ px: { xs: 2.5, sm: 3.5, md: 5, lg: 6.5, xl: 8 }, display: "flex", flexDirection: "column" }}>
+      <FindPropertyHeader />
       {children}
       <Box
         sx={{
