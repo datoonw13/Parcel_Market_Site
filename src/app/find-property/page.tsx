@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import PropertyInfo from "@/components/find-property/PropertyInfo";
 import FindPropertyStepper from "@/components/find-property/FindPropertyStepper";
 import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyFoundedParcels";
+import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
 
 enum Steps {
   PROPERTY_INFO,
@@ -60,7 +61,8 @@ const FindProperty = () => {
         </Box>
         <Box sx={{ mt: 3, height: "100%" }}>
           {/* {step === Steps.PROPERTY_INFO && <PropertyInfo />} */}
-          <FindPropertyFoundedParcels />
+          {/* <FindPropertyFoundedParcels /> */}
+          <FindPropertyAbout />
         </Box>
       </Paper>
     </Box>

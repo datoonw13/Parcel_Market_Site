@@ -2,15 +2,18 @@
 
 import { Inter } from "next/font/google";
 import { Shadows, createTheme } from "@mui/material/styles";
+import { green } from "@mui/material/colors";
 
 declare module "@mui/material/styles" {
   interface Palette {
     darkGreen: Palette["primary"];
+    green: Palette["grey"];
     black: string;
     white: string;
   }
   interface PaletteOptions {
     darkGreen: PaletteOptions["primary"];
+    green: PaletteOptions["grey"];
     black: string;
     white: string;
   }
@@ -65,6 +68,13 @@ const customPalette = {
     "400": "#A7A7A7",
     "600": "#7A7A7A",
     "800": "#4E4E4E",
+  },
+  green: {
+    "50": "#F3F9F5",
+    "100": "#E7F3EC",
+    "200": "#CFE8D9",
+    "400": "#9FD1B3",
+    "600": "#6EB98C",
   },
   black: "#222222",
   white: "#FFFFFF",

@@ -1,6 +1,7 @@
 import { PlaceOutlined } from "@mui/icons-material";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import React from "react";
+import SimpleBar from "simplebar-react";
 
 const FindPropertyFoundedParcels = () => (
   <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
