@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import Link from "next/link";
-import React, { useRef } from "react";
+import React from "react";
 import Logo from "@/icons/Logo";
 import { ResponsiveHeaderMenuItems } from "../header/Header";
 
