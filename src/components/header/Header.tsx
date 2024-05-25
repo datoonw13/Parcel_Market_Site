@@ -9,14 +9,13 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@mui/icons-material";
 
 const Header = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
   useAuthCheck();
   return (
     <Box
       sx={{
         bgcolor: "white",
       }}
-      ref={ref}
+      id="landing-header"
     >
       <Container
         sx={{
@@ -33,7 +32,7 @@ const Header = () => {
           </Box>
         </Link>
         <Box sx={{ ml: "auto", display: { xs: "flex", lg: "none" } }}>
-          <ResponsiveHeaderMenuItems ref={ref} />
+          <ResponsiveHeaderMenuItems rootId="landing-header" />
         </Box>
         <Box sx={{ display: { xs: "none", lg: "flex" } }}>
           <HeaderMenuItems />
@@ -68,18 +67,18 @@ const HeaderMenuItems = () => (
   </Box>
 );
 
-export const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement | null, any>((_, ref) => {
+export const ResponsiveHeaderMenuItems = ({ rootId }: { rootId: string }) => {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const parentEl = (ref as any)?.current as HTMLDivElement;
   const rootEl = useRef<HTMLDivElement | null>(null);
 
   const toggleResponsiveMenu = useCallback(() => {
     setOpen(!open);
+    const parentEl = document.getElementById(rootId);
     if (!open && rootEl.current && parentEl) {
       rootEl.current.style.transform = `translateY(${parentEl.getBoundingClientRect().height - 1}px)`;
     }
-  }, [open, parentEl]);
+  }, [open, rootId]);
 
   useEffect(() => {
     window.addEventListener("resize", () => setOpen(false));
@@ -144,4 +143,4 @@ export const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement | null, any>(
       </Box>
     </ClickAwayListener>
   );
-});
+};
