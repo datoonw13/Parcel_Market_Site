@@ -5,9 +5,7 @@ const AutoCompleteListboxComponent = forwardRef<HTMLUListElement, PropsWithChild
   const { children, ...other } = props;
   return (
     <ul {...other} style={{ overflow: "hidden" }} ref={ref}>
-      <SimpleBar style={{ height: "100%", maxHeight: "23vh" }}>
-        <li>{children}</li>
-      </SimpleBar>
+      <SimpleBar style={{ height: "100%", maxHeight: "23vh" }}>{children}</SimpleBar>
     </ul>
   );
 });

@@ -120,6 +120,8 @@ const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: I
         error={!!errors?.info?.state}
         helperText={errors?.info?.state?.message}
         onChange={(value) => {
+          console.log(value, 22);
+
           setValue("info.state", value, { shouldDirty: isSubmitted, shouldValidate: isSubmitted });
           setValue("info.county", null);
         }}
@@ -134,9 +136,11 @@ const PropertySearchInfo = ({ setValue, trigger, errors, isSubmitted, watch }: I
         error={!!errors?.info?.county}
         helperText={errors?.info?.county?.message}
         disabled={!watch("info.state")}
-        onChange={(value) =>
-          setValue("info.county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true })
-        }
+        onChange={(value) => {
+          console.log(value, 22);
+
+          setValue("info.county", value?.split(" ")?.[0].toLowerCase() || "", { shouldDirty: true, shouldValidate: true });
+        }}
       />
     </div>
     <TextField
