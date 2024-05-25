@@ -60,9 +60,9 @@ const FindProperty = () => {
           {stepDesc && <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>{stepDesc}</Typography>}
         </Box>
         <Box sx={{ mt: 3, height: "100%" }}>
-          {step === Steps.PROPERTY_INFO && <PropertyInfo />}
+          {/* {step === Steps.PROPERTY_INFO && <PropertyInfo />} */}
           {/* <FindPropertyFoundedParcels /> */}
-          {/* <FindPropertyAbout /> */}
+          <FindPropertyAbout />
         </Box>
       </Paper>
     </Box>

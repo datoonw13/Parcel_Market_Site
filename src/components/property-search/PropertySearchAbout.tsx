@@ -5,6 +5,28 @@ import TextField from "@/components/shared/TextField";
 import { ISearchProperty } from "@/types/property";
 import { Fragment } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
+// import NumberFormat from "react-number-format";
+
+// function NumberFormatCustom(props) {
+//   const { inputRef, onChange, ...other } = props;
+
+//   return (
+//     <NumberFormat
+//       {...other}
+//       getInputRef={inputRef}
+//       onValueChange={(values) => {
+//         onChange({
+//           target: {
+//             value: values.value,
+//           },
+//         });
+//       }}
+//       thousandSeparator=","
+//       decimalSeparator="."
+//       isNumericString
+//     />
+//   );
+// }
 
 interface IPropertySearchAbout {
   setValue: UseFormSetValue<ISearchProperty>;

@@ -1,111 +1,145 @@
+import { IFindPropertyAbout } from "@/types/find-property";
+import { findPropertyAbout } from "@/validations/find-property-schema";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
 import React from "react";
+import { useForm } from "react-hook-form";
 
-const FindPropertyAbout = () => (
-  <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
-    <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 }, height: "100%" }}>
-      <Box
-        sx={(theme) => ({
-          border: { xs: `1px solid transparent`, md: `1px solid ${theme.palette.grey[100]}` },
-          borderRadius: 4,
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: { xs: 4 },
-          py: { md: 3, lg: 4 },
-        })}
-      >
-        <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 4 }, px: { md: 4, lg: 5 } }}>
-          {list.map((el, i) => (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }} key={el.key}>
-              <Typography sx={{ fontSize: 14, fontWeight: 500 }}>{`${i + 1}. ${el.label}`}</Typography>
-              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                {el.options.map((opt) => (
-                  <Box
-                    key={opt.label}
-                    sx={(theme) => ({
-                      border: `1px solid ${theme.palette.grey[100]}`,
-                      borderRadius: "100px",
-                      fontSize: 12,
-                      fontWeight: 500,
-                      px: 2,
-                      py: 1,
-                    })}
-                  >
-                    {opt.label}
-                  </Box>
-                ))}
-                {/* <Box
-                sx={(theme) => ({
-                  border: `1px solid ${theme.palette.green["200"]}`,
-                  color: "primary.main",
-                  borderRadius: "100px",
-                  bgcolor: "green.100",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  px: 2,
-                  py: 1,
-                })}
-              >
-                No
-              </Box> */}
+const FindPropertyAbout = () => {
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitted },
+    setValue,
+    watch,
+  } = useForm<IFindPropertyAbout>({
+    resolver: yupResolver(findPropertyAbout),
+    defaultValues: {
+      improvementsValue: null,
+      langCoverType: null,
+      propertyAccess: null,
+      propertyCondition: null,
+      propertyRestriction: null,
+      waterFeature: null,
+      waterFront: null,
+      wetProperty: null,
+      agreement: false,
+    },
+    reValidateMode: "onChange",
+  });
+
+  const onSubmit = handleSubmit(
+    (data) => {
+      console.log(data);
+    },
+    (errorFields) => {
+      console.log(errorFields);
+    }
+  );
+
+  return (
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
+      <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 }, height: "100%" }}>
+        <Box
+          sx={(theme) => ({
+            border: { xs: `1px solid transparent`, md: `1px solid ${theme.palette.grey[100]}` },
+            borderRadius: 4,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: { xs: 4 },
+            py: { md: 3, lg: 4 },
+          })}
+        >
+          <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 4 }, px: { md: 4, lg: 5 } }}>
+            {list.map((el, i) => (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }} key={el.key}>
+                <Typography
+                  sx={{
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: errors?.[el.key as keyof IFindPropertyAbout]?.message ? "error.main" : "black",
+                  }}
+                >{`${i + 1}. ${el.label}`}</Typography>
+                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  {el.options.map((opt) => (
+                    <Box
+                      onClick={() => setValue(el.key as keyof IFindPropertyAbout, opt.value, { shouldValidate: isSubmitted })}
+                      key={opt.label}
+                      sx={(theme) => ({
+                        border: `1px solid ${
+                          watch(el.key as keyof IFindPropertyAbout) === opt.value ? theme.palette.green["200"] : theme.palette.grey[100]
+                        }`,
+                        bgcolor: watch(el.key as keyof IFindPropertyAbout) === opt.value ? "green.100" : "transparent",
+                        color: watch(el.key as keyof IFindPropertyAbout) === opt.value ? "primary.main" : "black",
+                        borderRadius: "100px",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        px: 2,
+                        py: 1,
+                        cursor: "pointer",
+                      })}
+                    >
+                      {opt.label}
+                    </Box>
+                  ))}
+                </Box>
               </Box>
-            </Box>
-          ))}
-        </Box>
-        <Divider />
-        <Box sx={{ px: { md: 4, lg: 5 } }}>
-          <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
-            Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.
-          </Typography>
-          <TextField variant="outlined" fullWidth sx={{ mt: 2, border: 0, outline: 0 }} InputProps={{ sx: { border: 0, outline: 0 } }} />
+            ))}
+          </Box>
+          <Divider />
+          <Box sx={{ px: { md: 4, lg: 5 } }}>
+            <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
+              Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.
+            </Typography>
+            <TextField variant="outlined" fullWidth sx={{ mt: 2, border: 0, outline: 0 }} InputProps={{ sx: { border: 0, outline: 0 } }} />
+          </Box>
         </Box>
       </Box>
-    </Box>
-    <FormControlLabel
-      sx={{ px: { md: 4, lg: 5 }, mt: 2 }}
-      control={<Checkbox />}
-      label={
-        <Typography sx={{ fontSize: 12 }}>
-          Yes, I understand and agree to the Parcel Market{" "}
-          <Typography component="span" sx={{ color: "primary.main", textDecoration: "underline", fontSize: 12 }}>
-            Terms of Service
-          </Typography>{" "}
-          and{" "}
-          <Typography component="span" sx={{ color: "primary.main", textDecoration: "underline", fontSize: 12 }}>
-            Privacy Policy
+      <FormControlLabel
+        sx={{ px: { md: 4, lg: 5 }, mt: 2 }}
+        control={<Checkbox />}
+        label={
+          <Typography sx={{ fontSize: 12 }}>
+            Yes, I understand and agree to the Parcel Market{" "}
+            <Typography component="span" sx={{ color: "primary.main", textDecoration: "underline", fontSize: 12 }}>
+              Terms of Service
+            </Typography>{" "}
+            and{" "}
+            <Typography component="span" sx={{ color: "primary.main", textDecoration: "underline", fontSize: 12 }}>
+              Privacy Policy
+            </Typography>
+            .
           </Typography>
-          .
-        </Typography>
-      }
-    />
-    <Divider sx={{ mt: 4 }} />
-    <Box
-      sx={{
-        mt: 2,
-        px: { xs: 2, md: 3, lg: 4, mb: 3 },
-        display: "flex",
-        justifyContent: "flex-end",
-        gap: 1.5,
-        flexDirection: { xs: "column", sm: "row" },
-      }}
-    >
-      <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined">
-        Back
-      </Button>
-      <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
-        Find out Your Estimated Sale Price
-      </Button>
+        }
+      />
+      <Divider sx={{ mt: 4 }} />
+      <Box
+        sx={{
+          mt: 2,
+          px: { xs: 2, md: 3, lg: 4, mb: 3 },
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 1.5,
+          flexDirection: { xs: "column", sm: "row" },
+        }}
+      >
+        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined">
+          Back
+        </Button>
+        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
+          Find out Your Estimated Sale Price
+        </Button>
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default FindPropertyAbout;
 
 const list = [
   {
     label: "Does your property have a water feature such as a lake or stream?",
-    key: "about.waterFeature",
+    key: "waterFeature",
     options: [
       {
         label: "NO",
@@ -119,7 +153,7 @@ const list = [
   },
   {
     label: "Is your property water front?",
-    key: "about.waterFront",
+    key: "waterFront",
     options: [
       {
         label: "NO",
@@ -133,7 +167,7 @@ const list = [
   },
   {
     label: "What is your land cover type?",
-    key: "about.langCoverType",
+    key: "langCoverType",
     options: [
       {
         label: "Wooded",
@@ -151,7 +185,7 @@ const list = [
   },
   {
     label: "What is the property condition?",
-    key: "about.propertyCondition",
+    key: "propertyCondition",
     options: [
       {
         label: "Clean and Ready to build on",
@@ -169,7 +203,7 @@ const list = [
   },
   {
     label: "How wet is the property?",
-    key: "about.wetProperty",
+    key: "wetProperty",
     options: [
       {
         label: "Wet",
@@ -187,7 +221,7 @@ const list = [
   },
   {
     label: "Property have Restrictions?",
-    key: "about.propertyRestriction",
+    key: "propertyRestriction",
     options: [
       {
         label: "Has restrictions",
@@ -201,7 +235,7 @@ const list = [
   },
   {
     label: "How is the access to the property?",
-    key: "about.propertyAccess",
+    key: "propertyAccess",
     options: [
       {
         label: "Road frontage",

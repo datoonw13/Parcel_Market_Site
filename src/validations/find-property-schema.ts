@@ -52,3 +52,15 @@ export const findPropertyInfoSchema = yup.object().shape(
     ["parcelNumber", "type"],
   ]
 );
+
+export const findPropertyAbout = yup.object().shape({
+  waterFeature: yup.boolean().required().nullable().notOneOf([null]),
+  waterFront: yup.boolean().required().nullable().notOneOf([null]),
+  langCoverType: yup.string().required().nullable().notOneOf([null]),
+  propertyCondition: yup.string().required().nullable().notOneOf([null]),
+  wetProperty: yup.string().required().nullable().notOneOf([null]),
+  propertyRestriction: yup.string().required().nullable().notOneOf([null]),
+  propertyAccess: yup.string().required().nullable().notOneOf([null]),
+  improvementsValue: yup.number().required().nullable(),
+  agreement: yup.boolean().oneOf([true]).required(),
+});
