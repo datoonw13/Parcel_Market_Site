@@ -3,7 +3,15 @@ import { Box, Step, Stepper } from "@mui/material";
 import React from "react";
 
 const FindPropertyStepper = ({ steps, activeStep }: { steps: number[]; activeStep: number }) => (
-  <Stepper activeStep={1} sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
+  <Stepper
+    activeStep={1}
+    sx={(theme) => ({
+      px: { xs: 2, md: 3, lg: 4 },
+      ".MuiStepConnector-root > span": {
+        border: `1.5px solid ${theme.palette.grey[100]}`,
+      },
+    })}
+  >
     {steps.map((key) => (
       <Step
         key={key}

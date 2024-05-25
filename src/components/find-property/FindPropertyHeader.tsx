@@ -8,7 +8,16 @@ const FindPropertyHeader = () => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   return (
-    <Box ref={ref} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: { xs: 2, sm: 4, md: 6, lg: 8 } }}>
+    <Box
+      ref={ref}
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        pt: { xs: 2, sm: 4, md: 6, lg: 8 },
+        pb: { xs: 6, md: 5 },
+      }}
+    >
       <Link href="/">
         <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }} id="root-header-logo">
           <Logo />
