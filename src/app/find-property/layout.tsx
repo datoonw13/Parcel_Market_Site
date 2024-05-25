@@ -37,51 +37,55 @@ const FindPropertyLayout = ({ children }: { children: ReactElement }) => (
       </Box>
     </Box>
     <Box sx={{ position: "relative", display: { xs: "none", lg: "block" } }}>
-      <Image alt="" src="/parcel-find-cover.png" fill style={{ objectFit: "cover" }} />
-      <Box
-        sx={(theme) => ({
-          bgcolor: alpha(theme.palette.black, 0.3),
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          top: 0,
-          zIndex: 1,
-        })}
-      />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "end",
-          gap: 2,
-          position: "absolute",
-          width: "100%",
-          bottom: 0,
-          zIndex: 2,
-          color: "white",
-          fontWeight: 500,
-          p: 3,
-        }}
-      >
-        <Typography>Let&apos;s connect</Typography>
-        <Box
-          sx={(theme) => ({
-            cursor: "pointer",
-            "& > svg > circle": { fill: alpha(theme.palette.white, 0.1), fillOpacity: 1, stroke: "white" },
-            "& > svg > path": { fill: theme.palette.white, fillOpacity: 1 },
-          })}
-        >
-          <FbIcon />
-        </Box>
-        <Box
-          sx={(theme) => ({
-            cursor: "pointer",
-            "& > svg > circle": { fill: alpha(theme.palette.white, 0.1), fillOpacity: 1, stroke: "white" },
-            "& > svg > path": { fill: theme.palette.white, fillOpacity: 1 },
-          })}
-        >
-          <TwitterIcon />
+      <Box sx={{ position: "sticky", width: "100%", height: "100vh", top: 0 }}>
+        <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+          <Image alt="" src="/parcel-find-cover.png" fill style={{ objectFit: "cover" }} />
+          <Box
+            sx={(theme) => ({
+              bgcolor: alpha(theme.palette.black, 0.3),
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              top: 0,
+              zIndex: 1,
+            })}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "end",
+              gap: 2,
+              position: "absolute",
+              width: "100%",
+              bottom: 0,
+              zIndex: 2,
+              color: "white",
+              fontWeight: 500,
+              p: 3,
+            }}
+          >
+            <Typography>Let&apos;s connect</Typography>
+            <Box
+              sx={(theme) => ({
+                cursor: "pointer",
+                "& > svg > circle": { fill: alpha(theme.palette.white, 0.1), fillOpacity: 1, stroke: "white" },
+                "& > svg > path": { fill: theme.palette.white, fillOpacity: 1 },
+              })}
+            >
+              <FbIcon />
+            </Box>
+            <Box
+              sx={(theme) => ({
+                cursor: "pointer",
+                "& > svg > circle": { fill: alpha(theme.palette.white, 0.1), fillOpacity: 1, stroke: "white" },
+                "& > svg > path": { fill: theme.palette.white, fillOpacity: 1 },
+              })}
+            >
+              <TwitterIcon />
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>
