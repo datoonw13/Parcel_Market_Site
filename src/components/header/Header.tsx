@@ -3,18 +3,19 @@
 import Logo from "@/icons/Logo";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import Link from "next/link";
-import { Box, Button, ClickAwayListener, Container, Drawer, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, ClickAwayListener, Container, Drawer, IconButton } from "@mui/material";
 import BurgerIcon from "@/icons/BurgerIcon";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
 const Header = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
   useAuthCheck();
   return (
     <Box
       sx={{
         bgcolor: "white",
       }}
-      id="root-header"
+      ref={ref}
     >
       <Container
         sx={{
@@ -31,7 +32,7 @@ const Header = () => {
           </Box>
         </Link>
         <Box sx={{ ml: "auto", display: { xs: "flex", lg: "none" } }}>
-          <ResponsiveHeaderMenuItems />
+          <ResponsiveHeaderMenuItems ref={ref} />
         </Box>
         <Box sx={{ display: { xs: "none", lg: "flex" } }}>
           <HeaderMenuItems />
@@ -66,51 +67,39 @@ const HeaderMenuItems = () => (
   </Box>
 );
 
-const ResponsiveHeaderMenuItems = () => {
+const ResponsiveHeaderMenuItems = forwardRef<HTMLDivElement | null, any>((_, ref) => {
   const [open, setOpen] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState<number>(20);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const parentEl = (ref as any)?.current as HTMLDivElement;
+  const rootEl = useRef<HTMLDivElement | null>(null);
 
-  const setInitialHeaderHeight = () => {
-    const el = document.getElementById("root-header");
-    if (el) {
-      setHeaderHeight(el.getBoundingClientRect().height);
+  const toggleResponsiveMenu = useCallback(() => {
+    setOpen(!open);
+    if (!open && rootEl.current && parentEl) {
+      rootEl.current.style.transform = `translateY(${parentEl.getBoundingClientRect().height - 1}px)`;
     }
-  };
-
-  const setHeaderHeightOnResize = () => {
-    const el = document.getElementById("root-header");
-    if (el) {
-      setHeaderHeight(el.getBoundingClientRect().height);
-    }
-  };
+  }, [open, parentEl]);
 
   useEffect(() => {
-    setInitialHeaderHeight();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("resize", setHeaderHeightOnResize);
-    return () => {
-      window.removeEventListener("resize", setHeaderHeightOnResize);
-    };
+    window.addEventListener("resize", () => setOpen(false));
   }, []);
 
   return (
     <ClickAwayListener
-      onClickAway={(e) => {
+      onClickAway={() => {
         setOpen(false);
       }}
     >
       <Box sx={{ gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative", display: "flex" }}>
         <>
-          <IconButton ref={buttonRef} sx={{ p: { xs: 0, sm: 1 } }} onClick={() => setOpen(!open)}>
+          <IconButton ref={buttonRef} sx={{ p: { xs: 0, sm: 1 } }} onClick={toggleResponsiveMenu}>
             <BurgerIcon />
           </IconButton>
 
           <Drawer
-            sx={{
-              transform: `translateY(${headerHeight}px)`,
+            ModalProps={{
+              ref: rootEl,
+              keepMounted: true,
             }}
             anchor="top"
             open={open}
@@ -144,4 +133,4 @@ const ResponsiveHeaderMenuItems = () => {
       </Box>
     </ClickAwayListener>
   );
-};
+});
