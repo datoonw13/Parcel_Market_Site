@@ -15,6 +15,9 @@ export interface IMapItem {
       owner: string;
       zoning_description?: string;
       usedesc?: string;
+      county: string;
+      state2: string;
+      parcelnumb_no_formatting: string;
     };
   };
 }

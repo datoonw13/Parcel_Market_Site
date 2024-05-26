@@ -7,12 +7,12 @@ import {
   ISellProperty,
   IUserSellingPropertiesResponse,
 } from "@/types/property";
-import { IRegridReq } from "@/types/find-property";
+import { IFindPropertyEstimatedPriceResponse, IRegridReq } from "@/types/find-property";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    calculatePrice: build.query<ResponseType<ISearchPropertyCalculatePriceResponse>, ISearchPropertyCalculatePrice>({
+    calculatePrice: build.query<ResponseType<IFindPropertyEstimatedPriceResponse>, ISearchPropertyCalculatePrice>({
       query: (arg) => ({
         url: "properties/calculate/price",
         method: "POST",
@@ -79,6 +79,7 @@ const propertyApi = baseApi.injectEndpoints({
 
 export const {
   useCalculatePriceQuery,
+  useLazyCalculatePriceQuery,
   useGetRegridQuery,
   useLazyGetRegridQuery,
   useSignatureMutation,

@@ -12,87 +12,6 @@ import { LoadingButton } from "@mui/lab";
 import { IMap } from "@/types/map";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
-const test = {
-  type: "Feature",
-  geometry: {
-    type: "Polygon",
-    coordinates: [
-      [
-        [32.9564905, -82.5211335],
-        [32.9565875, -82.5200115],
-        [32.957444, -82.519859],
-        [32.9578165, -82.5228285],
-        [32.9575655, -82.523358],
-        [32.956398, -82.5231955],
-        [32.9563985, -82.522884],
-        [32.956405, -82.5225725],
-        [32.956416, -82.522261],
-        [32.9564325, -82.52195],
-        [32.9564545, -82.5216395],
-        [32.9564905, -82.5211335],
-      ],
-    ],
-  },
-  properties: {
-    headline: "6272 Friendship Church Rd",
-    path: "/us/ga/jefferson/louisville/11912",
-    fields: {
-      ogc_fid: 11912,
-      geoid: "13163",
-      parcelnumb: "0026 003B",
-      parcelnumb_no_formatting: "0026003B",
-      account_number: "12718",
-      alt_parcelnumb1: "12718",
-      usecode: "V5",
-      usedesc: "Consv Use",
-      owner: "POOLE CHRISTOPHER THOMAS",
-      mailadd: "PO BOX 712",
-      mail_city: "LOUISVILLE",
-      mail_state2: "GA",
-      mail_zip: "30434",
-      address: "6272 FRIENDSHIP CHURCH RD",
-      saddno: "6272",
-      saddstr: "FRIENDSHIP CHURCH",
-      saddsttyp: "RD",
-      scity: "BARTOW",
-      original_address: '{"address":"6272 FRIENDSHIP CHURCH RD","saddno":"6272","saddstr":"FRIENDSHIP CHURCH RD"}',
-      city: "louisville",
-      county: "jefferson",
-      state2: "GA",
-      szip: "30413-3015",
-      szip5: "30413",
-      address_source: "county;cass",
-      legaldesc: "S/SD OF FRIENDSHIP CH RD",
-      lat: "32.957067",
-      lon: "-82.521732",
-      qoz: "Yes",
-      qoz_tract: "13163960300",
-      census_tract: "13163960300",
-      census_block: "131639603003048",
-      census_blockgroup: "131639603003",
-      census_zcta: "30413",
-      ll_last_refresh: "2023-12-15",
-      gisacre: 10.19,
-      sqft: 443876,
-      ll_gisacre: 10.07031,
-      ll_gissqft: 438672,
-      path: "/us/ga/jefferson/louisville/11912",
-      ll_stable_id: "preserved",
-      ll_uuid: "a6179ced-c6ae-4d1f-b9c7-ae8460b545ae",
-      ll_updated_at: "2024-05-02 02:13:43 -0400",
-    },
-    context: {
-      headline: "Louisville, GA",
-      name: "Louisville, GA",
-      path: "/us/ga/jefferson/louisville",
-      active: true,
-    },
-    ll_uuid: "a6179ced-c6ae-4d1f-b9c7-ae8460b545ae",
-    score: 100,
-  },
-  id: 11912,
-};
-
 const getAllStates = () =>
   usaStatesFull
     .filter((el) => el.contiguous)
@@ -174,8 +93,8 @@ const PropertyInfo = ({ onNext }: IProps) => {
       if (data.type === "fullName" && data.firstName && data.lastName) {
         reqData.owner = `${data.firstName} ${data.lastName}`.toUpperCase();
       }
-      // const res = await getRegrid(reqData).unwrap();
-      onNext([test] as any);
+      const res = await getRegrid(reqData).unwrap();
+      onNext([...res.data] as any);
     } catch (error) {}
   });
 

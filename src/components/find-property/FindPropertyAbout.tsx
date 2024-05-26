@@ -1,6 +1,9 @@
-import { IFindPropertyAbout } from "@/types/find-property";
+import { useLazyCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
+import { IFindPropertyAbout, IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { IMapItem } from "@/types/map";
 import { findPropertyAbout } from "@/validations/find-property-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { LoadingButton } from "@mui/lab";
 import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
 import React, { forwardRef } from "react";
 import { useForm } from "react-hook-form";
@@ -32,13 +35,16 @@ const NumberFormatCustom = forwardRef((props: any, inputRef: any) => {
 
 interface IProps {
   goBack: () => void;
-  onNext: () => void;
+  onNext: (data: IFindPropertyEstimatedPriceResponse) => void;
+  selectedRegridItem: IMapItem | null;
 }
 
-const FindPropertyAbout = ({ goBack, onNext }: IProps) => {
+const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem }: IProps) => {
+  const [calculatePrice] = useLazyCalculatePriceQuery();
+
   const {
     handleSubmit,
-    formState: { errors, isSubmitted },
+    formState: { errors, isSubmitted, isSubmitting },
     setValue,
     watch,
   } = useForm<IFindPropertyAbout>({
@@ -57,14 +63,32 @@ const FindPropertyAbout = ({ goBack, onNext }: IProps) => {
     reValidateMode: "onChange",
   });
 
-  const onSubmit = handleSubmit(
-    (data) => {
-      console.log(data);
-    },
-    (errorFields) => {
-      console.log(errorFields);
+  const onSubmit = handleSubmit(async (data) => {
+    const { agreement, ...aboutProperty } = data;
+    if (!selectedRegridItem) {
+      return;
     }
-  );
+    const reqData: IFindPropertyEstimatedPrice = {
+      body: {
+        ...aboutProperty,
+        county: selectedRegridItem?.properties.fields.county.toLocaleLowerCase(),
+        state: selectedRegridItem?.properties.fields.state2.toLocaleLowerCase(),
+        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb,
+        owner: selectedRegridItem.properties.fields.owner,
+        improvementsValue: data.improvementsValue || 0,
+        propertyType: selectedRegridItem.properties.fields?.zoning_description || selectedRegridItem.properties.fields.usedesc || "",
+      },
+      queryParams: {
+        acre: selectedRegridItem.properties.fields.ll_gisacre.toString(),
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
+      },
+    };
+    try {
+      const res = await calculatePrice({ ...reqData }).unwrap();
+      onNext(res.data);
+    } catch (error) {}
+  });
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
@@ -169,9 +193,9 @@ const FindPropertyAbout = ({ goBack, onNext }: IProps) => {
         <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined" onClick={goBack}>
           Back
         </Button>
-        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
+        <LoadingButton loading={isSubmitting} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
           Find out Your Estimated Sale Price
-        </Button>
+        </LoadingButton>
       </Box>
     </Box>
   );

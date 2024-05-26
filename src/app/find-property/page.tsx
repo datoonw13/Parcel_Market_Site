@@ -90,9 +90,11 @@ const FindProperty = () => {
               goBack={() => {
                 setStep(Steps.FOUNDED_PROPERTIES);
               }}
-              onNext={() => {
+              onNext={(res) => {
                 setStep(Steps.CALCULATED_PRICE);
+                console.log(res, 22);
               }}
+              selectedRegridItem={selectedRegridItem}
             />
           </Box>
           <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>priceeeeeeeeeeeeee</Box>
