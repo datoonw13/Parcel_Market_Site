@@ -1,9 +1,24 @@
+import { IMap, IMapItem } from "@/types/map";
 import { PlaceOutlined } from "@mui/icons-material";
 import { Box, Button, Divider, Typography } from "@mui/material";
-import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 
-const FindPropertyFoundedParcels = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
+const Map = dynamic(() => import("@/components/property-search/Map"), { ssr: false });
+
+interface IProps {
+  data: IMap;
+  selectedRegridItem: IMapItem | null;
+  setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
+}
+
+const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegridItem }: IProps) => {
+  useEffect(() => {
+    if (data.length === 1) {
+      setSelectedRegridItem(data[0]);
+    }
+  }, [data, setSelectedRegridItem]);
+
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
       <Box sx={{ px: { xs: 2, md: 3, lg: 4, mb: 3 }, height: "100%" }}>
@@ -18,7 +33,15 @@ const FindPropertyFoundedParcels = () => {
             gap: { xs: 1.5, md: 2 },
           })}
         >
-          <Box sx={{ bgcolor: "primary.main", borderRadius: 4, height: { xs: 240, sm: 230, md: 220, lg: 200 } }}>MAP</Box>
+          <Box sx={{ borderRadius: 4, height: { xs: 240, sm: 230, md: 220, lg: 200 }, "& > div": { borderRadius: 4 } }}>
+            {data && (
+              <Map
+                data={data}
+                selectedParcelNumber={selectedRegridItem?.properties.fields.parcelnumb || ""}
+                handleParcelSelect={(val) => setSelectedRegridItem(val)}
+              />
+            )}
+          </Box>
           <Box
             sx={(theme) => ({
               border: `1px solid ${theme.palette.grey[100]}`,
@@ -28,11 +51,15 @@ const FindPropertyFoundedParcels = () => {
               "& > div:not(:last-child)": {
                 borderBottom: `1px solid ${theme.palette.grey[100]}`,
               },
+              "& > div:first-child": data.length === 1 && {
+                borderRadius: 3,
+              },
             })}
           >
-            {new Array(20).fill(0).map(() => (
+            {data.map((item) => (
               <Box
-                key={Math.random()}
+                key={item.properties.fields.parcelnumb}
+                onClick={() => setSelectedRegridItem(item)}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -40,17 +67,20 @@ const FindPropertyFoundedParcels = () => {
                   p: 1.5,
                   cursor: "pointer",
                   transition: "all 0.1s",
-                  "&:hover": { bgcolor: false ? "primary.100" : "primary.50" },
-                  bgcolor: false ? "primary.100" : "transparent",
+                  "&:hover": {
+                    bgcolor:
+                      selectedRegridItem?.properties.fields.parcelnumb === item.properties.fields.parcelnumb ? "primary.100" : "primary.50",
+                  },
+                  bgcolor:
+                    selectedRegridItem?.properties.fields.parcelnumb === item.properties.fields.parcelnumb ? "primary.100" : "transparent",
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                   <PlaceOutlined fontSize="small" />
                   <Typography sx={{ fontSize: 14, color: "grey.600" }}>
-                    Parcel Number{" "}
+                    Parcel Number:{" "}
                     <Typography sx={{ color: "black", fontSize: 14 }} component="span">
-                      {" "}
-                      #123456789
+                      #{item.properties.fields.parcelnumb}
                     </Typography>
                   </Typography>
                 </Box>

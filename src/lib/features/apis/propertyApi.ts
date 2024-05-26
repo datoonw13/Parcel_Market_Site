@@ -7,6 +7,7 @@ import {
   ISellProperty,
   IUserSellingPropertiesResponse,
 } from "@/types/property";
+import { IRegridReq } from "@/types/find-property";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
@@ -21,7 +22,7 @@ const propertyApi = baseApi.injectEndpoints({
         },
       }),
     }),
-    getRegrid: build.query<ResponseType<IMap>, ICalculatePriceReq>({
+    getRegrid: build.query<ResponseType<IMap>, IRegridReq>({
       query: (arg) => {
         let api = "";
         if (arg.parcelNumber && arg.parcelNumber !== null) {
@@ -79,6 +80,7 @@ const propertyApi = baseApi.injectEndpoints({
 export const {
   useCalculatePriceQuery,
   useGetRegridQuery,
+  useLazyGetRegridQuery,
   useSignatureMutation,
   useSellPropertyTypeMutation,
   useGetUserSellingPropertiesQuery,

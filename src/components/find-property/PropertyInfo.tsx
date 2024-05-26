@@ -5,9 +5,93 @@ import { Autocomplete, Box, Button, Divider, FormControlLabel, Radio, RadioGroup
 import { usaStatesFull } from "typed-usa-states";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IFindPropertyInfo } from "@/types/find-property";
+import { IFindPropertyInfo, IRegridReq } from "@/types/find-property";
 import { findPropertyInfoSchema } from "@/validations/find-property-schema";
+import { useLazyGetRegridQuery } from "@/lib/features/apis/propertyApi";
+import { LoadingButton } from "@mui/lab";
+import { IMap } from "@/types/map";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
+
+const test = {
+  type: "Feature",
+  geometry: {
+    type: "Polygon",
+    coordinates: [
+      [
+        [32.9564905, -82.5211335],
+        [32.9565875, -82.5200115],
+        [32.957444, -82.519859],
+        [32.9578165, -82.5228285],
+        [32.9575655, -82.523358],
+        [32.956398, -82.5231955],
+        [32.9563985, -82.522884],
+        [32.956405, -82.5225725],
+        [32.956416, -82.522261],
+        [32.9564325, -82.52195],
+        [32.9564545, -82.5216395],
+        [32.9564905, -82.5211335],
+      ],
+    ],
+  },
+  properties: {
+    headline: "6272 Friendship Church Rd",
+    path: "/us/ga/jefferson/louisville/11912",
+    fields: {
+      ogc_fid: 11912,
+      geoid: "13163",
+      parcelnumb: "0026 003B",
+      parcelnumb_no_formatting: "0026003B",
+      account_number: "12718",
+      alt_parcelnumb1: "12718",
+      usecode: "V5",
+      usedesc: "Consv Use",
+      owner: "POOLE CHRISTOPHER THOMAS",
+      mailadd: "PO BOX 712",
+      mail_city: "LOUISVILLE",
+      mail_state2: "GA",
+      mail_zip: "30434",
+      address: "6272 FRIENDSHIP CHURCH RD",
+      saddno: "6272",
+      saddstr: "FRIENDSHIP CHURCH",
+      saddsttyp: "RD",
+      scity: "BARTOW",
+      original_address: '{"address":"6272 FRIENDSHIP CHURCH RD","saddno":"6272","saddstr":"FRIENDSHIP CHURCH RD"}',
+      city: "louisville",
+      county: "jefferson",
+      state2: "GA",
+      szip: "30413-3015",
+      szip5: "30413",
+      address_source: "county;cass",
+      legaldesc: "S/SD OF FRIENDSHIP CH RD",
+      lat: "32.957067",
+      lon: "-82.521732",
+      qoz: "Yes",
+      qoz_tract: "13163960300",
+      census_tract: "13163960300",
+      census_block: "131639603003048",
+      census_blockgroup: "131639603003",
+      census_zcta: "30413",
+      ll_last_refresh: "2023-12-15",
+      gisacre: 10.19,
+      sqft: 443876,
+      ll_gisacre: 10.07031,
+      ll_gissqft: 438672,
+      path: "/us/ga/jefferson/louisville/11912",
+      ll_stable_id: "preserved",
+      ll_uuid: "a6179ced-c6ae-4d1f-b9c7-ae8460b545ae",
+      ll_updated_at: "2024-05-02 02:13:43 -0400",
+    },
+    context: {
+      headline: "Louisville, GA",
+      name: "Louisville, GA",
+      path: "/us/ga/jefferson/louisville",
+      active: true,
+    },
+    ll_uuid: "a6179ced-c6ae-4d1f-b9c7-ae8460b545ae",
+    score: 100,
+  },
+  id: 11912,
+};
 
 const getAllStates = () =>
   usaStatesFull
@@ -43,12 +127,19 @@ const Label = ({ label, sx }: { label: string; sx?: SxProps }) => (
   </Box>
 );
 
-const PropertyInfo = () => {
+interface IProps {
+  onFinish: (data: IMap) => void;
+}
+
+const PropertyInfo = ({ onFinish }: IProps) => {
+  const [getRegrid] = useLazyGetRegridQuery();
+
   const {
     handleSubmit,
-    formState: { errors, isSubmitted },
+    formState: { errors, isSubmitted, isSubmitting },
     setValue,
     watch,
+    trigger,
   } = useForm<IFindPropertyInfo>({
     resolver: yupResolver(findPropertyInfoSchema),
     defaultValues: {
@@ -62,17 +153,31 @@ const PropertyInfo = () => {
   });
 
   const handleTypeChange = (value: IFindPropertyInfo["type"]) => {
-    setValue("type", value, { shouldValidate: isSubmitted });
+    setValue("type", value);
+    if (isSubmitted) {
+      trigger();
+    }
   };
 
-  const onSubmit = handleSubmit(
-    (data) => {
-      console.log(data);
-    },
-    (errorFields) => {
-      console.log(errorFields);
-    }
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const reqData: IRegridReq = {
+        county: watch("county") || "",
+        state: watch("state")?.toUpperCase() || "",
+      };
+      if (data.type === "parcelNumber" && data.parcelNumber) {
+        reqData.parcelNumber = data.parcelNumber;
+      }
+      if (data.type === "entityName" && data.entityName) {
+        reqData.owner = data.entityName.toUpperCase();
+      }
+      if (data.type === "fullName" && data.firstName && data.lastName) {
+        reqData.owner = `${data.firstName} ${data.lastName}`.toUpperCase();
+      }
+      // const res = await getRegrid(reqData).unwrap();
+      onFinish([test] as any);
+    } catch (error) {}
+  });
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
@@ -195,9 +300,9 @@ const PropertyInfo = () => {
         <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined">
           Back
         </Button>
-        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
+        <LoadingButton loading={isSubmitting} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
           Continue
-        </Button>
+        </LoadingButton>
       </Box>
     </Box>
   );

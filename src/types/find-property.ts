@@ -19,3 +19,10 @@ export interface IFindPropertyAbout {
   improvementsValue: number | null;
   agreement: boolean;
 }
+
+export interface IRegridReq {
+  state: string;
+  county: string;
+  owner?: string;
+  parcelNumber?: string;
+}
