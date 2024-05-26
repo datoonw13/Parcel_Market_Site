@@ -2,8 +2,33 @@ import { IFindPropertyAbout } from "@/types/find-property";
 import { findPropertyAbout } from "@/validations/find-property-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { forwardRef } from "react";
 import { useForm } from "react-hook-form";
+
+import { NumericFormat } from "react-number-format";
+
+const NumberFormatCustom = forwardRef((props: any, inputRef: any) => {
+  const { onChange, ...other } = props;
+
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator=","
+      decimalSeparator="."
+      prefix="$"
+      suffix=" USD"
+      decimalScale={2}
+    />
+  );
+});
 
 const FindPropertyAbout = () => {
   const {
@@ -91,21 +116,34 @@ const FindPropertyAbout = () => {
             <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
               Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.
             </Typography>
-            <TextField variant="outlined" fullWidth sx={{ mt: 2, border: 0, outline: 0 }} InputProps={{ sx: { border: 0, outline: 0 } }} />
+            <TextField
+              variant="outlined"
+              fullWidth
+              sx={{ mt: 2, border: 0, outline: 0 }}
+              InputProps={{ inputComponent: NumberFormatCustom, sx: { border: 0, outline: 0 } }}
+              value={watch("improvementsValue") || ""}
+              onChange={(e) => setValue("improvementsValue", e.target.value === "" ? null : Number(e.target.value))}
+            />
           </Box>
         </Box>
       </Box>
       <FormControlLabel
         sx={{ px: { md: 4, lg: 5 }, mt: 2 }}
-        control={<Checkbox />}
+        control={<Checkbox onChange={() => setValue("agreement", !watch("agreement"), { shouldValidate: isSubmitted })} />}
         label={
-          <Typography sx={{ fontSize: 12 }}>
+          <Typography sx={{ fontSize: 12, color: errors.agreement ? "error.main" : "black" }}>
             Yes, I understand and agree to the Parcel Market{" "}
-            <Typography component="span" sx={{ color: "primary.main", textDecoration: "underline", fontSize: 12 }}>
+            <Typography
+              component="span"
+              sx={{ color: errors.agreement ? "error.main" : "primary.main", textDecoration: "underline", fontSize: 12 }}
+            >
               Terms of Service
             </Typography>{" "}
             and{" "}
-            <Typography component="span" sx={{ color: "primary.main", textDecoration: "underline", fontSize: 12 }}>
+            <Typography
+              component="span"
+              sx={{ color: errors.agreement ? "error.main" : "primary.main", textDecoration: "underline", fontSize: 12 }}
+            >
               Privacy Policy
             </Typography>
             .
