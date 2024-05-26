@@ -128,10 +128,10 @@ const Label = ({ label, sx }: { label: string; sx?: SxProps }) => (
 );
 
 interface IProps {
-  onFinish: (data: IMap) => void;
+  onNext: (data: IMap) => void;
 }
 
-const PropertyInfo = ({ onFinish }: IProps) => {
+const PropertyInfo = ({ onNext }: IProps) => {
   const [getRegrid] = useLazyGetRegridQuery();
 
   const {
@@ -175,7 +175,7 @@ const PropertyInfo = ({ onFinish }: IProps) => {
         reqData.owner = `${data.firstName} ${data.lastName}`.toUpperCase();
       }
       // const res = await getRegrid(reqData).unwrap();
-      onFinish([test] as any);
+      onNext([test] as any);
     } catch (error) {}
   });
 

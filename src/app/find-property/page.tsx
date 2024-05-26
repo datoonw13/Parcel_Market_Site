@@ -6,7 +6,6 @@ import PropertyInfo from "@/components/find-property/PropertyInfo";
 import FindPropertyStepper from "@/components/find-property/FindPropertyStepper";
 import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyFoundedParcels";
 import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
-import { IFindPropertyInfo } from "@/types/find-property";
 import { IMap, IMapItem } from "@/types/map";
 
 enum Steps {
@@ -65,30 +64,38 @@ const FindProperty = () => {
           {stepDesc && <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>{stepDesc}</Typography>}
         </Box>
         <Box sx={{ mt: 3, height: "100%" }}>
-          {step === Steps.PROPERTY_INFO && (
-            <Box sx={{ height: "100%", display: step === Steps.PROPERTY_INFO ? "block" : "none" }}>
-              <PropertyInfo
-                onFinish={(data) => {
-                  setStep(Steps.FOUNDED_PROPERTIES);
-                  setRegridData(data);
-                }}
-              />
-            </Box>
-          )}
-          {step === Steps.FOUNDED_PROPERTIES && (
-            <Box sx={{ height: "100%", display: step === Steps.FOUNDED_PROPERTIES ? "block" : "none" }}>
-              <FindPropertyFoundedParcels
-                data={regridData}
-                selectedRegridItem={selectedRegridItem}
-                setSelectedRegridItem={setSelectedRegridItem}
-              />
-            </Box>
-          )}
-          {step === Steps.ABOUT_PROPERTY && (
-            <Box sx={{ height: "100%", display: step === Steps.ABOUT_PROPERTY ? "block" : "none" }}>
-              <FindPropertyAbout />
-            </Box>
-          )}
+          <Box sx={{ height: "100%", display: step === Steps.PROPERTY_INFO ? "block" : "none" }}>
+            <PropertyInfo
+              onNext={(data) => {
+                setStep(Steps.FOUNDED_PROPERTIES);
+                setRegridData(data);
+              }}
+            />
+          </Box>
+          <Box sx={{ height: "100%", display: step === Steps.FOUNDED_PROPERTIES ? "block" : "none" }}>
+            <FindPropertyFoundedParcels
+              data={regridData}
+              selectedRegridItem={selectedRegridItem}
+              setSelectedRegridItem={setSelectedRegridItem}
+              goBack={() => {
+                setStep(Steps.PROPERTY_INFO);
+              }}
+              onNext={() => {
+                setStep(Steps.ABOUT_PROPERTY);
+              }}
+            />
+          </Box>
+          <Box sx={{ height: "100%", display: step === Steps.ABOUT_PROPERTY ? "block" : "none" }}>
+            <FindPropertyAbout
+              goBack={() => {
+                setStep(Steps.FOUNDED_PROPERTIES);
+              }}
+              onNext={() => {
+                setStep(Steps.CALCULATED_PRICE);
+              }}
+            />
+          </Box>
+          <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>priceeeeeeeeeeeeee</Box>
         </Box>
       </Paper>
     </Box>

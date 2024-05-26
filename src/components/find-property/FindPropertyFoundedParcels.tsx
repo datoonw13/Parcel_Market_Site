@@ -10,9 +10,11 @@ interface IProps {
   data: IMap;
   selectedRegridItem: IMapItem | null;
   setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
+  goBack: () => void;
+  onNext: () => void;
 }
 
-const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegridItem }: IProps) => {
+const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegridItem, goBack, onNext }: IProps) => {
   useEffect(() => {
     if (data.length === 1) {
       setSelectedRegridItem(data[0]);
@@ -34,7 +36,7 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
           })}
         >
           <Box sx={{ borderRadius: 4, height: { xs: 240, sm: 230, md: 220, lg: 200 }, "& > div": { borderRadius: 4 } }}>
-            {data && (
+            {data.length > 0 && (
               <Map
                 data={data}
                 selectedParcelNumber={selectedRegridItem?.properties.fields.parcelnumb || ""}
@@ -106,10 +108,10 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
           flexDirection: { xs: "column", sm: "row" },
         }}
       >
-        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined">
+        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined" onClick={goBack}>
           Back
         </Button>
-        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
+        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onNext}>
           Tell us about your property
         </Button>
       </Box>

@@ -30,7 +30,12 @@ const NumberFormatCustom = forwardRef((props: any, inputRef: any) => {
   );
 });
 
-const FindPropertyAbout = () => {
+interface IProps {
+  goBack: () => void;
+  onNext: () => void;
+}
+
+const FindPropertyAbout = ({ goBack, onNext }: IProps) => {
   const {
     handleSubmit,
     formState: { errors, isSubmitted },
@@ -161,7 +166,7 @@ const FindPropertyAbout = () => {
           flexDirection: { xs: "column", sm: "row" },
         }}
       >
-        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined">
+        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined" onClick={goBack}>
           Back
         </Button>
         <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
