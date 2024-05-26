@@ -7,6 +7,7 @@ import FindPropertyStepper from "@/components/find-property/FindPropertyStepper"
 import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyFoundedParcels";
 import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
 import { IMap, IMapItem } from "@/types/map";
+import FindPropertyCalculatesPrices from "@/components/find-property/FindPropertyCalculatesPrices";
 
 enum Steps {
   PROPERTY_INFO,
@@ -42,7 +43,7 @@ const getStepInfo = (step: Steps) => {
 };
 
 const FindProperty = () => {
-  const [step, setStep] = useState(Steps.PROPERTY_INFO);
+  const [step, setStep] = useState(Steps.CALCULATED_PRICE);
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
   const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
@@ -97,7 +98,9 @@ const FindProperty = () => {
               selectedRegridItem={selectedRegridItem}
             />
           </Box>
-          <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>priceeeeeeeeeeeeee</Box>
+          <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>
+            <FindPropertyCalculatesPrices />
+          </Box>
         </Box>
       </Paper>
     </Box>
