@@ -1,6 +1,6 @@
 import Button from "@/components/shared/Button";
 import LoadingCircle from "@/icons/LoadingCircle";
-import propertyApi, { useCheckParcelSellingStatusMutation, useGetRegridQuery } from "@/lib/features/apis/propertyApi";
+import propertyApi, { useCheckParcelSellingStatusMutation } from "@/lib/features/apis/propertyApi";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 
 import dynamic from "next/dynamic";
@@ -39,7 +39,7 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem, 
     return data;
   }, [watch]);
 
-  const { isFetching, isLoading, data, isError, refetch } = useGetRegridQuery({ ...reqData() }, {});
+  // const { isFetching, isLoading, data, isError, refetch } = useGetRegridQuery({ ...reqData() }, {});
 
   const handleSelect = async (item: IMapItem) => {
     // try {
@@ -57,16 +57,16 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem, 
     setValue("found.parcelNumber", item.properties.fields.parcelnumb, { shouldValidate: true });
   };
 
-  useEffect(() => {
-    if (isError) {
-      reset();
-      dispatch(propertyApi.util.resetApiState());
-    }
-  }, [dispatch, isError, reset]);
+  // useEffect(() => {
+  //   if (isError) {
+  //     reset();
+  //     dispatch(propertyApi.util.resetApiState());
+  //   }
+  // }, [dispatch, isError, reset]);
 
   return (
     <div className="flex flex-col gap-10 pb-20">
-      {isLoading || isFetching ? (
+      {/* {isLoading || isFetching ? (
         <div className="w-[150px] m-auto mt-8">
           <LoadingCircle />
         </div>
@@ -101,7 +101,7 @@ const PropertySearchFound = ({ setValue, watch, onError, setSelectedRegridItem, 
             ))}
           </div>
         </>
-      )}
+      )} */}
     </div>
   );
 };
