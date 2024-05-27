@@ -111,7 +111,7 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
         <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined" onClick={goBack}>
           Back
         </Button>
-        <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onNext}>
+        <Button disabled={!selectedRegridItem} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onNext}>
           Tell us about your property
         </Button>
       </Box>

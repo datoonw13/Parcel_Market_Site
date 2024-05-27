@@ -7,6 +7,7 @@ import { Box, Button, ClickAwayListener, Container, Drawer, IconButton } from "@
 import BurgerIcon from "@/icons/BurgerIcon";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@mui/icons-material";
+import routes from "@/helpers/routes";
 
 const Header = () => {
   useAuthCheck();
@@ -57,12 +58,16 @@ const HeaderMenuItems = () => (
     <Link href="/">Find a Preferred Land Agent</Link>
     <Link href="/about-us">About Us</Link>
     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-      <Button sx={{ textTransform: "none" }} variant="contained">
-        Value my land for free
-      </Button>
-      <Button sx={{ textTransform: "none" }} variant="outlined">
-        Sign In
-      </Button>
+      <Link href={routes.propertySearch.root}>
+        <Button sx={{ textTransform: "none" }} variant="contained">
+          Value my land for free
+        </Button>
+      </Link>
+      <Link href={routes.auth.signIn}>
+        <Button sx={{ textTransform: "none" }} variant="outlined">
+          Sign In
+        </Button>
+      </Link>
     </Box>
   </Box>
 );

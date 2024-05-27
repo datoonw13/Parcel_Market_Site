@@ -8,6 +8,7 @@ import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyF
 import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
 import { IMap, IMapItem } from "@/types/map";
 import FindPropertyCalculatesPrices from "@/components/find-property/FindPropertyCalculatesPrices";
+import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
 
 enum Steps {
   PROPERTY_INFO,
@@ -43,10 +44,11 @@ const getStepInfo = (step: Steps) => {
 };
 
 const FindProperty = () => {
-  const [step, setStep] = useState(Steps.CALCULATED_PRICE);
+  const [step, setStep] = useState(Steps.PROPERTY_INFO);
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
   const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
+  const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
@@ -93,13 +95,13 @@ const FindProperty = () => {
               }}
               onNext={(res) => {
                 setStep(Steps.CALCULATED_PRICE);
-                console.log(res, 22);
+                setCalculatedPrice(res);
               }}
               selectedRegridItem={selectedRegridItem}
             />
           </Box>
           <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>
-            <FindPropertyCalculatesPrices />
+            <FindPropertyCalculatesPrices data={calculatedPrice} selectedRegridItem={selectedRegridItem} />
           </Box>
         </Box>
       </Paper>

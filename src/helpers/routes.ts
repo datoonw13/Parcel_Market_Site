@@ -8,7 +8,7 @@ const routes = {
     signUp: "/auth/sign-up",
   },
   propertySearch: {
-    root: "/property-search",
+    root: "/find-property",
     signature: "/property-search/signature",
   },
   user: {

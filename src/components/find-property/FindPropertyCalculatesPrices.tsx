@@ -1,10 +1,53 @@
+import { numFormatter } from "@/helpers/common";
+import routes from "@/helpers/routes";
+import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { IMapItem } from "@/types/map";
 import { Box, Button, Divider, Slider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-const FindPropertyCalculatesPrices = () => {
+const FindPropertyCalculatesPrices = ({
+  data,
+  selectedRegridItem,
+}: {
+  data: IFindPropertyEstimatedPriceResponse | null;
+  selectedRegridItem: IMapItem | null;
+}) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authedUser.user);
   const theme = useTheme();
   const onlySmallScreen = useMediaQuery(theme.breakpoints.down(650));
+
+  const onSellNow = () => {
+    if (!data || !selectedRegridItem) {
+      return;
+    }
+    dispatch(
+      setSelectedParcelOptions({
+        state: selectedRegridItem?.properties.fields.state2,
+        county: selectedRegridItem?.properties.fields.county,
+        propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
+        acrage: selectedRegridItem.properties.fields.ll_gisacre,
+        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb,
+        sellerType: "instantsale",
+        owner: selectedRegridItem.properties.fields.owner,
+        salePrice: data?.price || 0,
+        accepted: true,
+        coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
+      })
+    );
+    if (!user) {
+      router.push(routes.auth.signIn);
+    } else {
+      router.push(routes.propertySearch.signature);
+    }
+  };
   return (
     <Box sx={{ display: "grid", gap: { xs: 3, md: 4 }, px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>
       <Box sx={{ display: "grid", gridTemplateColumns: onlySmallScreen ? "1fr" : "1fr 1fr", gap: 2 }}>
@@ -26,7 +69,7 @@ const FindPropertyCalculatesPrices = () => {
           })}
         >
           <Typography sx={{ fontSize: 12, color: "grey.800", fontWeight: 500, mb: 1.5 }}>VOLT Value</Typography>
-          <Typography sx={{ fontSize: 48, fontWeight: 600, mb: 4 }}>$95,000</Typography>
+          <Typography sx={{ fontSize: 48, fontWeight: 600, mb: 4 }}> {data?.price && numFormatter.format(data?.price)}</Typography>
           <Box sx={{ width: "100%", mb: 3 }}>
             <Slider
               value={50}
@@ -55,13 +98,13 @@ const FindPropertyCalculatesPrices = () => {
           <Typography sx={{ fontSize: 12, fontWeight: 500, color: "grey.600", width: "100%", minWidth: "100%", mb: 1.5 }}>
             Min Price Per Acre:{" "}
             <Typography component="span" sx={{ fontSize: 12, fontWeight: 500, color: "black" }}>
-              $ 2,000
+              {data?.range.min && numFormatter.format(data?.range.min)}
             </Typography>
           </Typography>
           <Typography sx={{ fontSize: 12, fontWeight: 500, color: "grey.600", width: "100%", minWidth: "100%" }}>
             Max Price Per Acre:{" "}
             <Typography component="span" sx={{ fontSize: 12, fontWeight: 500, color: "black" }}>
-              $ 6,000
+              {data?.range.max && numFormatter.format(data?.range.max)}
             </Typography>
           </Typography>
         </Box>
@@ -83,7 +126,9 @@ const FindPropertyCalculatesPrices = () => {
           })}
         >
           <Typography sx={{ fontSize: 12, color: "grey.800", fontWeight: 500, mb: 1.5 }}>We buy for</Typography>
-          <Typography sx={{ fontSize: 48, fontWeight: 600, mb: 4, color: "primary.main" }}>$95,000</Typography>
+          <Typography sx={{ fontSize: 48, fontWeight: 600, mb: 4, color: "primary.main" }}>
+            {data?.price && numFormatter.format((data.price * 50) / 100)}
+          </Typography>
           <Typography sx={{ fontSize: 16, fontWeight: 500, textAlign: "center", mb: 4 }}>
             Sell your property{" "}
             <Typography component="span" sx={{ color: "primary.main", fontWeight: 500 }}>
@@ -91,7 +136,7 @@ const FindPropertyCalculatesPrices = () => {
             </Typography>
             , hassle free <br /> and no closing costs for.
           </Typography>
-          <Button variant="contained" sx={{ width: "100%" }}>
+          <Button variant="contained" sx={{ width: "100%" }} onClick={onSellNow}>
             Sell your property NOW
           </Button>
         </Box>
