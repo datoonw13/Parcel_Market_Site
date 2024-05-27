@@ -39,7 +39,7 @@ export const findPropertyInfoSchema = yup.object().shape(
     parcelNumber: yup
       .string()
       .required("Parcel number is a required field")
-      .min(6, "Min 6 character")
+      .min(2, "Min 2 character")
       .nullable()
       .when(["type"], ([type], schema) =>
         type !== "parcelNumber" ? schema : schema.notOneOf([null], "Parcel number is a required field")
