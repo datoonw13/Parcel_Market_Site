@@ -22,7 +22,7 @@ const propertyApi = baseApi.injectEndpoints({
         },
       }),
     }),
-    getRegrid: build.query<ResponseType<IMap>, IRegridReq>({
+    getRegrid: build.mutation<ResponseType<IMap>, IRegridReq>({
       query: (arg) => {
         let api = "";
         if (arg.parcelNumber && arg.parcelNumber !== null) {
@@ -80,8 +80,7 @@ const propertyApi = baseApi.injectEndpoints({
 export const {
   useCalculatePriceQuery,
   useLazyCalculatePriceQuery,
-  useGetRegridQuery,
-  useLazyGetRegridQuery,
+  useGetRegridMutation,
   useSignatureMutation,
   useSellPropertyTypeMutation,
   useGetUserSellingPropertiesQuery,

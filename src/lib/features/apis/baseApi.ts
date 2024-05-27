@@ -12,7 +12,9 @@ const baseQuery = fetchBaseQuery({
 });
 
 export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) => (action: any) => {
-  if (action.type.includes("rejected")) {
+  if (action.type.includes("rejected") && action?.meta?.arg?.endpointName !== "getRegrid") {
+    console.log(action.meta.arg.endpointName);
+
     let errorMessage = "Something went wrong";
     if (typeof action?.payload?.data?.message === "string") {
       errorMessage = action?.payload?.data?.message;

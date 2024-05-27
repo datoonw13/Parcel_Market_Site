@@ -1,13 +1,26 @@
 "use client";
 
 import { Info } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Divider, FormControlLabel, Radio, RadioGroup, SxProps, TextField, Tooltip } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  Divider,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  SxProps,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { usaStatesFull } from "typed-usa-states";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IFindPropertyInfo, IRegridReq } from "@/types/find-property";
 import { findPropertyInfoSchema } from "@/validations/find-property-schema";
-import { useLazyGetRegridQuery } from "@/lib/features/apis/propertyApi";
+import { useGetRegridMutation } from "@/lib/features/apis/propertyApi";
 import { LoadingButton } from "@mui/lab";
 import { IMap } from "@/types/map";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
@@ -54,7 +67,7 @@ interface IProps {
 }
 
 const PropertyInfo = ({ onNext }: IProps) => {
-  const [getRegrid] = useLazyGetRegridQuery();
+  const [getRegrid, { isError, reset }] = useGetRegridMutation();
 
   const {
     handleSubmit,
@@ -217,6 +230,12 @@ const PropertyInfo = ({ onNext }: IProps) => {
                 }}
               />
             </Box>
+            {isError && (
+              <Alert severity="warning" onClose={reset} sx={{ borderRadius: 2 }}>
+                <Typography sx={{ fontSize: 14, fontWeight: 600 }}>We could not find your property.</Typography>
+                <Typography sx={{ fontSize: 12, color: "grey.800" }}>Please check your information and try again.</Typography>
+              </Alert>
+            )}
           </Box>
         </Box>
       </Box>
