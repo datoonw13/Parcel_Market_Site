@@ -1,7 +1,7 @@
 "use client";
 
 import { Info } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Divider, FormControlLabel, Radio, RadioGroup, SxProps, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Divider, FormControlLabel, Radio, RadioGroup, SxProps, TextField, Tooltip } from "@mui/material";
 import { usaStatesFull } from "typed-usa-states";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -40,9 +40,12 @@ const getCountyValue = (county: string | null, state: string | null) => {
   return getCounties(state).find(({ value }) => value === county) || null;
 };
 
-const Label = ({ label, sx }: { label: string; sx?: SxProps }) => (
+const Label = ({ label, info, sx }: { label: string; info?: string; sx?: SxProps }) => (
   <Box sx={{ fontSize: 14, fontWeight: 500, color: "grey.800", display: "flex", alignItems: "center", gap: 1, ...sx }}>
-    {label} <Info sx={{ color: "grey.200" }} fontSize="small" />
+    {label}
+    <Tooltip title={info} arrow slotProps={{ arrow: { sx: { color: "black" } }, tooltip: { sx: { bgcolor: "black" } } }}>
+      <Info sx={{ color: "grey.200" }} fontSize="small" />
+    </Tooltip>
   </Box>
 );
 
@@ -110,23 +113,35 @@ const PropertyInfo = ({ onNext }: IProps) => {
           })}
         >
           <Box>
-            <Label label="Search By" />
+            <Label label="Search By" info="What king of criteria user needs to fill, or other info message" />
             <RadioGroup sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, columnGap: 1, rowGap: 2, mt: 1.5 }}>
               <FormControlLabel
                 value="parcelNumber"
-                label={<Label label="Parcel Number" sx={{ fontSize: 16 }} />}
+                label={
+                  <Label
+                    label="Parcel Number"
+                    sx={{ fontSize: 16 }}
+                    info="This is the land's unique number assigned by the county and is the best way to locate your property."
+                  />
+                }
                 control={<Radio size="small" checked={watch("type") === "parcelNumber"} />}
                 onChange={() => handleTypeChange("parcelNumber")}
               />
               <FormControlLabel
                 value="fullName"
-                label={<Label label="Full Name" sx={{ fontSize: 16 }} />}
+                label={<Label label="Full Name" sx={{ fontSize: 16 }} info="The owner name registered to the land with the County." />}
                 control={<Radio size="small" checked={watch("type") === "fullName"} />}
                 onChange={() => handleTypeChange("fullName")}
               />
               <FormControlLabel
                 value="entityName"
-                label={<Label label="Legal Entity" sx={{ fontSize: 16 }} />}
+                label={
+                  <Label
+                    label="Legal Entity"
+                    sx={{ fontSize: 16 }}
+                    info="The legal entity registered to the land with the County, such as an LLC, Inc, Corp, etc."
+                  />
+                }
                 control={<Radio size="small" checked={watch("type") === "entityName"} />}
                 onChange={() => handleTypeChange("entityName")}
               />
