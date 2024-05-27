@@ -9,13 +9,13 @@ import React, { ReactElement, useState } from "react";
 import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
 import dynamic from "next/dynamic";
 import { IMapItem } from "@/types/map";
-import FindProperty from "./page";
+import FindProperty from "@/components/find-property/FindProperty";
 
 const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-property/FindPropertyCalculatePriceMap"), {
   ssr: false,
 });
 
-const FindPropertyLayout = ({ children }: { children: ReactElement }) => {
+const FindPropertyLayout = () => {
   const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
   const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
 
