@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Divider, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import PropertyInfo from "@/components/find-property/PropertyInfo";
 import FindPropertyStepper from "@/components/find-property/FindPropertyStepper";
 import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyFoundedParcels";
@@ -43,12 +43,16 @@ const getStepInfo = (step: Steps) => {
   };
 };
 
-const FindProperty = () => {
+interface IProps {
+  calculatedPrice: IFindPropertyEstimatedPriceResponse | null;
+  setCalculatedPrice: Dispatch<SetStateAction<IFindPropertyEstimatedPriceResponse | null>>;
+  selectedRegridItem: IMapItem | null;
+  setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
+}
+const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem, setSelectedRegridItem }: IProps) => {
   const [step, setStep] = useState(Steps.PROPERTY_INFO);
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
-  const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
-  const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
