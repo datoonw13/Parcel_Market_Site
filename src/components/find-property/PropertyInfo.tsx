@@ -166,7 +166,7 @@ const PropertyInfo = ({ onNext }: IProps) => {
                 fullWidth
                 label="Enter parcel ID"
                 value={watch("parcelNumber") || ""}
-                onChange={(e) => setValue("parcelNumber", e.target.value, { shouldValidate: isSubmitted })}
+                onChange={(e) => setValue("parcelNumber", e.target.value.replaceAll(" ", ""), { shouldValidate: isSubmitted })}
                 error={!!errors?.parcelNumber}
                 helperText={errors?.parcelNumber?.message}
               />
