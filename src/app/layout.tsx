@@ -6,8 +6,9 @@ import "./globals.css";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { Box, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import theme from "@/theme";
+import NextTopLoader from "nextjs-toploader";
 import StoreProvider from "./StoreProvider";
 import "simplebar-react/dist/simplebar.min.css";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
       <StoreProvider>
         <html lang="en">
           <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
+            <NextTopLoader color="#0E8B40" showSpinner={false} />
             <AppRouterCacheProvider>
               <ThemeProvider theme={theme}>
                 <Toaster position="top-right" />
