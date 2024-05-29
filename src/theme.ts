@@ -141,6 +141,9 @@ const theme = createTheme({
         root: {
           fontSize: 12,
           fontWeight: 500,
+          "& > fieldset": {
+            borderWidth: "1px !important",
+          },
         },
       },
     },
@@ -148,6 +151,9 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: "8px",
+        },
+        input: {
+          padding: spacing(2.188, 2),
         },
       },
     },
