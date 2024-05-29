@@ -19,7 +19,7 @@ const NewAuth = () => (
     </Box>
 
     <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr" }, gap: 2 }}>
-      <TextField variant="outlined" label="Email" />
+      <TextField label="Email" />
       <TextField label="Password" />
       <FormControlLabel
         control={<Checkbox size="small" icon={<CheckboxIcon />} checkedIcon={<CheckboxCheckedIcon />} />}

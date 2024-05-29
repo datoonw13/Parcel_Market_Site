@@ -109,6 +109,63 @@ const theme = createTheme({
         },
       },
     },
+    MuiInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          height: "52px",
+        },
+      },
+    },
+    MuiFilledInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
+      styleOverrides: {
+        root: {
+          background: "transparent !important",
+          borderRadius: 8,
+          "&:not(.Mui-focused):not(.Mui-error)": {
+            border: `1px solid ${customPalette.grey[200]}`,
+            "&:hover": {
+              border: `1px solid ${customPalette.black}`,
+            },
+          },
+          "&.Mui-focused:not(.Mui-error)": {
+            outline: `2px solid ${customPalette.primary.main}`,
+            outlineOffset: -2,
+          },
+          "&.Mui-error:not(.Mui-focused)": {
+            border: `1px solid ${customPalette.error.main}`,
+          },
+          "&.Mui-focused": {
+            outline: `2px solid ${customPalette.error.main}`,
+            outlineOffset: -2,
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          height: "52px",
+          fontSize: 12,
+          "& fieldset": {
+            borderColor: customPalette.grey[200],
+          },
+          borderRadius: "8px !important",
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: "filled",
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -123,61 +180,6 @@ const theme = createTheme({
           "&:hover": {
             background: customPalette.primary[200],
           },
-        },
-      },
-    },
-    MuiTextField: {
-      defaultProps: {
-        variant: "filled",
-      },
-      styleOverrides: {
-        root: {
-          fontSize: 12,
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        root: {
-          fontSize: 12,
-          fontWeight: 500,
-          "& > fieldset": {
-            borderWidth: "1px !important",
-          },
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: "8px",
-        },
-        input: {
-          padding: spacing(2.188, 2),
-        },
-      },
-    },
-    MuiFilledInput: {
-      defaultProps: {
-        disableUnderline: true,
-      },
-      styleOverrides: {
-        root: {
-          background: "transparent",
-          "&:hover": {
-            background: "transparent",
-            border: `1px solid ${customPalette.primary.main}`,
-          },
-          "&.Mui-focused": {
-            background: "transparent",
-            border: `1px solid ${customPalette.primary.main}`,
-          },
-          "&.Mui-error": {
-            background: "transparent",
-            border: `1px solid ${customPalette.error.main}`,
-          },
-          border: `1px solid ${customPalette.grey[200]}`,
-          borderRadius: "8px",
         },
       },
     },
