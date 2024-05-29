@@ -1,3 +1,5 @@
+import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
+import CheckboxIcon from "@/icons/CheckboxIcon";
 import GoogleIcon from "@/icons/GoogleIcon";
 import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
 import React from "react";
@@ -20,9 +22,9 @@ const NewAuth = () => (
       <TextField variant="outlined" label="Email" />
       <TextField label="Password" />
       <FormControlLabel
-        control={<Checkbox />}
+        control={<Checkbox size="small" icon={<CheckboxIcon />} checkedIcon={<CheckboxCheckedIcon />} />}
         label="Remember me"
-        // slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: "grey.800" } } }}
+        slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: "grey.800" } } }}
       />
     </Box>
     <Button variant="contained" fullWidth>
