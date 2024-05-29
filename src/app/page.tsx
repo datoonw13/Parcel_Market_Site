@@ -6,7 +6,7 @@ import LandingSection2 from "@/components/landing/LandingSection2";
 import dynamic from "next/dynamic";
 import LandingSection5 from "@/components/landing/LandingSection5";
 import SubscribeNow from "@/components/landing/SubscribeNow";
-import Footer from "@/components/landing/Footer";
+import { Footer } from "@/components/footer";
 
 const LandingSection3 = dynamic(() => import("../components/landing/LandingSection3"), { ssr: false });
 const LandingSection4 = dynamic(() => import("../components/landing/LandingSection4"), { ssr: false });

@@ -2,7 +2,6 @@ import FbIcon from "@/icons/FbIcon";
 import Logo from "@/icons/Logo";
 import TwitterIcon from "@/icons/TwitterIcon";
 import { Box, Container, Divider, Typography } from "@mui/material";
-import React from "react";
 
 const Footer = () => (
   <Container>
