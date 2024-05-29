@@ -139,14 +139,12 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
+          fontSize: 12,
+          fontWeight: 500,
           borderRadius: `${spacing(1)} !important`,
           backgroundColor: `transparent !important`,
-          border: `1px solid ${customPalette.grey[200]}`,
-          "&.Mui-focused": {
-            border: `1px solid ${customPalette.primary.main}`,
-          },
-          "&.Mui-error": {
-            border: `1px solid ${customPalette.error.main}`,
+          "&.Mui-focused > input:not(.MuiOutlinedInput-input)": {
+            border: `2px solid ${customPalette.primary.main}`,
           },
         },
       },
@@ -158,6 +156,11 @@ const theme = createTheme({
       styleOverrides: {
         input: {
           borderRadius: `${spacing(1)} !important`,
+          border: `1px solid ${customPalette.grey[200]}`,
+          // paddingTop: 19,
+          "&:hover": {
+            border: `1px solid ${customPalette.black}`,
+          },
         },
       },
     },
