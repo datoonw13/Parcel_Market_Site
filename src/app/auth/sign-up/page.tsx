@@ -8,40 +8,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRegisterGoogleUserMutation, useRegisterMutation } from "@/lib/features/apis/authApi";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { usaStatesFull } from "typed-usa-states";
+import { useRouter, useSearchParams } from "next/navigation";
 import Select from "@/components/shared/Select";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import routes from "@/helpers/routes";
-import { setAuthPending, setAuthedUser } from "@/lib/features/slices/authedUserSlice";
-
-const getAllStates = () =>
-  usaStatesFull
-    .filter((el) => el.contiguous)
-    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
-
-const getCounties = (state: string | null) => {
-  if (!state) {
-    return [];
-  }
-  const counties = getAllStates().find(({ value }) => value === state)?.counties || [];
-  const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
-  return formattedCounties;
-};
-
-const getStateValue = (state: string | null) => {
-  if (!state) {
-    return null;
-  }
-  return getAllStates().find((el) => el.value === state) || null;
-};
-
-const getCountyValue = (county: string | null, state: string | null) => {
-  if (!county || !state) {
-    return null;
-  }
-  return getCounties(state).find(({ value }) => value === county) || null;
-};
+import { setAuthPending } from "@/lib/features/slices/authedUserSlice";
+import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 
 const SignUp = () => {
   const router = useRouter();

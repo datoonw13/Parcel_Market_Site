@@ -23,35 +23,8 @@ import { findPropertyInfoSchema } from "@/validations/find-property-schema";
 import { useGetRegridMutation } from "@/lib/features/apis/propertyApi";
 import { LoadingButton } from "@mui/lab";
 import { IMap } from "@/types/map";
+import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
-
-const getAllStates = () =>
-  usaStatesFull
-    .filter((el) => el.contiguous)
-    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
-
-const getCounties = (state: string | null) => {
-  if (!state) {
-    return [];
-  }
-  const counties = getAllStates().find(({ value }) => value === state)?.counties || [];
-  const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
-  return formattedCounties;
-};
-
-const getStateValue = (state: string | null) => {
-  if (!state) {
-    return null;
-  }
-  return getAllStates().find((el) => el.value === state) || null;
-};
-
-const getCountyValue = (county: string | null, state: string | null) => {
-  if (!county || !state) {
-    return null;
-  }
-  return getCounties(state).find(({ value }) => value === county) || null;
-};
 
 const Label = ({ label, info, sx }: { label: string; info?: string; sx?: SxProps }) => (
   <Box sx={{ fontSize: 14, fontWeight: 500, color: "grey.800", display: "flex", alignItems: "center", gap: 1, ...sx }}>

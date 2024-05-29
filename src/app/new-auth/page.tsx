@@ -7,15 +7,11 @@ import { useAuthMutation } from "@/lib/features/apis/authApi";
 import { ISignIn } from "@/types/auth";
 import { signInSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Box, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Eye, EyeSlash } from "iconsax-react";
-import { cookies } from "next/headers";
-import { Router } from "next/router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 const NewAuth = () => {
   const [authUser, { isLoading }] = useAuthMutation();
@@ -23,9 +19,7 @@ const NewAuth = () => {
 
   const {
     handleSubmit,
-    formState: { errors, isSubmitted },
-    setValue,
-    watch,
+    formState: { errors },
     register,
   } = useForm<ISignIn>({
     resolver: yupResolver(signInSchema),
