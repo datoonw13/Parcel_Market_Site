@@ -139,10 +139,15 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          fontSize: 12,
           borderRadius: `${spacing(1)} !important`,
           backgroundColor: `transparent !important`,
           border: `1px solid ${customPalette.grey[200]}`,
+          "&.Mui-focused": {
+            border: `1px solid ${customPalette.primary.main}`,
+          },
+          "&.Mui-error": {
+            border: `1px solid ${customPalette.error.main}`,
+          },
         },
       },
     },
