@@ -34,6 +34,15 @@ export const signUpSchema = (isGoogleUser?: boolean) =>
   });
 
 export const signInSchema = yup.object().shape({
-  email: yup.string().required("Email is a required field").nullable().notOneOf([null], "State is a required field"),
+  email: yup
+    .string()
+    .required("Email is a required field")
+    .matches(
+      // eslint-disable-next-line no-useless-escape
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      "Invalid email format"
+    )
+    .nullable()
+    .notOneOf([null], "State is a required field"),
   password: yup.string().required("Password is a required field").nullable().notOneOf([null], "State is a required field"),
 });

@@ -136,6 +136,7 @@ const theme = createTheme({
             },
           },
           "&.Mui-focused:not(.Mui-error)": {
+            border: `1px solid transparent`,
             outline: `2px solid ${customPalette.primary.main}`,
             outlineOffset: -2,
           },
@@ -143,6 +144,7 @@ const theme = createTheme({
             border: `1px solid ${customPalette.error.main}`,
           },
           "&.Mui-focused": {
+            border: `1px solid transparent`,
             outline: `2px solid ${customPalette.error.main}`,
             outlineOffset: -2,
           },

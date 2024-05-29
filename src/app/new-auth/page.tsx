@@ -1,62 +1,113 @@
+"use client";
+
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import GoogleIcon from "@/icons/GoogleIcon";
-import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
-import React from "react";
+import { useAuthMutation } from "@/lib/features/apis/authApi";
+import { ISignIn } from "@/types/auth";
+import { signInSchema } from "@/validations/auth-validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Box, Button, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Eye, EyeSlash } from "iconsax-react";
+import { cookies } from "next/headers";
+import { Router } from "next/router";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
-const NewAuth = () => (
-  <Box sx={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", height: "100%", maxWidth: 296, m: "auto" }}>
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-      <Typography variant="h1" sx={{ textAlign: "center", fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, fontWeight: 600 }}>
-        Sign In
-      </Typography>
-      {/* <Typography sx={{ textAlign: "center", fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>
-        Creating account for a{" "}
-        <Typography sx={{ textAlign: "center", fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "primary.main" }} component="span">
-          Real Estate Professional
+const NewAuth = () => {
+  const [authUser, { isLoading }] = useAuthMutation();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitted },
+    setValue,
+    watch,
+    register,
+  } = useForm<ISignIn>({
+    resolver: yupResolver(signInSchema),
+    defaultValues: {
+      email: null,
+      password: null,
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const res = await authUser(data).unwrap();
+      //   toast.success("You have successfully logged in");
+      //   Router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+      localStorage.setItem("token", res.data.access_token);
+    } catch (error) {
+      localStorage.removeItem("token");
+    }
+  });
+
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", height: "100%", maxWidth: 296, m: "auto" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <Typography variant="h1" sx={{ textAlign: "center", fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, fontWeight: 600 }}>
+          Sign In
         </Typography>
-      </Typography> */}
-    </Box>
+      </Box>
 
-    <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr" }, gap: 2 }}>
-      <TextField label="Email" />
-      <TextField label="Password" />
-      <FormControlLabel
-        control={<Checkbox size="small" icon={<CheckboxIcon />} checkedIcon={<CheckboxCheckedIcon />} />}
-        label="Remember me"
-        slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: "grey.800" } } }}
-      />
-    </Box>
-    <Button variant="contained" fullWidth>
-      Sign In
-    </Button>
-    <Divider>OR</Divider>
-    <Box
-      sx={{
-        "& svg": { width: 24, height: 24 },
-        display: "flex",
-        gap: 2,
-        boxShadow: "0px 2px 3px 0px rgba(0, 0, 0, 0.168)",
-        borderRadius: 10,
-        py: 1.5,
-        width: "100%",
-        justifyContent: "center",
-        cursor: "pointer",
-      }}
-    >
-      <GoogleIcon />
-      <Typography sx={{ fontWeight: 500, fontSize: 16, opacity: 0.56 }}>Continue with Google</Typography>
-    </Box>
-    <Typography sx={{ fontSize: 14, fontWeight: 500, mt: "auto" }}>
-      Don&apos;t have an account?{" "}
-      <Typography
-        sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
-        component="span"
+      <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr" }, gap: 2 }}>
+        <TextField label="Email" {...register("email")} error={!!errors.email} />
+        <TextField
+          label="Password"
+          {...register("password")}
+          type={showPassword ? "text" : "password"}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
+                  {showPassword ? <Eye /> : <EyeSlash />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          error={!!errors.password}
+        />
+        <FormControlLabel
+          control={<Checkbox size="small" icon={<CheckboxIcon />} checkedIcon={<CheckboxCheckedIcon />} />}
+          label="Remember me"
+          slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: "grey.800" } } }}
+        />
+      </Box>
+      <LoadingButton loading={isLoading} variant="contained" fullWidth onClick={onSubmit}>
+        Sign In
+      </LoadingButton>
+      <Divider>OR</Divider>
+      <Box
+        sx={{
+          "& svg": { width: 24, height: 24 },
+          display: "flex",
+          gap: 2,
+          boxShadow: "0px 2px 3px 0px rgba(0, 0, 0, 0.168)",
+          borderRadius: 10,
+          py: 1.5,
+          width: "100%",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}
       >
-        Sign Up{" "}
+        <GoogleIcon />
+        <Typography sx={{ fontWeight: 500, fontSize: 16, opacity: 0.56 }}>Continue with Google</Typography>
+      </Box>
+      <Typography sx={{ fontSize: 14, fontWeight: 500, mt: "auto" }}>
+        Don&apos;t have an account?{" "}
+        <Typography
+          sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
+          component="span"
+        >
+          Sign Up{" "}
+        </Typography>
       </Typography>
-    </Typography>
-  </Box>
-);
+    </Box>
+  );
+};
 
 export default NewAuth;
