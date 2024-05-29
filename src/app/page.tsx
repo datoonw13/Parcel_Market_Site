@@ -1,4 +1,3 @@
-import Header from "@/components/header/Header";
 import LandingMain from "@/components/landing/LandingMain";
 import { Box } from "@mui/material";
 import LandingSection1 from "@/components/landing/LandingSection1";
@@ -7,13 +6,14 @@ import dynamic from "next/dynamic";
 import LandingSection5 from "@/components/landing/LandingSection5";
 import SubscribeNow from "@/components/landing/SubscribeNow";
 import { Footer } from "@/components/footer";
+import { AppBar } from "@/components/app-bar";
 
 const LandingSection3 = dynamic(() => import("../components/landing/LandingSection3"), { ssr: false });
 const LandingSection4 = dynamic(() => import("../components/landing/LandingSection4"), { ssr: false });
 
 const Landing = () => (
   <Box sx={{ display: "flex", flexDirection: "column" }}>
-    <Header />
+    <AppBar />
     <LandingMain />
     <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
       <LandingSection1 />

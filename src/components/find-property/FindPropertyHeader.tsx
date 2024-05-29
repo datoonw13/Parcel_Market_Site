@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import Logo from "@/icons/Logo";
-import { ResponsiveHeaderMenuItems } from "../header/Header";
+import ResponsiveHeaderMenu from "../app-bar/ResponsiveHeaderMenu";
 
 const FindPropertyHeader = () => (
   <Box
@@ -22,7 +22,7 @@ const FindPropertyHeader = () => (
       </Box>
     </Link>
     <Box sx={{ ml: "auto", display: { xs: "flex", lg: "none" } }}>
-      <ResponsiveHeaderMenuItems rootId="parcel-find-header" />
+      <ResponsiveHeaderMenu rootId="parcel-find-header" />
     </Box>
   </Box>
 );
