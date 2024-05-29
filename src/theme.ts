@@ -141,11 +141,13 @@ const theme = createTheme({
         root: {
           fontSize: 12,
           fontWeight: 500,
-          borderRadius: `${spacing(1)} !important`,
-          backgroundColor: `transparent !important`,
-          "&.Mui-focused > input:not(.MuiOutlinedInput-input)": {
-            border: `2px solid ${customPalette.primary.main}`,
-          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: "8px",
         },
       },
     },
@@ -154,13 +156,22 @@ const theme = createTheme({
         disableUnderline: true,
       },
       styleOverrides: {
-        input: {
-          borderRadius: `${spacing(1)} !important`,
-          border: `1px solid ${customPalette.grey[200]}`,
-          // paddingTop: 19,
+        root: {
+          background: "transparent",
           "&:hover": {
-            border: `1px solid ${customPalette.black}`,
+            background: "transparent",
+            border: `1px solid ${customPalette.primary.main}`,
           },
+          "&.Mui-focused": {
+            background: "transparent",
+            border: `1px solid ${customPalette.primary.main}`,
+          },
+          "&.Mui-error": {
+            background: "transparent",
+            border: `1px solid ${customPalette.error.main}`,
+          },
+          border: `1px solid ${customPalette.grey[200]}`,
+          borderRadius: "8px",
         },
       },
     },
