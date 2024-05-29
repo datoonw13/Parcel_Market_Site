@@ -5,7 +5,7 @@ import DiscoverIcon from "@/icons/DiscoverIcon";
 import SellingIcon from "@/icons/SellingIcon";
 import { Box, Button, Container, Typography } from "@mui/material";
 
-const LandingSection2 = () => (
+const HomeSection2 = () => (
   <Container
     sx={{
       display: "flex",
@@ -64,7 +64,7 @@ const LandingSection2 = () => (
   </Container>
 );
 
-export default LandingSection2;
+export default HomeSection2;
 
 const list = [
   {

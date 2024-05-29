@@ -3,7 +3,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const LandingSection5 = () => (
+const HomeSection5 = () => (
   <Container
     sx={{
       display: "flex",
@@ -46,7 +46,7 @@ const LandingSection5 = () => (
   </Container>
 );
 
-export default LandingSection5;
+export default HomeSection5;
 
 const qa = new Array(6).fill(0).map((_, i) => ({
   title: `Frequently asked question ${i + 1}`,

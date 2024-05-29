@@ -2,7 +2,7 @@
 
 import Header from "@/components/header/Header";
 import Footer from "@/components/landing/Footer";
-import SubscribeNow from "@/components/landing/SubscribeNow";
+import SubscribeNow from "@/components/home/SubscribeNow";
 import { Box, Container, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import React from "react";

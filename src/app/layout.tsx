@@ -43,7 +43,6 @@ export default function RootLayout({
             <AppRouterCacheProvider>
               <ThemeProvider theme={theme}>
                 <Toaster position="top-right" />
-
                 {children}
               </ThemeProvider>
             </AppRouterCacheProvider>

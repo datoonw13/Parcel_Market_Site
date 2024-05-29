@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper/types";
 import "swiper/css/effect-fade";
 
-const LandingSection4 = () => {
+const HomeSection4 = () => {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [slidesPerView, setSlidesPerView] = useState<number>(0);
@@ -130,7 +130,7 @@ const LandingSection4 = () => {
   );
 };
 
-export default LandingSection4;
+export default HomeSection4;
 
 const list = new Array(6).fill(0).map((_, i) => ({
   src: null,

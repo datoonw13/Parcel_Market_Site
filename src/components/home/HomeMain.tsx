@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, EffectFade } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -10,7 +10,7 @@ import { Box, Button, Container, Typography, alpha } from "@mui/material";
 import { useState } from "react";
 import { Swiper as SwiperType } from "swiper/types";
 
-const LandingMain = () => {
+const HomeMain = () => {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -99,6 +99,6 @@ const LandingMain = () => {
   );
 };
 
-export default LandingMain;
+export default HomeMain;
 
 const images = ["/cover-1.png", "/cover-2.png", "/cover-3.png", "/cover-4.png"];

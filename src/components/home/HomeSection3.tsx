@@ -1,14 +1,14 @@
 "use client";
 
-import { Box, Button, Container, Typography, alpha } from "@mui/material";
+import { Box, Button, Typography, alpha } from "@mui/material";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-const LandingSection3 = () => {
+const HomeSection3 = () => {
   const ref = useRef<HTMLDivElement>();
 
   const calcLeftSpace = () => {
@@ -127,6 +127,6 @@ const LandingSection3 = () => {
   );
 };
 
-export default LandingSection3;
+export default HomeSection3;
 
 const images = new Array(6).fill(0).map((_, i) => ({ src: `/land${i + 1}.png`, title: "Land name goes here" }));
