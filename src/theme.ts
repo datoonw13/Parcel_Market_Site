@@ -192,6 +192,24 @@ const theme = createTheme({
         },
       },
     },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          "&:after": {
+            borderTop: `thin solid #D9D9D9`,
+          },
+          "&:before": {
+            borderTop: `thin solid #D9D9D9`,
+          },
+          "& span": {
+            color: customPalette.grey[800],
+            fontSize: 14,
+            fontWeight: 500,
+          },
+          width: "100%",
+        },
+      },
+    },
   },
   shadows: [...newShadows],
 });

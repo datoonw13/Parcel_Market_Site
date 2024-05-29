@@ -1,6 +1,6 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, SxProps, Typography } from "@mui/material";
 
-const MiniFooter = () => (
+const MiniFooter = ({ sx }: { sx?: SxProps }) => (
   <Box
     sx={{
       display: "flex",
@@ -11,6 +11,7 @@ const MiniFooter = () => (
       width: "100%",
       pt: { xs: 3, sm: 3.5, md: 4, lg: 5 },
       pb: { xs: 2, sm: 2.5, md: 3, lg: 3.5 },
+      ...sx,
     }}
   >
     <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5, alignItems: "center" }}>
