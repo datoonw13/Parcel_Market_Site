@@ -1,3 +1,5 @@
+"use client";
+
 import { AppBarMini } from "@/components/app-bar";
 import { MiniFooter } from "@/components/footer";
 import { Box, Paper } from "@mui/material";

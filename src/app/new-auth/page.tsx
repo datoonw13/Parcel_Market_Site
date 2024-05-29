@@ -1,8 +1,6 @@
-import { AppBarMini } from "@/components/app-bar";
-import { MiniFooter } from "@/components/footer";
 import GoogleIcon from "@/icons/GoogleIcon";
-import { Box, Divider, TextField, Typography } from "@mui/material";
-import React, { ReactElement } from "react";
+import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
+import React from "react";
 
 const NewAuth = () => (
   <Box sx={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", height: "100%", maxWidth: 296, m: "auto" }}>
@@ -21,7 +19,15 @@ const NewAuth = () => (
     <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr" }, gap: 2 }}>
       <TextField label="Email" />
       <TextField label="Password" />
+      <FormControlLabel
+        control={<Checkbox />}
+        label="Remember me"
+        // slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: "grey.800" } } }}
+      />
     </Box>
+    <Button variant="contained" fullWidth>
+      Sign In
+    </Button>
     <Divider>OR</Divider>
     <Box
       sx={{
@@ -41,7 +47,10 @@ const NewAuth = () => (
     </Box>
     <Typography sx={{ fontSize: 14, fontWeight: 500, mt: "auto" }}>
       Don&apos;t have an account?{" "}
-      <Typography sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline" }} component="span">
+      <Typography
+        sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
+        component="span"
+      >
         Sign Up{" "}
       </Typography>
     </Typography>
