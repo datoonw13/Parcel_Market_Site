@@ -1,18 +1,18 @@
 "use client";
 
-import Header from "@/components/header/Header";
-import Footer from "@/components/landing/Footer";
-import SubscribeNow from "@/components/home/SubscribeNow";
 import { Box, Container, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import React from "react";
+// import Header from "@/components/header/Header";
+// import Footer from "@/components/landing/Footer";
+// import SubscribeNow from "@/components/home/SubscribeNow";
 
 const AboutUs = () => {
   const theme = useTheme();
   const upMd = useMediaQuery(theme.breakpoints.up("md"));
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Divider />
       <Container sx={{ py: { xs: 6, md: 8, lg: 10 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -210,10 +210,10 @@ const AboutUs = () => {
           </Box>
         </Box>
       </Container>
-      <SubscribeNow />
+      {/* <SubscribeNow />
       <Box sx={{ bgcolor: "white", py: { xs: 10, md: 11, lg: 12.5 } }}>
         <Footer />
-      </Box>
+      </Box> */}
     </>
   );
 };

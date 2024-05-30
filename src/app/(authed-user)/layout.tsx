@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/header/Header";
+// import Header from "@/components/header/Header";
 // import Footer from "@/components/Footer";
 import Container from "@/components/shared/Container";
 import { usePathname, useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ const FindPropertyLayout = ({
   return (
     <div className="bg-white min-h-screen">
       <Container>
-        <Header />
+        {/* <Header /> */}
         {children}
       </Container>
       {/* <Footer /> */}
