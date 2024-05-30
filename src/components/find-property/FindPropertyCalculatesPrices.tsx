@@ -12,9 +12,11 @@ import React from "react";
 const FindPropertyCalculatesPrices = ({
   data,
   selectedRegridItem,
+  onNext,
 }: {
   data: IFindPropertyEstimatedPriceResponse | null;
   selectedRegridItem: IMapItem | null;
+  onNext: () => void;
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -45,7 +47,9 @@ const FindPropertyCalculatesPrices = ({
     if (!user) {
       router.push(routes.auth.signIn);
     } else {
-      router.push(routes.propertySearch.signature);
+      console.log("aqaa");
+
+      onNext();
     }
   };
   return (

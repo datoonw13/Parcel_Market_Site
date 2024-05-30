@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Divider, Paper, Typography } from "@mui/material";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import PropertyInfo from "@/components/find-property/PropertyInfo";
 import FindPropertyStepper from "@/components/find-property/FindPropertyStepper";
 import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyFoundedParcels";
@@ -9,6 +9,7 @@ import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
 import { IMap, IMapItem } from "@/types/map";
 import FindPropertyCalculatesPrices from "@/components/find-property/FindPropertyCalculatesPrices";
 import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { useAppSelector } from "@/lib/hooks";
 import FindPropertySignature from "./FindPropertySignature";
 
 enum Steps {
@@ -52,9 +53,16 @@ interface IProps {
   setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
 }
 const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem, setSelectedRegridItem }: IProps) => {
-  const [step, setStep] = useState(Steps.SIGNATURE);
+  const [step, setStep] = useState(Steps.PROPERTY_INFO);
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
+  const { selectedParcelOptions, user } = useAppSelector((state) => state.authedUser);
+
+  useEffect(() => {
+    if (selectedParcelOptions && user) {
+      setStep(Steps.SIGNATURE);
+    }
+  }, [selectedParcelOptions, user]);
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
@@ -111,11 +119,17 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
             />
           </Box>
           <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>
-            <FindPropertyCalculatesPrices data={calculatedPrice} selectedRegridItem={selectedRegridItem} />
+            <FindPropertyCalculatesPrices
+              data={calculatedPrice}
+              selectedRegridItem={selectedRegridItem}
+              onNext={() => setStep(Steps.SIGNATURE)}
+            />
           </Box>
-          <Box sx={{ height: "100%", display: step === Steps.SIGNATURE ? "block" : "none" }}>
-            <FindPropertySignature />
-          </Box>
+          {step === Steps.SIGNATURE && (
+            <Box sx={{ height: "100%", display: step === Steps.SIGNATURE ? "block" : "none" }}>
+              <FindPropertySignature goBack={() => setStep(Steps.CALCULATED_PRICE)} />
+            </Box>
+          )}
         </Box>
       </Paper>
     </Box>
