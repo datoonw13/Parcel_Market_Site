@@ -4,13 +4,14 @@ import routes from "@/helpers/routes";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import GoogleIcon from "@/icons/GoogleIcon";
-import { useAuthMutation } from "@/lib/features/apis/authApi";
+import { useAuthMutation, useGoogleAuthMutation } from "@/lib/features/apis/authApi";
 import { useAppSelector } from "@/lib/hooks";
 import { ISignIn } from "@/types/auth";
 import { signInSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Eye, EyeSlash } from "iconsax-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,6 +24,7 @@ const NewAuth = () => {
   const [authUser, { isLoading }] = useAuthMutation();
   const [showPassword, setShowPassword] = useState(false);
   const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
+  const [googleAuth, { isLoading: googleAuthLoading, data }] = useGoogleAuthMutation();
 
   const {
     handleSubmit,
@@ -45,6 +47,21 @@ const NewAuth = () => {
     } catch (error) {
       localStorage.removeItem("token");
     }
+  });
+
+  const onGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await googleAuth(tokenResponse.access_token).unwrap();
+        if ("access_token" in res.data) {
+          toast.success("You have successfully logged in");
+          router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+          localStorage.setItem("token", res.data.access_token);
+        } else {
+          router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
+        }
+      } catch (error) {}
+    },
   });
 
   return (
@@ -94,6 +111,7 @@ const NewAuth = () => {
           justifyContent: "center",
           cursor: "pointer",
         }}
+        onClick={() => onGoogleLogin()}
       >
         <GoogleIcon />
         <Typography sx={{ fontWeight: 500, fontSize: 16, opacity: 0.56 }}>Continue with Google</Typography>

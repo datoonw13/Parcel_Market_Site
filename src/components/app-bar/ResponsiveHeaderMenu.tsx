@@ -1,5 +1,6 @@
 "use client";
 
+import routes from "@/helpers/routes";
 import BurgerIcon from "@/icons/BurgerIcon";
 import { logOut } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -78,7 +79,7 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
               <Link href="/">Find a Preferred Land Agent</Link>
               <Link href="/about-us">About Us</Link>
               <Link href="/">Value my land for free</Link>
-              <Link href="/" onClick={() => dispatch(logOut())}>
+              <Link href={routes.auth.signIn} onClick={() => dispatch(logOut())}>
                 <Input fontSize="small" /> {user ? "Sign Out" : "Sign In"}
               </Link>
             </Box>
