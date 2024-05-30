@@ -1,12 +1,17 @@
 "use client";
 
 import BurgerIcon from "@/icons/BurgerIcon";
+import { logOut } from "@/lib/features/slices/authedUserSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Input } from "@mui/icons-material";
 import { Box, ClickAwayListener, Drawer, IconButton } from "@mui/material";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authedUser.user);
+
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const rootEl = useRef<HTMLDivElement | null>(null);
@@ -73,8 +78,8 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
               <Link href="/">Find a Preferred Land Agent</Link>
               <Link href="/about-us">About Us</Link>
               <Link href="/">Value my land for free</Link>
-              <Link href="/">
-                <Input fontSize="small" /> Sign In
+              <Link href="/" onClick={() => dispatch(logOut())}>
+                <Input fontSize="small" /> {user ? "Sign Out" : "Sign In"}
               </Link>
             </Box>
           </Drawer>
