@@ -19,6 +19,8 @@ import { Eye, EyeSlash } from "iconsax-react";
 import React, { useState } from "react";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
 const SignUpForm = () => {
@@ -135,12 +137,14 @@ const SignUpForm = () => {
       >
         <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
           Already have an account?{" "}
-          <Typography
-            sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
-            component="span"
-          >
-            Sign In
-          </Typography>
+          <Link href={routes.auth.signUp}>
+            <Typography
+              sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
+              component="span"
+            >
+              Sign In
+            </Typography>
+          </Link>
         </Typography>
         <Box
           sx={{

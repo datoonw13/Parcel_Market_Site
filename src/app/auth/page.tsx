@@ -1,5 +1,6 @@
 "use client";
 
+import routes from "@/helpers/routes";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import GoogleIcon from "@/icons/GoogleIcon";
@@ -10,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Eye, EyeSlash } from "iconsax-react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -93,12 +95,14 @@ const NewAuth = () => {
       </Box>
       <Typography sx={{ fontSize: 14, fontWeight: 500, mt: "auto" }}>
         Don&apos;t have an account?{" "}
-        <Typography
-          sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
-          component="span"
-        >
-          Sign Up{" "}
-        </Typography>
+        <Link href={routes.auth.signUp}>
+          <Typography
+            sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
+            component="span"
+          >
+            Sign Up{" "}
+          </Typography>
+        </Link>
       </Typography>
     </Box>
   );
