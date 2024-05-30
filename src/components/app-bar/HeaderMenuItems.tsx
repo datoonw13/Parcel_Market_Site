@@ -24,7 +24,7 @@ const HeaderMenuItems = () => {
           </Button>
         </Link>
         {user ? (
-          <Button variant="outlined">{`${user.name[0]}.${user.name.split(" ")[1][0]}`.toUpperCase()}</Button>
+          <Button variant="outlined">{`${user.name.split(" ")[0]}`.toUpperCase()}</Button>
         ) : (
           <Link href={routes.auth.signIn}>
             <Button sx={{ textTransform: "none" }} variant="outlined">

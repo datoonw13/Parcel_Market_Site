@@ -5,6 +5,7 @@ import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import GoogleIcon from "@/icons/GoogleIcon";
 import { useAuthMutation } from "@/lib/features/apis/authApi";
+import { useAppSelector } from "@/lib/hooks";
 import { ISignIn } from "@/types/auth";
 import { signInSchema } from "@/validations/auth-validation";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,12 +13,16 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Eye, EyeSlash } from "iconsax-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const NewAuth = () => {
+  const router = useRouter();
   const [authUser, { isLoading }] = useAuthMutation();
   const [showPassword, setShowPassword] = useState(false);
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
 
   const {
     handleSubmit,
@@ -34,8 +39,8 @@ const NewAuth = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const res = await authUser(data).unwrap();
-      //   toast.success("You have successfully logged in");
-      //   Router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+      toast.success("You have successfully logged in");
+      router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
       localStorage.setItem("token", res.data.access_token);
     } catch (error) {
       localStorage.removeItem("token");
