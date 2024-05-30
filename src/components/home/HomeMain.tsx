@@ -9,6 +9,8 @@ import "swiper/css/effect-fade";
 import { Box, Button, Container, Typography, alpha } from "@mui/material";
 import { useState } from "react";
 import { Swiper as SwiperType } from "swiper/types";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 
 const HomeMain = () => {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
@@ -73,9 +75,11 @@ const HomeMain = () => {
             <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 16 }, mt: 1 }}>
               Value your land for FREE in less than 3 minutes!
             </Typography>
-            <Button variant="contained" sx={{ textTransform: "none", my: 4 }}>
-              Get Started
-            </Button>
+            <Link href={routes.propertySearch.root}>
+              <Button variant="contained" sx={{ textTransform: "none", my: 4 }}>
+                Get Started
+              </Button>
+            </Link>
             <Box sx={{ display: "flex", gap: 1, position: "relative", zIndex: 2 }}>
               {images.map((el, i) => (
                 <Box
