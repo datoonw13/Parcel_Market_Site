@@ -1,6 +1,9 @@
 "use client";
 
-import { Box, Button, Container, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
+import SellQuicklyProcessBox from "@/components/sell-quickly/SellQuicklyProcessBox";
+import SellQuicklyProcessBoxMobile from "@/components/sell-quickly/SellQuicklyProcessBoxMobile";
+import { ErrorOutlineOutlined } from "@mui/icons-material";
+import { Alert, Box, Button, Container, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 
@@ -18,7 +21,7 @@ const SellQuickly = () => {
             Get quick cash for your property, with zero closing costs and zero hassle with our Parcel Market Purchase Option.
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <Typography sx={{ fontWeight: 400, fontSize: 14, color: "grey.800" }}>
             For sellers who are looking to <b>liquidate quickly and with no closing expenses,</b> our Parcel Market Purchase Option may be
             the right fit. Under this option, Parcel Market will make an offer to buy your land based on the VOLT value. If accepted, we
@@ -44,6 +47,40 @@ const SellQuickly = () => {
           <Button sx={{ width: "fit-content", m: "auto" }} variant="contained">
             Sell Your Property Now
           </Button>
+          <Alert sx={{ bgcolor: "green.50", p: 2.5, borderRadius: 2.5 }} icon={<ErrorOutlineOutlined sx={{ color: "green.600" }} />}>
+            <Box sx={{ fontWeight: 500, fontSize: 14, color: "grey.800", mb: 0.5 }}>
+              1. User Subscribes to platform enters their dashboard where user can post and make offers to buy land on land listings and
+              view all of their activity.
+            </Box>
+            <Box sx={{ fontWeight: 500, fontSize: 14, color: "grey.800" }}>
+              2. Marketplace is a classified type platform with land listings.
+            </Box>
+          </Alert>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: { xs: 6, sm: 8, md: 10, lg: 11 },
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: { xs: 24, sm: 28, md: 32, lg: 36 },
+              mb: 8,
+            }}
+          >
+            Our Process
+          </Typography>
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
+            <SellQuicklyProcessBox />
+          </Box>
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
+            <SellQuicklyProcessBoxMobile />
+          </Box>
         </Box>
       </Container>
     </>
