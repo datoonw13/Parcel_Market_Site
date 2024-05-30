@@ -73,8 +73,9 @@ const NewAuth = () => {
       </Box>
 
       <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr" }, gap: 2 }}>
-        <TextField label="Email" {...register("email")} error={!!errors.email} />
+        <TextField autoComplete="new-password" label="Email" {...register("email")} error={!!errors.email} />
         <TextField
+          autoComplete="new-password"
           label="Password"
           {...register("password")}
           type={showPassword ? "text" : "password"}
