@@ -9,12 +9,14 @@ import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
 import { IMap, IMapItem } from "@/types/map";
 import FindPropertyCalculatesPrices from "@/components/find-property/FindPropertyCalculatesPrices";
 import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import FindPropertySignature from "./FindPropertySignature";
 
 enum Steps {
   PROPERTY_INFO,
   FOUNDED_PROPERTIES,
   ABOUT_PROPERTY,
   CALCULATED_PRICE,
+  SIGNATURE,
 }
 
 const getStepInfo = (step: Steps) => {
@@ -50,26 +52,30 @@ interface IProps {
   setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
 }
 const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem, setSelectedRegridItem }: IProps) => {
-  const [step, setStep] = useState(Steps.PROPERTY_INFO);
+  const [step, setStep] = useState(Steps.SIGNATURE);
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
       <Paper sx={{ borderRadius: 4, py: 3, display: "flex", flexDirection: "column" }}>
-        <FindPropertyStepper
-          activeStep={step}
-          steps={Object.keys(Steps)
-            .map((x) => Number(x))
-            .filter((el) => !Number.isNaN(el))}
-        />
-        <Divider sx={{ my: 3 }} />
-        <Box sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
-          {stepTitle && (
-            <Typography sx={{ fontWeight: 700, fontSize: { xs: 18, sm: 20, md: 22, lg: 24 }, mb: 1.5 }}>{stepTitle}</Typography>
-          )}
-          {stepDesc && <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>{stepDesc}</Typography>}
-        </Box>
+        {step !== Steps.SIGNATURE && (
+          <>
+            <FindPropertyStepper
+              activeStep={step}
+              steps={Object.keys(Steps)
+                .map((x) => Number(x))
+                .filter((el) => !Number.isNaN(el))}
+            />
+            <Divider sx={{ my: 3 }} />
+            <Box sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
+              {stepTitle && (
+                <Typography sx={{ fontWeight: 700, fontSize: { xs: 18, sm: 20, md: 22, lg: 24 }, mb: 1.5 }}>{stepTitle}</Typography>
+              )}
+              {stepDesc && <Typography sx={{ fontWeight: 500, fontSize: { xs: 14, md: 16 }, color: "grey.800" }}>{stepDesc}</Typography>}
+            </Box>
+          </>
+        )}
         <Box sx={{ mt: 3, height: "100%" }}>
           <Box sx={{ height: "100%", display: step === Steps.PROPERTY_INFO ? "block" : "none" }}>
             <PropertyInfo
@@ -106,6 +112,9 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
           </Box>
           <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>
             <FindPropertyCalculatesPrices data={calculatedPrice} selectedRegridItem={selectedRegridItem} />
+          </Box>
+          <Box sx={{ height: "100%", display: step === Steps.SIGNATURE ? "block" : "none" }}>
+            <FindPropertySignature />
           </Box>
         </Box>
       </Paper>
