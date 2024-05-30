@@ -24,7 +24,7 @@ const NewAuth = () => {
   const [authUser, { isLoading }] = useAuthMutation();
   const [showPassword, setShowPassword] = useState(false);
   const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
-  const [googleAuth, { isLoading: googleAuthLoading, data }] = useGoogleAuthMutation();
+  const [googleAuth] = useGoogleAuthMutation();
 
   const {
     handleSubmit,

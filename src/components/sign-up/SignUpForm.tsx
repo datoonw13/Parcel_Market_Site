@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Eye, EyeSlash } from "iconsax-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import Link from "next/link";
@@ -26,10 +26,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "@/validations/auth-validation";
 import { LoadingButton } from "@mui/lab";
-import { useRegisterMutation } from "@/lib/features/apis/authApi";
+import { useGoogleAuthMutation, useRegisterGoogleUserMutation, useRegisterMutation } from "@/lib/features/apis/authApi";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { setAuthPending } from "@/lib/features/slices/authedUserSlice";
+import { useGoogleLogin } from "@react-oauth/google";
+import toast from "react-hot-toast";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
 interface IProps {
@@ -37,14 +39,34 @@ interface IProps {
   type: ISignUp["type"];
 }
 
+const defaultValues = {
+  firstName: null,
+  lastName: null,
+  email: null,
+  mailingAddress: null,
+  county: null,
+  state: null,
+  confirmPassword: null,
+  password: null,
+  agreeSubscribe: false,
+  agreeTerms: false,
+  type: 1,
+};
+
 const SignUpForm = ({ goBack, type }: IProps) => {
   const router = useRouter();
+  const params = useSearchParams();
   const dispatch = useAppDispatch();
+  const [googleAuth] = useGoogleAuthMutation();
+  const [registerGoogleUser, { isLoading: googleRegisterLoading }] = useRegisterGoogleUserMutation();
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-  const isGoogleUser = false;
   const [registerUser, { isLoading }] = useRegisterMutation();
-  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
+  const googleAuthToken = params.get("token");
+  const googleAuthName = params.get("name");
+  const googleAuthEmail = params.get("email");
+  const isGoogleUser = !!(googleAuthToken && googleAuthName && googleAuthEmail);
 
   const {
     handleSubmit,
@@ -54,29 +76,45 @@ const SignUpForm = ({ goBack, type }: IProps) => {
     reset,
   } = useForm<ISignUp>({
     resolver: yupResolver(signUpSchema(isGoogleUser)),
-    defaultValues: {
-      firstName: null,
-      lastName: null,
-      email: null,
-      mailingAddress: null,
-      county: null,
-      state: null,
-      confirmPassword: null,
-      password: null,
-      agreeSubscribe: false,
-      agreeTerms: false,
-      type,
-    },
+    defaultValues,
   });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await registerUser({ ...data, name: `${data.firstName} ${data.lastName}` }).unwrap();
+      const res = isGoogleUser
+        ? await registerGoogleUser({
+            token: googleAuthToken,
+            state: data.state,
+            county: data.county,
+            mailingAddress: data.mailingAddress,
+          }).unwrap()
+        : await registerUser({ ...data, name: `${data.firstName} ${data.lastName}` }).unwrap();
       router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
       localStorage.setItem("token", res.data.user.token);
       dispatch(setAuthPending(true));
     } catch (error) {}
   });
+
+  const onGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await googleAuth(tokenResponse.access_token).unwrap();
+        if ("access_token" in res.data) {
+          toast.success("You have successfully logged in");
+          router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+          localStorage.setItem("token", res.data.access_token);
+        } else {
+          router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
+        }
+      } catch (error) {}
+    },
+  });
+
+  useEffect(() => {
+    if (isGoogleUser) {
+      reset({ ...defaultValues, email: googleAuthEmail, firstName: googleAuthName.split(" ")[0], lastName: googleAuthName.split(" ")[1] });
+    }
+  }, [googleAuthEmail, googleAuthName, isGoogleUser, reset]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", height: "100%", m: "auto" }}>
@@ -103,6 +141,7 @@ const SignUpForm = ({ goBack, type }: IProps) => {
           cursor: "pointer",
           px: 6,
         }}
+        onClick={() => onGoogleLogin()}
       >
         <GoogleIcon />
         <Typography sx={{ fontWeight: 500, fontSize: 16, opacity: 0.56 }}>Continue with Google</Typography>
@@ -111,6 +150,7 @@ const SignUpForm = ({ goBack, type }: IProps) => {
       <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2 }}>
         <TextField
           autoComplete="new-password"
+          value={watch("firstName") || ""}
           fullWidth
           label="First Name"
           error={!!errors.firstName}
@@ -120,6 +160,7 @@ const SignUpForm = ({ goBack, type }: IProps) => {
           autoComplete="new-password"
           fullWidth
           label="Last Name"
+          value={watch("lastName") || ""}
           error={!!errors.lastName}
           onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted })}
         />
@@ -129,6 +170,8 @@ const SignUpForm = ({ goBack, type }: IProps) => {
           label="Email"
           error={!!errors.email}
           onChange={(e) => setValue("email", e.target.value, { shouldValidate: isSubmitted })}
+          value={watch("email") || ""}
+          disabled={isGoogleUser}
         />
         <TextField
           autoComplete="new-password"
@@ -160,38 +203,42 @@ const SignUpForm = ({ goBack, type }: IProps) => {
             />
           </>
         )}
-        <TextField
-          label="Password"
-          autoComplete="new-password"
-          error={!!errors.password}
-          type={showPassword ? "text" : "password"}
-          onChange={(e) => setValue("password", e.target.value || null, { shouldValidate: isSubmitted })}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
-                  {showPassword ? <Eye /> : <EyeSlash />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <TextField
-          label="Retype Password"
-          error={!!errors.confirmPassword}
-          autoComplete="new-password"
-          onChange={(e) => setValue("confirmPassword", e.target.value || null, { shouldValidate: isSubmitted })}
-          type={showRepeatPassword ? "text" : "password"}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowRepeatPassword(!showRepeatPassword)} edge="end" size="small">
-                  {showRepeatPassword ? <Eye /> : <EyeSlash />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+        {!isGoogleUser && (
+          <>
+            <TextField
+              label="Password"
+              autoComplete="new-password"
+              error={!!errors.password}
+              type={showPassword ? "text" : "password"}
+              onChange={(e) => setValue("password", e.target.value || null, { shouldValidate: isSubmitted })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
+                      {showPassword ? <Eye /> : <EyeSlash />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Retype Password"
+              error={!!errors.confirmPassword}
+              autoComplete="new-password"
+              onChange={(e) => setValue("confirmPassword", e.target.value || null, { shouldValidate: isSubmitted })}
+              type={showRepeatPassword ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowRepeatPassword(!showRepeatPassword)} edge="end" size="small">
+                      {showRepeatPassword ? <Eye /> : <EyeSlash />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </>
+        )}
         <Box sx={{ width: "100%", gridColumn: { sm: "1/span 2" } }}>
           <FormControlLabel
             control={
@@ -280,7 +327,12 @@ const SignUpForm = ({ goBack, type }: IProps) => {
           <Button sx={{ width: { xs: "100%", md: "fit-content" } }} variant="outlined" onClick={goBack}>
             Back
           </Button>
-          <LoadingButton loading={isLoading} sx={{ width: { xs: "100%", md: "fit-content" } }} variant="contained" onClick={onSubmit}>
+          <LoadingButton
+            loading={isLoading || googleRegisterLoading}
+            sx={{ width: { xs: "100%", md: "fit-content" } }}
+            variant="contained"
+            onClick={onSubmit}
+          >
             Create Account
           </LoadingButton>
         </Box>
