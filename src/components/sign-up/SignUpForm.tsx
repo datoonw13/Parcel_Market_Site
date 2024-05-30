@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllStates } from "@/helpers/states";
+import { getAllStates, getCounties } from "@/helpers/states";
 import GoogleIcon from "@/icons/GoogleIcon";
 import {
   Autocomplete,
@@ -21,14 +21,62 @@ import CheckboxIcon from "@/icons/CheckboxIcon";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import Link from "next/link";
 import routes from "@/helpers/routes";
+import { ISignUp, UserType } from "@/types/auth";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signUpSchema } from "@/validations/auth-validation";
+import { LoadingButton } from "@mui/lab";
+import { useRegisterMutation } from "@/lib/features/apis/authApi";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useRouter } from "next/navigation";
+import { setAuthPending } from "@/lib/features/slices/authedUserSlice";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
 interface IProps {
   goBack: () => void;
+  type: ISignUp["type"];
 }
 
-const SignUpForm = ({ goBack }: IProps) => {
+const SignUpForm = ({ goBack, type }: IProps) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const isGoogleUser = false;
+  const [registerUser, { isLoading }] = useRegisterMutation();
+  const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
+
+  const {
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitted },
+    setValue,
+    reset,
+  } = useForm<ISignUp>({
+    resolver: yupResolver(signUpSchema(isGoogleUser)),
+    defaultValues: {
+      firstName: null,
+      lastName: null,
+      email: null,
+      mailingAddress: null,
+      county: null,
+      state: null,
+      confirmPassword: null,
+      password: null,
+      agreeSubscribe: false,
+      agreeTerms: false,
+      type,
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const res = await registerUser({ ...data, name: `${data.firstName} ${data.lastName}` }).unwrap();
+      router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+      localStorage.setItem("token", res.data.user.token);
+      dispatch(setAuthPending(true));
+    } catch (error) {}
+  });
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", height: "100%", m: "auto" }}>
@@ -61,27 +109,63 @@ const SignUpForm = ({ goBack }: IProps) => {
       </Box>
       <Divider>OR</Divider>
       <Box sx={{ width: "100%", display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2 }}>
-        <TextField fullWidth label="First Name" />
-        <TextField fullWidth label="Last Name" />
-        <TextField fullWidth label="ekds@gmailj.com" />
-        <TextField fullWidth label="Mailing Address is filled" />
-        <Autocomplete
+        <TextField
+          autoComplete="new-password"
           fullWidth
-          renderInput={(params) => <TextField {...params} label="State" />}
-          ListboxComponent={AutoCompleteListboxComponent}
-          options={getAllStates()}
-          onChange={() => {}}
-        />
-
-        <Autocomplete
-          fullWidth
-          renderInput={(params) => <TextField {...params} label="County" />}
-          ListboxComponent={AutoCompleteListboxComponent}
-          options={getAllStates()}
-          onChange={() => {}}
+          label="First Name"
+          error={!!errors.firstName}
+          onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted })}
         />
         <TextField
+          autoComplete="new-password"
+          fullWidth
+          label="Last Name"
+          error={!!errors.lastName}
+          onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted })}
+        />
+        <TextField
+          autoComplete="new-password"
+          fullWidth
+          label="Email"
+          error={!!errors.email}
+          onChange={(e) => setValue("email", e.target.value, { shouldValidate: isSubmitted })}
+        />
+        <TextField
+          autoComplete="new-password"
+          fullWidth
+          label="Mailing Address"
+          error={!!errors.mailingAddress}
+          onChange={(e) => setValue("mailingAddress", e.target.value, { shouldValidate: isSubmitted })}
+        />
+        {watch("type") === UserType.PROFESSIONAL && (
+          <>
+            <Autocomplete
+              fullWidth
+              renderInput={(params) => <TextField {...params} label="State" error={!!errors.state} autoComplete="new-password" />}
+              ListboxComponent={AutoCompleteListboxComponent}
+              options={getAllStates()}
+              onChange={(_, newValue) => {
+                setValue("state", newValue?.value || null, { shouldValidate: isSubmitted });
+                setValue("county", null, { shouldValidate: isSubmitted });
+              }}
+            />
+
+            <Autocomplete
+              fullWidth
+              renderInput={(params) => <TextField {...params} label="County" error={!!errors.county} autoComplete="new-password" />}
+              ListboxComponent={AutoCompleteListboxComponent}
+              options={getCounties(watch("state"))}
+              disabled={!watch("state")}
+              onChange={(_, newValue) => setValue("county", newValue?.value || null, { shouldValidate: isSubmitted })}
+            />
+          </>
+        )}
+        <TextField
           label="Password"
+          autoComplete="new-password"
+          error={!!errors.password}
+          type={showPassword ? "text" : "password"}
+          onChange={(e) => setValue("password", e.target.value || null, { shouldValidate: isSubmitted })}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -94,11 +178,15 @@ const SignUpForm = ({ goBack }: IProps) => {
         />
         <TextField
           label="Retype Password"
+          error={!!errors.confirmPassword}
+          autoComplete="new-password"
+          onChange={(e) => setValue("confirmPassword", e.target.value || null, { shouldValidate: isSubmitted })}
+          type={showRepeatPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" size="small">
-                  {showPassword ? <Eye /> : <EyeSlash />}
+                <IconButton onClick={() => setShowRepeatPassword(!showRepeatPassword)} edge="end" size="small">
+                  {showRepeatPassword ? <Eye /> : <EyeSlash />}
                 </IconButton>
               </InputAdornment>
             ),
@@ -106,20 +194,50 @@ const SignUpForm = ({ goBack }: IProps) => {
         />
         <Box sx={{ width: "100%", gridColumn: { sm: "1/span 2" } }}>
           <FormControlLabel
-            control={<Checkbox size="small" icon={<CheckboxIcon />} checkedIcon={<CheckboxCheckedIcon />} />}
+            control={
+              <Checkbox
+                size="small"
+                icon={<CheckboxIcon />}
+                checkedIcon={<CheckboxCheckedIcon />}
+                onChange={() => setValue("agreeSubscribe", !watch("agreeSubscribe"), { shouldValidate: isSubmitted })}
+              />
+            }
             label="Send me emails with tips on how to find talent that fits my needs."
-            slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: "grey.800" } } }}
+            slotProps={{ typography: { sx: { fontSize: 12, fontWeight: 500, color: errors.agreeSubscribe ? "error.main" : "grey.800" } } }}
           />
           <FormControlLabel
-            control={<Checkbox size="small" icon={<CheckboxIcon />} checkedIcon={<CheckboxCheckedIcon />} />}
+            control={
+              <Checkbox
+                size="small"
+                icon={<CheckboxIcon />}
+                checkedIcon={<CheckboxCheckedIcon />}
+                onChange={() => setValue("agreeTerms", !watch("agreeTerms"), { shouldValidate: isSubmitted })}
+              />
+            }
             label={
-              <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+              <Typography sx={{ fontSize: 12, fontWeight: 500, color: errors.agreeTerms ? "error.main" : "black" }}>
                 Yes, I understand and agree to the Parcel Market{" "}
-                <Typography component="span" sx={{ fontSize: 12, fontWeight: 500, color: "primary.main", textDecoration: "underline" }}>
+                <Typography
+                  component="span"
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: 500,
+                    color: errors.agreeTerms ? "error.main" : "primary.main",
+                    textDecoration: "underline",
+                  }}
+                >
                   Terms of Service
                 </Typography>{" "}
                 and{" "}
-                <Typography component="span" sx={{ fontSize: 12, fontWeight: 500, color: "primary.main", textDecoration: "underline" }}>
+                <Typography
+                  component="span"
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: 500,
+                    color: errors.agreeTerms ? "error.main" : "primary.main",
+                    textDecoration: "underline",
+                  }}
+                >
                   Privacy Policy
                 </Typography>
                 .
@@ -162,9 +280,9 @@ const SignUpForm = ({ goBack }: IProps) => {
           <Button sx={{ width: { xs: "100%", md: "fit-content" } }} variant="outlined" onClick={goBack}>
             Back
           </Button>
-          <Button sx={{ width: { xs: "100%", md: "fit-content" } }} variant="contained">
+          <LoadingButton loading={isLoading} sx={{ width: { xs: "100%", md: "fit-content" } }} variant="contained" onClick={onSubmit}>
             Create Account
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Box>

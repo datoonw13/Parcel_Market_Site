@@ -20,7 +20,7 @@ const SignUp = () => {
       {step === Steps.SELECT_TYPE ? (
         <SignUpSelectRole onNext={() => setStep(Steps.SIGNUP_FORM)} type={type} setType={setType} />
       ) : (
-        <SignUpForm goBack={() => setStep(Steps.SELECT_TYPE)} />
+        <SignUpForm type={type!} goBack={() => setStep(Steps.SELECT_TYPE)} />
       )}
     </Box>
   );

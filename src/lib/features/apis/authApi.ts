@@ -13,7 +13,7 @@ import { setAuthedUser } from "../slices/authedUserSlice";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    register: build.mutation<ResponseType<ISignUpResponse>, ISignUp>({
+    register: build.mutation<ResponseType<ISignUpResponse>, ISignUp & { name: string }>({
       query: (arg) => ({
         url: "user/register",
         method: "POST",

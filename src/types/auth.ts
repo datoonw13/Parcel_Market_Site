@@ -1,14 +1,22 @@
 import { ISellProperty } from "./property";
 
+export enum UserType {
+  DEFAULT,
+  PROFESSIONAL,
+}
+
 export interface ISignUp {
-  name: string | null;
+  firstName: string | null;
+  lastName: string | null;
   email: string | null;
   mailingAddress: string | null;
   state: string | null;
   county: string | null;
   password: string | null;
   confirmPassword: string | null;
-  type: 1 | 2;
+  type: UserType;
+  agreeTerms: boolean;
+  agreeSubscribe: boolean;
   token?: string;
 }
 

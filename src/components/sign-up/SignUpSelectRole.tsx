@@ -3,7 +3,7 @@
 import routes from "@/helpers/routes";
 import RealEstateProfessionalIcon from "@/icons/RealEstateProfessionalIcon";
 import SellerRoleIcon from "@/icons/SellerRoleIcon";
-import { ISignUp } from "@/types/auth";
+import { ISignUp, UserType } from "@/types/auth";
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 import React, { Dispatch, SetStateAction } from "react";
@@ -26,15 +26,15 @@ const SignUpSelectRole = ({ setType, type, onNext }: IProps) => (
     </Box>
     <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, width: "100%", "& > div": { width: "100%" }, gap: 2 }}>
       <Box
-        onClick={() => setType(1)}
+        onClick={() => setType(UserType.DEFAULT)}
         sx={(theme) => ({
           display: "flex",
           flexDirection: "column",
           gap: 4,
           alignItems: "center",
           borderRadius: 4,
-          border: `1px solid ${type === 1 ? theme.palette.green[400] : theme.palette.grey[100]}`,
-          bgcolor: type === 1 ? "primary.100" : "transparent",
+          border: `1px solid ${type === UserType.DEFAULT ? theme.palette.green[400] : theme.palette.grey[100]}`,
+          bgcolor: type === UserType.DEFAULT ? "primary.100" : "transparent",
           p: 4,
           cursor: "pointer",
           "&:hover": {
@@ -48,15 +48,15 @@ const SignUpSelectRole = ({ setType, type, onNext }: IProps) => (
         </Typography>
       </Box>
       <Box
-        onClick={() => setType(2)}
+        onClick={() => setType(UserType.PROFESSIONAL)}
         sx={(theme) => ({
           display: "flex",
           flexDirection: "column",
           gap: 4,
           alignItems: "center",
           borderRadius: 4,
-          border: `1px solid ${type === 2 ? theme.palette.green[400] : theme.palette.grey[100]}`,
-          bgcolor: type === 2 ? "primary.100" : "transparent",
+          border: `1px solid ${type === UserType.PROFESSIONAL ? theme.palette.green[400] : theme.palette.grey[100]}`,
+          bgcolor: type === UserType.PROFESSIONAL ? "primary.100" : "transparent",
           p: 4,
           cursor: "pointer",
           "&:hover": {
@@ -70,7 +70,7 @@ const SignUpSelectRole = ({ setType, type, onNext }: IProps) => (
         </Typography>
       </Box>
     </Box>
-    <Button variant="contained" sx={{ mt: "auto" }} onClick={onNext}>
+    <Button variant="contained" sx={{ mt: "auto" }} onClick={onNext} disabled={type === null}>
       Create Account
     </Button>
     <Typography sx={{ fontWeight: 500, fontSize: 14 }}>

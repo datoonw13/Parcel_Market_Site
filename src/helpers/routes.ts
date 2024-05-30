@@ -4,7 +4,7 @@ const routes = {
   },
   auth: {
     root: "/auth",
-    signIn: "/auth/sign-in",
+    signIn: "/auth/",
     signUp: "/auth/sign-up",
   },
   propertySearch: {
