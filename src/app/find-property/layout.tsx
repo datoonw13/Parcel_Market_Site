@@ -11,6 +11,7 @@ import { IMapItem } from "@/types/map";
 import FindProperty from "@/components/find-property/FindProperty";
 import { MiniFooter } from "@/components/footer";
 import { AppBarMini } from "@/components/app-bar";
+import useAuthCheck from "@/hooks/useAuthCheck";
 
 const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-property/FindPropertyCalculatePriceMap"), {
   ssr: false,
@@ -19,7 +20,7 @@ const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-pr
 const FindPropertyLayout = () => {
   const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
   const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
-
+  useAuthCheck();
   return (
     <Box sx={{ height: "100vh", display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 400px", xl: "1fr 544px" } }}>
       <Box sx={{ px: { xs: 2.5, sm: 3.5, md: 5, lg: 6.5, xl: 8 }, display: "flex", flexDirection: "column" }}>
