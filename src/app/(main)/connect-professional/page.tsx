@@ -2,6 +2,7 @@
 
 import ConnectProfessionalProcessBox from "@/components/connect-professional/ConnectProfessionalProcessBox";
 import ConnectProfessionalProcessBoxMobile from "@/components/connect-professional/ConnectProfessionalProcessBoxMobile";
+import BreadCrumb from "@/components/shared/BreadCrumb";
 import routes from "@/helpers/routes";
 import { ErrorOutlineOutlined } from "@mui/icons-material";
 import { Alert, Box, Button, Container, Typography, useMediaQuery, useTheme } from "@mui/material";
@@ -10,10 +11,11 @@ import React from "react";
 
 const SellQuickly = () => {
   const theme = useTheme();
-  const upMd = useMediaQuery(theme.breakpoints.up("md"));
   return (
     <>
-      <Container sx={{ py: { xs: 6, md: 8, lg: 10 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
+      <Container sx={{ pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
+        <BreadCrumb routName="Parcel Market’s Preferred Professional Network" />
+
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography sx={{ fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, textAlign: "center", fontWeight: 600 }}>
             Parcel Market’s Preferred Professional Network

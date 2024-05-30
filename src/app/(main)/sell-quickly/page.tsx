@@ -2,6 +2,7 @@
 
 import SellQuicklyProcessBox from "@/components/sell-quickly/SellQuicklyProcessBox";
 import SellQuicklyProcessBoxMobile from "@/components/sell-quickly/SellQuicklyProcessBoxMobile";
+import BreadCrumb from "@/components/shared/BreadCrumb";
 import routes from "@/helpers/routes";
 import { ErrorOutlineOutlined } from "@mui/icons-material";
 import { Alert, Box, Button, Container, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
@@ -14,7 +15,8 @@ const SellQuickly = () => {
   const upMd = useMediaQuery(theme.breakpoints.up("md"));
   return (
     <>
-      <Container sx={{ py: { xs: 6, md: 8, lg: 10 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
+      <Container sx={{ pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
+        <BreadCrumb routName="Sell Quickly With No Closing Expenses" />
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography sx={{ fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, textAlign: "center", fontWeight: 600 }}>
             Sell Quickly With No Closing Expenses
