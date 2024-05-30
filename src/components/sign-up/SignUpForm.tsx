@@ -23,7 +23,11 @@ import Link from "next/link";
 import routes from "@/helpers/routes";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
-const SignUpForm = () => {
+interface IProps {
+  goBack: () => void;
+}
+
+const SignUpForm = ({ goBack }: IProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -155,7 +159,7 @@ const SignUpForm = () => {
             width: { xs: "100%", md: "fit-content" },
           }}
         >
-          <Button sx={{ width: { xs: "100%", md: "fit-content" } }} variant="outlined">
+          <Button sx={{ width: { xs: "100%", md: "fit-content" } }} variant="outlined" onClick={goBack}>
             Back
           </Button>
           <Button sx={{ width: { xs: "100%", md: "fit-content" } }} variant="contained">

@@ -1,7 +1,3 @@
-// export enum UserRoles {
-//   USER = "user",
-// }
-
 import { ISellProperty } from "./property";
 
 export interface ISignUp {
@@ -12,6 +8,7 @@ export interface ISignUp {
   county: string | null;
   password: string | null;
   confirmPassword: string | null;
+  type: 1 | 2;
   token?: string;
 }
 
