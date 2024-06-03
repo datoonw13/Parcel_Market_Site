@@ -80,7 +80,7 @@ const PropertyInfo = ({ onNext }: IProps) => {
         reqData.owner = data.entityName.toUpperCase();
       }
       if (data.type === "fullName" && data.firstName && data.lastName) {
-        reqData.owner = `${data.firstName} ${data.lastName}`.toUpperCase();
+        reqData.owner = `${data.lastName} ${data.firstName}`.toUpperCase();
       }
       const res = await getRegrid(reqData).unwrap();
       onNext([...res.data] as any);
