@@ -94,6 +94,7 @@ const customPalette = {
 
 const newShadows = shadows;
 shadows[1] = "0px 0px 30px 0px rgba(0, 0, 0, 0.08)";
+shadows[2] = "0px 12px 50px 0px rgba(0, 0, 0, 0.08)";
 
 const theme = createTheme({
   typography: {

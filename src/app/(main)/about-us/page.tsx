@@ -70,7 +70,7 @@ const AboutUs = () => {
           Specialists Network. Let’s explain these a bit further so you are well informed on how Parcel Market can help your specific needs.
         </Typography>
         <Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1.5 }}>The Parcel Market Value of Land Tool</Typography>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, mb: 1.5 }}>The Parcel Market Value of Land Tool</Typography>
           <Typography sx={{ fontSize: 14, color: "grey.800" }}>
             While the information provided by Parcel Market’s Value Of land Tool (VOLT) is the main driver behind our purpose, we also
             wanted to help our users utilize that information. We understand that the land business can be intimidating and finding
@@ -123,7 +123,7 @@ const AboutUs = () => {
               }}
             >
               <Typography sx={{ fontSize: 18, fontWeight: 500 }}>01.</Typography>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, width: { md: "max-content" } }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 600, width: { md: "max-content" } }}>
                 The Parcel Market Purchase Option
               </Typography>
             </Box>
@@ -158,7 +158,7 @@ const AboutUs = () => {
               }}
             >
               <Typography sx={{ fontSize: 18, fontWeight: 500 }}>01.</Typography>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, width: { md: "max-content" } }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 600, width: { md: "max-content" } }}>
                 The Parcel Market Purchase Option
               </Typography>
             </Box>
@@ -193,7 +193,7 @@ const AboutUs = () => {
               }}
             >
               <Typography sx={{ fontSize: 18, fontWeight: 500 }}>01.</Typography>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, width: { md: "max-content" } }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 600, width: { md: "max-content" } }}>
                 The Parcel Market Purchase Option
               </Typography>
             </Box>

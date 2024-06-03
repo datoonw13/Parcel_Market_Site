@@ -15,7 +15,7 @@ const LandingSection1 = () => (
     <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28 }, textAlign: "center", display: { md: "none" } }}>
       The Parcel Market <br /> value of land tool
     </Typography>
-    <Box boxShadow={1} sx={{ position: "relative", width: "100%", height: { xs: 230, sm: "45vw", md: 350, lg: 400 }, borderRadius: 4 }}>
+    <Box boxShadow={2} sx={{ position: "relative", width: "100%", height: { xs: 230, sm: "45vw", md: 350, lg: 400 }, borderRadius: 4 }}>
       <Image alt="" src="/volt.png" fill />
     </Box>
     <Box sx={{ display: "flex", flexDirection: "column" }}>

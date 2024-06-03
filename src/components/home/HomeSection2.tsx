@@ -50,14 +50,18 @@ const HomeSection2 = () => (
               maxWidth: 350,
               cursor: "pointer",
               "&:hover": {
-                boxShadow: theme.shadows[1],
+                boxShadow: theme.shadows[2],
+                borderColor: "transparent",
+                "& > h1": {
+                  color: "primary.main",
+                },
               },
             })}
           >
             <Box sx={{ mb: 4.5, "& > svg": { width: 142, height: 140 } }}>
               <el.icon />
             </Box>
-            <Typography sx={{ fontWeight: 700, fontSize: 18, mb: 1 }} dangerouslySetInnerHTML={{ __html: el.title }} />
+            <Typography component="h1" sx={{ fontWeight: 600, fontSize: 18, mb: 1 }} dangerouslySetInnerHTML={{ __html: el.title }} />
             <Typography sx={{ color: "grey.800" }}>{el.desc}</Typography>
           </Box>
         </Link>
