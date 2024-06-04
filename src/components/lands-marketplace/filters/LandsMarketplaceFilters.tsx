@@ -1,10 +1,11 @@
 "use client";
 
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import { Dispatch, SetStateAction } from "react";
 import LandsMarketplaceDesktopFilters from "./desktop/LandsMarketplaceDesktopFilters";
 import LandsMarketplaceMobileFilters from "./mobile/LandsMarketplaceMobileFilters";
+import LandsMarketPlaceSort from "../sort/LandsMarketPlaceSort";
 
 interface IProps {
   filters: ILandsMarketplaceFilters;
@@ -19,7 +20,10 @@ const LandsMarketplaceFilters = ({ filters, setFilters }: IProps) => (
     <Box sx={{ display: { xs: "block", md: "none" } }}>
       <LandsMarketplaceMobileFilters filters={filters} setFilters={setFilters} />
     </Box>
-    <Box>Sorts</Box>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+      <Typography sx={{ fontSize: 12, color: "grey.600", fontWeight: 500 }}>467,000 Lands</Typography>
+      <LandsMarketPlaceSort />
+    </Box>
   </Box>
 );
 

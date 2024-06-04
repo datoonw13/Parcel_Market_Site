@@ -91,7 +91,9 @@ const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placehol
             variant="text"
             color="inherit"
             onClick={() => {
-              setTempValue(value);
+              setTempValue({ min: null, max: null });
+              setValue({ min: null, max: null });
+              onSelect(null);
               handlePopoverClose();
             }}
           >
