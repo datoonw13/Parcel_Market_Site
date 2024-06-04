@@ -3,7 +3,8 @@
 import { Inter } from "next/font/google";
 import { Shadows, createTheme } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
-import { BorderColor } from "@mui/icons-material";
+import { BorderColor, Opacity } from "@mui/icons-material";
+import { colors } from "../tailwind.config";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -120,6 +121,12 @@ const theme = createTheme({
         root: {
           fontSize: 12,
           minHeight: 52,
+        },
+        input: {
+          "&::placeholder": {
+            opacity: 1,
+            color: customPalette.grey[800],
+          },
         },
       },
     },
