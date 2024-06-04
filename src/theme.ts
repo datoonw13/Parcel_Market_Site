@@ -135,6 +135,18 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           background: "transparent !important",
+          borderWidth: 1,
+          borderRadius: 10,
+          borderColor: customPalette.grey[100],
+          "&:hover:not(.Mui-error):not(.Mui-focused)": {
+            borderColor: customPalette.grey[200],
+          },
+          "&.Mui-error": {
+            borderColor: customPalette.error.main,
+          },
+          "&.Mui-focused:not(.Mui-error)": {
+            borderColor: customPalette.primary.main,
+          },
         },
       },
     },
@@ -148,6 +160,7 @@ const theme = createTheme({
         notchedOutline: {
           borderColor: customPalette.grey[100],
           borderWidth: `1px !important`,
+          borderRadius: 10,
         },
       },
     },
