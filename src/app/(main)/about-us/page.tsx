@@ -13,7 +13,6 @@ const AboutUs = () => {
   return (
     <>
       {/* <Header /> */}
-      <Divider />
       <Container sx={{ py: { xs: 6, md: 8, lg: 10 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography sx={{ fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, textAlign: "center", fontWeight: 600 }}>About us</Typography>
