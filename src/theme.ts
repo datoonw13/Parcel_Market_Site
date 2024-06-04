@@ -162,6 +162,12 @@ const theme = createTheme({
           },
           borderRadius: "8px !important",
         },
+        input: {
+          "&::placeholder": {
+            color: customPalette.grey[600],
+            opacity: 1 /* Firefox */,
+          },
+        },
       },
     },
     MuiTextField: {
