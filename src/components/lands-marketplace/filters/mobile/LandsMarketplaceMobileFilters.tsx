@@ -52,7 +52,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
         anchor="bottom"
         PaperProps={{ sx: { borderTopLeftRadius: 16, borderTopRightRadius: 16 } }}
       >
-        <Box sx={{ height: "95vh", display: "flex", flexDirection: "column", alignItems: "center", overflow: "scroll" }}>
+        <Box sx={{ height: "90vh", display: "flex", flexDirection: "column", alignItems: "center", overflow: "scroll" }}>
           <Box
             sx={{
               width: "100%",
@@ -270,7 +270,20 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
               <Divider sx={{ mt: 2 }} />
             </Box>
           </Box>
-          <Box boxShadow={1} sx={{ width: "100%", display: "flex", p: 2, flexDirection: "column", gap: 1, bgcolor: "white", zIndex: 2 }}>
+          <Box
+            boxShadow={1}
+            sx={{
+              width: "100%",
+              display: "flex",
+              p: 2,
+              flexDirection: "column",
+              gap: 1,
+              bgcolor: "white",
+              zIndex: 2,
+              position: "sticky",
+              bottom: 0,
+            }}
+          >
             <Button
               variant="contained"
               onClick={() => {
