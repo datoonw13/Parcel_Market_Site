@@ -13,6 +13,19 @@ const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-pr
   ssr: false,
 });
 
+const getFontSize = (val: string) => {
+  if (val.length >= 10 && val.length <= 15) {
+    return 28;
+  }
+  if (val.length >= 16 && val.length <= 20) {
+    return 24;
+  }
+  if (val.length >= 21) {
+    return 16;
+  }
+  return 48;
+};
+
 const FindPropertyCalculatesPrices = ({
   data,
   selectedRegridItem,
@@ -75,7 +88,10 @@ const FindPropertyCalculatesPrices = ({
           })}
         >
           <Typography sx={{ fontSize: 12, color: "grey.800", fontWeight: 500, mb: 1.5 }}>VOLT Value</Typography>
-          <Typography sx={{ fontSize: 48, fontWeight: 600, mb: 4 }}> {data?.price && numFormatter.format(data?.price)}</Typography>
+          <Typography sx={{ fontSize: getFontSize(numFormatter.format(data?.price || 0)), fontWeight: 600, mb: 4 }}>
+            {" "}
+            {data?.price && numFormatter.format(data.price)}
+          </Typography>
           <Box sx={{ width: "100%", mb: 3 }}>
             <Slider
               value={50}
@@ -132,7 +148,14 @@ const FindPropertyCalculatesPrices = ({
           })}
         >
           <Typography sx={{ fontSize: 12, color: "grey.800", fontWeight: 500, mb: 1.5 }}>We buy for</Typography>
-          <Typography sx={{ fontSize: 48, fontWeight: 600, mb: 4, color: "primary.main" }}>
+          <Typography
+            sx={{
+              fontSize: getFontSize(numFormatter.format((data?.price || 0 * 50) / 100)),
+              fontWeight: 600,
+              mb: 4,
+              color: "primary.main",
+            }}
+          >
             {data?.price && numFormatter.format((data.price * 50) / 100)}
           </Typography>
           <Typography sx={{ fontSize: 16, fontWeight: 500, textAlign: "center", mb: 4 }}>
