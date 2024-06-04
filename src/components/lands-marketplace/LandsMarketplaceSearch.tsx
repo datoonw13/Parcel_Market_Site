@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import { Search } from "@mui/icons-material";
-import { Box, InputAdornment, InputBase, TextField } from "@mui/material";
+import { Box, IconButton, InputAdornment, InputBase, TextField } from "@mui/material";
 
 const LandsMarketplaceSearch = () => (
   <Box
@@ -13,12 +13,11 @@ const LandsMarketplaceSearch = () => (
       justifyContent: "space-between",
       height: 44,
       borderRadius: 36,
-      maxWidth: 416,
     }}
   >
     <InputBase
       inputProps={{ sx: { p: 0 } }}
-      sx={{ height: "auto", py: 1.25, width: "100%", pr: 1.25, pl: 2 }}
+      sx={{ height: "auto", width: "100%", pr: 1.25, pl: 2, minHeight: "auto", py: 1.25 }}
       placeholder="Search by Parcel ID, or by owner "
     />
     <Box
@@ -34,7 +33,9 @@ const LandsMarketplaceSearch = () => (
         mr: 0.5,
       }}
     >
-      <Search sx={{ color: "white" }} />
+      <IconButton>
+        <Search sx={{ color: "white" }} />
+      </IconButton>
     </Box>
   </Box>
 );
