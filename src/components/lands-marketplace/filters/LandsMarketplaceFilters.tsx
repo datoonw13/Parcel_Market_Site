@@ -3,30 +3,24 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import { Dispatch, SetStateAction } from "react";
-import LandsMarketplaceDesktopFilters from "./LandsMarketplaceDesktopFilters";
-import LandsMarketplaceMobileFilters from "./LandsMarketplaceMobileFilters";
+import LandsMarketplaceDesktopFilters from "./desktop/LandsMarketplaceDesktopFilters";
+import LandsMarketplaceMobileFilters from "./mobile/LandsMarketplaceMobileFilters";
 
 interface IProps {
   filters: ILandsMarketplaceFilters;
   setFilters: Dispatch<SetStateAction<ILandsMarketplaceFilters>>;
 }
 
-const LandsMarketplaceFilters = ({ filters, setFilters }: IProps) => {
-  const theme = useTheme();
-  const upMd = useMediaQuery(theme.breakpoints.up("md"));
-
-  return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1, alignItems: "center" }}>
-      <Box>
-        {upMd ? (
-          <LandsMarketplaceDesktopFilters filters={filters} setFilters={setFilters} />
-        ) : (
-          <LandsMarketplaceMobileFilters filters={filters} setFilters={setFilters} />
-        )}
-      </Box>
-      <Box>Sorts</Box>
+const LandsMarketplaceFilters = ({ filters, setFilters }: IProps) => (
+  <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1, alignItems: "center" }}>
+    <Box sx={{ display: { xs: "none", md: "block" } }}>
+      <LandsMarketplaceDesktopFilters filters={filters} setFilters={setFilters} />
     </Box>
-  );
-};
+    <Box sx={{ display: { xs: "block", md: "none" } }}>
+      <LandsMarketplaceMobileFilters filters={filters} setFilters={setFilters} />
+    </Box>
+    <Box>Sorts</Box>
+  </Box>
+);
 
 export default LandsMarketplaceFilters;

@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { getAllStates, getCounties } from "@/helpers/states";
 import LandsMarketplaceFiltersAutocomplete from "./LandsMarketplaceFiltersAutocomplete";
 import LandsMarketplaceFiltersMinMaxAutocomplete from "./LandsMarketplaceFiltersMinMaxAutocomplete";
-import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-marketplace-utils";
+import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../../lands-marketplace-utils";
 
 interface IProps {
   filters: ILandsMarketplaceFilters;

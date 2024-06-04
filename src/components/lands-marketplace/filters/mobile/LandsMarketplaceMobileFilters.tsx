@@ -3,7 +3,7 @@ import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import { FilterList, KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, TextField, Typography } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-marketplace-utils";
+import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../../lands-marketplace-utils";
 
 type FiltersType = "state" | "county" | "acreage" | "price";
 
@@ -27,6 +27,12 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
   useEffect(() => {
     setSelectedFilters(filters);
   }, [filters]);
+
+  useEffect(() => {
+    if (!open && openFilter) {
+      setOpenFilter(null);
+    }
+  }, [open, openFilter]);
 
   return (
     <Box>
@@ -63,7 +69,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
             <Typography sx={{ fontSize: 16, fontWeight: 500, my: 2 }}>Filter By</Typography>
             <Divider />
           </Box>
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%", pb: 2 }}>
             <Box sx={{ p: 2, pb: 0 }}>
               <Box
                 sx={{
@@ -89,7 +95,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                       control={<Radio checked={state.value === selectedFilters.state} />}
                       label={state.label}
                       onChange={() => setSelectedFilters({ ...selectedFilters, state: state.value })}
-                      key={state.value}
+                      key={`mobile-${state.label}`}
                     />
                   ))}
                 </Box>
@@ -122,7 +128,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                       control={<Radio checked={county.value === selectedFilters.county} />}
                       label={county.label}
                       onChange={() => setSelectedFilters({ ...selectedFilters, county: county.value })}
-                      key={county.value}
+                      key={`mobile-${county.label}`}
                     />
                   ))}
                 </Box>
@@ -263,6 +269,27 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
               </Collapse>
               <Divider sx={{ mt: 2 }} />
             </Box>
+          </Box>
+          <Box boxShadow={1} sx={{ width: "100%", display: "flex", p: 2, flexDirection: "column", gap: 1, bgcolor: "white", zIndex: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setFilters(selectedFilters);
+                setOpen(false);
+              }}
+            >
+              Apply
+            </Button>
+            <Button
+              variant="text"
+              color="inherit"
+              onClick={() => {
+                setSelectedFilters(filters);
+                setOpen(false);
+              }}
+            >
+              Reset
+            </Button>
           </Box>
         </Box>
       </Drawer>

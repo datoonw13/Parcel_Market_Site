@@ -15,6 +15,7 @@ const LandsMarketPlacePage = () => {
     state: null,
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
+  console.log(filters, searchValue);
 
   return (
     <Container sx={{ py: { xs: 3, md: 4 }, display: "flex", flexDirection: "column" }}>
