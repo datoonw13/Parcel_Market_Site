@@ -5,9 +5,13 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { Box, Button, Divider, Slider, Typography, useMediaQuery, useTheme } from "@mui/material";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+
+const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-property/FindPropertyCalculatePriceMap"), {
+  ssr: false,
+});
 
 const FindPropertyCalculatesPrices = ({
   data,
@@ -47,8 +51,6 @@ const FindPropertyCalculatesPrices = ({
     if (!user) {
       router.push(routes.auth.signIn);
     } else {
-      console.log("aqaa");
-
       onNext();
     }
   };
@@ -202,6 +204,11 @@ const FindPropertyCalculatesPrices = ({
           </Button>
         </Box>
       </Box>
+      {selectedRegridItem && data && (
+        <Box sx={{ height: 366, width: "100%", display: { xs: "block", lg: "none" }, "& > div": { borderRadius: 4 } }}>
+          <FindPropertyCalculatePriceMap price={data.price} mainParcel={selectedRegridItem} parcels={data.properties} />
+        </Box>
+      )}
     </Box>
   );
 };

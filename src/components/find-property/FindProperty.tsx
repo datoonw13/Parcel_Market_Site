@@ -66,7 +66,7 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr" }, height: "100%" }}>
-      <Paper sx={{ borderRadius: 4, py: 3, display: "flex", flexDirection: "column" }}>
+      <Paper sx={{ borderRadius: 4, py: 3, display: "flex", flexDirection: "column", boxShadow: { xs: 0, md: 1 } }}>
         {step !== Steps.SIGNATURE && (
           <>
             <FindPropertyStepper
