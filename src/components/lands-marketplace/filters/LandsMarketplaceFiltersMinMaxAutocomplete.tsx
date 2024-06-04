@@ -1,21 +1,6 @@
-import AutoCompleteListboxComponent from "@/components/shared/AutoCompleteListboxComponent";
-import { ArrowBackIos, ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  ClickAwayListener,
-  Divider,
-  InputAdornment,
-  Menu,
-  MenuItem,
-  Paper,
-  Popover,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Arrow } from "iconsax-react";
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { Box, Button, Divider, InputAdornment, MenuItem, Popover, TextField } from "@mui/material";
+import { MouseEvent, useState } from "react";
 
 interface IOption {
   min: number | null;
@@ -28,23 +13,6 @@ interface ICustomMinMaxAutocomplete {
   placeholder: string;
   getLabel: (value: IOption | null) => string;
 }
-
-// const getInputLabel = (value: ICustomMinMaxAutocomplete["options"][0] | null) => {
-//   if (!value) {
-//     return "";
-//   }
-
-//   if (value.max && !value.min) {
-//     return `N/A - ${value.max} Acres`;
-//   }
-//   if (!value.max && value.min) {
-//     return `${value.min - 1}+ Acres`;
-//   }
-//   if (value.max && value.min) {
-//     return `${value.min} - ${value.max} Acres`;
-//   }
-//   return "";
-// };
 
 const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placeholder, getLabel }: ICustomMinMaxAutocomplete) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);

@@ -1,10 +1,11 @@
 import { getAllStates, getCounties } from "@/helpers/states";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import { FilterList, KeyboardArrowDown } from "@mui/icons-material";
-import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, Typography } from "@mui/material";
+import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, TextField, Typography } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-marketplace-utils";
 
-type FiltersType = "state" | "county";
+type FiltersType = "state" | "county" | "acreage" | "price";
 
 interface IProps {
   filters: ILandsMarketplaceFilters;
@@ -13,7 +14,7 @@ interface IProps {
 
 const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
   const [open, setOpen] = useState(false);
-  const [openFilters, setOpenFilters] = useState<Array<FiltersType>>([]);
+  const [openFilter, setOpenFilter] = useState<FiltersType | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<ILandsMarketplaceFilters>({
     acreage: null,
     county: null,
@@ -21,8 +22,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
     state: null,
   });
 
-  const toggleFilter = (filter: FiltersType) =>
-    openFilters.includes(filter) ? setOpenFilters(openFilters.filter((el) => el !== filter)) : setOpenFilters([...openFilters, filter]);
+  const toggleFilter = (filter: FiltersType) => (openFilter === filter ? setOpenFilter(null) : setOpenFilter(filter));
 
   useEffect(() => {
     setSelectedFilters(filters);
@@ -46,7 +46,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
         anchor="bottom"
         PaperProps={{ sx: { borderTopLeftRadius: 16, borderTopRightRadius: 16 } }}
       >
-        <Box sx={{ height: "95vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Box sx={{ height: "95vh", display: "flex", flexDirection: "column", alignItems: "center", overflow: "scroll" }}>
           <Box
             sx={{
               width: "100%",
@@ -80,8 +80,8 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                 State
                 <KeyboardArrowDown />
               </Box>
-              <Collapse in={openFilters.includes("state")}>
-                <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
+              <Collapse in={openFilter === "state"}>
+                <Box sx={{ mt: 2, display: "flex", flexDirection: "column", height: 250, overflow: "scroll" }}>
                   {getAllStates().map((state) => (
                     <FormControlLabel
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
@@ -113,8 +113,8 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                 County
                 <KeyboardArrowDown />
               </Box>
-              <Collapse in={openFilters.includes("county")}>
-                <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
+              <Collapse in={openFilter === "county"}>
+                <Box sx={{ mt: 2, display: "flex", flexDirection: "column", height: 250, overflow: "scroll" }}>
                   {getCounties(selectedFilters.state).map((county) => (
                     <FormControlLabel
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
@@ -123,6 +123,140 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                       label={county.label}
                       onChange={() => setSelectedFilters({ ...selectedFilters, county: county.value })}
                       key={county.value}
+                    />
+                  ))}
+                </Box>
+              </Collapse>
+              <Divider sx={{ mt: 2 }} />
+            </Box>
+            <Box sx={{ p: 2, pb: 0 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  justifyContent: "space-between",
+                  width: "100%",
+                  fontSize: 16,
+                  fontWeight: 500,
+                }}
+                onClick={() => toggleFilter("acreage")}
+              >
+                Acreage
+                <KeyboardArrowDown />
+              </Box>
+              <Collapse in={openFilter === "acreage"}>
+                <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
+                  <Box sx={{ display: "grid", gridTemplateColumns: "1fr 8px 1fr", gap: 0.5, width: "100%", alignItems: "center", mb: 1.5 }}>
+                    <TextField
+                      value={selectedFilters.acreage?.min || ""}
+                      onChange={(e) => {
+                        const newAcreageFilters = { ...(selectedFilters.acreage || { min: null, max: null }) };
+                        newAcreageFilters.min = Number(e.target.value) || null;
+                        if (!newAcreageFilters.min && !newAcreageFilters.max) {
+                          setSelectedFilters({ ...selectedFilters, acreage: null });
+                        } else {
+                          setSelectedFilters({ ...selectedFilters, acreage: { ...newAcreageFilters } });
+                        }
+                      }}
+                      InputProps={{ sx: { minHeight: 38 } }}
+                      size="small"
+                      fullWidth
+                      label="Min"
+                    />
+                    <Divider sx={{ width: "100%", height: 2 }} />
+                    <TextField
+                      value={selectedFilters.acreage?.max || ""}
+                      onChange={(e) => {
+                        const newAcreageFilters = { ...(selectedFilters.acreage || { min: null, max: null }) };
+                        newAcreageFilters.max = Number(e.target.value) || null;
+                        if (!newAcreageFilters.min && !newAcreageFilters.max) {
+                          setSelectedFilters({ ...selectedFilters, acreage: null });
+                        } else {
+                          setSelectedFilters({ ...selectedFilters, acreage: { ...newAcreageFilters } });
+                        }
+                      }}
+                      InputProps={{ sx: { minHeight: 38 } }}
+                      size="small"
+                      fullWidth
+                      label="Max"
+                    />
+                  </Box>
+                  {acreagesFilters.map((acreage) => (
+                    <FormControlLabel
+                      slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
+                      value={acreage}
+                      control={
+                        <Radio checked={acreage.min === selectedFilters.acreage?.min && acreage.max === selectedFilters.acreage?.max} />
+                      }
+                      label={getAcreageLabel(acreage)}
+                      onChange={() => setSelectedFilters({ ...selectedFilters, acreage })}
+                      key={JSON.stringify(acreage)}
+                    />
+                  ))}
+                </Box>
+              </Collapse>
+              <Divider sx={{ mt: 2 }} />
+            </Box>
+            <Box sx={{ p: 2, pb: 0 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  justifyContent: "space-between",
+                  width: "100%",
+                  fontSize: 16,
+                  fontWeight: 500,
+                }}
+                onClick={() => toggleFilter("price")}
+              >
+                VOLT value
+                <KeyboardArrowDown />
+              </Box>
+              <Collapse in={openFilter === "price"}>
+                <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
+                  <Box sx={{ display: "grid", gridTemplateColumns: "1fr 8px 1fr", gap: 0.5, width: "100%", alignItems: "center", mb: 1.5 }}>
+                    <TextField
+                      value={selectedFilters.price?.min || ""}
+                      onChange={(e) => {
+                        const newPriceFilters = { ...(selectedFilters.price || { min: null, max: null }) };
+                        newPriceFilters.min = Number(e.target.value) || null;
+                        if (!newPriceFilters.min && !newPriceFilters.max) {
+                          setSelectedFilters({ ...selectedFilters, price: null });
+                        } else {
+                          setSelectedFilters({ ...selectedFilters, price: { ...newPriceFilters } });
+                        }
+                      }}
+                      InputProps={{ sx: { minHeight: 38 } }}
+                      size="small"
+                      fullWidth
+                      label="Min"
+                    />
+                    <Divider sx={{ width: "100%", height: 2 }} />
+                    <TextField
+                      value={selectedFilters.price?.max || ""}
+                      onChange={(e) => {
+                        const newPriceFilters = { ...(selectedFilters.price || { min: null, max: null }) };
+                        newPriceFilters.max = Number(e.target.value) || null;
+                        if (!newPriceFilters.min && !newPriceFilters.max) {
+                          setSelectedFilters({ ...selectedFilters, price: null });
+                        } else {
+                          setSelectedFilters({ ...selectedFilters, price: { ...newPriceFilters } });
+                        }
+                      }}
+                      InputProps={{ sx: { minHeight: 38 } }}
+                      size="small"
+                      fullWidth
+                      label="Max"
+                    />
+                  </Box>
+                  {priceFilters.map((price) => (
+                    <FormControlLabel
+                      slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
+                      value={price}
+                      control={<Radio checked={price.min === selectedFilters.price?.min && price.max === selectedFilters.price?.max} />}
+                      label={getPriceLabel(price)}
+                      onChange={() => setSelectedFilters({ ...selectedFilters, price })}
+                      key={JSON.stringify(price)}
                     />
                   ))}
                 </Box>
