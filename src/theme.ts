@@ -3,6 +3,7 @@
 import { Inter } from "next/font/google";
 import { Shadows, createTheme } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
+import { BorderColor } from "@mui/icons-material";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -106,20 +107,25 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: 12,
-          top: "2px",
+          fontWeight: 500,
+        },
+        shrink: {
+          background: customPalette.white,
+          padding: "4px 0",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+          minHeight: 52,
         },
       },
     },
     MuiInput: {
       defaultProps: {
         disableUnderline: true,
-      },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          height: "52px",
-        },
       },
     },
     MuiFilledInput: {
@@ -129,50 +135,20 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           background: "transparent !important",
-          borderRadius: 8,
-          "&:not(.Mui-focused):not(.Mui-error)": {
-            border: `1px solid ${customPalette.grey[200]}`,
-            "&:hover": {
-              border: `1px solid ${customPalette.black}`,
-            },
-          },
-          "&.Mui-focused:not(.Mui-error)": {
-            border: `1px solid transparent`,
-            outline: `2px solid ${customPalette.primary.main}`,
-            outlineOffset: -2,
-          },
-          "&.Mui-error:not(.Mui-focused)": {
-            border: `1px solid ${customPalette.error.main}`,
-          },
-          "&.Mui-focused": {
-            border: `1px solid transparent`,
-            outline: `2px solid ${customPalette.error.main}`,
-            outlineOffset: -2,
-          },
         },
       },
     },
-    MuiInputBase: {
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          height: "52px",
-          fontSize: 12,
-          "& fieldset": {
+          "&:hover:not(.Mui-focused):not(.Mui-error) > .MuiOutlinedInput-notchedOutline": {
             borderColor: customPalette.grey[200],
           },
-          borderRadius: "8px !important",
         },
-        input: {
-          "&::placeholder": {
-            color: customPalette.grey[600],
-            opacity: 1 /* Firefox */,
-          },
+        notchedOutline: {
+          borderColor: customPalette.grey[100],
+          borderWidth: `1px !important`,
         },
-      },
-    },
-    MuiTextField: {
-      defaultProps: {
-        variant: "filled",
       },
     },
     MuiButton: {
