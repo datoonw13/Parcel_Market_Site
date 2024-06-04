@@ -1,11 +1,11 @@
 "use client";
 
-import LandsMarketplaceFilters from "@/components/lands-marketplace/LandsMarketplaceFilters";
 import LandsMarketplaceSearch from "@/components/lands-marketplace/LandsMarketplaceSearch";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import { Box, Container } from "@mui/material";
 import React, { useState } from "react";
+import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/LandsMarketplaceFilters";
 
 const LandsMarketPlacePage = () => {
   const [filters, setFilters] = useState<ILandsMarketplaceFilters>({
