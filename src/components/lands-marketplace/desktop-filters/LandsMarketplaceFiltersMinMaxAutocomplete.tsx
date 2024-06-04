@@ -66,18 +66,18 @@ const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placehol
           sx: { minHeight: 36 },
           endAdornment: <InputAdornment position="end">{anchorEl ? <ArrowDropUp /> : <ArrowDropDown />}</InputAdornment>,
         }}
-        sx={{ borderRadius: 74, "& fieldset": { borderRadius: 18.5 }, maxWidth: 150 }}
+        sx={{ borderRadius: 74, "& fieldset": { borderRadius: 18.5 }, width: 150 }}
         size="small"
         onClick={handlePopoverOpen}
         autoComplete="off"
         value={getLabel(value)}
       />
       <Popover
+        transitionDuration={0}
+        disableScrollLock
         open={!!anchorEl}
         anchorEl={anchorEl}
         onClose={handlePopoverClose}
-        disablePortal
-        disableScrollLock
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",

@@ -36,7 +36,7 @@ const LandsMarketplaceFiltersAutocomplete = ({ onSelect, options, placeholder, d
       )}
       ListboxComponent={AutoCompleteListboxComponent}
       options={options}
-      sx={{ maxWidth: 150 }}
+      sx={{ width: 150 }}
       open={open}
       disabled={disabled}
       disableCloseOnSelect
