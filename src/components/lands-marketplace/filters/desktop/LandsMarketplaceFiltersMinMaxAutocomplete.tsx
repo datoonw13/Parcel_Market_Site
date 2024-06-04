@@ -1,6 +1,30 @@
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Box, Button, Divider, InputAdornment, MenuItem, Popover, TextField } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, forwardRef, useState } from "react";
+import { NumericFormat } from "react-number-format";
+
+const NumberFormatCustom = forwardRef((props: any, inputRef: any) => {
+  const { onChange, ...other } = props;
+
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator=","
+      decimalSeparator="."
+      // prefix="$"
+      // suffix=" USD"
+      // decimalScale={2}
+    />
+  );
+});
 
 interface IOption {
   min: number | null;
@@ -54,18 +78,18 @@ const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placehol
       >
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 8px 1fr", gap: 0.5, width: "100%", alignItems: "center", p: 2 }}>
           <TextField
-            value={tempValue.min || ""}
-            onChange={(e) => setTempValue({ ...tempValue, min: Number(e.target.value) })}
-            InputProps={{ sx: { minHeight: 38 } }}
+            value={typeof tempValue.min === "number" ? tempValue.min : ""}
+            onChange={(e) => setTempValue({ ...tempValue, min: e.target.value === "" ? null : Number(e.target.value) })}
+            InputProps={{ inputComponent: NumberFormatCustom, sx: { minHeight: 38, border: 0, outline: 0 } }}
             size="small"
             fullWidth
             label="Min"
           />
           <Divider sx={{ width: "100%", height: 2 }} />
           <TextField
-            value={tempValue.max || ""}
-            onChange={(e) => setTempValue({ ...tempValue, max: Number(e.target.value) })}
-            InputProps={{ sx: { minHeight: 38 } }}
+            value={typeof tempValue.max === "number" ? tempValue.max : ""}
+            onChange={(e) => setTempValue({ ...tempValue, max: e.target.value === "" ? null : Number(e.target.value) })}
+            InputProps={{ inputComponent: NumberFormatCustom, sx: { minHeight: 38, border: 0, outline: 0 } }}
             size="small"
             fullWidth
             label="Max"
