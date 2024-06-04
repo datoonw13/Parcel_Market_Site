@@ -89,7 +89,7 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
                 <Typography sx={{ fontSize: 14, color: "grey.600" }}>
                   Acreages{" "}
                   <Typography sx={{ color: "black", fontSize: 14 }} component="span">
-                    123.34 Acres
+                    {item.properties.fields.ll_gisacre.toFixed(2)} Acres
                   </Typography>
                 </Typography>
               </Box>
