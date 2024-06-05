@@ -148,7 +148,7 @@ const LandsMarketPlacePage = () => {
                     <Typography sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "grey.600", fontWeight: 400, fontSize: 14 }}>
                       <UserSquare /> VOLT Value:{" "}
                       <Typography sx={{ fontWeight: 500, fontSize: 14, color: "black" }} component="span">
-                        {numFormatter.format(Number(item.marketPrice))} $
+                        {numFormatter.format(Number(item.salePrice))} $
                       </Typography>
                     </Typography>
                   </Box>
