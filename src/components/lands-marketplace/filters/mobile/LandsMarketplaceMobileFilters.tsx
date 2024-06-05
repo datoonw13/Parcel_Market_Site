@@ -20,6 +20,9 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
     county: null,
     price: null,
     state: null,
+    page: 1,
+    pageSize: 10,
+    sellerType: "instantsale",
   });
 
   const toggleFilter = (filter: FiltersType) => (openFilter === filter ? setOpenFilter(null) : setOpenFilter(filter));
