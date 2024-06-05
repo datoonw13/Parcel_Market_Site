@@ -7,6 +7,7 @@ import {
   ISellProperty,
   IUserSellingPropertiesResponse,
 } from "@/types/find-property";
+import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
@@ -64,14 +65,12 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
-    getSellingProperties: build.query<void, void>({
+    getSellingProperties: build.query<void, ILandsMarketplaceFilters>({
       query: (arg) => ({
         url: "/api/selling-properties",
         method: "GET",
         params: {
-          page: 0,
-          pageSize: 1,
-          sellerType: "saleonmarketplace",
+          ...arg,
         },
       }),
     }),

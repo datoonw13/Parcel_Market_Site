@@ -17,9 +17,12 @@ const LandsMarketPlacePage = () => {
     acreage: null,
     county: null,
     state: null,
+    page: 1,
+    pageSize: 10,
+    sellerType: "saleonmarketplace",
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
-  const { isLoading } = useGetSellingPropertiesQuery();
+  const { isLoading } = useGetSellingPropertiesQuery(filters);
 
   return (
     <Container sx={{ py: { xs: 3, md: 4 }, display: "flex", flexDirection: "column" }}>
