@@ -51,7 +51,7 @@ const FindPropertyCalculatesPrices = ({
         county: selectedRegridItem?.properties.fields.county,
         propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
         acrage: selectedRegridItem.properties.fields.ll_gisacre,
-        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb,
+        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb_no_formatting,
         sellerType,
         owner: selectedRegridItem.properties.fields.owner,
         salePrice: data?.price || 0,
@@ -195,7 +195,7 @@ const FindPropertyCalculatesPrices = ({
           <Typography sx={{ fontSize: 16, fontWeight: 500, mb: 4, textAlign: "center" }}>
             Submit your property to <br /> our network of investors.
           </Typography>
-          <Button variant="outlined" sx={{ width: "100%" }} onClick={() => onSell("saleonmarketplace")}>
+          <Button variant="outlined" sx={{ width: "100%" }} onClick={() => onSell("sale")}>
             Submit your property
           </Button>
         </Box>

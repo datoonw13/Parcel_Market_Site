@@ -67,7 +67,7 @@ const propertyApi = baseApi.injectEndpoints({
     }),
     getSellingProperties: build.query<void, ILandsMarketplaceFilters>({
       query: (arg) => ({
-        url: "/api/selling-properties",
+        url: "/selling-properties",
         method: "GET",
         params: {
           ...arg,

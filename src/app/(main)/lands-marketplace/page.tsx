@@ -19,7 +19,7 @@ const LandsMarketPlacePage = () => {
     state: null,
     page: 1,
     pageSize: 10,
-    sellerType: "saleonmarketplace",
+    sellerType: "sale",
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const { isLoading } = useGetSellingPropertiesQuery(filters);

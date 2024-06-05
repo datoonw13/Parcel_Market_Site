@@ -95,7 +95,7 @@ export interface ISellProperty {
   propertyType: string;
   acrage: number;
   parcelNumber: string;
-  sellerType: "instantsale" | "saleonmarketplace";
+  sellerType: "instantsale" | "sale";
   owner: string;
   salePrice: number;
   accepted: boolean;
