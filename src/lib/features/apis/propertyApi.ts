@@ -64,6 +64,17 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
+    getSellingProperties: build.query<void, void>({
+      query: (arg) => ({
+        url: "/api/selling-properties",
+        method: "GET",
+        params: {
+          page: 0,
+          pageSize: 1,
+          sellerType: "saleonmarketplace",
+        },
+      }),
+    }),
     checkParcelSellingStatus: build.mutation<ResponseType<{ data: boolean }>, string>({
       query: (parcelNumber) => ({
         url: "/selling-properties/instant-sale",
@@ -84,5 +95,6 @@ export const {
   useSellPropertyTypeMutation,
   useGetUserSellingPropertiesQuery,
   useCheckParcelSellingStatusMutation,
+  useGetSellingPropertiesQuery,
 } = propertyApi;
 export default propertyApi;

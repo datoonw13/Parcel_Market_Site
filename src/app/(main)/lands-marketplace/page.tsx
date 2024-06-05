@@ -9,6 +9,7 @@ import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/Land
 import { BookmarkBorderOutlined, CalendarMonth, FmdGoodOutlined, Place } from "@mui/icons-material";
 import { Location, UserSquare } from "iconsax-react";
 import Image from "next/image";
+import { useGetSellingPropertiesQuery } from "@/lib/features/apis/propertyApi";
 
 const LandsMarketPlacePage = () => {
   const [filters, setFilters] = useState<ILandsMarketplaceFilters>({
@@ -18,6 +19,7 @@ const LandsMarketPlacePage = () => {
     state: null,
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
+  const { isLoading } = useGetSellingPropertiesQuery();
 
   return (
     <Container sx={{ py: { xs: 3, md: 4 }, display: "flex", flexDirection: "column" }}>
