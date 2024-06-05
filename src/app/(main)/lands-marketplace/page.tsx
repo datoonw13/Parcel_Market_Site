@@ -3,7 +3,7 @@
 import LandsMarketplaceSearch from "@/components/lands-marketplace/LandsMarketplaceSearch";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Pagination, Typography } from "@mui/material";
 import React, { useState } from "react";
 import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/LandsMarketplaceFilters";
 import { BookmarkBorderOutlined, CalendarMonth, FmdGoodOutlined, Place } from "@mui/icons-material";
@@ -113,6 +113,7 @@ const LandsMarketPlacePage = () => {
           </Box>
         ))}
       </Box>
+      <Pagination sx={{ m: "auto" }} color="primary" count={10} variant="outlined" shape="rounded" />
     </Container>
   );
 };

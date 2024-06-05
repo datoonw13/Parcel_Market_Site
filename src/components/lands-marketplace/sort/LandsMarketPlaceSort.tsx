@@ -1,5 +1,5 @@
 import React from "react";
 
-const LandsMarketPlaceSort = () => <div>LandsMarketPlaceSort</div>;
+const LandsMarketPlaceSort = () => <div>Sort by</div>;
 
 export default LandsMarketPlaceSort;
