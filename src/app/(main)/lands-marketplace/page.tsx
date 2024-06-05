@@ -97,7 +97,7 @@ const LandsMarketPlacePage = () => {
                 <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, px: 3 }}>
                   <Box sx={{ display: "table", tableLayout: "fixed", width: "100%" }}>
                     <Typography noWrap component="h1" sx={{ fontWeight: 600, fontSize: { xs: 16, md: 18 }, mb: 1, transition: "all 0.2s" }}>
-                      {item.propertyType}
+                      {item.propertyType || `Unknown`}
                     </Typography>
                     <Typography sx={{ fontSize: 12, color: "grey.600", display: "flex", alignItems: "center", gap: 0.5 }}>
                       <Location color="#0E8B40" size={16} /> {state?.label}; {counties.find((el) => el.value === item.county)?.label}
@@ -117,7 +117,7 @@ const LandsMarketPlacePage = () => {
                   }}
                 >
                   <Box sx={{ position: "relative", height: { xs: 200, sm: "100%", md: 200, lg: "100%" } }}>
-                    <Image fill src="/property-map.png" alt="" style={{ borderRadius: 16 }} />
+                    <Image fill src="/blured-map.png" alt="" style={{ borderRadius: 16 }} />
                   </Box>
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                     <Box sx={{ display: "table", tableLayout: "fixed", width: "100%" }}>
@@ -126,7 +126,7 @@ const LandsMarketPlacePage = () => {
                           sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "grey.600", fontWeight: 400, fontSize: 14 }}
                           // noWrap
                         >
-                          <UserSquare /> Owner:{" "}
+                          <UserSquare style={{ width: 24, minWidth: 24, height: 24, minHeight: 24 }} /> Owner:{" "}
                           <Typography noWrap sx={{ fontWeight: 500, fontSize: 14, color: "black" }} component="span">
                             {item.owner}
                           </Typography>
@@ -134,21 +134,21 @@ const LandsMarketPlacePage = () => {
                       </Tooltip>
                     </Box>
                     <Typography sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "grey.600", fontWeight: 400, fontSize: 14 }}>
-                      <UserSquare /> Parcel ID:{" "}
+                      <UserSquare style={{ width: 24, minWidth: 24, height: 24, minHeight: 24 }} /> Parcel ID:{" "}
                       <Typography sx={{ fontWeight: 500, fontSize: 14, color: "black" }} component="span">
                         {item.parcelNumber}
                       </Typography>
                     </Typography>
                     <Typography sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "grey.600", fontWeight: 400, fontSize: 14 }}>
-                      <UserSquare /> Acreage:{" "}
+                      <UserSquare style={{ width: 24, minWidth: 24, height: 24, minHeight: 24 }} /> Acreage:{" "}
                       <Typography sx={{ fontWeight: 500, fontSize: 14, color: "black" }} component="span">
                         {item.acrage} Acres
                       </Typography>
                     </Typography>
                     <Typography sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "grey.600", fontWeight: 400, fontSize: 14 }}>
-                      <UserSquare /> VOLT Value:{" "}
+                      <UserSquare style={{ width: 24, minWidth: 24, height: 24, minHeight: 24 }} /> VOLT Value:{" "}
                       <Typography sx={{ fontWeight: 500, fontSize: 14, color: "black" }} component="span">
-                        {numFormatter.format(Number(item.salePrice))} $
+                        {numFormatter.format(Number(item.salePrice))}
                       </Typography>
                     </Typography>
                   </Box>
