@@ -11,7 +11,7 @@ import {
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import baseApi from "./baseApi";
 
-const propertyApi = baseApi.injectEndpoints({
+const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties"] }).injectEndpoints({
   endpoints: (build) => ({
     calculatePrice: build.query<ResponseType<IFindPropertyEstimatedPriceResponse>, IFindPropertyEstimatedPrice>({
       query: (arg) => ({
@@ -58,6 +58,7 @@ const propertyApi = baseApi.injectEndpoints({
         method: "POST",
         body: arg,
       }),
+      invalidatesTags: ["selling-properties"],
     }),
     getUserSellingProperties: build.query<IUserSellingPropertiesResponse, void>({
       query: (arg) => ({
@@ -81,6 +82,7 @@ const propertyApi = baseApi.injectEndpoints({
           ...arg,
         },
       }),
+      providesTags: ["selling-properties"],
     }),
     checkParcelSellingStatus: build.mutation<ResponseType<{ data: boolean }>, string>({
       query: (parcelNumber) => ({
