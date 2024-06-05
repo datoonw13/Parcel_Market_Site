@@ -2,7 +2,7 @@ import { numFormatter } from "@/helpers/common";
 import routes from "@/helpers/routes";
 import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { Box, Button, Divider, Slider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import dynamic from "next/dynamic";
@@ -41,7 +41,7 @@ const FindPropertyCalculatesPrices = ({
   const theme = useTheme();
   const onlySmallScreen = useMediaQuery(theme.breakpoints.down(650));
 
-  const onSellNow = () => {
+  const onSell = (sellerType: ISellProperty["sellerType"]) => {
     if (!data || !selectedRegridItem) {
       return;
     }
@@ -52,7 +52,7 @@ const FindPropertyCalculatesPrices = ({
         propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
         acrage: selectedRegridItem.properties.fields.ll_gisacre,
         parcelNumber: selectedRegridItem?.properties.fields.parcelnumb,
-        sellerType: "instantsale",
+        sellerType,
         owner: selectedRegridItem.properties.fields.owner,
         salePrice: data?.price || 0,
         accepted: true,
@@ -165,7 +165,7 @@ const FindPropertyCalculatesPrices = ({
             </Typography>
             , hassle free <br /> and no closing costs for.
           </Typography>
-          <Button variant="contained" sx={{ width: "100%" }} onClick={onSellNow}>
+          <Button variant="contained" sx={{ width: "100%" }} onClick={() => onSell("instantsale")}>
             Sell your property NOW
           </Button>
         </Box>
@@ -195,7 +195,7 @@ const FindPropertyCalculatesPrices = ({
           <Typography sx={{ fontSize: 16, fontWeight: 500, mb: 4, textAlign: "center" }}>
             Submit your property to <br /> our network of investors.
           </Typography>
-          <Button variant="outlined" sx={{ width: "100%" }}>
+          <Button variant="outlined" sx={{ width: "100%" }} onClick={() => onSell("saleonmarketplace")}>
             Submit your property
           </Button>
         </Box>
