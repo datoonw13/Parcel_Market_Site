@@ -5,7 +5,7 @@ import CheckboxIcon from "@/icons/CheckboxIcon";
 import { useSellPropertyTypeMutation } from "@/lib/features/apis/propertyApi";
 import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { ISellProperty } from "@/types/property";
+import { ISellProperty } from "@/types/find-property";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Checkbox, Divider, FormControlLabel, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";

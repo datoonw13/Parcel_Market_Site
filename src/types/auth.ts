@@ -1,4 +1,4 @@
-import { ISellProperty } from "./property";
+import { ISellProperty } from "./find-property";
 
 export enum UserType {
   DEFAULT,

@@ -7,12 +7,12 @@ import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileL
 import { Icon, LatLngExpression, DivIcon } from "leaflet";
 import { IMapItem } from "@/types/map";
 import { Fragment } from "react";
-import { ISearchPropertyCalculatePriceResponse } from "@/types/property";
 import { Chip } from "@mui/material";
 import ReactDOMServer from "react-dom/server";
+import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
 
 interface IProps {
-  parcels: ISearchPropertyCalculatePriceResponse["properties"];
+  parcels: IFindPropertyEstimatedPriceResponse["properties"];
   mainParcel: IMapItem;
   price: number;
 }

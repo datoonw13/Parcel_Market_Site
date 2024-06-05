@@ -4,7 +4,7 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 
-const Map = dynamic(() => import("@/components/property-search/Map"), { ssr: false });
+const Map = dynamic(() => import("@/components/find-property/Map"), { ssr: false });
 
 interface IProps {
   data: IMap;

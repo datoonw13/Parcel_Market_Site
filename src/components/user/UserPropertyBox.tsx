@@ -4,9 +4,10 @@ import React from "react";
 import WarningCircleIcon from "@/icons/WarningCircleIcon";
 import dynamic from "next/dynamic";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { ISellingProperty, IUserSellingPropertiesResponse } from "@/types/property";
+// import { ISellingProperty, IUserSellingPropertiesResponse } from "@/types/property";
 import moment from "moment";
 import LoadingCircle from "@/icons/LoadingCircle";
+import { ISellingProperty } from "@/types/find-property";
 import Button from "../shared/Button";
 
 const SharedMap = dynamic(() => import("@/components/shared/SharedMap"), { ssr: false });

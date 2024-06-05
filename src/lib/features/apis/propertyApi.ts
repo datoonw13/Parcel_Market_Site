@@ -1,18 +1,17 @@
 import { ResponseType } from "@/types/common";
 import { IMap } from "@/types/map";
 import {
-  ICalculatePriceReq,
-  ISearchPropertyCalculatePrice,
-  ISearchPropertyCalculatePriceResponse,
+  IFindPropertyEstimatedPrice,
+  IFindPropertyEstimatedPriceResponse,
+  IRegridReq,
   ISellProperty,
   IUserSellingPropertiesResponse,
-} from "@/types/property";
-import { IFindPropertyEstimatedPriceResponse, IRegridReq } from "@/types/find-property";
+} from "@/types/find-property";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    calculatePrice: build.query<ResponseType<IFindPropertyEstimatedPriceResponse>, ISearchPropertyCalculatePrice>({
+    calculatePrice: build.query<ResponseType<IFindPropertyEstimatedPriceResponse>, IFindPropertyEstimatedPrice>({
       query: (arg) => ({
         url: "properties/calculate/price",
         method: "POST",
