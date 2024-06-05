@@ -48,10 +48,21 @@ const LandsMarketPlacePage = () => {
         }}
       >
         {new Array(10).fill(0).map(() => (
-          <Box key={Math.random()} sx={{ borderWidth: 1, borderRadius: 4, borderColor: "grey.100", pt: 3 }}>
+          <Box
+            key={Math.random()}
+            sx={{
+              borderWidth: 1,
+              borderRadius: 4,
+              borderColor: "grey.100",
+              pt: 3,
+              cursor: "pointer",
+              "&:hover": { borderColor: "transparent", boxShadow: 1, "& div > div > h1": { color: "primary.main" } },
+              transition: "all 0.2s",
+            }}
+          >
             <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, px: 3 }}>
-              <Box>
-                <Typography sx={{ fontWeight: 600, fontSize: { xs: 16, md: 18 }, mb: 1 }}>
+              <Box sx={{ display: "table", tableLayout: "fixed", width: "100%" }}>
+                <Typography noWrap component="h1" sx={{ fontWeight: 600, fontSize: { xs: 16, md: 18 }, mb: 1, transition: "all 0.2s" }}>
                   Some Land name, longer names with 3 lorem ipsum ipsum lorem...
                 </Typography>
                 <Typography sx={{ fontSize: 12, color: "grey.600", display: "flex", alignItems: "center", gap: 0.5 }}>
