@@ -46,7 +46,7 @@ const FindPropertySignature = ({ goBack }: { goBack: () => void }) => {
         <Box sx={{ bgcolor: "green.100", p: 3, borderRadius: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
           <Typography sx={{ fontWeight: 500, fontSize: 14, color: "grey.800" }}>Your Free Valuation</Typography>
           <Typography sx={{ fontSize: 36, fontWeight: 600, color: "primary.main" }}>
-            {values?.salePrice && numFormatter.format(values.salePrice)}
+            {values?.salePrice && numFormatter.format(values.sellerType === "sale" ? values.salePrice : (values.salePrice * 60) / 100)}
           </Typography>
         </Box>
         <Box

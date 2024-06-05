@@ -150,13 +150,13 @@ const FindPropertyCalculatesPrices = ({
           <Typography sx={{ fontSize: 12, color: "grey.800", fontWeight: 500, mb: 1.5 }}>We buy for</Typography>
           <Typography
             sx={{
-              fontSize: getFontSize(numFormatter.format((data?.price || 0 * 50) / 100)),
+              fontSize: getFontSize(numFormatter.format((data?.price || 0 * 60) / 100)),
               fontWeight: 600,
               mb: 4,
               color: "primary.main",
             }}
           >
-            {data?.price && numFormatter.format((data.price * 50) / 100)}
+            {data?.price && numFormatter.format((data.price * 60) / 100)}
           </Typography>
           <Typography sx={{ fontSize: 16, fontWeight: 500, textAlign: "center", mb: 4 }}>
             Sell your property{" "}
