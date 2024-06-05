@@ -4,7 +4,7 @@ import LandsMarketplaceSearch from "@/components/lands-marketplace/LandsMarketpl
 import SectionHeader from "@/components/shared/SectionHeader";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
 import { Box, Button, CircularProgress, Container, Pagination, Skeleton, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/LandsMarketplaceFilters";
 import { BookmarkBorderOutlined, CalendarMonth, FmdGoodOutlined, Place } from "@mui/icons-material";
 import { Location, UserSquare } from "iconsax-react";
@@ -13,8 +13,11 @@ import { useGetSellingPropertiesQuery } from "@/lib/features/apis/propertyApi";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { numFormatter } from "@/helpers/common";
 import moment from "moment";
+import routes from "@/helpers/routes";
+import { useRouter } from "next/navigation";
 
 const LandsMarketPlacePage = () => {
+  const router = useRouter();
   const [filters, setFilters] = useState<ILandsMarketplaceFilters>({
     price: null,
     acreage: null,
@@ -25,7 +28,13 @@ const LandsMarketPlacePage = () => {
     sellerType: "sale",
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
-  const { isLoading, data } = useGetSellingPropertiesQuery(filters);
+  const { isFetching, data, isError } = useGetSellingPropertiesQuery(filters);
+
+  useEffect(() => {
+    if (isError) {
+      router.push(routes.auth.signIn);
+    }
+  }, [isError, router]);
 
   return (
     <Container sx={{ py: { xs: 3, md: 4 }, display: "flex", flexDirection: "column" }}>
@@ -55,7 +64,7 @@ const LandsMarketPlacePage = () => {
           gap: { xs: 3, md: 4 },
         }}
       >
-        {isLoading && (
+        {isFetching && (
           <>
             <Skeleton variant="rectangular" sx={{ height: 200, borderRadius: 5 }} />
             <Skeleton variant="rectangular" sx={{ height: 200, borderRadius: 5 }} />
@@ -67,7 +76,7 @@ const LandsMarketPlacePage = () => {
             <Skeleton variant="rectangular" sx={{ height: 200, borderRadius: 5 }} />
           </>
         )}
-        {!isLoading &&
+        {!isFetching &&
           data?.data.sellingProperties.map((item) => {
             const state = getAllStates().find((el) => el.value === item.state.toLocaleLowerCase());
             const counties = getCounties(state?.value!);
@@ -157,14 +166,20 @@ const LandsMarketPlacePage = () => {
             );
           })}
       </Box>
-      <Pagination
-        sx={{ m: "auto" }}
-        color="primary"
-        count={data?.data.pagination.totalCount}
-        page={filters.page}
-        variant="outlined"
-        shape="rounded"
-      />
+      {!isFetching && data?.data && (
+        <Pagination
+          sx={{ m: "auto" }}
+          color="primary"
+          count={Math.ceil(data?.data?.pagination?.totalCount / filters.pageSize)}
+          page={filters.page}
+          variant="outlined"
+          shape="rounded"
+          onChange={(_, page) => {
+            setFilters({ ...filters, page });
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+          }}
+        />
+      )}
     </Container>
   );
 };
