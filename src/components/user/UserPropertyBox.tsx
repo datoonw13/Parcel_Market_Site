@@ -8,6 +8,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import moment from "moment";
 import LoadingCircle from "@/icons/LoadingCircle";
 import { ISellingProperty } from "@/types/find-property";
+import clsx from "clsx";
 import Button from "../shared/Button";
 
 const SharedMap = dynamic(() => import("@/components/shared/SharedMap"), { ssr: false });
@@ -55,12 +56,14 @@ const UserPropertyBox = ({ data }: { data: ISellingProperty }) => (
           </div>
           <div className="flex gap-2 items-center">
             <p className="text-sm md:text-base text-[#868686] font-semibold">Average market price:</p>
-            <p className="text-sm md:text-base text-[#363636] font-extrabold">{data.marketPrice} $</p>
-          </div>
-          <div className="flex gap-2 items-center">
-            <p className="text-sm md:text-base text-[#868686] font-semibold">Requested sales price:</p>
             <p className="text-sm md:text-base text-[#363636] font-extrabold">{data.salePrice} $</p>
           </div>
+          {data.sellerType === "instantsale" && (
+            <div className="flex gap-2 items-center">
+              <p className="text-sm md:text-base text-[#868686] font-semibold">Requested sales price:</p>
+              <p className="text-sm md:text-base text-[#363636] font-extrabold">{data.marketPrice} $</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -80,14 +83,18 @@ const UserPropertyBox = ({ data }: { data: ISellingProperty }) => (
         View On Map
       </Button>
     </div>
-    <div className="bg-[#FFF4DC] p-4 rounded-lg">
+    <div className={clsx("p-4 rounded-lg", data.sellerType === "sale" ? "bg-green-200" : "bg-[#FFF4DC]")}>
       <div className="flex flex-row gap-3">
         <Warning2 size={24} color="#FFBD23" />
         <div className="flex gap-1 flex-col">
-          <p className="text-[#363636] font-semibold text-sm">your application is being processed</p>
-          <p className="text-xs text-[#363636]/[.9]">
-            Site administration will contact you within {3 - moment(new Date()).diff(data.dataCreated)} working days
+          <p className="text-[#363636] font-semibold text-sm">
+            {data.sellerType === "sale" ? "Item is placed on marketplace" : "Your application is being processed"}
           </p>
+          {data.sellerType === "instantsale" && (
+            <p className="text-xs text-[#363636]/[.9]">
+              Site administration will contact you within {3 - moment(new Date()).diff(data.dataCreated)} working days
+            </p>
+          )}
         </div>
       </div>
     </div>
