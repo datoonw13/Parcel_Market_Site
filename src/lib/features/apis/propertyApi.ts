@@ -1,10 +1,11 @@
-import { ResponseType } from "@/types/common";
+import { IPagination, ResponseType } from "@/types/common";
 import { IMap } from "@/types/map";
 import {
   IFindPropertyEstimatedPrice,
   IFindPropertyEstimatedPriceResponse,
   IRegridReq,
   ISellProperty,
+  ISellingProperty,
   IUserSellingPropertiesResponse,
 } from "@/types/find-property";
 import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
@@ -65,7 +66,14 @@ const propertyApi = baseApi.injectEndpoints({
         body: arg,
       }),
     }),
-    getSellingProperties: build.query<void, ILandsMarketplaceFilters>({
+    getSellingProperties: build.query<
+      ResponseType<
+        {
+          sellingProperties: Array<ISellingProperty>;
+        } & IPagination
+      >,
+      ILandsMarketplaceFilters
+    >({
       query: (arg) => ({
         url: "/selling-properties",
         method: "GET",
