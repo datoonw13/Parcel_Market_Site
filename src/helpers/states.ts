@@ -1,8 +1,23 @@
 import { usaStatesFull } from "typed-usa-states";
 
+const statesBlackList = [
+  "Louisiana",
+  "Montana",
+  "Texas",
+  "Idaho",
+  "Mississippi",
+  "New",
+  "Mexico",
+  "Utah",
+  "Kansas",
+  "Missouri",
+  "North",
+  "Dakota",
+  "Wyoming",
+];
 export const getAllStates = () =>
   usaStatesFull
-    .filter((el) => el.contiguous)
+    .filter((el) => el.contiguous && !statesBlackList.includes(el.name))
     .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
 
 export const getCounties = (state: string | null) => {
