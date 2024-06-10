@@ -44,6 +44,7 @@ export interface UserModel {
   mailingAddress: string;
   state: string;
   county: string;
+  id: number;
 }
 
 export interface ISignUpResponse {
