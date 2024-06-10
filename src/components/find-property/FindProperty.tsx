@@ -73,7 +73,7 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
               activeStep={step}
               steps={Object.keys(Steps)
                 .map((x) => Number(x))
-                .filter((el) => !Number.isNaN(el))}
+                .filter((el) => !Number.isNaN(el) && el !== Steps.SIGNATURE)}
             />
             <Divider sx={{ my: 3 }} />
             <Box sx={{ px: { xs: 2, md: 3, lg: 4 } }}>
