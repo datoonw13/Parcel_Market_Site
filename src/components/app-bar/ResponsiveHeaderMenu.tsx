@@ -7,9 +7,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Input } from "@mui/icons-material";
 import { Box, ClickAwayListener, Drawer, IconButton } from "@mui/material";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.authedUser.user);
 
@@ -64,7 +66,7 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "start",
-                "& > a": {
+                "& > div > a": {
                   fontSize: { xs: 14 },
                   py: 1.25,
                   "&:hover": { color: "primary.main" },
@@ -75,13 +77,23 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
                 },
               }}
             >
-              <Link href="/">Sell your property</Link>
-              <Link href="/">Find a Preferred Land Agent</Link>
-              <Link href="/about-us">About Us</Link>
-              <Link href="/">Value my land for free</Link>
-              <Link href={routes.auth.signIn} onClick={() => dispatch(logOut())}>
-                <Input fontSize="small" /> {user ? "Sign Out" : "Sign In"}
-              </Link>
+              <Box sx={{ color: pathname.includes("/about-us") ? "primary.main" : "inherit" }}>
+                <Link href="/about-us">About Us</Link>
+              </Box>
+              <Box>
+                <Link href="/">Find a Preferred Land Agent</Link>
+              </Box>
+              <Box>
+                <Link href="/find-property">Sell your property</Link>
+              </Box>
+              <Box>
+                <Link href="/find-property">Value my land for free</Link>
+              </Box>
+              <Box>
+                <Link href={routes.auth.signIn} onClick={() => dispatch(logOut())}>
+                  <Input fontSize="small" /> {user ? "Sign Out" : "Sign In"}
+                </Link>
+              </Box>
             </Box>
           </Drawer>
         </>
