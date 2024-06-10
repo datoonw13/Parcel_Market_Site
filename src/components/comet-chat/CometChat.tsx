@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import { useAppSelector } from "@/lib/hooks";
 import { CometChat as Chat } from "@cometchat/chat-sdk-javascript";
+import { CircularProgress } from "@mui/material";
 
 const COMETCHAT_CONSTANTS = {
   APP_ID: "258993edb46dedf6", // Replace with your App ID
@@ -68,8 +69,6 @@ const CometChat = () => {
     }
   };
 
-  console.log(user);
-
   useEffect(() => {
     if (authedUser) {
       initChat();
@@ -78,7 +77,11 @@ const CometChat = () => {
   return (
     <div className="conversationswithmessages" style={{ width: "100%", height: "100vh" }}>
       <div style={{ width: "100%", height: "100vh" }}>
-        {user && <CometChatConversationsWithMessages user={user} messageText="Conversations With Messages" />}
+        {user ? (
+          <CometChatConversationsWithMessages user={user} messageText="Conversations With Messages" />
+        ) : (
+          <CircularProgress sx={{ m: "auto", display: "flex", alignItems: "center" }} />
+        )}
       </div>
     </div>
   );
