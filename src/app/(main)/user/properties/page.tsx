@@ -4,10 +4,14 @@ import UserPropertyBox from "@/components/user/UserPropertyBox";
 import LoadingCircle from "@/icons/LoadingCircle";
 import { useGetUserSellingPropertiesQuery } from "@/lib/features/apis/propertyApi";
 import { Container } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 
 const UserSellingProperties = () => {
   const { data, isFetching, isLoading } = useGetUserSellingPropertiesQuery();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Container>
       <div className="my-[60px]">
