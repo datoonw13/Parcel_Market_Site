@@ -86,9 +86,6 @@ const FindPropertyCalculatePriceMap = ({ parcels, mainParcel, price }: IProps) =
             <Marker position={[parcel.lat as any, parcel.lng as any]}>
               <Popup>
                 <div>
-                  Owner: <b>{parcel.owner}</b>
-                </div>
-                <div>
                   Arcage: <b>#{parcel.arcage}</b>
                 </div>
                 <div>
