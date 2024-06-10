@@ -13,39 +13,6 @@ const COMETCHAT_CONSTANTS = {
   AUTH_KEY: "d45257747819de9f4455f4fd0ad13736b0be7677", // Replace with your Auth Key
 };
 
-// (async () => {
-//   const uiKitSettings = new UIKitSettingsBuilder()
-//     .setAppId(COMETCHAT_CONSTANTS.APP_ID)
-//     .setRegion(COMETCHAT_CONSTANTS.REGION)
-//     .setAuthKey(COMETCHAT_CONSTANTS.AUTH_KEY)
-//     .subscribePresenceForAllUsers()
-//     .build();
-//   try {
-//     await CometChatUIKit.init(uiKitSettings);
-//     // console.log("Initialization completed successfully");
-//     // const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-//     // root.render(<App />);
-//   } catch (error) {
-//     console.log("Initialization failed with error:", error);
-//   }
-// })();
-
-// const UID = "superhero1"; // Replace with your UID
-
-// CometChatUIKit.getLoggedinUser().then((user) => {
-//   if (!user) {
-//     // Login user
-//     CometChatUIKit.login(UID)
-//       .then((user) => {
-//         console.log("Login Successful:", { user });
-//         // mount your app
-//       })
-//       .catch(console.log);
-//   } else {
-//     // mount your app
-//   }
-// });
-
 const CometChat = () => {
   const [user, setUser] = useState<any>();
   useAuthCheck();
