@@ -26,13 +26,13 @@ const LandsMarketplaceDesktopFilters = ({ filters, setFilters }: IProps) => (
     />
     <LandsMarketplaceFiltersMinMaxAutocomplete
       options={acreagesFilters}
-      onSelect={(acreage) => setFilters({ ...filters, acreage })}
+      onSelect={(acreage) => setFilters({ ...filters, acreageMin: acreage?.min || null, acreageMax: acreage?.max || null })}
       placeholder="Acreage"
       getLabel={getAcreageLabel}
     />
     <LandsMarketplaceFiltersMinMaxAutocomplete
       options={priceFilters}
-      onSelect={(price) => setFilters({ ...filters, price })}
+      onSelect={(price) => setFilters({ ...filters, priceMin: price?.min || null, priceMax: price?.max || null })}
       placeholder="VOLT Price"
       getLabel={getPriceLabel}
     />

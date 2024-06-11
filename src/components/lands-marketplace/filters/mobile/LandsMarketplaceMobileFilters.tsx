@@ -16,9 +16,11 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
   const [open, setOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState<FiltersType | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<ILandsMarketplaceFilters>({
-    acreage: null,
+    acreageMin: null,
+    acreageMax: null,
     county: null,
-    price: null,
+    priceMin: null,
+    priceMax: null,
     state: null,
     page: 1,
     pageSize: 10,
@@ -157,14 +159,14 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                 <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
                   <Box sx={{ display: "grid", gridTemplateColumns: "1fr 8px 1fr", gap: 0.5, width: "100%", alignItems: "center", mb: 1.5 }}>
                     <TextField
-                      value={selectedFilters.acreage?.min || ""}
+                      value={selectedFilters.acreageMin || ""}
                       onChange={(e) => {
-                        const newAcreageFilters = { ...(selectedFilters.acreage || { min: null, max: null }) };
+                        const newAcreageFilters = { min: selectedFilters.acreageMin, max: selectedFilters.acreageMax };
                         newAcreageFilters.min = Number(e.target.value) || null;
                         if (!newAcreageFilters.min && !newAcreageFilters.max) {
-                          setSelectedFilters({ ...selectedFilters, acreage: null });
+                          setSelectedFilters({ ...selectedFilters, acreageMin: null, acreageMax: null });
                         } else {
-                          setSelectedFilters({ ...selectedFilters, acreage: { ...newAcreageFilters } });
+                          setSelectedFilters({ ...selectedFilters, acreageMin: newAcreageFilters.min, acreageMax: newAcreageFilters.max });
                         }
                       }}
                       InputProps={{ sx: { minHeight: 38 } }}
@@ -174,14 +176,14 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                     />
                     <Divider sx={{ width: "100%", height: 2 }} />
                     <TextField
-                      value={selectedFilters.acreage?.max || ""}
+                      value={selectedFilters.acreageMax || ""}
                       onChange={(e) => {
-                        const newAcreageFilters = { ...(selectedFilters.acreage || { min: null, max: null }) };
+                        const newAcreageFilters = { min: selectedFilters.acreageMin, max: selectedFilters.acreageMax };
                         newAcreageFilters.max = Number(e.target.value) || null;
                         if (!newAcreageFilters.min && !newAcreageFilters.max) {
-                          setSelectedFilters({ ...selectedFilters, acreage: null });
+                          setSelectedFilters({ ...selectedFilters, acreageMin: null, acreageMax: null });
                         } else {
-                          setSelectedFilters({ ...selectedFilters, acreage: { ...newAcreageFilters } });
+                          setSelectedFilters({ ...selectedFilters, acreageMin: newAcreageFilters.min, acreageMax: newAcreageFilters.max });
                         }
                       }}
                       InputProps={{ sx: { minHeight: 38 } }}
@@ -194,11 +196,9 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                     <FormControlLabel
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
                       value={acreage}
-                      control={
-                        <Radio checked={acreage.min === selectedFilters.acreage?.min && acreage.max === selectedFilters.acreage?.max} />
-                      }
+                      control={<Radio checked={acreage.min === selectedFilters.acreageMin && acreage.max === selectedFilters.acreageMax} />}
                       label={getAcreageLabel(acreage)}
-                      onChange={() => setSelectedFilters({ ...selectedFilters, acreage })}
+                      onChange={() => setSelectedFilters({ ...selectedFilters, acreageMin: acreage.min, acreageMax: acreage.max })}
                       key={JSON.stringify(acreage)}
                     />
                   ))}
@@ -225,14 +225,14 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                 <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
                   <Box sx={{ display: "grid", gridTemplateColumns: "1fr 8px 1fr", gap: 0.5, width: "100%", alignItems: "center", mb: 1.5 }}>
                     <TextField
-                      value={selectedFilters.price?.min || ""}
+                      value={selectedFilters.priceMin || ""}
                       onChange={(e) => {
-                        const newPriceFilters = { ...(selectedFilters.price || { min: null, max: null }) };
+                        const newPriceFilters = { min: selectedFilters.priceMin, max: selectedFilters.priceMax };
                         newPriceFilters.min = Number(e.target.value) || null;
                         if (!newPriceFilters.min && !newPriceFilters.max) {
-                          setSelectedFilters({ ...selectedFilters, price: null });
+                          setSelectedFilters({ ...selectedFilters, priceMin: null, priceMax: null });
                         } else {
-                          setSelectedFilters({ ...selectedFilters, price: { ...newPriceFilters } });
+                          setSelectedFilters({ ...selectedFilters, priceMin: newPriceFilters.min, priceMax: newPriceFilters.max });
                         }
                       }}
                       InputProps={{ sx: { minHeight: 38 } }}
@@ -242,14 +242,14 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                     />
                     <Divider sx={{ width: "100%", height: 2 }} />
                     <TextField
-                      value={selectedFilters.price?.max || ""}
+                      value={selectedFilters.priceMax || ""}
                       onChange={(e) => {
-                        const newPriceFilters = { ...(selectedFilters.price || { min: null, max: null }) };
+                        const newPriceFilters = { min: selectedFilters.priceMin, max: selectedFilters.priceMax };
                         newPriceFilters.max = Number(e.target.value) || null;
                         if (!newPriceFilters.min && !newPriceFilters.max) {
-                          setSelectedFilters({ ...selectedFilters, price: null });
+                          setSelectedFilters({ ...selectedFilters, priceMin: null, priceMax: null });
                         } else {
-                          setSelectedFilters({ ...selectedFilters, price: { ...newPriceFilters } });
+                          setSelectedFilters({ ...selectedFilters, priceMin: newPriceFilters.min, priceMax: newPriceFilters.max });
                         }
                       }}
                       InputProps={{ sx: { minHeight: 38 } }}
@@ -262,9 +262,9 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                     <FormControlLabel
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
                       value={price}
-                      control={<Radio checked={price.min === selectedFilters.price?.min && price.max === selectedFilters.price?.max} />}
+                      control={<Radio checked={price.min === selectedFilters.priceMin && price.max === selectedFilters.priceMax} />}
                       label={getPriceLabel(price)}
-                      onChange={() => setSelectedFilters({ ...selectedFilters, price })}
+                      onChange={() => setSelectedFilters({ ...selectedFilters, priceMin: price.min, priceMax: price.max })}
                       key={JSON.stringify(price)}
                     />
                   ))}
