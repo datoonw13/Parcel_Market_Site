@@ -53,7 +53,7 @@ interface IProps {
   setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
 }
 const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem, setSelectedRegridItem }: IProps) => {
-  const [step, setStep] = useState(Steps.SIGNATURE);
+  const [step, setStep] = useState(Steps.PROPERTY_INFO);
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
   const { selectedParcelOptions, user } = useAppSelector((state) => state.authedUser);

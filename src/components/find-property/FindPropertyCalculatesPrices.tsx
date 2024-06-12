@@ -69,7 +69,7 @@ const FindPropertyCalculatesPrices = ({
   };
   return (
     <Box sx={{ display: "grid", gap: { xs: 3, md: 4 }, px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>
-      <Box sx={{ display: "grid", gridTemplateColumns: onlySmallScreen ? "1fr" : "1fr 1fr", gap: 2 }}>
+      <Box sx={{ display: "grid", gridTemplateColumns: onlySmallScreen ? "1fr" : "1fr", gap: 2 }}>
         <Box
           sx={(theme) => ({
             border: `1px solid ${theme.palette.grey[100]}`,
@@ -130,7 +130,7 @@ const FindPropertyCalculatesPrices = ({
             </Typography>
           </Typography>
         </Box>
-        <Box
+        {/* <Box
           sx={(theme) => ({
             border: `1px solid ${theme.palette.grey[100]}`,
             borderRadius: 4,
@@ -168,7 +168,7 @@ const FindPropertyCalculatesPrices = ({
           <Button variant="contained" sx={{ width: "100%" }} onClick={() => onSell("instantsale")}>
             Sell your property NOW
           </Button>
-        </Box>
+        </Box> */}
       </Box>
       <Divider sx={{ fontSize: 14, fontWeight: 500, color: "grey.800" }}>OR</Divider>
       <Box sx={{ display: "grid", gridTemplateColumns: onlySmallScreen ? "1fr" : "1fr 1fr", gap: 2 }}>
