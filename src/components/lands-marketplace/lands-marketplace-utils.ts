@@ -47,8 +47,10 @@ export const priceFilters = [
   },
 ];
 export const getAcreageLabel = (acreageMin: ILandsMarketplaceFilters["acreageMin"], acreageMax: ILandsMarketplaceFilters["acreageMax"]) => {
-  if (!acreageMin || !acreageMax) {
-    return "";
+  console.log(!acreageMax && acreageMin);
+
+  if (!acreageMin && !acreageMax) {
+    return "qwd";
   }
 
   if (acreageMax && !acreageMin) {
@@ -64,7 +66,7 @@ export const getAcreageLabel = (acreageMin: ILandsMarketplaceFilters["acreageMin
 };
 
 export const getPriceLabel = (priceMin: ILandsMarketplaceFilters["priceMin"], priceMax: ILandsMarketplaceFilters["priceMax"]) => {
-  if (!priceMin || !priceMax) {
+  if (!priceMin && !priceMax) {
     return "";
   }
 

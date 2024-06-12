@@ -50,6 +50,7 @@ const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placehol
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Box>
       <TextField
