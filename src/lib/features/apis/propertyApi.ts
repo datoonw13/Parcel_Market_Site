@@ -84,6 +84,13 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
       }),
       providesTags: ["selling-properties"],
     }),
+    getSellingProperty: build.query<ResponseType<ISellingProperty>, string>({
+      query: (propertyId) => ({
+        url: `/selling-properties/${propertyId}`,
+        method: "GET",
+      }),
+      providesTags: ["selling-properties"],
+    }),
     checkParcelSellingStatus: build.mutation<ResponseType<{ data: boolean }>, string>({
       query: (parcelNumber) => ({
         url: "/selling-properties/instant-sale",
@@ -105,5 +112,6 @@ export const {
   useGetUserSellingPropertiesQuery,
   useCheckParcelSellingStatusMutation,
   useGetSellingPropertiesQuery,
+  useGetSellingPropertyQuery,
 } = propertyApi;
 export default propertyApi;

@@ -15,6 +15,7 @@ import { numFormatter } from "@/helpers/common";
 import moment from "moment";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LandsMarketPlacePage = () => {
   const router = useRouter();
@@ -163,7 +164,9 @@ const LandsMarketPlacePage = () => {
                       {moment(item.dataCreated).add(3, "day").format("D MMM")}
                     </Typography>
                   </Typography>
-                  <Button variant="contained">Details</Button>
+                  <Link href={`lands-marketplace/${item.id}`}>
+                    <Button variant="contained">Details</Button>
+                  </Link>
                 </Box>
               </Box>
             );

@@ -20,7 +20,7 @@ export const getAllStates = () =>
     .filter((el) => el.contiguous && !statesBlackList.includes(el.name))
     .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
 
-export const getCounties = (state: string | null) => {
+export const getCounties = (state?: string | null) => {
   if (!state) {
     return [];
   }

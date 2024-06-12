@@ -47,8 +47,6 @@ export const priceFilters = [
   },
 ];
 export const getAcreageLabel = (acreageMin: ILandsMarketplaceFilters["acreageMin"], acreageMax: ILandsMarketplaceFilters["acreageMax"]) => {
-  console.log(!acreageMax && acreageMin);
-
   if (!acreageMin && !acreageMax) {
     return "qwd";
   }
