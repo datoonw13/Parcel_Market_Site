@@ -77,10 +77,11 @@ const PropertyInfo = ({ onNext }: IProps) => {
         reqData.parcelNumber = data.parcelNumber;
       }
       if (data.type === "entityName" && data.entityName) {
-        reqData.owner = data.entityName.toUpperCase();
+        reqData.firstName = data.entityName.toUpperCase();
       }
       if (data.type === "fullName" && data.firstName && data.lastName) {
-        reqData.owner = `${data.lastName} ${data.firstName}`.toUpperCase();
+        reqData.firstName = data.firstName;
+        reqData.lastName = data.lastName;
       }
       const res = await getRegrid(reqData).unwrap();
       onNext([...res.data] as any);

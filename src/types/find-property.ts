@@ -25,7 +25,8 @@ export interface IFindPropertyAbout {
 export interface IRegridReq {
   state: string;
   county: string;
-  owner?: string;
+  firstName?: string;
+  lastName?: string;
   parcelNumber?: string;
 }
 
