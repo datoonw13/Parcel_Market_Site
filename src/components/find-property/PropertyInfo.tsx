@@ -71,7 +71,7 @@ const PropertyInfo = ({ onNext }: IProps) => {
     try {
       const reqData: IRegridReq = {
         county: watch("county") || "",
-        state: watch("state")?.toUpperCase() || "",
+        state: watch("state") || "",
       };
       if (data.type === "parcelNumber" && data.parcelNumber) {
         reqData.parcelNumber = data.parcelNumber;
