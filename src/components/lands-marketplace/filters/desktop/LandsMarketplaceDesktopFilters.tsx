@@ -28,13 +28,13 @@ const LandsMarketplaceDesktopFilters = ({ filters, setFilters }: IProps) => (
       options={acreagesFilters}
       onSelect={(acreage) => setFilters({ ...filters, acreageMin: acreage?.min || null, acreageMax: acreage?.max || null })}
       placeholder="Acreage"
-      getLabel={getAcreageLabel}
+      getLabel={(value) => getAcreageLabel(value?.min || null, value?.max || null)}
     />
     <LandsMarketplaceFiltersMinMaxAutocomplete
       options={priceFilters}
       onSelect={(price) => setFilters({ ...filters, priceMin: price?.min || null, priceMax: price?.max || null })}
       placeholder="VOLT Price"
-      getLabel={getPriceLabel}
+      getLabel={(value) => getPriceLabel(value?.min || null, value?.max || null)}
     />
   </Box>
 );
