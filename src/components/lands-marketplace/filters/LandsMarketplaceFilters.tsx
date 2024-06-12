@@ -22,7 +22,7 @@ const LandsMarketplaceFilters = ({ filters, setFilters }: IProps) => (
     </Box>
     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
       <Typography sx={{ fontSize: 12, color: "grey.600", fontWeight: 500 }}>467,000 Lands</Typography>
-      <LandsMarketPlaceSort />
+      <LandsMarketPlaceSort filters={filters} setFilters={setFilters} />
     </Box>
   </Box>
 );

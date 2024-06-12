@@ -79,7 +79,7 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
         url: "/selling-properties",
         method: "GET",
         params: {
-          ...arg,
+          ...Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null)),
         },
       }),
       providesTags: ["selling-properties"],

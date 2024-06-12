@@ -108,6 +108,7 @@ export interface ISellingProperty extends ISellProperty {
   user: { id: string; name: string; email: string };
   dataCreated: Date;
   marketPrice: string;
+  id: number;
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{

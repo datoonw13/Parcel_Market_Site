@@ -24,7 +24,8 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
     state: null,
     page: 1,
     pageSize: 10,
-    sellerType: "instantsale",
+    sellerType: "sale",
+    sortBy: null,
   });
 
   const toggleFilter = (filter: FiltersType) => (openFilter === filter ? setOpenFilter(null) : setOpenFilter(filter));
@@ -74,7 +75,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
             <Typography sx={{ fontSize: 16, fontWeight: 500, my: 2 }}>Filter By</Typography>
             <Divider />
           </Box>
-          <Box sx={{ width: "100%", pb: 2 }}>
+          <Box sx={{ width: "100%", pb: 2, height: "100%" }}>
             <Box sx={{ p: 2, pb: 0 }}>
               <Box
                 sx={{

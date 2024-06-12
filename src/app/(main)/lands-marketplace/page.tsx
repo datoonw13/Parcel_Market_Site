@@ -19,13 +19,16 @@ import { useRouter } from "next/navigation";
 const LandsMarketPlacePage = () => {
   const router = useRouter();
   const [filters, setFilters] = useState<ILandsMarketplaceFilters>({
-    price: null,
-    acreage: null,
+    priceMin: null,
+    priceMax: null,
+    acreageMin: null,
+    acreageMax: null,
     county: null,
     state: null,
     page: 1,
     pageSize: 10,
     sellerType: "sale",
+    sortBy: null,
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const { isFetching, data, isError } = useGetSellingPropertiesQuery(filters);
@@ -83,7 +86,7 @@ const LandsMarketPlacePage = () => {
 
             return (
               <Box
-                key={item.parcelNumber}
+                key={item.id}
                 sx={{
                   borderWidth: 1,
                   borderRadius: 4,
