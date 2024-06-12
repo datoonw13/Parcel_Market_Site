@@ -49,6 +49,20 @@ const FindPropertySignature = ({ goBack }: { goBack: () => void }) => {
             {values?.salePrice && numFormatter.format(values.sellerType === "sale" ? values.salePrice : (values.salePrice * 60) / 100)}
           </Typography>
         </Box>
+        <Box sx={{ mt: 1.5, display: "flex", justifyContent: "space-between", flexWrap: "wrap", rowGap: 1, columnGap: 3 }}>
+          <Typography sx={{ fontWeight: "400", fontSize: 14 }}>
+            Owner:{" "}
+            <Typography component="span" sx={{ fontWeight: 500, fontSize: 14 }}>
+              {values?.owner}
+            </Typography>
+          </Typography>
+          <Typography sx={{ fontWeight: "400", fontSize: 14 }}>
+            Parcel ID:{" "}
+            <Typography component="span" sx={{ fontWeight: 500, fontSize: 14 }}>
+              {values?.parcelNumber}
+            </Typography>
+          </Typography>
+        </Box>
         <Box
           sx={(theme) => ({
             border: { xs: `1px solid transparent`, md: `1px solid ${theme.palette.grey[100]}` },
