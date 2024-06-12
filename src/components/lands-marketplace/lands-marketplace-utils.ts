@@ -46,36 +46,36 @@ export const priceFilters = [
     max: null,
   },
 ];
-export const getAcreageLabel = (value: ILandsMarketplaceFilters["acreage"]) => {
-  if (!value) {
+export const getAcreageLabel = (acreageMin: ILandsMarketplaceFilters["acreageMin"], acreageMax: ILandsMarketplaceFilters["acreageMax"]) => {
+  if (!acreageMin || !acreageMax) {
     return "";
   }
 
-  if (value.max && !value.min) {
-    return `N/A - ${value.max} Acres`;
+  if (acreageMax && !acreageMin) {
+    return `N/A - ${acreageMax} Acres`;
   }
-  if (!value.max && value.min) {
-    return `${value.min - 1}+ Acres`;
+  if (!acreageMax && acreageMin) {
+    return `${acreageMin - 1}+ Acres`;
   }
-  if (value.max && value.min) {
-    return `${value.min} - ${value.max} Acres`;
+  if (acreageMax && acreageMin) {
+    return `${acreageMin} - ${acreageMax} Acres`;
   }
   return "";
 };
 
-export const getPriceLabel = (value: ILandsMarketplaceFilters["acreage"]) => {
-  if (!value) {
+export const getPriceLabel = (priceMin: ILandsMarketplaceFilters["priceMin"], priceMax: ILandsMarketplaceFilters["priceMax"]) => {
+  if (!priceMin || !priceMax) {
     return "";
   }
 
-  if (typeof value.max === "number" && typeof value.min !== "number") {
-    return `N/A - ${numFormatter.format(value.max)}`;
+  if (typeof priceMax === "number" && typeof priceMin !== "number") {
+    return `N/A - ${numFormatter.format(priceMax)}`;
   }
-  if (typeof value.max !== "number" && typeof value.min === "number") {
-    return `${numFormatter.format(value.min)} +`;
+  if (typeof priceMax !== "number" && typeof priceMin === "number") {
+    return `${numFormatter.format(priceMin)} +`;
   }
-  if (typeof value.max === "number" && typeof value.min === "number") {
-    return `${numFormatter.format(value.min)} - ${numFormatter.format(value.max)}`;
+  if (typeof priceMax === "number" && typeof priceMin === "number") {
+    return `${numFormatter.format(priceMin)} - ${numFormatter.format(priceMax)}`;
   }
   return "";
 };

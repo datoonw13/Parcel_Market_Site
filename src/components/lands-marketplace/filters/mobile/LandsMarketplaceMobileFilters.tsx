@@ -198,7 +198,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
                       value={acreage}
                       control={<Radio checked={acreage.min === selectedFilters.acreageMin && acreage.max === selectedFilters.acreageMax} />}
-                      label={getAcreageLabel(acreage)}
+                      label={getAcreageLabel(acreage.min, acreage.max)}
                       onChange={() => setSelectedFilters({ ...selectedFilters, acreageMin: acreage.min, acreageMax: acreage.max })}
                       key={JSON.stringify(acreage)}
                     />
@@ -264,7 +264,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
                       value={price}
                       control={<Radio checked={price.min === selectedFilters.priceMin && price.max === selectedFilters.priceMax} />}
-                      label={getPriceLabel(price)}
+                      label={getPriceLabel(price.min, price.max)}
                       onChange={() => setSelectedFilters({ ...selectedFilters, priceMin: price.min, priceMax: price.max })}
                       key={JSON.stringify(price)}
                     />
