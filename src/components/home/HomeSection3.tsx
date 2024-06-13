@@ -1,7 +1,10 @@
 "use client";
 
+import routes from "@/helpers/routes";
+import { useAppSelector } from "@/lib/hooks";
 import { Box, Button, Typography, alpha } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,6 +13,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 const HomeSection3 = () => {
   const ref = useRef<HTMLDivElement>();
+  const user = useAppSelector((state) => state.authedUser.user);
+  const router = useRouter();
 
   const calcLeftSpace = () => {
     const el = document.getElementById("root-header-logo");
@@ -36,7 +41,17 @@ const HomeSection3 = () => {
             place to start when making decisions regarding vacant land.
           </Typography>
         </Box>
-        <Button variant="contained" sx={{ width: { md: "fit-content" } }}>
+        <Button
+          variant="contained"
+          sx={{ width: { md: "fit-content" } }}
+          onClick={() => {
+            if (user) {
+              router.push(routes.home.marketplace);
+            } else {
+              router.push(`${routes.auth.signIn}?from=marketplace`);
+            }
+          }}
+        >
           View All
         </Button>
       </Box>

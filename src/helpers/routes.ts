@@ -1,6 +1,7 @@
 const routes = {
   home: {
     root: "/",
+    marketplace: "/lands-marketplace",
   },
   auth: {
     root: "/auth",

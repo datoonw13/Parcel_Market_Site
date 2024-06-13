@@ -14,13 +14,15 @@ import { Box, Checkbox, Divider, FormControlLabel, IconButton, InputAdornment, T
 import { useGoogleLogin } from "@react-oauth/google";
 import { Eye, EyeSlash } from "iconsax-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 const NewAuth = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [authUser, { isLoading }] = useAuthMutation();
   const [showPassword, setShowPassword] = useState(false);
   const { selectedParcelOptions } = useAppSelector((state) => state.authedUser);
@@ -38,11 +40,21 @@ const NewAuth = () => {
     },
   });
 
+  const handleRedirect = () => {
+    if (selectedParcelOptions) {
+      router.push(routes.propertySearch.signature);
+    } else if (searchParams.get("from") === "marketplace") {
+      router.push(routes.home.marketplace);
+    } else {
+      router.push(routes.home.root);
+    }
+  };
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       const res = await authUser(data).unwrap();
       toast.success("You have successfully logged in");
-      router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+      handleRedirect();
       localStorage.setItem("token", res.data.access_token);
     } catch (error) {
       localStorage.removeItem("token");
@@ -55,7 +67,7 @@ const NewAuth = () => {
         const res = await googleAuth(tokenResponse.access_token).unwrap();
         if ("access_token" in res.data) {
           toast.success("You have successfully logged in");
-          router.push(selectedParcelOptions ? routes.propertySearch.root : routes.home.root);
+          handleRedirect();
           localStorage.setItem("token", res.data.access_token);
         } else {
           router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
