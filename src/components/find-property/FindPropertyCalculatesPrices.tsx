@@ -170,7 +170,7 @@ const FindPropertyCalculatesPrices = ({
           </Button>
         </Box> */}
       </Box>
-      <Divider sx={{ fontSize: 14, fontWeight: 500, color: "grey.800" }}>OR</Divider>
+      {/* <Divider sx={{ fontSize: 14, fontWeight: 500, color: "grey.800" }}>OR</Divider> */}
       <Box sx={{ display: "grid", gridTemplateColumns: onlySmallScreen ? "1fr" : "1fr 1fr", gap: 2 }}>
         <Box
           sx={(theme) => ({
