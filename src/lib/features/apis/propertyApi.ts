@@ -62,7 +62,7 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
     }),
     getUserSellingProperties: build.query<IUserSellingPropertiesResponse, void>({
       query: (arg) => ({
-        url: "/selling-properties/for-sale",
+        url: "/selling-properties/user/properties",
         method: "GET",
         body: arg,
       }),
