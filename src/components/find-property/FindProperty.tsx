@@ -132,12 +132,12 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
               goBack={() => {
                 setStep(Steps.CALCULATED_PRICE);
               }}
-              onNext={(res) => {
+              onNext={() => {
                 setStep(Steps.SIGNATURE);
-                setCalculatedPrice(res);
               }}
               selectedRegridItem={selectedRegridItem}
               sellerType={sellerType}
+              price={calculatedPrice?.price ?? 0}
             />
           </Box>
           {step === Steps.SIGNATURE && (

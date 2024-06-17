@@ -1,10 +1,14 @@
+import routes from "@/helpers/routes";
 import { useLazyCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
+import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { IFindPropertyAbout, IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { findPropertyAbout } from "@/validations/find-property-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 import React, { forwardRef } from "react";
 import { useForm } from "react-hook-form";
 
@@ -35,14 +39,16 @@ const NumberFormatCustom = forwardRef((props: any, inputRef: any) => {
 
 interface IProps {
   goBack: () => void;
-  onNext: (data: IFindPropertyEstimatedPriceResponse) => void;
+  onNext: () => void;
   selectedRegridItem: IMapItem | null;
   sellerType: ISellProperty["sellerType"];
+  price: number;
 }
 
-const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType }: IProps) => {
-  const [calculatePrice] = useLazyCalculatePriceQuery();
-
+const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, price }: IProps) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.authedUser.user);
+  const router = useRouter();
   const {
     handleSubmit,
     formState: { errors, isSubmitted, isSubmitting },
@@ -64,7 +70,31 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType }: I
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("aqaa");
+    if (!data || !selectedRegridItem) {
+      return;
+    }
+    dispatch(
+      setSelectedParcelOptions({
+        state: selectedRegridItem?.properties.fields.state2,
+        county: selectedRegridItem?.properties.fields.county,
+        propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
+        acrage: selectedRegridItem.properties.fields.ll_gisacre,
+        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb_no_formatting,
+        sellerType,
+        owner: selectedRegridItem.properties.fields.owner,
+        salePrice: price || 0,
+        accepted: true,
+        coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
+        ...data,
+      })
+    );
+    if (!user) {
+      router.push(routes.auth.signIn);
+    } else {
+      onNext();
+    }
   });
 
   return (

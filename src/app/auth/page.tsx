@@ -42,7 +42,7 @@ const NewAuth = () => {
 
   const handleRedirect = () => {
     if (selectedParcelOptions) {
-      router.push(routes.propertySearch.signature);
+      router.push(routes.propertySearch.root);
     } else if (searchParams.get("from") === "marketplace") {
       router.push(routes.home.marketplace);
     } else {

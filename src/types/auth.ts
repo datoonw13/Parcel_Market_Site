@@ -1,4 +1,4 @@
-import { ISellProperty } from "./find-property";
+import { IFindPropertyAbout, ISellProperty } from "./find-property";
 
 export enum UserType {
   DEFAULT,
@@ -69,5 +69,5 @@ export type IAuthSliceInitial = {
   user: UserModel | null;
   pending: boolean;
   token: string | null;
-  selectedParcelOptions: ISellProperty | null;
+  selectedParcelOptions: (ISellProperty & IFindPropertyAbout) | null;
 };
