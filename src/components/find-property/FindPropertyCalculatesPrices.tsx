@@ -33,39 +33,13 @@ const FindPropertyCalculatesPrices = ({
 }: {
   data: IFindPropertyEstimatedPriceResponse | null;
   selectedRegridItem: IMapItem | null;
-  onNext: () => void;
+  onNext: (sellerType: ISellProperty["sellerType"]) => void;
 }) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.authedUser.user);
   const theme = useTheme();
   const onlySmallScreen = useMediaQuery(theme.breakpoints.down(650));
 
   const onSell = (sellerType: ISellProperty["sellerType"]) => {
-    if (!data || !selectedRegridItem) {
-      return;
-    }
-    dispatch(
-      setSelectedParcelOptions({
-        state: selectedRegridItem?.properties.fields.state2,
-        county: selectedRegridItem?.properties.fields.county,
-        propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
-        acrage: selectedRegridItem.properties.fields.ll_gisacre,
-        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb_no_formatting,
-        sellerType,
-        owner: selectedRegridItem.properties.fields.owner,
-        salePrice: data?.price || 0,
-        accepted: true,
-        coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
-        lat: selectedRegridItem.properties.fields.lat,
-        lon: selectedRegridItem.properties.fields.lon,
-      })
-    );
-    if (!user) {
-      router.push(routes.auth.signIn);
-    } else {
-      onNext();
-    }
+    onNext(sellerType);
   };
   return (
     <Box sx={{ display: "grid", gap: { xs: 3, md: 4 }, px: { xs: 2, md: 3, lg: 4, mb: 3 } }}>

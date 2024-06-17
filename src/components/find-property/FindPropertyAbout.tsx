@@ -1,5 +1,5 @@
 import { useLazyCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
-import { IFindPropertyAbout, IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { IFindPropertyAbout, IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { findPropertyAbout } from "@/validations/find-property-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -37,9 +37,10 @@ interface IProps {
   goBack: () => void;
   onNext: (data: IFindPropertyEstimatedPriceResponse) => void;
   selectedRegridItem: IMapItem | null;
+  sellerType: ISellProperty["sellerType"];
 }
 
-const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem }: IProps) => {
+const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType }: IProps) => {
   const [calculatePrice] = useLazyCalculatePriceQuery();
 
   const {
@@ -53,7 +54,6 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem }: IProps) => {
       improvementsValue: null,
       langCoverType: null,
       propertyAccess: null,
-      propertyCondition: null,
       propertyRestriction: null,
       waterFeature: null,
       waterFront: null,
@@ -64,30 +64,7 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem }: IProps) => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const { agreement, ...aboutProperty } = data;
-    if (!selectedRegridItem) {
-      return;
-    }
-    const reqData: IFindPropertyEstimatedPrice = {
-      body: {
-        ...aboutProperty,
-        county: selectedRegridItem?.properties.fields.county.toLocaleLowerCase(),
-        state: selectedRegridItem?.properties.fields.state2.toLocaleLowerCase(),
-        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb,
-        owner: selectedRegridItem.properties.fields.owner,
-        improvementsValue: data.improvementsValue || 0,
-        propertyType: selectedRegridItem.properties.fields?.zoning_description || selectedRegridItem.properties.fields.usedesc || "",
-      },
-      queryParams: {
-        acre: selectedRegridItem.properties.fields.ll_gisacre.toString(),
-        lat: selectedRegridItem.properties.fields.lat,
-        lon: selectedRegridItem.properties.fields.lon,
-      },
-    };
-    try {
-      const res = await calculatePrice({ ...reqData }).unwrap();
-      onNext(res.data);
-    } catch (error) {}
+    console.log("aqaa");
   });
 
   return (
@@ -247,24 +224,6 @@ const list = [
       {
         label: "Mixed",
         value: "Mixed",
-      },
-    ],
-  },
-  {
-    label: "What is the property condition?",
-    key: "propertyCondition",
-    options: [
-      {
-        label: "Clean and Ready to build on",
-        value: "Clean and Ready to build on",
-      },
-      {
-        label: "Needs some site work",
-        value: "Needs some site work",
-      },
-      {
-        label: "Needs Extensive site work",
-        value: "Needs Extensive site work",
       },
     ],
   },

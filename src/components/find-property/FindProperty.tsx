@@ -8,15 +8,15 @@ import FindPropertyFoundedParcels from "@/components/find-property/FindPropertyF
 import FindPropertyAbout from "@/components/find-property/FindPropertyAbout";
 import { IMap, IMapItem } from "@/types/map";
 import FindPropertyCalculatesPrices from "@/components/find-property/FindPropertyCalculatesPrices";
-import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { useAppSelector } from "@/lib/hooks";
 import FindPropertySignature from "./FindPropertySignature";
 
 enum Steps {
   PROPERTY_INFO,
   FOUNDED_PROPERTIES,
-  ABOUT_PROPERTY,
   CALCULATED_PRICE,
+  ABOUT_PROPERTY,
   SIGNATURE,
 }
 
@@ -57,6 +57,7 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
   const { stepDesc, stepTitle } = getStepInfo(step);
   const [regridData, setRegridData] = useState<IMap>([]);
   const { selectedParcelOptions, user } = useAppSelector((state) => state.authedUser);
+  const [sellerType, setSellerType] = useState<ISellProperty["sellerType"]>("sale");
 
   useEffect(() => {
     if (selectedParcelOptions && user) {
@@ -110,28 +111,33 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
               goBack={() => {
                 setStep(Steps.PROPERTY_INFO);
               }}
-              onNext={() => {
-                setStep(Steps.ABOUT_PROPERTY);
-              }}
-            />
-          </Box>
-          <Box sx={{ height: "100%", display: step === Steps.ABOUT_PROPERTY ? "block" : "none" }}>
-            <FindPropertyAbout
-              goBack={() => {
-                setStep(Steps.FOUNDED_PROPERTIES);
-              }}
               onNext={(res) => {
                 setStep(Steps.CALCULATED_PRICE);
                 setCalculatedPrice(res);
               }}
-              selectedRegridItem={selectedRegridItem}
             />
           </Box>
           <Box sx={{ height: "100%", display: step === Steps.CALCULATED_PRICE ? "block" : "none" }}>
             <FindPropertyCalculatesPrices
               data={calculatedPrice}
               selectedRegridItem={selectedRegridItem}
-              onNext={() => setStep(Steps.SIGNATURE)}
+              onNext={(value) => {
+                setStep(Steps.ABOUT_PROPERTY);
+                setSellerType(value);
+              }}
+            />
+          </Box>
+          <Box sx={{ height: "100%", display: step === Steps.ABOUT_PROPERTY ? "block" : "none" }}>
+            <FindPropertyAbout
+              goBack={() => {
+                setStep(Steps.CALCULATED_PRICE);
+              }}
+              onNext={(res) => {
+                setStep(Steps.SIGNATURE);
+                setCalculatedPrice(res);
+              }}
+              selectedRegridItem={selectedRegridItem}
+              sellerType={sellerType}
             />
           </Box>
           {step === Steps.SIGNATURE && (

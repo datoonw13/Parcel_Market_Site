@@ -14,7 +14,6 @@ export interface IFindPropertyAbout {
   waterFeature: boolean | null;
   waterFront: boolean | null;
   langCoverType: string | null;
-  propertyCondition: string | null;
   wetProperty: string | null;
   propertyRestriction: string | null;
   propertyAccess: string | null;
@@ -31,7 +30,7 @@ export interface IRegridReq {
 }
 
 export interface IFindPropertyEstimatedPrice {
-  body: Omit<IFindPropertyAbout, "agreement"> & {
+  body: {
     owner?: string;
     parcelNumber: string;
     propertyType: string;

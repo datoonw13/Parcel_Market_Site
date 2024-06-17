@@ -1,3 +1,5 @@
+import { useLazyCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
+import { IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
 import { IMap, IMapItem } from "@/types/map";
 import { PlaceOutlined } from "@mui/icons-material";
 import { Box, Button, Divider, Typography } from "@mui/material";
@@ -11,15 +13,41 @@ interface IProps {
   selectedRegridItem: IMapItem | null;
   setSelectedRegridItem: Dispatch<SetStateAction<IMapItem | null>>;
   goBack: () => void;
-  onNext: () => void;
+  onNext: (data: IFindPropertyEstimatedPriceResponse) => void;
 }
 
 const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegridItem, goBack, onNext }: IProps) => {
+  const [calculatePrice] = useLazyCalculatePriceQuery();
+
   useEffect(() => {
     if (data.length === 1) {
       setSelectedRegridItem(data[0]);
     }
   }, [data, setSelectedRegridItem]);
+
+  const onSubmit = async () => {
+    if (!selectedRegridItem) {
+      return;
+    }
+    const reqData: IFindPropertyEstimatedPrice = {
+      body: {
+        county: selectedRegridItem?.properties.fields.county.toLocaleLowerCase(),
+        state: selectedRegridItem?.properties.fields.state2.toLocaleLowerCase(),
+        parcelNumber: selectedRegridItem?.properties.fields.parcelnumb,
+        owner: selectedRegridItem.properties.fields.owner,
+        propertyType: selectedRegridItem.properties.fields?.zoning_description || selectedRegridItem.properties.fields.usedesc || "",
+      },
+      queryParams: {
+        acre: selectedRegridItem.properties.fields.ll_gisacre.toString(),
+        lat: selectedRegridItem.properties.fields.lat,
+        lon: selectedRegridItem.properties.fields.lon,
+      },
+    };
+    try {
+      const res = await calculatePrice({ ...reqData }).unwrap();
+      onNext(res.data);
+    } catch (error) {}
+  };
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>
@@ -111,7 +139,7 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
         <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="outlined" onClick={goBack}>
           Back
         </Button>
-        <Button disabled={!selectedRegridItem} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onNext}>
+        <Button disabled={!selectedRegridItem} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
           Tell us about your property
         </Button>
       </Box>
