@@ -43,9 +43,10 @@ interface IProps {
   selectedRegridItem: IMapItem | null;
   sellerType: ISellProperty["sellerType"];
   price: number;
+  propertyId?: number;
 }
 
-const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, price }: IProps) => {
+const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, price, propertyId }: IProps) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.authedUser.user);
   const router = useRouter();
@@ -87,6 +88,7 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, pri
         coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
         lat: selectedRegridItem.properties.fields.lat,
         lon: selectedRegridItem.properties.fields.lon,
+        propertyId,
         ...data,
       })
     );
@@ -201,7 +203,7 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, pri
           Back
         </Button>
         <LoadingButton loading={isSubmitting} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
-          Find out Your Estimated Sale Price
+          Continue
         </LoadingButton>
       </Box>
     </Box>

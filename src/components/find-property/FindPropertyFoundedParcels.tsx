@@ -140,7 +140,7 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
           Back
         </Button>
         <Button disabled={!selectedRegridItem} sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={onSubmit}>
-          Tell us about your property
+          Find out Your Estimated Sale Price
         </Button>
       </Box>
     </Box>

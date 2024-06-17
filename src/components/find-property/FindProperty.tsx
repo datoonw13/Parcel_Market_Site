@@ -138,6 +138,7 @@ const FindProperty = ({ calculatedPrice, setCalculatedPrice, selectedRegridItem,
               selectedRegridItem={selectedRegridItem}
               sellerType={sellerType}
               price={calculatedPrice?.price ?? 0}
+              propertyId={calculatedPrice?.id}
             />
           </Box>
           {step === Steps.SIGNATURE && (

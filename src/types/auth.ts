@@ -69,5 +69,5 @@ export type IAuthSliceInitial = {
   user: UserModel | null;
   pending: boolean;
   token: string | null;
-  selectedParcelOptions: (ISellProperty & IFindPropertyAbout) | null;
+  selectedParcelOptions: (ISellProperty & IFindPropertyAbout & { propertyId?: number }) | null;
 };
