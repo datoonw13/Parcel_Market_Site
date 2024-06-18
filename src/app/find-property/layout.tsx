@@ -15,10 +15,6 @@ import useAuthCheck from "@/hooks/useAuthCheck";
 import { LatLngTuple } from "leaflet";
 import { numFormatter } from "@/helpers/common";
 
-const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-property/FindPropertyCalculatePriceMap"), {
-  ssr: false,
-});
-
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
 function formatCompactNumber(number: number) {
@@ -49,11 +45,6 @@ const FindPropertyLayout = () => {
             {calculatedPrice ? (
               selectedRegridItem &&
               calculatedPrice && (
-                // <FindPropertyCalculatePriceMap
-                //   price={calculatedPrice.price}
-                //   mainParcel={selectedRegridItem}
-                //   parcels={calculatedPrice.properties}
-                // />
                 <Map
                   geolibInputCoordinates={[
                     [Number(selectedRegridItem.properties.fields.lat), Number(selectedRegridItem.properties.fields.lon)],

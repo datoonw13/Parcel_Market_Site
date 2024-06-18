@@ -5,13 +5,12 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { Box, Button, Divider, Slider, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { LatLngTuple } from "leaflet";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-property/FindPropertyCalculatePriceMap"), {
-  ssr: false,
-});
+const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
 const getFontSize = (val: string) => {
   if (val.length >= 10 && val.length <= 15) {
@@ -25,6 +24,11 @@ const getFontSize = (val: string) => {
   }
   return 48;
 };
+
+function formatCompactNumber(number: number) {
+  const formatter = Intl.NumberFormat("en", { notation: "compact" });
+  return formatter.format(number);
+}
 
 const FindPropertyCalculatesPrices = ({
   data,
@@ -203,7 +207,72 @@ const FindPropertyCalculatesPrices = ({
       </Box>
       {selectedRegridItem && data && (
         <Box sx={{ height: 366, width: "100%", display: { xs: "block", lg: "none" }, "& > div": { borderRadius: 4 } }}>
-          <FindPropertyCalculatePriceMap price={data.price} mainParcel={selectedRegridItem} parcels={data.properties} />
+          <Map
+            geolibInputCoordinates={[[Number(selectedRegridItem.properties.fields.lat), Number(selectedRegridItem.properties.fields.lon)]]}
+            zoom={10}
+            data={[
+              {
+                centerCoordinate: [Number(selectedRegridItem.properties.fields.lat), Number(selectedRegridItem.properties.fields.lon)],
+                markerColor: "custom",
+                customMarkerIcon: (
+                  <div
+                    style={{
+                      background: "#3EA266",
+                      boxShadow: "0px 0px 20px 0px #00000026",
+                      width: 80,
+                      height: 35,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 600,
+                      color: "white",
+                      borderRadius: 60,
+                    }}
+                  >
+                    {formatCompactNumber(data.price)}
+                  </div>
+                ),
+                parcelNumber: selectedRegridItem.properties.fields.parcelnumb,
+                polygon: selectedRegridItem.geometry.coordinates,
+                showMarker: true,
+                popup: {
+                  parcelNumber: {
+                    label: "Parcel Number",
+                    value: selectedRegridItem.properties.fields.parcelnumb,
+                  },
+                  acreage: {
+                    label: "Acreage",
+                    value: selectedRegridItem.properties.fields.ll_gisacre.toFixed(2),
+                  },
+                  showSelectButton: false,
+                },
+              },
+              ...data.properties.map((el) => ({
+                centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
+                parcelNumber: el.parselId,
+                showMarker: true,
+                popup: {
+                  parcelNumber: {
+                    label: "Parcel Number",
+                    value: el.parselId,
+                  },
+                  acreage: {
+                    label: "Acreage",
+                    value: el.arcage.toFixed(2),
+                  },
+                  lastSaleDate: {
+                    label: "Last Sale Date",
+                    value: el.lastSalesDate,
+                  },
+                  lastSalePrice: {
+                    label: "Last Sale Price",
+                    value: numFormatter.format(el.lastSalesPrice),
+                  },
+                  showSelectButton: false,
+                },
+              })),
+            ]}
+          />
         </Box>
       )}
     </Box>
