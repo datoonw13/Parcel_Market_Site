@@ -9,8 +9,12 @@ import PersonalId from "@/icons/PersonalId";
 import { useGetSellingPropertyQuery } from "@/lib/features/apis/propertyApi";
 import { Box, Button, Chip, Container, Divider, Typography } from "@mui/material";
 import { Calendar, Eye, Location, UserSquare } from "iconsax-react";
+import { LatLngTuple } from "leaflet";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import React from "react";
+
+const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
 interface IProps {
   params: {
@@ -22,12 +26,11 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
   const { isFetching, data } = useGetSellingPropertyQuery(params!.slug);
   const state = getAllStates().find((state) => state.value === data?.data.state.toLocaleLowerCase())?.label;
   const county = getCounties(data?.data.state.toLocaleLowerCase()).find((el) => el.value === data?.data.county)?.label;
-
   return (
     <Container sx={{ display: "flex", flexDirection: "column", gap: 3, pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 } }}>
       <BreadCrumb routName="Test Name" />
 
-      {isFetching ? (
+      {!data?.data ? (
         <div className="w-[260px] flex m-auto">
           <LoadingCircle />
         </div>
@@ -52,7 +55,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                   <Typography sx={{ fontSize: 12 }}>
                     Total Views:
                     <Typography component="span" sx={{ fontSize: 12, color: "black", fontWeight: 500, ml: 0.5 }}>
-                      2435
+                      {data?.data.totalViews}
                     </Typography>
                   </Typography>
                 </Box>
@@ -74,7 +77,36 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
           </Box>
           <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 1.5 }}>
             <Box sx={{ height: { xs: 200, sm: 250, md: 350, lg: 448 }, width: "100%", borderRadius: 2, position: "relative" }}>
-              <Image src="/property-map.png" fill alt="" />
+              {/* <Image src="/property-map.png" fill alt="" /> */}
+              <Map
+                geolibInputCoordinates={[[Number(data.data.lat), Number(data.data.lon)]]}
+                zoom={10}
+                data={[
+                  {
+                    centerCoordinate: [Number(data.data.lat), Number(data.data.lon)],
+                    markerColor: "red",
+                    parcelNumber: data.data.parcelNumber,
+                    polygon: JSON.parse(data.data.coordinates) as any,
+                    showMarker: true,
+                    popup: {
+                      owner: {
+                        label: "Owner",
+                        value: data.data.owner,
+                      },
+                      acreage: {
+                        label: "Acreage",
+                        value: Number(data.data.acrage).toFixed(2),
+                      },
+                      showSelectButton: false,
+                    },
+                  },
+                  ...data.data.usedForPriceCalculations.map((el) => ({
+                    centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
+                    parcelNumber: "",
+                    showMarker: true,
+                  })),
+                ]}
+              />
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" }, justifyContent: "space-between" }}>
               <Box sx={{ color: "grey.600", display: "flex", alignItems: "center", gap: 0.5 }}>

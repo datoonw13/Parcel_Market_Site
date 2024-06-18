@@ -104,11 +104,13 @@ export interface ISellProperty {
   lon: string;
 }
 
-export interface ISellingProperty extends ISellProperty {
+export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout, "agreement"> {
   user: { id: string; name: string; email: string };
   dataCreated: Date;
   marketPrice: string;
   id: number;
+  usedForPriceCalculations: Array<{ latitude: string; longitude: string }>;
+  totalViews: number;
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{
