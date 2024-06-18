@@ -12,12 +12,19 @@ import FindProperty from "@/components/find-property/FindProperty";
 import { MiniFooter } from "@/components/footer";
 import { AppBarMini } from "@/components/app-bar";
 import useAuthCheck from "@/hooks/useAuthCheck";
+import { LatLngTuple } from "leaflet";
+import { numFormatter } from "@/helpers/common";
 
 const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-property/FindPropertyCalculatePriceMap"), {
   ssr: false,
 });
 
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
+
+function formatCompactNumber(number: number) {
+  const formatter = Intl.NumberFormat("en", { notation: "compact" });
+  return formatter.format(number);
+}
 
 const FindPropertyLayout = () => {
   const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
@@ -42,26 +49,82 @@ const FindPropertyLayout = () => {
             {calculatedPrice ? (
               selectedRegridItem &&
               calculatedPrice && (
-                <FindPropertyCalculatePriceMap
-                  price={calculatedPrice.price}
-                  mainParcel={selectedRegridItem}
-                  parcels={calculatedPrice.properties}
-                />
-                // <Map
-                //   geolibInputCoordinates={[
-                //     [Number(selectedRegridItem.properties.fields.lat), Number(selectedRegridItem.properties.fields.lon)],
-                //   ]}
-                //   data={[
-                //     {
-                //       centerCoordinate: [
-                //         Number(selectedRegridItem.properties.fields.lat),
-                //         Number(selectedRegridItem.properties.fields.lon),
-                //       ],
-                //       markerColor: 'default',
-                //       owner:
-                //     },
-                //   ]}
+                // <FindPropertyCalculatePriceMap
+                //   price={calculatedPrice.price}
+                //   mainParcel={selectedRegridItem}
+                //   parcels={calculatedPrice.properties}
                 // />
+                <Map
+                  geolibInputCoordinates={[
+                    [Number(selectedRegridItem.properties.fields.lat), Number(selectedRegridItem.properties.fields.lon)],
+                  ]}
+                  zoom={10}
+                  data={[
+                    {
+                      centerCoordinate: [
+                        Number(selectedRegridItem.properties.fields.lat),
+                        Number(selectedRegridItem.properties.fields.lon),
+                      ],
+                      markerColor: "custom",
+                      customMarkerIcon: (
+                        <div
+                          style={{
+                            background: "#3EA266",
+                            boxShadow: "0px 0px 20px 0px #00000026",
+                            width: 80,
+                            height: 35,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: 600,
+                            color: "white",
+                            borderRadius: 60,
+                          }}
+                        >
+                          {formatCompactNumber(calculatedPrice.price)}
+                        </div>
+                      ),
+                      parcelNumber: selectedRegridItem.properties.fields.parcelnumb,
+                      polygon: selectedRegridItem.geometry.coordinates,
+                      showMarker: true,
+                      popup: {
+                        parcelNumber: {
+                          label: "Parcel Number",
+                          value: selectedRegridItem.properties.fields.parcelnumb,
+                        },
+                        acreage: {
+                          label: "Acreage",
+                          value: selectedRegridItem.properties.fields.ll_gisacre.toFixed(2),
+                        },
+                        showSelectButton: false,
+                      },
+                    },
+                    ...calculatedPrice.properties.map((el) => ({
+                      centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
+                      parcelNumber: el.parselId,
+                      showMarker: true,
+                      popup: {
+                        parcelNumber: {
+                          label: "Parcel Number",
+                          value: el.parselId,
+                        },
+                        acreage: {
+                          label: "Acreage",
+                          value: el.arcage.toFixed(2),
+                        },
+                        lastSaleDate: {
+                          label: "Last Sale Date",
+                          value: el.lastSalesDate,
+                        },
+                        lastSalePrice: {
+                          label: "Last Sale Price",
+                          value: numFormatter.format(el.lastSalesPrice),
+                        },
+                        showSelectButton: false,
+                      },
+                    })),
+                  ]}
+                />
               )
             ) : (
               <>

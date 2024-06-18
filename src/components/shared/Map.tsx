@@ -4,10 +4,11 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import { Button } from "@mui/material";
-import { LatLngTuple, Icon } from "leaflet";
-import { Fragment } from "react";
+import { LatLngTuple, Icon, DivIcon } from "leaflet";
+import { Fragment, ReactElement } from "react";
 import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
 import { getCenter } from "geolib";
+import ReactDOMServer from "react-dom/server";
 
 interface IProps {
   geolibInputCoordinates: Array<LatLngTuple>;
@@ -17,7 +18,8 @@ interface IProps {
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
     showMarker?: boolean;
-    markerColor: "default" | "red" | "green";
+    markerColor?: "default" | "red" | "green" | "custom";
+    customMarkerIcon?: ReactElement;
     popup?: {
       showSelectButton: boolean;
     } & Record<Exclude<string, "showSelectButton">, { label: string; value: string } | boolean>;
@@ -55,11 +57,22 @@ const getMarkerIcon = (mapItem: IProps["data"][0], selectedParcelNumber: IProps[
   if (mapItem.markerColor === "green") {
     return markerGreen;
   }
-  return undefined;
+  return markerGrey;
 };
 
 const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelect, onDiscard }: IProps) => {
   const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
+
+  const generateCustomIcon = (customMarkerIcon?: ReactElement) => {
+    if (!customMarkerIcon) {
+      return undefined;
+    }
+    const iconHTML = ReactDOMServer.renderToString(customMarkerIcon);
+    const icon = new DivIcon({
+      html: iconHTML,
+    });
+    return icon;
+  };
 
   return (
     <MapContainer
@@ -74,7 +87,14 @@ const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelec
           <Fragment key={mapItem.parcelNumber}>
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
             {mapItem.showMarker && (
-              <Marker icon={getMarkerIcon(mapItem, selectedParcelNumber)} position={mapItem.centerCoordinate}>
+              <Marker
+                icon={
+                  mapItem.markerColor === "custom"
+                    ? generateCustomIcon(mapItem.customMarkerIcon)
+                    : getMarkerIcon(mapItem, selectedParcelNumber)
+                }
+                position={mapItem.centerCoordinate}
+              >
                 {mapItem.popup && (
                   <Popup>
                     <div className="flex flex-col gap-1">
