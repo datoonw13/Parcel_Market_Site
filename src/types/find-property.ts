@@ -81,8 +81,8 @@ export interface IFindPropertyEstimatedPriceResponse {
     lastSalesDate: string;
     address: string;
     isMedianValid: boolean;
-    lat: string;
-    lng: string;
+    latitude: string;
+    longitude: string;
     property_id: number;
     id: number;
     dateCreated: Date;

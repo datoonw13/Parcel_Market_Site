@@ -83,7 +83,7 @@ const FindPropertyCalculatePriceMap = ({ parcels, mainParcel, price }: IProps) =
         {parcels?.map((parcel) => (
           <Fragment key={Math.random()}>
             {/* <Polygon stroke key={Math.random()} fillColor="blue" positions={[parcel.lat as any, parcel.lng as any]} /> */}
-            <Marker position={[parcel.lat as any, parcel.lng as any]}>
+            <Marker position={[parcel.latitude as any, parcel.longitude as any]}>
               <Popup>
                 <div>
                   Arcage: <b>#{parcel.arcage}</b>
