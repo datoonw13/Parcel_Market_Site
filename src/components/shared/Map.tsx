@@ -15,15 +15,12 @@ interface IProps {
   data: Array<{
     centerCoordinate: LatLngTuple;
     polygon?: PolygonProps["positions"];
-    owner: string | null;
     parcelNumber: string;
     showMarker?: boolean;
     markerColor: "default" | "red" | "green";
     popup?: {
-      owner?: string;
-      parcelNumber?: string;
-      showSelectButton?: boolean;
-    };
+      showSelectButton: boolean;
+    } & Record<Exclude<string, "showSelectButton">, { label: string; value: string } | boolean>;
   }>;
   selectedParcelNumber?: string | null;
   onSelect?: (parcelNumber: string) => void;
@@ -81,16 +78,13 @@ const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelec
                 {mapItem.popup && (
                   <Popup>
                     <div className="flex flex-col gap-1">
-                      {mapItem.popup.owner && (
-                        <div>
-                          Owner: <b>{mapItem.owner}</b>
-                        </div>
-                      )}
-                      {mapItem.popup.parcelNumber && (
-                        <div>
-                          Parcel Number: <b>#{mapItem.parcelNumber}</b>
-                        </div>
-                      )}
+                      {Object.keys(mapItem.popup)
+                        .filter((el) => el !== "showSelectButton")
+                        .map((key) => (
+                          <div key={key}>
+                            {(mapItem.popup as any)[key as any]?.label}: <b>{(mapItem.popup as any)[key as any]?.value}</b>
+                          </div>
+                        ))}
                     </div>
                     {mapItem.popup.showSelectButton && (
                       <Button

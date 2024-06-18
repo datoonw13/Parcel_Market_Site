@@ -17,6 +17,8 @@ const FindPropertyCalculatePriceMap = dynamic(() => import("@/components/find-pr
   ssr: false,
 });
 
+const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
+
 const FindPropertyLayout = () => {
   const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
   const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
@@ -45,6 +47,21 @@ const FindPropertyLayout = () => {
                   mainParcel={selectedRegridItem}
                   parcels={calculatedPrice.properties}
                 />
+                // <Map
+                //   geolibInputCoordinates={[
+                //     [Number(selectedRegridItem.properties.fields.lat), Number(selectedRegridItem.properties.fields.lon)],
+                //   ]}
+                //   data={[
+                //     {
+                //       centerCoordinate: [
+                //         Number(selectedRegridItem.properties.fields.lat),
+                //         Number(selectedRegridItem.properties.fields.lon),
+                //       ],
+                //       markerColor: 'default',
+                //       owner:
+                //     },
+                //   ]}
+                // />
               )
             ) : (
               <>

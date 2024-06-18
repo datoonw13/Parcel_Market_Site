@@ -74,8 +74,14 @@ const FindPropertyFoundedParcels = ({ data, selectedRegridItem, setSelectedRegri
                   showMarker: true,
                   markerColor: "default",
                   popup: {
-                    owner: el.properties.fields.parcelnumb,
-                    parcelNumber: el.properties.fields.owner,
+                    owner: {
+                      label: "Owner",
+                      value: el.properties.fields.owner,
+                    },
+                    parcelNumber: {
+                      label: "Parcel Number",
+                      value: el.properties.fields.parcelnumb,
+                    },
                     showSelectButton: data.length > 1,
                   },
                 }))}
