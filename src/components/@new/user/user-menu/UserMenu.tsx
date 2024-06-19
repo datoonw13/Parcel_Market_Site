@@ -1,7 +1,6 @@
 import React from "react";
 import Avatar from "@/components/@new/shared/Avatar";
 import Popper from "../../shared/Popper";
-import { UserIcon1 } from "../../icons/UserIcons";
 import UserMenuList from "./UserMenuList";
 import { ArrowIconDown1 } from "../../icons/ArrowIcons";
 
