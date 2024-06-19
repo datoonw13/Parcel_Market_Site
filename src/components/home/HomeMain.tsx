@@ -41,7 +41,7 @@ const HomeMain = () => {
         >
           {images.map((image) => (
             <SwiperSlide key={image}>
-              <Box sx={{ position: "relative", height: { xs: 400, sm: 450, md: 500, lg: 550, xl: 660 } }}>
+              <Box sx={{ position: "relative", height: { xs: 536, sm: 500, md: 500, lg: 550, xl: 660 } }}>
                 <Image alt="" src={image} fill loading="eager" />
                 <Box
                   sx={(theme) => ({
@@ -73,21 +73,22 @@ const HomeMain = () => {
             <Typography
               sx={{
                 lineHeight: 1.2,
-                textAlign: "start",
+                textAlign: "center",
                 fontWeight: { xs: 600, lg: 700 },
                 fontSize: { xs: 36, sm: 42, md: 56, lg: 64 },
               }}
             >
               Value, Buy & Sell vacant land
             </Typography>
-            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 14, md: 16 }, mt: 1 }}>
+            <Typography sx={{ textAlign: "center", fontWeight: 500, fontSize: { xs: 14, md: 16 }, mt: 1 }}>
               Value your land for FREE in less than 3 minutes!
             </Typography>
             <Box
               component={Paper}
               sx={{
                 display: "grid",
-                gridTemplateColumns: "minmax(276px, 1fr) minmax(276px, 1fr) auto",
+                gridTemplateColumns: {xs: '1fr', sm: "1fr 1fr auto", md: "minmax(276px,1fr) minmax(276px,1fr) auto", },
+                width: {xs: '100%', md: 'max-content'},
                 gap: 2,
                 p: 2,
                 borderRadius: 3,
@@ -95,7 +96,7 @@ const HomeMain = () => {
               }}
             >
               <Autocomplete
-                sx={{ maxWidth: 276, width: "100%" }}
+                sx={{ maxWidth: {xs: '100%'}, width: "100%" }}
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="State" InputProps={{ ...params.InputProps }} />}
                 ListboxComponent={AutoCompleteListboxComponent}
@@ -107,7 +108,7 @@ const HomeMain = () => {
                 }}
               />
               <Autocomplete
-                sx={{ maxWidth: 276, width: "100%" }}
+                sx={{ maxWidth: {xs: '100%'}, width: "100%" }}
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="County" InputProps={{ ...params.InputProps }} />}
                 ListboxComponent={AutoCompleteListboxComponent}
@@ -118,7 +119,7 @@ const HomeMain = () => {
                   setCounty(newValue?.value || null);
                 }}
               />
-              <Button variant="contained" sx={{ width: { xs: "fit-content" } }} disabled={!state || !county} onClick={onStart}>
+              <Button variant="contained" sx={{ width: { xs: "100%", sm: "fit-content" } }} disabled={!state || !county} onClick={onStart}>
                 Get Started
               </Button>
             </Box>
