@@ -219,6 +219,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                 <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
                   Contact Seller
                 </Button>
+                {/* hide for land owner */}
                 <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
                   Make an offer
                 </Button>
