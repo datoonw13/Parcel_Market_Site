@@ -24,7 +24,9 @@ import { useGetRegridMutation } from "@/lib/features/apis/propertyApi";
 import { LoadingButton } from "@mui/lab";
 import { IMap } from "@/types/map";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
+import { useSearchParams } from "next/navigation";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
+import { useEffect } from "react";
 
 const Label = ({ label, info, sx }: { label: string; info?: string; sx?: SxProps }) => (
   <Box sx={{ fontSize: 14, fontWeight: 500, color: "grey.800", display: "flex", alignItems: "center", gap: 1, ...sx }}>
@@ -40,6 +42,7 @@ interface IProps {
 }
 
 const PropertyInfo = ({ onNext }: IProps) => {
+  const searchParams = useSearchParams();
   const [getRegrid, { isError, reset }] = useGetRegridMutation();
 
   const {
@@ -87,6 +90,15 @@ const PropertyInfo = ({ onNext }: IProps) => {
       onNext([...res.data] as any);
     } catch (error) {}
   });
+
+  useEffect(() => {
+    const state = searchParams.get("state")
+    const county = searchParams.get("county")
+    if(state && county) {
+      setValue('state', state)
+      setValue('county', county)
+    }
+  }, [])
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>

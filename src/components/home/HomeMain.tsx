@@ -6,16 +6,24 @@ import { Autoplay, EffectFade } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { Box, Button, Container, Typography, alpha } from "@mui/material";
+import { Autocomplete, Box, Button, Container, Paper, TextField, Typography, alpha } from "@mui/material";
 import { useState } from "react";
 import { Swiper as SwiperType } from "swiper/types";
-import Link from "next/link";
+import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
+import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
+import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
 const HomeMain = () => {
+  const router = useRouter();
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [state, setState] = useState<string | null>(null);
+  const [county, setCounty] = useState<string | null>(null);
 
+  const onStart = () => {
+    router.push(`${routes.propertySearch.root}?state=${state}&county=${county}`);
+  };
   return (
     <>
       <Box sx={{ position: "relative" }}>
@@ -61,26 +69,60 @@ const HomeMain = () => {
             color: "white",
           }}
         >
-          <Container sx={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+          <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <Typography
               sx={{
                 lineHeight: 1.2,
                 textAlign: "start",
-                fontWeight: { xs: 600, lg: 800 },
-                fontSize: { xs: 36, sm: 46, md: 66, lg: 76, xl: 96 },
+                fontWeight: { xs: 600, lg: 700 },
+                fontSize: { xs: 36, sm: 42, md: 56, lg: 64 },
               }}
             >
-              Value, Buy & Sell <br /> vacant land
+              Value, Buy & Sell vacant land
             </Typography>
-            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 16 }, mt: 1 }}>
+            <Typography sx={{ textAlign: "start", fontWeight: 500, fontSize: { xs: 14, md: 16 }, mt: 1 }}>
               Value your land for FREE in less than 3 minutes!
             </Typography>
-            <Link href={routes.propertySearch.root}>
-              <Button variant="contained" sx={{ textTransform: "none", my: 4 }}>
+            <Box
+              component={Paper}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "minmax(276px, 1fr) minmax(276px, 1fr) auto",
+                gap: 2,
+                p: 2,
+                borderRadius: 3,
+                mt: 3,
+              }}
+            >
+              <Autocomplete
+                sx={{ maxWidth: 276, width: "100%" }}
+                fullWidth
+                renderInput={(params) => <TextField {...params} label="State" InputProps={{ ...params.InputProps }} />}
+                ListboxComponent={AutoCompleteListboxComponent}
+                options={getAllStates()}
+                value={getStateValue(state)}
+                onChange={(_, newValue) => {
+                  setState(newValue?.value || null);
+                  setCounty(null);
+                }}
+              />
+              <Autocomplete
+                sx={{ maxWidth: 276, width: "100%" }}
+                fullWidth
+                renderInput={(params) => <TextField {...params} label="County" InputProps={{ ...params.InputProps }} />}
+                ListboxComponent={AutoCompleteListboxComponent}
+                options={getCounties(state)}
+                value={getCountyValue(county, state)}
+                disabled={!state}
+                onChange={(_, newValue) => {
+                  setCounty(newValue?.value || null);
+                }}
+              />
+              <Button variant="contained" sx={{ width: { xs: "fit-content" } }} disabled={!state || !county} onClick={onStart}>
                 Get Started
               </Button>
-            </Link>
-            <Box sx={{ display: "flex", gap: 1, position: "relative", zIndex: 2 }}>
+            </Box>
+            <Box sx={{ display: "flex", gap: 1, position: "absolute", zIndex: 2, bottom: 0, mb: { xs: 8, sm: 6, md: 4 } }}>
               {images.map((el, i) => (
                 <Box
                   key={el}
