@@ -3,7 +3,7 @@ import type { Config } from "tailwindcss";
 export const colors = {
   backdrop: "rgba(22, 28, 36, 0.4)",
   grey: {
-    30: "rgba(78, 78, 78, 1)",
+    30: "rgba(248, 248, 248, 1)",
     50: "rgba(244, 244, 244, 1)",
     100: "rgba(233, 233, 233, 1)",
     200: "rgba(211, 211, 211, 1)",
@@ -34,38 +34,38 @@ export const colors = {
       DEFAULT: "rgba(14, 139, 64, 1)",
       hover: "rgba(8, 78, 36, 1)",
     },
-    black: {
-      50: "rgba(34, 34, 34, 0.05) ",
-      100: "rgba(34, 34, 34, 0.1)",
-      200: "rgba(34, 34, 34, 0.2)",
-      400: "rgba(34, 34, 34, 0.4)",
-      600: "rgba(34, 34, 34, 0.6)",
-      800: "rgba(34, 34, 34, 0.8)",
-      1000: "rgba(34, 34, 34, 1)",
-      DEFAULT: "rgba(34, 34, 34, 1)",
-    },
-    white: {
-      50: "rgba(255, 255, 255, 0.05)",
-      100: "rgba(255, 255, 255, 0.1)",
-      200: "rgba(255, 255, 255, 0.2))",
-      400: "rgba(255, 255, 255, 0.4)",
-      600: "rgba(255, 255, 255, 0.6)",
-      800: "rgba(255, 255, 255, 0.8)",
-      1000: "rgba(255, 255, 255, 1)",
-      DEFAULT: "rgba(255, 255, 255, 1)",
-    },
-    success: {
-      DEFAULT: "rgba(22, 219, 101, 1)",
-    },
-    warning: {
-      DEFAULT: "rgba(255, 153, 0, 1)",
-    },
-    error: {
-      DEFAULT: "rgba(211, 34, 11, 1)",
-    },
-    info: {
-      DEFAULT: "rgba(53, 156, 239, 1)",
-    },
+  },
+  black: {
+    50: "rgba(34, 34, 34, 0.05) ",
+    100: "rgba(34, 34, 34, 0.1)",
+    200: "rgba(34, 34, 34, 0.2)",
+    400: "rgba(34, 34, 34, 0.4)",
+    600: "rgba(34, 34, 34, 0.6)",
+    800: "rgba(34, 34, 34, 0.8)",
+    1000: "rgba(34, 34, 34, 1)",
+    DEFAULT: "rgba(34, 34, 34, 1)",
+  },
+  white: {
+    50: "rgba(255, 255, 255, 0.05)",
+    100: "rgba(255, 255, 255, 0.1)",
+    200: "rgba(255, 255, 255, 0.2))",
+    400: "rgba(255, 255, 255, 0.4)",
+    600: "rgba(255, 255, 255, 0.6)",
+    800: "rgba(255, 255, 255, 0.8)",
+    1000: "rgba(255, 255, 255, 1)",
+    DEFAULT: "rgba(255, 255, 255, 1)",
+  },
+  success: {
+    DEFAULT: "rgba(22, 219, 101, 1)",
+  },
+  warning: {
+    DEFAULT: "rgba(255, 153, 0, 1)",
+  },
+  error: {
+    DEFAULT: "rgba(211, 34, 11, 1)",
+  },
+  info: {
+    DEFAULT: "rgba(53, 156, 239, 1)",
   },
 };
 
@@ -86,8 +86,12 @@ const config: Config = {
         inter: ["var(--font-inter)"],
         bricolage: ["var(--font-bricolage)"],
       },
+      boxShadow: {
+        1: "0px 8px 24px 0px rgba(0, 0, 0, 0.08)",
+        2: "6px 10px 16px 0px rgba(0, 0, 0, 0.12)",
+      },
     },
   },
-  plugins: [require('@headlessui/tailwindcss')],
+  plugins: [require("@headlessui/tailwindcss")],
 };
 export default config;

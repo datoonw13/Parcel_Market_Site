@@ -3,6 +3,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { Box, Button } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import UserMenu from "../@new/user/user-menu/UserMenu";
 
 const HeaderMenuItems = () => {
   const pathname = usePathname();
@@ -33,7 +34,7 @@ const HeaderMenuItems = () => {
           </Button>
         </Link>
         {user ? (
-          <Button variant="outlined">{`${user.name.split(" ")[0]}`.toUpperCase()}</Button>
+          <UserMenu />
         ) : (
           <Link href={routes.auth.signIn}>
             <Button sx={{ textTransform: "none" }} variant="outlined">

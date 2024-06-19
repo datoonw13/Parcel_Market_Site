@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useAppSelector } from "@/lib/hooks";
 import ResponsiveHeaderMenu from "./ResponsiveHeaderMenu";
 import HeaderMenuItems from "./HeaderMenuItems";
+import UserMenu from "../@new/user/user-menu/UserMenu";
 
 const AppBar = () => {
   const user = useAppSelector((state) => state.authedUser.user);

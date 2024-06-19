@@ -1,9 +1,10 @@
-import { Popover, PopoverButton, PopoverPanel, Transition, PopoverProps } from "@headlessui/react";
+import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
+import clsx from "clsx";
 import { ReactElement } from "react";
 
 interface PopperProps {
   renderButton: ReactElement;
-  children: ReactElement;
+  children: ReactElement | ReactElement[];
   anchorPlacement?:
     | "bottom end"
     | "bottom start"
@@ -16,11 +17,12 @@ interface PopperProps {
     | "top"
     | "bottom";
   anchorGap?: number;
+  contentClassName?: string
 }
 
-const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap = 8 }: PopperProps) => (
+const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap = 8, contentClassName }: PopperProps) => (
   <Popover>
-    <PopoverButton>{renderButton}</PopoverButton>
+    <PopoverButton className="outline-0">{renderButton}</PopoverButton>
     <Transition
       enter="transition ease-out duration-200"
       enterFrom="opacity-0 translate-y-1"
@@ -29,7 +31,9 @@ const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap 
       leaveFrom="opacity-100 translate-y-0"
       leaveTo="opacity-0 translate-y-1"
     >
-      <PopoverPanel anchor={{ to: anchorPlacement, gap: anchorGap }}>{children}</PopoverPanel>
+      <PopoverPanel anchor={{ to: anchorPlacement, gap: anchorGap }} className={clsx(contentClassName)}>
+        {children}
+      </PopoverPanel>
     </Transition>
   </Popover>
 );
