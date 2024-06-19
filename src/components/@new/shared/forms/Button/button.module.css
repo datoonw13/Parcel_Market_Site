@@ -18,6 +18,9 @@
 .secondary:disabled {
     @apply text-black-400
 }
+.secondary:hover {
+    @apply text-black-400
+}
 .secondary:focus {
     border-color: transparent;
     box-shadow: inset 0 0 0 2px rgba(233, 233, 233, 1); 
