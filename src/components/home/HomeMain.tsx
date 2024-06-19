@@ -87,8 +87,8 @@ const HomeMain = () => {
               component={Paper}
               sx={{
                 display: "grid",
-                gridTemplateColumns: {xs: '1fr', sm: "1fr 1fr auto", md: "minmax(276px,1fr) minmax(276px,1fr) auto", },
-                width: {xs: '100%', md: 'max-content'},
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr auto", md: "minmax(276px,1fr) minmax(276px,1fr) auto" },
+                width: { xs: "100%", md: "max-content" },
                 gap: 2,
                 p: 2,
                 borderRadius: 3,
@@ -96,7 +96,7 @@ const HomeMain = () => {
               }}
             >
               <Autocomplete
-                sx={{ maxWidth: {xs: '100%'}, width: "100%" }}
+                sx={{ maxWidth: { xs: "100%" }, width: "100%" }}
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="State" InputProps={{ ...params.InputProps }} />}
                 ListboxComponent={AutoCompleteListboxComponent}
@@ -108,7 +108,7 @@ const HomeMain = () => {
                 }}
               />
               <Autocomplete
-                sx={{ maxWidth: {xs: '100%'}, width: "100%" }}
+                sx={{ maxWidth: { xs: "100%" }, width: "100%" }}
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="County" InputProps={{ ...params.InputProps }} />}
                 ListboxComponent={AutoCompleteListboxComponent}

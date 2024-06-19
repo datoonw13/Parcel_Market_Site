@@ -25,8 +25,8 @@ import { LoadingButton } from "@mui/lab";
 import { IMap } from "@/types/map";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { useSearchParams } from "next/navigation";
-import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 import { useEffect } from "react";
+import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
 
 const Label = ({ label, info, sx }: { label: string; info?: string; sx?: SxProps }) => (
   <Box sx={{ fontSize: 14, fontWeight: 500, color: "grey.800", display: "flex", alignItems: "center", gap: 1, ...sx }}>
@@ -92,13 +92,13 @@ const PropertyInfo = ({ onNext }: IProps) => {
   });
 
   useEffect(() => {
-    const state = searchParams.get("state")
-    const county = searchParams.get("county")
-    if(state && county) {
-      setValue('state', state)
-      setValue('county', county)
+    const state = searchParams.get("state");
+    const county = searchParams.get("county");
+    if (state && county) {
+      setValue("state", state);
+      setValue("county", county);
     }
-  }, [])
+  }, []);
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", mt: { xs: 1, md: 0 } }}>

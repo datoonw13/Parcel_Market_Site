@@ -72,7 +72,7 @@ const Select = (props: Props) => {
               margin: 0,
             },
             "& > div:not(.select__placeholder)": {
-              color: colors.grey[500],
+              color: colors.grey["400"],
             },
           }),
           indicatorsContainer: (provided, state) => ({
