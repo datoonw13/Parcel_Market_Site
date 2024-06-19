@@ -104,6 +104,21 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                     centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
                     parcelNumber: "",
                     showMarker: true,
+                    popup: {
+                      acreage: {
+                        label: "Acreage",
+                        value: el.arcage,
+                      },
+                      lastSaleDate: {
+                        label: "Last sale date",
+                        value: el.lastSalesDate,
+                      },
+                      lastSalesPrice: {
+                        label: "Last sale price",
+                        value: numFormatter.format(Number(el.lastSalesPrice)),
+                      },
+                      showSelectButton: false,
+                    },
                   })) || []),
                 ]}
               />
@@ -194,10 +209,20 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                 py: 2,
               }}
             >
-              <Typography>Some text before user contacts to seller.</Typography>
-              <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
-                Contact Seller
-              </Button>
+              <Typography>
+                Additional Value For Improvements:{" "}
+                <Typography component="span" className="text-medium">
+                  {numFormatter.format(data.data.improvementsValue ?? 0)}
+                </Typography>
+              </Typography>
+              <Box>
+                <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
+                  Contact Seller
+                </Button>
+                <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
+                  Make an offer
+                </Button>
+              </Box>
             </Box>
           </Box>
           <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
@@ -209,7 +234,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                 color: "primary.main",
                 fontWeight: 500,
               }}
-              label="Waterfront"
+              label={data.data.waterFeature ? "Has water feature" : "No water feature"}
               color="primary"
             />
             <Chip
@@ -220,7 +245,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                 color: "primary.main",
                 fontWeight: 500,
               }}
-              label="Waterfront"
+              label={data.data.waterFront ? "Waterfront" : "Not waterfront"}
               color="primary"
             />
             <Chip
@@ -231,7 +256,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                 color: "primary.main",
                 fontWeight: 500,
               }}
-              label="Waterfront"
+              label={data.data.langCoverType}
               color="primary"
             />
             <Chip
@@ -242,7 +267,29 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                 color: "primary.main",
                 fontWeight: 500,
               }}
-              label="Waterfront"
+              label={data.data.wetProperty}
+              color="primary"
+            />
+            <Chip
+              sx={{
+                border: "1px solid",
+                borderColor: "green.200",
+                bgcolor: "green.100",
+                color: "primary.main",
+                fontWeight: 500,
+              }}
+              label={data.data.propertyRestriction}
+              color="primary"
+            />
+            <Chip
+              sx={{
+                border: "1px solid",
+                borderColor: "green.200",
+                bgcolor: "green.100",
+                color: "primary.main",
+                fontWeight: 500,
+              }}
+              label={data.data.propertyAccess}
               color="primary"
             />
           </Box>
@@ -253,3 +300,11 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
 };
 
 export default LandsMarketPlaceItemPage;
+
+// waterFeature: boolean | null;
+// waterFront: boolean | null;
+// langCoverType: string | null;
+// wetProperty: string | null;
+// propertyRestriction: string | null;
+// propertyAccess: string | null;
+// improvementsValue: number | null;
