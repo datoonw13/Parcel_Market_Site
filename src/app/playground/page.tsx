@@ -33,13 +33,14 @@ export default function PlaygroundPage() {
           <TextField variant="primary" placeholder="placeholder" />
         </div>
       </div>
-      {/* <div>
+      <div>
         <h2 className="mb-4 text-lg font-mono">Button</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <Button>Primary button</Button>
+          <Button>Primary</Button>
+          <Button variant="secondary">Secondary</Button>
         </div>
-      </div> */}
+      </div>
     </main>
   );
 }
