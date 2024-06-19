@@ -100,11 +100,11 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                       showSelectButton: false,
                     },
                   },
-                  ...data.data.usedForPriceCalculations.map((el) => ({
+                  ...(data.data?.usedForPriceCalculations?.map((el) => ({
                     centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
                     parcelNumber: "",
                     showMarker: true,
-                  })),
+                  })) || []),
                 ]}
               />
             </Box>

@@ -79,7 +79,7 @@ const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelec
       zoom={zoom}
       center={mapCenter ? [mapCenter.latitude, mapCenter.longitude] : [0, 0]}
       scrollWheelZoom
-      style={{ height: "100%", width: "100%" }}
+      style={{ height: "100%", width: "100%", zIndex: 0 }}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <FeatureGroup pathOptions={{ color: "green" }}>

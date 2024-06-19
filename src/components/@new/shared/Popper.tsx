@@ -17,7 +17,7 @@ interface PopperProps {
     | "top"
     | "bottom";
   anchorGap?: number;
-  contentClassName?: string
+  contentClassName?: string;
 }
 
 const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap = 8, contentClassName }: PopperProps) => (

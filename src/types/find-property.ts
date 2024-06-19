@@ -109,7 +109,7 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   dataCreated: Date;
   marketPrice: string;
   id: number;
-  usedForPriceCalculations: Array<{ latitude: string; longitude: string }>;
+  usedForPriceCalculations?: Array<{ latitude: string; longitude: string }>;
   totalViews: number;
 }
 
