@@ -1,6 +1,7 @@
 import Avatar from "@/components/@new/shared/Avatar";
 import Popper from "@/components/@new/shared/Popper";
-import TextField from "@/components/@new/shared/forms/textfield/TextField";
+import Button from "@/components/@new/shared/forms/Button";
+import TextField from "@/components/@new/shared/forms/TextField";
 
 export default function PlaygroundPage() {
   return (
@@ -27,11 +28,18 @@ export default function PlaygroundPage() {
         <h2 className="mb-4 text-lg font-mono">TextField</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <TextField variant="primary" label="Primary" />
+          <TextField endIcon={<p className="">qdwd</p>} label="Primary" />
           <TextField variant="secondary" label="secondary" />
           <TextField variant="primary" placeholder="placeholder" />
         </div>
       </div>
+      {/* <div>
+        <h2 className="mb-4 text-lg font-mono">Button</h2>
+        <hr className="mb-4 border-gray-200 dark:border-gray-800" />
+        <div className="flex space-x-8">
+          <Button>Primary button</Button>
+        </div>
+      </div> */}
     </main>
   );
 }
