@@ -9,6 +9,7 @@ import { Box, ClickAwayListener, Drawer, IconButton } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import UserMenuList from "../@new/user/user-menu/UserMenuList";
 
 const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
   const pathname = usePathname();
@@ -89,12 +90,14 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
               <Box>
                 <Link href="/find-property">Value my land for free</Link>
               </Box>
-              <Box>
+              {/* <Box>
                 <Link href={routes.auth.signIn} onClick={() => dispatch(logOut())}>
                   <Input fontSize="small" /> {user ? "Sign Out" : "Sign In"}
                 </Link>
-              </Box>
+              </Box> */}
             </Box>
+            <p className="text-grey-600 text-xs my-4">Personal</p>
+            <UserMenuList listItemClasses="!text-sm" />
           </Drawer>
         </>
       </Box>
