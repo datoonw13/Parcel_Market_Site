@@ -75,7 +75,7 @@ const config: Config = {
   theme: {
     colors,
     screens: {
-      xs: "430px",
+      xs: "0px",
       sm: "640px",
       md: "768px",
       lg: "1024px",

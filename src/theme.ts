@@ -244,15 +244,6 @@ const theme = createTheme({
     },
   },
   shadows: [...newShadows],
-  breakpoints: {
-    values: {
-      xs: 430,
-      sm: 640,
-      md: 768,
-      lg: 1024,
-      xl: 1280,
-    },
-  },
 });
 
 export default theme;
