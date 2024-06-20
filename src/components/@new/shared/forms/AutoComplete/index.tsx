@@ -1,11 +1,42 @@
-import React from "react";
-import { TextField } from "@mui/material";
-import Popper from "../../Popper";
+"use client";
 
-const index = () => (
-  <Popper anchorPlacement="bottom end" renderButton={<TextField />}>
-    <div className="shadow-lg p-4 bg-primary-main-600 rounded-lg">Popper Content</div>
-  </Popper>
+import React, { useContext } from "react";
+import Popper from "../../Popper";
+import TextField from "../TextField";
+import AutoCompleteListBox from "./AutoCompleteListBox";
+import AutoCompleteListItem from "./AutoCompleteListItem";
+
+const AutoComplete = () => (
+  <Popper
+    contentClassName="shadow-1 rounded-xl"
+    anchorPlacement="bottom end"
+    anchorGap={5}
+    renderButton={<TextField label="State" />}
+    renderContent={(closePopper) => (
+      <>
+        <AutoCompleteListBox>
+          <AutoCompleteListItem onClick={closePopper}>aee</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+          <AutoCompleteListItem onClick={closePopper}>qwqd</AutoCompleteListItem>
+        </AutoCompleteListBox>
+      </>
+    )}
+  />
 );
 
-export default index;
+export default AutoComplete;

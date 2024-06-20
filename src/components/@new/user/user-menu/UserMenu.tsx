@@ -10,21 +10,24 @@ const UserMenu = () => (
       <div className="relative">
         <Avatar title="LG" />
         <div className="shadow-2 bg-white rounded-full w-4 h-4 flex items-center justify-center absolute bottom-0 right-0">
-          <ArrowIconDown1 className="m-1 w-4 h-4" />
+          <ArrowIconDown1 className="m-1 w-4 h-4 cursor-pointer" />
         </div>
       </div>
     }
     contentClassName="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80"
-  >
-    <Avatar title="LG" className="w-16 h-16" />
-    <div>
-      <p className="text-sm font-medium mb-1 text-center">Davit Natelashvili</p>
-      <p className="text-xs text-grey-600 text-center">d.natelashvili@Example.com</p>
-    </div>
-    <div className="bg-grey-30 rounded-xl w-full p-4">
-      <UserMenuList />
-    </div>
-  </Popper>
+    renderContent={() => (
+      <>
+        <Avatar title="LG" className="w-16 h-16" />
+        <div>
+          <p className="text-sm font-medium mb-1 text-center">Davit Natelashvili</p>
+          <p className="text-xs text-grey-600 text-center">d.natelashvili@Example.com</p>
+        </div>
+        <div className="bg-grey-30 rounded-xl w-full p-4">
+          <UserMenuList />
+        </div>
+      </>
+    )}
+  />
 );
 
 export default UserMenu;
