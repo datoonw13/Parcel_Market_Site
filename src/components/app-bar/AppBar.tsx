@@ -1,11 +1,12 @@
 import Logo from "@/icons/Logo";
 import Link from "next/link";
-import { Box, Container, Divider } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useAppSelector } from "@/lib/hooks";
 import ResponsiveHeaderMenu from "./ResponsiveHeaderMenu";
 import HeaderMenuItems from "./HeaderMenuItems";
 import UserMenu from "../@new/user/user-menu/UserMenu";
+import Container from "../@new/shared/forms/Container";
 
 const AppBar = () => {
   const user = useAppSelector((state) => state.authedUser.user);
@@ -18,15 +19,7 @@ const AppBar = () => {
         }}
         id="landing-header"
       >
-        <Container
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            m: "auto",
-            py: { xs: 2, md: 3 },
-          }}
-        >
+        <Container className="flex items-center justify-between m-auto py-4 md:py-6">
           <Link href="/">
             <Box sx={{ width: { xs: 85, sm: 110, md: 125, lg: 140 }, cursor: "pointer" }} id="root-header-logo">
               <Logo />
