@@ -12,8 +12,8 @@ interface ButtonBaseProps {
 }
 
 type ButtonType =
-  | (ButtonBaseProps & { variant: ButtonVariant; startIcon?: never })
-  | (ButtonBaseProps & { variant: "text"; startIcon?: ReactElement });
+  | (ButtonBaseProps & { variant?: ButtonVariant; startIcon?: never })
+  | (ButtonBaseProps & { variant?: "text"; startIcon?: ReactElement });
 
 const Button = (props: ButtonType) => {
   const { children, variant = "primary", className, disabled, onClick, startIcon } = props;

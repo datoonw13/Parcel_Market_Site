@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import headlessui from "@headlessui/tailwindcss";
 
 export const colors = {
   backdrop: "rgba(22, 28, 36, 0.4)",
@@ -92,6 +93,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@headlessui/tailwindcss")],
+  plugins: [headlessui],
 };
 export default config;
