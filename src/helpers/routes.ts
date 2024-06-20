@@ -15,6 +15,8 @@ const routes = {
   user: {
     root: "/user",
     properties: "/user/properties",
+    profile: "/user/profile",
+    listings: "/user/listings",
   },
 };
 
