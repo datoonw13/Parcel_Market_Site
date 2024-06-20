@@ -5,21 +5,39 @@
     @apply transition-all duration-200;
 }
 .input {
-    @apply h-full w-full px-3 border border-grey-200 rounded-lg text-xs font-medium outline-none
+    @apply h-full w-full px-3 border border-grey-100 rounded-lg text-xs font-medium outline-none
+}
+.input + p {
+    @apply text-grey-800
 }
 .input:focus {
     @apply border-primary-main
 }
+.input:focus + p {
+    @apply text-primary-main
+}
+.input:hover {
+    @apply border-grey-200
+}
+.input:hover + p {
+    @apply text-black
+}
 
+.error {
+    @apply !border-error text-error
+}
+.error + p {
+    @apply !text-error;
+}
 
 .input-primary {
     @apply  pt-3.5
 }
 .input-primary:focus+p {
-    @apply top-[16px] text-[10px] text-grey-600;
+    @apply top-[16px] text-[10px];
 }
 .input-primary:not(:placeholder-shown)+p{
-    @apply top-[16px] text-[10px] text-grey-600;
+    @apply top-[16px] text-[10px];
 }
 .label-primary {
     @apply font-medium text-xs absolute px-3  top-[50%] translate-y-[-50%]
@@ -30,10 +48,10 @@
     @apply font-medium text-xs absolute top-[50%] translate-y-[-50%] left-2 px-1.5;
 }
 .input-secondary:focus+p {
-    @apply top-[0] text-[10px] text-grey-600;
+    @apply top-[0] text-[10px];
 }
 .input-secondary:not(:placeholder-shown)+p{
-    @apply top-[0] text-[10px] text-grey-600;
+    @apply top-[0] text-[10px];
 }
 
 .label-secondary::after {

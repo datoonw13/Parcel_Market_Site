@@ -27,7 +27,7 @@ export default function PlaygroundPage() {
         <h2 className="mb-4 text-lg font-mono">TextField</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <TextField variant="primary" label="Primary" error />
+          <TextField variant="primary" label="Primary" />
           <TextField variant="secondary" label="secondary" />
           <TextField variant="primary" placeholder="placeholder" />
         </div>
