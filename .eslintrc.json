@@ -46,6 +46,7 @@
     "no-param-reassign" : "off",
     "no-shadow":"off",
     "import/no-cycle" :"off",
-    "react/display-name": 0
+    "react/display-name": 0,
+    "jsx-a11y/label-has-associated-control": 0
   }
 }

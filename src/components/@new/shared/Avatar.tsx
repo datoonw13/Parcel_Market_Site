@@ -5,7 +5,7 @@ import React from "react";
 interface AvatarProps {
   className?: string;
   title?: string;
-  src?: string;
+  src?: string | null;
 }
 
 const Avatar = ({ className, title, src }: AvatarProps) => (

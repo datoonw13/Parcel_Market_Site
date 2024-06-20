@@ -1,16 +1,25 @@
 import clsx from "clsx";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import classes from "./button.module.css";
 
-interface ButtonTypes {
-  variant?: "primary" | "secondary" | "text";
-  children: string | ReactElement;
+type ButtonVariant = "primary" | "secondary" | "secondary-green" | "text";
+
+interface ButtonBaseProps {
+  children: string | ReactNode;
+  className?: string;
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
-const Button = (props: ButtonTypes) => {
-  const { children, variant = "primary" } = props;
+type ButtonType =
+  | (ButtonBaseProps & { variant: ButtonVariant; startIcon?: never })
+  | (ButtonBaseProps & { variant: "text"; startIcon?: ReactElement });
+
+const Button = (props: ButtonType) => {
+  const { children, variant = "primary", className, disabled, onClick, startIcon } = props;
   return (
-    <button type="button" className={clsx(classes.root, classes[variant])}>
+    <button onClick={onClick} type="button" className={clsx(classes.root, classes[variant], className, "group")} disabled={disabled}>
+      {startIcon && <div className={classes[`${variant}-start-icon`]}>{startIcon}</div>}
       {children}
     </button>
   );

@@ -7,7 +7,7 @@ import { DiscountIcon1, DiscountIcon2 } from "../../icons/DiscountIcons";
 import { BookmarkIcon1 } from "../../icons/BookMarkIcons";
 import { LogoutIcon1 } from "../../icons/LogutIcons";
 
-const UserMenuList = ({ listItemClasses }: { listItemClasses?: string }) => (
+const UserMenuList = ({ listItemClasses, hideLogout }: { listItemClasses?: string, hideLogout?: boolean }) => (
   <ul className="flex flex-col gap-4">
     {list.map((el) => (
       <li key={el.label} className="flex items-center  gap-1.5 cursor-pointer group ">
@@ -15,10 +15,10 @@ const UserMenuList = ({ listItemClasses }: { listItemClasses?: string }) => (
         <p className={clsx("text-xs group-hover:text-primary-main transition-all duration-0.1", listItemClasses)}>{el.label}</p>
       </li>
     ))}
-    <li className="flex items-center  gap-1.5 cursor-pointer group ">
+   {!hideLogout && <li className="flex items-center  gap-1.5 cursor-pointer group ">
       <LogoutIcon1 className="fill-error transition-all duration-0.1" />
       <p className={clsx("text-xs text-error transition-all duration-0.1", listItemClasses)}>Log Out</p>
-    </li>
+    </li>}
   </ul>
 );
 
