@@ -2,10 +2,10 @@
 
 import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { ReactElement, forwardRef, useEffect, useRef, useState, ReactNode, useCallback, Dispatch, SetStateAction } from "react";
+import { ReactElement, Provider, forwardRef, useEffect, useRef, useState, ReactNode, useCallback } from "react";
 
 interface PopperProps {
-  renderButton: (open: boolean, setOpen: Dispatch<SetStateAction<boolean>>) => ReactElement;
+  renderButton: ReactElement;
   renderContent: (closePopper: () => void) => ReactNode;
   anchorPlacement?:
     | "bottom end"
@@ -23,7 +23,6 @@ interface PopperProps {
   fixedWidth?: boolean;
   onClose?: () => void;
   onOpen?: () => void;
-  disableTransition?: boolean;
 }
 
 const MyCustomButton = forwardRef((props: any, ref: any) => (
@@ -41,7 +40,6 @@ const Popper = ({
   fixedWidth,
   onClose,
   onOpen,
-  disableTransition,
 }: PopperProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLElement | null>(null);
@@ -49,7 +47,8 @@ const Popper = ({
 
   const closePopper = useCallback(() => {
     setOpen(false);
-  }, []);
+    onClose && onClose();
+  }, [onClose]);
 
   const handleOutSideClick = useCallback(
     (event: any) => {
@@ -67,21 +66,26 @@ const Popper = ({
     };
   }, [handleOutSideClick]);
 
+  useEffect(() => {
+    if (open && onOpen) {
+      onOpen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   return (
     <Popover>
-      <PopoverButton ref={buttonRef} as={MyCustomButton} className="outline-0">
-        {renderButton(open, setOpen)}
+      <PopoverButton ref={buttonRef} as={MyCustomButton} className="outline-0" onClick={() => setOpen(!open)}>
+        {renderButton}
       </PopoverButton>
       <Transition
-        enter={disableTransition ? "" : "transition ease-out duration-200"}
-        enterFrom={disableTransition ? "" : "opacity-0 translate-y-1"}
-        enterTo={disableTransition ? "" : "opacity-100 translate-y-0"}
-        leave={disableTransition ? "" : "transition ease-in duration-150"}
-        leaveFrom={disableTransition ? "" : "opacity-100 translate-y-0"}
-        leaveTo={disableTransition ? "" : "opacity-0 translate-y-1"}
+        enter="transition ease-out duration-200"
+        enterFrom="opacity-0 translate-y-1"
+        enterTo="opacity-100 translate-y-0"
+        leave="transition ease-in duration-150"
+        leaveFrom="opacity-100 translate-y-0"
+        leaveTo="opacity-0 translate-y-1"
         show={open}
-        afterLeave={onClose}
-        beforeEnter={onOpen}
       >
         <PopoverPanel
           ref={ref}
@@ -89,6 +93,7 @@ const Popper = ({
           portal={false}
           static
           anchor={{ to: anchorPlacement, gap: anchorGap }}
+          onClick={() => closePopper}
           className={clsx(contentClassName, "min-w-[var(--button-width)]", fixedWidth && "w-[var(--button-width)]")}
         >
           {renderContent(() => setOpen(false))}

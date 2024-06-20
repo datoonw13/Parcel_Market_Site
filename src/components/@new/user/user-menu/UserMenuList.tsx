@@ -7,10 +7,10 @@ import { DiscountIcon1, DiscountIcon2 } from "../../icons/DiscountIcons";
 import { BookmarkIcon1 } from "../../icons/BookMarkIcons";
 import { LogoutIcon1 } from "../../icons/LogutIcons";
 
-const UserMenuList = ({ listItemClasses, hideLogout }: { listItemClasses?: string; hideLogout?: boolean }) => (
-  <ul className="flex flex-col gap-4">
+const UserMenuList = ({ listItemClasses, hideLogout, close }: { listItemClasses?: string; hideLogout?: boolean; close?: () => void }) => (
+  <ul className="flex flex-col gap-4 min-w-[306px]">
     {list.map((el) => (
-      <li key={el.label} className="flex items-center  gap-1.5 cursor-pointer group ">
+      <li key={el.label} className="flex items-center  gap-1.5 cursor-pointer group" onClick={close}>
         <el.icon className="group-hover:fill-primary-main transition-all duration-0.1" />
         <p className={clsx("text-xs group-hover:text-primary-main transition-all duration-0.1", listItemClasses)}>{el.label}</p>
       </li>
