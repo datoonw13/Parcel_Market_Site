@@ -2,7 +2,8 @@
     @apply w-full flex items-center relative h-[52px]
 }
 .root > * {
-    @apply transition-all duration-200;
+    transition-property: top, transform, padding, font-size;
+    transition-duration: 100ms;
 }
 .input {
     @apply h-full w-full px-3 border border-grey-100 rounded-lg text-xs font-medium outline-none
@@ -16,10 +17,10 @@
 .input:focus + p {
     @apply text-primary-main
 }
-.input:hover {
+.input:hover:not(:focus) {
     @apply border-grey-200
 }
-.input:hover + p {
+.input:hover:not(:focus) + p {
     @apply text-black
 }
 
