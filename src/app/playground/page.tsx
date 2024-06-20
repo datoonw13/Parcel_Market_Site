@@ -1,5 +1,6 @@
 import Avatar from "@/components/@new/shared/Avatar";
 import Popper from "@/components/@new/shared/Popper";
+import TextField from "@/components/@new/shared/forms/textfield/TextField";
 
 export default function PlaygroundPage() {
   return (
@@ -20,6 +21,15 @@ export default function PlaygroundPage() {
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
           <Avatar title="LA" />
+        </div>
+      </div>
+      <div>
+        <h2 className="mb-4 text-lg font-mono">TextField</h2>
+        <hr className="mb-4 border-gray-200 dark:border-gray-800" />
+        <div className="flex space-x-8">
+          <TextField variant="primary" label="Primary" error />
+          <TextField variant="secondary" label="secondary" />
+          <TextField variant="primary" placeholder="placeholder" />
         </div>
       </div>
     </main>

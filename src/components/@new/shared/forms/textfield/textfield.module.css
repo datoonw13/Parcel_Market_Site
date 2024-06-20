@@ -1,0 +1,49 @@
+.root {
+    @apply w-full flex items-center relative h-[52px]
+}
+.root > * {
+    @apply transition-all duration-200;
+}
+.input {
+    @apply h-full w-full px-3 border border-grey-200 rounded-lg text-xs font-medium outline-none
+}
+.input:focus {
+    @apply border-primary-main
+}
+
+
+.input-primary {
+    @apply  pt-3.5
+}
+.input-primary:focus+p {
+    @apply top-[16px] text-[10px] text-grey-600;
+}
+.input-primary:not(:placeholder-shown)+p{
+    @apply top-[16px] text-[10px] text-grey-600;
+}
+.label-primary {
+    @apply font-medium text-xs absolute px-3  top-[50%] translate-y-[-50%]
+}
+
+/* secondary */
+.label-secondary {
+    @apply font-medium text-xs absolute top-[50%] translate-y-[-50%] left-2 px-1.5;
+}
+.input-secondary:focus+p {
+    @apply top-[0] text-[10px] text-grey-600;
+}
+.input-secondary:not(:placeholder-shown)+p{
+    @apply top-[0] text-[10px] text-grey-600;
+}
+
+.label-secondary::after {
+    content: "";
+    display: block;
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    top: 0;
+    height: 100%;
+    @apply left-0 px-1
+}
