@@ -14,7 +14,6 @@ interface UserMenuListItemProps {
 }
 const UserMenuListItem = ({ path, onClick, label, icon: Icon, listItemClasses }: UserMenuListItemProps) => {
   const pathname = usePathname();
-  console.log(pathname);
 
   return (
     <Link key={label} href={path} onClick={onClick}>
