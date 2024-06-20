@@ -1,10 +1,14 @@
+"use client";
+
 import Avatar from "@/components/@new/shared/Avatar";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
-import Popper from "@/components/@new/shared/Popper";
+import { getAllStates } from "@/helpers/states";
+import { useState } from "react";
 
 export default function PlaygroundPage() {
+  const [value, setValue] = useState<any>(null);
   return (
     <main className="space-y-8 mb-44 max-w-6xl m-auto">
       <h1 className="text-4xl mt-8">Playground</h1>
@@ -38,7 +42,7 @@ export default function PlaygroundPage() {
         <h2 className="mb-4 text-lg font-mono">AutoComplete</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <AutoComplete />
+          <AutoComplete value={value} options={getAllStates()} onChange={(data) => setValue(data)} />
         </div>
       </div>
       <div>

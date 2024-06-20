@@ -2,10 +2,10 @@
 
 import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { ReactElement, Provider, forwardRef, useEffect, useRef, useState, ReactNode } from "react";
+import { ReactElement, forwardRef, useEffect, useRef, useState, ReactNode, useCallback, Dispatch, SetStateAction } from "react";
 
 interface PopperProps {
-  renderButton: ReactElement;
+  renderButton: (open: boolean, setOpen: Dispatch<SetStateAction<boolean>>) => ReactElement;
   renderContent: (closePopper: () => void) => ReactNode;
   anchorPlacement?:
     | "bottom end"
@@ -21,6 +21,8 @@ interface PopperProps {
   anchorGap?: number;
   contentClassName?: string;
   fixedWidth?: boolean;
+  onClose?: () => void;
+  onOpen?: () => void;
 }
 
 const MyCustomButton = forwardRef((props: any, ref: any) => (
@@ -29,30 +31,44 @@ const MyCustomButton = forwardRef((props: any, ref: any) => (
   </div>
 ));
 
-const Popper = ({ renderButton, renderContent, anchorPlacement = "bottom", anchorGap = 8, contentClassName, fixedWidth }: PopperProps) => {
+const Popper = ({
+  renderButton,
+  renderContent,
+  anchorPlacement = "bottom",
+  anchorGap = 8,
+  contentClassName,
+  fixedWidth,
+  onClose,
+  onOpen,
+}: PopperProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const closePopper = () => setOpen(false);
+  const closePopper = useCallback(() => {
+    setOpen(false);
+  }, []);
 
-  const handleOutSideClick = (event: any) => {
-    if (!ref.current?.contains(event.target) && !buttonRef?.current?.contains(event.target)) {
-      closePopper();
-    }
-  };
+  const handleOutSideClick = useCallback(
+    (event: any) => {
+      if (open && !ref.current?.contains(event.target) && !buttonRef?.current?.contains(event.target)) {
+        closePopper();
+      }
+    },
+    [closePopper, open]
+  );
 
   useEffect(() => {
     window.addEventListener("pointerdown", handleOutSideClick);
     return () => {
       window.removeEventListener("pointerdown", handleOutSideClick);
     };
-  }, []);
+  }, [handleOutSideClick]);
 
   return (
     <Popover>
-      <PopoverButton ref={buttonRef} as={MyCustomButton} className="outline-0" onClick={() => setOpen(!open)}>
-        {renderButton}
+      <PopoverButton ref={buttonRef} as={MyCustomButton} className="outline-0">
+        {renderButton(open, setOpen)}
       </PopoverButton>
       <Transition
         enter="transition ease-out duration-200"
@@ -62,6 +78,8 @@ const Popper = ({ renderButton, renderContent, anchorPlacement = "bottom", ancho
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
         show={open}
+        afterLeave={onClose}
+        beforeEnter={onOpen}
       >
         <PopoverPanel
           ref={ref}
@@ -69,7 +87,6 @@ const Popper = ({ renderButton, renderContent, anchorPlacement = "bottom", ancho
           portal={false}
           static
           anchor={{ to: anchorPlacement, gap: anchorGap }}
-          onClick={() => closePopper}
           className={clsx(contentClassName, "min-w-[var(--button-width)]", fixedWidth && "w-[var(--button-width)]")}
         >
           {renderContent(() => setOpen(false))}
