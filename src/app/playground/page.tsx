@@ -42,7 +42,18 @@ export default function PlaygroundPage() {
         <h2 className="mb-4 text-lg font-mono">AutoComplete</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <AutoComplete value={value} options={getAllStates()} onChange={(data) => setValue(data)} />
+          <AutoComplete
+            value={value}
+            options={getAllStates()}
+            onChange={(data) => setValue(data)}
+            renderInput={(searchValue, setSearchValue) => (
+              <TextField
+                label="State"
+                value={searchValue !== null ? searchValue : value?.label || ""}
+                onChange={(e) => setSearchValue(e)}
+              />
+            )}
+          />
         </div>
       </div>
       <div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Dispatch, ReactElement, SetStateAction, useState } from "react";
 import Popper from "../../Popper";
 import TextField from "../TextField";
 import AutoCompleteListBox from "./AutoCompleteListBox";
@@ -10,9 +10,10 @@ interface AutoCompleteProps {
   options: Array<{ label: string; value: string }>;
   onChange: (value: { label: string; value: string }) => void;
   value: { label: string; value: string } | null;
+  renderInput: (searchValue: string | null, setSearchValue: Dispatch<SetStateAction<string | null>>) => ReactElement;
 }
 
-const AutoComplete = ({ onChange, options, value }: AutoCompleteProps) => {
+const AutoComplete = ({ onChange, options, value, renderInput }: AutoCompleteProps) => {
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const filteredOptions = options.filter((el) =>
     searchValue ? el.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) : Boolean(el.label)
@@ -23,17 +24,14 @@ const AutoComplete = ({ onChange, options, value }: AutoCompleteProps) => {
       contentClassName="shadow-1 rounded-xl"
       anchorPlacement="bottom end"
       anchorGap={5}
+      disableTransition
       onOpen={() => {
         setSearchValue(value?.label || "");
       }}
       onClose={() => {
         setSearchValue(null);
       }}
-      renderButton={(open, setOpen) => (
-        <div onClick={() => setOpen(true)}>
-          <TextField label="State" value={searchValue !== null ? searchValue : value?.label || ""} onChange={(e) => setSearchValue(e)} />
-        </div>
-      )}
+      renderButton={(open, setOpen) => <div onClick={() => setOpen(true)}>{renderInput(searchValue, setSearchValue)}</div>}
       renderContent={(closePopper) => (
         <>
           <AutoCompleteListBox>

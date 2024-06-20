@@ -23,6 +23,7 @@ interface PopperProps {
   fixedWidth?: boolean;
   onClose?: () => void;
   onOpen?: () => void;
+  disableTransition?: boolean;
 }
 
 const MyCustomButton = forwardRef((props: any, ref: any) => (
@@ -40,6 +41,7 @@ const Popper = ({
   fixedWidth,
   onClose,
   onOpen,
+  disableTransition,
 }: PopperProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLElement | null>(null);
@@ -71,12 +73,12 @@ const Popper = ({
         {renderButton(open, setOpen)}
       </PopoverButton>
       <Transition
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 translate-y-1"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-1"
+        enter={disableTransition ? "" : "transition ease-out duration-200"}
+        enterFrom={disableTransition ? "" : "opacity-0 translate-y-1"}
+        enterTo={disableTransition ? "" : "opacity-100 translate-y-0"}
+        leave={disableTransition ? "" : "transition ease-in duration-150"}
+        leaveFrom={disableTransition ? "" : "opacity-100 translate-y-0"}
+        leaveTo={disableTransition ? "" : "opacity-0 translate-y-1"}
         show={open}
         afterLeave={onClose}
         beforeEnter={onOpen}
