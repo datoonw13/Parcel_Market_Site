@@ -17,10 +17,10 @@
 .input:focus + p {
     @apply text-primary-main
 }
-.input:hover:not(:focus) {
+.input:hover:not(:focus):not(:disabled) {
     @apply border-grey-200
 }
-.input:hover:not(:focus) + p {
+.input:hover:not(:focus):not(:disabled)  + p {
     @apply text-black
 }
 

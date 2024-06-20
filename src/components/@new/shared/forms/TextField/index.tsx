@@ -12,10 +12,11 @@ interface TextFieldProps {
   value?: string;
   onChange?: (value: string) => void;
   endIcon?: ReactElement | string;
+  disabled?: boolean;
 }
 
 const TextField = (props: TextFieldProps) => {
-  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon } = props;
+  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon, disabled } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -39,6 +40,7 @@ const TextField = (props: TextFieldProps) => {
         value={value}
         onChange={(e) => onChange && onChange(e.target.value)}
         ref={inputRef}
+        disabled={disabled}
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (

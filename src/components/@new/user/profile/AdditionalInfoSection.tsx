@@ -10,7 +10,7 @@ const AdditionalInfoSection = () => (
           <p className="font-medium text-sm">Password</p>
           <p className="font-medium text-xs text-grey-600">Set a permanent password to login to your account</p>
         </div>
-        <Button variant="text" className="text-grey-800 !text-xs">
+        <Button variant="text" className="!text-primary-main !text-xs">
           Change Password
         </Button>
       </div>
@@ -21,9 +21,9 @@ const AdditionalInfoSection = () => (
           <p className="font-medium text-sm">Email</p>
           <p className="font-medium text-xs text-grey-600">Davit@Gmail.com</p>
         </div>
-        <Button variant="text" className="text-grey-800 !text-xs">
+        {/* <Button variant="text" className="text-grey-800 !text-xs">
           Change email Password
-        </Button>
+        </Button> */}
       </div>
       <hr className="border-grey-100" />
       <div className="w-full flex justify-between">
@@ -31,8 +31,8 @@ const AdditionalInfoSection = () => (
           <p className="font-medium text-sm">Delete My Account</p>
           <p className="font-medium text-xs text-grey-600">Permanently delete the account and remove access </p>
         </div>
-        <Button variant="text" className="text-grey-800 !text-xs">
-          Deactivate
+        <Button variant="text" className="!text-error !text-xs">
+          Delete
         </Button>
       </div>
     </div>
