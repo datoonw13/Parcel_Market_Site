@@ -18,9 +18,10 @@ interface PopperProps {
     | "bottom";
   anchorGap?: number;
   contentClassName?: string;
+  fixedWidth?: boolean;
 }
 
-const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap = 8, contentClassName }: PopperProps) => (
+const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap = 8, contentClassName, fixedWidth }: PopperProps) => (
   <Popover>
     <PopoverButton className="outline-0">{renderButton}</PopoverButton>
     <Transition
@@ -31,7 +32,10 @@ const Popper = ({ renderButton, children, anchorPlacement = "bottom", anchorGap 
       leaveFrom="opacity-100 translate-y-0"
       leaveTo="opacity-0 translate-y-1"
     >
-      <PopoverPanel anchor={{ to: anchorPlacement, gap: anchorGap }} className={clsx(contentClassName)}>
+      <PopoverPanel
+        anchor={{ to: anchorPlacement, gap: anchorGap }}
+        className={clsx(contentClassName, "min-w-[var(--button-width)]", fixedWidth && "w-[var(--button-width)]")}
+      >
         {children}
       </PopoverPanel>
     </Transition>

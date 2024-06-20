@@ -1,5 +1,6 @@
 import Avatar from "@/components/@new/shared/Avatar";
 import Popper from "@/components/@new/shared/Popper";
+import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
 
@@ -31,6 +32,13 @@ export default function PlaygroundPage() {
           <TextField endIcon={<p className="">qdwd</p>} label="Primary" />
           <TextField variant="secondary" label="secondary" />
           <TextField variant="primary" placeholder="placeholder" />
+        </div>
+      </div>
+      <div>
+        <h2 className="mb-4 text-lg font-mono">AutoComplete</h2>
+        <hr className="mb-4 border-gray-200 dark:border-gray-800" />
+        <div className="flex space-x-8">
+          <AutoComplete />
         </div>
       </div>
       <div>
