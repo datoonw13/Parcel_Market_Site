@@ -13,7 +13,7 @@ import UserMenuListItem from "./UserMenuListItem";
 const UserMenuList = ({ listItemClasses, hideLogout, close }: { listItemClasses?: string; hideLogout?: boolean; close?: () => void }) => (
   <ul className="flex flex-col gap-4 min-w-[306px]">
     {list.map((el) => (
-      <UserMenuListItem label={el.label} path={el.path} icon={el.icon} onClick={close} key={el.label} />
+      <UserMenuListItem listItemClasses={listItemClasses} label={el.label} path={el.path} icon={el.icon} onClick={close} key={el.label} />
     ))}
     {!hideLogout && (
       <li className="flex items-center  gap-1.5 cursor-pointer group ">
@@ -40,7 +40,7 @@ const list = [
   {
     label: "My Listings",
     icon: BookIcon1,
-    path: routes.user.listings,
+    path: "/",
   },
   {
     label: "Received Offers",
@@ -55,6 +55,6 @@ const list = [
   {
     label: "My saved properties",
     icon: BookmarkIcon1,
-    path: "/",
+    path: routes.user.savedProperties,
   },
 ];
