@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/components/@new/shared/Avatar";
+import Drawer from "@/components/@new/shared/Drawer";
 import Modal from "@/components/@new/shared/Modal";
 import Popper from "@/components/@new/shared/Popper";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
@@ -81,9 +82,9 @@ export default function PlaygroundPage() {
       <button type="button" onClick={() => setOpen(true)}>
         wqdwqd
       </button>
-      <Modal open={open} closeModal={() => setOpen(false)}>
-        <div className="bg-white shadow-1 p-4">aee</div>
-      </Modal>
+      <Drawer title="Sort By ragac" open={open} closeModal={() => setOpen(false)}>
+        <div className="h-[150px]">qwd</div>
+      </Drawer>
     </main>
   );
 }
