@@ -1,105 +1,114 @@
 "use client";
 
-import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react";
-import clsx from "clsx";
-import { ReactElement, Provider, forwardRef, useEffect, useRef, useState, ReactNode, useCallback } from "react";
+import React, { Dispatch, FC, ReactElement, SetStateAction, useCallback, useEffect, useState } from "react";
+import { usePopper } from "react-popper";
+import { AnimatePresence, motion } from "framer-motion";
+import { ModifierArguments, ModifierPhases, Placement, offset } from "@popperjs/core";
+import maxSize from "popper-max-size-modifier";
 
-interface PopperProps {
-  renderButton: ReactElement;
-  renderContent: (closePopper: () => void) => ReactNode;
-  anchorPlacement?:
-    | "bottom end"
-    | "bottom start"
-    | "top end"
-    | "top start"
-    | "right end"
-    | "right start"
-    | "left end"
-    | "left start"
-    | "top"
-    | "bottom";
-  anchorGap?: number;
-  contentClassName?: string;
-  fixedWidth?: boolean;
-  onClose?: () => void;
-  onOpen?: () => void;
+interface IPopper {
+  renderButton: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>, referenceElement: HTMLElement | null) => ReactElement;
+  renderContent: (closePopper: () => void) => ReactElement;
+  disableCloseOnAwayClick?: boolean;
+  disableSameWidth?: boolean;
+  placement?: Placement;
+  offsetY?: number;
+  offsetX?: number;
 }
 
-const MyCustomButton = forwardRef((props: any, ref: any) => (
-  <div className="..." ref={ref} onClick={props.onClick}>
-    {props.children}
-  </div>
-));
+const sameWidth = {
+  name: "sameWidth",
+  enabled: true,
+  phase: "beforeWrite" as ModifierPhases,
+  requires: ["computeStyles"],
+  fn: ({ state }: ModifierArguments<object>) => {
+    state.styles.popper.minWidth = `${state.rects.reference.width}px`;
+  },
+  effect: ({ state }: ModifierArguments<object>) => {
+    state.elements.popper.style.minWidth = `${(state.elements.reference as any)?.offsetWidth}px`;
+  },
+};
 
-const Popper = ({
+const applyMaxSize = {
+  name: "applyMaxSize",
+  enabled: true,
+  phase: "beforeWrite" as ModifierPhases,
+  requires: ["maxSize"],
+  fn({ state }: ModifierArguments<object>) {
+    const { height } = state.modifiersData.maxSize;
+    state.styles.popper.maxHeight = `${height}px`;
+  },
+};
+
+const Popper: FC<IPopper> = ({
   renderButton,
+  disableCloseOnAwayClick,
+  disableSameWidth,
+  placement = "bottom",
   renderContent,
-  anchorPlacement = "bottom",
-  anchorGap = 8,
-  contentClassName,
-  fixedWidth,
-  onClose,
-  onOpen,
-}: PopperProps) => {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  offsetX,
+  offsetY,
+}) => {
+  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement,
+    modifiers: [
+      ...(disableSameWidth ? [] : [sameWidth]),
+      applyMaxSize,
+      maxSize,
+      {
+        name: "offset",
+        options: {
+          offset: [offsetX || 0, offsetY || 10],
+        },
+      },
+    ],
+    strategy: "fixed",
+  });
 
-  const closePopper = useCallback(() => {
-    setOpen(false);
-    onClose && onClose();
-  }, [onClose]);
-
-  const handleOutSideClick = useCallback(
-    (event: any) => {
-      if (open && !ref.current?.contains(event.target) && !buttonRef?.current?.contains(event.target)) {
-        closePopper();
+  const handleClickOutside = useCallback(
+    (e: MouseEvent | TouchEvent) => {
+      if (!popperElement?.contains(e.target as Node) && !referenceElement?.contains(e.target as Node)) {
+        setReferenceElement(null);
       }
     },
-    [closePopper, open]
+    [popperElement, referenceElement]
   );
 
   useEffect(() => {
-    window.addEventListener("pointerdown", handleOutSideClick);
-    return () => {
-      window.removeEventListener("pointerdown", handleOutSideClick);
-    };
-  }, [handleOutSideClick]);
-
-  useEffect(() => {
-    if (open && onOpen) {
-      onOpen();
+    if (referenceElement && popperElement && !disableCloseOnAwayClick) {
+      document.addEventListener("mouseup", handleClickOutside);
+      document.addEventListener("touchend", handleClickOutside);
+    } else {
+      document.removeEventListener("mouseup", handleClickOutside);
+      document.removeEventListener("touchend", handleClickOutside);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+    return () => {
+      document.removeEventListener("mouseup", handleClickOutside);
+      document.removeEventListener("touchend", handleClickOutside);
+    };
+  }, [referenceElement, popperElement, handleClickOutside, disableCloseOnAwayClick]);
 
   return (
-    <Popover>
-      <PopoverButton ref={buttonRef} as={MyCustomButton} className="outline-0" onClick={() => setOpen(!open)}>
-        {renderButton}
-      </PopoverButton>
-      <Transition
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 translate-y-1"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-1"
-        show={open}
-      >
-        <PopoverPanel
-          ref={ref}
-          modal={false}
-          portal={false}
-          static
-          anchor={{ to: anchorPlacement, gap: anchorGap }}
-          onClick={() => closePopper}
-          className={clsx(contentClassName, "min-w-[var(--button-width)]", fixedWidth && "w-[var(--button-width)]")}
-        >
-          {renderContent(() => setOpen(false))}
-        </PopoverPanel>
-      </Transition>
-    </Popover>
+    <>
+      <div>{renderButton(setReferenceElement, referenceElement)}</div>
+      <AnimatePresence>
+        {referenceElement && (
+          <motion.div
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            ref={setPopperElement}
+            style={styles.popper}
+            className="!m-auto z-50"
+            {...attributes.popper}
+          >
+            {renderContent(() => setReferenceElement(null))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
