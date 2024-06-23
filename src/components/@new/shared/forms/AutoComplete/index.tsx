@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Popper from "../../Popper";
 import AutoCompleteListBox from "./AutoCompleteListBox";
 import AutoCompleteListItem from "./AutoCompleteListItem";
@@ -14,6 +14,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   onChange: (item: T[0]) => void;
   disableCloseOnSelect?: boolean;
   onFilter?: (searchValue: string, items: T) => T;
+  placeholder?: string
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -24,6 +25,7 @@ const AutoComplete = <T extends Array<{}>>({
   onChange,
   disableCloseOnSelect,
   onFilter,
+  placeholder
 }: AutoCompleteProps<T>) => {
   const [searchValue, setSearchValue] = useState<string | null>(null);
 
@@ -59,16 +61,12 @@ const AutoComplete = <T extends Array<{}>>({
         renderButton={(setReferenceElement, referenceElement) => (
           <TextField
             onChange={(value) => setSearchValue(value || null)}
-            placeholder="Test"
-            variant="primary"
+            placeholder={placeholder}
             onClick={(e) => {
               setSearchValue(value ? getOptionLabel(value) : null);
               setReferenceElement(referenceElement ? null : e.currentTarget);
             }}
             value={getInputValue(!!referenceElement)}
-            // onBlur={() => {
-            //   setSearchValue(null);
-            // }}
           />
         )}
         renderContent={(setReferenceElement) => (
