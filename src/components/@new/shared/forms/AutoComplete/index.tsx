@@ -31,7 +31,6 @@ const AutoComplete = <T extends Array<{}>>({
 }: AutoCompleteProps<T>) => {
   const isSearching = useRef(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
-  console.log(searchValue, 22);
 
   const handleSelect = (item: typeof options[0], setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => {
     onChange(item);
@@ -57,8 +56,6 @@ const AutoComplete = <T extends Array<{}>>({
     return options;
   };
 
-  console.log(searchValue)
-
   return (
     <div>
       <Popper
@@ -67,10 +64,10 @@ const AutoComplete = <T extends Array<{}>>({
           isSearching.current = false;
         }}
         onAnimationStart={() => {
-          if(value) {
-            const el = document.getElementById(getOptionKey(value))
-            if(el) {
-              el.scrollIntoView()
+          if (value) {
+            const el = document.getElementById(getOptionKey(value));
+            if (el) {
+              el.scrollIntoView();
             }
           }
         }}
@@ -84,7 +81,6 @@ const AutoComplete = <T extends Array<{}>>({
             onClick={(e) => {
               setSearchValue(value ? getOptionLabel(value) : null);
               setReferenceElement(referenceElement ? null : e.currentTarget);
-            
             }}
             value={getInputValue(!!referenceElement)}
           />

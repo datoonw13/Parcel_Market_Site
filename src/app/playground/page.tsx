@@ -83,7 +83,7 @@ export default function PlaygroundPage() {
       <button type="button" onClick={() => setOpen(true)}>
         wqdwqd
       </button>
-      <Drawer title="Sort By ragac" open={open} closeModal={() => setOpen(false)}>
+      <Drawer title="Sort By ragac" open={open} closeDrawer={() => setOpen(false)}>
         <div className="h-[150px]">qwd</div>
       </Drawer>
     </main>
