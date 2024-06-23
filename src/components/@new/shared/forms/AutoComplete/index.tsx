@@ -1,9 +1,9 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, ReactElement, SetStateAction, useRef, useState } from "react";
 import { ArrowIcon1 } from "@/components/@new/icons/ArrowIcons";
 import clsx from "clsx";
-import { Clear, Remove } from "@mui/icons-material";
+import { Clear } from "@mui/icons-material";
 import Popper from "../../Popper";
 import AutoCompleteListBox from "./AutoCompleteListBox";
 import AutoCompleteListItem from "./AutoCompleteListItem";
@@ -23,6 +23,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   disabled?: boolean;
   clearIconClassName?: string;
   arrowIconClassName?: string;
+  renderContent?: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>, options: T) => ReactElement;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -39,6 +40,7 @@ const AutoComplete = <T extends Array<{}>>({
   disabled,
   clearIconClassName,
   arrowIconClassName,
+  renderContent,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -72,6 +74,7 @@ const AutoComplete = <T extends Array<{}>>({
   return (
     <div>
       <Popper
+        offsetY={2}
         onAnimationExit={() => {
           setSearchValue(null);
           isSearching.current = false;
@@ -109,21 +112,27 @@ const AutoComplete = <T extends Array<{}>>({
             disabled={disabled}
           />
         )}
-        renderContent={(setReferenceElement) => (
-          <AutoCompleteListBox>
-            {getOptions().length === 0 && <div className="py-4 px-4 cursor-pointer font-medium text-xs text-center">Data not found...</div>}
-            {getOptions().map((item) => (
-              <AutoCompleteListItem
-                id={getOptionKey(item)}
-                selected={getSelectedOption ? getSelectedOption(item, value) : false}
-                key={getOptionKey(item)}
-                onClick={() => handleSelect(item, setReferenceElement)}
-              >
-                {getOptionLabel(item)}
-              </AutoCompleteListItem>
-            ))}
-          </AutoCompleteListBox>
-        )}
+        renderContent={(setReferenceElement) =>
+          renderContent ? (
+            renderContent(setReferenceElement, options)
+          ) : (
+            <AutoCompleteListBox>
+              {getOptions().length === 0 && (
+                <div className="py-4 px-4 cursor-pointer font-medium text-xs text-center">Data not found...</div>
+              )}
+              {getOptions().map((item) => (
+                <AutoCompleteListItem
+                  id={getOptionKey(item)}
+                  selected={getSelectedOption ? getSelectedOption(item, value) : false}
+                  key={getOptionKey(item)}
+                  onClick={() => handleSelect(item, setReferenceElement)}
+                >
+                  {getOptionLabel(item)}
+                </AutoCompleteListItem>
+              ))}
+            </AutoCompleteListBox>
+          )
+        }
       />
     </div>
   );

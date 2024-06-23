@@ -9,12 +9,15 @@ const LandsDesktopFilters = () => {
   const [filters, setFilters] = useState<{
     state: string | null;
     county: string | null;
+    acreages: { min: number | null; max: number | null };
   }>({
     state: null,
     county: null,
+    acreages: { min: null, max: null },
   });
+  const [acreagesTempFilters, setAcreagesTempFilters] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   return (
-    <div>
+    <div className="mb-8">
       <div className="grid gap-3 grid-cols-4">
         <AutoComplete
           inputRootClassName={clsx(
@@ -41,6 +44,47 @@ const LandsDesktopFilters = () => {
           value={getCountyValue(filters.county, filters.state)}
           disabled={!filters.state}
         />
+        {/* <AutoComplete
+          inputRootClassName={clsx(
+            "!h-[36px] [&>input::placeholder]:text-black",
+            filters.county && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
+          )}
+          options={acreagesFilters}
+          getOptionLabel={(item) => ""}
+          getOptionKey={(item) => ""}
+          onChange={(item) => {}}
+          placeholder="County"
+          value={null}
+          renderContent={(setReferenceElement, options) => (
+            <AutoCompleteListBox>
+              <div className="flex gap-0.5 items-center p-4">
+                <TextField
+                  onChange={(value) => {}}
+                  placeholder="Min"
+                  className="!h-[38px]"
+                  value={filters.acreages.min ? filters.acreages.min.toString() : ""}
+                />
+                <hr className="w-7 border-grey-100" />
+                <TextField
+                  onChange={(value) => {}}
+                  placeholder="Max"
+                  className="!h-[38px]"
+                  value={filters.acreages.max ? filters.acreages.max.toString() : ""}
+                />
+              </div>
+              {options.map((item) => (
+                <AutoCompleteListItem key={item.min} onClick={() => setFilters({ ...filters, acreages: item })} id="">
+                  {`${item.min - 1}+ Acres`}
+                </AutoCompleteListItem>
+              ))}
+              <hr className="w-full border-grey-100" />
+              <div className="">
+                <Button>Clear</Button>
+                <Button>Done</Button>
+              </div>
+            </AutoCompleteListBox>
+          )}
+        /> */}
       </div>
     </div>
   );

@@ -84,3 +84,7 @@ body {
   background-color: transparent;
   border: 0;
 }
+
+.simplebar-content-wrapper {
+  @apply rounded-xl
+}

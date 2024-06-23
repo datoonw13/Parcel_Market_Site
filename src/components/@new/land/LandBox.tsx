@@ -25,8 +25,9 @@ interface LandBoxProps {
     };
   };
   className?: string;
+  disableSave?: boolean;
 }
-const LandBox = ({ view, data, className }: LandBoxProps) => {
+const LandBox = ({ view, data, className, disableSave }: LandBoxProps) => {
   const [save, setSave] = useState(false);
   return (
     <div
@@ -44,13 +45,15 @@ const LandBox = ({ view, data, className }: LandBoxProps) => {
             <LocationIcon1 /> {data.state}; {data.county}
           </h2>
         </div>
-        <div onClick={() => setSave(!save)}>
-          {save ? (
-            <BookmarkIcon2 className="mt-1 fill-primary-main cursor-pointer" />
-          ) : (
-            <BookmarkIcon1 className="mt-1 fill-primary-main cursor-pointer" />
-          )}
-        </div>
+        {!disableSave && (
+          <div onClick={() => setSave(!save)}>
+            {save ? (
+              <BookmarkIcon2 className="mt-1 fill-primary-main cursor-pointer" />
+            ) : (
+              <BookmarkIcon1 className="mt-1 fill-primary-main cursor-pointer" />
+            )}
+          </div>
+        )}
       </div>
       <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
         <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>

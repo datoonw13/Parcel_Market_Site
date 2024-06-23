@@ -40,7 +40,7 @@ const list = [
   {
     label: "My Listings",
     icon: BookIcon1,
-    path: "/",
+    path: routes.user.listings,
   },
   {
     label: "Received Offers",
