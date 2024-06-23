@@ -4,16 +4,16 @@ import React, { Dispatch, FC, ReactElement, SetStateAction, useCallback, useEffe
 import { usePopper } from "react-popper";
 import { AnimatePresence, motion } from "framer-motion";
 import { ModifierArguments, ModifierPhases, Placement, offset } from "@popperjs/core";
-import maxSize from "popper-max-size-modifier";
 
 interface IPopper {
   renderButton: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>, referenceElement: HTMLElement | null) => ReactElement;
-  renderContent: (closePopper: () => void) => ReactElement;
+  renderContent: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => ReactElement;
   disableCloseOnAwayClick?: boolean;
   disableSameWidth?: boolean;
   placement?: Placement;
   offsetY?: number;
   offsetX?: number;
+  onExitComplete?: () => void;
 }
 
 const sameWidth = {
@@ -29,17 +29,6 @@ const sameWidth = {
   },
 };
 
-const applyMaxSize = {
-  name: "applyMaxSize",
-  enabled: true,
-  phase: "beforeWrite" as ModifierPhases,
-  requires: ["maxSize"],
-  fn({ state }: ModifierArguments<object>) {
-    const { height } = state.modifiersData.maxSize;
-    state.styles.popper.maxHeight = `${height}px`;
-  },
-};
-
 const Popper: FC<IPopper> = ({
   renderButton,
   disableCloseOnAwayClick,
@@ -48,6 +37,7 @@ const Popper: FC<IPopper> = ({
   renderContent,
   offsetX,
   offsetY,
+  onExitComplete,
 }) => {
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -55,8 +45,6 @@ const Popper: FC<IPopper> = ({
     placement,
     modifiers: [
       ...(disableSameWidth ? [] : [sameWidth]),
-      applyMaxSize,
-      maxSize,
       {
         name: "offset",
         options: {
@@ -93,7 +81,7 @@ const Popper: FC<IPopper> = ({
   return (
     <>
       <div>{renderButton(setReferenceElement, referenceElement)}</div>
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={onExitComplete}>
         {referenceElement && (
           <motion.div
             exit={{ opacity: 0 }}
@@ -104,7 +92,7 @@ const Popper: FC<IPopper> = ({
             className="!m-auto z-50"
             {...attributes.popper}
           >
-            {renderContent(() => setReferenceElement(null))}
+            {renderContent(setReferenceElement)}
           </motion.div>
         )}
       </AnimatePresence>

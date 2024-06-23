@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { ReactElement, useEffect, useLayoutEffect, useRef } from "react";
+import { MouseEvent, ReactElement, useEffect, useLayoutEffect, useRef } from "react";
 import classes from "./textfield.module.css";
 
 interface TextFieldProps {
@@ -13,10 +13,12 @@ interface TextFieldProps {
   onChange?: (value: string) => void;
   endIcon?: ReactElement | string;
   disabled?: boolean;
+  onClick?: (e: MouseEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
 }
 
 const TextField = (props: TextFieldProps) => {
-  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon, disabled } = props;
+  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon, disabled, onClick, onBlur } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -33,7 +35,7 @@ const TextField = (props: TextFieldProps) => {
   }, [endIcon]);
 
   return (
-    <div className={clsx(classes.root)}>
+    <div className={clsx(classes.root)} onClick={onClick}>
       <input
         className={clsx(label && classes[`input-${variant}`], classes.input, error && classes.error)}
         placeholder={placeholder}
@@ -41,6 +43,7 @@ const TextField = (props: TextFieldProps) => {
         onChange={(e) => onChange && onChange(e.target.value)}
         ref={inputRef}
         disabled={disabled}
+        onBlur={onBlur}
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (

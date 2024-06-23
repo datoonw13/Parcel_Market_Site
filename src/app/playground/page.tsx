@@ -43,24 +43,32 @@ export default function PlaygroundPage() {
           <TextField variant="primary" placeholder="placeholder" />
         </div>
       </div>
-      {/* <div>
+      <div>
         <h2 className="mb-4 text-lg font-mono">AutoComplete</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
           <AutoComplete
-            value={value}
             options={getAllStates()}
-            onChange={(data) => setValue(data)}
-            renderInput={(searchValue, setSearchValue) => (
-              <TextField
-                label="State"
-                value={searchValue !== null ? searchValue : value?.label || ""}
-                onChange={(e) => setSearchValue(e)}
-              />
-            )}
+            getOptionLabel={(item) => item.label}
+            getOptionKey={(item) => item.value}
+            onChange={(item) => setValue(item)}
+            value={value}
+            onFilter={(searchValue, items) =>
+              items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+            }
+            // value={value}
+            // options={getAllStates()}
+            // onChange={(data) => setValue(data)}
+            // renderInput={(searchValue, setSearchValue) => (
+            //   <TextField
+            //     label="State"
+            //     value={searchValue !== null ? searchValue : value?.label || ""}
+            //     onChange={(e) => setSearchValue(e)}
+            //   />
+            // )}
           />
         </div>
-      </div> */}
+      </div>
       <div>
         <h2 className="mb-4 text-lg font-mono">Button</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />

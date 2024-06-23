@@ -1,64 +1,89 @@
-// "use client";
+"use client";
 
-// import React, { Dispatch, ReactElement, SetStateAction, useState } from "react";
-// import Popper from "../../Popper";
-// import TextField from "../TextField";
-// import AutoCompleteListBox from "./AutoCompleteListBox";
-// import AutoCompleteListItem from "./AutoCompleteListItem";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import Popper from "../../Popper";
+import AutoCompleteListBox from "./AutoCompleteListBox";
+import AutoCompleteListItem from "./AutoCompleteListItem";
+import TextField from "../TextField";
 
-// interface AutoCompleteProps {
-//   options: Array<{ label: string; value: string }>;
-//   onChange: (value: { label: string; value: string }) => void;
-//   value: { label: string; value: string } | null;
-//   renderInput: (searchValue: string | null, setSearchValue: Dispatch<SetStateAction<string | null>>) => ReactElement;
-// }
+interface AutoCompleteProps<T extends Array<{}>> {
+  options: T;
+  getOptionLabel: (item: T[0]) => string;
+  getOptionKey: (item: T[0]) => string;
+  value?: T[0] | null;
+  onChange: (item: T[0]) => void;
+  disableCloseOnSelect?: boolean;
+  onFilter?: (searchValue: string, items: T) => T;
+}
 
-// const AutoComplete = ({ onChange, options, value, renderInput }: AutoCompleteProps) => {
-//   const [searchValue, setSearchValue] = useState<string | null>(null);
-//   const filteredOptions = options.filter((el) =>
-//     searchValue ? el.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) : Boolean(el.label)
-//   );
+const AutoComplete = <T extends Array<{}>>({
+  options,
+  getOptionKey,
+  getOptionLabel,
+  value,
+  onChange,
+  disableCloseOnSelect,
+  onFilter,
+}: AutoCompleteProps<T>) => {
+  const [searchValue, setSearchValue] = useState<string | null>(null);
 
-//   return (
-//     <Popper
-//       contentClassName="shadow-1 rounded-xl"
-//       anchorPlacement="bottom end"
-//       anchorGap={5}
-//       disableTransition
-//       onOpen={() => {
-//         setSearchValue(value?.label || "");
-//       }}
-//       onClose={() => {
-//         setSearchValue(null);
-//       }}
-//       renderButton={(open, setOpen) => <div onClick={() => setOpen(true)}>{renderInput(searchValue, setSearchValue)}</div>}
-//       renderContent={(closePopper) => (
-//         <>
-//           <AutoCompleteListBox>
-//             {filteredOptions.map((el) => (
-//               <AutoCompleteListItem
-//                 key={el.value}
-//                 selected={el?.value === value?.value}
-//                 onClick={() => {
-//                   closePopper();
-//                   onChange(el);
-//                 }}
-//               >
-//                 {el.label}
-//               </AutoCompleteListItem>
-//             ))}
-//             {filteredOptions.length === 0 && <AutoCompleteListItem onClick={() => {}}>Data not found...</AutoCompleteListItem>}
-//           </AutoCompleteListBox>
-//         </>
-//       )}
-//     />
-//   );
-// };
+  const handleSelect = (item: typeof options[0], setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => {
+    onChange(item);
+    setSearchValue(null);
+    if (!disableCloseOnSelect) {
+      setReferenceElement(null);
+    }
+  };
 
-// export default AutoComplete;
+  const getInputValue = (isOpen?: boolean) => {
+    if (searchValue || isOpen) {
+      return searchValue || "";
+    }
+    if (value) {
+      return getOptionLabel(value);
+    }
+    return "";
+  };
 
-import React from "react";
+  const getOptions = () => {
+    if (searchValue && onFilter) {
+      return onFilter(searchValue, options);
+    }
+    return options;
+  };
 
-const index = () => <div>index</div>;
+  return (
+    <div>
+      <Popper
+        onExitComplete={() => setSearchValue && setSearchValue(null)}
+        renderButton={(setReferenceElement, referenceElement) => (
+          <TextField
+            onChange={(value) => setSearchValue(value || null)}
+            placeholder="Test"
+            variant="primary"
+            onClick={(e) => {
+              setSearchValue(value ? getOptionLabel(value) : null);
+              setReferenceElement(referenceElement ? null : e.currentTarget);
+            }}
+            value={getInputValue(!!referenceElement)}
+            // onBlur={() => {
+            //   setSearchValue(null);
+            // }}
+          />
+        )}
+        renderContent={(setReferenceElement) => (
+          <AutoCompleteListBox>
+            {getOptions().length === 0 && <div className="py-4 px-4 cursor-pointer font-medium text-xs text-center">Data not found...</div>}
+            {getOptions().map((item) => (
+              <AutoCompleteListItem key={getOptionKey(item)} onClick={() => handleSelect(item, setReferenceElement)}>
+                {getOptionLabel(item)}
+              </AutoCompleteListItem>
+            ))}
+          </AutoCompleteListBox>
+        )}
+      />
+    </div>
+  );
+};
 
-export default index;
+export default AutoComplete;

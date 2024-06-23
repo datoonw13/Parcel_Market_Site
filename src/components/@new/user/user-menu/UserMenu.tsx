@@ -15,7 +15,7 @@ const UserMenu = () => (
         </div>
       </div>
     )}
-    renderContent={(closePopper) => (
+    renderContent={(setReferenceElement) => (
       <div className="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80">
         <Avatar title="LG" className="w-16 h-16" />
         <div>
@@ -23,7 +23,7 @@ const UserMenu = () => (
           <p className="text-xs text-grey-600 text-center">d.natelashvili@Example.com</p>
         </div>
         <div className="bg-grey-30 rounded-xl w-full p-4">
-          <UserMenuList close={closePopper} />
+          <UserMenuList close={() => setReferenceElement(null)} />
         </div>
       </div>
     )}
