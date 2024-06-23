@@ -1,6 +1,8 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { ArrowIcon1 } from "@/components/@new/icons/ArrowIcons";
+import clsx from "clsx";
 import Popper from "../../Popper";
 import AutoCompleteListBox from "./AutoCompleteListBox";
 import AutoCompleteListItem from "./AutoCompleteListItem";
@@ -16,6 +18,8 @@ interface AutoCompleteProps<T extends Array<{}>> {
   onFilter?: (searchValue: string, items: T) => T;
   placeholder?: string;
   getSelectedOption?: (item: T[0], selectedValue?: T[0] | null) => boolean;
+  inputRootClassName?: string;
+  endIconClassName?: string;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -28,12 +32,16 @@ const AutoComplete = <T extends Array<{}>>({
   onFilter,
   placeholder,
   getSelectedOption,
+  inputRootClassName,
+  endIconClassName,
 }: AutoCompleteProps<T>) => {
+  const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
 
   const handleSelect = (item: typeof options[0], setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => {
     onChange(item);
+    setOpen(!isOpen);
     if (!disableCloseOnSelect) {
       setReferenceElement(null);
     }
@@ -64,6 +72,7 @@ const AutoComplete = <T extends Array<{}>>({
           isSearching.current = false;
         }}
         onAnimationStart={() => {
+          setOpen(!isOpen);
           if (value) {
             const el = document.getElementById(getOptionKey(value));
             if (el) {
@@ -83,6 +92,8 @@ const AutoComplete = <T extends Array<{}>>({
               setReferenceElement(referenceElement ? null : e.currentTarget);
             }}
             value={getInputValue(!!referenceElement)}
+            className={inputRootClassName}
+            endIcon={<ArrowIcon1 className={clsx(endIconClassName, isOpen ? "rotate-180" : "")} />}
           />
         )}
         renderContent={(setReferenceElement) => (

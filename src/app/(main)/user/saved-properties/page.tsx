@@ -1,5 +1,6 @@
 import { UserIcon2 } from "@/components/@new/icons/UserIcons";
 import LandBox from "@/components/@new/land/LandBox";
+import LandsDesktopFilters from "@/components/@new/land/filters/LandsDesktopFilters";
 import { numFormatter } from "@/helpers/common";
 import { Container } from "@mui/material";
 import React from "react";
@@ -12,6 +13,7 @@ const UserListings = () => (
         Welcome to Parcel Market and thank You for being here. At Parcel Market, our goal is simple, to provide a FREE...
       </h2>
     </div>
+    <LandsDesktopFilters />
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {new Array(21).fill(0).map(() => (
         <LandBox data={data} key={Math.random()} view="vertical" className="max-w-96 md:max-w-max m-auto" />

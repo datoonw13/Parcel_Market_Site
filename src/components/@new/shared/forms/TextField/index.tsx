@@ -16,10 +16,24 @@ interface TextFieldProps {
   onClick?: (e: MouseEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   defaultValue?: string;
+  className?: string;
 }
 
 const TextField = (props: TextFieldProps) => {
-  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon, disabled, onClick, onBlur, defaultValue } = props;
+  const {
+    variant = "primary",
+    label,
+    placeholder = "",
+    error,
+    value,
+    onChange,
+    endIcon,
+    disabled,
+    onClick,
+    onBlur,
+    defaultValue,
+    className,
+  } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -36,7 +50,7 @@ const TextField = (props: TextFieldProps) => {
   }, [endIcon]);
 
   return (
-    <div className={clsx(classes.root)} onClick={onClick}>
+    <div className={clsx(classes.root, className)} onClick={onClick}>
       <input
         className={clsx(label && classes[`input-${variant}`], classes.input, error && classes.error)}
         placeholder={placeholder}
