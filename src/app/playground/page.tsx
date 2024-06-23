@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/components/@new/shared/Avatar";
+import Modal from "@/components/@new/shared/Modal";
 import Popper from "@/components/@new/shared/Popper";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import Button from "@/components/@new/shared/forms/Button";
@@ -10,10 +11,10 @@ import { useState } from "react";
 
 export default function PlaygroundPage() {
   const [value, setValue] = useState<any>(null);
+  const [open, setOpen] = useState(false);
   return (
     <main className="space-y-8 mb-44 max-w-6xl m-auto">
       <h1 className="text-4xl mt-8">Playground</h1>
-
       <div>
         <h2 className="mb-4 text-lg font-mono">Popper</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
@@ -77,6 +78,12 @@ export default function PlaygroundPage() {
           <Button variant="secondary">Secondary</Button>
         </div>
       </div>
+      <button type="button" onClick={() => setOpen(true)}>
+        wqdwqd
+      </button>
+      <Modal open={open} closeModal={() => setOpen(false)}>
+        <div className="bg-white shadow-1 p-4">aee</div>
+      </Modal>
     </main>
   );
 }
