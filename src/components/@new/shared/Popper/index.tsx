@@ -15,7 +15,7 @@ interface IPopper {
   offsetX?: number;
   onAnimationEnter?: () => void;
   onAnimationExit?: () => void;
-  onAnimationStart?: () => void
+  onAnimationStart?: () => void;
 }
 
 const sameWidth = {
@@ -41,7 +41,7 @@ const Popper: FC<IPopper> = ({
   offsetY,
   onAnimationEnter,
   onAnimationExit,
-  onAnimationStart
+  onAnimationStart,
 }) => {
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -89,11 +89,11 @@ const Popper: FC<IPopper> = ({
         {referenceElement && (
           <motion.div
             onAnimationComplete={(definition: any) => {
-              if(definition?.opacity === 1 && onAnimationEnter) {
-                onAnimationEnter()
+              if (definition?.opacity === 1 && onAnimationEnter) {
+                onAnimationEnter();
               }
-              if(definition?.opacity === 0 && onAnimationExit) {
-                onAnimationExit()
+              if (definition?.opacity === 0 && onAnimationExit) {
+                onAnimationExit();
               }
             }}
             onAnimationStart={onAnimationStart}
