@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ArrowIcon1 } from "@/components/@new/icons/ArrowIcons";
 import clsx from "clsx";
+import { Clear, Remove } from "@mui/icons-material";
 import Popper from "../../Popper";
 import AutoCompleteListBox from "./AutoCompleteListBox";
 import AutoCompleteListItem from "./AutoCompleteListItem";
@@ -13,13 +14,15 @@ interface AutoCompleteProps<T extends Array<{}>> {
   getOptionLabel: (item: T[0]) => string;
   getOptionKey: (item: T[0]) => string;
   value?: T[0] | null;
-  onChange: (item: T[0]) => void;
+  onChange: (item: T[0] | null) => void;
   disableCloseOnSelect?: boolean;
   onFilter?: (searchValue: string, items: T) => T;
   placeholder?: string;
   getSelectedOption?: (item: T[0], selectedValue?: T[0] | null) => boolean;
   inputRootClassName?: string;
-  endIconClassName?: string;
+  disabled?: boolean;
+  clearIconClassName?: string;
+  arrowIconClassName?: string;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -33,7 +36,9 @@ const AutoComplete = <T extends Array<{}>>({
   placeholder,
   getSelectedOption,
   inputRootClassName,
-  endIconClassName,
+  disabled,
+  clearIconClassName,
+  arrowIconClassName,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -93,7 +98,15 @@ const AutoComplete = <T extends Array<{}>>({
             }}
             value={getInputValue(!!referenceElement)}
             className={inputRootClassName}
-            endIcon={<ArrowIcon1 className={clsx(endIconClassName, isOpen ? "rotate-180" : "")} />}
+            endIcon={
+              <div className="flex items-center">
+                <div onClick={() => onChange(null)}>
+                  <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
+                </div>
+                <ArrowIcon1 className={clsx("cursor-pointer h-2 mt-1", arrowIconClassName)} />
+              </div>
+            }
+            disabled={disabled}
           />
         )}
         renderContent={(setReferenceElement) => (

@@ -15,7 +15,7 @@ const LandsDesktopFilters = () => {
   });
   return (
     <div>
-      <div className="flex gap-3">
+      <div className="grid gap-3 grid-cols-4">
         <AutoComplete
           inputRootClassName={clsx(
             "!h-[36px] [&>input::placeholder]:text-black",
@@ -24,9 +24,8 @@ const LandsDesktopFilters = () => {
           options={getAllStates()}
           getOptionLabel={(item) => item.label}
           getOptionKey={(item) => item.value}
-          onChange={(item) => setFilters({ ...filters, state: item.value, county: null })}
+          onChange={(item) => setFilters({ ...filters, state: item?.value || null, county: null })}
           placeholder="State"
-          endIconClassName="h-2"
           value={getStateValue(filters.state)}
         />
         <AutoComplete
@@ -37,10 +36,10 @@ const LandsDesktopFilters = () => {
           options={getCounties(filters.state)}
           getOptionLabel={(item) => item.label}
           getOptionKey={(item) => item.value}
-          onChange={(item) => setFilters({ ...filters, county: item.value })}
+          onChange={(item) => setFilters({ ...filters, county: item?.value || null })}
           placeholder="County"
-          endIconClassName="h-2"
           value={getCountyValue(filters.county, filters.state)}
+          disabled={!filters.state}
         />
       </div>
     </div>

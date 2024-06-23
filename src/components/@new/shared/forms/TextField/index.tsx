@@ -13,7 +13,7 @@ interface TextFieldProps {
   onChange?: (value: string) => void;
   endIcon?: ReactElement | string;
   disabled?: boolean;
-  onClick?: (e: MouseEvent<HTMLInputElement>) => void;
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void;
   onBlur?: () => void;
   defaultValue?: string;
   className?: string;
@@ -50,9 +50,9 @@ const TextField = (props: TextFieldProps) => {
   }, [endIcon]);
 
   return (
-    <div className={clsx(classes.root, className)} onClick={onClick}>
+    <div className={clsx(classes.root, className)} onClick={(e) => !disabled && onClick && onClick(e)}>
       <input
-        className={clsx(label && classes[`input-${variant}`], classes.input, error && classes.error)}
+        className={clsx(label && classes[`input-${variant}`], classes.input, error && classes.error, disabled && "cursor-not-allowed")}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange && onChange(e.target.value)}
@@ -63,7 +63,10 @@ const TextField = (props: TextFieldProps) => {
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (
-        <div className="absolute right-0 h-full flex items-center pr-3" ref={endIconRef}>
+        <div
+          className={clsx("absolute right-0 h-full flex items-center pr-3", disabled && "cursor-not-allowed pointer-events-none")}
+          ref={endIconRef}
+        >
           {endIcon}
         </div>
       )}
