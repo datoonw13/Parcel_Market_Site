@@ -15,10 +15,11 @@ interface TextFieldProps {
   disabled?: boolean;
   onClick?: (e: MouseEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
+  defaultValue?: string;
 }
 
 const TextField = (props: TextFieldProps) => {
-  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon, disabled, onClick, onBlur } = props;
+  const { variant = "primary", label, placeholder = "", error, value, onChange, endIcon, disabled, onClick, onBlur, defaultValue } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -44,6 +45,7 @@ const TextField = (props: TextFieldProps) => {
         ref={inputRef}
         disabled={disabled}
         onBlur={onBlur}
+        defaultValue={defaultValue}
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (

@@ -55,6 +55,7 @@ export default function PlaygroundPage() {
             getOptionKey={(item) => item.value}
             onChange={(item) => setValue(item)}
             value={value}
+            getSelectedOption={(item, selectedValue) => item.value === selectedValue?.value}
             onFilter={(searchValue, items) =>
               items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
             }

@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import React, { ReactNode } from "react";
 
-const AutoCompleteListItem = ({ children, onClick, selected }: { children: ReactNode; onClick: () => void; selected?: boolean }) => (
+const AutoCompleteListItem = ({ children, onClick, selected, id }: { children: ReactNode; onClick: () => void; selected?: boolean, id: string }) => (
   <div
+    id={id}
     onClick={onClick}
     className={clsx(
       "py-2.5 px-4 cursor-pointer hover:bg-primary-main-50 transition-all duration-100 font-medium text-xs",

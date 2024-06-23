@@ -13,7 +13,9 @@ interface IPopper {
   placement?: Placement;
   offsetY?: number;
   offsetX?: number;
-  onExitComplete?: () => void;
+  onAnimationEnter?: () => void;
+  onAnimationExit?: () => void;
+  onAnimationStart?: () => void
 }
 
 const sameWidth = {
@@ -37,7 +39,9 @@ const Popper: FC<IPopper> = ({
   renderContent,
   offsetX,
   offsetY,
-  onExitComplete,
+  onAnimationEnter,
+  onAnimationExit,
+  onAnimationStart
 }) => {
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -81,9 +85,18 @@ const Popper: FC<IPopper> = ({
   return (
     <>
       <div>{renderButton(setReferenceElement, referenceElement)}</div>
-      <AnimatePresence onExitComplete={onExitComplete}>
+      <AnimatePresence>
         {referenceElement && (
           <motion.div
+            onAnimationComplete={(definition: any) => {
+              if(definition?.opacity === 1 && onAnimationEnter) {
+                onAnimationEnter()
+              }
+              if(definition?.opacity === 0 && onAnimationExit) {
+                onAnimationExit()
+              }
+            }}
+            onAnimationStart={onAnimationStart}
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
