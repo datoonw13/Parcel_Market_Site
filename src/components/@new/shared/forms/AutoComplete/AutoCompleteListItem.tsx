@@ -1,7 +1,17 @@
 import clsx from "clsx";
 import React, { ReactNode } from "react";
 
-const AutoCompleteListItem = ({ children, onClick, selected, id }: { children: ReactNode; onClick: () => void; selected?: boolean, id: string }) => (
+const AutoCompleteListItem = ({
+  children,
+  onClick,
+  selected,
+  id,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+  selected?: boolean;
+  id: string;
+}) => (
   <div
     id={id}
     onClick={onClick}
