@@ -33,6 +33,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         placeholder="State"
         value={getStateValue(filters.state)}
         onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
+        getSelectedOption={(item) => item.value === filters.state}
       />
       <AutoComplete
         inputRootClassName={clsx(
@@ -47,6 +48,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         value={getCountyValue(filters.county, filters.state)}
         disabled={!filters.state}
         onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
+        getSelectedOption={(item) => item.value === filters.county}
       />
       <LandsDesktopFiltersMinMax
         options={acreagesFilters}
