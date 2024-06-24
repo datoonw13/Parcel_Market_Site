@@ -14,7 +14,6 @@ interface UserMenuListItemProps {
 }
 const UserMenuListItem = ({ path, onClick, label, icon: Icon, listItemClasses }: UserMenuListItemProps) => {
   const pathname = usePathname();
-
   return (
     <Link key={label} href={path} onClick={onClick}>
       <li className="flex items-center  gap-1.5 cursor-pointer group">

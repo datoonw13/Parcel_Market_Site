@@ -22,3 +22,15 @@ export interface ILandsMarketplaceFilters {
   sellerType: ISellProperty["sellerType"];
   sortBy: SortBy | null;
 }
+
+export interface ILandsFilters {
+  state: string | null;
+  county: string | null;
+  acreageMin: number | string | null;
+  acreageMax: number | string | null;
+  priceMin: number | string | null;
+  priceMax: number | string | null;
+  page: number;
+  pageSize: number;
+  sortBy: SortBy | null;
+}

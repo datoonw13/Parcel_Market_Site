@@ -7,15 +7,18 @@ import TextField from "@/components/@new/shared/forms/TextField";
 import clsx from "clsx";
 
 interface LandsDesktopFiltersMinMaxProps {
-  options: Array<{ min: number | null; max: number | null }>;
-  value: { min: number | null; max: number | null };
-  onChange: (value: { min: number | null; max: number | null }) => void;
+  options: Array<{ min: number | string | null; max: number | string | null }>;
+  value: { min: number | string | null; max: number | string | null };
+  onChange: (value: { min: number | string | null; max: number | string | null }) => void;
   placeHolder?: string;
-  getOptionLabel: (item: { min: number | null; max: number | null }) => string;
+  getOptionLabel: (item: { min: number | string | null; max: number | string | null }) => string;
 }
 
 const LandsDesktopFiltersMinMax: FC<LandsDesktopFiltersMinMaxProps> = ({ options, value, onChange, placeHolder, getOptionLabel }) => {
-  const [filters, setFilters] = useState<{ min: string | number | null; max: string | number | null }>({ min: null, max: null });
+  const [filters, setFilters] = useState<{ min: string | number | string | null; max: string | number | string | null }>({
+    min: null,
+    max: null,
+  });
 
   const isSelected = (item: LandsDesktopFiltersMinMaxProps["value"]) => JSON.stringify(filters) === JSON.stringify(item);
   const disableSelect = filters.max && Number(filters.max) <= Number(filters.min);

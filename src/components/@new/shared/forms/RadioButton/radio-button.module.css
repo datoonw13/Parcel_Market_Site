@@ -1,0 +1,6 @@
+.root {
+    @apply appearance-none w-[18px] h-[18px] inline-block border border-grey-600 bg-none [&:checked]:bg-success [&:checked]:border-success;
+    background-clip: content-box;
+    border-radius: 50%;
+    padding: 4px;
+}

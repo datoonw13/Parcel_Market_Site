@@ -97,7 +97,7 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
               </Box> */}
             </Box>
             <p className="text-grey-600 text-xs my-4">Personal</p>
-            <UserMenuList listItemClasses="!text-sm" />
+            <UserMenuList listItemClasses="!text-sm" close={() => setOpen(false)} />
           </Drawer>
         </>
       </Box>

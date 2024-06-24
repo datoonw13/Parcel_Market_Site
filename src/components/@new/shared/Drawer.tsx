@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, ReactElement, useCallback, useEffect, useRef, useState } from "react";
+import React, { FC, ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
@@ -9,7 +9,7 @@ interface ModalProps {
   open: boolean;
   closeDrawer: () => void;
   disableCloseOnAwayClick?: boolean;
-  children: ReactElement;
+  children: ReactNode;
   disableBackDrop?: boolean;
   title?: string;
 }
