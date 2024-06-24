@@ -1,5 +1,5 @@
 import { getAllStates, getCounties } from "@/helpers/states";
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 import { FilterList, KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, TextField, Typography } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";

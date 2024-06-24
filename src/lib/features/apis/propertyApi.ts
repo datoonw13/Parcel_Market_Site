@@ -8,7 +8,7 @@ import {
   ISellingProperty,
   IUserSellingPropertiesResponse,
 } from "@/types/find-property";
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties"] }).injectEndpoints({

@@ -1,5 +1,5 @@
 import { numFormatter } from "@/helpers/common";
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 
 export const acreagesFilters = [
   {

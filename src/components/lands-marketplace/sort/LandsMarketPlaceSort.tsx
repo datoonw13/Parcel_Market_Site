@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 import LandsMarketplaceDesktopSort from "./LandsMarketplaceDesktopSort";
 import LandsMarketplaceMobileSort from "./LandsMarketplaceMobileSort";
 

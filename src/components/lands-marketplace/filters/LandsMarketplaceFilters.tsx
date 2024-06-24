@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 import { Dispatch, SetStateAction } from "react";
 import LandsMarketplaceDesktopFilters from "./desktop/LandsMarketplaceDesktopFilters";
 import LandsMarketplaceMobileFilters from "./mobile/LandsMarketplaceMobileFilters";

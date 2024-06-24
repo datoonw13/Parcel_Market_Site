@@ -2,7 +2,7 @@
 
 import LandsMarketplaceSearch from "@/components/lands-marketplace/LandsMarketplaceSearch";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 import { Box, Button, CircularProgress, Container, Pagination, Skeleton, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/LandsMarketplaceFilters";

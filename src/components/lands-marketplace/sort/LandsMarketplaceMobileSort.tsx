@@ -1,5 +1,5 @@
 import { getAllStates, getCounties } from "@/helpers/states";
-import { ILandsMarketplaceFilters, SortBy } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters, SortBy } from "@/types/lands";
 import { FilterList, KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, TextField, Typography } from "@mui/material";
 import { ArrowDown2, ArrowUp2 } from "iconsax-react";

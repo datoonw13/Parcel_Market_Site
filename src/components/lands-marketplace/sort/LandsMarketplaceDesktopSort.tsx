@@ -1,9 +1,9 @@
-import { ILandsMarketplaceFilters, SortBy } from "@/types/lands-marketplace";
 import { Autocomplete, Box, InputAdornment, TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { getAllStates, getCounties } from "@/helpers/states";
 import AutoCompleteListboxComponent from "@/components/shared/AutoCompleteListboxComponent";
 import { ArrowDown2, ArrowSwapVertical, ArrowUp2 } from "iconsax-react";
+import { ILandsMarketplaceFilters, SortBy } from "@/types/lands";
 
 interface IProps {
   filters: ILandsMarketplaceFilters;

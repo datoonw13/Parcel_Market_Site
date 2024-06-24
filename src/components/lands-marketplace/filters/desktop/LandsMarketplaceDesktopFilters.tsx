@@ -1,4 +1,4 @@
-import { ILandsMarketplaceFilters } from "@/types/lands-marketplace";
+import { ILandsMarketplaceFilters } from "@/types/lands";
 import { Box } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { getAllStates, getCounties } from "@/helpers/states";
