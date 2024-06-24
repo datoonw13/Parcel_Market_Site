@@ -30,6 +30,9 @@ const LandsDesktopFilters = () => {
           onChange={(item) => setFilters({ ...filters, state: item?.value || null, county: null })}
           placeholder="State"
           value={getStateValue(filters.state)}
+          onFilter={(searchValue, items) =>
+            items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+          }
         />
         <AutoComplete
           inputRootClassName={clsx(
@@ -43,6 +46,9 @@ const LandsDesktopFilters = () => {
           placeholder="County"
           value={getCountyValue(filters.county, filters.state)}
           disabled={!filters.state}
+          onFilter={(searchValue, items) =>
+            items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+          }
         />
         {/* <AutoComplete
           inputRootClassName={clsx(
