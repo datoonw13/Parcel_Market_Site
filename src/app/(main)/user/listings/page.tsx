@@ -16,7 +16,14 @@ const UserListings = () => (
     {/* <LandsDesktopFilters  /> */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {new Array(21).fill(0).map(() => (
-        <LandBox data={data} key={Math.random()} view="vertical" className="max-w-96 md:max-w-max m-auto" />
+        <LandBox
+          data={data}
+          key={Math.random()}
+          view="vertical"
+          className="max-w-96 md:max-w-max m-auto"
+          parcelNumber=""
+          sellingItemId={2}
+        />
       ))}
     </div>
   </div>
