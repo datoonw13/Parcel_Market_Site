@@ -3,6 +3,8 @@
 import Image from "next/image";
 import clsx from "clsx";
 import { ReactNode, useState } from "react";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import { BookmarkIcon1, BookmarkIcon2 } from "../icons/BookMarkIcons";
 import { LocationIcon1 } from "../icons/LocationIcons";
 import { CalendarIcon1 } from "../icons/CalendarIcons";
@@ -34,8 +36,9 @@ interface LandBoxProps {
     selected: boolean;
     id: number;
   };
+  sellingItemId: number;
 }
-const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcelNumber }: LandBoxProps) => {
+const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcelNumber, sellingItemId }: LandBoxProps) => {
   const [save, setSave] = useState(false);
 
   return (
@@ -86,7 +89,9 @@ const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcel
         <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
           <CalendarIcon1 /> Available till: <span className="text-black">{data.availableTill}</span>
         </p>
-        <Button>Details</Button>
+        <Link href={`${routes.home.marketplace}/${sellingItemId}`}>
+          <Button>Details</Button>
+        </Link>
       </div>
     </div>
   );

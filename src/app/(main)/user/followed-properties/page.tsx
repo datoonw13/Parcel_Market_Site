@@ -64,6 +64,7 @@ const UserFollowedProperties = () => {
               state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === sellingProperty.county.toLocaleLowerCase()) || "";
             return (
               <LandBox
+                sellingItemId={sellingProperty.id}
                 select={{
                   showSelect: select.selecting,
                   id: followedListingId,
