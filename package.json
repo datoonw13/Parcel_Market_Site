@@ -39,6 +39,7 @@
     "nextjs-toploader": "^1.6.12",
     "npm": "^10.8.1",
     "popper-max-size-modifier": "^0.2.0",
+    "rc-pagination": "^4.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.2",

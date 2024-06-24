@@ -55,6 +55,6 @@ const list = [
   {
     label: "My saved properties",
     icon: BookmarkIcon1,
-    path: routes.user.savedProperties,
+    path: routes.user.followedProperties,
   },
 ];

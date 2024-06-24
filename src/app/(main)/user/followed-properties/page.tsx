@@ -6,7 +6,7 @@ import { numFormatter } from "@/helpers/common";
 import { Container } from "@mui/material";
 import React from "react";
 
-const UserListings = () => (
+const UserFollowedProperties = () => (
   <div className="w-full">
     <div className="mb-8">
       <h1 className="font-semibold text-2xl xs:mb-3 md:mb-4">My Saved Properties</h1>
@@ -21,7 +21,7 @@ const UserListings = () => (
   </div>
 );
 
-export default UserListings;
+export default UserFollowedProperties;
 
 const data = {
   name: "Lorem ipsum dolor sit amet. Et galisum incidunt non galisum modi et quia deleniti qui incidunt delectus et atque dicta vel expedita nemo sit sint eveniet. Et architecto omnis qui culpa sunt ut Quis voluptas.",

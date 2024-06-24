@@ -17,7 +17,7 @@ const routes = {
     properties: "/user/properties",
     profile: "/user/profile",
     listings: "/user/listings",
-    savedProperties: "/user/saved-properties",
+    followedProperties: "/user/followed-properties",
   },
 };
 
