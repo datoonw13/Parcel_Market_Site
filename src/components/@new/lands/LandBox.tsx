@@ -43,8 +43,8 @@ const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcel
       className={clsx(
         "pt-6 border border-grey-100 rounded-2xl w-full flex flex-col gap-4 cursor-pointer group hover:shadow-1 transition-all duration-100",
         className,
-        select?.showSelect && 'bg-black-100',
-        select?.selected && 'bg-black-200',
+        select?.showSelect && "bg-black-100",
+        select?.selected && "bg-black-200"
       )}
     >
       <div className="px-6 flex justify-between items-start gap-6">
