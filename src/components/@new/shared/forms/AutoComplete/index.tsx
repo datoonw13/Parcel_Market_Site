@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useRef, useState } from "react";
-import { ArrowIcon1 } from "@/components/@new/icons/ArrowIcons";
+import { ArrowIconDown1, ArrowIconUp1 } from "@/components/@new/icons/ArrowIcons";
 import clsx from "clsx";
 import { Clear } from "@mui/icons-material";
 import Popper from "../../Popper";
@@ -106,7 +106,11 @@ const AutoComplete = <T extends Array<{}>>({
                 <div onClick={() => onChange(null)}>
                   <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
                 </div>
-                <ArrowIcon1 className={clsx("cursor-pointer h-2 mt-1", arrowIconClassName)} />
+                {isOpen ? (
+                  <ArrowIconUp1 className={clsx("cursor-pointer h-2 mt-0.5", arrowIconClassName)} />
+                ) : (
+                  <ArrowIconDown1 className={clsx("cursor-pointer h-2 mt-0.5", arrowIconClassName)} />
+                )}
               </div>
             }
             disabled={disabled}

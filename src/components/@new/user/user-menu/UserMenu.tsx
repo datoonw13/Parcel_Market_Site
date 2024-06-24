@@ -2,7 +2,7 @@ import React from "react";
 import Avatar from "@/components/@new/shared/Avatar";
 import Popper from "../../shared/Popper";
 import UserMenuList from "./UserMenuList";
-import { ArrowIcon1 } from "../../icons/ArrowIcons";
+import { ArrowIconDown1 } from "../../icons/ArrowIcons";
 
 const UserMenu = () => (
   <Popper
@@ -11,7 +11,7 @@ const UserMenu = () => (
       <div className="relative" onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}>
         <Avatar title="LG" />
         <div className="shadow-2 bg-white rounded-full w-4 h-4 flex items-center justify-center absolute bottom-0 right-0">
-          <ArrowIcon1 className="m-1 w-4 h-4 cursor-pointer" />
+          <ArrowIconDown1 className="m-1 w-4 h-4 cursor-pointer" />
         </div>
       </div>
     )}
