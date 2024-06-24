@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 import RadioButton from "@/components/@new/shared/forms/RadioButton/";
 import { getAllStates, getCounties } from "@/helpers/states";
-import { ILandsFilters } from "@/types/lands";
+import { ILandsFilters, SortBy } from "@/types/lands";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
 
@@ -20,6 +20,7 @@ interface LandsMobileFiltersProps {
 
 const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters }) => {
   const [openFilters, setOpenFilters] = useState(false);
+  const [openSortBy, setOpenSortBy] = useState(false);
   const [collapsedFilter, setCollapsedFilter] = useState<"state" | "county" | "acreage" | "voltPrice" | null>(null);
   const [localFilters, setLocalFilters] = useState<ILandsFilters>({ ...filters });
 
@@ -37,7 +38,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters }
         </div>
         <div className="flex items-center gap-4">
           <Button className="!rounded-3xl !h-[30px] !bg-grey-50 !text-black !text-xs !border-0 !shadow-none !px-3">Select</Button>
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpenSortBy(true)}>
             <p className="font-medium text-xs capitalize">Sort by</p>
             <ArrowIconsUnion1 className="h-2 w-2" />
           </div>
@@ -275,6 +276,52 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters }
               setLocalFilters({ ...filters });
               setOpenFilters(false);
               setCollapsedFilter(null);
+            }}
+          >
+            Reset
+          </Button>
+        </div>
+      </Drawer>
+      <Drawer
+        closeDrawer={() => {
+          setOpenSortBy(false);
+        }}
+        open={openSortBy}
+        title="Sort By"
+      >
+        <div className="h-[60vh] overflow-scroll px-5">
+          <div className="">
+            <div className={clsx("flex flex-col py-4 gap-4")}>
+              {Object.values(SortBy).map((sort) => (
+                <RadioButton
+                  key={sort}
+                  checked={localFilters.sortBy === sort}
+                  name={`sort-${sort}`}
+                  label={sort}
+                  onChange={() => setLocalFilters({ ...localFilters, sortBy: sort })}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-3 shadow-3 p-4 bg-white border-t border-grey-100">
+          <Button
+            className="justify-center"
+            onClick={() => {
+              setFilters({
+                ...localFilters,
+              });
+              setOpenSortBy(false);
+            }}
+          >
+            Apply
+          </Button>
+          <Button
+            className="justify-center h-12"
+            variant="text"
+            onClick={() => {
+              setLocalFilters({ ...filters });
+              setOpenSortBy(false);
             }}
           >
             Reset
