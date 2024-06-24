@@ -29,6 +29,7 @@ interface LandBoxProps {
 }
 const LandBox = ({ view, data, className, disableSave }: LandBoxProps) => {
   const [save, setSave] = useState(false);
+
   return (
     <div
       className={clsx(
@@ -62,7 +63,7 @@ const LandBox = ({ view, data, className, disableSave }: LandBoxProps) => {
         <ul className="flex flex-col gap-3">
           {Object.keys(data.options).map((key) => (
             <li className="flex items-center gap-1.5" key={key}>
-              <div className="[&>svg]:stroke-grey-600 [&>svg]:fill-grey-600">{data.options[key].icon}</div>
+              <div className="[&>svg]:!w-4 [&>svg]:!h-4">{data.options[key].icon}</div>
               <p className="text-sm text-grey-600">
                 {data.options[key].label}: <span className="ext-sm font-medium text-black"> {data.options[key].value}</span>
               </p>

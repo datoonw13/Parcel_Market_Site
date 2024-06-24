@@ -8,7 +8,7 @@ import {
   ISellingProperty,
   IUserSellingPropertiesResponse,
 } from "@/types/find-property";
-import { ILandsMarketplaceFilters } from "@/types/lands";
+import { ILandsFilters, ILandsMarketplaceFilters } from "@/types/lands";
 import baseApi from "./baseApi";
 
 const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties"] }).injectEndpoints({
@@ -100,6 +100,16 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
         },
       }),
     }),
+    getUserFollowedLands: build.query<
+      ResponseType<{ data: Array<{ sellingProperty: ISellingProperty; followedListingId: number }>; pagination: { totalCount: number } }>,
+      Partial<ILandsFilters>
+    >({
+      query: (params) => ({
+        url: `/followed-listings`,
+        method: "GET",
+        params,
+      }),
+    }),
   }),
 });
 
@@ -113,5 +123,6 @@ export const {
   useCheckParcelSellingStatusMutation,
   useGetSellingPropertiesQuery,
   useGetSellingPropertyQuery,
+  useGetUserFollowedLandsQuery,
 } = propertyApi;
 export default propertyApi;

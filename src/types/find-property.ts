@@ -111,6 +111,7 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   id: number;
   usedForPriceCalculations?: Array<{ latitude: string; longitude: string; lastSalesDate: string; lastSalesPrice: string; arcage: string }>;
   totalViews: number;
+  availableTill: string;
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{
