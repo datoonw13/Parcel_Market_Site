@@ -8,12 +8,17 @@ import LandsMobileFilters from "./LandsMobileFilters/LandsMobileFilters";
 interface LandsFiltersProps {
   setFilters: Dispatch<SetStateAction<ILandsFilters>>;
   filters: ILandsFilters;
+  select?: {
+    startSelect: () => void;
+    totalSelected: number;
+    onRemove: () => void;
+  };
 }
 
-const LandsFilters: FC<LandsFiltersProps> = ({ filters, setFilters }) => (
+const LandsFilters: FC<LandsFiltersProps> = ({ filters, setFilters, select }) => (
   <div className="mb-6">
     <div className="hidden md:flex">
-      <LandsDesktopFilters filters={filters} setFilters={setFilters} />
+      <LandsDesktopFilters select={select} filters={filters} setFilters={setFilters} />
     </div>
     <div className="flex md:hidden">
       <LandsMobileFilters filters={filters} setFilters={setFilters} />

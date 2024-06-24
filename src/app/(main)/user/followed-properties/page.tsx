@@ -31,6 +31,13 @@ const UserFollowedProperties = () => {
     sortBy: null,
   });
   const { data, isFetching } = useGetUserFollowedLandsQuery(removeNullValue(filters));
+  const [select, setSelect] = useState<{
+    selecting: boolean;
+    selectedIds: number[];
+  }>({
+    selecting: false,
+    selectedIds: [],
+  });
 
   return (
     <div className="w-full">
@@ -40,7 +47,15 @@ const UserFollowedProperties = () => {
           View and manage the properties you&apos;ve bookmarked for future consideration.
         </h2>
       </div>
-      <LandsFilters filters={filters} setFilters={setFilters} />
+      <LandsFilters
+        filters={filters}
+        setFilters={setFilters}
+        select={{
+          startSelect: () => setSelect({ ...select, selecting: !select.selecting, selectedIds: [] }),
+          totalSelected: select.selectedIds.length,
+          onRemove: () => {},
+        }}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {!isFetching &&
           data?.data?.data?.map(({ sellingProperty, followedListingId }) => {
@@ -49,7 +64,21 @@ const UserFollowedProperties = () => {
               state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === sellingProperty.county.toLocaleLowerCase()) || "";
             return (
               <LandBox
-                disableSave
+                select={{
+                  showSelect: select.selecting,
+                  id: followedListingId,
+                  onSelect: (id) => {
+                    let newList = [...select.selectedIds];
+                    if (select.selectedIds.includes(id)) {
+                      newList = newList.filter((el) => el !== id);
+                    } else {
+                      newList.push(id);
+                    }
+                    setSelect({ ...select, selectedIds: newList });
+                  },
+                  selected: select.selectedIds.includes(followedListingId),
+                }}
+                parcelNumber={sellingProperty.parcelNumber}
                 data={{
                   availableTill: sellingProperty.availableTill,
                   state: state?.label || "",

@@ -5,9 +5,9 @@ import clsx from "clsx";
 import { ReactNode, useState } from "react";
 import { BookmarkIcon1, BookmarkIcon2 } from "../icons/BookMarkIcons";
 import { LocationIcon1 } from "../icons/LocationIcons";
-import { UserIcon2 } from "../icons/UserIcons";
 import { CalendarIcon1 } from "../icons/CalendarIcons";
 import Button from "../shared/forms/Button";
+import RadioButton from "../shared/forms/RadioButton";
 
 interface LandBoxProps {
   view: "vertical" | "horizontal";
@@ -25,16 +25,26 @@ interface LandBoxProps {
     };
   };
   className?: string;
-  disableSave?: boolean;
+  showFollow?: boolean;
+  isFollowed?: boolean;
+  parcelNumber: string;
+  select?: {
+    showSelect: boolean;
+    onSelect: (id: number) => void;
+    selected: boolean;
+    id: number;
+  };
 }
-const LandBox = ({ view, data, className, disableSave }: LandBoxProps) => {
+const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcelNumber }: LandBoxProps) => {
   const [save, setSave] = useState(false);
 
   return (
     <div
       className={clsx(
         "pt-6 border border-grey-100 rounded-2xl w-full flex flex-col gap-4 cursor-pointer group hover:shadow-1 transition-all duration-100",
-        className
+        className,
+        select?.showSelect && 'bg-black-100',
+        select?.selected && 'bg-black-200',
       )}
     >
       <div className="px-6 flex justify-between items-start gap-6">
@@ -46,15 +56,16 @@ const LandBox = ({ view, data, className, disableSave }: LandBoxProps) => {
             <LocationIcon1 /> {data.state}; {data.county}
           </h2>
         </div>
-        {!disableSave && (
+        {!select?.showSelect && showFollow && (
           <div onClick={() => setSave(!save)}>
-            {save ? (
+            {isFollowed ? (
               <BookmarkIcon2 className="mt-1 fill-primary-main cursor-pointer" />
             ) : (
               <BookmarkIcon1 className="mt-1 fill-primary-main cursor-pointer" />
             )}
           </div>
         )}
+        {select?.showSelect && <RadioButton name={parcelNumber} onChange={() => select.onSelect(select.id)} checked={select.selected} />}
       </div>
       <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
         <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>

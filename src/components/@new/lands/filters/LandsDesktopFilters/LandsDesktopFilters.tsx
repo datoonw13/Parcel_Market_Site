@@ -9,6 +9,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import AutoCompleteListBox from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListBox";
 import { ILandsFilters, SortBy } from "@/types/lands";
 import AutoCompleteListItem from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListItem";
+import { RemoveIcon1 } from "@/components/@new/icons/RemoveIcons";
 import AutoComplete from "../../../shared/forms/AutoComplete";
 import LandsDesktopFiltersMinMax from "./LandsDesktopFiltersMinMax";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
@@ -16,9 +17,14 @@ import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from ".
 interface LandsDesktopFiltersProps {
   setFilters: Dispatch<SetStateAction<ILandsFilters>>;
   filters: ILandsFilters;
+  select?: {
+    startSelect: () => void;
+    totalSelected: number;
+    onRemove: () => void;
+  };
 }
 
-const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters }) => (
+const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters, select }) => (
   <div className="flex flex-col gap-7">
     <div className="grid gap-3 grid-cols-4">
       <AutoComplete
@@ -66,7 +72,16 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
       />
     </div>
     <div className="flex items-center justify-between">
-      <Button className="!rounded-3xl !h-[30px] !bg-grey-50 !text-black !text-xs !border-0 !shadow-none">Select</Button>
+      <div className="flex items-center gap-3">
+        <Button className="!rounded-3xl !h-[30px] !bg-grey-50 !text-black !text-xs !border-0 !shadow-none" onClick={select?.startSelect}>
+          {select && select?.totalSelected > 0 ? `${select?.totalSelected} Selected` : "Select"}
+        </Button>
+        {select && select.totalSelected > 0 && (
+          <Button variant="text" className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error">
+            <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
+          </Button>
+        )}
+      </div>
       <div className="flex items-center gap-4">
         <p className="text-medium text-xs text-grey-600">467,000 Lands</p>
         <Popper
