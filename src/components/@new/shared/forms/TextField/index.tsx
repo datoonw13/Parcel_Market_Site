@@ -1,7 +1,8 @@
 "use client";
 
 import clsx from "clsx";
-import { MouseEvent, ReactElement, useEffect, useLayoutEffect, useRef } from "react";
+import { MouseEvent, ReactElement, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { numericInput } from "@/helpers/common";
 import classes from "./textfield.module.css";
 
 interface TextFieldProps {
@@ -18,6 +19,7 @@ interface TextFieldProps {
   defaultValue?: string;
   className?: string;
   readOnly?: boolean;
+  type?: "text" | "number";
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -35,6 +37,7 @@ const TextField = (props: TextFieldProps) => {
     defaultValue,
     className,
     readOnly,
+    type = "text",
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -44,6 +47,20 @@ const TextField = (props: TextFieldProps) => {
       const { width } = endIconRef.current.getBoundingClientRect();
       const currentRightPadding = window.getComputedStyle(inputRef.current, null).getPropertyValue("padding-left");
       inputRef.current.style.paddingRight = `calc(${parseFloat(currentRightPadding) / 2}px + ${width}px)`;
+    }
+  };
+
+  const handleChange = (newValue: string) => {
+    if (!onChange) {
+      return;
+    }
+    if (type === "number") {
+      const { valid, result } = numericInput(newValue);
+      if (valid) {
+        onChange(result);
+      }
+    } else {
+      onChange(newValue);
     }
   };
 
@@ -57,13 +74,13 @@ const TextField = (props: TextFieldProps) => {
         className={clsx(label && classes[`input-${variant}`], classes.input, error && classes.error, disabled && "cursor-not-allowed")}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange && onChange(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         ref={inputRef}
         disabled={disabled}
         onBlur={onBlur}
         defaultValue={defaultValue}
         readOnly={readOnly}
-        onFocus={onFocus}
+        type={type === "number" ? "text" : type}
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (

@@ -105,7 +105,7 @@ const AutoComplete = <T extends Array<{}>>({
             value={getInputValue(!!referenceElement)}
             className={inputRootClassName}
             endIcon={
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <div onClick={() => onChange(null)}>
                   <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
                 </div>

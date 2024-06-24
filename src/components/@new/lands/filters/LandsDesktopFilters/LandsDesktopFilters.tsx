@@ -5,18 +5,22 @@ import { useState } from "react";
 import clsx from "clsx";
 import AutoComplete from "../../../shared/forms/AutoComplete";
 import LandsDesktopFiltersMinMax from "./LandsDesktopFiltersMinMax";
-import { acreagesFilters } from "../lands-filters-utils";
+import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
 
 const LandsDesktopFilters = () => {
   const [filters, setFilters] = useState<{
     state: string | null;
     county: string | null;
     acreages: { min: number | null; max: number | null };
+    volt: { min: number | null; max: number | null };
   }>({
     state: null,
     county: null,
     acreages: { min: null, max: null },
+    volt: { min: null, max: null },
   });
+  console.log(filters);
+
   return (
     <div className="mb-8">
       <div className="grid gap-3 grid-cols-4">
@@ -56,6 +60,14 @@ const LandsDesktopFilters = () => {
           value={filters.acreages}
           onChange={(acreages) => setFilters({ ...filters, acreages })}
           placeHolder="Acreage"
+          getOptionLabel={(item) => getAcreageLabel(item.min, item.max)}
+        />
+        <LandsDesktopFiltersMinMax
+          options={priceFilters}
+          value={filters.volt}
+          onChange={(volt) => setFilters({ ...filters, volt })}
+          placeHolder="VOLT Price"
+          getOptionLabel={(item) => getPriceLabel(item.min, item.max)}
         />
       </div>
     </div>
