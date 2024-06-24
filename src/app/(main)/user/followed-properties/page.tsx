@@ -5,6 +5,7 @@ import LandBox from "@/components/@new/lands/LandBox";
 import LandsFilters from "@/components/@new/lands/filters/LandsFilters";
 import Pagination from "@/components/@new/shared/Pagination";
 import { numFormatter } from "@/helpers/common";
+import UserFollowedPropertiesLoading from "./loading";
 
 const UserFollowedProperties = () => (
   <div className="w-full">
@@ -18,6 +19,7 @@ const UserFollowedProperties = () => (
         <LandBox disableSave data={data} key={Math.random()} view="vertical" className="max-w-96 md:max-w-max m-auto" />
       ))}
     </div>
+    {/* <UserFollowedPropertiesLoading /> */}
     <Pagination rowsPerPage={5} totalCount={105} className="mt-12" onChange={(page) => console.log(page, 22)} />
   </div>
 );
