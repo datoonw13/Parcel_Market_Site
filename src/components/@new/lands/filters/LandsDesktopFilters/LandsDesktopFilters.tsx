@@ -3,6 +3,12 @@
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { useState } from "react";
 import clsx from "clsx";
+import Popper from "@/components/@new/shared/Popper";
+import { ArrowIconsUnion1 } from "@/components/@new/icons/ArrowIcons";
+import Button from "@/components/@new/shared/forms/Button";
+import AutoCompleteListBox from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListBox";
+import { SortBy } from "@/types/lands";
+import AutoCompleteListItem from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListItem";
 import AutoComplete from "../../../shared/forms/AutoComplete";
 import LandsDesktopFiltersMinMax from "./LandsDesktopFiltersMinMax";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
@@ -13,16 +19,17 @@ const LandsDesktopFilters = () => {
     county: string | null;
     acreages: { min: number | null; max: number | null };
     volt: { min: number | null; max: number | null };
+    sortBy: SortBy | null;
   }>({
     state: null,
     county: null,
     acreages: { min: null, max: null },
     volt: { min: null, max: null },
+    sortBy: null,
   });
-  console.log(filters);
 
   return (
-    <div className="mb-8">
+    <div className="flex flex-col gap-7">
       <div className="grid gap-3 grid-cols-4">
         <AutoComplete
           inputRootClassName={clsx(
@@ -69,6 +76,41 @@ const LandsDesktopFilters = () => {
           placeHolder="VOLT Price"
           getOptionLabel={(item) => getPriceLabel(item.min, item.max)}
         />
+      </div>
+      <div className="flex items-center justify-between">
+        <Button className="!rounded-3xl !h-[30px] !bg-grey-50 !text-black !text-xs !border-0 !shadow-none">Select</Button>
+        <div className="flex items-center gap-4">
+          <p className="text-medium text-xs text-grey-600">467,000 Lands</p>
+          <Popper
+            disableSameWidth
+            renderButton={(setReferenceElement, referenceElement) => (
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}
+              >
+                <p className="font-medium text-xs capitalize">{filters.sortBy ? filters.sortBy : "Sort by"}</p>
+                <ArrowIconsUnion1 className="h-2 w-2" />
+              </div>
+            )}
+            renderContent={(setReferenceElement) => (
+              <AutoCompleteListBox className="!w-32">
+                {Object.values(SortBy).map((el) => (
+                  <AutoCompleteListItem
+                    className="!w-full capitalize"
+                    key={el}
+                    id={el}
+                    onClick={() => {
+                      setFilters({ ...filters, sortBy: el });
+                      setReferenceElement(null);
+                    }}
+                  >
+                    {el}
+                  </AutoCompleteListItem>
+                ))}
+              </AutoCompleteListBox>
+            )}
+          />
+        </div>
       </div>
     </div>
   );
