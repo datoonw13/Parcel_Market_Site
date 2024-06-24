@@ -17,6 +17,7 @@ interface TextFieldProps {
   onBlur?: () => void;
   defaultValue?: string;
   className?: string;
+  readOnly?: boolean;
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -33,6 +34,7 @@ const TextField = (props: TextFieldProps) => {
     onBlur,
     defaultValue,
     className,
+    readOnly,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -60,6 +62,8 @@ const TextField = (props: TextFieldProps) => {
         disabled={disabled}
         onBlur={onBlur}
         defaultValue={defaultValue}
+        readOnly={readOnly}
+        onFocus={onFocus}
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (

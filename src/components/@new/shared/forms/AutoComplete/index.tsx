@@ -13,7 +13,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   options: T;
   getOptionLabel: (item: T[0]) => string;
   getOptionKey: (item: T[0]) => string;
-  value?: T[0] | null;
+  value?: T[0] | string | null;
   onChange: (item: T[0] | null) => void;
   disableCloseOnSelect?: boolean;
   onFilter?: (searchValue: string, items: T) => T;
@@ -24,6 +24,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   clearIconClassName?: string;
   arrowIconClassName?: string;
   renderContent?: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>, options: T) => ReactElement;
+  readOnly?: boolean;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -41,6 +42,7 @@ const AutoComplete = <T extends Array<{}>>({
   clearIconClassName,
   arrowIconClassName,
   renderContent,
+  readOnly,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -74,7 +76,7 @@ const AutoComplete = <T extends Array<{}>>({
   return (
     <div>
       <Popper
-        offsetY={2}
+        offsetY={4}
         onAnimationExit={() => {
           setSearchValue(null);
           isSearching.current = false;
@@ -90,6 +92,7 @@ const AutoComplete = <T extends Array<{}>>({
         }}
         renderButton={(setReferenceElement, referenceElement) => (
           <TextField
+            readOnly={readOnly}
             onChange={(value) => {
               setSearchValue(value);
               isSearching.current = true;

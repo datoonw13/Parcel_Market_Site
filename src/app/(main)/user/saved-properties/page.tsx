@@ -1,6 +1,6 @@
 import { UserIcon2 } from "@/components/@new/icons/UserIcons";
 import LandBox from "@/components/@new/lands/LandBox";
-import LandsDesktopFilters from "@/components/@new/lands/filters/LandsDesktopFilters";
+import LandsDesktopFilters from "@/components/@new/lands/filters/LandsDesktopFilters/LandsDesktopFilters";
 import { numFormatter } from "@/helpers/common";
 import { Container } from "@mui/material";
 import React from "react";
