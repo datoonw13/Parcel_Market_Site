@@ -49,31 +49,28 @@ const UserFollowedProperties = () => {
   });
   const { data, isFetching } = useGetUserFollowedLandsQuery(removeNullValue(filters));
   const [remove, { isLoading: removeLoading }] = useRemoveUserFollowedLandsMutation();
-  const [setFollowed, {isLoading: setFollowedLoading}] = useAddUserFollowedLandMutation()
-  const [removedLandsIds, setRemoveLandsIds] = useState<number[]>([])
+  const [setFollowed, { isLoading: setFollowedLoading }] = useAddUserFollowedLandMutation();
+  const [removedLandsIds, setRemoveLandsIds] = useState<number[]>([]);
 
   const handleRemove = async () => {
     try {
       await remove(select.selectedIds).unwrap();
       setSelect({ selecting: false, selectedIds: [], removeModal: false });
-      setRemoveLandsIds([...removedLandsIds, ...select.selectedIds])
+      setRemoveLandsIds([...removedLandsIds, ...select.selectedIds]);
     } catch (error) {}
   };
 
   const toggleFollow = async (id: number) => {
     try {
-      if(removedLandsIds.includes(id)) {
-        await setFollowed(id).unwrap()
-        setRemoveLandsIds(removedLandsIds.filter(el => el !== id))
+      if (removedLandsIds.includes(id)) {
+        await setFollowed(id).unwrap();
+        setRemoveLandsIds(removedLandsIds.filter((el) => el !== id));
+      } else {
+        await remove([id]).unwrap();
+        setRemoveLandsIds([...removedLandsIds, id]);
       }
-      else {
-        await remove([id]).unwrap()
-        setRemoveLandsIds([...removedLandsIds, id])
-      }
-    } catch (error) {
-      
-    }
-  }
+    } catch (error) {}
+  };
 
   useEffect(
     () => () => {

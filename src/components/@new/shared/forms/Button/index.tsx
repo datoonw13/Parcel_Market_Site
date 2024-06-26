@@ -10,7 +10,7 @@ interface ButtonBaseProps {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
-  loading?: boolean
+  loading?: boolean;
 }
 
 type ButtonType =
@@ -20,7 +20,12 @@ type ButtonType =
 const Button = (props: ButtonType) => {
   const { children, variant = "primary", className, disabled, onClick, startIcon, loading } = props;
   return (
-    <button onClick={onClick} type="button" className={clsx(classes.root, classes[variant], className, "group")} disabled={disabled || loading}>
+    <button
+      onClick={onClick}
+      type="button"
+      className={clsx(classes.root, classes[variant], className, "group")}
+      disabled={disabled || loading}
+    >
       {startIcon && <div className={classes[`${variant}-start-icon`]}>{startIcon}</div>}
       {loading ? <LoadingIcon1 className="fill-grey-400" /> : children}
     </button>

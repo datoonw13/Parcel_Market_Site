@@ -145,6 +145,6 @@ export const {
   useGetSellingPropertyQuery,
   useGetUserFollowedLandsQuery,
   useRemoveUserFollowedLandsMutation,
-  useAddUserFollowedLandMutation
+  useAddUserFollowedLandMutation,
 } = propertyApi;
 export default propertyApi;

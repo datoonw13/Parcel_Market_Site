@@ -21,7 +21,7 @@ interface LandsDesktopFiltersProps {
     startSelect: () => void;
     totalSelected: number;
     onRemove: () => void;
-    selecting: boolean
+    selecting: boolean;
   };
 }
 
@@ -74,7 +74,13 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
     </div>
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <Button className={clsx("!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none", select?.selecting ? '!bg-grey-200' : '!bg-grey-50')} onClick={select?.startSelect}>
+        <Button
+          className={clsx(
+            "!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none",
+            select?.selecting ? "!bg-grey-200" : "!bg-grey-50"
+          )}
+          onClick={select?.startSelect}
+        >
           {select && select?.totalSelected > 0 ? `${select?.totalSelected} Selected` : "Select"}
         </Button>
         {select && select.totalSelected > 0 && (
