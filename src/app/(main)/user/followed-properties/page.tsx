@@ -4,9 +4,14 @@ import { UserIcon2 } from "@/components/@new/icons/UserIcons";
 import LandBox from "@/components/@new/lands/LandBox";
 import LandsFilters from "@/components/@new/lands/filters/LandsFilters";
 import Pagination from "@/components/@new/shared/Pagination";
-import { useGetUserFollowedLandsQuery } from "@/lib/features/apis/propertyApi";
+import propertyApi, {
+  propertyApiTags,
+  useAddUserFollowedLandMutation,
+  useGetUserFollowedLandsQuery,
+  useRemoveUserFollowedLandsMutation,
+} from "@/lib/features/apis/propertyApi";
 import { getAllStates } from "@/helpers/states";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ILandsFilters } from "@/types/lands";
 import DataNotFound from "@/components/@new/shared/DataNotFound";
 import { IdIcon1 } from "@/components/@new/icons/IdIcons";
@@ -14,12 +19,14 @@ import { ResizeIcon1 } from "@/components/@new/icons/ResizeIcons";
 import { MoneyIcon1 } from "@/components/@new/icons/MoneyIcons";
 import { numFormatter } from "@/helpers/common";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
+import { useAppDispatch } from "@/lib/hooks";
 import UserFollowedPropertiesLoading from "./loading";
 
 const removeNullValue = (obj: { [key: string]: any }) =>
   Object.keys(obj).reduce((acc, cur) => ({ ...acc, ...(obj[cur] && { [cur]: obj[cur] }) }), {});
 
 const UserFollowedProperties = () => {
+  const dispatch = useAppDispatch();
   const [filters, setFilters] = useState<ILandsFilters>({
     state: null,
     county: null,
@@ -31,7 +38,6 @@ const UserFollowedProperties = () => {
     priceMin: null,
     sortBy: null,
   });
-  const { data, isFetching } = useGetUserFollowedLandsQuery(removeNullValue(filters));
   const [select, setSelect] = useState<{
     selecting: boolean;
     selectedIds: number[];
@@ -41,11 +47,46 @@ const UserFollowedProperties = () => {
     selectedIds: [],
     removeModal: false,
   });
+  const { data, isFetching } = useGetUserFollowedLandsQuery(removeNullValue(filters));
+  const [remove, { isLoading: removeLoading }] = useRemoveUserFollowedLandsMutation();
+  const [setFollowed, {isLoading: setFollowedLoading}] = useAddUserFollowedLandMutation()
+  const [removedLandsIds, setRemoveLandsIds] = useState<number[]>([])
+
+  const handleRemove = async () => {
+    try {
+      await remove(select.selectedIds).unwrap();
+      setSelect({ selecting: false, selectedIds: [], removeModal: false });
+      setRemoveLandsIds([...removedLandsIds, ...select.selectedIds])
+    } catch (error) {}
+  };
+
+  const toggleFollow = async (id: number) => {
+    try {
+      if(removedLandsIds.includes(id)) {
+        await setFollowed(id).unwrap()
+        setRemoveLandsIds(removedLandsIds.filter(el => el !== id))
+      }
+      else {
+        await remove([id]).unwrap()
+        setRemoveLandsIds([...removedLandsIds, id])
+      }
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(
+    () => () => {
+      dispatch(propertyApi.util.invalidateTags([propertyApiTags.userFollowedListings]));
+    },
+    [dispatch]
+  );
 
   return (
     <>
       <ResponsiveRemoveModal
         open={select.removeModal}
+        pending={removeLoading}
         handleClose={() => {
           setSelect({ selecting: false, selectedIds: [], removeModal: false });
         }}
@@ -54,7 +95,7 @@ const UserFollowedProperties = () => {
         }}
         title="Delete Selected Listings?"
         desc="Are you sure you want to delete selected listings?"
-        onDelete={() => {}}
+        onDelete={handleRemove}
       />
       <div className="w-full">
         <div className="mb-8">
@@ -70,7 +111,7 @@ const UserFollowedProperties = () => {
             startSelect: () => setSelect({ ...select, selecting: !select.selecting, selectedIds: [] }),
             totalSelected: select.selectedIds.length,
             onRemove: () => setSelect({ ...select, removeModal: true }),
-            selecting: select.selecting
+            selecting: select.selecting,
           }}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -128,6 +169,12 @@ const UserFollowedProperties = () => {
                   key={Math.random()}
                   view="vertical"
                   className="max-w-96 md:max-w-full m-auto"
+                  follow={{
+                    isFollowed: !!followedListingId && !removedLandsIds.includes(followedListingId),
+                    showFollow: true,
+                    followId: followedListingId,
+                    toggle: (id) => toggleFollow(id),
+                  }}
                 />
               );
             })}

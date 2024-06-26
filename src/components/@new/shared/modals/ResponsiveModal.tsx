@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FC, ReactNode } from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from "react-responsive";
 import Modal from "./Modal";
 import Drawer from "./Drawer";
 
@@ -13,7 +13,9 @@ interface ResponsiveModalProps {
 }
 
 const ResponsiveModal: FC<ResponsiveModalProps> = ({ open, handleClose, content, responsiveContent }) => {
-  const isSmallDevice = useMediaQuery("only screen and (max-width : 768px)");
+  "use client";
+
+  const isSmallDevice = useMediaQuery({ query: "(max-width: 768px)" });
 
   return (
     <>

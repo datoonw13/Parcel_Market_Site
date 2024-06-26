@@ -11,7 +11,12 @@ import {
 import { ILandsFilters, ILandsMarketplaceFilters } from "@/types/lands";
 import baseApi from "./baseApi";
 
-const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties"] }).injectEndpoints({
+export const propertyApiTags = {
+  sellingProperties: "selling-properties",
+  userFollowedListings: "user-followed-listings",
+};
+
+const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: Object.values(propertyApiTags) }).injectEndpoints({
   endpoints: (build) => ({
     calculatePrice: build.query<ResponseType<IFindPropertyEstimatedPriceResponse>, IFindPropertyEstimatedPrice>({
       query: (arg) => ({
@@ -58,7 +63,7 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
         method: "POST",
         body: arg,
       }),
-      invalidatesTags: ["selling-properties"],
+      invalidatesTags: [propertyApiTags.sellingProperties],
     }),
     getUserSellingProperties: build.query<IUserSellingPropertiesResponse, void>({
       query: (arg) => ({
@@ -82,14 +87,14 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
           ...Object.fromEntries(Object.entries(arg).filter(([_, v]) => v != null)),
         },
       }),
-      providesTags: ["selling-properties"],
+      providesTags: [propertyApiTags.sellingProperties],
     }),
     getSellingProperty: build.query<ResponseType<ISellingProperty>, string>({
       query: (propertyId) => ({
         url: `/selling-properties/${propertyId}`,
         method: "GET",
       }),
-      providesTags: ["selling-properties"],
+      providesTags: [propertyApiTags.sellingProperties],
     }),
     checkParcelSellingStatus: build.mutation<ResponseType<{ data: boolean }>, string>({
       query: (parcelNumber) => ({
@@ -109,6 +114,21 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: ["selling-properties
         method: "GET",
         params,
       }),
+      providesTags: [propertyApiTags.userFollowedListings],
+    }),
+    removeUserFollowedLands: build.mutation<void, number[]>({
+      query: (arg) => ({
+        url: "/followed-listings",
+        method: "DELETE",
+        body: { ids: arg },
+      }),
+    }),
+    addUserFollowedLand: build.mutation<void, number>({
+      query: (arg) => ({
+        url: "/followed-listings",
+        method: "POST",
+        body: { sellingPropertyId: arg },
+      }),
     }),
   }),
 });
@@ -124,5 +144,7 @@ export const {
   useGetSellingPropertiesQuery,
   useGetSellingPropertyQuery,
   useGetUserFollowedLandsQuery,
+  useRemoveUserFollowedLandsMutation,
+  useAddUserFollowedLandMutation
 } = propertyApi;
 export default propertyApi;

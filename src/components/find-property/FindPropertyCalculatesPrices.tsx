@@ -1,3 +1,5 @@
+"use client";
+
 import { numFormatter } from "@/helpers/common";
 import routes from "@/helpers/routes";
 import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";

@@ -29,8 +29,12 @@ interface LandBoxProps {
     };
   };
   className?: string;
-  showFollow?: boolean;
-  isFollowed?: boolean;
+  follow?: {
+    showFollow?: boolean;
+    isFollowed?: boolean;
+    toggle: (id: number) => void;
+    followId: number
+  }
   parcelNumber: string;
   select?: {
     showSelect: boolean;
@@ -40,7 +44,7 @@ interface LandBoxProps {
   };
   sellingItemId: number;
 }
-const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcelNumber, sellingItemId }: LandBoxProps) => {
+const LandBox = ({ view, data, className, follow, select, parcelNumber, sellingItemId }: LandBoxProps) => {
   const [save, setSave] = useState(false);
 
   return (
@@ -63,9 +67,9 @@ const LandBox = ({ view, data, className, showFollow, isFollowed, select, parcel
               <LocationIcon1 /> {data.state}; {data.county}
             </h2>
           </div>
-          {!select?.showSelect && showFollow && (
-            <div onClick={() => setSave(!save)}>
-              {isFollowed ? (
+          {!select?.showSelect && follow?.showFollow && (
+            <div onClick={() => follow && follow.toggle(follow.followId)}>
+              {follow.isFollowed ? (
                 <BookmarkIcon2 className="mt-1 fill-primary-main cursor-pointer" />
               ) : (
                 <BookmarkIcon1 className="mt-1 fill-primary-main cursor-pointer" />
