@@ -7,7 +7,7 @@ import { Container } from "@mui/material";
 import React, { useEffect } from "react";
 
 const UserSellingProperties = () => {
-  const { data, isFetching, isLoading } = useGetUserSellingPropertiesQuery();
+  // const { data, isFetching, isLoading } = {useGetUserSellingPropertiesQuery()};
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -17,14 +17,14 @@ const UserSellingProperties = () => {
       <div className="my-[60px]">
         <h1 className="text-[#363636] font-semibold text-2xl md:text-3xl mb-8">My Listed Properties</h1>
         <div className=" flex flex-col w-full gap-10">
-          {(isFetching || isLoading) && (
+          {/* {(isFetching || isLoading) && (
             <div className="w-[260px] flex m-auto">
               <LoadingCircle />
             </div>
           )}
           {data?.data.sellingProperties.map((el) => (
             <UserPropertyBox key={el.parcelNumber} data={el} />
-          ))}
+          ))} */}
         </div>
       </div>
     </Container>

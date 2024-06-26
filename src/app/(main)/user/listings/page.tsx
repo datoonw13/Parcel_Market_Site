@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import Pagination from "@/components/@new/shared/Pagination";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import UserLandsListingLoading from "./loading";
+import LandsFilters from "@/components/@new/lands/filters/LandsFilters";
 
 const removeNullValue = (obj: { [key: string]: any }) =>
   Object.keys(obj).reduce((acc, cur) => ({ ...acc, ...(obj[cur] && { [cur]: obj[cur] }) }), {});
@@ -73,16 +74,16 @@ const UserListings = () => {
             Welcome to Parcel Market and thank You for being here. At Parcel Market, our goal is simple, to provide a FREE...
           </h2>
         </div>
-        <LandsDesktopFilters
+        <LandsFilters
           filters={filters}
           setFilters={setFilters}
-          totalCount={data?.data.pagination.totalCount}
           select={{
             startSelect: () => setSelect({ ...select, selecting: !select.selecting, selectedIds: [] }),
             totalSelected: select.selectedIds.length,
             onRemove: () => setSelect({ ...select, removeModal: true }),
             selecting: select.selecting,
           }}
+          totalCount={data?.data.pagination.totalCount}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {!isFetching &&
