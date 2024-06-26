@@ -23,9 +23,10 @@ interface LandsDesktopFiltersProps {
     onRemove: () => void;
     selecting: boolean;
   };
+  totalCount?: number
 }
 
-const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters, select }) => (
+const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters, select, totalCount }) => (
   <div className="flex flex-col gap-7">
     <div className="grid gap-3 grid-cols-4">
       <AutoComplete
@@ -94,7 +95,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         )}
       </div>
       <div className="flex items-center gap-4">
-        <p className="text-medium text-xs text-grey-600">467,000 Lands</p>
+        <p className={clsx("text-medium text-xs text-grey-600", totalCount ? 'opacity-100' : 'opacity-0')}>{totalCount} Lands</p>
         <Popper
           disableSameWidth
           renderButton={(setReferenceElement, referenceElement) => (

@@ -14,12 +14,13 @@ interface LandsFiltersProps {
     onRemove: () => void;
     selecting: boolean;
   };
+  totalCount?: number
 }
 
-const LandsFilters: FC<LandsFiltersProps> = ({ filters, setFilters, select }) => (
+const LandsFilters: FC<LandsFiltersProps> = ({ filters, setFilters, select, totalCount }) => (
   <div className="mb-6">
     <div className="hidden md:flex">
-      <LandsDesktopFilters select={select} filters={filters} setFilters={setFilters} />
+      <LandsDesktopFilters select={select} filters={filters} setFilters={setFilters} totalCount={totalCount} />
     </div>
     <div className="flex md:hidden">
       <LandsMobileFilters filters={filters} setFilters={setFilters} />

@@ -60,14 +60,14 @@ const UserFollowedProperties = () => {
     } catch (error) {}
   };
 
-  const toggleFollow = async (id: number) => {
+  const toggleFollow = async (followedListingId: number, sellingProperty: number) => {
     try {
-      if (removedLandsIds.includes(id)) {
-        await setFollowed(id).unwrap();
-        setRemoveLandsIds(removedLandsIds.filter((el) => el !== id));
+      if (removedLandsIds.includes(followedListingId)) {
+        await setFollowed(sellingProperty).unwrap();
+        setRemoveLandsIds(removedLandsIds.filter((el) => el !== followedListingId));
       } else {
-        await remove([id]).unwrap();
-        setRemoveLandsIds([...removedLandsIds, id]);
+        await remove([followedListingId]).unwrap();
+        setRemoveLandsIds([...removedLandsIds, followedListingId]);
       }
     } catch (error) {}
   };
@@ -110,6 +110,7 @@ const UserFollowedProperties = () => {
             onRemove: () => setSelect({ ...select, removeModal: true }),
             selecting: select.selecting,
           }}
+          totalCount={data?.data.pagination.totalCount}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {!isFetching &&
@@ -170,7 +171,7 @@ const UserFollowedProperties = () => {
                     isFollowed: !!followedListingId && !removedLandsIds.includes(followedListingId),
                     showFollow: true,
                     followId: followedListingId,
-                    toggle: (id) => toggleFollow(id),
+                    toggle: (id) => toggleFollow(followedListingId, sellingProperty.id),
                   }}
                 />
               );
