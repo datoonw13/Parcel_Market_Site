@@ -84,7 +84,7 @@ const Drawer: FC<ModalProps> = ({ open, closeDrawer, disableCloseOnAwayClick, ch
         {open && (
           <div
             ref={setPopperElement}
-            style={{ ...styles.popper, background: disableBackDrop ? "transparent" : "rgba(0, 0, 0, 0.5)" }}
+            style={{ ...styles.popper, background: disableBackDrop ? "transparent" : "rgba(0, 0, 0, 0.4)" }}
             className="!m-auto z-50 w-full h-full flex items-end justify-center"
             {...attributes.popper}
           >

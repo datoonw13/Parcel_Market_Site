@@ -1,13 +1,28 @@
 .root {
     @apply cursor-pointer font-medium text-sm transition-all duration-100 flex items-center gap-1
 }
+.root:disabled {
+    @apply pointer-events-none
+}
+/* // */
 .primary {
     @apply h-12 border-0 bg-primary-main text-white py-3 px-6 rounded-lg hover:bg-primary-main-hover
 }
-.primary:focus {
+.primary:active {
     box-shadow: inset 0 0 0 2px rgba(110, 185, 140, 1); 
 }
+
 .primary:disabled {
+    @apply bg-grey-100 text-black-400;
+}
+/* // */
+.primary-error {
+    @apply h-12 border-0 bg-error text-white py-3 px-6 rounded-lg hover:bg-error-hover
+}
+.primary-error:active {
+    box-shadow: inset 0 0 0 2px rgba(145, 24, 8, 1); 
+}
+.primary-error:disabled {
     @apply bg-grey-100 text-black-400;
 }
 
@@ -21,7 +36,7 @@
 .secondary:hover {
     @apply bg-grey-50
 }
-.secondary:focus {
+.secondary:active {
     border-color: transparent;
     box-shadow: inset 0 0 0 2px rgba(233, 233, 233, 1); 
 }
@@ -35,7 +50,7 @@
 .secondary-green:hover {
     @apply bg-primary-main-100
 }
-.secondary-green:focus {
+.secondary-green:active {
     border-color: transparent;
     box-shadow: inset 0 0 0 2px rgba(110, 185, 140, 1); 
 }
@@ -54,7 +69,7 @@
         @apply fill-primary-dark
     }
 }
-.text:focus {
+.text:active {
     @apply text-primary-main;
     .text-start-icon > svg {
         @apply fill-primary-main

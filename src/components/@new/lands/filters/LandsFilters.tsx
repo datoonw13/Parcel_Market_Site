@@ -12,6 +12,7 @@ interface LandsFiltersProps {
     startSelect: () => void;
     totalSelected: number;
     onRemove: () => void;
+    selecting: boolean;
   };
 }
 

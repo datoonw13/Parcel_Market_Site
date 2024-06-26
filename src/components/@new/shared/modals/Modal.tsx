@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, ReactElement, useCallback, useEffect, useState } from "react";
+import React, { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -9,11 +9,11 @@ interface ModalProps {
   closeModal?: () => void;
   onModalClose?: () => void;
   disableCloseOnAwayClick?: boolean;
-  children: ReactElement;
-  showBackDrop?: boolean;
+  children: ReactNode;
+  disableBackdrop?: boolean;
 }
 
-const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, showBackDrop }) => {
+const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, disableBackdrop }) => {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(null, popperElement, {
     strategy: "fixed",
@@ -62,7 +62,7 @@ const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnA
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             ref={setPopperElement}
-            style={{ ...styles.popper, background: showBackDrop ? "rgba(0, 0, 0, 0.5)" : "transparent" }}
+            style={{ ...styles.popper, background: !disableBackdrop ? "rgba(0, 0, 0, 0.4)" : "transparent" }}
             className="!m-auto z-50 w-full h-full flex items-center justify-center"
             {...attributes.popper}
           >

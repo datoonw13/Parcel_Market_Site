@@ -2,7 +2,7 @@
 
 import { ArrowIconDown1, ArrowIconUp1, ArrowIconsUnion1 } from "@/components/@new/icons/ArrowIcons";
 import { SortIcon1 } from "@/components/@new/icons/SortIcons";
-import Drawer from "@/components/@new/shared/Drawer";
+import Drawer from "@/components/@new/shared/modals/Drawer";
 import Button from "@/components/@new/shared/forms/Button";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";

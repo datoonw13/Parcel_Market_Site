@@ -1,8 +1,8 @@
 "use client";
 
 import Avatar from "@/components/@new/shared/Avatar";
-import Drawer from "@/components/@new/shared/Drawer";
-import Modal from "@/components/@new/shared/Modal";
+import Drawer from "@/components/@new/shared/modals/Drawer";
+import Modal from "@/components/@new/shared/modals/Modal";
 import Popper from "@/components/@new/shared/Popper";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import Button from "@/components/@new/shared/forms/Button";

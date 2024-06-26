@@ -63,6 +63,7 @@ export const colors = {
   },
   error: {
     100: "rgba(211, 34, 11, 0.1)",
+    hover: "rgba(179, 29, 9, 1)",
     DEFAULT: "rgba(211, 34, 11, 1)",
   },
   info: {
@@ -91,6 +92,7 @@ const config: Config = {
         1: "0px 8px 24px 0px rgba(0, 0, 0, 0.08)",
         2: "6px 10px 16px 0px rgba(0, 0, 0, 0.12)",
         3: "0px -8px 20px 0px #00000014",
+        4: "0px 0px 30px 0px rgba(0, 0, 0, 0.08)",
       },
     },
   },
