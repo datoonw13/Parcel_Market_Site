@@ -23,7 +23,7 @@ const LandsFilters: FC<LandsFiltersProps> = ({ filters, setFilters, select, tota
       <LandsDesktopFilters select={select} filters={filters} setFilters={setFilters} totalCount={totalCount} />
     </div>
     <div className="flex md:hidden">
-      <LandsMobileFilters filters={filters} setFilters={setFilters} />
+      <LandsMobileFilters select={select} totalCount={totalCount} filters={filters} setFilters={setFilters} />
     </div>
   </div>
 );

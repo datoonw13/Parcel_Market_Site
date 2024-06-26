@@ -11,14 +11,22 @@ import RadioButton from "@/components/@new/shared/forms/RadioButton/";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { ILandsFilters, SortBy } from "@/types/lands";
 import TextField from "@/components/@new/shared/forms/TextField";
+import { RemoveIcon1 } from "@/components/@new/icons/RemoveIcons";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
 
 interface LandsMobileFiltersProps {
   setFilters: Dispatch<SetStateAction<ILandsFilters>>;
   filters: ILandsFilters;
+  select?: {
+    startSelect: () => void;
+    totalSelected: number;
+    onRemove: () => void;
+    selecting: boolean;
+  };
+  totalCount?: number;
 }
 
-const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters }) => {
+const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, select, totalCount }) => {
   const [openFilters, setOpenFilters] = useState(false);
   const [openSortBy, setOpenSortBy] = useState(false);
   const [collapsedFilter, setCollapsedFilter] = useState<"state" | "county" | "acreage" | "voltPrice" | null>(null);
@@ -37,7 +45,28 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters }
           <p className="text-xs font-medium">Filter</p> <SortIcon1 className="h-6 w-6" />
         </div>
         <div className="flex items-center gap-4">
-          <Button className="!rounded-3xl !h-[30px] !bg-grey-50 !text-black !text-xs !border-0 !shadow-none !px-3">Select</Button>
+          {select && (
+            <div className="flex items-center gap-3">
+              <Button
+                className={clsx(
+                  "!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none !px-3",
+                  select?.selecting ? "!bg-grey-200" : "!bg-grey-50"
+                )}
+                onClick={select.startSelect}
+              >
+                {select.totalSelected > 0 ? `${select.totalSelected} Selected` : "Select"}
+              </Button>
+              {select.totalSelected > 0 && (
+                <Button
+                  onClick={select.onRemove}
+                  variant="text"
+                  className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
+                >
+                  <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
+                </Button>
+              )}
+            </div>
+          )}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpenSortBy(true)}>
             <p className="font-medium text-xs capitalize">Sort by</p>
             <ArrowIconsUnion1 className="h-2 w-2" />

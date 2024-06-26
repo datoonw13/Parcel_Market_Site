@@ -74,17 +74,17 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
       />
     </div>
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
+     {select && <div className="flex items-center gap-3">
         <Button
           className={clsx(
             "!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none",
             select?.selecting ? "!bg-grey-200" : "!bg-grey-50"
           )}
-          onClick={select?.startSelect}
+          onClick={select.startSelect}
         >
-          {select && select?.totalSelected > 0 ? `${select?.totalSelected} Selected` : "Select"}
+          {select.totalSelected > 0 ? `${select.totalSelected} Selected` : "Select"}
         </Button>
-        {select && select.totalSelected > 0 && (
+        {select.totalSelected > 0 && (
           <Button
             onClick={select.onRemove}
             variant="text"
@@ -93,7 +93,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
             <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
           </Button>
         )}
-      </div>
+      </div>}
       <div className="flex items-center gap-4">
         <p className={clsx("text-medium text-xs text-grey-600", totalCount ? 'opacity-100' : 'opacity-0')}>{totalCount} Lands</p>
         <Popper
