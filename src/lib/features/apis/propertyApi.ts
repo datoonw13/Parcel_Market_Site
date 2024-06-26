@@ -79,7 +79,7 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: Object.values(proper
     }),
     removeUserSellingLand: build.mutation<void, number[]>({
       query: (arg) => ({
-        url: "/user/properties",
+        url: "/selling-properties/user/properties",
         method: "DELETE",
         body: { ids: arg },
       }),
