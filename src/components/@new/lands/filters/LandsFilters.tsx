@@ -14,7 +14,7 @@ interface LandsFiltersProps {
     onRemove: () => void;
     selecting: boolean;
   };
-  totalCount?: number
+  totalCount?: number;
 }
 
 const LandsFilters: FC<LandsFiltersProps> = ({ filters, setFilters, select, totalCount }) => (

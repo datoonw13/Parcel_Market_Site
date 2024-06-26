@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React from "react";
 
 export const NotFound1 = ({ className }: { className?: string }) => (
-  <svg className={clsx("w-4 h-4", className)} viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg className={clsx(className)} viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M106.428 169C149.518 169 184.463 134.318 184.463 91.4908C184.463 48.6636 149.518 13.9814 106.428 13.9814C63.3385 13.9814 28.3936 48.6636 28.3936 91.4908C28.3936 134.318 63.3385 169 106.428 169Z"
       fill="#F3F9F5"

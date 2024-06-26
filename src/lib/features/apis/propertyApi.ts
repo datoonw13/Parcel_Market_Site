@@ -14,6 +14,7 @@ import baseApi from "./baseApi";
 export const propertyApiTags = {
   sellingProperties: "selling-properties",
   userFollowedListings: "user-followed-listings",
+  userSellingLands: "user-selling-lands",
 };
 
 const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: Object.values(propertyApiTags) }).injectEndpoints({
@@ -65,12 +66,24 @@ const propertyApi = baseApi.enhanceEndpoints({ addTagTypes: Object.values(proper
       }),
       invalidatesTags: [propertyApiTags.sellingProperties],
     }),
-    getUserSellingProperties: build.query<IUserSellingPropertiesResponse, void>({
+    getUserSellingProperties: build.query<
+      ResponseType<{ data: ISellingProperty[]; pagination: { totalCount: number } }>,
+      Partial<ILandsFilters>
+    >({
       query: (arg) => ({
         url: "/selling-properties/user/properties",
         method: "GET",
-        body: arg,
+        params: { ...arg },
       }),
+      providesTags: [propertyApiTags.userSellingLands],
+    }),
+    removeUserSellingLand: build.mutation<void, number[]>({
+      query: (arg) => ({
+        url: "/user/properties",
+        method: "DELETE",
+        body: { ids: arg },
+      }),
+      invalidatesTags: [propertyApiTags.userSellingLands],
     }),
     getSellingProperties: build.query<
       ResponseType<
@@ -146,5 +159,6 @@ export const {
   useGetUserFollowedLandsQuery,
   useRemoveUserFollowedLandsMutation,
   useAddUserFollowedLandMutation,
+  useRemoveUserSellingLandMutation,
 } = propertyApi;
 export default propertyApi;

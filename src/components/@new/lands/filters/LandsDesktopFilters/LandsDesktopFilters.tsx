@@ -23,7 +23,7 @@ interface LandsDesktopFiltersProps {
     onRemove: () => void;
     selecting: boolean;
   };
-  totalCount?: number
+  totalCount?: number;
 }
 
 const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters, select, totalCount }) => (
@@ -74,28 +74,30 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
       />
     </div>
     <div className="flex items-center justify-between">
-     {select && <div className="flex items-center gap-3">
-        <Button
-          className={clsx(
-            "!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none",
-            select?.selecting ? "!bg-grey-200" : "!bg-grey-50"
-          )}
-          onClick={select.startSelect}
-        >
-          {select.totalSelected > 0 ? `${select.totalSelected} Selected` : "Select"}
-        </Button>
-        {select.totalSelected > 0 && (
+      {select && (
+        <div className="flex items-center gap-3">
           <Button
-            onClick={select.onRemove}
-            variant="text"
-            className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
+            className={clsx(
+              "!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none",
+              select?.selecting ? "!bg-grey-200" : "!bg-grey-50"
+            )}
+            onClick={select.startSelect}
           >
-            <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
+            {select.totalSelected > 0 ? `${select.totalSelected} Selected` : "Select"}
           </Button>
-        )}
-      </div>}
+          {select.totalSelected > 0 && (
+            <Button
+              onClick={select.onRemove}
+              variant="text"
+              className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
+            >
+              <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
+            </Button>
+          )}
+        </div>
+      )}
       <div className="flex items-center gap-4">
-        <p className={clsx("text-medium text-xs text-grey-600", totalCount ? 'opacity-100' : 'opacity-0')}>{totalCount} Lands</p>
+        <p className={clsx("text-medium text-xs text-grey-600", totalCount ? "opacity-100" : "opacity-0")}>{totalCount} Lands</p>
         <Popper
           disableSameWidth
           renderButton={(setReferenceElement, referenceElement) => (

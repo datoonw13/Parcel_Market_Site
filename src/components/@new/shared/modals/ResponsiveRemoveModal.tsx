@@ -50,7 +50,7 @@ const Content = ({
 const ResponsiveRemoveModal: FC<ResponsiveRemoveModalProps> = ({ handleClose, open, desc, onCancel, onDelete, title, pending }) => (
   <ResponsiveModal
     open={open}
-    handleClose={() => {}}
+    handleClose={handleClose}
     content={<Content handleClose={handleClose} desc={desc} onCancel={onCancel} onDelete={onDelete} title={title} pending={pending} />}
     responsiveContent={
       <Content responsive handleClose={handleClose} desc={desc} onCancel={onCancel} onDelete={onDelete} title={title} pending={pending} />
