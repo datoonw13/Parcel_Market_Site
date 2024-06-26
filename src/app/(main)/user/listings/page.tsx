@@ -15,8 +15,8 @@ import { Container } from "@mui/material";
 import React, { useState } from "react";
 import Pagination from "@/components/@new/shared/Pagination";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
-import UserLandsListingLoading from "./loading";
 import LandsFilters from "@/components/@new/lands/filters/LandsFilters";
+import UserLandsListingLoading from "./loading";
 
 const removeNullValue = (obj: { [key: string]: any }) =>
   Object.keys(obj).reduce((acc, cur) => ({ ...acc, ...(obj[cur] && { [cur]: obj[cur] }) }), {});
