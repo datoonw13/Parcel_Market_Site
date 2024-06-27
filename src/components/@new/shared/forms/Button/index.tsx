@@ -65,6 +65,7 @@ interface ButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   loading?: boolean;
+  className?: string;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -77,13 +78,15 @@ const Button: FC<ButtonProps> = ({
   disabled,
   onClick,
   loading,
+  className,
 }) => (
   <button
     type="button"
     className={clsx(
       "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
       sizes[size],
-      buttonTypes[variant][color]
+      buttonTypes[variant][color],
+      className
     )}
     disabled={disabled || loading}
     onClick={onClick}
