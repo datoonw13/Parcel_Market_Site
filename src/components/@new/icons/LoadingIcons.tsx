@@ -3,7 +3,7 @@ import React from "react";
 
 export const LoadingIcon1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
+    aria-label="fill"
     className={clsx(`w-4 h-4`, `fill-${color}`, className)}
     viewBox="0 0 24 24"
     fill="none"

@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 export const CalendarIcon1 = ({ color = "black", className }: { color?: string; className?: string }) => (
   <svg
-    aria-color="fill"
+    aria-label="fill"
     className={clsx(`fill-${color} w-4 h-4`, className)}
     viewBox="0 0 16 16"
     fill="none"

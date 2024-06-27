@@ -2,8 +2,8 @@ import clsx from "clsx";
 
 export const BookmarkIcon1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
-    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    aria-label="fill"
+    className={clsx("w-4 h-4", `fill-${color}`, className)}
     viewBox="0 0 15 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -14,8 +14,8 @@ export const BookmarkIcon1 = ({ className, color = "black" }: { className?: stri
 
 export const BookmarkIcon2 = ({ className, color = "primary-main" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
-    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    aria-label="fill"
+    className={clsx("w-4 h-4", `fill-${color}`, className)}
     viewBox="0 0 15 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

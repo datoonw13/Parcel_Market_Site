@@ -2,8 +2,8 @@ import clsx from "clsx";
 
 export const SmsIcon1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
-    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    aria-label="fill"
+    className={clsx("w-4 h-4", `fill-${color}`, className)}
     viewBox="0 0 16 14"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

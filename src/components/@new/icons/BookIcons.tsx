@@ -3,7 +3,7 @@ import React from "react";
 
 export const BookIcon1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
+    aria-label="fill"
     className={clsx(`w-4 h-4`, `fill-${color}`, className)}
     viewBox="0 0 16 16"
     fill="none"

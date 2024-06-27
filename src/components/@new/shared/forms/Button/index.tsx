@@ -12,15 +12,15 @@ const primary = {
   default: `
   rounded-lg disabled:bg-grey-100 
   bg-primary-main hover:bg-primary-main-hover 
-  [&>svg[aria-color="fill"]]:fill-white [&>svg[aria-color="stroke"]]:stroke-white
-  [&:disabled>svg[aria-color="fill"]]:fill-black-400 [&:disabled>svg[aria-color="stroke"]]:stroke-black-400  
+  [&>svg[aria-label="fill"]]:fill-white [&>svg[aria-label="stroke"]]:stroke-white
+  [&:disabled>svg[aria-label="fill"]]:fill-black-400 [&:disabled>svg[aria-label="stroke"]]:stroke-black-400  
   text-white disabled:text-black-400
   `,
   error: `
   rounded-lg disabled:bg-grey-100 
   bg-error hover:bg-error-hover 
-  [&>svg[aria-color="fill"]]:fill-white [&>svg[aria-color="stroke"]]:stroke-white
-  [&:disabled>svg[aria-color="fill"]]:fill-black-400 [&:disabled>svg[aria-color="stroke"]]:stroke-black-400  
+  [&>svg[aria-label="fill"]]:fill-white [&>svg[aria-label="stroke"]]:stroke-white
+  [&:disabled>svg[aria-label="fill"]]:fill-black-400 [&:disabled>svg[aria-label="stroke"]]:stroke-black-400  
   text-white disabled:text-black-400
   `,
 };
@@ -30,17 +30,17 @@ const secondary = {
   disabled:bg-grey-50
   rounded-lg
   outline outline-[1px] outline-grey-100 disabled:!outline-[2px]
-  [&>svg[aria-color="fill"]]:fill-black [&>svg[aria-color="stroke"]]:stroke-black
-  [&:hover>svg[aria-color="fill"]]:fill-black-400 [&:hover>svg[aria-color="stroke"]]:stroke-black-400
+  [&>svg[aria-label="fill"]]:fill-black [&>svg[aria-label="stroke"]]:stroke-black
+  [&:hover>svg[aria-label="fill"]]:fill-black-400 [&:hover>svg[aria-label="stroke"]]:stroke-black-400
   hover:text-black-400 
   `,
   error: `
   disabled:bg-grey-50
   rounded-lg
   outline outline-[1px] outline-error disabled:!outline-[2px] disabled:outline-grey-100
-  [&>svg[aria-color="fill"]]:fill-error [&>svg[aria-color="stroke"]]:stroke-error
-  [&:hover>svg[aria-color="fill"]]:fill-error-400 [&:hover>svg[aria-color="stroke"]]:stroke-error-400
-  [&:disabled>svg[aria-color="fill"]]:fill-black [&:disabled>svg[aria-color="stroke"]]:stroke-black
+  [&>svg[aria-label="fill"]]:fill-error [&>svg[aria-label="stroke"]]:stroke-error
+  [&:hover>svg[aria-label="fill"]]:fill-error-400 [&:hover>svg[aria-label="stroke"]]:stroke-error-400
+  [&:disabled>svg[aria-label="fill"]]:fill-black [&:disabled>svg[aria-label="stroke"]]:stroke-black
   text-error hover:text-error-400 disabled:text-black 
   `,
 };

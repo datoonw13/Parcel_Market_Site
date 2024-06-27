@@ -11,7 +11,7 @@ export const ArrowIconDown1 = ({
   color?: string;
 }) => (
   <svg
-    aria-color="stroke"
+    aria-label="stroke"
     className={clsx("w-4 h-4", `stroke-${color}`, className)}
     viewBox="0 0 24 24"
     fill="none"
@@ -37,7 +37,7 @@ export const ArrowIconUp1 = ({
   color?: string;
 }) => (
   <svg
-    aria-color="stroke"
+    aria-label="stroke"
     className={clsx("w-4 h-4", `stroke-${color}`, className)}
     viewBox="0 0 24 24"
     fill="none"
@@ -55,8 +55,8 @@ export const ArrowIconUp1 = ({
 
 export const ArrowIconLeft1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
-    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    aria-label="fill"
+    className={clsx("w-4 h-4", `fill-${color}`, className)}
     viewBox="0 0 7 12"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -67,8 +67,8 @@ export const ArrowIconLeft1 = ({ className, color = "black" }: { className?: str
 
 export const ArrowIconRight1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
-    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    aria-label="fill"
+    className={clsx("w-4 h-4", `fill-${color}`, className)}
     viewBox="0 0 7 12"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -79,8 +79,8 @@ export const ArrowIconRight1 = ({ className, color = "black" }: { className?: st
 
 export const ArrowIconsUnion1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg
-    aria-color="fill"
-    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    aria-label="fill"
+    className={clsx("w-4 h-4", `fill-${color}`, className)}
     viewBox="0 0 7 10"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
