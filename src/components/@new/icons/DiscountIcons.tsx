@@ -1,7 +1,13 @@
 import clsx from "clsx";
 
-export const DiscountIcon1 = ({ className, color = 'black' }: { className?: string, color?: string }) => (
-  <svg aria-color="fill" className={clsx("w-4 h-4", `stroke-${color}`, className)} viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const DiscountIcon1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
+  <svg
+    aria-color="fill"
+    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    viewBox="0 0 14 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path d="M8.49539 7.45389L3.79264 12.1566C3.57351 12.3758 3.57351 12.7129 3.79264 12.932C3.89377 13.0331 4.04548 13.0837 4.18032 13.0837C4.31517 13.0837 4.45001 13.0331 4.568 12.932L9.27076 8.22926C9.48988 8.01013 9.48988 7.67302 9.27076 7.45389C9.05163 7.23477 8.69766 7.23477 8.49539 7.45389Z" />
     <path d="M4.68579 9.37574C5.25365 9.37574 5.71399 8.9154 5.71399 8.34754C5.71399 7.77968 5.25365 7.31934 4.68579 7.31934C4.11793 7.31934 3.65759 7.77968 3.65759 8.34754C3.65759 8.9154 4.11793 9.37574 4.68579 9.37574Z" />
     <path d="M8.36048 13.0501C8.92834 13.0501 9.38868 12.5897 9.38868 12.0219C9.38868 11.454 8.92834 10.9937 8.36048 10.9937C7.79262 10.9937 7.33228 11.454 7.33228 12.0219C7.33228 12.5897 7.79262 13.0501 8.36048 13.0501Z" />
@@ -9,8 +15,14 @@ export const DiscountIcon1 = ({ className, color = 'black' }: { className?: stri
   </svg>
 );
 
-export const DiscountIcon2 = ({ className, color = 'black' }: { className?: string, color?: string }) => (
-  <svg aria-color="fill" className={clsx("w-4 h-4", `stroke-${color}`, className)} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const DiscountIcon2 = ({ className, color = "black" }: { className?: string; color?: string }) => (
+  <svg
+    aria-color="fill"
+    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path d="M10.8597 5.40949C11.0857 5.11886 11.0334 4.70001 10.7427 4.47396C10.4521 4.24791 10.0333 4.30027 9.80721 4.5909L5.14054 10.5909C4.9145 10.8815 4.96685 11.3004 5.25749 11.5264C5.54812 11.7525 5.96697 11.7001 6.19301 11.4095L10.8597 5.40949Z" />
     <path d="M6.33346 6.66683C6.88574 6.66683 7.33346 6.21911 7.33346 5.66683C7.33346 5.11454 6.88574 4.66683 6.33346 4.66683C5.78117 4.66683 5.33346 5.11454 5.33346 5.66683C5.33346 6.21911 5.78117 6.66683 6.33346 6.66683Z" />
     <path d="M10.6668 10.3335C10.6668 10.8858 10.2191 11.3335 9.66679 11.3335C9.1145 11.3335 8.66679 10.8858 8.66679 10.3335C8.66679 9.78121 9.1145 9.3335 9.66679 9.3335C10.2191 9.3335 10.6668 9.78121 10.6668 10.3335Z" />

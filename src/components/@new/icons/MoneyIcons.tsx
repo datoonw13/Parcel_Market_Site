@@ -1,8 +1,14 @@
 import clsx from "clsx";
 import React from "react";
 
-export const MoneyIcon1 = ({ className, color = 'black' }: { className?: string, color?: string }) => (
-  <svg aria-color="fill" className={clsx("w-4 h-4", `stroke-${color}`, className)} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const MoneyIcon1 = ({ className, color = "black" }: { className?: string; color?: string }) => (
+  <svg
+    aria-color="fill"
+    className={clsx("w-4 h-4", `stroke-${color}`, className)}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path
       fillRule="evenodd"
       clipRule="evenodd"

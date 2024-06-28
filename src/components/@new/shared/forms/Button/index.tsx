@@ -88,9 +88,9 @@ const Button: FC<ButtonProps> = ({
     disabled={disabled || loading}
     onClick={onClick}
   >
-    {StartIcon && <StartIcon className={clsx("start-icon transition-all duration-100", loading && 'opacity-0')} />}
-    <div className={clsx(loading && 'opacity-0')}>{children}</div>
-    {EndIcon && <EndIcon className={clsx("end-icon transition-all duration-100", loading && 'opacity-0')} />}
+    {StartIcon && <StartIcon className={clsx("start-icon transition-all duration-100", loading && "opacity-0")} />}
+    <div className={clsx(loading && "opacity-0")}>{children}</div>
+    {EndIcon && <EndIcon className={clsx("end-icon transition-all duration-100", loading && "opacity-0")} />}
     {loading && <LoadingIcon1 className="loading-icon absolute start-icon transition-all duration-100" />}
   </button>
 );
