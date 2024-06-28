@@ -76,10 +76,115 @@ export default function PlaygroundPage() {
         </div>
       </div>
       <div>
-        <h2 className="mb-4 text-lg font-mono">Button</h2>
+        <h2 className="mb-4 text-lg font-mono">Button Primary</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
-        <div className="flex space-x-8">
-          <Button variant="secondary" color="error" d size="lg" endIcon={CalendarIcon1}>Primary</Button>
+        <div className="space-y-8">
+          <div className="flex space-x-8">
+            <Button variant="primary" color="default" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Default
+            </Button>
+            <Button variant="primary" color="default" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Default disabled
+            </Button>
+          </div>
+          <div className="flex space-x-8">
+            <Button variant="primary" color="error" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Error
+            </Button>
+            <Button variant="primary" color="error" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Error disabled
+            </Button>
+          </div>
+
+          <div className="flex space-x-8">
+            <Button variant="primary" color="default" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Default
+            </Button>
+            <Button variant="primary" color="default" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Default disabled
+            </Button>
+          </div>
+          <div className="flex space-x-8">
+            <Button variant="primary" color="error" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Error
+            </Button>
+            <Button variant="primary" color="error" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Error disabled
+            </Button>
+          </div>
+
+          <div className="flex space-x-8">
+            <Button variant="primary" color="default" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Default
+            </Button>
+            <Button variant="primary" color="default" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Default disabled
+            </Button>
+          </div>
+          <div className="flex space-x-8">
+            <Button variant="primary" color="error" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Error
+            </Button>
+            <Button variant="primary" color="error" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Error disabled
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2 className="mb-4 text-lg font-mono">Button Secondary</h2>
+        <hr className="mb-4 border-gray-200 dark:border-gray-800" />
+        <div className="space-y-8">
+          <div className="flex space-x-8">
+            <Button variant="secondary" color="default" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Default
+            </Button>
+            <Button variant="secondary" color="default" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Default disabled
+            </Button>
+          </div>
+          <div className="flex space-x-8">
+            <Button variant="secondary" color="error" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Error
+            </Button>
+            <Button variant="secondary" color="error" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Sm Error disabled
+            </Button>
+          </div>
+
+          <div className="flex space-x-8">
+            <Button variant="secondary" color="default" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Default
+            </Button>
+            <Button variant="secondary" color="default" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Default disabled
+            </Button>
+          </div>
+          <div className="flex space-x-8">
+            <Button variant="secondary" color="error" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Error
+            </Button>
+            <Button variant="secondary" color="error" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Md Error disabled
+            </Button>
+          </div>
+
+          <div className="flex space-x-8">
+            <Button variant="secondary" color="default" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Default
+            </Button>
+            <Button variant="secondary" color="default" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Default disabled
+            </Button>
+          </div>
+          <div className="flex space-x-8">
+            <Button variant="secondary" color="error" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Error
+            </Button>
+            <Button variant="secondary" color="error" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+              Primary Lg Error disabled
+            </Button>
+          </div>
         </div>
       </div>
       <button type="button" onClick={() => setOpen(true)}>
