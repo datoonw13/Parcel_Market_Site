@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import React from "react";
 
-export const IdIcon1 = ({ className }: { className?: string }) => (
-  <svg className={clsx("fill-black w-4 h-4", className)} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const IdIcon1 = ({ className, color = 'black' }: { className?: string, color?: string })=> (
+  <svg aria-color="fill" className={clsx("w-4 h-4", `stroke-${color}`, className)} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fillRule="evenodd"
       clipRule="evenodd"

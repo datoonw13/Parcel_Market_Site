@@ -80,52 +80,52 @@ export default function PlaygroundPage() {
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="space-y-8">
           <div className="flex space-x-8">
-            <Button variant="primary" color="default" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="default" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Sm Default
             </Button>
-            <Button variant="primary" color="default" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="default" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Sm Default disabled
             </Button>
           </div>
           <div className="flex space-x-8">
-            <Button variant="primary" color="error" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="error" size="sm" startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Sm Error
             </Button>
-            <Button variant="primary" color="error" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="error" size="sm" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Sm Error disabled
             </Button>
           </div>
 
           <div className="flex space-x-8">
-            <Button variant="primary" color="default" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="default" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Md Default
             </Button>
-            <Button variant="primary" color="default" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="default" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Md Default disabled
             </Button>
           </div>
           <div className="flex space-x-8">
-            <Button variant="primary" color="error" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="error" size="md" startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Md Error
             </Button>
-            <Button variant="primary" color="error" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="error" size="md" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Md Error disabled
             </Button>
           </div>
 
           <div className="flex space-x-8">
-            <Button variant="primary" color="default" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="default" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Lg Default
             </Button>
-            <Button variant="primary" color="default" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="default" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Lg Default disabled
             </Button>
           </div>
           <div className="flex space-x-8">
-            <Button variant="primary" color="error" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="error" size="lg" startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Lg Error
             </Button>
-            <Button variant="primary" color="error" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
+            <Button variant="primary" loading color="error" size="lg" disabled startIcon={BookIcon1} endIcon={CalendarIcon1}>
               Primary Lg Error disabled
             </Button>
           </div>
