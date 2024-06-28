@@ -63,7 +63,7 @@ export const colors = {
   },
   error: {
     100: "rgba(211, 34, 11, 0.1)",
-    hover: "rgba(179, 29, 9, 1)",
+    hover: "rgba(146, 18, 1, 1)",
     DEFAULT: "rgba(211, 34, 11, 1)",
   },
   info: {

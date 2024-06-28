@@ -9,6 +9,9 @@ import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { getAllStates } from "@/helpers/states";
 import { useState } from "react";
+import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
+import { ArrowIconDown1 } from "@/components/@new/icons/ArrowIcons";
+import { BookIcon1 } from "@/components/@new/icons/BookIcons";
 
 export default function PlaygroundPage() {
   const [value, setValue] = useState<any>(null);
@@ -40,7 +43,7 @@ export default function PlaygroundPage() {
         <h2 className="mb-4 text-lg font-mono">TextField</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <TextField endIcon={<p className="">qdwd</p>} label="Primary" />
+          {/* <TextField endIcon={Button} label="Primary" /> */}
           <TextField variant="secondary" label="secondary" />
           <TextField variant="primary" placeholder="placeholder" />
         </div>
@@ -76,8 +79,7 @@ export default function PlaygroundPage() {
         <h2 className="mb-4 text-lg font-mono">Button</h2>
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
-          <Button>Primary</Button>
-          <Button variant="secondary">Secondary</Button>
+          <Button variant="secondary" color="error" d size="lg" endIcon={CalendarIcon1}>Primary</Button>
         </div>
       </div>
       <button type="button" onClick={() => setOpen(true)}>
