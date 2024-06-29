@@ -16,7 +16,8 @@ const UploadImage = () => {
   return (
     <div className="flex items-center gap-6">
       <Avatar className="w-24 h-24 font-semibold" title="DN" src={avatar && URL.createObjectURL(avatar)} />
-      <Button variant="secondary-green" className="h-12 relative">
+      {/* TODO:Reefactor */}
+      <Button variant="secondary" className="h-12 relative">
         Upload Image{" "}
         <label htmlFor="upload" className="bg-error w-full h-full absolute top-0 left-0 opacity-0 cursor-pointer">
           <input
