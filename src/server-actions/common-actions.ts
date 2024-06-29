@@ -10,6 +10,7 @@ export const getProtectedData = async <T>(url: string, options?: any): Promise<T
       cookie: cookies().toString(),
     },
   });
+
   const data = await request.json();
   return data;
 };
