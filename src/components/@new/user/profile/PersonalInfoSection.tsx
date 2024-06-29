@@ -15,7 +15,7 @@ const PersonalInfoSection = () => {
         <Button
           variant="text"
           className={clsx(editMode ? "opacity-0" : "opacity-1")}
-          startIcon={(<EditIcon1 />) as any}
+          // startIcon={(<EditIcon1 />) as any}
           onClick={() => setEditMode(true)}
         >
           Edit
