@@ -40,9 +40,9 @@ const Content = ({
       <Button className="w-full justify-center" variant="secondary" onClick={onCancel} disabled={pending}>
         Cancel
       </Button>
-      <Button className="w-full justify-center" variant="primary-error" loading={pending} onClick={onDelete}>
+      {/* <Button className="w-full justify-center" variant="primary-error" loading={pending} onClick={onDelete}>
         Delete
-      </Button>
+      </Button> */}
     </div>
   </div>
 );
