@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export const getProtectedData = async <T, >(url: string, options?: any): Promise<T>   => {
+export const getProtectedData = async <T>(url: string, options?: any): Promise<T> => {
   const request = await fetch(url, {
     ...options,
     headers: {
@@ -11,5 +11,5 @@ export const getProtectedData = async <T, >(url: string, options?: any): Promise
     },
   });
   const data = await request.json();
-  return data
+  return data;
 };
