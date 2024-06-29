@@ -17,31 +17,35 @@ const COMETCHAT_CONSTANTS = {
 const CometChat = () => {
   const [user, setUser] = useState<any>();
   useAuthCheck();
-  const authedUser = useAppSelector((state) => state.authedUser.user);
-
+  // const authedUser = useAppSelector((state) => state.authedUser.user);
+  const authedUser = true;
   const loginUser = async (userUUID: string) => {
     try {
       const res = await CometChatUIKit.login(userUUID);
       return { user: res, error: false };
     } catch (error) {
+      console.log(error, 222);
+
       return { user: null, error: true };
     }
   };
 
   const initUser = async () => {
     if (authedUser) {
-      const { error, user } = await loginUser(authedUser.id.toString());
+      const { error, user } = await loginUser("48".toString());
       setUser(user);
       if (error) {
-        console.log(authedUser.email, 22);
-        const newUser = new Chat.User(authedUser.id.toString());
-        newUser.setName(authedUser.name);
+        console.log(authedUser, 22);
+        const newUser = new Chat.User("authedUser.id".toString());
+        newUser.setName("Lasha Gabelashvili");
         try {
           await CometChatUIKit.createUser(newUser);
         } catch (error) {
           console.log(error, 12213);
         }
-        const { error, user } = await loginUser(authedUser.email);
+        const { error, user } = await loginUser("gabelashvili1999@gmail.com");
+        console.log(error, 11);
+
         setUser(user);
       }
     }
