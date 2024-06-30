@@ -11,6 +11,6 @@ export const getProtectedData = async <T>(url: string, options?: any): Promise<T
     },
   });
 
-    const data = await request.json();
+  const data = await request.json();
   return data;
 };

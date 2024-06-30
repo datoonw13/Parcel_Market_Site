@@ -19,7 +19,8 @@ interface TextFieldProps {
   defaultValue?: string;
   className?: string;
   readOnly?: boolean;
-  type?: "text" | "number";
+  type?: "text" | "number" | "password";
+  name?: string;
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -38,6 +39,7 @@ const TextField = (props: TextFieldProps) => {
     className,
     readOnly,
     type = "text",
+    name
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -81,6 +83,7 @@ const TextField = (props: TextFieldProps) => {
         defaultValue={defaultValue}
         readOnly={readOnly}
         type={type === "number" ? "text" : type}
+        name={name}
       />
       {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
       {endIcon && (
