@@ -12,22 +12,15 @@ import React, { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 
-const formInitialState = {
-  message: "",
-  error: false,
-}
 const SignInPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [state, formAction] = useFormState(
-    signInUser,
-    formInitialState,
-  );
-  
+  const [state, formAction] = useFormState(signInUser, null);
+
   useEffect(() => {
-    if(state.error) {
-      toast.error(state.message)
+    if (state?.error) {
+      toast.error(state.message);
     }
-  }, [state])
+  }, [state]);
   return (
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>
@@ -53,15 +46,23 @@ const SignInPage = () => {
       </form>
       <Divider label="OR" className="my-3" />
       <GoogleButton onClick={() => {}} />
-      <p className="font-medium text-sm mt-auto">Don't have an account? <Link href={'/'}><span className="font-medium text-sm text-primary-main underline">Sign Up</span></Link></p>
+      <p className="font-medium text-sm mt-auto">
+        Don&apos;t have an account?{" "}
+        <Link href="/">
+          <span className="font-medium text-sm text-primary-main underline">Sign Up</span>
+        </Link>
+      </p>
     </div>
   );
 };
 
 export default SignInPage;
 
-
 const SubmitButton = () => {
-  const { pending } = useFormStatus()
-  return <Button loading={pending} className="mt-4" type="submit">Sign In</Button>
-}
+  const { pending } = useFormStatus();
+  return (
+    <Button loading={pending} className="mt-4" type="submit">
+      Sign In
+    </Button>
+  );
+};

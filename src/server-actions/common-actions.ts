@@ -2,15 +2,21 @@
 
 import { cookies } from "next/headers";
 
-export const getProtectedData = async <T>(url: string, options?: any): Promise<T> => {
-  const request = await fetch(url, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      cookie: cookies().toString(),
-    },
-  });
-
-  const data = await request.json();
-  return data;
+export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise<{data: T | null, error: boolean }> => { // eslint-disable-line
+  try {
+    const request = await fetch(`https://api.parcelmarket.com/api/${apiUrl}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        cookie: cookies().toString(),
+      },
+    });
+    const data = await request.json();
+    return {
+      data,
+      error: data?.statusCode !== 200,
+    };
+  } catch (error) {
+    return { error: true, data: null };
+  }
 };
