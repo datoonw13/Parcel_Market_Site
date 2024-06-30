@@ -6,16 +6,32 @@ import Button from "@/components/@new/shared/forms/Button";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
+import { signInUser } from "@/server-actions/user-actions";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
 
+const formInitialState = {
+  message: "",
+  error: false,
+}
 const SignInPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-
+  const [state, formAction] = useFormState(
+    signInUser,
+    formInitialState,
+  );
+  
+  useEffect(() => {
+    if(state.error) {
+      toast.error(state.message)
+    }
+  }, [state])
   return (
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>
-      <form className="flex flex-col gap-4 w-full">
+      <form className="flex flex-col gap-4 w-full" action={formAction}>
         <TextField label="Email" name="email" />
         <TextField
           label="Password"
@@ -33,7 +49,7 @@ const SignInPage = () => {
             <p className="text-xs font-medium text-primary-main">Forgot Password?</p>
           </Link>
         </div>
-        <Button className="mt-4">Sign In</Button>
+        <SubmitButton />
       </form>
       <Divider label="OR" className="my-3" />
       <GoogleButton onClick={() => {}} />
@@ -43,3 +59,9 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
+
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus()
+  return <Button loading={pending} className="mt-4" type="submit">Sign In</Button>
+}

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ButtonHTMLAttributes, FC, ReactNode } from "react";
 import clsx from "clsx";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 
@@ -66,6 +66,7 @@ interface ButtonProps {
   onClick?: () => void;
   loading?: boolean;
   className?: string;
+  type?: ButtonHTMLAttributes<HTMLButtonElement>['type']
 }
 
 const Button: FC<ButtonProps> = ({
@@ -79,9 +80,10 @@ const Button: FC<ButtonProps> = ({
   onClick,
   loading,
   className,
+  type='button'
 }) => (
   <button
-    type="button"
+    type={type}
     className={clsx(
       "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
       sizes[size],
