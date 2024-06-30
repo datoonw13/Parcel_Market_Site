@@ -13,7 +13,7 @@ const SignInPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
-    <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16">
+    <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>
       <form className="flex flex-col gap-4 w-full">
         <TextField label="Email" name="email" />
@@ -36,7 +36,8 @@ const SignInPage = () => {
         <Button className="mt-4">Sign In</Button>
       </form>
       <Divider label="OR" className="my-3" />
-      <GoogleButton />
+      <GoogleButton onClick={() => {}} />
+      <p className="font-medium text-sm mt-auto">Don't have an account? <Link href={'/'}><span className="font-medium text-sm text-primary-main underline">Sign Up</span></Link></p>
     </div>
   );
 };

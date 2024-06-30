@@ -96,19 +96,19 @@ const config: Config = {
         4: "0px 0px 30px 0px rgba(0, 0, 0, 0.08)",
       },
       fontSize: {
-        xss: ['0.625rem', '14px'], //14px => 10px
-        xs: ['0.75rem', '22px'], //22px => 12px
-        sm: ['0.875rem', '24px'], //24px => 14px
-        base: [ '1rem', '28px'], //28px => 16px
-        lg: [ '1.125rem', '28px'], //28px => 18px
-        '2xl': ['1.5rem', '32px'], //32px => 24px
-        '3xl': ['1.75rem', '40px'], //40px => 28px
-        '4xl': ['2rem', '48px'], //48px => 32px
-        '5xl': ['2.25rem', '48px'], //48px => 36px
-        '6xl': ['3rem', '48px'], //64px => 48px
-        '7xl': ['4rem', '80px'], //64px => 48px
-        '8xl': ['6rem', '112px'], //64px => 48px
-      }
+        xss: ["0.625rem", "14px"], // 14px => 10px
+        xs: ["0.75rem", "22px"], // 22px => 12px
+        sm: ["0.875rem", "24px"], // 24px => 14px
+        base: ["1rem", "28px"], // 28px => 16px
+        lg: ["1.125rem", "28px"], // 28px => 18px
+        "2xl": ["1.5rem", "32px"], // 32px => 24px
+        "3xl": ["1.75rem", "40px"], // 40px => 28px
+        "4xl": ["2rem", "48px"], // 48px => 32px
+        "5xl": ["2.25rem", "48px"], // 48px => 36px
+        "6xl": ["3rem", "48px"], // 64px => 48px
+        "7xl": ["4rem", "80px"], // 64px => 48px
+        "8xl": ["6rem", "112px"], // 64px => 48px
+      },
     },
   },
 };
