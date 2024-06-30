@@ -39,7 +39,7 @@ const TextField = (props: TextFieldProps) => {
     className,
     readOnly,
     type = "text",
-    name
+    name,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);

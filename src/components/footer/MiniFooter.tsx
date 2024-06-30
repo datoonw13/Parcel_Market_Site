@@ -27,12 +27,8 @@
 
 // export default MiniFooter;
 
-import React from 'react'
+import React from "react";
 
-const MiniFooter = ({sx}: any) => {
-  return (
-    <div>MiniFooter</div>
-  )
-}
+const MiniFooter = ({ sx }: any) => <div>MiniFooter</div>;
 
-export default MiniFooter
+export default MiniFooter;

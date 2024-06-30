@@ -66,7 +66,7 @@ interface ButtonProps {
   onClick?: () => void;
   loading?: boolean;
   className?: string;
-  type?: ButtonHTMLAttributes<HTMLButtonElement>['type']
+  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
 const Button: FC<ButtonProps> = ({
@@ -80,10 +80,11 @@ const Button: FC<ButtonProps> = ({
   onClick,
   loading,
   className,
-  type='button'
+  type = "button",
 }) => (
   <button
-    type={type}
+    // eslint-disable-next-line react/button-has-type
+    type={type || "submit"}
     className={clsx(
       "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
       sizes[size],

@@ -26,6 +26,7 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   const { error, data } = await fetcher<ResponseType<ISignInResponse>>("user/auth", {
     method: "POST",
     body: JSON.stringify(validations.data),
+    cache: "no-cache",
   });
 
   if (error) {
@@ -47,3 +48,5 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   redirect("/");
   return null;
 };
+
+export const getUserAction = async () => fetcher<ResponseType<ISignInResponse>>("user/profile", { cache: "no-cache" });

@@ -1,6 +1,6 @@
 "use client";
 
-import Container from "@/components/@new/shared/forms/Container";
+import Container from "@/components/@new/shared/Container";
 import UserMenuList from "@/components/@new/user/user-menu/UserMenuList";
 import routes from "@/helpers/routes";
 import { useAppSelector } from "@/lib/hooks";
@@ -11,11 +11,11 @@ const UserLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const { user, pending } = useAppSelector((state) => state.authedUser);
 
-  useEffect(() => {
-    if (!pending && !user) {
-      router.push(routes.auth.signIn);
-    }
-  }, [user, pending, router]);
+  // useEffect(() => {
+  //   if (!pending && !user) {
+  //     router.push(routes.auth.signIn);
+  //   }
+  // }, [user, pending, router]);
   return (
     <Container className="pt-12 pb-32">
       <div className="grid lg:grid-cols-[minmax(0,_max-content)_1fr] gap-8">
