@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import AdditionalInfoSection from "@/components/@new/user/profile/AdditionalInfoSection";
 import PersonalInfoSection from "@/components/@new/user/profile/PersonalInfoSection";
@@ -11,14 +11,16 @@ import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-const UserProfilePage = () => {
+const UserProfilePage = async () => {
+  const data = await getUserAction();
+  console.log(data);
   return (
     <div className="grid gap-6">
-      <UploadImage />
+      {/* <UploadImage />
       <PersonalInfoSection />
-      <AdditionalInfoSection />
+      <AdditionalInfoSection /> */}
     </div>
-  )
-}
+  );
+};
 
 export default UserProfilePage;

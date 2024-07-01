@@ -3,7 +3,7 @@
 import { ISignInResponse } from "@/types/auth";
 import { UserSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseType } from "@/types/common";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import { redirect } from "next/navigation";
@@ -36,7 +36,9 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   }
 
   const decodedToken = jwtDecode(data?.data.access_token!) as { exp: number };
+  fetcher<ResponseType<ISignInResponse>>("user/profile", { cache: "no-cache" });
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+  // set jwt token in cookie
   cookies().set({
     name: "jwt",
     value: data?.data.access_token!,
@@ -48,4 +50,16 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   return null;
 };
 
-export const getUserAction = async () => fetcher<ResponseType<ISignInResponse>>("user/profile", { cache: "no-cache" });
+// export const getUserAction = async () => fetcher<ResponseType<ISignInResponse>>("user/profile", { cache: "no-cache" });
+export const getUserAction = async (): Promise<ISignInResponse["payload"] | null> => {
+  const userString = headers().get("user");
+  if (userString) {
+    try {
+      const user = JSON.parse(userString!);
+      return user;
+    } catch (error) {
+      return null;
+    }
+  }
+  return null;
+};
