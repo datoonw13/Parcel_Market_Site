@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { IUser } from "@/types/auth";
+import { IUserSignUp } from "@/types/auth";
 import clsx from "clsx";
 import Link from "next/link";
+import routes from "@/helpers/routes";
 import CheckBox from "../shared/forms/CheckBox";
 import Button from "../shared/forms/Button";
 
-const SignUpReason = ({ onNext }: { onNext: (type: IUser["registrationReason"]) => void }) => {
-  const [value, setValue] = useState<IUser["registrationReason"]>();
+const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReason"]) => void }) => {
+  const [value, setValue] = useState<IUserSignUp["registrationReason"]>();
   return (
     <>
       <div className="max-w-xl">
@@ -18,7 +19,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUser["registrationReason"]) 
       <div className="flex flex-col max-w-fit w-full gap-3">
         <CheckBox
           className={clsx(
-            `!w-full p-6 border border-grey-100 rounded-2xl hover:bg-primary-main-100
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
           hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value === "sellLandQuickly" && "bg-primary-main-100 border-primary-main-400"
           )}
@@ -28,7 +29,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUser["registrationReason"]) 
         />
         <CheckBox
           className={clsx(
-            `!w-full p-6 border border-grey-100 rounded-2xl hover:bg-primary-main-100
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
             hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value === "lookingForLandDeal" && "bg-primary-main-100 border-primary-main-400"
           )}
@@ -38,7 +39,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUser["registrationReason"]) 
         />
         <CheckBox
           className={clsx(
-            `!w-full p-6 border border-grey-100 rounded-2xl hover:bg-primary-main-100
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
           hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value === "researchingPropertyData" && "bg-primary-main-100 border-primary-main-400"
           )}
@@ -48,7 +49,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUser["registrationReason"]) 
         />
         <CheckBox
           className={clsx(
-            `!w-full p-6 border border-grey-100 rounded-2xl hover:bg-primary-main-100
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
         hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value === "realEstateProfessional" && "bg-primary-main-100 border-primary-main-400"
           )}
@@ -66,7 +67,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUser["registrationReason"]) 
         </Button>
         <p className="mt-3 text-center font-medium text-sm">
           Already have an account?{" "}
-          <Link href="/">
+          <Link href={routes.auth.signIn.url}>
             <span className="underline text-primary-main font-medium text-sm">Sign In</span>
           </Link>
         </p>

@@ -1,7 +1,6 @@
 "use server";
 
-import { ISignInResponse } from "@/types/auth";
-import { UserSignInValidation } from "@/zod-validations/auth-validations";
+import { userSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
@@ -9,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import { revalidatePath } from "next/cache";
 import routes from "@/helpers/routes";
+import { ISignInResponse } from "../types/auth";
 import { fetcher } from "./fetcher";
 
 export const signInUser = async (prevState: any, formData: FormData) => {
@@ -17,7 +17,7 @@ export const signInUser = async (prevState: any, formData: FormData) => {
     password: formData.get("password"),
   };
 
-  const validations = UserSignInValidation.safeParse(values);
+  const validations = userSignInValidation.safeParse(values);
   if (!validations.success) {
     return {
       error: true,

@@ -1,4 +1,4 @@
-import { usaStatesFull } from "typed-usa-states";
+import { usaCities, usaStatesFull } from "typed-usa-states";
 
 const statesBlackList = [
   "Louisiana",
@@ -42,3 +42,8 @@ export const getCountyValue = (county: string | null, state: string | null) => {
   }
   return getCounties(state).find(({ value }) => value === county) || null;
 };
+
+export const getCitiesByState = (state?: string) =>
+  usaCities
+    .filter((el) => el.state === getAllStates().find((x) => x.value === state)?.label)
+    .map((city) => ({ label: city.name, value: city.name }));

@@ -91,7 +91,7 @@ const TextField = (props: TextFieldProps) => {
           [&+.placeholder]:left-2 
           [&+.placeholder]:px-1.5 
           [&+.placeholder]:font-medium
-          [&:focus+.placeholder]:hidden
+          [&:focus+.placeholder]:text-grey-800
           [&:not(:placeholder-shown)+.placeholder]:hidden
           `
         )}
@@ -112,7 +112,12 @@ const TextField = (props: TextFieldProps) => {
           {required && <span className="text-error">*</span>}
         </p>
       )}
-      {placeholder && <p className="placeholder">{placeholder}</p>}
+      {placeholder && (
+        <p className="placeholder">
+          {placeholder}
+          {required && <span className="text-error">*</span>}
+        </p>
+      )}
       {endIcon && (
         <div
           className={clsx("absolute right-0 h-full flex items-center pr-3", disabled && "cursor-not-allowed pointer-events-none")}

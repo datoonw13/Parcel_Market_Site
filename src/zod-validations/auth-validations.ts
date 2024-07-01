@@ -1,22 +1,29 @@
 import { z } from "zod";
 
-export const UserSignInValidation = z.object({
+export const userSignInValidation = z.object({
   email: z.string().trim().min(1).email(),
   password: z.string().trim().min(1),
 });
 
-export const UserSignUpValidation = z.object({
-  email: z.string().trim(),
-  mailingAddress: z.string().trim(),
-  state: z.string().trim(),
-  county: z.string().trim(),
-  mobileNumber: z.string().trim(),
-  password: z.string().trim(),
-  firstName: z.string().trim(),
-  lastName: z.string().trim(),
-  registrationReason: z.enum(['sellLandQuickly', 'lookingForLandDeal', 'researchingPropertyData', 'realEstateProfessional']),
-  unitNumber: z.string().trim(),
-  city: z.string().trim(),
-  postalCode: z.string().trim(),
-  streetName: z.string().trim(),
-});
+export const userSignUpValidation = z
+  .object({
+    firstName: z.string().trim().min(1),
+    lastName: z.string().trim().min(1),
+    email: z.string().email(),
+    streetName: z.string().trim().min(1),
+    unitNumber: z.string().trim().min(1),
+    city: z.string().trim().min(1),
+    state: z.string().trim().min(1),
+    postalCode: z.string().trim().min(1),
+    password: z.string().trim().min(1),
+    registrationReason: z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"]),
+    agreeTerm: z.boolean().refine((val) => val === true, {
+      message: "Please read and accept the terms and conditions",
+    }),
+    sendEmailTips: z.boolean(),
+    repeatPassword: z.string().trim().min(1),
+  })
+  .refine((data) => data.password === data.repeatPassword, {
+    message: "Passwords don't match",
+    path: ["repeatPassword"],
+  });
