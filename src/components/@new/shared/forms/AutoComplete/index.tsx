@@ -25,6 +25,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   arrowIconClassName?: string;
   renderContent?: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>, options: T) => ReactElement;
   readOnly?: boolean;
+  required?: boolean;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -43,6 +44,7 @@ const AutoComplete = <T extends Array<{}>>({
   arrowIconClassName,
   renderContent,
   readOnly,
+  required,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -93,6 +95,7 @@ const AutoComplete = <T extends Array<{}>>({
         renderButton={(setReferenceElement, referenceElement) => (
           <TextField
             readOnly={readOnly}
+            required={required}
             onChange={(value) => {
               setSearchValue(value);
               isSearching.current = true;

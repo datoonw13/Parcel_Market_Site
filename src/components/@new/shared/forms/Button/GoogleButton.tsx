@@ -1,11 +1,15 @@
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 import { GoogleIcon1 } from "@/components/@new/icons/SocialNetworkIcons";
+import clsx from "clsx";
 import React from "react";
 
-const GoogleButton = ({ onClick, loading }: { onClick: () => void; loading?: boolean }) => (
+const GoogleButton = ({ onClick, loading, className }: { onClick: () => void; loading?: boolean; className?: string }) => (
   <button
     type="button"
-    className="w-full p-3 flex justify-center items-center gap-4 shadow-[0px_2px_3px_0px_rgba(0,0,0,0.17)] text-black-400 font-medium rounded-[40px]"
+    className={clsx(
+      "w-full p-3 flex justify-center items-center gap-4 shadow-[0px_2px_3px_0px_rgba(0,0,0,0.17)] text-black-400 font-medium rounded-[40px]",
+      className
+    )}
     onClick={onClick}
     disabled={loading}
   >

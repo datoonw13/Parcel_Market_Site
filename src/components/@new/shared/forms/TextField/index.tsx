@@ -21,6 +21,7 @@ interface TextFieldProps {
   readOnly?: boolean;
   type?: "text" | "number" | "password";
   name?: string;
+  required?: boolean;
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -40,6 +41,7 @@ const TextField = (props: TextFieldProps) => {
     readOnly,
     type = "text",
     name,
+    required,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -73,7 +75,14 @@ const TextField = (props: TextFieldProps) => {
   return (
     <div className={clsx(classes.root, className)} onClick={(e) => !disabled && onClick && onClick(e)}>
       <input
-        className={clsx(label && classes[`input-${variant}`], classes.input, error && classes.error, disabled && "cursor-not-allowed")}
+        className={clsx(
+          label && classes[`input-${variant}`],
+          classes.input,
+          error && classes.error,
+          disabled && "cursor-not-allowed",
+          required && classes["required-placeholder"],
+          "placeholder:text-grey-800"
+        )}
         placeholder={placeholder}
         value={value}
         onChange={(e) => handleChange(e.target.value)}
@@ -85,7 +94,12 @@ const TextField = (props: TextFieldProps) => {
         type={type === "number" ? "text" : type}
         name={name}
       />
-      {label && <p className={label && classes[`label-${variant}`]}>{label}</p>}
+      {label && (
+        <p className={clsx(label && classes[`label-${variant}`], "pointer-events-none")}>
+          {label}
+          {required && <span className="text-error">*</span>}
+        </p>
+      )}
       {endIcon && (
         <div
           className={clsx("absolute right-0 h-full flex items-center pr-3", disabled && "cursor-not-allowed pointer-events-none")}
