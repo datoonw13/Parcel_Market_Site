@@ -8,6 +8,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { CometChat as Chat } from "@cometchat/chat-sdk-javascript";
 import { CircularProgress } from "@mui/material";
 
+console.log(process.env.NODE_ENV)
 const COMETCHAT_CONSTANTS = {
   APP_ID: "258993edb46dedf6", // Replace with your App ID
   REGION: "EU", // Replace with your App Region
@@ -32,7 +33,7 @@ const CometChat = () => {
 
   const initUser = async () => {
     if (authedUser) {
-      const { error, user } = await loginUser("48".toString());
+      const { error, user } = await loginUser(process.env.NODE_ENV === 'development' ? "48": '50');
       setUser(user);
       if (error) {
         console.log(authedUser, 22);
