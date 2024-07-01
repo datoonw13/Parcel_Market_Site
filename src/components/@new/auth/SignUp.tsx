@@ -1,15 +1,14 @@
-import React from 'react'
+import React from "react";
 import Divider from "@/components/@new/shared/Divider";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import { getAllStates } from "@/helpers/states";
 import Link from "next/link";
-import TextField from '../shared/forms/TextField';
+import TextField from "../shared/forms/TextField";
 
-const SignUp = () => {
-  return (
-    <>
+const SignUp = () => (
+  <>
     <div>
       <h1 className="font-semibold text-2xl md:text-5xl text-center">Sign Up</h1>
       <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
@@ -26,7 +25,7 @@ const SignUp = () => {
         options={getAllStates()}
         getOptionLabel={(item) => item.label}
         getOptionKey={(item) => item.value}
-        onChange={(item) => {}}
+        onChange={(item) => console.log(item)}
         placeholder="State"
         value={null}
         onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
@@ -64,8 +63,7 @@ const SignUp = () => {
         className="col-span-2"
       />
     </div>
-    </>
-  )
-}
+  </>
+);
 
-export default SignUp
+export default SignUp;

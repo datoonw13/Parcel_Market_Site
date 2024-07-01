@@ -76,17 +76,29 @@ const TextField = (props: TextFieldProps) => {
     <div className={clsx(classes.root, className)} onClick={(e) => !disabled && onClick && onClick(e)}>
       <input
         className={clsx(
+          "group",
           label && classes[`input-${variant}`],
           classes.input,
           error && classes.error,
           disabled && "cursor-not-allowed",
           required && classes["required-placeholder"],
-          "placeholder:text-grey-800"
+          `[&+.placeholder]:text-grey-800 
+          [&+.placeholder]:text-xs 
+          [&+.placeholder]:absolute 
+          [&+.placeholder]:pointer-events-none 
+          [&+.placeholder]:top-[50%] 
+          [&+.placeholder]:translate-y-[-50%] 
+          [&+.placeholder]:left-2 
+          [&+.placeholder]:px-1.5 
+          [&+.placeholder]:font-medium
+          [&:focus+.placeholder]:hidden
+          [&:not(:placeholder-shown)+.placeholder]:hidden
+          `
         )}
-        placeholder={placeholder}
         value={value}
         onChange={(e) => handleChange(e.target.value)}
         ref={inputRef}
+        placeholder=" "
         disabled={disabled}
         onBlur={onBlur}
         defaultValue={defaultValue}
@@ -100,6 +112,7 @@ const TextField = (props: TextFieldProps) => {
           {required && <span className="text-error">*</span>}
         </p>
       )}
+      {placeholder && <p className="placeholder">{placeholder}</p>}
       {endIcon && (
         <div
           className={clsx("absolute right-0 h-full flex items-center pr-3", disabled && "cursor-not-allowed pointer-events-none")}
