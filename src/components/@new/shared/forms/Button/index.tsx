@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FC, ReactNode } from "react";
+import { ButtonHTMLAttributes, FC, ReactNode, forwardRef } from "react";
 import clsx from "clsx";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 
@@ -69,36 +69,42 @@ interface ButtonProps {
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
-const Button: FC<ButtonProps> = ({
-  color = "default",
-  size = "lg",
-  variant = "primary",
-  startIcon: StartIcon,
-  endIcon: EndIcon,
-  children,
-  disabled,
-  onClick,
-  loading,
-  className,
-  type = "button",
-}) => (
-  <button
-    // eslint-disable-next-line react/button-has-type
-    type={type || "submit"}
-    className={clsx(
-      "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
-      sizes[size],
-      buttonTypes[variant][color],
-      className
-    )}
-    disabled={disabled || loading}
-    onClick={onClick}
-  >
-    {StartIcon && <StartIcon className={clsx("start-icon transition-all duration-100", loading && "opacity-0")} />}
-    <div className={clsx(loading && "opacity-0")}>{children}</div>
-    {EndIcon && <EndIcon className={clsx("end-icon transition-all duration-100", loading && "opacity-0")} />}
-    {loading && <LoadingIcon1 className="loading-icon absolute start-icon transition-all duration-100" />}
-  </button>
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      color = "default",
+      size = "lg",
+      variant = "primary",
+      startIcon: StartIcon,
+      endIcon: EndIcon,
+      children,
+      disabled,
+      onClick,
+      loading,
+      className,
+      type = "button",
+    },
+    ref
+  ) => (
+    <button
+      // eslint-disable-next-line react/button-has-type
+      type={type || "submit"}
+      ref={ref}
+      className={clsx(
+        "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
+        sizes[size],
+        buttonTypes[variant][color],
+        className
+      )}
+      disabled={disabled || loading}
+      onClick={onClick}
+    >
+      {StartIcon && <StartIcon className={clsx("start-icon transition-all duration-100", loading && "opacity-0")} />}
+      <div className={clsx(loading && "opacity-0")}>{children}</div>
+      {EndIcon && <EndIcon className={clsx("end-icon transition-all duration-100", loading && "opacity-0")} />}
+      {loading && <LoadingIcon1 className="loading-icon absolute start-icon transition-all duration-100" />}
+    </button>
+  )
 );
 
 export default Button;

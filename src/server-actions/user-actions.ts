@@ -4,11 +4,12 @@ import { ISignInResponse } from "@/types/auth";
 import { UserSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
-import { fetcher } from "./fetcher";
 import { revalidatePath } from "next/cache";
+import routes from "@/helpers/routes";
+import { fetcher } from "./fetcher";
 
 export const signInUser = async (prevState: any, formData: FormData) => {
   const values = {
@@ -20,7 +21,7 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   if (!validations.success) {
     return {
       error: true,
-      message: "Please provide all required fields",
+      message: "Wrong email or password",
     };
   }
   const { error, data } = await fetcher<ResponseType<ISignInResponse>>("user/auth", {
@@ -47,7 +48,7 @@ export const signInUser = async (prevState: any, formData: FormData) => {
     secure: true,
     maxAge: maxAgeInSeconds,
   });
-  redirect("/");
+  redirect(routes.home.url);
   return null;
 };
 
@@ -65,6 +66,6 @@ export const getUserAction = async (): Promise<ISignInResponse["payload"] | null
 };
 
 export const logOutUserAction = async () => {
-  cookies().delete('jwt')
-  revalidatePath('/')
-}
+  cookies().delete("jwt");
+  redirect("?logout=true");
+};

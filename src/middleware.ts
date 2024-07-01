@@ -6,8 +6,7 @@ import { getUserAction } from "./server-actions/user-actions";
 const allRoute = getAllRoutes();
 
 export async function middleware(request: NextRequest) {
-  const user = await getUserAction()
-  
+  const user = request.nextUrl.searchParams.get("logout") ? null : await getUserAction();
   if (allRoute?.[request.nextUrl.pathname]?.protected && !user) {
     return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }

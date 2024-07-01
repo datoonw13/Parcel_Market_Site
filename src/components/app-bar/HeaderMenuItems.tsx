@@ -33,7 +33,7 @@ const HeaderMenuItems = async () => {
         {user ? (
           <UserMenu user={user} />
         ) : (
-          <Link href={routes.auth.signIn.url}>
+          <Link href={`${routes.auth.url}/${routes.auth.signIn.url}`}>
             <Button sx={{ textTransform: "none" }} variant="outlined">
               Sign In
             </Button>

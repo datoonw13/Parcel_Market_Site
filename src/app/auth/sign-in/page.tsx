@@ -6,15 +6,19 @@ import Button from "@/components/@new/shared/forms/Button";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
+import useEnterClick from "@/hooks/useEnterClick";
 import { signInUser } from "@/server-actions/user-actions";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 
 const SignInPage = () => {
+  const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [state, formAction] = useFormState(signInUser, null);
+
+  useEnterClick(ref?.current?.onclick);
 
   useEffect(() => {
     if (state?.error) {
@@ -42,7 +46,7 @@ const SignInPage = () => {
             <p className="text-xs font-medium text-primary-main">Forgot Password?</p>
           </Link>
         </div>
-        <SubmitButton />
+        <SubmitButton ref={ref} />
       </form>
       <Divider label="OR" className="my-3" />
       <GoogleButton onClick={() => {}} />
@@ -58,11 +62,11 @@ const SignInPage = () => {
 
 export default SignInPage;
 
-const SubmitButton = () => {
+const SubmitButton = forwardRef<HTMLButtonElement | null>((_, ref) => {
   const { pending } = useFormStatus();
   return (
-    <Button loading={pending} className="mt-4" type="submit">
+    <Button ref={ref} loading={pending} className="mt-4" type="submit">
       Sign In
     </Button>
   );
-};
+});

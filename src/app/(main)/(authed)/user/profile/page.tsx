@@ -10,14 +10,12 @@ import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-const UserProfilePage = async () => {
-  return (
-    <div className="grid gap-6">
-      <UploadImage />
-      <PersonalInfoSection />
-      <AdditionalInfoSection />
-    </div>
-  );
-};
+const UserProfilePage = async () => (
+  <div className="grid gap-6">
+    <UploadImage />
+    <PersonalInfoSection />
+    <AdditionalInfoSection />
+  </div>
+);
 
 export default UserProfilePage;

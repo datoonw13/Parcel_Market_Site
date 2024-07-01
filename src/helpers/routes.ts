@@ -40,7 +40,7 @@ const routes = {
     },
     listings: {
       url: "listings",
-      protected: false,
+      protected: true,
     },
     followedProperties: {
       url: "followed-properties",
