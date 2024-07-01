@@ -1,14 +1,11 @@
 import routes from "@/helpers/routes";
-import { useAppSelector } from "@/lib/hooks";
 import { Box, Button } from "@mui/material";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { getUserAction } from "@/server-actions/user-actions";
 import UserMenu from "../@new/user/user-menu/UserMenu";
 
-const HeaderMenuItems = () => {
-  const pathname = usePathname();
-
-  const user = useAppSelector((state) => state.authedUser.user);
+const HeaderMenuItems = async () => {
+  const user = await getUserAction();
   return (
     <Box
       sx={{
@@ -18,7 +15,7 @@ const HeaderMenuItems = () => {
         display: "flex",
       }}
     >
-      <Box sx={{ color: pathname.includes("/about-us") ? "primary.main" : "inherit" }}>
+      <Box>
         <Link href="/about-us">About Us</Link>
       </Box>
       <Box>
@@ -34,7 +31,7 @@ const HeaderMenuItems = () => {
           </Button>
         </Link>
         {user ? (
-          <UserMenu />
+          <UserMenu user={user} />
         ) : (
           <Link href={routes.auth.signIn.url}>
             <Button sx={{ textTransform: "none" }} variant="outlined">

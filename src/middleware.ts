@@ -1,25 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtDecode } from "jwt-decode";
 import routes, { getAllRoutes } from "./helpers/routes";
+import { getUserAction } from "./server-actions/user-actions";
 
 const allRoute = getAllRoutes();
 
-export function middleware(request: NextRequest) {
-  // if (allRoute?.[request.nextUrl.pathname]?.protected && !request.cookies.has("jwt")) {
-  //   return NextResponse.redirect(new URL(routes.auth.signIn.url, request.nextUrl.origin));
-  // }
-  // if (request.nextUrl.pathname.includes("auth") && request.cookies.has("jwt")) {
-  //   return NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
-  // }
-  // if (request.cookies.has("jwt") && !request.cookies.has("user")) {
-  //   try {
-  //     const user = jwtDecode(request.cookies.get("jwt")?.value!);
-  //     const requestHeaders = new Headers(request.headers);
-  //     requestHeaders.set('Set-Cookie', `user=${JSON.stringify(user)};httpOnly=true;secure=true`)
-  //     return NextResponse.next({ headers: requestHeaders });
-  //   } catch (error) {}
-  // }
+export async function middleware(request: NextRequest) {
+  const user = await getUserAction()
+  
+  if (allRoute?.[request.nextUrl.pathname]?.protected && !user) {
+    return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
+  }
+  if (request.nextUrl.pathname.includes("auth") && user) {
+    return NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
+  }
   return NextResponse.next();
 }
 

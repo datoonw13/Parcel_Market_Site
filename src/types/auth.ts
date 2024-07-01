@@ -29,9 +29,11 @@ export interface ISignInResponse {
   access_token: string;
   payload: {
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     role: null;
     sub: number;
+    id: number;
   };
 }
 

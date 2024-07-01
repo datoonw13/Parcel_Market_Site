@@ -1,10 +1,13 @@
+"use client";
+
 import React from "react";
 import Avatar from "@/components/@new/shared/Avatar";
+import { ISignInResponse } from "@/types/auth";
 import Popper from "../../shared/Popper";
 import UserMenuList from "./UserMenuList";
 import { ArrowIconDown1 } from "../../icons/ArrowIcons";
 
-const UserMenu = () => (
+const UserMenu = ({ user }: { user: ISignInResponse["payload"] }) => (
   <Popper
     placement="bottom-end"
     renderButton={(setReferenceElement, referenceElement) => (
@@ -19,8 +22,8 @@ const UserMenu = () => (
       <div className="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80">
         <Avatar title="LG" className="w-16 h-16" />
         <div>
-          <p className="text-sm font-medium mb-1 text-center">Davit Natelashvili</p>
-          <p className="text-xs text-grey-600 text-center">d.natelashvili@Example.com</p>
+          <p className="text-sm font-medium mb-1 text-center">{`${user.firstName} ${user.lastName}`}</p>
+          <p className="text-xs text-grey-600 text-center">{user.email}</p>
         </div>
         <div className="bg-grey-30 rounded-xl w-full p-4">
           <UserMenuList close={() => setReferenceElement(null)} />

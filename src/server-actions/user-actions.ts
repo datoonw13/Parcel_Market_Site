@@ -3,11 +3,12 @@
 import { ISignInResponse } from "@/types/auth";
 import { UserSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseType } from "@/types/common";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
-import { redirect } from "next/navigation";
 import { fetcher } from "./fetcher";
+import { revalidatePath } from "next/cache";
 
 export const signInUser = async (prevState: any, formData: FormData) => {
   const values = {
@@ -36,6 +37,7 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   }
 
   const decodedToken = jwtDecode(data?.data.access_token!) as { exp: number };
+  fetcher<ResponseType<ISignInResponse>>("user/profile", { cache: "no-cache" });
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
   // set jwt token in cookie
   cookies().set({
@@ -49,3 +51,20 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   return null;
 };
 
+export const getUserAction = async (): Promise<ISignInResponse["payload"] | null> => {
+  const userString = cookies().get("jwt")?.value;
+  if (userString) {
+    try {
+      const { id, sub, firstName, lastName, email, role } = jwtDecode(userString!) as ISignInResponse["payload"];
+      return { id, sub, firstName, lastName, email, role };
+    } catch (error) {
+      return null;
+    }
+  }
+  return null;
+};
+
+export const logOutUserAction = async () => {
+  cookies().delete('jwt')
+  revalidatePath('/')
+}

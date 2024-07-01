@@ -1,11 +1,11 @@
 const routes = {
   home: {
-    url: "",
+    url: "home",
     protected: false,
-    landsMarketplace: {
-      url: "lands-marketplace",
-      protected: true,
-    },
+  },
+  landsMarketplace: {
+    url: "lands-marketplace",
+    protected: true,
   },
   auth: {
     url: "auth",
