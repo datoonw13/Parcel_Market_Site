@@ -1,5 +1,3 @@
-"use server";
-
 import { cookies } from "next/headers";
 
 export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise<{data: T | null, error: boolean }> => { // eslint-disable-line
