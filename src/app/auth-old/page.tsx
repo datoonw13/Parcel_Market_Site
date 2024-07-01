@@ -42,11 +42,11 @@ const NewAuth = () => {
 
   const handleRedirect = () => {
     if (selectedParcelOptions) {
-      router.push(routes.propertySearch.root);
+      router.push(routes.propertySearch.url);
     } else if (searchParams.get("from") === "marketplace") {
-      router.push(routes.home.marketplace);
+      router.push(routes.home.landsMarketplace.url);
     } else {
-      router.push(routes.home.root);
+      router.push(routes.home.url);
     }
   };
 
@@ -70,7 +70,7 @@ const NewAuth = () => {
           handleRedirect();
           localStorage.setItem("token", res.data.access_token);
         } else {
-          router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
+          router.push(`${routes.auth.signUp.url}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
         }
       } catch (error) {}
     },
@@ -131,7 +131,7 @@ const NewAuth = () => {
       </Box>
       <Typography sx={{ fontSize: 14, fontWeight: 500, mt: "auto" }}>
         Don&apos;t have an account?{" "}
-        <Link href={routes.auth.signUp}>
+        <Link href={routes.auth.signUp.url}>
           <Typography
             sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
             component="span"

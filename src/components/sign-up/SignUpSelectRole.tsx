@@ -75,7 +75,7 @@ const SignUpSelectRole = ({ setType, type, onNext }: IProps) => (
     </Button>
     <Typography sx={{ fontWeight: 500, fontSize: 14 }}>
       Already have an account?{" "}
-      <Link href={routes.auth.signIn}>
+      <Link href={routes.auth.signIn.url}>
         <Typography component="span" sx={{ fontWeight: 500, fontSize: 14, textDecoration: "underline", color: "primary.main" }}>
           Sign In
         </Typography>

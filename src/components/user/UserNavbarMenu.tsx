@@ -36,10 +36,10 @@ const UserNavbarMenu = () => {
       {open && (
         <div className="pt-2 absolute bg-neutral-300 shadow-2xl rounded bottom-[-5px] translate-y-[100%] z-50 w-64 left-[0px] translate-x-[-50%] drop-shadow-2xl">
           <ul className="w-full">
-            <Link href={routes.user.root}>
+            <Link href={routes.user.url}>
               <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">User Profile</li>
             </Link>
-            <Link href={routes.user.properties}>
+            <Link href={routes.user.properties.url}>
               <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">My Properties</li>
             </Link>
             <Divider />

@@ -44,7 +44,7 @@ const SellQuickly = () => {
             land acquisitions and convenient selling opportunities. Our goal is to facilitate fair and beneficial transactions for all
             parties involved.
           </Typography>
-          <Link href={routes.propertySearch.root}>
+          <Link href={routes.propertySearch.url}>
             <Button sx={{ width: "fit-content", m: "auto", display: "flex" }} variant="contained">
               Start free trial
             </Button>

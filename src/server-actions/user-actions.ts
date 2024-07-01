@@ -22,7 +22,6 @@ export const signInUser = async (prevState: any, formData: FormData) => {
       message: "Please provide all required fields",
     };
   }
-
   const { error, data } = await fetcher<ResponseType<ISignInResponse>>("user/auth", {
     method: "POST",
     body: JSON.stringify(validations.data),

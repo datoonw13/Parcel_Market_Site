@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import routes from "./helpers/routes";
+import routes, { getAllRoutes } from "./helpers/routes";
 
-const protectedRoutes = ["/user/profile"];
+const allRoute = getAllRoutes();
 
 export function middleware(request: NextRequest) {
-  if (protectedRoutes.includes(request.nextUrl.pathname) && !request.cookies.has("jwt")) {
-    return NextResponse.redirect(new URL(routes.auth.signIn, request.nextUrl.origin));
+  if (allRoute?.[request.nextUrl.pathname]?.protected && !request.cookies.has("jwt")) {
+    return NextResponse.redirect(new URL(routes.auth.signIn.url, request.nextUrl.origin));
   }
   return NextResponse.next();
 }

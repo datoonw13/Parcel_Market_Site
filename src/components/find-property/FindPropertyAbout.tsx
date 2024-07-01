@@ -93,7 +93,7 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, pri
       })
     );
     if (!user) {
-      router.push(routes.auth.signIn);
+      router.push(routes.auth.signIn.url);
     } else {
       onNext();
     }

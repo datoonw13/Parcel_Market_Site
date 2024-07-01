@@ -46,9 +46,9 @@ const HomeSection3 = () => {
           sx={{ width: { md: "fit-content" } }}
           onClick={() => {
             if (user) {
-              router.push(routes.home.marketplace);
+              router.push(routes.home.landsMarketplace.url);
             } else {
-              router.push(`${routes.auth.signIn}?from=marketplace`);
+              router.push(`${routes.auth.signIn.url}?from=marketplace`);
             }
           }}
         >

@@ -36,7 +36,7 @@ const LandsMarketPlacePage = () => {
 
   useEffect(() => {
     if (isError) {
-      router.push(routes.auth.signIn);
+      router.push(routes.auth.signIn.url);
     }
   }, [isError, router]);
 

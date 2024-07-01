@@ -50,7 +50,7 @@ const SellQuickly = () => {
             <b>The Parcel Marketplace or Preferred Professional Network</b> à User chooses and navigates to those pages, respectively.{" "}
             <br />
           </Typography>
-          <Link href={routes.propertySearch.root}>
+          <Link href={routes.propertySearch.url}>
             <Button sx={{ width: "fit-content", m: "auto", display: "flex" }} variant="contained">
               Sell Your Property Now
             </Button>

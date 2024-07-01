@@ -19,7 +19,7 @@ const FindPropertyLayout = ({
 
   useEffect(() => {
     if (!pending && !user) {
-      router.push(routes.auth.signIn);
+      router.push(routes.auth.signIn.url);
     }
   }, [user, pending, router]);
   return (

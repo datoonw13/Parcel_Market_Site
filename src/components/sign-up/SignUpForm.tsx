@@ -89,7 +89,7 @@ const SignUpForm = ({ goBack, type }: IProps) => {
             mailingAddress: data.mailingAddress,
           }).unwrap()
         : await registerUser({ ...data, name: `${data.firstName} ${data.lastName}` }).unwrap();
-      router.push(selectedParcelOptions ? routes.propertySearch.signature : routes.home.root);
+      router.push(selectedParcelOptions ? routes.propertySearch.signature.url : routes.home.url);
       localStorage.setItem("token", res.data.user.token);
       dispatch(setAuthPending(true));
     } catch (error) {}
@@ -101,10 +101,10 @@ const SignUpForm = ({ goBack, type }: IProps) => {
         const res = await googleAuth(tokenResponse.access_token).unwrap();
         if ("access_token" in res.data) {
           toast.success("You have successfully logged in");
-          router.push(selectedParcelOptions ? routes.propertySearch.root : routes.home.root);
+          router.push(selectedParcelOptions ? routes.propertySearch.url : routes.home.url);
           localStorage.setItem("token", res.data.access_token);
         } else {
-          router.push(`${routes.auth.signUp}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
+          router.push(`${routes.auth.signUp.url}?email=${res.data.email}&name=${res.data.name}&token=${res.data.token}`);
         }
       } catch (error) {}
     },
@@ -306,7 +306,7 @@ const SignUpForm = ({ goBack, type }: IProps) => {
       >
         <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
           Already have an account?{" "}
-          <Link href={routes.auth.signUp}>
+          <Link href={routes.auth.signUp.url}>
             <Typography
               sx={{ fontSize: 14, fontWeight: 500, color: "primary.main", textDecoration: "underline", cursor: "pointer" }}
               component="span"

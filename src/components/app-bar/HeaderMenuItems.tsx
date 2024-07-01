@@ -28,7 +28,7 @@ const HeaderMenuItems = () => {
         <Link href="/find-property">Sell your property</Link>
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-        <Link href={routes.propertySearch.root}>
+        <Link href={routes.propertySearch.url}>
           <Button sx={{ textTransform: "none" }} variant="contained">
             Value my land for free
           </Button>
@@ -36,7 +36,7 @@ const HeaderMenuItems = () => {
         {user ? (
           <UserMenu />
         ) : (
-          <Link href={routes.auth.signIn}>
+          <Link href={routes.auth.signIn.url}>
             <Button sx={{ textTransform: "none" }} variant="outlined">
               Sign In
             </Button>

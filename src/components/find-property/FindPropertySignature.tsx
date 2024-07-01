@@ -26,7 +26,7 @@ const FindPropertySignature = ({ goBack }: { goBack: () => void }) => {
       try {
         await sellProperty({ ...values }).unwrap();
         toast.success("Check your email");
-        router.push(routes.user.properties);
+        router.push(routes.user.properties.url);
       } catch {}
     }
   };
