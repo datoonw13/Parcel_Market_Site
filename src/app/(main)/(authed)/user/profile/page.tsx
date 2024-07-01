@@ -11,8 +11,7 @@ import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-const UserProfilePage = async () => {
-  await getUserAction()
+const UserProfilePage = () => {
   return (
     <div className="grid gap-6">
       <UploadImage />
