@@ -82,6 +82,15 @@ export const getUserAction = async (): Promise<ISignInResponse["payload"] | null
   return null;
 };
 
+export const activateUserAccountAction = async (token?: string): Promise<{ error: boolean }> => {
+  if (!token) {
+    redirect(`/${routes.home.url}`);
+    return { error: true };
+  }
+  const request = await fetcher(`user/activate/${token}`, { method: "POST" });
+  return { error: request.error };
+};
+
 export const logOutUserAction = async () => {
   cookies().delete("jwt");
   redirect("?logout=true");
