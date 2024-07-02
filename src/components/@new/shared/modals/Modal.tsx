@@ -3,6 +3,7 @@
 import React, { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import { AnimatePresence, motion } from "framer-motion";
+import clsx from "clsx";
 
 interface ModalProps {
   open: boolean;
@@ -11,9 +12,10 @@ interface ModalProps {
   disableCloseOnAwayClick?: boolean;
   children: ReactNode;
   disableBackdrop?: boolean;
+  contentClasses?: string;
 }
 
-const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, disableBackdrop }) => {
+const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, disableBackdrop, contentClasses }) => {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(null, popperElement, {
     strategy: "fixed",
@@ -66,7 +68,7 @@ const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnA
             className="!m-auto z-50 w-full h-full flex items-center justify-center"
             {...attributes.popper}
           >
-            <div className="">{children}</div>
+            <div className={clsx(contentClasses)}>{children}</div>
           </motion.div>
         )}
       </AnimatePresence>

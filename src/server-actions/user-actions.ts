@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import routes from "@/helpers/routes";
-import { ISignInResponse, IUserSignUp } from "../types/auth";
+import { ISignInResponse, IUser, IUserSignUp } from "../types/auth";
 import { fetcher } from "./fetcher";
 
 export const signInUser = async (prevState: any, formData: FormData) => {
@@ -46,7 +46,7 @@ export const signInUser = async (prevState: any, formData: FormData) => {
     secure: true,
     maxAge: maxAgeInSeconds,
   });
-  redirect(routes.home.url);
+  redirect(`/${routes.home.url}`);
   return null;
 };
 
@@ -69,17 +69,32 @@ export const signUpUserAction = async (values: IUserSignUp) => {
   };
 };
 
-export const getUserAction = async (): Promise<ISignInResponse["payload"] | null> => {
+export const logOutUserAction = async () => {
+  cookies().delete("jwt");
+  redirect("?logout=true");
+};
+
+export const getUserAction = async (option: { hideEmail?: boolean }): Promise<ISignInResponse["payload"] | null> => {
   const userString = cookies().get("jwt")?.value;
   if (userString) {
     try {
       const { id, sub, firstName, lastName, email, role } = jwtDecode(userString!) as ISignInResponse["payload"];
-      return { id, sub, firstName, lastName, email, role };
+      const user = { id, sub, firstName, lastName, email, role };
+      if (option?.hideEmail) {
+        const hideSubstring = email.split("@")[0].substring(1, email.split("@")[0].length - 1);
+        user.email = user.email.replace(hideSubstring, "****");
+      }
+      return { ...user };
     } catch (error) {
       return null;
     }
   }
   return null;
+};
+
+export const getUserFullDetails = async (): Promise<IUser | null> => {
+  const request = await fetcher<ResponseType<IUser>>("user/details");
+  return request.data?.data || null;
 };
 
 export const activateUserAccountAction = async (token?: string): Promise<{ error: boolean }> => {
@@ -91,7 +106,33 @@ export const activateUserAccountAction = async (token?: string): Promise<{ error
   return { error: request.error };
 };
 
-export const logOutUserAction = async () => {
-  cookies().delete("jwt");
-  redirect("?logout=true");
+export const sendPasswordResetCodeAction = async (values: { oldPassword: string; newPassword: string }) => {
+  const request = await fetcher<ResponseType<null>>("user/reset/password/send-email-code", {
+    method: "POST",
+    body: JSON.stringify(values),
+  });
+
+  if (request.error) {
+    if (request.data?.statusCode === 401) {
+      return {
+        error: true,
+        message: "Current password is incorrect",
+      };
+    }
+    if (request.data?.statusCode === 400) {
+      return {
+        error: true,
+        message: "New password validation failed",
+      };
+    }
+    return {
+      error: true,
+      message: "Something went wrong",
+    };
+  }
+
+  return {
+    error: false,
+    message: null,
+  };
 };

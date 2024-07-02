@@ -10,20 +10,16 @@ interface ResponsiveModalProps {
   handleClose: () => void;
   content: ReactNode;
   responsiveContent: ReactNode;
+  desktopModalContentClasses?: string;
 }
 
-const ResponsiveModal: FC<ResponsiveModalProps> = ({ open, handleClose, content, responsiveContent }) => {
+const ResponsiveModal: FC<ResponsiveModalProps> = ({ open, handleClose, content, responsiveContent, desktopModalContentClasses }) => {
   const isSmallDevice = useMediaQuery({ query: "(max-width: 768px)" });
-  const [mount, setMount] = useState(false);
-
-  useEffect(() => {
-    setMount(true);
-  });
 
   return (
     <>
       {!isSmallDevice && (
-        <Modal open={open} closeModal={handleClose}>
+        <Modal open={open} closeModal={handleClose} contentClasses={desktopModalContentClasses}>
           {content}
         </Modal>
       )}
