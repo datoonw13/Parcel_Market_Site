@@ -88,7 +88,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
           {select.totalSelected > 0 && (
             <Button
               onClick={select.onRemove}
-              variant="text"
+              // variant="text"
               className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
             >
               <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />

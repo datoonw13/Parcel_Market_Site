@@ -76,7 +76,7 @@ const LandsDesktopFiltersMinMax: FC<LandsDesktopFiltersMinMaxProps> = ({ options
           <div className="flex p-3 justify-end gap-3">
             <Button
               className="!h-10"
-              variant="text"
+              // variant="text"
               onClick={() => {
                 setReferenceElement(null);
                 setFilters({ min: value.min, max: value.max });

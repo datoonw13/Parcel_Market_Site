@@ -59,7 +59,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, 
               {select.totalSelected > 0 && (
                 <Button
                   onClick={select.onRemove}
-                  variant="text"
+                  // variant="text"
                   className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
                 >
                   <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
@@ -300,7 +300,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, 
           </Button>
           <Button
             className="justify-center h-12"
-            variant="text"
+            // variant="text"
             onClick={() => {
               setLocalFilters({ ...filters });
               setOpenFilters(false);
@@ -347,7 +347,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, 
           </Button>
           <Button
             className="justify-center h-12"
-            variant="text"
+            // variant="text"
             onClick={() => {
               setLocalFilters({ ...filters });
               setOpenSortBy(false);
