@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { ISignInResponse, IUser } from "@/types/auth";
 import UpdatePasswordContent from "./UpdatePasswordContent";
 
-const ResponsiveModal = dynamic(() => import("../../../shared/modals/ResponsiveModal"), { ssr: false });
+const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });
 
 interface UpdatePasswordModalWrapperProps {
   open: boolean;

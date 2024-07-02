@@ -39,7 +39,7 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
   };
 
   return (
-    <div className="px-5 sm:px-8">
+    <>
       <div className="space-y-4">
         <TextField placeholder="Code" value={code} onChange={(value) => setCode(value)} />
         <ResendButton
@@ -56,7 +56,7 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
           Continue
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 

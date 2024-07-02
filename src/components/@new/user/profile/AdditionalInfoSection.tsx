@@ -4,12 +4,14 @@ import { useState } from "react";
 import { IUser } from "@/types/auth";
 import UserProfileSection from "./UserProfileSection";
 import Button from "../../shared/forms/Button";
-import UpdatePasswordModal from "./update-password-modal/UpdatePasswordModal";
+import UpdatePasswordModal from "./modals/update-password-modal/UpdatePasswordModal";
+import DeletePasswordModal from "./modals/delete-account-modal/DeleteAccountModal";
 
 const AdditionalInfoSection = ({ user }: { user: IUser }) => {
   const [openModal, setOpenModal] = useState<"updatePassword" | null>(null);
   return (
     <>
+      {/* <DeletePasswordModal open handleClose={() => {}} /> */}
       <UpdatePasswordModal user={user} open={openModal === "updatePassword"} handleClose={() => setOpenModal(null)} />
       <UserProfileSection sectionTitle="Additional Information">
         <div className="grid gap-3">

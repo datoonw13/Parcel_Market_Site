@@ -32,7 +32,7 @@ const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPasswo
     }
   };
   return (
-    <div className="px-5 sm:px-8">
+    <>
       <div className="space-y-4">
         <TextField
           label="Current password"
@@ -79,7 +79,7 @@ const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPasswo
           Continue
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
