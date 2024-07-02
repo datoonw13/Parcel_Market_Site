@@ -12,17 +12,17 @@ import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { signUpUserAction } from "@/server-actions/user-actions";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import Button from "../../shared/forms/Button";
 import TextField from "../../shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
-import { useRouter } from "next/navigation";
 
 interface SignUpProps {
   onBack: () => void;
   registrationReason: IUserSignUp["registrationReason"];
 }
 const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
   const {
@@ -58,8 +58,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
       toast.error(message);
     }
     if (!error && message) {
-      toast.success(message, {duration: 3000});
-      router.replace(`/${routes.home.url}`)
+      toast.success(message, { duration: 3000 });
+      router.replace(`/${routes.home.url}`);
     }
   });
 
@@ -71,7 +71,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
       </div>
       <GoogleButton className="!w-fit px-14" onClick={() => {}} />
       <Divider label="OR" className="my-1.5" />
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="w-full flex flex-col sm:grid sm:grid-cols-2 gap-4">
         <TextField
           onChange={(value) => setValue("firstName", value, { shouldValidate: isSubmitted })}
           required
