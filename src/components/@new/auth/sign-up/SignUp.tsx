@@ -10,20 +10,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
-import Button from "../shared/forms/Button";
-import TextField from "../shared/forms/TextField";
-import { EyeIcon1, EyeIcon2 } from "../icons/EyeIcons";
+import { signUpUserAction } from "@/server-actions/user-actions";
+import toast from "react-hot-toast";
+import Button from "../../shared/forms/Button";
+import TextField from "../../shared/forms/TextField";
+import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
+import { useRouter } from "next/navigation";
 
 interface SignUpProps {
   onBack: () => void;
   registrationReason: IUserSignUp["registrationReason"];
 }
 const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
+  const router = useRouter()
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
   const {
     handleSubmit,
-    formState: { isSubmitted, isValid },
+    formState: { isSubmitted, errors, isSubmitting },
     setValue,
     watch,
   } = useForm<IUserSignUp>({
@@ -48,6 +52,17 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
 
   const cities = useMemo(() => getCitiesByState(selectedState), [selectedState]);
 
+  const onSubmit = handleSubmit(async (data) => {
+    const { error, message } = await signUpUserAction(data);
+    if (error && message) {
+      toast.error(message);
+    }
+    if (!error && message) {
+      toast.success(message, {duration: 3000});
+      router.replace(`/${routes.home.url}`)
+    }
+  });
+
   return (
     <>
       <div>
@@ -63,6 +78,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           className="w-full"
           label="First Name"
           value={watch("firstName")}
+          error={!!errors.firstName}
         />
         <TextField
           onChange={(value) => setValue("lastName", value, { shouldValidate: isSubmitted })}
@@ -70,6 +86,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           className="w-full"
           label="Last Name"
           value={watch("lastName")}
+          error={!!errors.lastName}
         />
         <TextField
           onChange={(value) => setValue("email", value, { shouldValidate: isSubmitted })}
@@ -77,6 +94,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           className="w-full"
           label="Email Address"
           value={watch("email")}
+          error={!!errors.email}
         />
         <TextField
           onChange={(value) => setValue("streetName", value, { shouldValidate: isSubmitted })}
@@ -84,12 +102,14 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           className="w-full"
           label="Street Address"
           value={watch("streetName")}
+          error={!!errors.streetName}
         />
         <TextField
           onChange={(value) => setValue("unitNumber", value, { shouldValidate: isSubmitted })}
           className="w-full"
           label="Unit Number"
           value={watch("unitNumber")}
+          error={!!errors.unitNumber}
         />
         <AutoComplete
           options={getAllStates()}
@@ -106,6 +126,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           }
           required
           getSelectedOption={(item) => item.value === watch("state")}
+          error={!!errors.state}
         />
         <AutoComplete
           options={cities}
@@ -120,6 +141,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           required
           disabled={!watch("state")}
           getSelectedOption={(item) => item.value === watch("city")}
+          error={!!errors.city}
         />
         <TextField
           required
@@ -127,6 +149,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           label="Postal Code"
           onChange={(value) => setValue("postalCode", value, { shouldValidate: isSubmitted })}
           value={watch("postalCode")}
+          error={!!errors.postalCode}
         />
         <TextField
           className="w-full"
@@ -139,6 +162,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
               {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
             </div>
           }
+          error={!!errors.password}
         />
         <TextField
           value={watch("repeatPassword")}
@@ -151,6 +175,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
               {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
             </div>
           }
+          error={!!errors.repeatPassword}
         />
         <CheckBox
           onChange={() => setValue("sendEmailTips", !watch("sendEmailTips"))}
@@ -158,6 +183,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           className="col-span-2"
         />
         <CheckBox
+          error={!!errors.agreeTerm}
           checked={watch("agreeTerm")}
           onChange={() => setValue("agreeTerm", !watch("agreeTerm"), { shouldValidate: isSubmitted })}
           label={
@@ -186,14 +212,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
           <Button className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={onBack}>
             Back
           </Button>
-          <Button
-            className="w-full max-w-96 sm:w-fit"
-            disabled={!isValid}
-            onClick={handleSubmit(
-              (data) => console.log(data),
-              (error) => console.log(error)
-            )}
-          >
+          <Button className="w-full max-w-96 sm:w-fit" onClick={onSubmit} loading={isSubmitting}>
             Create Account
           </Button>
         </div>

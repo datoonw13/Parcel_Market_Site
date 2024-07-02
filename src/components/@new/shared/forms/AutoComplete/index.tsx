@@ -26,6 +26,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   renderContent?: (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>, options: T) => ReactElement;
   readOnly?: boolean;
   required?: boolean;
+  error?: boolean;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -45,6 +46,7 @@ const AutoComplete = <T extends Array<{}>>({
   renderContent,
   readOnly,
   required,
+  error
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -95,6 +97,7 @@ const AutoComplete = <T extends Array<{}>>({
         renderButton={(setReferenceElement, referenceElement) => (
           <TextField
             readOnly={readOnly}
+            error={error}
             required={required}
             onChange={(value) => {
               setSearchValue(value);

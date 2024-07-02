@@ -6,6 +6,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
+import routes from "@/helpers/routes";
 import useEnterClick from "@/hooks/useEnterClick";
 import { signInUser } from "@/server-actions/user-actions";
 import Link from "next/link";
@@ -52,7 +53,7 @@ const SignInPage = () => {
       <GoogleButton onClick={() => {}} />
       <p className="font-medium text-sm mt-auto">
         Don&apos;t have an account?{" "}
-        <Link href="/">
+        <Link href={`/${routes.auth.url}/${routes.auth.signUp.url}`}>
           <span className="font-medium text-sm text-primary-main underline">Sign Up</span>
         </Link>
       </p>

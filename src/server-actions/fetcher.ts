@@ -15,7 +15,7 @@ export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise
     const data = await request.json();
     return {
       data,
-      error: data?.statusCode !== 200,
+      error: data?.statusCode.toString()[0] !== "2",
     };
   } catch (error) {
     return { error: true, data: null };

@@ -5,8 +5,8 @@ import { IUserSignUp } from "@/types/auth";
 import clsx from "clsx";
 import Link from "next/link";
 import routes from "@/helpers/routes";
-import CheckBox from "../shared/forms/CheckBox";
-import Button from "../shared/forms/Button";
+import CheckBox from "../../shared/forms/CheckBox";
+import Button from "../../shared/forms/Button";
 
 const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReason"]) => void }) => {
   const [value, setValue] = useState<IUserSignUp["registrationReason"]>();

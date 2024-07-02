@@ -3,12 +3,11 @@
 import { userSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
-import { revalidatePath } from "next/cache";
 import routes from "@/helpers/routes";
-import { ISignInResponse } from "../types/auth";
+import { ISignInResponse, IUserSignUp } from "../types/auth";
 import { fetcher } from "./fetcher";
 
 export const signInUser = async (prevState: any, formData: FormData) => {
@@ -33,12 +32,11 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   if (error) {
     return {
       error: true,
-      message: data?.message || "Something went wrong...",
+      message: "Wrong email or password",
     };
   }
 
   const decodedToken = jwtDecode(data?.data.access_token!) as { exp: number };
-  fetcher<ResponseType<ISignInResponse>>("user/profile", { cache: "no-cache" });
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
   // set jwt token in cookie
   cookies().set({
@@ -50,6 +48,25 @@ export const signInUser = async (prevState: any, formData: FormData) => {
   });
   redirect(routes.home.url);
   return null;
+};
+
+export const signUpUserAction = async (values: IUserSignUp) => {
+  const request = await fetcher<ResponseType<any>>("user/register", {
+    method: "POST",
+    body: JSON.stringify(values),
+    cache: "no-cache",
+  });
+  if (request.error) {
+    return {
+      error: true,
+      message: request.data?.message === "Conflict" ? "Email already registered" : "Registration failed",
+    };
+  }
+
+  return {
+    error: false,
+    message: request.data?.message,
+  };
 };
 
 export const getUserAction = async (): Promise<ISignInResponse["payload"] | null> => {
