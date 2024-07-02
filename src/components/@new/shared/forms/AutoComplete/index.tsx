@@ -46,7 +46,7 @@ const AutoComplete = <T extends Array<{}>>({
   renderContent,
   readOnly,
   required,
-  error
+  error,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);

@@ -28,7 +28,6 @@ const ResendButton: FC<ResendButtonProps> = ({ handleResend }) => {
         setTimer((timer) => timer - 1);
       }, 1000);
     } catch (error) {
-      toast.error("Code resend failed");
     } finally {
       setLoading(false);
     }
@@ -42,7 +41,6 @@ const ResendButton: FC<ResendButtonProps> = ({ handleResend }) => {
 
   useEffect(() => () => window.clearInterval(timerRef.current), []);
 
-  console.log(loading, 2);
   return (
     <div>
       <div className="flex items-center gap-2 cursor-pointer " onClick={() => timer === 0 && onResend()}>

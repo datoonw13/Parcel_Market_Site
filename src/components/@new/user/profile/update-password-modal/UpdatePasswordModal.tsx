@@ -1,9 +1,13 @@
-import { getUserAction } from "@/server-actions/user-actions";
+import { FC } from "react";
+import { IUser } from "@/types/auth";
 import UpdatePasswordModalWrapper from "./UpdatePasswordModalWrapper";
 
-const UpdatePasswordModal = async ({ open }: { open: boolean }) => {
-  const user = await getUserAction({ hideEmail: true });
-  return user && <UpdatePasswordModalWrapper open={open} user={user} />;
-};
+interface UpdatePasswordModalProps {
+  open: boolean;
+  handleClose: () => void;
+  user: IUser;
+}
+const UpdatePasswordModal: FC<UpdatePasswordModalProps> = ({ open, handleClose, user }) =>
+  user && <UpdatePasswordModalWrapper open={open} user={user} handleClose={handleClose} />;
 
 export default UpdatePasswordModal;

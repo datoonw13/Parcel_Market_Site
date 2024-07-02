@@ -2,21 +2,22 @@
 
 import React, { FC } from "react";
 import dynamic from "next/dynamic";
-import { ISignInResponse } from "@/types/auth";
+import { ISignInResponse, IUser } from "@/types/auth";
 import UpdatePasswordContent from "./UpdatePasswordContent";
 
 const ResponsiveModal = dynamic(() => import("../../../shared/modals/ResponsiveModal"), { ssr: false });
 
 interface UpdatePasswordModalWrapperProps {
   open: boolean;
-  user: ISignInResponse["payload"];
+  user: IUser;
+  handleClose: () => void;
 }
-const UpdatePasswordModalWrapper: FC<UpdatePasswordModalWrapperProps> = ({ open, user }) => (
+const UpdatePasswordModalWrapper: FC<UpdatePasswordModalWrapperProps> = ({ open, user, handleClose }) => (
   <ResponsiveModal
-    content={<UpdatePasswordContent user={user} open={open} />}
-    responsiveContent={<UpdatePasswordContent user={user} open={open} />}
+    content={<UpdatePasswordContent user={user} open={open} handleClose={handleClose} />}
+    responsiveContent={<UpdatePasswordContent user={user} open={open} handleClose={handleClose} />}
     open={open}
-    handleClose={() => {}}
+    handleClose={handleClose}
     desktopModalContentClasses="max-w-lg w-full"
   />
 );

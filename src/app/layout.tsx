@@ -44,7 +44,7 @@ export default function RootLayout({
             <NextTopLoader color="#0E8B40" showSpinner={false} />
             <AppRouterCacheProvider>
               <ThemeProvider theme={theme}>
-                <Toaster position="top-right" />
+                <Toaster position="top-right" toastOptions={{ duration: 1500 }} />
                 {children}
               </ThemeProvider>
             </AppRouterCacheProvider>

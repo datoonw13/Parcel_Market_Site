@@ -3,16 +3,17 @@
 import { Divider } from "@mui/material";
 import { RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
 import { FC, useEffect, useState } from "react";
-import { ISignInResponse } from "@/types/auth";
+import { ISignInResponse, IUser } from "@/types/auth";
 import CreateNewPasswordVerify from "./CreateNewPasswordVerify";
 import CreateNewPassword from "./CreateNewPassword";
 
 interface UpdatePasswordContentProps {
-  user: ISignInResponse["payload"];
+  user: IUser;
   open: boolean;
+  handleClose: () => void;
 }
-const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ open, user }) => {
-  const [passwords, setPasswords] = useState<{ oldPassword: string; newPassword: string } | null>({ newPassword: "", oldPassword: "" });
+const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ open, user, handleClose }) => {
+  const [passwords, setPasswords] = useState<{ oldPassword: string; newPassword: string } | null>(null);
 
   useEffect(() => {
     if (!open) {
@@ -35,7 +36,7 @@ const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ open, user }) =
       </div>
       <Divider className="my-4 sm:hidden" />
       {!passwords && <CreateNewPassword onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })} />}
-      {passwords && <CreateNewPasswordVerify passwords={passwords} />}
+      {passwords && <CreateNewPasswordVerify passwords={passwords} onFinish={handleClose} />}
     </div>
   );
 };

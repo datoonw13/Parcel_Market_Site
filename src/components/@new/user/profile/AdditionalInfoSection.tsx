@@ -1,44 +1,50 @@
-import { ISignInResponse } from "@/types/auth";
+"use client";
+
+import { useState } from "react";
+import { IUser } from "@/types/auth";
 import UserProfileSection from "./UserProfileSection";
 import Button from "../../shared/forms/Button";
 import UpdatePasswordModal from "./update-password-modal/UpdatePasswordModal";
 
-const AdditionalInfoSection = () => (
-  <>
-    <UpdatePasswordModal open />
-    <UserProfileSection sectionTitle="Additional Information">
-      <div className="grid gap-3">
-        <div className="w-full flex justify-between items-center">
-          <div className="flex flex-col gap-1">
-            <p className="font-medium text-sm">Password</p>
-            <p className="font-medium text-xs text-grey-600">Set a permanent password to login to your account</p>
+const AdditionalInfoSection = ({ user }: { user: IUser }) => {
+  const [openModal, setOpenModal] = useState<"updatePassword" | null>(null);
+  return (
+    <>
+      <UpdatePasswordModal user={user} open={openModal === "updatePassword"} handleClose={() => setOpenModal(null)} />
+      <UserProfileSection sectionTitle="Additional Information">
+        <div className="grid gap-3">
+          <div className="w-full flex justify-between items-center">
+            <div className="flex flex-col gap-1">
+              <p className="font-medium text-sm">Password</p>
+              <p className="font-medium text-xs text-grey-600">Set a permanent password to login to your account</p>
+            </div>
+            <button type="button" className="font-medium text-xs text-primary-main" onClick={() => setOpenModal("updatePassword")}>
+              Change Password
+            </button>
           </div>
-          <button type="button" className="font-medium text-xs text-primary-main">
-            Change Password
-          </button>
-        </div>
-        <hr className="border-grey-100" />
+          <hr className="border-grey-100" />
 
-        <div className="w-full flex justify-between">
-          <div className="flex flex-col gap-1">
-            <p className="font-medium text-sm">Email</p>
-            <p className="font-medium text-xs text-grey-600">Davit@Gmail.com</p>
+          <div className="w-full flex justify-between">
+            <div className="flex flex-col gap-1">
+              <p className="font-medium text-sm">Email</p>
+              <p className="font-medium text-xs text-grey-600">Davit@Gmail.com</p>
+            </div>
+            {/* <Button className="text-grey-800 !text-xs">
+            Change email Password
+          </Button> */}
           </div>
-          {/* <Button className="text-grey-800 !text-xs">
-          Change email Password
-        </Button> */}
-        </div>
-        <hr className="border-grey-100" />
-        <div className="w-full flex justify-between">
-          <div className="flex flex-col gap-1">
-            <p className="font-medium text-sm">Delete My Account</p>
-            <p className="font-medium text-xs text-grey-600">Permanently delete the account and remove access </p>
+          <hr className="border-grey-100" />
+          <div className="w-full flex justify-between">
+            <div className="flex flex-col gap-1">
+              <p className="font-medium text-sm">Delete My Account</p>
+              <p className="font-medium text-xs text-grey-600">Permanently delete the account and remove access </p>
+            </div>
+            <Button className="!text-error !text-xs">Delete</Button>
           </div>
-          <Button className="!text-error !text-xs">Delete</Button>
         </div>
-      </div>
-    </UserProfileSection>
-  </>
-);
+      </UserProfileSection>
+    </>
+  );
+};
 
 export default AdditionalInfoSection;

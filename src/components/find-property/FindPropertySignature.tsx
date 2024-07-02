@@ -19,7 +19,6 @@ const FindPropertySignature = ({ goBack }: { goBack: () => void }) => {
   const [accepted, setAccepted] = useState<boolean>(false);
   const [sellProperty, { isLoading }] = useSellPropertyTypeMutation();
   const [values, setValues] = useState<ISellProperty | null>(null);
-  console.log(values, 22);
 
   const handleSubmit = async () => {
     if (accepted && values) {

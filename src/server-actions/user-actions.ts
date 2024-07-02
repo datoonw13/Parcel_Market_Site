@@ -74,16 +74,12 @@ export const logOutUserAction = async () => {
   redirect("?logout=true");
 };
 
-export const getUserAction = async (option: { hideEmail?: boolean }): Promise<ISignInResponse["payload"] | null> => {
+export const getUserAction = async (): Promise<ISignInResponse["payload"] | null> => {
   const userString = cookies().get("jwt")?.value;
   if (userString) {
     try {
       const { id, sub, firstName, lastName, email, role } = jwtDecode(userString!) as ISignInResponse["payload"];
       const user = { id, sub, firstName, lastName, email, role };
-      if (option?.hideEmail) {
-        const hideSubstring = email.split("@")[0].substring(1, email.split("@")[0].length - 1);
-        user.email = user.email.replace(hideSubstring, "****");
-      }
       return { ...user };
     } catch (error) {
       return null;
@@ -93,7 +89,7 @@ export const getUserAction = async (option: { hideEmail?: boolean }): Promise<IS
 };
 
 export const getUserFullDetails = async (): Promise<IUser | null> => {
-  const request = await fetcher<ResponseType<IUser>>("user/details");
+  const request = await fetcher<ResponseType<IUser>>("user/profile", { cache: "no-cache" });
   return request.data?.data || null;
 };
 
@@ -134,5 +130,24 @@ export const sendPasswordResetCodeAction = async (values: { oldPassword: string;
   return {
     error: false,
     message: null,
+  };
+};
+
+export const setNewPasswordAction = async (values: { code: string; newPassword: string }) => {
+  const request = await fetcher<ResponseType<null>>("user/reset/password", {
+    method: "POST",
+    body: JSON.stringify(values),
+  });
+
+  if (request.error) {
+    return {
+      error: true,
+      message: request.data?.message,
+    };
+  }
+
+  return {
+    error: false,
+    message: "Your password has been successfully reset",
   };
 };
