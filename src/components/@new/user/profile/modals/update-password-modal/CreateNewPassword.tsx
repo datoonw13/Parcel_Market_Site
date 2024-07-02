@@ -8,7 +8,7 @@ import { userPasswordResetValidations } from "@/zod-validations/auth-validations
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPassword: string) => void }) => {
+const CreateNewPassword = ({ onNext, handleClose }: { onNext: (oldPassword: string, newPassword: string) => void, handleClose: () => void }) => {
   const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,
@@ -35,7 +35,7 @@ const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPasswo
     <>
       <div className="space-y-4">
         <TextField
-          label="Current password"
+          placeholder="Current password"
           type={showPassword.current ? "text" : "password"}
           endIcon={
             <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, current: !showPassword.current })}>
@@ -46,7 +46,7 @@ const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPasswo
           onChange={(oldPassword) => setValues({ ...values, oldPassword })}
         />
         <TextField
-          label="New password"
+          placeholder="New password"
           type={showPassword.new ? "text" : "password"}
           endIcon={
             <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, new: !showPassword.new })}>
@@ -57,7 +57,7 @@ const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPasswo
           onChange={(newPassword) => setValues({ ...values, newPassword })}
         />
         <TextField
-          label="Re-type password"
+          placeholder="Re-type password"
           type={showPassword.repeatNew ? "text" : "password"}
           endIcon={
             <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, repeatNew: !showPassword.repeatNew })}>
@@ -72,7 +72,7 @@ const CreateNewPassword = ({ onNext }: { onNext: (oldPassword: string, newPasswo
         </button>
       </div>
       <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
-        <Button className="w-full" variant="secondary">
+        <Button className="w-full" variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button className="w-full" onClick={onSubmit} loading={loading} disabled={!userPasswordResetValidations.safeParse(values).success}>

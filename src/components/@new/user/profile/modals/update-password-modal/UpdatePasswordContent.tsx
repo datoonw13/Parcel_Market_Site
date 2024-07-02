@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { IUser } from "@/types/auth";
 import CreateNewPasswordVerify from "./CreateNewPasswordVerify";
 import CreateNewPassword from "./CreateNewPassword";
@@ -8,19 +8,12 @@ import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 interface UpdatePasswordContentProps {
   user: IUser;
-  open: boolean;
   handleClose: () => void;
 }
-const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ open, user, handleClose }) => {
+const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ user, handleClose }) => {
   const [passwords, setPasswords] = useState<{ oldPassword: string; newPassword: string } | null>(null);
   const emailArr = user.email.split("@");
-  const currentUserEmail = `${emailArr[0][0]}****${emailArr[0][emailArr[0].length - 1]}${emailArr[1]}`;
-
-  useEffect(() => {
-    if (!open) {
-      setPasswords(null);
-    }
-  }, [open]);
+  const currentUserEmail = `${emailArr[0][0]}****${emailArr[0][emailArr[0].length - 1]}@${emailArr[1]}`;
 
   return (
     <ProfileModalContentWrapper
@@ -32,8 +25,8 @@ const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ open, user, han
       }
       title={passwords ? "Check Your Email" : "Change Password"}
     >
-      {!passwords && <CreateNewPassword onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })} />}
-      {passwords && <CreateNewPasswordVerify passwords={passwords} onFinish={handleClose} />}
+      {!passwords && <CreateNewPassword handleClose={handleClose} onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })} />}
+      {passwords && <CreateNewPasswordVerify passwords={passwords} handleClose={handleClose} />}
     </ProfileModalContentWrapper>
   );
 };

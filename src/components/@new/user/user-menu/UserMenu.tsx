@@ -20,7 +20,7 @@ const UserMenu = ({ user }: { user: ISignInResponse["payload"] }) => (
     )}
     renderContent={(setReferenceElement) => (
       <div className="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80">
-        <Avatar title="LG" className="w-16 h-16" />
+        <Avatar title={`${user.firstName[0]}${user.lastName[0]}`} className="w-16 h-16" />
         <div>
           <p className="text-sm font-medium mb-1 text-center">{`${user.firstName} ${user.lastName}`}</p>
           <p className="text-xs text-grey-600 text-center">{user.email}</p>

@@ -9,9 +9,9 @@ import toast from "react-hot-toast";
 
 interface CreateNewPasswordVerifyProps {
   passwords: { oldPassword: string; newPassword: string };
-  onFinish: () => void;
+  handleClose: () => void;
 }
-const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, onFinish }) => {
+const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, handleClose }) => {
   const [codeSending, setCodeSending] = useState(false);
   const [passwordUpdating, setPasswordUpdating] = useState(false);
   const [code, setCode] = useState("");
@@ -34,12 +34,12 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
       setPasswordUpdating(false);
     } else {
       message && toast.success(message);
-      onFinish();
+      handleClose();
     }
   };
 
   return (
-    <>
+    <div className="flex flex-col justify-between h-full">
       <div className="space-y-4">
         <TextField placeholder="Code" value={code} onChange={(value) => setCode(value)} />
         <ResendButton
@@ -49,14 +49,14 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
         />
       </div>
       <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
-        <Button className="w-full" variant="secondary">
+        <Button className="w-full" variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button className="w-full" disabled={codeSending || !code} loading={passwordUpdating} onClick={onSubmit}>
           Continue
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
