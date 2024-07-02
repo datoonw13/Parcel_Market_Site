@@ -8,7 +8,13 @@ import { userPasswordResetValidations } from "@/zod-validations/auth-validations
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const CreateNewPassword = ({ onNext, handleClose }: { onNext: (oldPassword: string, newPassword: string) => void, handleClose: () => void }) => {
+const CreateNewPassword = ({
+  onNext,
+  handleClose,
+}: {
+  onNext: (oldPassword: string, newPassword: string) => void;
+  handleClose: () => void;
+}) => {
   const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,

@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { IUser } from "@/types/auth";
 import UserProfileSection from "./UserProfileSection";
-import Button from "../../shared/forms/Button";
 import UpdatePasswordModal from "./modals/update-password-modal/UpdatePasswordModal";
 import DeletePasswordModal from "./modals/delete-account-modal/DeleteAccountModal";
 
 const AdditionalInfoSection = ({ user }: { user: IUser }) => {
-  const [openModal, setOpenModal] = useState<"updatePassword" | null>(null);
+  const [openModal, setOpenModal] = useState<"updatePassword" | "removeAccount" | null>(null);
   return (
     <>
-      {/* <DeletePasswordModal open handleClose={() => {}} /> */}
+      <DeletePasswordModal open={openModal === "removeAccount"} handleClose={() => setOpenModal(null)} />
       <UpdatePasswordModal user={user} open={openModal === "updatePassword"} handleClose={() => setOpenModal(null)} />
       <UserProfileSection sectionTitle="Additional Information">
         <div className="grid gap-3">
@@ -41,7 +40,9 @@ const AdditionalInfoSection = ({ user }: { user: IUser }) => {
               <p className="font-medium text-sm">Delete My Account</p>
               <p className="font-medium text-xs text-grey-600">Permanently delete the account and remove access </p>
             </div>
-            <Button className="!text-error !text-xs">Delete</Button>
+            <button type="button" className="font-medium text-xs text-error" onClick={() => setOpenModal("removeAccount")}>
+              Delete
+            </button>
           </div>
         </div>
       </UserProfileSection>

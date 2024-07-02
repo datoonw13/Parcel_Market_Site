@@ -98,6 +98,15 @@ export interface IUser {
   streetName: string;
 }
 
+export enum DeletionAccountReason {
+  SoldLand = "SoldLand",
+  SoldLandOutsideMarket = "SoldLandOutsideMarket",
+  NotUseful = "NotUseful",
+  NoDataAccess = "NoDataAccess",
+  Complicated = "Complicated",
+  TooExpensive = "TooExpensive",
+}
+
 // new types
 export type IUserSignIn = z.infer<typeof userSignInValidation>;
 export type IUserSignUp = z.infer<typeof userSignUpValidation>;

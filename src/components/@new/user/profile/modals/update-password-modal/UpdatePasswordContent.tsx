@@ -25,7 +25,9 @@ const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ user, handleClo
       }
       title={passwords ? "Check Your Email" : "Change Password"}
     >
-      {!passwords && <CreateNewPassword handleClose={handleClose} onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })} />}
+      {!passwords && (
+        <CreateNewPassword handleClose={handleClose} onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })} />
+      )}
       {passwords && <CreateNewPasswordVerify passwords={passwords} handleClose={handleClose} />}
     </ProfileModalContentWrapper>
   );

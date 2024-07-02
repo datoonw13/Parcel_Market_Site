@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import routes from "@/helpers/routes";
-import { ISignInResponse, IUser, IUserSignUp } from "../types/auth";
+import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../types/auth";
 import { fetcher } from "./fetcher";
 
 export const signInUser = async (prevState: any, formData: FormData) => {
@@ -149,5 +149,23 @@ export const setNewPasswordAction = async (values: { code: string; newPassword: 
   return {
     error: false,
     message: "Your password has been successfully reset",
+  };
+};
+
+export const removeUserAccountAction = async (values: { password: string; deletionResult: DeletionAccountReason }) => {
+  const request = await fetcher<ResponseType<null>>("user/profile", {
+    method: "DELETE",
+    body: JSON.stringify(values),
+  });
+  if (request.error) {
+    return {
+      error: true,
+      message: "Account remove failed",
+    };
+  }
+  await logOutUserAction();
+  return {
+    error: false,
+    message: "",
   };
 };
