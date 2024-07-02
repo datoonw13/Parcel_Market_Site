@@ -48,11 +48,10 @@ const secondary = {
 const buttonTypes = {
   primary,
   secondary,
-  text: primary,
 };
 
 type ButtonColors = "default" | "error";
-type ButtonVariant = "primary" | "secondary" | "text";
+type ButtonVariant = "primary" | "secondary";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {

@@ -13,7 +13,6 @@ const PersonalInfoSection = () => {
       sectionTitle="Personal Information"
       headerButton={
         <Button
-          variant="text"
           className={clsx(editMode ? "opacity-0" : "opacity-1")}
           // startIcon={(<EditIcon1 />) as any}
           onClick={() => setEditMode(true)}

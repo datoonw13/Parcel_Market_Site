@@ -105,6 +105,7 @@ const TextField = (props: TextFieldProps) => {
         readOnly={readOnly}
         type={type === "number" ? "text" : type}
         name={name}
+        autoComplete="new-password"
       />
       {label && (
         <p className={clsx(label && classes[`label-${variant}`], "pointer-events-none")}>
