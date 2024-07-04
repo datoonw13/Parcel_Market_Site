@@ -53,7 +53,7 @@ export default function PlaygroundPage() {
         <hr className="mb-4 border-gray-200 dark:border-gray-800" />
         <div className="flex space-x-8">
           <AutoComplete
-            options={getAllStates()}
+            options={getAllStates({ filterBlackList: true })}
             getOptionLabel={(item) => item.label}
             getOptionKey={(item) => item.value}
             onChange={(item) => setValue(item)}
@@ -63,7 +63,7 @@ export default function PlaygroundPage() {
               items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
             }
             // value={value}
-            // options={getAllStates()}
+            // options={getAllStates({ filterBlackList:true })}
             // onChange={(data) => setValue(data)}
             // renderInput={(searchValue, setSearchValue) => (
             //   <TextField

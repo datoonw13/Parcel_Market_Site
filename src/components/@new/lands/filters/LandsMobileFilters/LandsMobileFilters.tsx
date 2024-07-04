@@ -106,7 +106,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, 
                 transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
                 <div className="border-b border-grey-100 pb-3 flex flex-col gap-4 mt-1">
-                  {getAllStates().map((state) => (
+                  {getAllStates({ filterBlackList: true }).map((state) => (
                     <RadioButton
                       key={state.value}
                       checked={localFilters.state === state.value}

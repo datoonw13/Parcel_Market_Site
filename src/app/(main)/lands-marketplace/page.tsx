@@ -82,7 +82,7 @@ const LandsMarketPlacePage = () => {
         )}
         {!isFetching &&
           data?.data.sellingProperties.map((item) => {
-            const state = getAllStates().find((el) => el.value === item.state.toLocaleLowerCase());
+            const state = getAllStates({ filterBlackList: true }).find((el) => el.value === item.state.toLocaleLowerCase());
             const counties = getCounties(state?.value!);
 
             return (

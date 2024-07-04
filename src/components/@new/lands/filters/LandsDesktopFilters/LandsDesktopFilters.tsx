@@ -34,7 +34,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
           "!h-[36px] [&>input::placeholder]:text-black",
           filters.state && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
         )}
-        options={getAllStates()}
+        options={getAllStates({ filterBlackList: true })}
         getOptionLabel={(item) => item.label}
         getOptionKey={(item) => item.value}
         onChange={(item) => setFilters({ ...filters, state: item?.value || null, county: null })}

@@ -94,7 +94,7 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
               </Box>
               <Collapse in={openFilter === "state"}>
                 <Box sx={{ mt: 2, display: "flex", flexDirection: "column", height: 250, overflow: "scroll" }}>
-                  {getAllStates().map((state) => (
+                  {getAllStates({ filterBlackList: true }).map((state) => (
                     <FormControlLabel
                       slotProps={{ typography: { fontSize: 14, fontWeight: 500 } }}
                       value={state.value}

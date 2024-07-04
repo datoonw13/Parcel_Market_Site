@@ -14,7 +14,7 @@ interface IProps {
 const LandsMarketplaceDesktopFilters = ({ filters, setFilters }: IProps) => (
   <Box sx={{ display: "flex", gap: 1.5 }}>
     <LandsMarketplaceFiltersAutocomplete
-      options={getAllStates().map(({ value, label }) => ({ value, label }))}
+      options={getAllStates({ filterBlackList: true }).map(({ value, label }) => ({ value, label }))}
       onSelect={(state) => setFilters({ ...filters, state, ...(!state && { county: null }) })}
       placeholder="State"
     />

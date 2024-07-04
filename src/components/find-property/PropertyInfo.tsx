@@ -196,7 +196,7 @@ const PropertyInfo = ({ onNext }: IProps) => {
                 )}
                 ListboxComponent={AutoCompleteListboxComponent}
                 value={getStateValue(watch("state"))}
-                options={getAllStates()}
+                options={getAllStates({ filterBlackList: true })}
                 onChange={(_, newValue) => {
                   setValue("state", newValue?.value || null, { shouldValidate: isSubmitted });
                   setValue("county", null);

@@ -15,35 +15,36 @@ const statesBlackList = [
   "Dakota",
   "Wyoming",
 ];
-export const getAllStates = () =>
+
+export const getAllStates = (props?: { filterBlackList?: boolean }) =>
   usaStatesFull
-    .filter((el) => el.contiguous && !statesBlackList.includes(el.name))
+    .filter((el) => el.contiguous && props?.filterBlackList ? !statesBlackList.includes(el.name) : true)
     .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
 
-export const getCounties = (state?: string | null) => {
-  if (!state) {
+export const getCounties = (stateValue: string | null) => {
+  if (!stateValue) {
     return [];
   }
-  const counties = getAllStates().find(({ value }) => value === state)?.counties || [];
+  const counties = getAllStates({ filterBlackList: true }).find(({ value }) => value === stateValue)?.counties || [];
   const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
   return formattedCounties;
 };
 
-export const getStateValue = (state: string | null) => {
-  if (!state) {
+export const getStateValue = (stateValue: string | null) => {
+  if (!stateValue) {
     return null;
   }
-  return getAllStates().find((el) => el.value === state) || null;
+  return getAllStates({ filterBlackList: true }).find((el) => el.value === stateValue) || null;
 };
 
-export const getCountyValue = (county: string | null, state: string | null) => {
-  if (!county || !state) {
+export const getCountyValue = (countyValue: string | null, stateValue: string | null) => {
+  if (!countyValue || !stateValue) {
     return null;
   }
-  return getCounties(state).find(({ value }) => value === county) || null;
+  return getCounties(stateValue).find(({ value }) => value === countyValue) || null;
 };
 
-export const getCitiesByState = (state?: string) =>
+export const getCitiesByState = (stateValue: string | null) =>
   usaCities
-    .filter((el) => el.state === getAllStates().find((x) => x.value === state)?.label)
+    .filter((el) => el.state === getAllStates({ filterBlackList: true }).find((x) => x.value === stateValue)?.label)
     .map((city) => ({ label: city.name, value: city.name }));

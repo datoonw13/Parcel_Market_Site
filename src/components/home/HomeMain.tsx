@@ -100,7 +100,7 @@ const HomeMain = () => {
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="State" InputProps={{ ...params.InputProps }} />}
                 ListboxComponent={AutoCompleteListboxComponent}
-                options={getAllStates()}
+                options={getAllStates({ filterBlackList: true })}
                 value={getStateValue(state)}
                 onChange={(_, newValue) => {
                   setState(newValue?.value || null);

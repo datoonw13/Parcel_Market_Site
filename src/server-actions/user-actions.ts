@@ -107,6 +107,7 @@ export const activateUserAccountAction = async (token?: string): Promise<{ error
     return { error: true };
   }
   const request = await fetcher(`user/activate/${token}`, { method: "POST" });
+
   return { error: request.error };
 };
 

@@ -115,7 +115,7 @@ const UserFollowedProperties = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {!isFetching &&
             data?.data?.data?.map(({ sellingProperty, followedListingId }) => {
-              const state = getAllStates().find((el) => el.value === sellingProperty.state.toLocaleLowerCase());
+              const state = getAllStates({ filterBlackList: true }).find((el) => el.value === sellingProperty.state.toLocaleLowerCase());
               const county =
                 state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === sellingProperty.county.toLocaleLowerCase()) || "";
               return (

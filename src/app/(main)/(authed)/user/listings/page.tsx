@@ -5,13 +5,11 @@ import { MoneyIcon1 } from "@/components/@new/icons/MoneyIcons";
 import { ResizeIcon1 } from "@/components/@new/icons/ResizeIcons";
 import { UserIcon2 } from "@/components/@new/icons/UserIcons";
 import LandBox from "@/components/@new/lands/LandBox";
-import LandsDesktopFilters from "@/components/@new/lands/filters/LandsDesktopFilters/LandsDesktopFilters";
 import DataNotFound from "@/components/@new/shared/DataNotFound";
 import { numFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
 import { useGetUserSellingPropertiesQuery, useRemoveUserSellingLandMutation } from "@/lib/features/apis/propertyApi";
 import { ILandsFilters } from "@/types/lands";
-import { Container } from "@mui/material";
 import React, { useState } from "react";
 import Pagination from "@/components/@new/shared/Pagination";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
@@ -88,7 +86,7 @@ const UserListings = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {!isFetching &&
             data?.data.data.map((land) => {
-              const state = getAllStates().find((el) => el.value === land.state.toLocaleLowerCase());
+              const state = getAllStates({ filterBlackList: true }).find((el) => el.value === land.state.toLocaleLowerCase());
               const county = state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
               return (
                 <LandBox
