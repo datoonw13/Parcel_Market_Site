@@ -6,7 +6,11 @@ import Button from "@/components/@new/shared/forms/Button";
 import { IUser } from "@/types/auth";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
-import { Password } from "@mui/icons-material";
+import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user-actions";
+import toast from "react-hot-toast";
+import { emailSchema } from "@/zod-validations/auth-validations";
+import { maskEmail } from "@/helpers/common";
+import ResendButton from "@/components/@new/shared/ResendButton";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });
@@ -23,53 +27,117 @@ enum UpdateEmailSteps {
   CODE,
 }
 
-const generateModalMeta = (step: UpdateEmailSteps, user: IUser) => {
+const generateModalMeta = (step: UpdateEmailSteps, user: IUser, newEmail: string) => {
   switch (step) {
     case UpdateEmailSteps.NEW_EMAIL:
       return {
-        title: "Deleting your account",
-        description: "When you delete your account, all of your saved data will also be deleted.",
+        title: "Enter New Email",
+        description: `Please enter your new email address and we will send you code to confirm this changes`,
       };
     case UpdateEmailSteps.CODE:
       return {
-        title: "Deleting your account",
-        description:
-          "We're sorry to see you go. Once the deletion process begins, you won't be able to reactivate your account or retrieve any of the content or information you have added.",
+        title: "Change Email",
+        description: `Enter the code we sent to ${maskEmail(newEmail)}`,
       };
     default:
       return {
         title: "Change Email",
-        description: "For your security, please re-enter your password to continue",
+        description: `Your current email is ${user.email}`,
       };
   }
 };
 
-const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "user">> = async ({ handleClose, user }) => {
+const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "user">> = ({ handleClose, user }) => {
   const [step, setStep] = useState<UpdateEmailSteps>(UpdateEmailSteps.PASSWORD);
+  const [pending, setPending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({
     password: "",
+    email: "",
+    code: "",
   });
-  // const modalMeta = generateModalMeta(step, null);
+  const { description, title } = generateModalMeta(step, user, values.email);
 
-  const handleNext = async () => {};
+  const handleCodeSend = async ({ resend }: { resend?: boolean }) => {
+    setPending(true);
+    const { error, message } = await sendEmailResetCodeAction({ password: values.password });
+    if (!error) {
+      !resend && setStep(UpdateEmailSteps.NEW_EMAIL);
+      setPending(false);
+      return { error: false };
+    }
+    message && toast.error(message);
+    setPending(false);
+    return { error: true };
+  };
 
-  const goBack = () => {};
+  const handleEmailUpdate = async () => {
+    setPending(true);
+    const { error, message } = await setNewEmailAction({ code: values.code, email: values.email });
+    if (!error) {
+      handleClose();
+    } else {
+      message && toast.error(message);
+      setPending(false);
+    }
+  };
+
+  const handleNext = async () => {
+    if (step === UpdateEmailSteps.PASSWORD) {
+      await handleCodeSend({ resend: false });
+    }
+    if (step === UpdateEmailSteps.NEW_EMAIL) {
+      setStep(UpdateEmailSteps.CODE);
+    }
+    if (step === UpdateEmailSteps.CODE) {
+      await handleEmailUpdate();
+    }
+  };
+
+  const goBack = () => {
+    if (step === UpdateEmailSteps.PASSWORD) {
+      handleClose();
+    } else {
+      setStep(step - 1);
+    }
+  };
+
   return (
-    <ProfileModalContentWrapper title={''} description={''} handleClose={handleClose}>
+    <ProfileModalContentWrapper title={title} description={description} handleClose={handleClose}>
       <div className="flex justify-between flex-col h-full">
         {step === UpdateEmailSteps.PASSWORD && (
-          <TextField
-            placeholder="Enter Your Password"
-            type={showPassword ? "text" : "password"}
-            endIcon={
-              <div className="cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeIcon1 /> : <EyeIcon2 />}
-              </div>
-            }
-            value={values.password}
-            onChange={(password) => setValues({ ...values, password })}
-          />
+          <div className="space-y-4">
+            <TextField
+              placeholder="Enter Your Password"
+              type={showPassword ? "text" : "password"}
+              endIcon={
+                <div className="cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                </div>
+              }
+              value={values.password}
+              onChange={(password) => setValues({ ...values, password })}
+            />
+            <button type="button" className="font-medium text-xs text-primary-main">
+              Forgot Password?
+            </button>
+          </div>
+        )}
+        {step === UpdateEmailSteps.NEW_EMAIL && (
+          <TextField placeholder="Enter New Email Address" value={values.email} onChange={(email) => setValues({ ...values, email })} />
+        )}
+        {step === UpdateEmailSteps.CODE && (
+          <div className="space-y-4">
+            <TextField placeholder="Code" value={values.code} onChange={(code) => setValues({ ...values, code })} />
+            <ResendButton
+              handleResend={async () => {
+                const { error } = await handleCodeSend({ resend: true });
+                if (error) {
+                  throw new Error();
+                }
+              }}
+            />
+          </div>
         )}
         <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
           <Button className="w-full" variant="secondary" onClick={goBack}>
@@ -77,15 +145,15 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
           </Button>
           <Button
             className="w-full"
-            // loading={removePending}
-            // disabled={
-            //   (step === AccountRemoveSteps.TYPE_PASSWORD && !values.password) ||
-            //   (step === AccountRemoveSteps.SELECT_REASON && !values.deletionResult)
-            // }
+            disabled={
+              (step === UpdateEmailSteps.PASSWORD && !values.password) ||
+              (step === UpdateEmailSteps.NEW_EMAIL && !emailSchema.safeParse(values.email).success) ||
+              (step === UpdateEmailSteps.CODE && !values.code)
+            }
+            loading={pending}
             onClick={handleNext}
           >
-            Test
-            {/* {step === AccountRemoveSteps.CONFIRM_DELETE ? "Delete" : "Continue"} */}
+            {step === UpdateEmailSteps.CODE ? "Change Email" : "Continue"}
           </Button>
         </div>
       </div>

@@ -8,6 +8,8 @@ const passwordSchema = z
     "Password must be at least 6 characters long and include at least one letter, one number, and one special character (!@$%)."
   );
 
+export const emailSchema = z.string().trim().email();
+
 export const userSignInValidation = z.object({
   email: z.string().trim().min(1).email(),
   password: z.string().trim().min(1),
@@ -17,7 +19,7 @@ export const userSignUpValidation = z
   .object({
     firstName: z.string().trim().min(1),
     lastName: z.string().trim().min(1),
-    email: z.string().email(),
+    email: emailSchema,
     streetName: z.string().trim().min(1),
     unitNumber: z
       .string()

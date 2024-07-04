@@ -1,4 +1,5 @@
 export const numFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+
 export const numericInput = (number: string) => {
   // You can modify the {0,2} to match your decimal preference {min, max}
   const regex = new RegExp(/^\d*(\.)?(\d{0,2})?$/);
@@ -14,3 +15,6 @@ export const numericInput = (number: string) => {
     result,
   };
 };
+
+export const maskEmail = (email: string) =>
+  `${email.split("@")[0][0]}****${email.split("@")[0][email.split("@")[0].length - 1]}@${email.split("@")[1]}`;

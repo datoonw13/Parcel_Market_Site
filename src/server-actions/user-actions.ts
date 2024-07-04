@@ -10,6 +10,19 @@ import routes from "@/helpers/routes";
 import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../types/auth";
 import { fetcher } from "./fetcher";
 
+export const setAuthToken = (token: string) => {
+  const decodedToken = jwtDecode(token) as { exp: number };
+  const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+  // set jwt token in cookie
+  cookies().set({
+    name: "jwt",
+    value: token,
+    httpOnly: true,
+    secure: true,
+    maxAge: maxAgeInSeconds,
+  });
+};
+
 export const signInUser = async (prevState: any, formData: FormData) => {
   const values = {
     email: formData.get("email"),
@@ -36,16 +49,9 @@ export const signInUser = async (prevState: any, formData: FormData) => {
     };
   }
 
-  const decodedToken = jwtDecode(data?.data.access_token!) as { exp: number };
-  const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
-  // set jwt token in cookie
-  cookies().set({
-    name: "jwt",
-    value: data?.data.access_token!,
-    httpOnly: true,
-    secure: true,
-    maxAge: maxAgeInSeconds,
-  });
+  if (data?.data.access_token) {
+    setAuthToken(data.data.access_token);
+  }
   redirect(`/${routes.home.url}`);
   return null;
 };
@@ -106,9 +112,16 @@ export const sendPasswordResetCodeAction = async (values: { oldPassword: string;
   const request = await fetcher<ResponseType<null>>("user/reset/password/send-email-code", {
     method: "POST",
     body: JSON.stringify(values),
+    cache: "no-store",
   });
 
   if (request.error) {
+    if (request.data?.message.includes("You have to wait")) {
+      return {
+        error: false,
+        message: null,
+      };
+    }
     if (request.data?.statusCode === 401) {
       return {
         error: true,
@@ -137,6 +150,7 @@ export const setNewPasswordAction = async (values: { code: string; newPassword: 
   const request = await fetcher<ResponseType<null>>("user/reset/password", {
     method: "POST",
     body: JSON.stringify(values),
+    cache: "no-store",
   });
 
   if (request.error) {
@@ -156,6 +170,7 @@ export const removeUserAccountAction = async (values: { password: string; deleti
   const request = await fetcher<ResponseType<null>>("user/profile", {
     method: "DELETE",
     body: JSON.stringify(values),
+    cache: "no-store",
   });
   if (request.error) {
     return {
@@ -167,5 +182,65 @@ export const removeUserAccountAction = async (values: { password: string; deleti
   return {
     error: false,
     message: "",
+  };
+};
+
+export const sendEmailResetCodeAction = async (values: { password: string }) => {
+  const request = await fetcher<ResponseType<null>>("user/reset/email/send-email-code", {
+    method: "POST",
+    body: JSON.stringify(values),
+    cache: "no-store",
+  });
+
+  if (request.error) {
+    if (request.data?.message.includes("You have to wait")) {
+      return {
+        error: false,
+        message: null,
+      };
+    }
+    if (request.data?.statusCode === 401) {
+      return {
+        error: true,
+        message: "Current password is incorrect",
+      };
+    }
+    if (request.data?.statusCode === 400) {
+      return {
+        error: true,
+        message: request.data.message,
+      };
+    }
+    return {
+      error: true,
+      message: "Something went wrong",
+    };
+  }
+
+  return {
+    error: false,
+    message: null,
+  };
+};
+
+export const setNewEmailAction = async (values: { code: string; email: string }) => {
+  const request = await fetcher<ResponseType<null>>("user/reset/email", {
+    method: "POST",
+    body: JSON.stringify(values),
+    cache: "no-store",
+  });
+
+  console.log(request.data);
+
+  if (request.error) {
+    return {
+      error: true,
+      message: request.data?.message,
+    };
+  }
+
+  return {
+    error: false,
+    message: "Your email has been successfully reset",
   };
 };

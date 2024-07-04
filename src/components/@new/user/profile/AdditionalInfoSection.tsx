@@ -8,7 +8,7 @@ import DeleteAccountModal from "./modals/delete-account-modal/DeleteAccountModal
 import UpdateEmailModal from "./modals/update-email-modal/update-email-modal";
 
 const AdditionalInfoSection = ({ user }: { user: IUser }) => {
-  const [openModal, setOpenModal] = useState<"updatePassword" | "removeAccount" | "updateEmail" | null>("updateEmail");
+  const [openModal, setOpenModal] = useState<"updatePassword" | "removeAccount" | "updateEmail" | null>(null);
   return (
     <>
       <DeleteAccountModal open={openModal === "removeAccount"} handleClose={() => setOpenModal(null)} />
@@ -32,9 +32,9 @@ const AdditionalInfoSection = ({ user }: { user: IUser }) => {
               <p className="font-medium text-sm">Email</p>
               <p className="font-medium text-xs text-grey-600">Davit@Gmail.com</p>
             </div>
-            {/* <Button className="text-grey-800 !text-xs">
-            Change email Password
-          </Button> */}
+            <button type="button" className="font-medium text-xs text-primary-main" onClick={() => setOpenModal("updateEmail")}>
+              Change Email
+            </button>
           </div>
           <hr className="border-grey-100" />
           <div className="w-full flex justify-between">
