@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import routes from "@/helpers/routes";
+import { revalidatePath } from "next/cache";
 import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../types/auth";
 import { fetcher } from "./fetcher";
 
@@ -21,6 +22,7 @@ export const setAuthToken = (token: string) => {
     secure: true,
     maxAge: maxAgeInSeconds,
   });
+  revalidatePath("/");
 };
 
 export const signInUser = async (prevState: any, formData: FormData) => {
@@ -224,13 +226,11 @@ export const sendEmailResetCodeAction = async (values: { password: string }) => 
 };
 
 export const setNewEmailAction = async (values: { code: string; email: string }) => {
-  const request = await fetcher<ResponseType<null>>("user/reset/email", {
+  const request = await fetcher<ResponseType<ISignInResponse>>("user/reset/email", {
     method: "POST",
     body: JSON.stringify(values),
     cache: "no-store",
   });
-
-  console.log(request.data);
 
   if (request.error) {
     return {
@@ -238,6 +238,8 @@ export const setNewEmailAction = async (values: { code: string; email: string })
       message: request.data?.message,
     };
   }
+
+  setAuthToken(request.data?.data.access_token ?? "");
 
   return {
     error: false,
