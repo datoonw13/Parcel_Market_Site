@@ -4,14 +4,16 @@ import { useState } from "react";
 import { IUser } from "@/types/auth";
 import UserProfileSection from "./UserProfileSection";
 import UpdatePasswordModal from "./modals/update-password-modal/UpdatePasswordModal";
-import DeletePasswordModal from "./modals/delete-account-modal/DeleteAccountModal";
+import DeleteAccountModal from "./modals/delete-account-modal/DeleteAccountModal";
+import UpdateEmailModal from "./modals/update-email-modal/update-email-modal";
 
 const AdditionalInfoSection = ({ user }: { user: IUser }) => {
-  const [openModal, setOpenModal] = useState<"updatePassword" | "removeAccount" | null>(null);
+  const [openModal, setOpenModal] = useState<"updatePassword" | "removeAccount" | "updateEmail" | null>("updateEmail");
   return (
     <>
-      <DeletePasswordModal open={openModal === "removeAccount"} handleClose={() => setOpenModal(null)} />
+      <DeleteAccountModal open={openModal === "removeAccount"} handleClose={() => setOpenModal(null)} />
       <UpdatePasswordModal user={user} open={openModal === "updatePassword"} handleClose={() => setOpenModal(null)} />
+      <UpdateEmailModal user={user} open={openModal === "updateEmail"} handleClose={() => setOpenModal(null)} />
       <UserProfileSection sectionTitle="Additional Information">
         <div className="grid gap-3">
           <div className="w-full flex justify-between items-center">

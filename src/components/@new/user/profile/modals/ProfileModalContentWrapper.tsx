@@ -5,7 +5,7 @@ import React, { FC, ReactNode } from "react";
 interface ProfileModalContentWrapperProps {
   handleClose: () => void;
   children: ReactNode;
-  title: string;
+  title: string | ReactNode;
   description: string;
 }
 const ProfileModalContentWrapper: FC<ProfileModalContentWrapperProps> = ({ children, handleClose, description, title }) => (
