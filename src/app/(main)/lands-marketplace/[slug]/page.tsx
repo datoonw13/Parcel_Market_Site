@@ -1,6 +1,5 @@
 "use client";
 
-import MakeOfferModal from "@/components/@new/lands/MakeOfferModal";
 import BreadCrumb from "@/components/shared/BreadCrumb";
 import { numFormatter } from "@/helpers/common";
 import { getAllStates, getCounties } from "@/helpers/states";
@@ -29,7 +28,6 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
 
   return (
     <>
-      <MakeOfferModal />
       <Container sx={{ display: "flex", flexDirection: "column", gap: 3, pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 } }}>
         <BreadCrumb routName="Test Name" />
 
