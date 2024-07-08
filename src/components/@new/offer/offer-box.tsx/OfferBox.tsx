@@ -4,6 +4,7 @@ import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import Divider from "../../shared/Divider";
 import Button from "../../shared/forms/Button";
 import classes from "./style.module.css";
+import Alert from "../../shared/Alert";
 
 const OfferBox = () => (
   <div className={classes.root}>
@@ -65,6 +66,9 @@ const OfferBox = () => (
           Status:<span className="text-black font-semibold ml-1">Expired</span>
         </p>
       </div>
+    </div>
+    <div className="px-4 md:px-8 mt-6">
+      <Alert title="Offer Active for" description="Your offer active for 3 days " onClose={() => {}} type="warning" />
     </div>
     <Divider className="mt-8 mb-4" />
     <div className="flex gap-3 px-4 md:px-8">

@@ -18,7 +18,7 @@ const statesBlackList = [
 
 export const getAllStates = (props?: { filterBlackList?: boolean }) =>
   usaStatesFull
-    .filter((el) => el.contiguous && props?.filterBlackList ? !statesBlackList.includes(el.name) : true)
+    .filter((el) => (el.contiguous && props?.filterBlackList ? !statesBlackList.includes(el.name) : true))
     .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
 
 export const getCounties = (stateValue: string | null) => {

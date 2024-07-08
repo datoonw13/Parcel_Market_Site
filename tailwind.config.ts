@@ -59,6 +59,7 @@ export const colors = {
     DEFAULT: "rgba(22, 219, 101, 1)",
   },
   warning: {
+    100: "rgba(255, 243, 224, 1)",
     DEFAULT: "rgba(255, 153, 0, 1)",
   },
   error: {
