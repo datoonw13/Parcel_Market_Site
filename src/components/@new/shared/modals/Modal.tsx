@@ -68,7 +68,7 @@ const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnA
             className="!m-auto z-50 w-full h-full flex items-center justify-center"
             {...attributes.popper}
           >
-            <div className={clsx(contentClasses)}>{children}</div>
+            <div className={clsx(contentClasses, "flex items-center justify-center w-full")}>{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
