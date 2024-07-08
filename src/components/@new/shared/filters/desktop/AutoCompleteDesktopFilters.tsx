@@ -16,7 +16,7 @@ const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ optio
   const pathname = usePathname();
   const { replace } = useRouter();
   const params = new URLSearchParams(searchParams);
-  const selectedValue = options.find((el) => el.value === params.get(filterKey))?.value || null;
+  const selectedValue = options.find((el) => el.value === params.get(filterKey)) || null;
 
   const handleSelect = (newValue: string | null) => {
     if (newValue) {
@@ -40,7 +40,7 @@ const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ optio
       placeholder={placeholder}
       value={selectedValue}
       onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
-      getSelectedOption={(item) => item.value === selectedValue}
+      getSelectedOption={(item) => item.value === selectedValue?.value}
     />
   );
 };

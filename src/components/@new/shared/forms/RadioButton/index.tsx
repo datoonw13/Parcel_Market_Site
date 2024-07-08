@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import clsx from "clsx";
 import classes from "./radio-button.module.css";
 
 interface RadioButtonProps {
@@ -6,12 +7,13 @@ interface RadioButtonProps {
   checked: boolean;
   onChange: (value?: boolean) => void;
   label?: string;
+  labelClassName?: string;
 }
-const RadioButton: FC<RadioButtonProps> = ({ name, checked, onChange, label }) => (
+const RadioButton: FC<RadioButtonProps> = ({ name, checked, onChange, label, labelClassName }) => (
   <div className="flex items-center gap-3 cursor-pointer">
     <input className={classes.root} type="radio" id={name} checked={checked} onChange={() => {}} onClick={(e) => onChange()} />
     {label && (
-      <label className="font-medium text-sm" htmlFor={name}>
+      <label className={clsx("font-medium text-sm", labelClassName)} htmlFor={name}>
         {label}
       </label>
     )}
