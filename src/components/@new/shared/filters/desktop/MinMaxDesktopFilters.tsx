@@ -5,40 +5,60 @@ import AutoCompleteListItem from "@/components/@new/shared/forms/AutoComplete/Au
 import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
 import clsx from "clsx";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-interface MinMaxFiltersProps {
+interface MinMaxDesktopFiltersProps {
   options: Array<{ min: number | null; max: number | null }>;
-  value: { min: number | null; max: number | null };
-  onChange: (value: { min: number | null; max: number | null }) => void;
   placeHolder?: string;
   getOptionLabel: (item: { min: number | null; max: number | null }) => string;
+  filterKey: string;
 }
 
-const MinMaxFilters: FC<MinMaxFiltersProps> = ({ options, value, onChange, placeHolder, getOptionLabel }) => {
+const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHolder, getOptionLabel, filterKey }) => {
   const [filters, setFilters] = useState<{ min: number | null; max: number | null }>({
     min: null,
     max: null,
   });
 
-  const isSelected = (item: MinMaxFiltersProps["value"]) => JSON.stringify(filters) === JSON.stringify(item);
+  const isSelected = (item: MinMaxDesktopFiltersProps["options"][0]) => JSON.stringify(filters) === JSON.stringify(item);
   const disableSelect = filters.max && Number(filters.max) <= Number(filters.min);
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const params = new URLSearchParams(searchParams);
+  const selectedValue = { min: Number(params.get(`${filterKey}Min`)) || null, max: Number(params.get(`${filterKey}Max`)) || null };
+
+  const handleSelect = (newValue: { min: number | null; max: number | null }) => {
+    if (newValue?.min) {
+      params.set(`${filterKey}Min`, newValue.min.toString());
+    } else {
+      params.delete(`${filterKey}Min`);
+    }
+    if (newValue?.max) {
+      params.set(`${filterKey}Max`, newValue.max.toString());
+    } else {
+      params.delete(`${filterKey}Max`);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <AutoComplete
       inputRootClassName={clsx(
         "!h-[36px] [&>input::placeholder]:text-black",
-        (value.min || value.max) && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
+        (selectedValue.min || selectedValue.max) && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
       )}
       options={options}
       getOptionLabel={getOptionLabel}
       getOptionKey={(item) => ""}
       onChange={(item) => {
-        onChange({ min: null, max: null });
+        handleSelect({ min: null, max: null });
         setFilters({ min: null, max: null });
       }}
       placeholder={placeHolder}
       readOnly
-      value={value.min || value.max ? value : ""}
+      value={selectedValue.min || selectedValue.max ? selectedValue : ""}
       renderContent={(setReferenceElement, options) => (
         <AutoCompleteListBox className="!max-h-max">
           <div className="flex gap-0.5 items-center p-4">
@@ -79,7 +99,7 @@ const MinMaxFilters: FC<MinMaxFiltersProps> = ({ options, value, onChange, place
               // variant="text"
               onClick={() => {
                 setReferenceElement(null);
-                setFilters({ min: value.min, max: value.max });
+                setFilters({ min: selectedValue.min, max: selectedValue.max });
               }}
             >
               Clear
@@ -89,7 +109,7 @@ const MinMaxFilters: FC<MinMaxFiltersProps> = ({ options, value, onChange, place
               disabled={!!disableSelect}
               onClick={() => {
                 setReferenceElement(null);
-                onChange({
+                handleSelect({
                   min: filters.min ? filters.min : null,
                   max: filters.max ? filters.max : null,
                 });
@@ -108,4 +128,4 @@ const MinMaxFilters: FC<MinMaxFiltersProps> = ({ options, value, onChange, place
   );
 };
 
-export default MinMaxFilters;
+export default MinMaxDesktopFilters;

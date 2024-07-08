@@ -5,23 +5,24 @@ import clsx from "clsx";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AutoComplete from "../../forms/AutoComplete";
 
-interface ParcelNumberDesktopFilterProps {
+interface AutoCompleteDesktopFiltersProps {
   options: Array<{ label: string; value: string }>;
   placeholder: string;
+  filterKey: string;
 }
 
-const ParcelNumberDesktopFilter: FC<ParcelNumberDesktopFilterProps> = ({ options, placeholder }) => {
+const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ options, placeholder, filterKey }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const params = new URLSearchParams(searchParams);
-  const selectedValue = params.get("parcelNumber");
+  const selectedValue = params.get(filterKey);
 
   const handleSelect = (newValue: string | null) => {
     if (newValue) {
-      params.set("parcelNumber", newValue);
+      params.set(filterKey, newValue);
     } else {
-      params.delete("parcelNumber");
+      params.delete(filterKey);
     }
     replace(`${pathname}?${params.toString()}`);
   };
@@ -44,4 +45,4 @@ const ParcelNumberDesktopFilter: FC<ParcelNumberDesktopFilterProps> = ({ options
   );
 };
 
-export default ParcelNumberDesktopFilter;
+export default AutoCompleteDesktopFilters;

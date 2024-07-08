@@ -1,6 +1,11 @@
+"use client";
+
 import OfferBox from "@/components/@new/offer/offer-box.tsx/OfferBox";
-import ParcelNumberDesktopFilter from "@/components/@new/shared/filters/desktop/ParcelNumberDesktopFilter";
-import PriceDesktopFilter from "@/components/@new/shared/filters/desktop/PriceDesktopFilter";
+import MinMaxDesktopFilters from "@/components/@new/shared/filters/desktop/MinMaxDesktopFilters";
+import AutoCompleteDesktopFilters from "@/components/@new/shared/filters/desktop/AutoCompleteDesktopFilters";
+import { numFormatter } from "@/helpers/common";
+import { ILandsMarketplaceFilters } from "@/types/lands";
+import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 
 const opts = [
   {
@@ -106,8 +111,13 @@ const opts = [
 ];
 const UserOffers = () => (
   <div className="space-y-6">
-    <ParcelNumberDesktopFilter placeholder="Parcel ID" options={opts} />
-    <PriceDesktopFilter filterKey="offerPrice" placeholder="Offer Price" />
+    <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={opts} />
+    <MinMaxDesktopFilters
+      filterKey="offerPrice"
+      options={priceFilters}
+      placeHolder="Test"
+      getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
+    />
     <OfferBox />
   </div>
 );
