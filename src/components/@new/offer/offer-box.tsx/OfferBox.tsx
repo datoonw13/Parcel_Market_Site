@@ -7,7 +7,7 @@ import classes from "./style.module.css";
 
 const OfferBox = () => (
   <div className={classes.root}>
-    <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8 md:mb-4">
+    <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
       <div className="space-y-2 grid">
         <h1 className="font-semibold text-white truncate sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
           long names with 3 dots long names with 3 dot long names with 3 dot...
@@ -22,7 +22,7 @@ const OfferBox = () => (
         <p className="font-semibold text-primary-main sm:text-white text-2xl">$20,000</p>
       </div>
     </div>
-    <div className="rounded-2xl p-4 sm:p-6 bg-grey-30 flex flex-col sm:grid sm:grid-cols-2 gap-6 my-3 mx-4 md:mx-8">
+    <div className="rounded-2xl p-4 sm:p-6 bg-grey-30 flex flex-col sm:grid sm:grid-cols-2 gap-6 my-3 sm:my-4 mx-4 md:mx-8">
       <div className="space-y-3">
         <p className="font-semibold text-sm">Offer Information</p>
         <ul className="space-y-3 text-grey-600 text-sm font-medium">
