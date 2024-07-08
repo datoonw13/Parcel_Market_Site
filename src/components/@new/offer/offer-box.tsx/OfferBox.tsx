@@ -5,6 +5,7 @@ import Divider from "../../shared/Divider";
 import Button from "../../shared/forms/Button";
 import classes from "./style.module.css";
 import Alert from "../../shared/Alert";
+import OfferStatus from "../OfferStatus";
 
 const OfferBox = () => (
   <div className={classes.root}>
@@ -60,12 +61,7 @@ const OfferBox = () => (
           Active Until:<span className="text-black font-semibold ml-1">20 Jul</span>
         </p>
       </div>
-      <div className="flex flex-row items-center gap-1">
-        <div className="w-5 h-5 rounded-full bg-info" />
-        <p className="text-xs text-grey-600">
-          Status:<span className="text-black font-semibold ml-1">Expired</span>
-        </p>
-      </div>
+      <OfferStatus status="pending" />
     </div>
     <div className="px-4 md:px-8 mt-6">
       <Alert title="Offer Active for" description="Your offer active for 3 days " onClose={() => {}} type="warning" />
