@@ -7,7 +7,7 @@ import AutoComplete from "../../forms/AutoComplete";
 
 interface ParcelNumberDesktopFilterProps {
   options: Array<{ label: string; value: string }>;
-  placeholder?: string;
+  placeholder: string;
 }
 
 const ParcelNumberDesktopFilter: FC<ParcelNumberDesktopFilterProps> = ({ options, placeholder }) => {
@@ -36,7 +36,7 @@ const ParcelNumberDesktopFilter: FC<ParcelNumberDesktopFilterProps> = ({ options
       getOptionLabel={(item) => item.label}
       getOptionKey={(item) => item.value}
       onChange={(option) => handleSelect(option?.value || null)}
-      placeholder={placeholder || "Parcel ID"}
+      placeholder={placeholder}
       value={options.find((option) => option.value === selectedValue) || null}
       onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
       getSelectedOption={(item) => item.value === selectedValue}

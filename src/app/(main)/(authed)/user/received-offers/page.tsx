@@ -1,5 +1,6 @@
 import OfferBox from "@/components/@new/offer/offer-box.tsx/OfferBox";
 import ParcelNumberDesktopFilter from "@/components/@new/shared/filters/desktop/ParcelNumberDesktopFilter";
+import PriceDesktopFilter from "@/components/@new/shared/filters/desktop/PriceDesktopFilter";
 
 const opts = [
   {
@@ -104,8 +105,9 @@ const opts = [
   },
 ];
 const UserOffers = () => (
-  <div>
-    <ParcelNumberDesktopFilter options={opts} />
+  <div className="space-y-6">
+    <ParcelNumberDesktopFilter placeholder="Parcel ID" options={opts} />
+    <PriceDesktopFilter filterKey="offerPrice" placeholder="Offer Price" />
     <OfferBox />
   </div>
 );

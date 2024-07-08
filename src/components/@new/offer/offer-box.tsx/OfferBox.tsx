@@ -9,7 +9,7 @@ const OfferBox = () => (
   <div className={classes.root}>
     <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
       <div className="space-y-2 grid">
-        <h1 className="font-semibold text-white truncate sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
+        <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
           long names with 3 dots long names with 3 dot long names with 3 dot...
         </h1>
         <div className="flex items-center gap-1.5">
