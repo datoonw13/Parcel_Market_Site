@@ -2,48 +2,65 @@ const routes = {
   home: {
     url: "home",
     protected: false,
+    fullUrl: "/home",
   },
   landsMarketplace: {
     url: "lands-marketplace",
+    fullUrl: "/lands-marketplace",
     protected: true,
   },
   auth: {
     url: "auth",
+    fullUrl: "/auth",
     protected: false,
     signIn: {
       url: "sign-in",
+      fullUrl: "/auth/sign-in",
       protected: false,
     },
     signUp: {
       url: "sign-up",
+      fullUrl: "/auth/sign-up",
       protected: false,
     },
   },
   propertySearch: {
     url: "find-property",
+    fullUrl: "/find-property",
     protected: false,
     signature: {
       url: "signature",
+      fullUrl: "/find-property/signature",
       protected: true,
     },
   },
   user: {
     url: "user",
+    fullUrl: "/user",
     protected: true,
     properties: {
       url: "properties",
+      fullUrl: "/user/properties",
       protected: true,
     },
     profile: {
       url: "profile",
+      fullUrl: "/user/profile",
       protected: true,
     },
     listings: {
       url: "listings",
+      fullUrl: "/user/listings",
       protected: true,
     },
     followedProperties: {
       url: "followed-properties",
+      fullUrl: "/user/followed-properties",
+      protected: true,
+    },
+    receivedOffers: {
+      url: "received-offers",
+      fullUrl: "/user/received-offers",
       protected: true,
     },
   },

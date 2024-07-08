@@ -35,7 +35,7 @@ const list = [
   {
     label: "My Profile",
     icon: UserIcon1,
-    path: `/${routes.user.url}/${routes.user.profile.url}`,
+    path: routes.user.profile.fullUrl,
   },
   {
     label: "My Messages",
@@ -45,12 +45,12 @@ const list = [
   {
     label: "My Listings",
     icon: BookIcon1,
-    path: `/${routes.user.url}/${routes.user.listings.url}`,
+    path: routes.user.listings.fullUrl,
   },
   {
     label: "Received Offers",
     icon: DiscountIcon1,
-    path: "/",
+    path: routes.user.receivedOffers.fullUrl,
   },
   {
     label: "Sent Offers",
@@ -60,6 +60,6 @@ const list = [
   {
     label: "My saved properties",
     icon: BookmarkIcon1,
-    path: `/${routes.user.url}/${routes.user.followedProperties.url}`,
+    path: routes.user.followedProperties.fullUrl,
   },
 ];
