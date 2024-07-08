@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 import { Dispatch, ReactElement, SetStateAction, useRef, useState } from "react";
 import { ArrowIconDown1, ArrowIconUp1 } from "@/components/@new/icons/ArrowIcons";
 import clsx from "clsx";
@@ -27,6 +28,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   readOnly?: boolean;
   required?: boolean;
   error?: boolean;
+  loading?: boolean;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -47,6 +49,7 @@ const AutoComplete = <T extends Array<{}>>({
   readOnly,
   required,
   error,
+  loading,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -112,7 +115,12 @@ const AutoComplete = <T extends Array<{}>>({
             className={inputRootClassName}
             endIcon={
               <div className="flex items-center gap-2">
-                <div onClick={() => onChange(null)}>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onChange(null);
+                  }}
+                >
                   <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
                 </div>
                 {isOpen ? (
@@ -120,6 +128,7 @@ const AutoComplete = <T extends Array<{}>>({
                 ) : (
                   <ArrowIconDown1 className={clsx("cursor-pointer h-2 mt-0.5", arrowIconClassName)} />
                 )}
+                {loading && <LoadingIcon1 className="!h-3 !w-3" color="grey-600" />}
               </div>
             }
             disabled={disabled}
