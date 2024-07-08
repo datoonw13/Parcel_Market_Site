@@ -93,9 +93,9 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
             </AutoCompleteListItem>
           ))}
           <hr className="w-full border-grey-100" />
-          <div className="flex p-3 justify-end gap-3">
+          <div className="flex p-3 gap-3">
             <Button
-              className="!h-10"
+              className="!h-10 !px-5 w-full"
               // variant="text"
               onClick={() => {
                 setReferenceElement(null);
@@ -105,7 +105,7 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
               Clear
             </Button>
             <Button
-              className="!h-10"
+              className="!h-10 !px-5 w-full"
               disabled={!!disableSelect}
               onClick={() => {
                 setReferenceElement(null);
