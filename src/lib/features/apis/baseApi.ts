@@ -3,12 +3,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import toast from "react-hot-toast";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://api.parcelmarket.com/api/",
+  baseUrl: "http://localhost:4000/api/",
   prepareHeaders: async (headers) => {
     headers.set("authorization", `Bearer ${localStorage.getItem("token")}`);
 
     return headers;
   },
+  credentials: "include",
 });
 
 export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) => (action: any) => {

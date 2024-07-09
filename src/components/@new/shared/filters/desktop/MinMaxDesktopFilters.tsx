@@ -95,8 +95,9 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
           <hr className="w-full border-grey-100" />
           <div className="flex p-3 gap-3">
             <Button
-              className="!h-10 !px-5 w-full"
+              className="!h-10 !px-5 w-full !outline-none"
               // variant="text"
+              variant="secondary"
               onClick={() => {
                 setReferenceElement(null);
                 setFilters({ min: selectedValue.min, max: selectedValue.max });
