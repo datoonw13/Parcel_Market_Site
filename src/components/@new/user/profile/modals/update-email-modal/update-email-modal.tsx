@@ -6,7 +6,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import { IUser } from "@/types/auth";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
-import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user-actions";
+import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user/user-actions";
 import toast from "react-hot-toast";
 import { emailSchema } from "@/zod-validations/auth-validations";
 import { maskEmail } from "@/helpers/common";

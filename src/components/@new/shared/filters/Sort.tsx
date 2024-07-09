@@ -2,7 +2,6 @@
 
 import { FC, MouseEvent, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMediaQuery } from "react-responsive";
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
@@ -12,6 +11,7 @@ import AutoCompleteListBox from "../forms/AutoComplete/AutoCompleteListBox";
 import RadioButton from "../forms/RadioButton";
 import Button from "../forms/Button";
 import Divider from "../Divider";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const Drawer = dynamic(() => import("@/components/@new/shared/modals/Drawer"), { ssr: false });
 
@@ -27,7 +27,7 @@ interface SortProps {
 }
 
 const Sort: FC<SortProps> = ({ options }) => {
-  const isSmallDevice = useMediaQuery({ query: "(max-width: 640px)" });
+  const isSmallDevice = useMediaQuery(640);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();

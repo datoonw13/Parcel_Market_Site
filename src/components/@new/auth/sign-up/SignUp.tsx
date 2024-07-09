@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
-import { signUpUserAction } from "@/server-actions/user-actions";
+import { signUpUserAction } from "@/server-actions/user/user-actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Button from "../../shared/forms/Button";

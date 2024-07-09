@@ -1,4 +1,4 @@
-import { activateUserAccountAction } from "@/server-actions/user-actions";
+import { activateUserAccountAction } from "@/server-actions/user/user-actions";
 import clsx from "clsx";
 import React from "react";
 

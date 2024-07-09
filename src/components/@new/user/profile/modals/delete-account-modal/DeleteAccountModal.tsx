@@ -9,7 +9,7 @@ import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Button from "@/components/@new/shared/forms/Button";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
 import { DeletionAccountReason } from "@/types/auth";
-import { removeUserAccountAction } from "@/server-actions/user-actions";
+import { removeUserAccountAction } from "@/server-actions/user/user-actions";
 import toast from "react-hot-toast";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
