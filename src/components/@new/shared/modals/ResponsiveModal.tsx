@@ -1,9 +1,9 @@
 "use client";
 
 import React, { FC, ReactNode, useEffect, useState } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import Modal from "./Modal";
 import Drawer from "./Drawer";
-import useMediaQuery from "@/hooks/useMediaQuery";
 
 interface ResponsiveModalProps {
   open: boolean;

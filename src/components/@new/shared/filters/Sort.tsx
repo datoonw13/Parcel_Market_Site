@@ -4,6 +4,7 @@ import { FC, MouseEvent, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import dynamic from "next/dynamic";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 import Popper from "../Popper";
 import AutoCompleteListItem from "../forms/AutoComplete/AutoCompleteListItem";
@@ -11,7 +12,6 @@ import AutoCompleteListBox from "../forms/AutoComplete/AutoCompleteListBox";
 import RadioButton from "../forms/RadioButton";
 import Button from "../forms/Button";
 import Divider from "../Divider";
-import useMediaQuery from "@/hooks/useMediaQuery";
 
 const Drawer = dynamic(() => import("@/components/@new/shared/modals/Drawer"), { ssr: false });
 
