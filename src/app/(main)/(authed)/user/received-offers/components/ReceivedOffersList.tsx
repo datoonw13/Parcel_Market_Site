@@ -19,11 +19,11 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = async ({ params }) => {
           <OfferBox key={offer.id} data={offer} />
         ))}
       </div>
-        <ReceivedOffersListPagination
-          page={Number(params.page)}
-          pageSize={Number(params.pageSize)}
-          totalCount={data?.pagination.totalCount || 0}
-        />
+      <ReceivedOffersListPagination
+        page={Number(params.page)}
+        pageSize={Number(params.pageSize)}
+        totalCount={data?.pagination.totalCount || 0}
+      />
     </div>
   );
 };

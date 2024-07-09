@@ -19,7 +19,7 @@ export const getMinMaxFilterLabel = (priceMin: number | null, priceMax: number |
 
 export const priceFilters = [
   {
-    min: 0,
+    min: null,
     max: 50000,
   },
   {

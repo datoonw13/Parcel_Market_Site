@@ -27,7 +27,9 @@ const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams })
         <UserReceivedOffersDesktopFilters />
       </Suspense>
       <div className="mb-6 md:mb-4 flex items-center justify-between w-full">
-        <UserReceivedOffersMobileFilters />
+        <div className="block sm:hidden">
+          <UserReceivedOffersMobileFilters />
+        </div>
         <div className="flex items-center gap-3 sm:justify-between sm:w-full">
           <Button className="!py-1 !px-3 !bg-grey-50 !outline-none !rounded-3xl text-xs !text-black" variant="secondary">
             Select
