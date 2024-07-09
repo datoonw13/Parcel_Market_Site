@@ -3,7 +3,6 @@
 import OfferBox from "@/components/@new/offer/offer-box.tsx/OfferBox";
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
 import { SortEnum } from "@/types/common";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import UserReceivedOffersFilters from "./components/UserReceivedOffersFilters";
 import Sort from "@/components/@new/shared/filters/Sort";
