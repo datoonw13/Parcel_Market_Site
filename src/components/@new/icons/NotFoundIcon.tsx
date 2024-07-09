@@ -105,8 +105,8 @@ export const NotFound1 = ({ className }: { className?: string }) => (
         <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3341_96172" result="shape" />
       </filter>
       <linearGradient id="paint0_linear_3341_96172" x1="106.518" y1="78.7898" x2="106.518" y2="147.382" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#FDFEFF" />
-        <stop offset="0.9964" stop-color="#ECF0F5" />
+        <stop stopColor="#FDFEFF" />
+        <stop offset="0.9964" stopColor="#ECF0F5" />
       </linearGradient>
     </defs>
   </svg>
