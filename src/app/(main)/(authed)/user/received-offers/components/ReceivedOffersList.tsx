@@ -11,7 +11,6 @@ interface ReceivedOffersListProps {
 
 const ReceivedOffersList: FC<ReceivedOffersListProps> = async ({ params }) => {
   const data = await getUserReceivedOffers(params);
-    
   return (
     <div>
       <div className="flex flex-col gap-6 md:gap-4">
@@ -20,13 +19,11 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = async ({ params }) => {
           <OfferBox key={offer.id} data={offer} />
         ))}
       </div>
-      {Number(params.page) >=0 && params.pageSize && (
         <ReceivedOffersListPagination
           page={Number(params.page)}
           pageSize={Number(params.pageSize)}
           totalCount={data?.pagination.totalCount || 0}
         />
-      )}
     </div>
   );
 };

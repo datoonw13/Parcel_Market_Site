@@ -8,6 +8,14 @@ import Divider from "../../Divider";
 
 const Drawer = dynamic(() => import("@/components/@new/shared/modals/Drawer"), { ssr: false });
 
+interface DefaultFilter {
+  [key: string]: {
+    type: "default" | "minmax";
+  };
+}
+
+interface FiltersDrawerProps {}
+
 const FiltersDrawer = () => {
   const [open, setOpen] = useState(false);
   const [filtersTempValue, setFiltersTempValue] = useState({});
