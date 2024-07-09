@@ -5,13 +5,13 @@ import AutoCompleteDesktopFilters from "@/components/@new/shared/filters/desktop
 import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 import { OfferStatusEnum } from "@/types/offer";
 
-const UserReceivedOffersFilters = () => (
-  <div className="flex gap-3 mb-6">
+const UserReceivedOffersDesktopFilters = () => (
+  <div className="gap-3 mb-6 hidden sm:flex">
     <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={[]} />
     <AutoCompleteDesktopFilters
       filterKey="status"
       placeholder="Status"
-      options={  Object.keys(OfferStatusEnum).map((key) => ({
+      options={Object.keys(OfferStatusEnum).map((key) => ({
         value: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
         label: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
       }))}
@@ -31,4 +31,4 @@ const UserReceivedOffersFilters = () => (
   </div>
 );
 
-export default UserReceivedOffersFilters;
+export default UserReceivedOffersDesktopFilters;

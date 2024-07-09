@@ -50,6 +50,7 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
         (selectedValue.min || selectedValue.max) && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
       )}
       options={options}
+      disableSameWidth
       getOptionLabel={getOptionLabel}
       getOptionKey={(item) => ""}
       onChange={(item) => {

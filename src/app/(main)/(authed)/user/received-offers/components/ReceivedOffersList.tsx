@@ -11,7 +11,6 @@ interface ReceivedOffersListProps {
 
 const ReceivedOffersList: FC<ReceivedOffersListProps> = async ({ params }) => {
   const data = await getUserReceivedOffers(params);
-    console.log(data?.data, 22);
     
   return (
     <div>

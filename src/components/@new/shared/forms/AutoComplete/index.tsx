@@ -30,7 +30,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   error?: boolean;
   loading?: boolean;
   contentClassName?: string;
-  disableSameWidth?: boolean
+  disableSameWidth?: boolean;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -53,7 +53,7 @@ const AutoComplete = <T extends Array<{}>>({
   error,
   loading,
   contentClassName,
-  disableSameWidth
+  disableSameWidth,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -149,7 +149,7 @@ const AutoComplete = <T extends Array<{}>>({
               )}
               {getOptions().map((item) => (
                 <AutoCompleteListItem
-                  className={clsx(contentClassName)}
+                  className={clsx(contentClassName, "w-full")}
                   id={getOptionKey(item)}
                   selected={getSelectedOption ? getSelectedOption(item, value) : false}
                   key={getOptionKey(item)}
