@@ -88,6 +88,7 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
               onClick={() => setFilters({ min: item.min, max: item.max })}
               id={item.min?.toString() || ""}
               selected={isSelected(item)}
+              className="w-max min-w-full"
             >
               {getOptionLabel(item)}
             </AutoCompleteListItem>
