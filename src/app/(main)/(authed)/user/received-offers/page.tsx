@@ -4,6 +4,7 @@ import OfferBox from "@/components/@new/offer/offer-box.tsx/OfferBox";
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
 import { SortEnum } from "@/types/common";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import UserReceivedOffersFilters from "./components/UserReceivedOffersFilters";
 
 const Sort = dynamic(() => import("@/components/@new/shared/filters/Sort"), { ssr: false });
@@ -11,7 +12,10 @@ const Sort = dynamic(() => import("@/components/@new/shared/filters/Sort"), { ss
 const UserReceivedOffers = () => (
   <div className="">
     <UserProfileSectionHeader title="Received Offers" description="View and assess the proposals you've received for your property." />
-    <UserReceivedOffersFilters />
+    <Suspense>
+      {" "}
+      <UserReceivedOffersFilters />
+    </Suspense>
     <div className="mb-6 md:mb-4">
       <Sort options={SortEnum} />
     </div>

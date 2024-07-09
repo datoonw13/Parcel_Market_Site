@@ -15,7 +15,6 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { usaStatesFull } from "typed-usa-states";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IFindPropertyInfo, IRegridReq } from "@/types/find-property";

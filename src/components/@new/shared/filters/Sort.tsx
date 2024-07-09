@@ -1,17 +1,19 @@
 "use client";
 
-import { FC, MouseEvent, useRef, useState } from "react";
+import { FC, MouseEvent, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import clsx from "clsx";
+import dynamic from "next/dynamic";
 import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 import Popper from "../Popper";
 import AutoCompleteListItem from "../forms/AutoComplete/AutoCompleteListItem";
 import AutoCompleteListBox from "../forms/AutoComplete/AutoCompleteListBox";
 import RadioButton from "../forms/RadioButton";
 import Button from "../forms/Button";
-import Drawer from "../modals/Drawer";
 import Divider from "../Divider";
+
+const Drawer = dynamic(() => import("@/components/@new/shared/modals/Drawer"), { ssr: false });
 
 const SortButton = ({ onClick, selectedFilter }: { onClick: (e: MouseEvent<HTMLDivElement>) => void; selectedFilter: string | null }) => (
   <div className="flex items-center gap-2 cursor-pointer" onClick={onClick}>
