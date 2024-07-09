@@ -34,7 +34,7 @@ const Alert: FC<AlertProps> = ({ type = "success", description, onClose, title }
     </div>
     {onClose && (
       <div onClick={onClose} className="ml-auto  cursor-pointer translate-y-1">
-        <RemoveIcon2 className="w-3 h-3" color="grey-600" />
+        <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
       </div>
     )}
   </div>
