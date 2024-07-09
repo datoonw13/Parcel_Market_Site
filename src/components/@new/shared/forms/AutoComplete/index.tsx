@@ -29,7 +29,8 @@ interface AutoCompleteProps<T extends Array<{}>> {
   required?: boolean;
   error?: boolean;
   loading?: boolean;
-  contentClassName?: string
+  contentClassName?: string;
+  disableSameWidth?: boolean
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -51,7 +52,8 @@ const AutoComplete = <T extends Array<{}>>({
   required,
   error,
   loading,
-  contentClassName
+  contentClassName,
+  disableSameWidth
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -85,6 +87,7 @@ const AutoComplete = <T extends Array<{}>>({
   return (
     <div>
       <Popper
+        disableSameWidth={disableSameWidth}
         offsetY={4}
         onAnimationExit={() => {
           setSearchValue(null);

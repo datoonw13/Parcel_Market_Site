@@ -11,10 +11,11 @@ const UserReceivedOffersFilters = () => (
     <AutoCompleteDesktopFilters
       filterKey="status"
       placeholder="Status"
-      options={Object.keys(OfferStatusEnum).map((key) => ({
-        value: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
-        label: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
-      }))}
+      options={new Array(500).fill(0).map(el => ({label: 'wd', value: 'wd'}))}
+      // Object.keys(OfferStatusEnum).map((key) => ({
+      //   value: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
+      //   label: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
+      // }))
     />
     <MinMaxDesktopFilters
       filterKey="offerPrice"
