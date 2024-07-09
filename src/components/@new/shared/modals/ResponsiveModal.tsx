@@ -1,9 +1,9 @@
 "use client";
 
 import React, { FC, ReactNode, useEffect, useState } from "react";
-import { useMediaQuery } from "react-responsive";
 import Modal from "./Modal";
 import Drawer from "./Drawer";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 interface ResponsiveModalProps {
   open: boolean;
@@ -14,7 +14,7 @@ interface ResponsiveModalProps {
 }
 
 const ResponsiveModal: FC<ResponsiveModalProps> = ({ open, handleClose, content, responsiveContent, desktopModalContentClasses }) => {
-  const isSmallDevice = useMediaQuery({ query: "(max-width: 768px)" });
+  const isSmallDevice = useMediaQuery(768);
 
   return (
     <>
