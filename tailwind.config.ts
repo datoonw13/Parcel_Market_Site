@@ -112,8 +112,6 @@ const config: Config = {
       },
     },
   },
-  safelist: [
-    {pattern:  /([a-zA-Z]+)-./}
-  ],
+  safelist: [{ pattern: /([a-zA-Z]+)-./ }],
 };
-export default config
+export default config;
