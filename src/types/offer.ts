@@ -47,8 +47,8 @@ export interface ReceivedOffersFilters {
   priceMax?: string;
   voltPriceMin?: string;
   voltPriceMax?: string;
-  page?: string;
-  pageSize?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface ReceivedOfferModel {

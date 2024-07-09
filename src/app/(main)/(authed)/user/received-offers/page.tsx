@@ -1,4 +1,3 @@
-import OfferBox from "@/components/@new/offer/offer-box.tsx/OfferBox";
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
 import { SortEnum } from "@/types/common";
 import { FC, Suspense } from "react";
@@ -15,8 +14,8 @@ interface ReceivedOffersListProps {
 const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams }) => {
   const params = {
     ...searchParams,
-    page: searchParams?.page ? searchParams?.page : "0",
-    pageSize: searchParams?.pageSize ? searchParams?.pageSize : "10",
+    page: searchParams?.page ? searchParams?.page : 1,
+    pageSize: searchParams?.pageSize ? searchParams?.pageSize : 5,
   };
 
   return (
@@ -28,9 +27,8 @@ const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams })
       <div className="mb-6 md:mb-4">
         <Sort options={SortEnum} />
       </div>
-      <Suspense fallback={<ReceivedOffersListLoading />}>
+      <Suspense key={params.page}  fallback={<ReceivedOffersListLoading />}>
         <ReceivedOffersList params={params} />
-        <p>qwd</p>
       </Suspense>
     </div>
   );

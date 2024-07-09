@@ -76,7 +76,12 @@ const OfferBox = ({ data }: { data: ReceivedOfferModel }) => (
       <OfferStatus status={data.offerStatus} />
     </div>
     <div className="px-4 md:px-8 mt-6">
-      <Alert title="Offer Active for" description={`Your offer active for ${data.offerActiveForDays} days`} onClose={() => {}} type="warning" />
+      <Alert
+        title="Offer Active for"
+        description={`Your offer active for ${data.offerActiveForDays} days`}
+        onClose={() => {}}
+        type="warning"
+      />
     </div>
     <Divider className="mt-8 mb-4" />
     <div className="flex gap-3 px-4 md:px-8">

@@ -12,7 +12,8 @@ export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise
         cookie: cookies().toString(),
       },
     });
-
+    console.log(request, 22);
+    
     const data = await request.json();
 
     return {

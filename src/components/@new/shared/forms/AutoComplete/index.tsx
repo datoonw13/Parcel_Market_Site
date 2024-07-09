@@ -29,6 +29,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   required?: boolean;
   error?: boolean;
   loading?: boolean;
+  contentClassName?: string
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -50,6 +51,7 @@ const AutoComplete = <T extends Array<{}>>({
   required,
   error,
   loading,
+  contentClassName
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -144,6 +146,7 @@ const AutoComplete = <T extends Array<{}>>({
               )}
               {getOptions().map((item) => (
                 <AutoCompleteListItem
+                  className={clsx(contentClassName)}
                   id={getOptionKey(item)}
                   selected={getSelectedOption ? getSelectedOption(item, value) : false}
                   key={getOptionKey(item)}

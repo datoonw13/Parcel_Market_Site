@@ -10,5 +10,6 @@ export const getUserReceivedOffers = async (params: ReceivedOffersFilters): Prom
     `offers/received?${new URLSearchParams(params as Record<string, string>)}`,
     { next: { tags: [userTags.receivedOffers] } }
   );
+  
   return request.data?.data || null;
 };

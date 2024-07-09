@@ -3,6 +3,7 @@ import { getUserReceivedOffers } from "@/server-actions/user/received-offers-act
 import { ReceivedOffersFilters } from "@/types/offer";
 import DataNotFound from "@/components/@new/shared/DataNotFound";
 import OfferBox from "@/components/@new/offer/offer-box.tsx/OfferBox";
+import ReceivedOffersListPagination from "./ReceivedOffersListPagination";
 
 interface ReceivedOffersListProps {
   params: ReceivedOffersFilters;
@@ -10,13 +11,23 @@ interface ReceivedOffersListProps {
 
 const ReceivedOffersList: FC<ReceivedOffersListProps> = async ({ params }) => {
   const data = await getUserReceivedOffers(params);
-
+    console.log(data?.data, 22);
+    
   return (
-    <div className="flex flex-col gap-6 md:gap-4">
-      {(!data || data.data.length === 0) && <DataNotFound message="No received offers yet" />}
-      {data?.data.map((offer) => (
-        <OfferBox key={offer.id} data={offer} />
-      ))}
+    <div>
+      <div className="flex flex-col gap-6 md:gap-4">
+        {(!data || data.data.length === 0) && <DataNotFound message="No received offers yet" />}
+        {data?.data.map((offer) => (
+          <OfferBox key={offer.id} data={offer} />
+        ))}
+      </div>
+      {Number(params.page) >=0 && params.pageSize && (
+        <ReceivedOffersListPagination
+          page={Number(params.page)}
+          pageSize={Number(params.pageSize)}
+          totalCount={data?.pagination.totalCount || 0}
+        />
+      )}
     </div>
   );
 };
