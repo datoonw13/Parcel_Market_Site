@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import routes from "@/helpers/routes";
-import { logOutUserAction } from "@/server-actions/user-actions";
+import { logOutUserAction } from "@/server-actions/user/user-actions";
 import { UserIcon1 } from "../../icons/UserIcons";
 import { SmsIcon1 } from "../../icons/SmsIcons";
 import { BookIcon1 } from "../../icons/BookIcons";

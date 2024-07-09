@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { LocationIcon1 } from "../../icons/LocationIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";

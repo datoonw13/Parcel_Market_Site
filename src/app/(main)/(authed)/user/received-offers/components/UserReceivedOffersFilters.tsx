@@ -11,7 +11,10 @@ const UserReceivedOffersFilters = () => (
     <AutoCompleteDesktopFilters
       filterKey="status"
       placeholder="Status"
-      options={Object.keys(OfferStatus).map((key) => ({ value: key, label: OfferStatus[key as keyof typeof OfferStatus] }))}
+      options={Object.keys(OfferStatus).map((key) => ({
+        value: OfferStatus[key as keyof typeof OfferStatus],
+        label: OfferStatus[key as keyof typeof OfferStatus],
+      }))}
     />
     <MinMaxDesktopFilters
       filterKey="offerPrice"

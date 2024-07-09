@@ -8,8 +8,8 @@ import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import routes from "@/helpers/routes";
 import { revalidatePath } from "next/cache";
-import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../types/auth";
-import { fetcher } from "./fetcher";
+import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
+import { fetcher } from "../fetcher";
 
 export const setAuthToken = (token: string) => {
   const decodedToken = jwtDecode(token) as { exp: number };

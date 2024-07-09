@@ -12,7 +12,9 @@ export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise
         cookie: cookies().toString(),
       },
     });
+    
     const data = await request.json();
+    
     return {
       data,
       error: data?.statusCode.toString()[0] !== "2",
