@@ -25,7 +25,7 @@ export const getCounties = (stateValue: string | null) => {
   if (!stateValue) {
     return [];
   }
-  const counties = getAllStates({ filterBlackList: true }).find(({ value }) => value === stateValue)?.counties || [];
+  const counties = getAllStates({ filterBlackList: true }).find(({ value }) => value === stateValue.toLocaleLowerCase())?.counties || [];
   const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
   return formattedCounties;
 };
@@ -34,14 +34,14 @@ export const getStateValue = (stateValue: string | null) => {
   if (!stateValue) {
     return null;
   }
-  return getAllStates({ filterBlackList: true }).find((el) => el.value === stateValue) || null;
+  return getAllStates({ filterBlackList: true }).find((el) => el.value === stateValue.toLocaleLowerCase()) || null;
 };
 
 export const getCountyValue = (countyValue: string | null, stateValue: string | null) => {
   if (!countyValue || !stateValue) {
     return null;
   }
-  return getCounties(stateValue).find(({ value }) => value === countyValue) || null;
+  return getCounties(stateValue).find(({ value }) => value.toLocaleLowerCase() === countyValue.toLocaleLowerCase()) || null;
 };
 
 export const getCitiesByState = (stateValue: string | null) =>

@@ -15,7 +15,7 @@ interface ReceivedOffersListProps {
 const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams }) => {
   const params = {
     ...searchParams,
-    page: searchParams?.page ? searchParams?.page : "1",
+    page: searchParams?.page ? searchParams?.page : "0",
     pageSize: searchParams?.pageSize ? searchParams?.pageSize : "10",
   };
 

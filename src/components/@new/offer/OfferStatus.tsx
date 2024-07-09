@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { OfferStatusEnum } from "@/types/offer";
 import { RemoveIcon2 } from "../icons/RemoveIcons";
 import { ClockIcon1, ClockIcon2 } from "../icons/ClockIcons";
 import { CheckIcon3 } from "../icons/CheckIcons";
@@ -23,10 +24,15 @@ const options = {
   },
 };
 
-const OfferStatus = ({ status }: { status: keyof typeof options }) => (
+const OfferStatus = ({ status }: { status: OfferStatusEnum }) => (
   <div className="flex flex-row items-center gap-1">
-    <div className={clsx("w-5 h-5 rounded-full flex items-center justify-center", `bg-${options[status].color}`)}>
-      {options[status].icon}
+    <div
+      className={clsx(
+        "w-5 h-5 rounded-full flex items-center justify-center",
+        `bg-${options[status.toLocaleLowerCase() as keyof typeof options].color}`
+      )}
+    >
+      {options[status.toLocaleLowerCase() as keyof typeof options].icon}
     </div>
     <p className="text-xs text-grey-600">
       Status:<span className="text-black font-semibold ml-1 capitalize">{status}</span>
