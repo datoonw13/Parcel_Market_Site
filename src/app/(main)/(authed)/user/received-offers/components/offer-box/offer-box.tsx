@@ -5,6 +5,7 @@ import { ReceivedOfferModel } from "@/types/offer";
 import { numFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import moment from "moment";
+import clsx from "clsx";
 import { LocationIcon1 } from "../../../../../../../components/@new/icons/LocationIcons";
 import { CalendarIcon1 } from "../../../../../../../components/@new/icons/CalendarIcons";
 import Divider from "../../../../../../../components/@new/shared/Divider";
@@ -13,8 +14,8 @@ import classes from "./style.module.css";
 import Alert from "../../../../../../../components/@new/shared/Alert";
 import OfferStatus from "../../../../../../../components/@new/offer/OfferStatus";
 
-const ReceivedOfferBox = ({ data }: { data: ReceivedOfferModel }) => (
-  <div className={classes.root}>
+const ReceivedOfferBox = ({ data, selecting, selected = true }: { data: ReceivedOfferModel; selecting?: boolean; selected?: boolean }) => (
+  <div className={clsx(classes.root, selecting && classes.selecting, selected && classes.selected)}>
     <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
       <div className="space-y-2 grid">
         <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">

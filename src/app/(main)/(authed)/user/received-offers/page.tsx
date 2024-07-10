@@ -4,16 +4,16 @@ import { FC, Suspense } from "react";
 import Sort from "@/components/@new/shared/filters/Sort";
 import { ReceivedOffersFilters } from "@/types/offer";
 import Button from "@/components/@new/shared/forms/Button";
-import UserReceivedOffersDesktopFilters from "./components/UserReceivedOffersDesktopFilters";
-import ReceivedOffersList from "./components/ReceivedOffersList";
-import ReceivedOffersListLoading from "./components/ReceivedOffersListLoading";
-import UserReceivedOffersMobileFilters from "./components/UserReceivedOffersMobileFilters";
+import UserReceivedOffersDesktopFilters from "./components/desktop-filters";
+import ReceivedOffersListLoading from "./components/loading";
+import UserReceivedOffersMobileFilters from "./components/mobile-filters";
+import ReceivedOfferListWrapper from "./components/list-wrapper";
 
 interface ReceivedOffersListProps {
   searchParams: ReceivedOffersFilters;
 }
 
-const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams }) => {
+const UserReceivedOffers: FC<ReceivedOffersListProps> = ({ searchParams }) => {
   const params = {
     ...searchParams,
     page: searchParams?.page ? searchParams?.page : 1,
@@ -41,7 +41,7 @@ const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams })
         </div>
       </div>
       <Suspense key={JSON.stringify(params)} fallback={<ReceivedOffersListLoading />}>
-        <ReceivedOffersList params={params} />
+        <ReceivedOfferListWrapper params={params} />
       </Suspense>
     </div>
   );
