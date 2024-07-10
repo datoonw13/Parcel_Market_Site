@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-console */
+
 "use client";
 
 import { UIKitSettingsBuilder } from "@cometchat/uikit-shared";
 import { CometChatUIKit, CometChatConversationsWithMessages } from "@cometchat/chat-uikit-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useAuthCheck from "@/hooks/useAuthCheck";
 import { useAppSelector } from "@/lib/hooks";
 import { CometChat as Chat } from "@cometchat/chat-sdk-javascript";
@@ -31,7 +34,7 @@ const CometChat = () => {
     }
   };
 
-  const initUser = async () => {
+  const initUser = useCallback(async () => {
     if (authedUser) {
       const { error, user } = await loginUser(process.env.NODE_ENV === "development" ? "48" : "50");
       setUser(user);
@@ -50,9 +53,9 @@ const CometChat = () => {
         setUser(user);
       }
     }
-  };
+  }, []);
 
-  const initChat = async () => {
+  const initChat = useCallback(async () => {
     try {
       const uiKitSettings = new UIKitSettingsBuilder()
         .setAppId(COMETCHAT_CONSTANTS.APP_ID)
@@ -72,13 +75,13 @@ const CometChat = () => {
     } catch (error) {
       console.log("Initialization failed with error:", error);
     }
-  };
+  }, [initUser]);
 
   useEffect(() => {
     if (authedUser) {
       initChat();
     }
-  }, [authedUser]);
+  }, [authedUser, initChat]);
   return (
     <div className="conversationswithmessages" style={{ width: "100%", height: "100vh" }}>
       <div style={{ width: "100%", height: "100vh" }}>

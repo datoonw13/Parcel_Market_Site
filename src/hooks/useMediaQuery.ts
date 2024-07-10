@@ -30,7 +30,7 @@ const useMediaQuery = (width: number) => {
     }
     // compatibility for browser that dont have removeEventListener
     return () => media.removeListener(updateTarget);
-  }, []);
+  }, [updateTarget, width]);
 
   return targetReached;
 };
