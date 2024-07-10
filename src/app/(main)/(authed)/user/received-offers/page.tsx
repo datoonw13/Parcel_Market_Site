@@ -1,7 +1,7 @@
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
 import { FC, Suspense } from "react";
 import { ReceivedOffersFilters } from "@/types/offer";
-import ReceivedOfferListWrapper from "./components/received-list-wrapper";
+import ReceivedOfferListWrapper from "./components/received-offer-list-wrapper";
 import ReceivedOffersListLoading from "./components/received-offer-loading";
 import UserReceivedOffersDesktopFilters from "./components/received-offer-desktop-filters";
 
@@ -18,15 +18,20 @@ const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams })
 
   return (
     <div>
-      <UserProfileSectionHeader title="Received Offers" description="View and assess the proposals you've received for your property." />
-      <Suspense>
-        <div className="hidden sm:block">
-          <UserReceivedOffersDesktopFilters />
-        </div>
-      </Suspense>
-      <Suspense key={JSON.stringify(params)} fallback={<ReceivedOffersListLoading />}>
-        <ReceivedOfferListWrapper params={params} />
-      </Suspense>
+      <>
+            <UserProfileSectionHeader
+              title="Received Offers"
+              description="View and assess the proposals you've received for your property."
+            />
+            <Suspense>
+              <div className="hidden sm:block">
+                <UserReceivedOffersDesktopFilters />
+              </div>
+            </Suspense>
+        <Suspense key={JSON.stringify(params)} fallback={<ReceivedOffersListLoading />}>
+          <ReceivedOfferListWrapper params={params} />
+        </Suspense>
+      </>
     </div>
   );
 };

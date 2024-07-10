@@ -1,4 +1,3 @@
-import React from "react";
 import { uuid } from "short-uuid";
 
 const ReceivedOffersListLoading = () => (
