@@ -5,15 +5,15 @@ import { ReceivedOfferModel } from "@/types/offer";
 import { numFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import moment from "moment";
-import { LocationIcon1 } from "../../icons/LocationIcons";
-import { CalendarIcon1 } from "../../icons/CalendarIcons";
-import Divider from "../../shared/Divider";
-import Button from "../../shared/forms/Button";
+import { LocationIcon1 } from "../../../../../../../components/@new/icons/LocationIcons";
+import { CalendarIcon1 } from "../../../../../../../components/@new/icons/CalendarIcons";
+import Divider from "../../../../../../../components/@new/shared/Divider";
+import Button from "../../../../../../../components/@new/shared/forms/Button";
 import classes from "./style.module.css";
-import Alert from "../../shared/Alert";
-import OfferStatus from "../OfferStatus";
+import Alert from "../../../../../../../components/@new/shared/Alert";
+import OfferStatus from "../../../../../../../components/@new/offer/OfferStatus";
 
-const OfferBox = ({ data }: { data: ReceivedOfferModel }) => (
+const ReceivedOfferBox = ({ data }: { data: ReceivedOfferModel }) => (
   <div className={classes.root}>
     <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
       <div className="space-y-2 grid">
@@ -96,4 +96,4 @@ const OfferBox = ({ data }: { data: ReceivedOfferModel }) => (
   </div>
 );
 
-export default OfferBox;
+export default ReceivedOfferBox;
