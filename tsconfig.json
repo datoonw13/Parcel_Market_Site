@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(authed-user)/user/loading.js", "src/app/(main)/(authed)/user/received-offers/components/offer-box"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(authed-user)/user/loading.js", "src/app/(main)/(authed)/user/received-offers/components/received-offer-box"],
   "exclude": ["node_modules"]
 }

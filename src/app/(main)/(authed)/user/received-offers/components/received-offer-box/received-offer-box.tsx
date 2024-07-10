@@ -14,8 +14,8 @@ import classes from "./style.module.css";
 import Alert from "../../../../../../../components/@new/shared/Alert";
 import OfferStatus from "../../../../../../../components/@new/offer/OfferStatus";
 
-const ReceivedOfferBox = ({ data, selecting, selected = true }: { data: ReceivedOfferModel; selecting?: boolean; selected?: boolean }) => (
-  <div className={clsx(classes.root, selecting && classes.selecting, selected && classes.selected)}>
+const ReceivedOfferBox = ({ data }: { data: ReceivedOfferModel }) => (
+  <div className={clsx(classes.root)}>
     <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
       <div className="space-y-2 grid">
         <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">

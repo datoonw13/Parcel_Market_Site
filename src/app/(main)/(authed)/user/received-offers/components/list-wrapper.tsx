@@ -1,8 +1,8 @@
 import { getUserReceivedOffers } from "@/server-actions/user/received-offers-actions";
 import { FC } from "react";
 import { ReceivedOffersFilters } from "@/types/offer";
-import ReceivedOffersList from "./list";
-import ReceivedOffersListPagination from "./pagination";
+import ReceivedOffersList from "./received-offer-list";
+import ReceivedOffersListPagination from "./received-offer-pagination";
 
 interface ReceivedOffersListWrapperProps {
   params: ReceivedOffersFilters;

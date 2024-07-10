@@ -4,16 +4,18 @@ import { FC, Suspense } from "react";
 import Sort from "@/components/@new/shared/filters/Sort";
 import { ReceivedOffersFilters } from "@/types/offer";
 import Button from "@/components/@new/shared/forms/Button";
-import UserReceivedOffersDesktopFilters from "./components/desktop-filters";
-import ReceivedOffersListLoading from "./components/loading";
-import UserReceivedOffersMobileFilters from "./components/mobile-filters";
+import { getUserReceivedOffers } from "@/server-actions/user/received-offers-actions";
 import ReceivedOfferListWrapper from "./components/list-wrapper";
+import UserReceivedOffersDesktopFilters from "./components/received-offer-desktop-filters";
+import UserReceivedOffersMobileFilters from "./components/received-offer-mobile-filters";
+import ReceivedOffersListLoading from "./components/received-offer-loading";
+import ReceivedOfferSelect from "./components/received-offer-select/received-offer-select";
 
 interface ReceivedOffersListProps {
   searchParams: ReceivedOffersFilters;
 }
 
-const UserReceivedOffers: FC<ReceivedOffersListProps> = ({ searchParams }) => {
+const UserReceivedOffers: FC<ReceivedOffersListProps> = async ({ searchParams }) => {
   const params = {
     ...searchParams,
     page: searchParams?.page ? searchParams?.page : 1,
@@ -31,9 +33,7 @@ const UserReceivedOffers: FC<ReceivedOffersListProps> = ({ searchParams }) => {
           <UserReceivedOffersMobileFilters />
         </div>
         <div className="flex items-center gap-3 sm:justify-between sm:w-full">
-          <Button className="!py-1 !px-3 !bg-grey-50 !outline-none !rounded-3xl text-xs !text-black" variant="secondary">
-            Select
-          </Button>
+          <ReceivedOfferSelect />
           <div className="flex items-center gap-3">
             <p className="hidden sm:block text-grey-600 text-xs">1326,000 Lands</p>
             <Sort options={SortEnum} />

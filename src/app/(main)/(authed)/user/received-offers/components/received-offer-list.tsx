@@ -2,8 +2,8 @@ import { FC } from "react";
 import { getUserReceivedOffers } from "@/server-actions/user/received-offers-actions";
 import { ReceivedOfferModel, ReceivedOffersFilters } from "@/types/offer";
 import DataNotFound from "@/components/@new/shared/DataNotFound";
-import ReceivedOffersListPagination from "./pagination";
-import ReceivedOfferBox from "./offer-box/offer-box";
+import ReceivedOffersListPagination from "./received-offer-pagination";
+import ReceivedOfferBox from "./received-offer-box/received-offer-box";
 
 interface ReceivedOffersListProps {
   data: ReceivedOfferModel[];
