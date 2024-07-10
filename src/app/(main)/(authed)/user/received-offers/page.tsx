@@ -3,7 +3,7 @@ import { FC, Suspense } from "react";
 import { ReceivedOffersFilters } from "@/types/offer";
 import ReceivedOfferListWrapper from "./components/received-offers-list/received-offer-list-wrapper";
 import ReceivedOffersListLoading from "./components/received-offers-list/received-offer-loading";
-import UserReceivedOffersDesktopFilters from "./components/received-offer-details-modal";
+import UserReceivedOffersDesktopFilters from "./components/received-offers-filters/received-offer-desktop-filters";
 
 interface ReceivedOffersListProps {
   searchParams: ReceivedOffersFilters;

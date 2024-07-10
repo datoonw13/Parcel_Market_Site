@@ -10,7 +10,7 @@ import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRem
 import { deleteReceivedOffers, revalidateReceivedOffers } from "@/server-actions/user/received-offers-actions";
 import toast from "react-hot-toast";
 import ReceivedOfferBox from "../received-offer-box/received-offer-box";
-import UserReceivedOffersMobileFilters from "../received-offer-mobile-filters";
+import UserReceivedOffersMobileFilters from "../received-offers-filters/received-offer-mobile-filters";
 
 interface ReceivedOffersListProps {
   data: ReceivedOfferModel[];
