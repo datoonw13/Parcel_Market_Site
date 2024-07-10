@@ -1,10 +1,9 @@
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
 import { FC, Suspense } from "react";
 import { ReceivedOffersFilters } from "@/types/offer";
-import { headers } from "next/headers";
-import ReceivedOfferListWrapper from "./components/received-offer-list-wrapper";
-import ReceivedOffersListLoading from "./components/received-offer-loading";
-import UserReceivedOffersDesktopFilters from "./components/received-offer-desktop-filters";
+import ReceivedOfferListWrapper from "./components/received-offers-list/received-offer-list-wrapper";
+import ReceivedOffersListLoading from "./components/received-offers-list/received-offer-loading";
+import UserReceivedOffersDesktopFilters from "./components/received-offer-details-modal";
 
 interface ReceivedOffersListProps {
   searchParams: ReceivedOffersFilters;

@@ -5,11 +5,12 @@ import ReceivedOffersList from "./received-offer-list";
 import ReceivedOffersListPagination from "./received-offer-pagination";
 
 interface ReceivedOffersListWrapperProps {
-  params: ReceivedOffersFilters & { showDetail?: boolean };
+  params: ReceivedOffersFilters & { showOfferDetail?: string };
 }
 
 const ReceivedOfferListWrapper: FC<ReceivedOffersListWrapperProps> = async ({ params }) => {
   const data = await getUserReceivedOffers(params);
+
   return (
     <div>
       <>

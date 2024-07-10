@@ -42,7 +42,7 @@ export enum OfferContingenciesOffer {
 }
 
 export interface ReceivedOffersFilters {
-  sortBY?: SortEnum;
+  sortBy?: SortEnum;
   parcelNumber?: string;
   priceMin?: string;
   priceMax?: string;

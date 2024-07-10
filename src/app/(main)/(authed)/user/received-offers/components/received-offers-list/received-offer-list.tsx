@@ -9,8 +9,8 @@ import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import { deleteReceivedOffers, revalidateReceivedOffers } from "@/server-actions/user/received-offers-actions";
 import toast from "react-hot-toast";
-import ReceivedOfferBox from "./received-offer-box/received-offer-box";
-import UserReceivedOffersMobileFilters from "./received-offer-mobile-filters";
+import ReceivedOfferBox from "../received-offer-box/received-offer-box";
+import UserReceivedOffersMobileFilters from "../received-offer-mobile-filters";
 
 interface ReceivedOffersListProps {
   data: ReceivedOfferModel[];
@@ -36,15 +36,14 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
     try {
       setRemovePending(true);
       await deleteReceivedOffers(selectedIds!);
-      toast.success('Offer successfully removed')
-      await revalidateReceivedOffers()
+      toast.success("Offer successfully removed");
+      await revalidateReceivedOffers();
     } catch (error) {
       toast.error("Offers remove failed");
     } finally {
       setRemovePending(false);
     }
   };
-  
 
   return (
     <>
@@ -60,7 +59,6 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
         onDelete={removeOffers}
         pending={removePending}
       />
-      {/* <ReceivedOfferModal /> */}
       <div className="space-y-6 md:space-y-4">
         <div className="flex items-center gap-3 sm:justify-between sm:w-full">
           <div className="block sm:hidden mr-auto">

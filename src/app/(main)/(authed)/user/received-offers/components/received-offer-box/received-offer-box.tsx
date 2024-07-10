@@ -6,7 +6,7 @@ import { numFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import moment from "moment";
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { LocationIcon1 } from "../../../../../../../components/@new/icons/LocationIcons";
 import { CalendarIcon1 } from "../../../../../../../components/@new/icons/CalendarIcons";
@@ -24,6 +24,10 @@ interface ReceivedOfferBoxProps {
 }
 const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, onClick }) => {
   const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const params = new URLSearchParams(searchParams);
+
   return (
     <div className={clsx(classes.root, selected && classes.selected, selecting && classes.selecting)} onClick={() => onClick(data.id)}>
       <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
@@ -108,7 +112,10 @@ const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting
         >
           View Land
         </Button>
-        <Button className="w-full sm:w-fit !h-10 sm:!h-auto">Details</Button>
+        <Button className="w-full sm:w-fit !h-10 sm:!h-auto" onClick={() => {
+          params.set('showOfferDetail', data.id.toString())
+          push(`${pathname}?${params.toString()}`)
+        }}>Details</Button>
       </div>
     </div>
   );
