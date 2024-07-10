@@ -26,6 +26,7 @@ const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting
   const { push } = useRouter();
   return (
     <div className={clsx(classes.root, selected && classes.selected, selecting && classes.selecting)} onClick={() => onClick(data.id)}>
+      {data.id}
       <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
         <div className="space-y-2 grid">
           <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">

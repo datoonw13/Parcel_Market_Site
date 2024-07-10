@@ -19,18 +19,19 @@ export const getUserReceivedOffers = async (
   return request.data?.data || null;
 };
 
+export const revalidateReceivedOffers = async () => {
+  const path = headers().get("referer");
+  if (path) {
+    revalidateTag(userTags.receivedOffers);
+    redirect(path);
+  }
+}
+
 export const deleteReceivedOffers = async (ids: number[]): Promise<{ error: boolean }> => {
   const request = await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {
     method: "DELETE",
     body: JSON.stringify({ ids }),
   });
 
-  if (!request.error) {
-    const path = headers().get("referer");
-    if (path) {
-      revalidateTag(userTags.receivedOffers);
-      redirect(path);
-    }
-  }
   return { error: request.error };
 };
