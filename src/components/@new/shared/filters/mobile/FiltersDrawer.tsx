@@ -221,7 +221,7 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
                         }}
                         transition={{ duration: 0.1 }}
                       >
-                        <div className="border-b border-grey-100 pb-3 flex flex-col gap-4 mt-1">
+                        <div className="pb-3 flex flex-col gap-4 mt-1">
                           {data[filterKey].options.map((option) => (
                             <RadioButton
                               key={(option as DefaultFilterType).value}

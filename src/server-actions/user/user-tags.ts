@@ -1,3 +1,6 @@
 export const userTags = {
-  receivedOffers: "/user/receivedOffers",
+  offers: {
+    receivedOffers: "/user/offers/receivedOffers",
+    receivedOffersParcelNum: "/user/offers/receivedOffersParcelNumbers",
+  },
 };

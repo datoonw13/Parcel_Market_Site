@@ -9,9 +9,10 @@ interface AutoCompleteDesktopFiltersProps {
   options: Array<{ label: string; value: string }>;
   placeholder: string;
   filterKey: string;
+  loading?: boolean;
 }
 
-const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ options, placeholder, filterKey }) => {
+const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ options, placeholder, filterKey, loading }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -34,6 +35,7 @@ const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ optio
         selectedValue && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
       )}
       options={options}
+      loading={loading}
       getOptionLabel={(item) => item.label}
       getOptionKey={(item) => item.value}
       onChange={(option) => handleSelect(option?.value || null)}

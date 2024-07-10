@@ -13,8 +13,16 @@ export const getUserReceivedOffers = async (
 ): Promise<(ResponseType<ReceivedOfferModel[]> & IPagination) | null> => {
   const request = await fetcher<ResponseType<(ResponseType<ReceivedOfferModel[]> & IPagination) | null>>(
     `offers/received?${new URLSearchParams(params as Record<string, string>)}`,
-    { next: { tags: [userTags.receivedOffers] } }
+    { next: { tags: [userTags.offers.receivedOffers] } }
   );
+
+  return request.data?.data || null;
+};
+
+export const getUserReceivedOffersParcelNumbers = async (): Promise<string[] | null> => {
+  const request = await fetcher<{ data: string[] | null }>(`offers/received/parcel-numbers`, {
+    next: { tags: [userTags.offers.receivedOffersParcelNum] },
+  });
 
   return request.data?.data || null;
 };
@@ -22,10 +30,11 @@ export const getUserReceivedOffers = async (
 export const revalidateReceivedOffers = async () => {
   const path = headers().get("referer");
   if (path) {
-    revalidateTag(userTags.receivedOffers);
+    revalidateTag(userTags.offers.receivedOffers);
+    revalidateTag(userTags.offers.receivedOffersParcelNum);
     redirect(path);
   }
-}
+};
 
 export const deleteReceivedOffers = async (ids: number[]): Promise<{ error: boolean }> => {
   const request = await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {

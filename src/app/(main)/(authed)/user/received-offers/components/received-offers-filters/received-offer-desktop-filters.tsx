@@ -4,31 +4,48 @@ import MinMaxDesktopFilters from "@/components/@new/shared/filters/desktop/MinMa
 import AutoCompleteDesktopFilters from "@/components/@new/shared/filters/desktop/AutoCompleteDesktopFilters";
 import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 import { OfferStatusEnum } from "@/types/offer";
+import { useEffect, useState } from "react";
+import { getUserReceivedOffersParcelNumbers } from "@/server-actions/user/received-offers-actions";
 
-const UserReceivedOffersDesktopFilters = () => (
-  <div className="gap-3 mb-6 flex">
-    <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={[]} />
-    <AutoCompleteDesktopFilters
-      filterKey="status"
-      placeholder="Status"
-      options={Object.keys(OfferStatusEnum).map((key) => ({
-        value: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
-        label: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
-      }))}
-    />
-    <MinMaxDesktopFilters
-      filterKey="offerPrice"
-      options={priceFilters}
-      placeHolder="Offer Price"
-      getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
-    />
-    <MinMaxDesktopFilters
-      filterKey="voltPrice"
-      options={priceFilters}
-      placeHolder="VOLT Price"
-      getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
-    />
-  </div>
-);
+const UserReceivedOffersDesktopFilters = () => {
+  const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
+
+  const getParcelNumbers = async () => {
+    const data = await getUserReceivedOffersParcelNumbers();
+    if (data) {
+      setParcelNumbers(data.map((el) => ({ value: el, label: el })));
+    }
+  };
+
+  useEffect(() => {
+    getParcelNumbers();
+  }, []);
+
+  return (
+    <div className="gap-3 mb-6 grid grid-cols-4">
+      <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={parcelNumbers || []} loading={!parcelNumbers} />
+      <AutoCompleteDesktopFilters
+        filterKey="status"
+        placeholder="Status"
+        options={Object.keys(OfferStatusEnum).map((key) => ({
+          value: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
+          label: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
+        }))}
+      />
+      <MinMaxDesktopFilters
+        filterKey="offerPrice"
+        options={priceFilters}
+        placeHolder="Offer Price"
+        getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
+      />
+      <MinMaxDesktopFilters
+        filterKey="voltPrice"
+        options={priceFilters}
+        placeHolder="VOLT Price"
+        getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
+      />
+    </div>
+  );
+};
 
 export default UserReceivedOffersDesktopFilters;

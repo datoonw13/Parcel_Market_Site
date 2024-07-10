@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 "use client";
 
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
@@ -128,12 +130,14 @@ const AutoComplete = <T extends Array<{}>>({
                 >
                   <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
                 </div>
-                {isOpen ? (
+
+                {loading ? (
+                  <LoadingIcon1 className="!h-3 !w-3" color="grey-600" />
+                ) : isOpen ? (
                   <ArrowIconUp1 className={clsx("cursor-pointer h-2 mt-0.5", arrowIconClassName)} />
                 ) : (
                   <ArrowIconDown1 className={clsx("cursor-pointer h-2 mt-0.5", arrowIconClassName)} />
                 )}
-                {loading && <LoadingIcon1 className="!h-3 !w-3" color="grey-600" />}
               </div>
             }
             disabled={disabled}
