@@ -6,7 +6,7 @@ import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/fil
 import { OfferStatusEnum } from "@/types/offer";
 
 const UserReceivedOffersDesktopFilters = () => (
-  <div className="gap-3 mb-6 hidden sm:flex">
+  <div className="gap-3 mb-6 flex">
     <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={[]} />
     <AutoCompleteDesktopFilters
       filterKey="status"
