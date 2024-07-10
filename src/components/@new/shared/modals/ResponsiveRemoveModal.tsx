@@ -28,7 +28,7 @@ const Content = ({
   <div className={clsx("p-4 flex flex-col items-center gap-3", !responsive && "bg-white rounded-2xl shadow-4 w-[340px] ")}>
     {!responsive && (
       <div className="w-full" onClick={() => !pending && handleClose()}>
-        <RemoveIcon2 className="fill-grey-600 flex ml-auto cursor-pointer" />
+        <RemoveIcon2 className="fill-grey-600 flex ml-auto cursor-pointer !w-3 !h-3" />
       </div>
     )}
     <div className={clsx("w-12 h-12 rounded-full bg-error-100 flex items-center justify-center")}>
@@ -36,13 +36,13 @@ const Content = ({
     </div>
     <p className="text-center font-semibold">{title}</p>
     <p className="text-center text-sm text-grey-800">{desc}</p>
-    <div className={clsx("flex gap-3 w-full mt-3", responsive ? "flex-col-reverse" : "flex-row")}>
+    <div className={clsx("flex gap-3 w-full mt-3 flex-col-reverse sm:flex-row",)}>
       <Button className="w-full justify-center" variant="secondary" onClick={onCancel} disabled={pending}>
         Cancel
       </Button>
-      {/* <Button className="w-full justify-center" variant="primary-error" loading={pending} onClick={onDelete}>
+      <Button className="w-full justify-center" variant="primary" loading={pending} onClick={onDelete} color="error">
         Delete
-      </Button> */}
+      </Button>
     </div>
   </div>
 );

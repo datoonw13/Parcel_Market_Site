@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { FC } from "react";
 import { ReceivedOfferModel } from "@/types/offer";
 import { numFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
@@ -14,8 +14,14 @@ import classes from "./style.module.css";
 import Alert from "../../../../../../../components/@new/shared/Alert";
 import OfferStatus from "../../../../../../../components/@new/offer/OfferStatus";
 
-const ReceivedOfferBox = ({ data }: { data: ReceivedOfferModel }) => (
-  <div className={clsx(classes.root)}>
+interface ReceivedOfferBoxProps {
+  data: ReceivedOfferModel;
+  selecting: boolean;
+  selected: boolean;
+  onClick: (offerId: number) => void;
+}
+const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, onClick }) => (
+  <div className={clsx(classes.root, selected && classes.selected, selecting && classes.selecting)} onClick={() => onClick(data.id)}>
     <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
       <div className="space-y-2 grid">
         <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
