@@ -2,3 +2,5 @@
     @apply border border-grey-100 w-full bg-[url('/offer-box-mobile-gradient.png')] bg-[length:100%_115px] bg-no-repeat pt-6 pb-4 rounded-2xl;
     @apply sm:bg-[url('/offer-box-desktop-gradient.png')] sm:bg-[length:284px_120px] md:bg-[length:328px_140px] sm:bg-right-top md:pt-8 
 }
+
+
