@@ -2,6 +2,9 @@
 
 import { IPagination, ResponseType } from "@/types/common";
 import { ReceivedOfferModel, ReceivedOffersFilters } from "@/types/offer";
+import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { fetcher } from "../fetcher";
 import { userTags } from "./user-tags";
 
@@ -14,4 +17,20 @@ export const getUserReceivedOffers = async (
   );
 
   return request.data?.data || null;
+};
+
+export const deleteReceivedOffers = async (ids: number[]): Promise<{ error: boolean }> => {
+  const request = await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {
+    method: "DELETE",
+    body: JSON.stringify({ ids }),
+  });
+
+  if (!request.error) {
+    const path = headers().get("referer");
+    if (path) {
+      revalidateTag(userTags.receivedOffers);
+      redirect(path);
+    }
+  }
+  return { error: request.error };
 };

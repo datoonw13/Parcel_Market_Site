@@ -7,6 +7,8 @@ import Sort from "@/components/@new/shared/filters/Sort";
 import { SortEnum } from "@/types/common";
 import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
+import { deleteReceivedOffers } from "@/server-actions/user/received-offers-actions";
+import toast from "react-hot-toast";
 import ReceivedOfferBox from "./received-offer-box/received-offer-box";
 import UserReceivedOffersMobileFilters from "./received-offer-mobile-filters";
 
@@ -15,6 +17,7 @@ interface ReceivedOffersListProps {
 }
 
 const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
+  const [removePending, setRemovePending] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[] | null>(null);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
@@ -29,6 +32,22 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
     }
   };
 
+  const removeOffers = async () => {
+    try {
+      setRemovePending(true);
+      const { error } = await deleteReceivedOffers(selectedIds!);
+      if (error) {
+        throw new Error();
+      }
+      setOpenRemoveModal(false);
+      setSelectedIds(null);
+    } catch (error) {
+      toast.error("Offers remove failed");
+    } finally {
+      setRemovePending(false);
+    }
+  };
+
   return (
     <>
       <ResponsiveRemoveModal
@@ -40,7 +59,8 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
           setOpenRemoveModal(false);
           setSelectedIds(null);
         }}
-        onDelete={() => {}}
+        onDelete={removeOffers}
+        pending={removePending}
       />
       <div className="space-y-6 md:space-y-4">
         <div className="flex items-center gap-3 sm:justify-between sm:w-full">

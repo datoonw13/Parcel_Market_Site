@@ -1,3 +1,4 @@
+import { IUser } from "./auth";
 import { SortEnum } from "./common";
 import { ISellingProperty } from "./find-property";
 
@@ -68,4 +69,5 @@ export interface ReceivedOfferModel {
   createdAt: Date;
   activeUntil: string;
   sellingProperty: ISellingProperty;
+  offerGivenBy: IUser;
 }

@@ -10,7 +10,7 @@ interface SelectButtonProps {
   total?: number;
   selecting: boolean;
   className?: string;
-  onRemove: () => void
+  onRemove: () => void;
 }
 
 const SelectButton: FC<SelectButtonProps> = ({ onClick, total, selecting, className, onRemove }) => (
@@ -27,8 +27,12 @@ const SelectButton: FC<SelectButtonProps> = ({ onClick, total, selecting, classN
       {`${total || ""}`} Select
     </Button>
     {!!total && (
-      <Button variant="secondary" className="!w-[30px] h-[30px] !outline-none !rounded-full hover:!bg-error-100 !p-0 group" onClick={onRemove}>
-        <RemoveIcon1 className="group-hover:fill-error"  />
+      <Button
+        variant="secondary"
+        className="!w-[30px] h-[30px] !outline-none !rounded-full hover:!bg-error-100 !p-0 group"
+        onClick={onRemove}
+      >
+        <RemoveIcon1 className="group-hover:fill-error" />
       </Button>
     )}
   </div>
