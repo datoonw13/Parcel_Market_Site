@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import clsx from "clsx";
 import routes from "@/helpers/routes";
 import { logOutUserAction } from "@/server-actions/user/user-actions";

@@ -6,23 +6,25 @@ import { numFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import moment from "moment";
 import clsx from "clsx";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { redirect, usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
-import { LocationIcon1 } from "../../../../../../../components/@new/icons/LocationIcons";
-import { CalendarIcon1 } from "../../../../../../../components/@new/icons/CalendarIcons";
-import Divider from "../../../../../../../components/@new/shared/Divider";
-import Button from "../../../../../../../components/@new/shared/forms/Button";
+import { LocationIcon1 } from "@/components/@new/icons/LocationIcons";
+import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
+import Divider from "@/components/@new/shared/Divider";
+import Button from "@/components/@new/shared/forms/Button";
+import Alert from "@/components/@new/shared/Alert";
+import OfferStatus from "@/components/@new/offer/OfferStatus";
+import { headers } from "next/headers";
 import classes from "./style.module.css";
-import Alert from "../../../../../../../components/@new/shared/Alert";
-import OfferStatus from "../../../../../../../components/@new/offer/OfferStatus";
 
 interface ReceivedOfferBoxProps {
   data: ReceivedOfferModel;
   selecting: boolean;
   selected: boolean;
   onClick: (offerId: number) => void;
+  openDetail: (offerId: number) => void;
 }
-const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, onClick }) => {
+const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, onClick, openDetail }) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -112,10 +114,9 @@ const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting
         >
           View Land
         </Button>
-        <Button className="w-full sm:w-fit !h-10 sm:!h-auto" onClick={() => {
-          params.set('showOfferDetail', data.id.toString())
-          push(`${pathname}?${params.toString()}`)
-        }}>Details</Button>
+        <Button className="w-full sm:w-fit !h-10 sm:!h-auto" onClick={() => openDetail(data.id)}>
+          Details
+        </Button>
       </div>
     </div>
   );

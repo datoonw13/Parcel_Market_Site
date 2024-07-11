@@ -9,8 +9,11 @@ import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import { deleteReceivedOffers, revalidateReceivedOffers } from "@/server-actions/user/received-offers-actions";
 import toast from "react-hot-toast";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { usePathname, useRouter } from "next/navigation";
 import ReceivedOfferBox from "../received-offer-box/received-offer-box";
 import UserReceivedOffersMobileFilters from "../received-offers-filters/received-offer-mobile-filters";
+import ReceivedOfferDetailModal from "../received-offer-detail-modal";
 
 interface ReceivedOffersListProps {
   data: ReceivedOfferModel[];
@@ -18,9 +21,21 @@ interface ReceivedOffersListProps {
 }
 
 const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) => {
+  const { push } = useRouter();
+  const pathname = usePathname();
+  const isSmallDevice = useMediaQuery(1024);
   const [removePending, setRemovePending] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[] | null>(null);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
+  const [openDetailModal, setOpenDetailModal] = useState<number | null>(null);
+
+  const openOfferDetail = (offerId: number) => {
+    if (isSmallDevice) {
+      push(`${pathname}/${offerId}`);
+    } else {
+      setOpenDetailModal(offerId);
+    }
+  };
 
   const handleSelect = (offerId: number) => {
     if (!selectedIds) {
@@ -48,6 +63,7 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
 
   return (
     <>
+      <ReceivedOfferDetailModal open={openDetailModal} setOpen={setOpenDetailModal} />
       <ResponsiveRemoveModal
         desc="Are you sure you want to delete offers you selected?"
         title="Delete selected received offers?"
@@ -86,6 +102,7 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
               selecting={!!selectedIds}
               onClick={handleSelect}
               selected={!!selectedIds?.includes(offer.id)}
+              openDetail={openOfferDetail}
             />
           ))}
         </div>
