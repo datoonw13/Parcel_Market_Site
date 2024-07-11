@@ -51,7 +51,7 @@ const list = [
   {
     label: "Received Offers",
     icon: DiscountIcon1,
-    path: routes.user.receivedOffers.fullUrl,
+    path: routes.user.offers.received.fullUrl,
   },
   {
     label: "Sent Offers",

@@ -58,10 +58,15 @@ const routes = {
       fullUrl: "/user/followed-properties",
       protected: true,
     },
-    receivedOffers: {
-      url: "received-offers",
-      fullUrl: "/user/received-offers",
+    offers: {
+      url: "offers",
+      fullUrl: "/user/offers",
       protected: true,
+      received: {
+        url: "received",
+        fullUrl: '/user/offers/received',
+        protected: true
+      }
     },
   },
 };

@@ -11,7 +11,7 @@ const ReceivedOfferDetails = async ({ params }: { params: { offerId: string } })
   const data = await getOfferDetail(params.offerId);
 
   if (!data) {
-    redirect(routes.user.receivedOffers.fullUrl);
+    redirect(routes.user.offers.received.fullUrl);
   }
 
   return (

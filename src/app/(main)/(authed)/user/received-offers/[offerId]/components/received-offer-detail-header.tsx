@@ -9,7 +9,7 @@ const ReceivedOfferDetailHeader = () => {
   const { push } = useRouter();
   return (
     <div>
-      <Button variant="secondary" className="!p-0 !h-fit !outline-none" onClick={() => push(routes.user.receivedOffers.fullUrl)}>
+      <Button variant="secondary" className="!p-0 !h-fit !outline-none" onClick={() => push(routes.user.offers.received.fullUrl)}>
         <div className="flex items-center gap-2 text-primary-main">
           <ArrowIconLeft1 className="!w-1.5 !h-3" color="primary-main" /> Back
         </div>
