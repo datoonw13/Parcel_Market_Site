@@ -5,7 +5,7 @@ import { getUserReceivedOfferDetails } from "@/server-actions/user/received-offe
 import routes from "@/helpers/routes";
 import { redirect } from "next/navigation";
 import ReceivedOfferDetailHeader from "./components/received-offer-detail-header";
-import ReceivedOfferFullDetail from "../components/received-offer-full-detail";
+import ReceivedOfferFullDetail from "../components/received-offer-full-detail/received-offer-full-detail";
 
 const ReceivedOfferDetails = async ({ params }: { params: { offerId: string } }) => {
   const data = await getUserReceivedOfferDetails(params.offerId);
@@ -17,7 +17,7 @@ const ReceivedOfferDetails = async ({ params }: { params: { offerId: string } })
   return (
     <div>
       <ReceivedOfferDetailHeader />
-      {data && <ReceivedOfferFullDetail data={data?.data} />}
+      {data && <ReceivedOfferFullDetail data={data} />}
     </div>
   );
 };

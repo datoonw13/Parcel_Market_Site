@@ -69,6 +69,6 @@ export interface ReceivedOfferModel {
   createdAt: Date;
   activeUntil: string;
   sellingProperty: ISellingProperty;
-  offerGivenBy: { id: number, firstName: string, lastName: string },
-  offerGivenTo: { id: number, firstName: string, lastName: string }
+  offerGivenBy: { id: number; firstName: string; lastName: string };
+  offerGivenTo: { id: number; firstName: string; lastName: string };
 }

@@ -19,8 +19,8 @@ export const getUserReceivedOffers = async (
   return request.data?.data || null;
 };
 
-export const getUserReceivedOfferDetails = async (offerId: string): Promise<ResponseType<ReceivedOfferModel> | null> => {
-  const request = await fetcher<ResponseType<ResponseType<ReceivedOfferModel> | null>>(`offers/details/${offerId}`, {
+export const getUserReceivedOfferDetails = async (offerId: string): Promise<ReceivedOfferModel | null> => {
+  const request = await fetcher<ResponseType<ReceivedOfferModel | null>>(`offers/details/${offerId}`, {
     next: { tags: [userTags.receivedOffers] },
   });
 

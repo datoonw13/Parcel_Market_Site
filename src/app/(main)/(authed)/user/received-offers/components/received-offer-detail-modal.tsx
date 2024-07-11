@@ -3,7 +3,7 @@ import { RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
 import Modal from "@/components/@new/shared/modals/Modal";
 import Button from "@/components/@new/shared/forms/Button";
 import { ReceivedOfferModel } from "@/types/offer";
-import ReceivedOfferFullDetail from "./received-offer-full-detail";
+import ReceivedOfferFullDetail from "./received-offer-full-detail/received-offer-full-detail";
 
 interface ReceivedOfferDetailModalProps {
   data: ReceivedOfferModel | null;
