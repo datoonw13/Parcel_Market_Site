@@ -25,7 +25,7 @@ function formatCompactNumber(number: number) {
 const FindPropertyLayout = () => {
   const [calculatedPrice, setCalculatedPrice] = useState<IFindPropertyEstimatedPriceResponse | null>(null);
   const [selectedRegridItem, setSelectedRegridItem] = useState<IMapItem | null>(null);
-  useAuthCheck();
+  // useAuthCheck();
   return (
     <Suspense>
       <Box sx={{ height: "100vh", display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 400px", xl: "1fr 544px" } }}>

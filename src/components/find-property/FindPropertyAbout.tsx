@@ -1,15 +1,15 @@
 import routes from "@/helpers/routes";
-import { useLazyCalculatePriceQuery } from "@/lib/features/apis/propertyApi";
 import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { IFindPropertyAbout, IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
+import { useAppDispatch } from "@/lib/hooks";
+import { getUserAction } from "@/server-actions/user/user-actions";
+import { IFindPropertyAbout, ISellProperty } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { findPropertyAbout } from "@/validations/find-property-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Checkbox, Divider, FormControlLabel, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { NumericFormat } from "react-number-format";
@@ -47,8 +47,20 @@ interface IProps {
 }
 
 const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, price, propertyId }: IProps) => {
+  const [user, setUser] = useState<any>();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.authedUser.user);
+
+  const getUser = async () => {
+    const data = await getUserAction();
+    if (data) {
+      setUser(data);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   const router = useRouter();
   const {
     handleSubmit,
@@ -93,7 +105,7 @@ const FindPropertyAbout = ({ goBack, onNext, selectedRegridItem, sellerType, pri
       })
     );
     if (!user) {
-      router.push(routes.auth.signIn.url);
+      router.push(routes.auth.signIn.fullUrl);
     } else {
       onNext();
     }
