@@ -13,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { OfferModel } from "@/types/offer";
 import ReceivedOffersMobileFilters from "./filters/mobile-filters";
 import ReceivedOfferListItem from "./list-item/list-item";
+import OfferDetailModal from "../../components/detail-modal";
 
 interface ReceivedOffersListProps {
   data: OfferModel[];
@@ -74,6 +75,7 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
         onDelete={removeOffers}
         pending={removePending}
       />
+      <OfferDetailModal data={openOffer} handleClose={() => setOpenOffer(null)} />
       <div className="space-y-6 md:space-y-4">
         <div className="flex items-center gap-3 sm:justify-between sm:w-full">
           <div className="block sm:hidden mr-auto">

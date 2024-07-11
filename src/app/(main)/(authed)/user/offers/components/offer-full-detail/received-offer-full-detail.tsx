@@ -11,7 +11,7 @@ import clsx from "clsx";
 import OfferDetailSection from "../offer-detail-section";
 import OfferFullDetailMap from "./offer-full-detail-map";
 
-const OfferFullDetail = ({ data, responsive }: { data: OfferModel; responsive?: true }) => (
+const OfferFullDetail = ({ data, responsive, actionClasses }: { data: OfferModel; responsive?: true; actionClasses?: string }) => (
   <div>
     <div className={clsx(responsive && "border border-grey-100 rounded-xl py-6 px-4")}>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 mb-3 sm:mb-4 md:mb-8">
@@ -53,11 +53,11 @@ const OfferFullDetail = ({ data, responsive }: { data: OfferModel; responsive?: 
       <OfferDetailSection alertClasses="mt-3 sm:mt-5" data={data} />
     </div>
     <Divider className="mt-6" />
-    <div className="flex flex-col sm:flex-row gap-3 py-4">
+    <div className={clsx("flex flex-col sm:flex-row gap-3 py-4", actionClasses)}>
       <Button variant="secondary" className="w-full sm:w-fit">
         Contact Buyer
       </Button>
-      <div className="flex flex-col sm:flex-row gap-3 sm:ml-auto">
+      <div className={clsx("flex flex-col sm:flex-row gap-3 sm:ml-auto")}>
         <Button className="w-full sm:w-fit" color="error">
           Reject
         </Button>
