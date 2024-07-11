@@ -1,15 +1,15 @@
 "use client";
 
+import { FC } from "react";
 import { ISellingProperty } from "@/types/find-property";
 import dynamic from "next/dynamic";
-import { FC } from "react";
 
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
-interface ReceivedOfferFullDetailMapProps {
+interface OfferFullDetailMapProps {
   data: ISellingProperty;
 }
-const ReceivedOfferFullDetailMap: FC<ReceivedOfferFullDetailMapProps> = ({ data }) => {
+const OfferFullDetailMap: FC<OfferFullDetailMapProps> = ({ data }) => {
   const mapOptions = {
     data: [
       {
@@ -29,4 +29,4 @@ const ReceivedOfferFullDetailMap: FC<ReceivedOfferFullDetailMapProps> = ({ data 
   );
 };
 
-export default ReceivedOfferFullDetailMap;
+export default OfferFullDetailMap;

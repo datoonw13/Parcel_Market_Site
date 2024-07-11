@@ -6,7 +6,8 @@ import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 
 const ReceivedOfferDetailsHeader = () => {
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
+
   return (
     <div>
       <Button variant="secondary" className="!p-0 !h-fit !outline-none" onClick={() => push(routes.user.offers.received.fullUrl)}>

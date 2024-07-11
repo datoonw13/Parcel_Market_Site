@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { numFormatter } from "@/helpers/common";
 import classes from "./list-item.module.css";
-import ReceivedOfferDetailSection from "../../../components/offer-detail-section";
+import OfferDetailSection from "../../../components/offer-detail-section";
 
 interface ReceivedOfferListItemProps {
   data: OfferModel;
@@ -43,7 +43,7 @@ const ReceivedOfferListItem: FC<ReceivedOfferListItemProps> = ({ data, openDetai
           <p className="font-semibold text-primary-main sm:text-white sm:text-2xl">{numFormatter.format(Number(data.price))}</p>
         </div>
       </div>
-      <ReceivedOfferDetailSection data={data} rootClasses="mx-4 md:mx-8 mb-8" alertClasses="mt-3" />
+      <OfferDetailSection data={data} rootClasses="mx-4 md:mx-8 mb-8" alertClasses="mt-3" />
       <Divider className="mb-4" />
       <div className="flex gap-3 px-4 md:px-8">
         <Button className="w-full sm:w-fit !h-10 sm:!h-auto sm:mr-auto" variant="secondary">

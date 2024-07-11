@@ -22,7 +22,7 @@ interface ReceivedOffersListProps {
 const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) => {
   const { push } = useRouter();
   const pathname = usePathname();
-  const isSmallDevice = useMediaQuery(768);
+  const isSmallDevice = useMediaQuery(1024);
   const [removePending, setRemovePending] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[] | null>(null);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);

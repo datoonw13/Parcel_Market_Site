@@ -1,3 +1,5 @@
+"use client";
+
 import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
 import OfferStatus from "@/components/@new/offer/OfferStatus";
 import Alert from "@/components/@new/shared/Alert";
@@ -14,7 +16,7 @@ interface OfferDetailSectionProps {
   alertClasses?: string;
 }
 
-const ReceivedOfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, infoClasses, rootClasses }) => (
+const OfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, infoClasses, rootClasses }) => (
   <div className={clsx("flex flex-col gap-3", rootClasses)}>
     <div className="rounded-2xl p-4 sm:p-6 bg-grey-30 flex flex-col sm:grid sm:grid-cols-2 gap-6">
       <div className="space-y-3">
@@ -69,4 +71,4 @@ const ReceivedOfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertCl
   </div>
 );
 
-export default ReceivedOfferDetailSection;
+export default OfferDetailSection;
