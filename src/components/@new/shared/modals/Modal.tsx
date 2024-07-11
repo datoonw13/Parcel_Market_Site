@@ -63,12 +63,13 @@ const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnA
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            ref={setPopperElement}
             style={{ ...styles.popper, background: !disableBackdrop ? "rgba(0, 0, 0, 0.4)" : "transparent" }}
             className="!m-auto z-50 w-full h-full flex items-center justify-center"
             {...attributes.popper}
           >
-            <div className={clsx(contentClasses, "flex items-center justify-center w-full")}>{children}</div>
+            <div ref={setPopperElement} className={clsx(contentClasses, "flex items-center justify-center w-full")}>
+              {children}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
