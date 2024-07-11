@@ -6,7 +6,7 @@ import Sort from "@/components/@new/shared/filters/Sort";
 import { SortEnum } from "@/types/common";
 import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
-import { deleteReceivedOffers, revalidateReceivedOffers } from "@/server-actions/user/received-offers-actions";
+import { deleteReceivedOffers, revalidateReceivedOffers } from "@/server-actions/user/offers-actions";
 import toast from "react-hot-toast";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";

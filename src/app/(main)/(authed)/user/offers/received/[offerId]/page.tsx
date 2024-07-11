@@ -1,4 +1,4 @@
-import { getOfferDetail } from "@/server-actions/user/received-offers-actions";
+import { getOfferDetail } from "@/server-actions/user/offers-actions";
 import routes from "@/helpers/routes";
 import { redirect } from "next/navigation";
 import ReceivedOfferDetailsHeader from "./components/header";

@@ -5,7 +5,7 @@ import AutoCompleteDesktopFilters from "@/components/@new/shared/filters/desktop
 import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
-import { getReceivedOffersParcelNumbers } from "@/server-actions/user/received-offers-actions";
+import { getReceivedOffersParcelNumbers } from "@/server-actions/user/offers-actions";
 
 const ReceivedOffersDesktopFilters = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);

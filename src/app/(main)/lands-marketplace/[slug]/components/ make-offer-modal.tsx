@@ -9,9 +9,10 @@ import MakeOffer from "../../components/MakeOffer";
 interface MakeOfferModalProps {
   open: boolean;
   closeModal: () => void;
+  sellingPropertyId: any;
 }
 
-const MakeOfferModal: FC<MakeOfferModalProps> = ({ closeModal, open }) => (
+const MakeOfferModal: FC<MakeOfferModalProps> = ({ closeModal, open, sellingPropertyId }) => (
   <Modal open={open} closeModal={() => {}}>
     <div className="max-w-4xl w-full mx-9 bg-white rounded-xl grid overflow-hidden">
       <div className="flex items-center justify-between gap-4 px-8 py-6 border-b border-b-grey-100 sticky top-0 bg-white z-10">
@@ -21,7 +22,7 @@ const MakeOfferModal: FC<MakeOfferModalProps> = ({ closeModal, open }) => (
         </Button>
       </div>
       <div className="py-6 px-8">
-        <MakeOffer maxHeight="max-h-[50vh]" />
+        <MakeOffer maxHeight="max-h-[50vh]" sellingPropertyId={sellingPropertyId} />
       </div>
     </div>
   </Modal>

@@ -1,6 +1,6 @@
 import { priceFilters, getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer";
-import { getReceivedOffersParcelNumbers } from "@/server-actions/user/received-offers-actions";
+import { getReceivedOffersParcelNumbers } from "@/server-actions/user/offers-actions";
 import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
 

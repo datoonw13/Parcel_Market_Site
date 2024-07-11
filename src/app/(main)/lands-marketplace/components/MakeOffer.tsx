@@ -9,6 +9,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
 import TextField from "@/components/@new/shared/forms/TextField";
+import { makeOfferAction } from "@/server-actions/user/offers-actions";
 import { MakeOfferModel } from "@/types/offer";
 import { offerValidation } from "@/zod-validations/offer-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +39,7 @@ const LabelWithTooltip = ({ label, description, error }: { label: string; descri
   </div>
 );
 
-const MakeOffer = ({ maxHeight }: { maxHeight?: string }) => {
+const MakeOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sellingPropertyId: any }) => {
   const [showAlert, setShowAlert] = useState(true);
   const [showInput, setShowInput] = useState({
     inspectionPeriodDays: false,
@@ -57,8 +58,9 @@ const MakeOffer = ({ maxHeight }: { maxHeight?: string }) => {
   });
 
   const onSubmit = handleSubmit(
-    (data) => {
-      console.log(data);
+    async (data) => {
+      const result = await makeOfferAction({ ...data, sellingPropertyId });
+      console.log(result, 22);
     },
     (error) => console.log(error, 22)
   );

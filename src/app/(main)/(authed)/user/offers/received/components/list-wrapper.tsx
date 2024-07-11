@@ -1,4 +1,4 @@
-import { getReceivedOffers } from "@/server-actions/user/received-offers-actions";
+import { getReceivedOffers } from "@/server-actions/user/offers-actions";
 import { ReceivedOffersFilters } from "@/types/offer";
 import { FC } from "react";
 import ReceivedOffersPagination from "./pagination";
