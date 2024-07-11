@@ -48,6 +48,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
       repeatPassword: "",
     },
   });
+  console.log(errors, 22);
+
   const selectedState = watch("state");
 
   const cities = useMemo(() => getCitiesByState(selectedState), [selectedState]);

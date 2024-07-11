@@ -4,7 +4,7 @@ const passwordSchema = z
   .string()
   .trim()
   .regex(
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@$%])[A-Za-z\d!@$%]{6,}$/,
+    /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{6,}$/,
     "Password must be at least 6 characters long and include at least one letter, one number, and one special character (!@$%)."
   );
 
