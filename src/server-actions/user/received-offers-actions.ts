@@ -13,15 +13,23 @@ export const getUserReceivedOffers = async (
 ): Promise<(ResponseType<ReceivedOfferModel[]> & IPagination) | null> => {
   const request = await fetcher<ResponseType<(ResponseType<ReceivedOfferModel[]> & IPagination) | null>>(
     `offers/received?${new URLSearchParams(params as Record<string, string>)}`,
-    { next: { tags: [userTags.offers.receivedOffers] } }
+    { next: { tags: [userTags.receivedOffers] } }
   );
+
+  return request.data?.data || null;
+};
+
+export const getUserReceivedOfferDetails = async (offerId: string): Promise<ResponseType<ReceivedOfferModel> | null> => {
+  const request = await fetcher<ResponseType<ResponseType<ReceivedOfferModel> | null>>(`offers/details/${offerId}`, {
+    next: { tags: [userTags.receivedOffers] },
+  });
 
   return request.data?.data || null;
 };
 
 export const getUserReceivedOffersParcelNumbers = async (): Promise<string[] | null> => {
   const request = await fetcher<{ data: string[] | null }>(`offers/received/parcel-numbers`, {
-    next: { tags: [userTags.offers.receivedOffersParcelNum] },
+    next: { tags: [userTags.receivedOffers] },
   });
 
   return request.data?.data || null;
@@ -30,8 +38,7 @@ export const getUserReceivedOffersParcelNumbers = async (): Promise<string[] | n
 export const revalidateReceivedOffers = async () => {
   const path = headers().get("referer");
   if (path) {
-    revalidateTag(userTags.offers.receivedOffers);
-    revalidateTag(userTags.offers.receivedOffersParcelNum);
+    revalidateTag(userTags.receivedOffers);
     redirect(path);
   }
 };

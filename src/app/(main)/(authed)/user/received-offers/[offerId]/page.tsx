@@ -1,18 +1,24 @@
 import { ArrowIconLeft1 } from "@/components/@new/icons/ArrowIcons";
 import Button from "@/components/@new/shared/forms/Button";
 import React from "react";
+import { getUserReceivedOfferDetails } from "@/server-actions/user/received-offers-actions";
+import routes from "@/helpers/routes";
+import { redirect } from "next/navigation";
 import ReceivedOfferDetailHeader from "./components/received-offer-detail-header";
+import ReceivedOfferFullDetail from "../components/received-offer-full-detail";
 
-const ReceivedOfferDetails = () => (
-  <div>
-    <ReceivedOfferDetailHeader />
-    <Button variant="secondary" className="!p-0 !h-fit !outline-none">
-      <div className="flex items-center gap-2 text-primary-main">
-        <ArrowIconLeft1 className="!w-1.5 !h-3" color="primary-main" /> Back
-      </div>
-    </Button>
-    <div className="font-semibold mt-4 mb-6">Offer Details</div>
-  </div>
-);
+const ReceivedOfferDetails = async ({ params }: { params: { offerId: string } }) => {
+  const data = await getUserReceivedOfferDetails(params.offerId);
 
+  if (!data) {
+    redirect(routes.user.receivedOffers.fullUrl);
+  }
+
+  return (
+    <div>
+      <ReceivedOfferDetailHeader />
+      {data && <ReceivedOfferFullDetail data={data?.data} />}
+    </div>
+  );
+};
 export default ReceivedOfferDetails;

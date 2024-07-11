@@ -21,17 +21,17 @@ interface ReceivedOfferBoxProps {
   data: ReceivedOfferModel;
   selecting: boolean;
   selected: boolean;
-  onClick: (offerId: number) => void;
-  openDetail: (offerId: number) => void;
+  toggleSelect: (offerId: number) => void;
+  openDetail: (offer: ReceivedOfferModel) => void;
 }
-const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, onClick, openDetail }) => {
+const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, toggleSelect, openDetail }) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const params = new URLSearchParams(searchParams);
 
   return (
-    <div className={clsx(classes.root, selected && classes.selected, selecting && classes.selecting)} onClick={() => onClick(data.id)}>
+    <div className={clsx(classes.root, selected && classes.selected, selecting && classes.selecting)} onClick={() => toggleSelect(data.id)}>
       <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
         <div className="space-y-2 grid">
           <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
@@ -114,7 +114,7 @@ const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting
         >
           View Land
         </Button>
-        <Button className="w-full sm:w-fit !h-10 sm:!h-auto" onClick={() => openDetail(data.id)}>
+        <Button className="w-full sm:w-fit !h-10 sm:!h-auto" onClick={() => openDetail(data)}>
           Details
         </Button>
       </div>

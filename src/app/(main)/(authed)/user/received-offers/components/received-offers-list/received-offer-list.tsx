@@ -23,17 +23,17 @@ interface ReceivedOffersListProps {
 const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) => {
   const { push } = useRouter();
   const pathname = usePathname();
-  const isSmallDevice = useMediaQuery(1024);
+  const isSmallDevice = useMediaQuery(768);
   const [removePending, setRemovePending] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[] | null>(null);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
-  const [openDetailModal, setOpenDetailModal] = useState<number | null>(null);
+  const [openOffer, setOpenOffer] = useState<ReceivedOfferModel | null>(null);
 
-  const openOfferDetail = (offerId: number) => {
+  const openOfferDetail = (offer: ReceivedOfferModel) => {
     if (isSmallDevice) {
-      push(`${pathname}/${offerId}`);
+      push(`${pathname}/${offer.id}`);
     } else {
-      setOpenDetailModal(offerId);
+      setOpenOffer(offer);
     }
   };
 
@@ -63,7 +63,7 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
 
   return (
     <>
-      <ReceivedOfferDetailModal open={openDetailModal} setOpen={setOpenDetailModal} />
+      <ReceivedOfferDetailModal data={openOffer} setOpen={setOpenOffer} />
       <ResponsiveRemoveModal
         desc="Are you sure you want to delete offers you selected?"
         title="Delete selected received offers?"
@@ -100,7 +100,7 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
               key={offer.id}
               data={offer}
               selecting={!!selectedIds}
-              onClick={handleSelect}
+              toggleSelect={handleSelect}
               selected={!!selectedIds?.includes(offer.id)}
               openDetail={openOfferDetail}
             />
