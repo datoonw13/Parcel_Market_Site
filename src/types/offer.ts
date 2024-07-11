@@ -52,7 +52,7 @@ export interface ReceivedOffersFilters {
   pageSize?: number;
 }
 
-export interface ReceivedOfferModel {
+export interface OfferModel {
   id: number;
   price: string;
   earnestMoney: OfferEarnestMoneyModel;

@@ -4,7 +4,7 @@ import { getReceivedOffersParcelNumbers } from "@/server-actions/user/received-o
 import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
 
-const UserReceivedOffersMobileFilters = () => {
+const ReceivedOffersMobileFilters = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
 
   const getParcelNumbers = async () => {
@@ -46,4 +46,4 @@ const UserReceivedOffersMobileFilters = () => {
   return <FiltersDrawer data={filters} />;
 };
 
-export default UserReceivedOffersMobileFilters;
+export default ReceivedOffersMobileFilters;

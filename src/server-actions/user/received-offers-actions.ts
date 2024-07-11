@@ -1,17 +1,17 @@
 "use server";
 
 import { IPagination, ResponseType } from "@/types/common";
-import { ReceivedOfferModel, ReceivedOffersFilters } from "@/types/offer";
+import { OfferModel, ReceivedOffersFilters } from "@/types/offer";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { fetcher } from "../fetcher";
 import { userTags } from "./user-tags";
 
-export const getUserReceivedOffers = async (
+export const getReceivedOffers = async (
   params: ReceivedOffersFilters
-): Promise<(ResponseType<ReceivedOfferModel[]> & IPagination) | null> => {
-  const request = await fetcher<ResponseType<(ResponseType<ReceivedOfferModel[]> & IPagination) | null>>(
+): Promise<(ResponseType<OfferModel[]> & IPagination) | null> => {
+  const request = await fetcher<ResponseType<(ResponseType<OfferModel[]> & IPagination) | null>>(
     `offers/received?${new URLSearchParams(params as Record<string, string>)}`,
     { next: { tags: [userTags.receivedOffers] } }
   );
@@ -19,15 +19,15 @@ export const getUserReceivedOffers = async (
   return request.data?.data || null;
 };
 
-export const getUserReceivedOfferDetails = async (offerId: string): Promise<ReceivedOfferModel | null> => {
-  const request = await fetcher<ResponseType<ReceivedOfferModel | null>>(`offers/details/${offerId}`, {
+export const getOfferDetail = async (offerId: string): Promise<OfferModel | null> => {
+  const request = await fetcher<ResponseType<OfferModel | null>>(`offers/details/${offerId}`, {
     next: { tags: [userTags.receivedOffers] },
   });
 
   return request.data?.data || null;
 };
 
-export const getUserReceivedOffersParcelNumbers = async (): Promise<string[] | null> => {
+export const getReceivedOffersParcelNumbers = async (): Promise<string[] | null> => {
   const request = await fetcher<{ data: string[] | null }>(`offers/received/parcel-numbers`, {
     next: { tags: [userTags.receivedOffers] },
   });

@@ -7,7 +7,7 @@ import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
 import { getReceivedOffersParcelNumbers } from "@/server-actions/user/received-offers-actions";
 
-const UserReceivedOffersDesktopFilters = () => {
+const ReceivedOffersDesktopFilters = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
 
   const getParcelNumbers = async () => {
@@ -48,4 +48,4 @@ const UserReceivedOffersDesktopFilters = () => {
   );
 };
 
-export default UserReceivedOffersDesktopFilters;
+export default ReceivedOffersDesktopFilters;

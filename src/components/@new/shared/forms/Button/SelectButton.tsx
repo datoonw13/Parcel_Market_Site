@@ -29,7 +29,7 @@ const SelectButton: FC<SelectButtonProps> = ({ onClick, total, selecting, classN
     {!!total && (
       <Button
         variant="secondary"
-        className="!w-[30px] h-[30px] !outline-none !rounded-full hover:!bg-error-100 !p-0 group"
+        className="!w-[30px] !h-[30px] !outline-none !rounded-full hover:!bg-error-100 !p-0 group"
         onClick={onRemove}
       >
         <RemoveIcon1 className="group-hover:fill-error" />

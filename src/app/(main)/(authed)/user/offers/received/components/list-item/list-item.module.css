@@ -1,0 +1,15 @@
+.root {
+    @apply border border-grey-100 w-full bg-[url('/offer-box-mobile-gradient.png')] bg-[length:100%_115px] bg-no-repeat pt-6 pb-4 rounded-2xl;
+    @apply sm:bg-[url('/offer-box-desktop-gradient.png')] sm:bg-[length:284px_120px] md:bg-[length:328px_140px] sm:bg-right-top md:pt-8 
+}
+
+.selecting {
+    @apply relative after:content-[''] after:block after:w-full after:h-full 
+    after:absolute after:top-0 after:bg-black-100 after:rounded-2xl cursor-pointer;
+    @apply relative before:content-[''] before:block before:w-6 before:h-6 before:absolute before:top-6 before:right-6  before:bg-white
+    before:rounded-full before:border-2 before:border-primary-main-800
+}
+
+.selected {
+    @apply before:outline before:outline-4 before:-outline-offset-[6px] before:outline-white before:bg-primary-main before:border-primary-main after:bg-black-200
+}
