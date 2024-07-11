@@ -15,7 +15,7 @@ interface OfferDetailSectionProps {
 }
 
 const ReceivedOfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, infoClasses, rootClasses }) => (
-  <div className={clsx('flex flex-col gap-3',rootClasses)}>
+  <div className={clsx("flex flex-col gap-3", rootClasses)}>
     <div className="rounded-2xl p-4 sm:p-6 bg-grey-30 flex flex-col sm:grid sm:grid-cols-2 gap-6">
       <div className="space-y-3">
         <p className="font-semibold text-sm">Offer Information</p>
@@ -46,7 +46,7 @@ const ReceivedOfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertCl
           <li>
             Closing Period:<span className="ml-1 text-black">{data.contigencies}</span>
           </li>
-      </ul>
+        </ul>
       </div>
     </div>
     <div className={clsx("flex justify-between items-center", infoClasses)}>
@@ -59,12 +59,12 @@ const ReceivedOfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertCl
       <OfferStatus status={data.offerStatus} />
     </div>
     <div className={clsx(alertClasses)}>
-    <Alert
-      title="Offer Active for"
-      description={`Your offer active for ${data.offerActiveForDays} days`}
-      onClose={() => {}}
-      type="warning"
-    />
+      <Alert
+        title="Offer Active for"
+        description={`Your offer active for ${data.offerActiveForDays} days`}
+        onClose={() => {}}
+        type="warning"
+      />
     </div>
   </div>
 );
