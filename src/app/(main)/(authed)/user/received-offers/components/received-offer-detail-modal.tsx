@@ -2,12 +2,12 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
 import Modal from "@/components/@new/shared/modals/Modal";
 import Button from "@/components/@new/shared/forms/Button";
-import { ReceivedOfferModel } from "@/types/offer";
 import ReceivedOfferFullDetail from "./received-offer-full-detail/received-offer-full-detail";
+import { OfferModel } from "@/types/offer";
 
 interface ReceivedOfferDetailModalProps {
-  data: ReceivedOfferModel | null;
-  setOpen: Dispatch<SetStateAction<ReceivedOfferModel | null>>;
+  data: OfferModel | null;
+  setOpen: Dispatch<SetStateAction<OfferModel | null>>;
 }
 
 const ReceivedOfferDetailModal: FC<ReceivedOfferDetailModalProps> = ({ data, setOpen }) => (

@@ -43,10 +43,7 @@ const ReceivedOfferListItem: FC<ReceivedOfferListItemProps> = ({data, openDetail
         <p className="font-semibold text-primary-main sm:text-white sm:text-2xl">{numFormatter.format(Number(data.price))}</p>
       </div>
     </div>
-    <div className="my-3 sm:my-4 mx-4 md:mx-8">
-      <ReceivedOfferDetailSection data={data} />
-    </div>
-
+    <ReceivedOfferDetailSection data={data} rootClasses="my-3 sm:my-4 mx-4 md:mx-8" alertClasses='mt-3' />
     <Divider className="mt-8 mb-4" />
     <div className="flex gap-3 px-4 md:px-8">
       <Button className="w-full sm:w-fit !h-10 sm:!h-auto sm:mr-auto" variant="secondary">
