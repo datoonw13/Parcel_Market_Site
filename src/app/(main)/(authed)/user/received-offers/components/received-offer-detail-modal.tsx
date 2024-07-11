@@ -2,8 +2,8 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
 import Modal from "@/components/@new/shared/modals/Modal";
 import Button from "@/components/@new/shared/forms/Button";
-import ReceivedOfferFullDetail from "./received-offer-full-detail/received-offer-full-detail";
 import { OfferModel } from "@/types/offer";
+import ReceivedOfferFullDetail from "./received-offer-full-detail/received-offer-full-detail";
 
 interface ReceivedOfferDetailModalProps {
   data: OfferModel | null;

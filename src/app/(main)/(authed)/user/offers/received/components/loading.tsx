@@ -1,8 +1,7 @@
-import { uuid } from "short-uuid"
+import { uuid } from "short-uuid";
 
-const ReceivedOfferListLoading = () => {
-  return (
-    <div className="space-y-6 md:space-y-4">
+const ReceivedOfferListLoading = () => (
+  <div className="space-y-6 md:space-y-4">
     <div className="w-full h-8 animate-pulse bg-primary-main-50 rounded-2xl" />
     <div className="flex flex-col gap-6 md:gap-4">
       {new Array(5).fill(0).map(() => (
@@ -10,7 +9,6 @@ const ReceivedOfferListLoading = () => {
       ))}
     </div>
   </div>
-  )
-}
+);
 
-export default ReceivedOfferListLoading
+export default ReceivedOfferListLoading;

@@ -2,12 +2,12 @@ import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
 import OfferStatus from "@/components/@new/offer/OfferStatus";
 import Alert from "@/components/@new/shared/Alert";
 import { numFormatter } from "@/helpers/common";
-import { ReceivedOfferModel } from "@/types/offer";
+import { OfferModel } from "@/types/offer";
 import moment from "moment";
 import { FC } from "react";
 
 interface ReceivedOfferDetailSectionProps {
-  data: ReceivedOfferModel;
+  data: OfferModel;
 }
 
 const ReceivedOfferDetailSection: FC<ReceivedOfferDetailSectionProps> = ({ data }) => (
@@ -42,7 +42,7 @@ const ReceivedOfferDetailSection: FC<ReceivedOfferDetailSectionProps> = ({ data 
           <li>
             Closing Period:<span className="ml-1 text-black">{data.contigencies}</span>
           </li>
-      </ul>
+        </ul>
       </div>
     </div>
     <div className="flex justify-between items-center">

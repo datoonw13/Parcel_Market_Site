@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { ReceivedOfferModel } from "@/types/offer";
+import { OfferModel } from "@/types/offer";
 import DataNotFound from "@/components/@new/shared/DataNotFound";
 import Sort from "@/components/@new/shared/filters/Sort";
 import { SortEnum } from "@/types/common";
@@ -16,7 +16,7 @@ import UserReceivedOffersMobileFilters from "../received-offers-filters/received
 import ReceivedOfferDetailModal from "../received-offer-detail-modal";
 
 interface ReceivedOffersListProps {
-  data: ReceivedOfferModel[];
+  data: OfferModel[];
   totalCount: number;
 }
 
@@ -27,9 +27,9 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
   const [removePending, setRemovePending] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[] | null>(null);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
-  const [openOffer, setOpenOffer] = useState<ReceivedOfferModel | null>(null);
+  const [openOffer, setOpenOffer] = useState<OfferModel | null>(null);
 
-  const openOfferDetail = (offer: ReceivedOfferModel) => {
+  const openOfferDetail = (offer: OfferModel) => {
     if (isSmallDevice) {
       push(`${pathname}/${offer.id}`);
     } else {

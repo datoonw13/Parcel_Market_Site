@@ -8,9 +8,7 @@ import { headers } from "next/headers";
 import { fetcher } from "../fetcher";
 import { userTags } from "./user-tags";
 
-export const getReceivedOffers = async (
-  params: ReceivedOffersFilters
-): Promise<(ResponseType<OfferModel[]> & IPagination) | null> => {
+export const getReceivedOffers = async (params: ReceivedOffersFilters): Promise<(ResponseType<OfferModel[]> & IPagination) | null> => {
   const request = await fetcher<ResponseType<(ResponseType<OfferModel[]> & IPagination) | null>>(
     `offers/received?${new URLSearchParams(params as Record<string, string>)}`,
     { next: { tags: [userTags.receivedOffers] } }

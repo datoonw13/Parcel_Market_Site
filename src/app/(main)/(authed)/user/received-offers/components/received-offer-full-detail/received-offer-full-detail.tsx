@@ -1,6 +1,6 @@
 import { LocationIcon1 } from "@/components/@new/icons/LocationIcons";
 import { getCountyValue, getStateValue } from "@/helpers/states";
-import { ReceivedOfferModel } from "@/types/offer";
+import { OfferModel } from "@/types/offer";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { IdIcon1 } from "@/components/@new/icons/IdIcons";
@@ -10,7 +10,7 @@ import { numFormatter } from "@/helpers/common";
 import ReceivedOfferFullDetailMap from "./received-offer-full-detail-map";
 import ReceivedOfferDetailSection from "../received-offer-detail-section";
 
-const ReceivedOfferFullDetail = ({ data }: { data: ReceivedOfferModel }) => (
+const ReceivedOfferFullDetail = ({ data }: { data: OfferModel }) => (
   <div>
     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 mb-3 sm:mb-4">
       <div className="grid gap-2">

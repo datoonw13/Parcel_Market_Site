@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { ReceivedOfferModel } from "@/types/offer";
+import { OfferModel } from "@/types/offer";
 import { numFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import moment from "moment";
@@ -19,11 +19,11 @@ import classes from "./style.module.css";
 import ReceivedOfferDetailSection from "../received-offer-detail-section";
 
 interface ReceivedOfferBoxProps {
-  data: ReceivedOfferModel;
+  data: OfferModel;
   selecting: boolean;
   selected: boolean;
   toggleSelect: (offerId: number) => void;
-  openDetail: (offer: ReceivedOfferModel) => void;
+  openDetail: (offer: OfferModel) => void;
 }
 const ReceivedOfferBox: FC<ReceivedOfferBoxProps> = ({ data, selected, selecting, toggleSelect, openDetail }) => {
   const { push } = useRouter();

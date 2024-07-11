@@ -64,9 +64,9 @@ const routes = {
       protected: true,
       received: {
         url: "received",
-        fullUrl: '/user/offers/received',
-        protected: true
-      }
+        fullUrl: "/user/offers/received",
+        protected: true,
+      },
     },
   },
 };

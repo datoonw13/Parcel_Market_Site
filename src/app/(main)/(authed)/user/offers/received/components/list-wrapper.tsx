@@ -13,7 +13,7 @@ const ReceivedOffersListWrapper: FC<ReceivedOffersListWrapperProps> = async ({ p
 
   return (
     <div>
-       {data?.data && <ReceivedOffersList data={data.data} totalCount={data.pagination.totalCount} />}
+      {data?.data && <ReceivedOffersList data={data.data} totalCount={data.pagination.totalCount} />}
       <ReceivedOffersPagination
         page={Number(params.page)}
         pageSize={Number(params.pageSize)}
