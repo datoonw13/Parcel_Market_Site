@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FC, ReactNode, forwardRef } from "react";
+import { ButtonHTMLAttributes, FC, MouseEvent, MouseEventHandler, ReactNode, forwardRef } from "react";
 import clsx from "clsx";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 
@@ -62,7 +62,7 @@ interface ButtonProps {
   startIcon?: FC<{ className: string }>;
   endIcon?: FC<{ className: string }>;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   loading?: boolean;
   className?: string;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];

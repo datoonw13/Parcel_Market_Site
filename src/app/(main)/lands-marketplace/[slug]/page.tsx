@@ -11,7 +11,8 @@ import { Box, Button, Chip, Container, Divider, Typography } from "@mui/material
 import { Calendar, Eye, Location, UserSquare } from "iconsax-react";
 import { LatLngTuple } from "leaflet";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useState } from "react";
+import MakeOfferModal from "./components/ make-offer-modal";
 
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
@@ -22,12 +23,14 @@ interface IProps {
 }
 
 const LandsMarketPlaceItemPage = ({ params }: IProps) => {
+  const [openOfferModal, setOpenOfferModal] = useState(false);
   const { isFetching, data } = useGetSellingPropertyQuery(params!.slug);
   const state = getAllStates({ filterBlackList: true }).find((state) => state.value === data?.data.state.toLocaleLowerCase())?.label;
   const county = getCounties(data?.data.state.toLocaleLowerCase() || null).find((el) => el.value === data?.data.county)?.label;
 
   return (
     <>
+      {openOfferModal && <MakeOfferModal open={openOfferModal} closeModal={() => setOpenOfferModal(false)} />}
       <Container sx={{ display: "flex", flexDirection: "column", gap: 3, pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 } }}>
         <BreadCrumb routName="Test Name" />
 
@@ -220,8 +223,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                   <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
                     Contact Seller
                   </Button>
-                  {/* hide for land owner */}
-                  <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained">
+                  <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={() => setOpenOfferModal(true)}>
                     Make an offer
                   </Button>
                 </Box>

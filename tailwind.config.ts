@@ -69,6 +69,7 @@ export const colors = {
     DEFAULT: "rgba(211, 34, 11, 1)",
   },
   info: {
+    100: "rgba(53, 156, 239, 0.1)",
     DEFAULT: "rgba(53, 156, 239, 1)",
   },
 };

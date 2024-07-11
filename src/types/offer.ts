@@ -1,6 +1,8 @@
+import { z } from "zod";
 import { IUser } from "./auth";
 import { SortEnum } from "./common";
 import { ISellingProperty } from "./find-property";
+import { offerValidation } from "@/zod-validations/offer-validations";
 
 export enum OfferStatusEnum {
   pending = "Pending",
@@ -10,31 +12,31 @@ export enum OfferStatusEnum {
   canceled = "Canceled",
 }
 
-export enum OfferEarnestMoneyModel {
+export enum OfferEarnestMoneyEnum {
   FIVE_PERCENT = 5,
   TEN_PERCENT = 10,
   TWENTY_PERCENT = 20,
 }
 
-export enum OfferInspectionPeriodModel {
+export enum OfferInspectionPeriodEnum {
   TEN_DAYS = 10,
   TWENTY_DAYS = 20,
   THIRTY_DAYS = 30,
 }
 
-export enum OfferClosingPeriodOffer {
+export enum OfferClosingPeriodOfferEnum {
   FIFTEEN_DAYS = 15,
   THIRTY_DAYS = 30,
   FORTY_FIVE_DAYS = 45,
 }
 
-export enum OfferClosingCostsOffer {
+export enum OfferClosingCostsOfferEnum {
   SELLER_PAYS = "Seller Pays",
   SPLIT_EQUALLY = "Split equally",
   BUYER_PAYS = "Buyer Pays",
 }
 
-export enum OfferContingenciesOffer {
+export enum OfferContingenciesOfferEnum {
   TITLE = "Title",
   FINANCING = "Financing",
   APPRAISAL = "Appraisal",
@@ -55,11 +57,11 @@ export interface ReceivedOffersFilters {
 export interface OfferModel {
   id: number;
   price: string;
-  earnestMoney: OfferEarnestMoneyModel;
-  inspectionPeriodDays: OfferInspectionPeriodModel;
-  closingPeriodDays: OfferClosingPeriodOffer;
-  closingCosts: OfferClosingCostsOffer;
-  contigencies: OfferContingenciesOffer;
+  earnestMoney: OfferEarnestMoneyEnum;
+  inspectionPeriodDays: OfferInspectionPeriodEnum;
+  closingPeriodDays: OfferClosingPeriodOfferEnum;
+  closingCosts: OfferClosingCostsOfferEnum;
+  contigencies: OfferContingenciesOfferEnum;
   offerActiveForDays: number;
   offerStatus: OfferStatusEnum;
   offerGivenByUserId: number;
@@ -72,3 +74,5 @@ export interface OfferModel {
   offerGivenBy: { id: number; firstName: string; lastName: string };
   offerGivenTo: { id: number; firstName: string; lastName: string };
 }
+
+export type MakeOfferModel = z.infer<typeof offerValidation>
