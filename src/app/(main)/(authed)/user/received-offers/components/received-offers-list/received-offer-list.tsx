@@ -14,9 +14,10 @@ import UserReceivedOffersMobileFilters from "../received-offers-filters/received
 
 interface ReceivedOffersListProps {
   data: ReceivedOfferModel[];
+  totalCount: number;
 }
 
-const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
+const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) => {
   const [removePending, setRemovePending] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[] | null>(null);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
@@ -76,7 +77,7 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data }) => {
             <Sort options={SortEnum} />
           </div>
         </div>
-        {data.length === 0 && <DataNotFound message="No received offers yet" />}
+        {totalCount === 0 && <DataNotFound message="No received offers yet" />}
         <div className="flex flex-col gap-6 md:gap-4">
           {data.map((offer) => (
             <ReceivedOfferBox
