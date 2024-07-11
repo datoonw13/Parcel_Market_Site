@@ -25,7 +25,7 @@ const ReceivedOfferListItem: FC<ReceivedOfferListItemProps> = ({data, openDetail
 
   return (
     <div className={clsx(classes.root, selected && classes.selected, selecting && classes.selecting)} onClick={() => toggleSelect(data.id)}>
-    <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8">
+    <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8 mb-3 sm:mb-4">
       <div className="space-y-2 grid">
         <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
           long names with 3 dots long names with 3 dot long names with 3 dot...
@@ -43,8 +43,8 @@ const ReceivedOfferListItem: FC<ReceivedOfferListItemProps> = ({data, openDetail
         <p className="font-semibold text-primary-main sm:text-white sm:text-2xl">{numFormatter.format(Number(data.price))}</p>
       </div>
     </div>
-    <ReceivedOfferDetailSection data={data} rootClasses="my-3 sm:my-4 mx-4 md:mx-8" alertClasses='mt-3' />
-    <Divider className="mt-8 mb-4" />
+    <ReceivedOfferDetailSection data={data} rootClasses="mx-4 md:mx-8 mb-8" alertClasses='mt-3' />
+    <Divider className="mb-4" />
     <div className="flex gap-3 px-4 md:px-8">
       <Button className="w-full sm:w-fit !h-10 sm:!h-auto sm:mr-auto" variant="secondary">
         Contact Buyer
