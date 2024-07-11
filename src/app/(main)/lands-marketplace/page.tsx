@@ -9,7 +9,7 @@ import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/Land
 import { BookmarkBorderOutlined, CalendarMonth, FmdGoodOutlined, Place } from "@mui/icons-material";
 import { Location, UserSquare } from "iconsax-react";
 import Image from "next/image";
-import { useGetSellingPropertiesQuery } from "@/lib/features/apis/propertyApi";
+import { useAddUserFollowedLandMutation, useGetSellingPropertiesQuery } from "@/lib/features/apis/propertyApi";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { numFormatter } from "@/helpers/common";
 import moment from "moment";
@@ -33,6 +33,7 @@ const LandsMarketPlacePage = () => {
   });
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const { isFetching, data, isError } = useGetSellingPropertiesQuery(filters);
+  const [setFollowed] = useAddUserFollowedLandMutation();
 
   useEffect(() => {
     if (isError) {
