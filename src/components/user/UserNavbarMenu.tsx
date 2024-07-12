@@ -39,7 +39,7 @@ const UserNavbarMenu = () => {
             <Link href={routes.user.url}>
               <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">User Profile</li>
             </Link>
-            <Link href={routes.user.properties.url}>
+            <Link href={routes.user.listings.fullUrl}>
               <li className="px-3 py-3 text-sm cursor-pointer hover:bg-neutral-500">My Properties</li>
             </Link>
             <Divider />

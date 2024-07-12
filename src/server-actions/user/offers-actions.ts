@@ -57,6 +57,9 @@ export const makeOfferAction = async (
     method: "POST",
     body: JSON.stringify(data),
   });
+  if (!request.error) {
+    revalidateTag(userTags.receivedOffers);
+  }
 
   return { error: request.error, message: request.data?.message };
 };
