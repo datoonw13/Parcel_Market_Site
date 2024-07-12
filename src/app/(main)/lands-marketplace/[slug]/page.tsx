@@ -12,6 +12,8 @@ import { Calendar, Eye, Location, UserSquare } from "iconsax-react";
 import { LatLngTuple } from "leaflet";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { usePathname, useRouter } from "next/navigation";
 import MakeOfferModal from "./components/ make-offer-modal";
 
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
@@ -23,6 +25,11 @@ interface IProps {
 }
 
 const LandsMarketPlaceItemPage = ({ params }: IProps) => {
+  const router = useRouter();
+  const isSmallDevice = useMediaQuery(768);
+  const pathname = usePathname();
+  console.log(isSmallDevice, 2);
+
   const [openOfferModal, setOpenOfferModal] = useState(false);
   const { isFetching, data } = useGetSellingPropertyQuery(params!.slug);
   const state = getAllStates({ filterBlackList: true }).find((state) => state.value === data?.data.state.toLocaleLowerCase())?.label;
@@ -31,7 +38,13 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
   return (
     <>
       {openOfferModal && (
-        <MakeOfferModal sellingPropertyId={params.slug} open={openOfferModal} closeModal={() => setOpenOfferModal(false)} />
+        <MakeOfferModal
+          sellingPropertyId={params.slug}
+          open={openOfferModal}
+          closeModal={() => {
+            setOpenOfferModal(false);
+          }}
+        />
       )}
       <Container sx={{ display: "flex", flexDirection: "column", gap: 3, pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 } }}>
         <BreadCrumb routName="Test Name" />
@@ -225,7 +238,11 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                   <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
                     Contact Seller
                   </Button>
-                  <Button sx={{ width: { xs: "100%", sm: "fit-content" } }} variant="contained" onClick={() => setOpenOfferModal(true)}>
+                  <Button
+                    sx={{ width: { xs: "100%", sm: "fit-content", mt: { xs: 2, sm: 0 } } }}
+                    variant="contained"
+                    onClick={() => (isSmallDevice ? router.push(`${pathname}/offer`) : setOpenOfferModal(false))}
+                  >
                     Make an offer
                   </Button>
                 </Box>

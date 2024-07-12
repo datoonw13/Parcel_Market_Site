@@ -10,9 +10,9 @@ interface OfferInspectionPeriodFieldProps {
   onChange: (value: number | undefined) => void;
 }
 
-const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onChange,  error }) => {
+const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onChange, error }) => {
   const [showInput, setShowInput] = useState(false);
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("");
   return (
     <div className="flex flex-col gap-3" onBlur={() => onChange(value ? Number(value) : undefined)}>
       <LabelWithInfo
@@ -24,7 +24,7 @@ const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onCha
         <RadioButton
           name="inspection-period-none"
           onChange={() => {
-            setValue('');
+            setValue("");
             setShowInput(false);
           }}
           checked={!showInput && !value}

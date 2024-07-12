@@ -6,16 +6,15 @@ import Divider from "@/components/@new/shared/Divider";
 import Popper from "@/components/@new/shared/Popper";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import Button from "@/components/@new/shared/forms/Button";
-import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { makeOfferAction } from "@/server-actions/user/offers-actions";
 import { MakeOfferModel } from "@/types/offer";
 import { offerValidation } from "@/zod-validations/offer-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import SimpleBar from "simplebar-react";
+import toast from "react-hot-toast";
 import OfferPriceField from "./offer-price-field";
 import OfferEarnestMoneyField from "./offer-earnest-money-field";
 import OfferInspectionPeriodField from "./offer-inspection-period-field";
@@ -45,14 +44,6 @@ const LabelWithTooltip = ({ label, description, error }: { label: string; descri
 );
 
 const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sellingPropertyId: any }) => {
-  const [showAlert, setShowAlert] = useState(true);
-  const [showInput, setShowInput] = useState({
-    inspectionPeriodDays: false,
-    closingCosts: false,
-    contigencies: false,
-    earnestMoney: false,
-  });
-
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting, isValid },
@@ -62,24 +53,18 @@ const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sel
     resolver: zodResolver(offerValidation),
   });
 
-  const onSubmit = handleSubmit(
-    async (data) => {
-      const result = await makeOfferAction({ ...data, sellingPropertyId: Number(sellingPropertyId) });
-      console.log(result, 22);
-    },
-    (error) => console.log(error, 22)
-  );
-
-  console.log(watch());
+  const onSubmit = handleSubmit(async (data) => {
+    const result = await makeOfferAction({ ...data, sellingPropertyId: Number(sellingPropertyId) });
+    if (result.error) {
+      toast.error("Offer request failed");
+    }
+  });
 
   return (
     <div className="flex flex-col gap-8">
       <SimpleBar className={clsx("p-1 z-20", maxHeight)}>
         <div className="flex flex-col gap-8">
-          <OfferPriceField
-            onChange={(value) => setValue("price", value, { shouldValidate: isSubmitted })}
-            error={!!errors.price}
-          />
+          <OfferPriceField onChange={(value) => setValue("price", value, { shouldValidate: isSubmitted })} error={!!errors.price} />
           <OfferEarnestMoneyField
             error={!!errors.earnestMoney}
             onChange={(value) => setValue("earnestMoney", value, { shouldValidate: isSubmitted })}
@@ -135,9 +120,9 @@ const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sel
         description="Please check your information one more time, before you submit. You won’t be able to edit, or send offer again, but you can contact to the seller and manage changes."
       />
       <Divider />
-      <div className="flex justify-end gap-3 bg-white">
-        <Button variant="secondary">Close</Button>
-        <Button onClick={onSubmit}>Offer Price</Button>
+      <div className="flex sm:justify-end gap-3 bg-white">
+        <Button className="w-full sm:w-fit" variant="secondary">Close</Button>
+        <Button className="w-full sm:w-fit" onClick={onSubmit}>Offer Price</Button>
       </div>
     </div>
   );
