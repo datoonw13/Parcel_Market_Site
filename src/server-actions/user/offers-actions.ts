@@ -51,9 +51,11 @@ export const deleteReceivedOffers = async (ids: number[]): Promise<{ error: bool
 };
 
 export const makeOfferAction = async (data: any): Promise<{ error: boolean }> => {
+  console.log(data, 22);
+
   const request = await fetcher<ResponseType<{ error: boolean }>>(`offers`, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ...data, price: Number(data), sellingPropertyId: Number(data.sellingPropertyId) }),
   });
   console.log(request, 21123);
 

@@ -4,15 +4,15 @@ import Button from "@/components/@new/shared/forms/Button";
 import { RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
 import SimpleBar from "simplebar-react";
 import Alert from "@/components/@new/shared/Alert";
-import MakeOffer from "../../components/MakeOffer";
+import CreateOffer from "../../components/create-offer";
 
-interface MakeOfferModalProps {
+interface CreateOfferModalProps {
   open: boolean;
   closeModal: () => void;
   sellingPropertyId: any;
 }
 
-const MakeOfferModal: FC<MakeOfferModalProps> = ({ closeModal, open, sellingPropertyId }) => (
+const CreateOfferModal: FC<CreateOfferModalProps> = ({ closeModal, open, sellingPropertyId }) => (
   <Modal open={open} closeModal={() => {}}>
     <div className="max-w-4xl w-full mx-9 bg-white rounded-xl grid overflow-hidden">
       <div className="flex items-center justify-between gap-4 px-8 py-6 border-b border-b-grey-100 sticky top-0 bg-white z-10">
@@ -22,10 +22,10 @@ const MakeOfferModal: FC<MakeOfferModalProps> = ({ closeModal, open, sellingProp
         </Button>
       </div>
       <div className="py-6 px-8">
-        <MakeOffer maxHeight="max-h-[50vh]" sellingPropertyId={sellingPropertyId} />
+        <CreateOffer maxHeight="max-h-[50vh]" sellingPropertyId={sellingPropertyId} />
       </div>
     </div>
   </Modal>
 );
 
-export default MakeOfferModal;
+export default CreateOfferModal;
