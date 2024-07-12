@@ -1,7 +1,7 @@
 "use server";
 
 import { IPagination, ResponseType } from "@/types/common";
-import { OfferModel, ReceivedOffersFilters } from "@/types/offer";
+import { MakeOfferModel, OfferModel, ReceivedOffersFilters } from "@/types/offer";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
@@ -50,12 +50,12 @@ export const deleteReceivedOffers = async (ids: number[]): Promise<{ error: bool
   return { error: request.error };
 };
 
-export const makeOfferAction = async (data: any): Promise<{ error: boolean }> => {
+export const makeOfferAction = async (data: MakeOfferModel & {sellingPropertyId: number}): Promise<{ error: boolean }> => {
   console.log(data, 22);
 
   const request = await fetcher<ResponseType<{ error: boolean }>>(`offers`, {
     method: "POST",
-    body: JSON.stringify({ ...data, price: Number(data), sellingPropertyId: Number(data.sellingPropertyId) }),
+    body: JSON.stringify(data),
   });
   console.log(request, 21123);
 

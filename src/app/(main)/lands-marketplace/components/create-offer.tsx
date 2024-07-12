@@ -64,7 +64,7 @@ const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sel
 
   const onSubmit = handleSubmit(
     async (data) => {
-      const result = await makeOfferAction({ ...data, sellingPropertyId });
+      const result = await makeOfferAction({ ...data, sellingPropertyId: Number(sellingPropertyId) });
       console.log(result, 22);
     },
     (error) => console.log(error, 22)
