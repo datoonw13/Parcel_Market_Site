@@ -68,11 +68,11 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
         title="Delete selected received offers?"
         open={openRemoveModal}
         handleClose={() => setOpenRemoveModal(false)}
-        onCancel={() => {
+        onReject={() => {
           setOpenRemoveModal(false);
           setSelectedIds(null);
         }}
-        onDelete={removeOffers}
+        onOk={removeOffers}
         pending={removePending}
       />
       <OfferDetailModal data={openOffer} handleClose={() => setOpenOffer(null)} />
