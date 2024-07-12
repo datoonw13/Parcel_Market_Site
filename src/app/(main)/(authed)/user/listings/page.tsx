@@ -136,7 +136,7 @@ const UserListings = () => {
                   view="vertical"
                   className="max-w-96 md:max-w-full m-auto"
                   parcelNumber=""
-                  sellingItemId={2}
+                  sellingItemId={land.id}
                 />
               );
             })}
