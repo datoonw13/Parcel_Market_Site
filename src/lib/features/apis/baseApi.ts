@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import toast from "react-hot-toast";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:4000/api/",
+  baseUrl: "https://test.parcelmarket.com/api/",
   prepareHeaders: async (headers) => {
     headers.set("authorization", `Bearer ${localStorage.getItem("token")}`);
 

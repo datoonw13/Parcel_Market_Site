@@ -14,7 +14,6 @@ export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise
     });
 
     const data = await request.json();
-    console.log(data, 22);
 
     return {
       data,
