@@ -77,6 +77,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
       {select && (
         <div className="flex items-center gap-3">
           <Button
+            variant="secondary"
             className={clsx(
               "!rounded-3xl !h-[30px]  !text-black !text-xs !border-0 !shadow-none",
               select?.selecting ? "!bg-grey-200" : "!bg-grey-50"
@@ -88,8 +89,9 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
           {select.totalSelected > 0 && (
             <Button
               onClick={select.onRemove}
+              variant="secondary"
               // variant="text"
-              className="w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
+              className="!bg-white w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group focus:bg-error"
             >
               <RemoveIcon1 className="group-hover:fill-error group-focus:fill-white" />
             </Button>
