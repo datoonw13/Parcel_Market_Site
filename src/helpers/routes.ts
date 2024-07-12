@@ -38,11 +38,6 @@ const routes = {
     url: "user",
     fullUrl: "/user",
     protected: true,
-    properties: {
-      url: "properties",
-      fullUrl: "/user/properties",
-      protected: true,
-    },
     profile: {
       url: "profile",
       fullUrl: "/user/profile",

@@ -87,12 +87,12 @@ const UserFollowedProperties = () => {
         handleClose={() => {
           setSelect({ selecting: false, selectedIds: [], removeModal: false });
         }}
-        onCancel={() => {
+        onReject={() => {
           setSelect({ selecting: false, selectedIds: [], removeModal: false });
         }}
         title="Delete Selected Listings?"
         desc="Are you sure you want to delete selected listings?"
-        onDelete={handleRemove}
+        onOk={handleRemove}
       />
       <div className="w-full">
         <div className="mb-8">

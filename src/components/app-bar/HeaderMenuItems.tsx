@@ -25,7 +25,7 @@ const HeaderMenuItems = async () => {
         <Link href="/find-property">Sell your property</Link>
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-        <Link href={routes.propertySearch.url}>
+        <Link href={routes.propertySearch.fullUrl}>
           <Button sx={{ textTransform: "none" }} variant="contained">
             Value my land for free
           </Button>
