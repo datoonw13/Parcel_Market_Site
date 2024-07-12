@@ -50,11 +50,13 @@ export const deleteReceivedOffers = async (ids: number[]): Promise<{ error: bool
   return { error: request.error };
 };
 
-export const makeOfferAction = async (data: MakeOfferModel & { sellingPropertyId: number }): Promise<{ error: boolean }> => {
+export const makeOfferAction = async (
+  data: MakeOfferModel & { sellingPropertyId: number }
+): Promise<{ error: boolean; message?: string }> => {
   const request = await fetcher<ResponseType<{ error: boolean }>>(`offers`, {
     method: "POST",
     body: JSON.stringify(data),
   });
 
-  return { error: request.error };
+  return { error: request.error, message: request.data?.message };
 };

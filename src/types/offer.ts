@@ -1,8 +1,8 @@
 import { z } from "zod";
+import { offerValidation } from "@/zod-validations/offer-validations";
 import { IUser } from "./auth";
 import { SortEnum } from "./common";
 import { ISellingProperty } from "./find-property";
-import { offerValidation } from "@/zod-validations/offer-validations";
 
 export enum OfferStatusEnum {
   pending = "Pending",
@@ -75,4 +75,4 @@ export interface OfferModel {
   offerGivenTo: { id: number; firstName: string; lastName: string };
 }
 
-export type MakeOfferModel = z.infer<typeof offerValidation>
+export type MakeOfferModel = z.infer<typeof offerValidation>;

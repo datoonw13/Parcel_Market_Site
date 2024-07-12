@@ -241,7 +241,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
                   <Button
                     sx={{ width: { xs: "100%", sm: "fit-content", mt: { xs: 2, sm: 0 } } }}
                     variant="contained"
-                    onClick={() => (isSmallDevice ? router.push(`${pathname}/offer`) : setOpenOfferModal(false))}
+                    onClick={() => (isSmallDevice ? router.push(`${pathname}/offer`) : setOpenOfferModal(true))}
                   >
                     Make an offer
                   </Button>
