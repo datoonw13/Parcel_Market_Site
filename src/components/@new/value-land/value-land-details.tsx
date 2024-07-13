@@ -7,6 +7,10 @@ import { valueLandDetailsValidations } from "@/zod-validations/value-land-valida
 import { z } from "zod";
 import { getFoundedPropertiesAction } from "@/server-actions/value-land/actions";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import routes from "@/helpers/routes";
+import { useSetAtom } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
@@ -16,7 +20,9 @@ import Alert from "../shared/Alert";
 
 type LandDetailsModel = z.infer<typeof valueLandDetailsValidations>;
 
-const LandDetails = () => {
+const ValueLandDetails = () => {
+  const router = useRouter();
+  const setValueLandAtom = useSetAtom(valueLandAtom);
   const [showError, setShowError] = useState(false);
   const {
     handleSubmit,
@@ -42,6 +48,13 @@ const LandDetails = () => {
     const { data: foundedProperties, errorMessage } = await getFoundedPropertiesAction(data);
     if (errorMessage) {
       setShowError(true);
+    } else {
+      setValueLandAtom((prev) => ({
+        ...prev,
+        lands: foundedProperties,
+        selectedLand: foundedProperties?.length === 1 ? foundedProperties[0] : null,
+      }));
+      router.push(routes.valueLand.found.fullUrl);
     }
   });
 
@@ -190,4 +203,4 @@ const LandDetails = () => {
   );
 };
 
-export default LandDetails;
+export default ValueLandDetails;

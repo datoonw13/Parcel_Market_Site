@@ -1,5 +1,5 @@
-import LandDetails from "@/components/@new/value-land/land-details";
+import ValueLandDetails from "@/components/@new/value-land/value-land-details";
 
-const ValueLandPage = () => <LandDetails />;
+const ValueLandPage = () => <ValueLandDetails />;
 
 export default ValueLandPage;

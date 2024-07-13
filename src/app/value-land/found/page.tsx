@@ -1,10 +1,5 @@
-import { cookies, headers } from "next/headers";
-import React from "react";
+import ValueLandFound from "@/components/@new/value-land/value-land-found";
 
-const ValueLandsFound = async () => {
-  console.log(cookies().get("foundedLands"));
+const ValueLandFoundPage = () => <ValueLandFound />;
 
-  return <div>ValueLandsFound</div>;
-};
-
-export default ValueLandsFound;
+export default ValueLandFoundPage;

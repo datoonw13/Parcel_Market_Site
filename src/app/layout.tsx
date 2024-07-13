@@ -9,6 +9,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material";
 import theme from "@/theme";
 import NextTopLoader from "nextjs-toploader";
+import { Provider } from "jotai";
 import StoreProvider from "./StoreProvider";
 import "simplebar-react/dist/simplebar.min.css";
 
@@ -43,10 +44,12 @@ export default function RootLayout({
           <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
             <NextTopLoader color="#0E8B40" showSpinner={false} />
             <AppRouterCacheProvider>
-              <ThemeProvider theme={theme}>
-                <Toaster position="top-right" toastOptions={{ duration: 1500 }} />
-                {children}
-              </ThemeProvider>
+              <Provider>
+                <ThemeProvider theme={theme}>
+                  <Toaster position="top-right" toastOptions={{ duration: 1500 }} />
+                  {children}
+                </ThemeProvider>
+              </Provider>
             </AppRouterCacheProvider>
           </body>
         </html>
