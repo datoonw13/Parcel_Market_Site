@@ -20,11 +20,12 @@ const SignInPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const signIn = async (prevState: any, formData: FormData) => {
-    try {
-      await signInUserAction(prevState, formData);
-    } catch (error) {
-      toast.error((error as ErrorResponse).message);
-    }
+    const request = await signInUserAction(prevState, formData);
+    console.log(request, 22);
+    
+    // if (request.errorMessage) {
+    //   toast.error(request.errorMessage);
+    // }
   };
 
   const [state, formAction] = useFormState(signIn, null);

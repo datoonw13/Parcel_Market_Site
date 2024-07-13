@@ -13,6 +13,7 @@ import routes from "@/helpers/routes";
 import { signUpUserAction } from "@/server-actions/user/user-actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { ErrorResponse } from "@/helpers/error-response";
 import Button from "../../shared/forms/Button";
 import TextField from "../../shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
@@ -48,19 +49,17 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
       repeatPassword: "",
     },
   });
-  console.log(errors, 22);
 
   const selectedState = watch("state");
 
   const cities = useMemo(() => getCitiesByState(selectedState), [selectedState]);
 
   const onSubmit = handleSubmit(async (data) => {
-    const { error, message } = await signUpUserAction(data);
-    if (error && message) {
-      toast.error(message);
-    }
-    if (!error && message) {
-      toast.success(message, { duration: 3000 });
+    const request = await signUpUserAction(data);
+    if (request?.errorMessage) {
+      toast.error(request.errorMessage);
+    } else {
+      toast.success("User registered successfully, please activate your account by clicking on email we have sent.", { duration: 3000 });
       router.replace(`/${routes.home.url}`);
     }
   });

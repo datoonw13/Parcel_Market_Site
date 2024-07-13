@@ -34,38 +34,40 @@ export const signInUserAction = async (prevState: any, formData: FormData) => {
 
   const validations = userSignInValidation.safeParse(values);
   if (!validations.success) {
-    throw new ErrorResponse("Unauthorized", 401);
-  }
-
-  const data = await fetcher<ISignInResponse>("user/auth", {
-    method: "POST",
-    body: JSON.stringify(validations.data),
-    cache: "no-cache",
-  });
-
-  if (data) {
-    setAuthToken(data.access_token);
-  }
-  return redirect(`/${routes.home.url}`);
-};
-
-export const signUpUserAction = async (values: IUserSignUp) => {
-  const request = await fetcher<ResponseType<any>>("user/register", {
-    method: "POST",
-    body: JSON.stringify(values),
-    cache: "no-cache",
-  });
-  if (request.error) {
     return {
-      error: true,
-      message: request.data?.message === "Conflict" ? "Email already registered" : "Registration failed",
+      errorMessage: "Unauthorized",
     };
   }
 
-  return {
-    error: false,
-    message: request.data?.message,
-  };
+  try {
+    const data = await fetcher<ISignInResponse>("user/auth", {
+      method: "POST",
+      body: JSON.stringify(validations.data),
+      cache: "no-cache",
+    });
+
+    setAuthToken(data.access_token);
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).message,
+    };
+  }
+  redirect(`${routes.home.fullUrl}`);
+};
+
+export const signUpUserAction = async (values: IUserSignUp) => {
+  try {
+    const request = await fetcher<null>("user/register", {
+      method: "POST",
+      body: JSON.stringify(values),
+      cache: "no-cache",
+    });
+    return request;
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).statusCode === 409 ? "Email already registered" : "Registration failed",
+    };
+  }
 };
 
 export const logOutUserAction = async () => {

@@ -1,7 +1,7 @@
 "use client";
 
-import SignUp from "@/components/@new/auth/sign-up/SignUp";
-import SignUpReason from "@/components/@new/auth/sign-up/SignUpReason";
+import SignUp from "@/components/@new/auth/sign-up/sign-up-form";
+import SignUpReason from "@/components/@new/auth/sign-up/sign-up-reason";
 import { IUserSignUp } from "@/types/auth";
 import { useState } from "react";
 
