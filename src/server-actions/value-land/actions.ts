@@ -5,8 +5,6 @@ import { ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
 import { valueLandDetailsValidations } from "@/zod-validations/value-land-validations";
-import { redirect } from "next/navigation";
-import routes from "@/helpers/routes";
 import { fetcher } from "../fetcher";
 
 export const getFoundedPropertiesAction = async (
@@ -33,7 +31,6 @@ export const getFoundedPropertiesAction = async (
         revalidate: 3600,
       },
     });
-    redirect(routes.valueLand.found.fullUrl);
     return {
       data: request,
       errorMessage: null,
