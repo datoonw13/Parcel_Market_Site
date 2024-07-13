@@ -1,25 +1,35 @@
 "use server";
 
+import { ErrorResponse } from "@/helpers/error-response";
 import { cookies } from "next/headers";
 
-export const fetcher = async <T>(apiUrl: string, options?: RequestInit): Promise<{data: T | null, error: boolean }> => { // eslint-disable-line
-
+// eslint-disable-next-line no-undef
+export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T> => {
   try {
-    const request = await fetch(`https://api.parcelmarket.com/api/${apiUrl}`, {
+    const request = await fetch(`https://api.parcelmarket.com/api/${url}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
         cookie: cookies().toString(),
       },
     });
-
-    const data = await request.json();
-
-    return {
-      data,
-      error: data?.statusCode.toString()[0] !== "2",
+    const response = (await request.json()) as {
+      data: any;
+      errors: string[];
+      message: string;
+      statusCode: number;
     };
+    if (!response.statusCode.toString().startsWith("2")) {
+      let errorMessage = "Something went wrong";
+      if (response.message) {
+        errorMessage = response.message;
+      } else if (response.errors.length > 0) {
+        errorMessage = response.errors.join("; ");
+      }
+      throw new ErrorResponse(errorMessage, response.statusCode);
+    }
+    return response.data;
   } catch (error) {
-    return { error: true, data: null };
+    throw new ErrorResponse((error as ErrorResponse).message, (error as ErrorResponse).statusCode);
   }
 };

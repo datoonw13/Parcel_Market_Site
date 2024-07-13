@@ -1,31 +1,36 @@
 "use client";
 
+import { forwardRef, useRef, useState } from "react";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
+import { ErrorResponse } from "@/helpers/error-response";
 import routes from "@/helpers/routes";
 import useEnterClick from "@/hooks/useEnterClick";
-import { signInUser } from "@/server-actions/user/user-actions";
+import { signInUserAction } from "@/server-actions/user/user-actions";
 import Link from "next/link";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 
 const SignInPage = () => {
   const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [state, formAction] = useFormState(signInUser, null);
+
+  const signIn = async (prevState: any, formData: FormData) => {
+    try {
+      await signInUserAction(prevState, formData);
+    } catch (error) {
+      toast.error((error as ErrorResponse).message);
+    }
+  };
+
+  const [state, formAction] = useFormState(signIn, null);
 
   useEnterClick(ref?.current?.onclick);
 
-  useEffect(() => {
-    if (state?.error) {
-      toast.error(state.message);
-    }
-  }, [state]);
   return (
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>

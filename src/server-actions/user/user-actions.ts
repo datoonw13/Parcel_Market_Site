@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import routes from "@/helpers/routes";
 import { revalidatePath } from "next/cache";
+import { ErrorResponse } from "@/helpers/error-response";
 import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
@@ -25,7 +26,7 @@ export const setAuthToken = (token: string) => {
   revalidatePath("/");
 };
 
-export const signInUser = async (prevState: any, formData: FormData) => {
+export const signInUserAction = async (prevState: any, formData: FormData) => {
   const values = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -33,29 +34,19 @@ export const signInUser = async (prevState: any, formData: FormData) => {
 
   const validations = userSignInValidation.safeParse(values);
   if (!validations.success) {
-    return {
-      error: true,
-      message: "Wrong email or password",
-    };
+    throw new ErrorResponse("Unauthorized", 401);
   }
-  const { error, data } = await fetcher<ResponseType<ISignInResponse>>("user/auth", {
+
+  const data = await fetcher<ISignInResponse>("user/auth", {
     method: "POST",
     body: JSON.stringify(validations.data),
     cache: "no-cache",
   });
 
-  if (error) {
-    return {
-      error: true,
-      message: "Wrong email or password",
-    };
+  if (data) {
+    setAuthToken(data.access_token);
   }
-
-  if (data?.data.access_token) {
-    setAuthToken(data.data.access_token);
-  }
-  redirect(`/${routes.home.url}`);
-  return null;
+  return redirect(`/${routes.home.url}`);
 };
 
 export const signUpUserAction = async (values: IUserSignUp) => {
