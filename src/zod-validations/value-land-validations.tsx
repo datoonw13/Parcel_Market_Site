@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const landAddressValidation = z.object({
-  state: z.string(),
-  county: z.string(),
+  state: z.string().min(1),
+  county: z.string().min(1),
 });
 
 export const landOwnerValidation = z
