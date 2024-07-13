@@ -1,0 +1,26 @@
+import Divider from "@/components/@new/shared/Divider";
+import ValueLandStepInfo from "@/components/@new/value-land/value-land-step-info";
+import ValueLandStepper from "@/components/@new/value-land/value-land-stepper";
+import { AppBarMini } from "@/components/app-bar";
+import { ReactNode } from "react";
+
+const ValueLandLayout = ({ children }: { children: ReactNode }) => (
+  <div className="h-screen grid grid-cols-1 xl:grid-cols-[1fr_400px] 2xl:grid-cols-[1fr_544px]">
+    <div className="flex flex-col px-5 sm:px-7 md:px-10 lg:px-13 xl:px-16">
+      <AppBarMini />
+      <div className="border border-grey-100 md:border-none md:shadow-4 pt-6 rounded-2xl space-y-6">
+        <div className="px-4 md:px-6 lg:px-8">
+          <ValueLandStepper steps={4} currentStep={2} />
+        </div>
+        <Divider />
+        <div className="px-4 md:px-6 lg:px-8">
+          <ValueLandStepInfo />
+        </div>
+        {children}
+      </div>
+    </div>
+    <div className="bg-error-100">SideBar</div>
+  </div>
+);
+
+export default ValueLandLayout;

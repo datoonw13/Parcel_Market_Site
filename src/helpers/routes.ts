@@ -64,6 +64,26 @@ const routes = {
       },
     },
   },
+  valueLand: {
+    url: "value-land",
+    fullUrl: "/value-land",
+    protected: false,
+    found: {
+      url: "found",
+      fullUrl: "/value-land/found",
+      protected: false,
+    },
+    about: {
+      url: "about",
+      fullUrl: "/value-land/about",
+      protected: false,
+    },
+    value: {
+      url: "value",
+      fullUrl: "/value-land/value",
+      protected: false,
+    },
+  },
 };
 
 export const getAllRoutes = (
