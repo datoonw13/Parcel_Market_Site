@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonHTMLAttributes, FC, MouseEvent, MouseEventHandler, ReactNode, forwardRef } from "react";
 import clsx from "clsx";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
@@ -66,6 +68,8 @@ interface ButtonProps {
   loading?: boolean;
   className?: string;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  onMouseEnter?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onMouseLeave?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -82,6 +86,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       loading,
       className,
       type = "button",
+      onMouseEnter,
+      onMouseLeave,
     },
     ref
   ) => (
@@ -89,6 +95,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       // eslint-disable-next-line react/button-has-type
       type={type || "submit"}
       ref={ref}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={clsx(
         "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
         sizes[size],
