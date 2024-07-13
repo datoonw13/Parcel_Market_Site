@@ -1,6 +1,6 @@
 import { priceFilters, getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer";
-import { getReceivedOffersParcelNumbers } from "@/server-actions/user/offers-actions";
+import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/actions";
 import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ const ReceivedOffersMobileFilters = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
 
   const getParcelNumbers = async () => {
-    const data = await getReceivedOffersParcelNumbers();
+    const { data } = await getReceivedOffersParcelNumbersAction();
     if (data) {
       setParcelNumbers(data.map((el) => ({ value: el, label: el })));
     }

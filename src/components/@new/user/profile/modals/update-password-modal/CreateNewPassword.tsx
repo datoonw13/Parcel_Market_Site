@@ -3,7 +3,7 @@
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
-import { sendPasswordResetCodeAction } from "@/server-actions/user/user-actions";
+import { sendPasswordResetCodeAction } from "@/server-actions/user/actions";
 import { userPasswordResetValidations } from "@/zod-validations/auth-validations";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -29,9 +29,9 @@ const CreateNewPassword = ({
 
   const onSubmit = async () => {
     setLoading(true);
-    const { error, message } = await sendPasswordResetCodeAction({ newPassword: values.newPassword, oldPassword: values.oldPassword });
-    if (error) {
-      toast.error(message);
+    const { errorMessage } = await sendPasswordResetCodeAction({ newPassword: values.newPassword, oldPassword: values.oldPassword });
+    if (errorMessage) {
+      toast.error(errorMessage);
       setLoading(false);
     } else {
       onNext(values.oldPassword, values.newPassword);

@@ -1,7 +1,7 @@
 import routes from "@/helpers/routes";
 import { Box, Button } from "@mui/material";
 import Link from "next/link";
-import { getUserAction } from "@/server-actions/user/user-actions";
+import { getUserAction } from "@/server-actions/user/actions";
 import UserMenu from "../@new/user/user-menu/UserMenu";
 
 const HeaderMenuItems = async () => {

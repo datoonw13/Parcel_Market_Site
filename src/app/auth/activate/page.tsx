@@ -1,13 +1,11 @@
-import { activateUserAccountAction } from "@/server-actions/user/user-actions";
+import { activateUserAccountAction } from "@/server-actions/user/actions";
 import clsx from "clsx";
-import React from "react";
 
 const page = async ({ searchParams }: { searchParams: { token?: string } }) => {
-  const { error } = await activateUserAccountAction(searchParams.token);
-
+  const request = await activateUserAccountAction(searchParams.token);
   return (
-    <div className={clsx("p-8 font-semibold text-center ", error ? "text-error" : "text-success")}>
-      {error ? "Activation failed...." : "Account successfully activated"}
+    <div className={clsx("p-8 font-semibold text-center ", request?.errorMessage ? "text-error" : "text-success")}>
+      {request?.errorMessage ? "Activation failed...." : "Account successfully activated"}
     </div>
   );
 };

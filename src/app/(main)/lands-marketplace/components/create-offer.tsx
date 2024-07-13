@@ -7,7 +7,7 @@ import Popper from "@/components/@new/shared/Popper";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
-import { makeOfferAction } from "@/server-actions/user/offers-actions";
+import { makeOfferAction } from "@/server-actions/offer/actions";
 import { MakeOfferModel } from "@/types/offer";
 import { offerValidation } from "@/zod-validations/offer-validations";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -2,14 +2,12 @@
 
 import React, { FC, useState } from "react";
 import dynamic from "next/dynamic";
-import { RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
-import Divider from "@/components/@new/shared/Divider";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Button from "@/components/@new/shared/forms/Button";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
 import { DeletionAccountReason } from "@/types/auth";
-import { removeUserAccountAction } from "@/server-actions/user/user-actions";
+import { removeUserAccountAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
@@ -62,12 +60,11 @@ const DeleteAccountModalContent: FC<Pick<DeleteAccountModalProps, "handleClose">
     } else {
       setRemovePending(true);
       if (values.deletionResult && values.password) {
-        const { error, message } = await removeUserAccountAction({ deletionResult: values.deletionResult, password: values.password });
-        if (error) {
-          toast.error(message);
+        const { errorMessage } = await removeUserAccountAction({ deletionResult: values.deletionResult, password: values.password });
+        if (errorMessage) {
+          toast.error(errorMessage);
           setRemovePending(false);
-        }
-        if (!error) {
+        } else {
           toast.success("Account has been removed");
         }
       }

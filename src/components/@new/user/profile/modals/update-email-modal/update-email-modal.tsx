@@ -6,7 +6,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import { IUser } from "@/types/auth";
 import TextField from "@/components/@new/shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
-import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user/user-actions";
+import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import { emailSchema } from "@/zod-validations/auth-validations";
 import { maskEmail } from "@/helpers/common";
@@ -60,24 +60,26 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
 
   const handleCodeSend = async ({ resend }: { resend?: boolean }) => {
     setPending(true);
-    const { error, message } = await sendEmailResetCodeAction({ password: values.password });
-    if (!error) {
+    const { errorMessage } = await sendEmailResetCodeAction({ password: values.password });
+    if (!errorMessage) {
       !resend && setStep(UpdateEmailSteps.NEW_EMAIL);
       setPending(false);
       return { error: false };
     }
-    message && toast.error(message);
+
+    toast.error(errorMessage);
     setPending(false);
+
     return { error: true };
   };
 
   const handleEmailUpdate = async () => {
     setPending(true);
-    const { error, message } = await setNewEmailAction({ code: values.code, email: values.email });
-    if (!error) {
+    const { errorMessage } = await setNewEmailAction({ code: values.code, email: values.email });
+    if (!errorMessage) {
       handleClose();
     } else {
-      message && toast.error(message);
+      toast.error(errorMessage);
       setPending(false);
     }
   };

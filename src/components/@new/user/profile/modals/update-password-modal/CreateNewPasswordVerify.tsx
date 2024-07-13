@@ -3,7 +3,7 @@
 import ResendButton from "@/components/@new/shared/ResendButton";
 import Button from "@/components/@new/shared/forms/Button";
 import TextField from "@/components/@new/shared/forms/TextField";
-import { sendPasswordResetCodeAction, setNewPasswordAction } from "@/server-actions/user/user-actions";
+import { sendPasswordResetCodeAction, setNewPasswordAction } from "@/server-actions/user/actions";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -18,22 +18,22 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
 
   const handleResend = async () => {
     setCodeSending(true);
-    const { error, message } = await sendPasswordResetCodeAction(passwords);
+    const { errorMessage } = await sendPasswordResetCodeAction(passwords);
     setCodeSending(false);
-    if (error) {
-      toast.error(message);
+    if (errorMessage) {
+      toast.error(errorMessage);
       throw Error();
     }
   };
 
   const onSubmit = async () => {
     setPasswordUpdating(true);
-    const { error, message } = await setNewPasswordAction({ code, newPassword: passwords.newPassword });
-    if (error) {
-      message && toast.error(message);
+    const { errorMessage } = await setNewPasswordAction({ code, newPassword: passwords.newPassword });
+    if (errorMessage) {
+      toast.error(errorMessage);
       setPasswordUpdating(false);
     } else {
-      message && toast.success(message);
+      toast.success("Your password has been successfully reset");
       handleClose();
     }
   };

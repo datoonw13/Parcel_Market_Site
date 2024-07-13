@@ -1,10 +1,11 @@
 import AdditionalInfoSection from "@/components/@new/user/profile/AdditionalInfoSection";
 import PersonalInfoSection from "@/components/@new/user/profile/PersonalInfoSection";
 import UploadImage from "@/components/@new/user/profile/UploadImage";
-import { getUserFullDetails } from "@/server-actions/user/user-actions";
+import { getUserFullDetailsAction } from "@/server-actions/user/actions";
 
 const UserProfilePage = async () => {
-  const userDetails = await getUserFullDetails();
+  const userDetails = await getUserFullDetailsAction();
+
   return (
     <div className="grid gap-6">
       {userDetails && (

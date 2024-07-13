@@ -1,4 +1,4 @@
-import { getReceivedOffers } from "@/server-actions/user/offers-actions";
+import { getReceivedOffersAction } from "@/server-actions/offer/actions";
 import { ReceivedOffersFilters } from "@/types/offer";
 import { FC } from "react";
 import ReceivedOffersPagination from "./pagination";
@@ -9,11 +9,11 @@ interface ReceivedOffersListWrapperProps {
 }
 
 const ReceivedOffersListWrapper: FC<ReceivedOffersListWrapperProps> = async ({ params }) => {
-  const data = await getReceivedOffers(params);
+  const { data } = await getReceivedOffersAction(params);
 
   return (
     <div>
-      {data?.data && <ReceivedOffersList data={data.data} totalCount={data.pagination.totalCount} />}
+      {data && <ReceivedOffersList data={data.list} totalCount={data.pagination.totalCount} />}
       <ReceivedOffersPagination
         page={Number(params.page)}
         pageSize={Number(params.pageSize)}

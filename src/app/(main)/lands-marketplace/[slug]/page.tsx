@@ -28,7 +28,6 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
   const router = useRouter();
   const isSmallDevice = useMediaQuery(768);
   const pathname = usePathname();
-  console.log(isSmallDevice, 2);
 
   const [openOfferModal, setOpenOfferModal] = useState(false);
   const { isFetching, data } = useGetSellingPropertyQuery(params!.slug);

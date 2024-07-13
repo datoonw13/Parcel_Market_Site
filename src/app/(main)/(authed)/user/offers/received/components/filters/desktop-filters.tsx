@@ -5,13 +5,13 @@ import AutoCompleteDesktopFilters from "@/components/@new/shared/filters/desktop
 import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
-import { getReceivedOffersParcelNumbers } from "@/server-actions/user/offers-actions";
+import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/actions";
 
 const ReceivedOffersDesktopFilters = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
 
   const getParcelNumbers = async () => {
-    const data = await getReceivedOffersParcelNumbers();
+    const { data } = await getReceivedOffersParcelNumbersAction();
     if (data) {
       setParcelNumbers(data.map((el) => ({ value: el, label: el })));
     }

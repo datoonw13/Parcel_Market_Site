@@ -10,10 +10,10 @@ import TextField from "@/components/@new/shared/forms/TextField";
 import { ErrorResponse } from "@/helpers/error-response";
 import routes from "@/helpers/routes";
 import useEnterClick from "@/hooks/useEnterClick";
-import { signInUserAction } from "@/server-actions/user/user-actions";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
+import { signInUserAction } from "@/server-actions/user/actions";
 
 const SignInPage = () => {
   const ref = useRef<HTMLButtonElement | null>(null);
@@ -21,11 +21,9 @@ const SignInPage = () => {
 
   const signIn = async (prevState: any, formData: FormData) => {
     const request = await signInUserAction(prevState, formData);
-    console.log(request, 22);
-    
-    // if (request.errorMessage) {
-    //   toast.error(request.errorMessage);
-    // }
+    if (request.errorMessage) {
+      toast.error(request.errorMessage);
+    }
   };
 
   const [state, formAction] = useFormState(signIn, null);

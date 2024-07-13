@@ -1,7 +1,7 @@
 import routes from "@/helpers/routes";
 import { setSelectedParcelOptions } from "@/lib/features/slices/authedUserSlice";
 import { useAppDispatch } from "@/lib/hooks";
-import { getUserAction } from "@/server-actions/user/user-actions";
+import { getUserAction } from "@/server-actions/user/actions";
 import { IFindPropertyAbout, ISellProperty } from "@/types/find-property";
 import { IMapItem } from "@/types/map";
 import { findPropertyAbout } from "@/validations/find-property-schema";

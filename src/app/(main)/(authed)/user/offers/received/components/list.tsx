@@ -6,7 +6,7 @@ import Sort from "@/components/@new/shared/filters/Sort";
 import { SortEnum } from "@/types/common";
 import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
-import { deleteReceivedOffers, revalidateReceivedOffers } from "@/server-actions/user/offers-actions";
+import { deleteReceivedOffersAction } from "@/server-actions/offer/actions";
 import toast from "react-hot-toast";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
@@ -49,15 +49,13 @@ const ReceivedOffersList: FC<ReceivedOffersListProps> = ({ data, totalCount }) =
   };
 
   const removeOffers = async () => {
-    try {
-      setRemovePending(true);
-      await deleteReceivedOffers(selectedIds!);
-      toast.success("Offer successfully removed");
-      await revalidateReceivedOffers();
-    } catch (error) {
+    setRemovePending(true);
+    const { errorMessage } = await deleteReceivedOffersAction(selectedIds!);
+    if (errorMessage) {
       toast.error("Offers remove failed");
-    } finally {
       setRemovePending(false);
+    } else {
+      toast.success("Offer successfully removed");
     }
   };
 

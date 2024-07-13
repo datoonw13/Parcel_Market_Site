@@ -5,6 +5,11 @@ export interface ResponseType<T> {
   statusCode: number;
 }
 
+export interface ResponseModel<T> {
+  data: T;
+  errorMessage: string | null;
+}
+
 export interface IPagination {
   pagination: {
     totalCount: number;
