@@ -11,9 +11,8 @@ const AppBarMini = () => (
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      pt: { xs: 2, sm: 4, md: 6, lg: 8 },
-      pb: 2,
-      mb: { xs: 4, md: 3 },
+      // pt: { xs: 2, sm: 4, md: 6, lg: 8 },
+      // mb: { xs: 6, md: 5 },
     }}
   >
     <Link href="/">
@@ -21,7 +20,7 @@ const AppBarMini = () => (
         <Logo />
       </Box>
     </Link>
-    <Box sx={{ ml: "auto", display: { xs: "flex", lg: "none" } }}>
+    <Box sx={{ ml: "auto", display: { xs: "flex", sm: "none" } }}>
       <ResponsiveHeaderMenu rootId="parcel-find-header" />
     </Box>
   </Box>

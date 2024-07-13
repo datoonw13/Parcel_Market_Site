@@ -33,6 +33,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   loading?: boolean;
   contentClassName?: string;
   disableSameWidth?: boolean;
+  rootClassName?: string
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -56,6 +57,7 @@ const AutoComplete = <T extends Array<{}>>({
   loading,
   contentClassName,
   disableSameWidth,
+  rootClassName
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -87,7 +89,7 @@ const AutoComplete = <T extends Array<{}>>({
   };
 
   return (
-    <div>
+    <div className={clsx(rootClassName)}>
       <Popper
         disableSameWidth={disableSameWidth}
         offsetY={4}

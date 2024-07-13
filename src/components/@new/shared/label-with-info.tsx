@@ -15,7 +15,7 @@ interface LabelWithInfoProps {
 }
 
 const LabelWithInfo: FC<LabelWithInfoProps> = ({ description, error, label, iconClassName, labelClassName }) => (
-  <div className="flex gap-1">
+  <div className="flex gap-1 items-center">
     <p className={clsx("font-medium", error && "text-error", labelClassName)}>{label}</p>
     <Popper
       disableSameWidth
