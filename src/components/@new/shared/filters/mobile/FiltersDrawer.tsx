@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { ArrowIconDown1, ArrowIconUp1 } from "@/components/@new/icons/ArrowIcons";
 import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getCounties } from "@/helpers/states";
 import Button from "../../forms/Button";
 import Divider from "../../Divider";
 import TextField from "../../forms/TextField";
@@ -143,6 +144,8 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
     if (localFilters) {
       Object.keys(localFilters).forEach((key) => {
         if (localFilters[key]) {
+          console.log(localFilters, key);
+
           params.set(key, localFilters[key]!.toString());
         } else {
           params.delete(key);
@@ -182,7 +185,8 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
               <div
                 className={clsx(
                   "flex justify-between items-center py-3 sticky top-0 bg-white",
-                  !isFilterOpen(filterKey) && "border-b border-grey-100"
+                  !isFilterOpen(filterKey) && "border-b border-grey-100",
+                  filterKey === "county" && !localFilters?.state && "pointer-events-none opacity-50"
                 )}
                 onClick={() => toggleFilter(filterKey)}
               >
@@ -222,15 +226,24 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
                         transition={{ duration: 0.1 }}
                       >
                         <div className="pb-3 flex flex-col gap-4 mt-1">
-                          {data[filterKey].options.map((option) => (
-                            <RadioButton
-                              key={(option as DefaultFilterType).value}
-                              checked={localFilters?.[filterKey] === (option as DefaultFilterType).value}
-                              name={(option as DefaultFilterType).value}
-                              label={(option as DefaultFilterType).label}
-                              onChange={() => setLocalFilters({ ...localFilters, [filterKey]: (option as DefaultFilterType).value })}
-                            />
-                          ))}
+                          {[filterKey === "county" ? getCounties(localFilters?.state?.toString() ?? "") : data[filterKey].options]
+                            .flat()
+                            .map((option) => (
+                              <RadioButton
+                                key={(option as DefaultFilterType).value}
+                                checked={localFilters?.[filterKey] === (option as DefaultFilterType).value}
+                                name={(option as DefaultFilterType).value}
+                                label={(option as DefaultFilterType).label}
+                                onChange={() => {
+                                  const newFilters = {
+                                    ...localFilters,
+                                    [filterKey]: (option as DefaultFilterType).value,
+                                    ...(filterKey === "state" && { county: null }),
+                                  };
+                                  setLocalFilters({ ...newFilters });
+                                }}
+                              />
+                            ))}
                         </div>
                       </motion.div>
                     )}

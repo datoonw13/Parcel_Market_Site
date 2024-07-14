@@ -3,6 +3,7 @@
 import React, { FC } from "react";
 import clsx from "clsx";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getCounties, getCountyValue } from "@/helpers/states";
 import AutoComplete from "../../forms/AutoComplete";
 
 interface AutoCompleteDesktopFiltersProps {
@@ -17,9 +18,15 @@ const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ optio
   const pathname = usePathname();
   const { replace } = useRouter();
   const params = new URLSearchParams(searchParams);
-  const selectedValue = options.find((el) => el.value === params.get(filterKey)) || null;
+  const selectedValue =
+    filterKey === "county"
+      ? getCountyValue(params.get("county"), params.get("state"))
+      : options.find((el) => el.value === params.get(filterKey)) || null;
 
   const handleSelect = (newValue: string | null) => {
+    if (filterKey === "state") {
+      params.delete("county");
+    }
     if (newValue) {
       params.set(filterKey, newValue);
     } else {
@@ -34,8 +41,9 @@ const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ optio
         "!h-[36px] [&>input::placeholder]:text-black",
         selectedValue && "[&>input]:bg-primary-main-100 [&>input]:!border-primary-main-400"
       )}
-      options={options}
+      options={filterKey === "county" ? getCounties(params.get("state")) : options}
       loading={loading}
+      disabled={filterKey === "county" && !params.get("state")}
       getOptionLabel={(item) => item.label}
       getOptionKey={(item) => item.value}
       onChange={(option) => handleSelect(option?.value || null)}

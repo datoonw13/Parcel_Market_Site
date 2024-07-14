@@ -17,6 +17,46 @@ export const getMinMaxFilterLabel = (priceMin: number | null, priceMax: number |
   return "";
 };
 
+export const getAcreageLabel = (acreageMin: number | null, acreageMax: number | null) => {
+  if (!acreageMin && !acreageMax) {
+    return "qwd";
+  }
+
+  if (acreageMax && !acreageMin) {
+    return `N/A - ${acreageMax} Acres`;
+  }
+  if (!acreageMax && acreageMin) {
+    return `${acreageMin - 1}+ Acres`;
+  }
+  if (acreageMax && acreageMin) {
+    return `${acreageMin} - ${acreageMax} Acres`;
+  }
+  return "";
+};
+
+export const acreagesFilters = [
+  {
+    min: 1,
+    max: null,
+  },
+  {
+    min: 6,
+    max: null,
+  },
+  {
+    min: 11,
+    max: null,
+  },
+  {
+    min: 21,
+    max: null,
+  },
+  {
+    min: 51,
+    max: null,
+  },
+];
+
 export const priceFilters = [
   {
     min: null,
