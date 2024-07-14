@@ -1,16 +1,16 @@
+import { FC } from "react";
 import clsx from "clsx";
-import React, { FC, ReactNode } from "react";
 import Image from "next/image";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { LandListItemProps } from "@/types/lands";
 import { LocationIcon1 } from "../../icons/LocationIcons";
-import { BookmarkIcon1 } from "../../icons/BookMarkIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
+import LanListItemBookmark from "./land-list-item-bookmark";
 
-const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, className, selected, selecting, onClick }) => (
+const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, className, selected, selecting, onClick, bookmark }) => (
   <div
     className={clsx(
       "pt-6 border border-grey-100 rounded-2xl w-full flex flex-col gap-4 cursor-pointer group hover:shadow-1 transition-all duration-100",
@@ -29,7 +29,8 @@ const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, classN
           <LocationIcon1 /> {data.state}; {data.county}
         </h2>
       </div>
-      <BookmarkIcon1 />
+
+      {!selecting && bookmark && <LanListItemBookmark {...bookmark} />}
     </div>
     <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
       <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>
