@@ -3,7 +3,7 @@ import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer
 import { getAllStates } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
-const UserListingsMobileFilter = () => {
+const UserListingMobileFilter = () => {
   const filters = {
     state: {
       label: "State",
@@ -32,4 +32,4 @@ const UserListingsMobileFilter = () => {
   return <FiltersDrawer data={filters} />;
 };
 
-export default UserListingsMobileFilter;
+export default UserListingMobileFilter;

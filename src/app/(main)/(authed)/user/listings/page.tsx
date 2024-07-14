@@ -1,45 +1,34 @@
-"use client";
-
-import Sort from "@/components/@new/shared/filters/Sort";
-import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
-import UserListingsDesktopFilter from "@/components/@new/user/listings/user-listings-desktop-filters";
-import UserListingsMobileFilter from "@/components/@new/user/listings/user-listings-mobile-filters";
-import { SortEnum } from "@/types/common";
+import UserListingDesktopFilter from "@/components/@new/user/listings/user-listing-desktop-filters";
+import UserListing from "@/components/@new/user/listings/user-listing";
 import { Suspense } from "react";
+import UserListingLoader from "@/components/@new/user/listings/user-listing-loader";
+import Button from "@/components/@new/shared/forms/Button";
+import { AddIcon1 } from "@/components/@new/icons/AddIcons";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 
-const removeNullValue = (obj: { [key: string]: any }) =>
-  Object.keys(obj).reduce((acc, cur) => ({ ...acc, ...(obj[cur] && { [cur]: obj[cur] }) }), {});
-
-const UserListings = () => {
-  return (
-    <>
-      <div className="w-full">
-        <UserProfileSectionHeader title="My Listings" description="Welcome to Parcel Market and thank You for being here. At Parcel Market, our goal is simple, to provide a FREE..." />
-      <Suspense>
-        <div className="hidden sm:block">
-          <UserListingsDesktopFilter />
-        </div>
-      </Suspense>
-        <div className="flex items-center gap-3 sm:justify-between sm:w-full">
-          <div className="block sm:hidden mr-auto">
-            <UserListingsMobileFilter />
+const UserListingPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
+  <div className="w-full space-y-8">
+    <div className="flex justify-between flex-col sm:flex-row gap-6">
+      <UserProfileSectionHeader title="My Listings" description="Welcome to Parcel Market and thank You for being here" />
+      <Link href={routes.valueLand.fullUrl} className="w-full sm:w-fit">
+        <Button className="!bg-primary-main-100 w-full sm:w-fit">
+          <div className="flex items-center gap-2  text-primary-main">
+            <AddIcon1 className="fill-primary-main" /> Add Land
           </div>
-          <SelectButton
-            selecting={false}
-            onClick={() => {}}
-            total={0}
-            className="ml-auto sm:ml-0"
-            onRemove={() => {}}
-          />
-          <div className="flex items-center gap-3">
-            <p className="hidden sm:block text-grey-600 text-xs">1326,000 Lands</p>
-            <Sort options={SortEnum} />
-          </div>
-        </div>
+        </Button>
+      </Link>
+    </div>
+    <Suspense>
+      <div className="hidden sm:block">
+        <UserListingDesktopFilter />
       </div>
-    </>
-  );
-};
+    </Suspense>
+    <Suspense fallback={<UserListingLoader />} key={JSON.stringify(searchParams)}>
+      <UserListing searchParams={searchParams} />
+    </Suspense>
+  </div>
+);
 
-export default UserListings;
+export default UserListingPage;

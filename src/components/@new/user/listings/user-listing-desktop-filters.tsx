@@ -9,7 +9,7 @@ import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/act
 import { getAllStates, getCounties } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
-const UserListingsDesktopFilter = () => {
+const UserListingDesktopFilter = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
 
   const getParcelNumbers = async () => {
@@ -50,4 +50,4 @@ const UserListingsDesktopFilter = () => {
   );
 };
 
-export default UserListingsDesktopFilter;
+export default UserListingDesktopFilter;
