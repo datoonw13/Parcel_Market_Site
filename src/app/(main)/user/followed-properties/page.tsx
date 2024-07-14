@@ -1,7 +1,7 @@
 "use client";
 
 import { UserIcon2 } from "@/components/@new/icons/UserIcons";
-import LandBox from "@/components/@new/lands/LandBox";
+// import LandBox from "@/components/@new/lands/LandBox";
 import LandsFilters from "@/components/@new/lands/filters/LandsFilters";
 import Pagination from "@/components/@new/shared/Pagination";
 import propertyApi, {
@@ -112,7 +112,7 @@ const UserFollowedProperties = () => {
           }}
           totalCount={data?.data.pagination.totalCount}
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {!isFetching &&
             data?.data?.data?.map(({ sellingProperty, followedListingId }) => {
               const state = getAllStates({ filterBlackList: true }).find((el) => el.value === sellingProperty.state.toLocaleLowerCase());
@@ -176,7 +176,7 @@ const UserFollowedProperties = () => {
                 />
               );
             })}
-        </div>
+        </div> */}
         {isFetching && <UserFollowedPropertiesLoading />}
         {!isFetching && data?.data.pagination.totalCount === 0 && <DataNotFound message="No followed listings" />}
         <Pagination

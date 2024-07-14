@@ -1,5 +1,5 @@
 import { numFormatter } from "@/helpers/common";
-import { ImarketlpaceFilters } from "@/types/lands";
+import { IMarketplaceFilters } from "@/types/lands";
 
 export const acreagesFilters = [
   {
@@ -46,7 +46,7 @@ export const priceFilters = [
     max: null,
   },
 ];
-export const getAcreageLabel = (acreageMin: ImarketlpaceFilters["acreageMin"], acreageMax: ImarketlpaceFilters["acreageMax"]) => {
+export const getAcreageLabel = (acreageMin: IMarketplaceFilters["acreageMin"], acreageMax: IMarketplaceFilters["acreageMax"]) => {
   if (!acreageMin && !acreageMax) {
     return "";
   }
@@ -63,7 +63,7 @@ export const getAcreageLabel = (acreageMin: ImarketlpaceFilters["acreageMin"], a
   return "";
 };
 
-export const getPriceLabel = (priceMin: ImarketlpaceFilters["priceMin"], priceMax: ImarketlpaceFilters["priceMax"]) => {
+export const getPriceLabel = (priceMin: IMarketplaceFilters["priceMin"], priceMax: IMarketplaceFilters["priceMax"]) => {
   if (!priceMin && !priceMax) {
     return "";
   }

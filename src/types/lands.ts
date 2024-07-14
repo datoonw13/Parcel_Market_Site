@@ -11,7 +11,7 @@ export enum SortBy {
   Oldest = "oldest",
 }
 
-export interface ImarketlpaceFilters {
+export interface IMarketplaceFilters {
   state: string | null;
   county: string | null;
   acreageMin: number | null;
