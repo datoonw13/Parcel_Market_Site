@@ -54,7 +54,7 @@ const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, classN
       <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
         <CalendarIcon1 /> Available till: <span className="text-black">{data.availableTill}</span>
       </p>
-      <Link href={`${routes.marketlpace.fullUrl}/${sellingItemId}`}>
+      <Link href={`${routes.marketplace.fullUrl}/${sellingItemId}`}>
         <Button>Details</Button>
       </Link>
     </div>
