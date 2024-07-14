@@ -20,7 +20,7 @@ const CreateOfferModal: FC<CreateOfferModalProps> = ({ closeModal, open, selling
         </Button>
       </div>
       <div className="pt-6 h-[80vh] grid overflow-hidden">
-        <CreateOffer />
+        <CreateOffer sellingPropertyId={Number(sellingPropertyId)} goBack={closeModal} />
       </div>
     </div>
   </Modal>

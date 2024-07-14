@@ -69,13 +69,13 @@ export const getReceivedOffersParcelNumbersAction = async (): Promise<ResponseMo
   }
 };
 
-export const revalidateReceivedOffers = async () => {
-  const path = headers().get("referer");
-  if (path) {
-    revalidateTag(offerTags.receivedOffers);
-    redirect(path);
-  }
-};
+// export const revalidateReceivedOffers = async () => {
+//   const path = headers().get("referer");
+//   if (path) {
+//     revalidateTag(offerTags.receivedOffers);
+//     redirect(path);
+//   }
+// };
 
 export const deleteReceivedOffersAction = async (ids: number[]): Promise<ResponseModel<null>> => {
   try {
@@ -83,7 +83,7 @@ export const deleteReceivedOffersAction = async (ids: number[]): Promise<Respons
       method: "DELETE",
       body: JSON.stringify({ ids }),
     });
-    revalidateReceivedOffers();
+    // revalidateReceivedOffers();
     return { data: null, errorMessage: null };
   } catch (error) {
     const errorData = error as ErrorResponse;
@@ -94,13 +94,21 @@ export const deleteReceivedOffersAction = async (ids: number[]): Promise<Respons
   }
 };
 
-export const makeOfferAction = async (data: MakeOfferModel & { sellingPropertyId: number }) => {
-  // const request = await fetcher<ResponseType<{ error: boolean }>>(`offers`, {
-  //   method: "POST",
-  //   body: JSON.stringify(data),
-  // });
-  // if (!request.error) {
-  //   revalidateTag(offerTags.receivedOffers);
-  // }
-  // return { error: request.error, message: request.data?.message };
+export const createOfferAction = async (data: MakeOfferModel & { sellingPropertyId: number }): Promise<ResponseModel<null>> => {
+  try {
+    const req = await fetcher<ResponseType<{ error: boolean }>>(`offers`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    // TODO: revalidte sent offers page
+    revalidateTag(offerTags.receivedOffers);
+    return { data: null, errorMessage: null };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
 };

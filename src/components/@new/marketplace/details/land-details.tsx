@@ -37,7 +37,7 @@ const LandDetails = ({ data }: { data: ISellingProperty }) => {
 
   return (
     <>
-      <CreateOfferModal open={openModal} closeModal={() => setOpenModal(false)} sellingPropertyId="2" />
+      <CreateOfferModal open={openModal} closeModal={() => setOpenModal(false)} sellingPropertyId={data.id.toString()} />
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3, pb: { xs: 6, md: 8, lg: 10 }, pt: { xs: 3, md: 4 } }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           <Typography component="h1" sx={{ fontSize: { xs: 18, sm: 20, md: 24, lg: 28 }, fontWeight: 600 }}>

@@ -6,8 +6,8 @@ import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
 import { valueLandDetailsValidations } from "@/zod-validations/value-land-validations";
 import { IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
-import { fetcher } from "../fetcher";
 import { revalidateTag } from "next/cache";
+import { fetcher } from "../fetcher";
 import { userListingsTags } from "../user-listings/tags";
 import { marketplaceTags } from "../marketplace/tags";
 
@@ -82,8 +82,8 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
       body: JSON.stringify({ ...payload, acrage: Number(payload.acrage) }),
       cache: "no-store",
     });
-    revalidateTag(userListingsTags.list)
-    revalidateTag(marketplaceTags.list)
+    revalidateTag(userListingsTags.list);
+    revalidateTag(marketplaceTags.list);
     return {
       data: request,
       errorMessage: null,

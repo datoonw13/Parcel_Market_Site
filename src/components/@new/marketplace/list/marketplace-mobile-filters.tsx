@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { priceFilters, getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer";
@@ -31,7 +31,11 @@ const MarketPlaceMobileFilters = () => {
     },
   };
 
-  return <div className="block lg:hidden"><FiltersDrawer data={filters} /></div>;
+  return (
+    <div className="block lg:hidden">
+      <FiltersDrawer data={filters} />
+    </div>
+  );
 };
 
 export default MarketPlaceMobileFilters;

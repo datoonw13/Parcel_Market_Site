@@ -1,8 +1,10 @@
-import { MakeOfferModel, OfferModel } from "@/types/offer";
+import { MakeOfferModel } from "@/types/offer";
 import { offerValidation } from "@/zod-validations/offer-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import SimpleBar from "simplebar-react";
+import { createOfferAction } from "@/server-actions/offer/actions";
+import toast from "react-hot-toast";
 import OfferPriceField from "./offer-price-field";
 import Button from "../../shared/forms/Button";
 import OfferEarnestMoneyField from "./offer-earnest-money-field";
@@ -15,15 +17,24 @@ import AutoComplete from "../../shared/forms/AutoComplete";
 import TextField from "../../shared/forms/TextField";
 import Alert from "../../shared/Alert";
 
-const CreateOffer = () => {
+const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number; goBack: () => void }) => {
   const {
     handleSubmit,
-    formState: { isSubmitted, errors },
+    formState: { isSubmitted, errors, isSubmitting },
     setValue,
     watch,
-    getValues,
   } = useForm<MakeOfferModel>({
     resolver: zodResolver(offerValidation),
+  });
+
+  const createOffer = handleSubmit(async (data) => {
+    const { errorMessage } = await createOfferAction({ ...data, sellingPropertyId });
+    if (errorMessage) {
+      toast.error(errorMessage, { duration: 3000 });
+    } else {
+      toast.success("Offer sent successfully");
+      goBack();
+    }
   });
 
   return (
@@ -59,12 +70,13 @@ const CreateOffer = () => {
               <LabelWithInfo error={!!errors.offerActiveForDays} label="Offer active for" description="How long the offer is good for. " />
               <div className="flex flex-col gap-4">
                 <AutoComplete
-                  options={[1, 2, 3, 4, 5]}
+                  contentClassName="z-20"
+                  options={[3, 4, 5]}
                   getOptionLabel={(item) => `${item} Day${item > 1 ? "s" : ""}`}
                   getOptionKey={(item) => item.toString()}
                   onChange={(item) => {
                     if (item) {
-                      const value = item as 1 | 2 | 3 | 4 | 5;
+                      const value = item as 3 | 4 | 5;
                       setValue("offerActiveForDays", value, { shouldValidate: isSubmitted });
                     }
                   }}
@@ -95,23 +107,10 @@ const CreateOffer = () => {
         />
       </div>
       <div className="px-4 md:px-8 border-t border-t-grey-100 py-4 flex justify-center sm:justify-end gap-3">
-        <Button
-          className="w-full sm:w-fit"
-          variant="secondary"
-          onClick={handleSubmit(
-            (data) => console.log(data),
-            (error) => console.log(error)
-          )}
-        >
+        <Button className="w-full sm:w-fit" variant="secondary" onClick={goBack}>
           Close
         </Button>
-        <Button
-          className="w-full sm:w-fit"
-          onClick={handleSubmit(
-            (data) => console.log(data),
-            (error) => console.log(error)
-          )}
-        >
+        <Button className="w-full sm:w-fit" loading={isSubmitting} onClick={createOffer}>
           Offer Price
         </Button>
       </div>
