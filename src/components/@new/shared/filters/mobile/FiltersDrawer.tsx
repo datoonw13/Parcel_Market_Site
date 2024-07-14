@@ -144,8 +144,6 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
     if (localFilters) {
       Object.keys(localFilters).forEach((key) => {
         if (localFilters[key]) {
-          console.log(localFilters, key);
-
           params.set(key, localFilters[key]!.toString());
         } else {
           params.delete(key);
