@@ -7,14 +7,14 @@ import React, { FC, useState } from "react";
 
 interface OfferInspectionPeriodFieldProps {
   error?: boolean;
-  onChange: (value: number | undefined) => void;
+  onChange: (value: number | null) => void;
 }
 
 const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onChange, error }) => {
   const [showInput, setShowInput] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string | null>("");
   return (
-    <div className="flex flex-col gap-3" onBlur={() => onChange(value ? Number(value) : undefined)}>
+    <div className="flex flex-col gap-3">
       <LabelWithInfo
         error={!!error}
         label="Inspection Period"
@@ -24,16 +24,18 @@ const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onCha
         <RadioButton
           name="inspection-period-none"
           onChange={() => {
-            setValue("");
+            setValue(null);
+            onChange(null);
             setShowInput(false);
           }}
-          checked={!showInput && !value}
+          checked={!showInput && value === null}
           label="None"
         />
         <RadioButton
           name="inspection-period-5"
           onChange={() => {
             setValue("10");
+            onChange(10);
             setShowInput(false);
           }}
           checked={!showInput && value === "10"}
@@ -43,6 +45,7 @@ const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onCha
           name="inspection-period-10"
           onChange={() => {
             setValue("20");
+            onChange(20);
             setShowInput(false);
           }}
           checked={!showInput && value === "20"}
@@ -52,6 +55,7 @@ const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onCha
           name="inspection-period-20"
           onChange={() => {
             setValue("30");
+            onChange(30);
             setShowInput(false);
           }}
           checked={!showInput && value === "30"}
@@ -65,7 +69,16 @@ const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onCha
           checked={showInput}
           label="Other"
         />
-        {showInput && <TextField value={value || ""} placeholder="Type here" onChange={(value) => setValue(value)} />}
+        {showInput && (
+          <TextField
+            value={value || ""}
+            placeholder="Type here"
+            onChange={(value) => {
+              setValue(value);
+              onChange(Number(value));
+            }}
+          />
+        )}
       </div>
     </div>
   );

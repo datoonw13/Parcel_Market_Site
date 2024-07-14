@@ -17,6 +17,7 @@ const OfferClosingCostsField: FC<OfferClosingCostsFieldProps> = ({ onChange, val
     <div className="flex flex-col gap-3">
       <LabelWithInfo
         label="Closing Costs"
+        error={error}
         description="All closing costs, including but not limited to attorney's fees (both parties), commissions, transfer fees, taxes, title fees, etc."
       />
       <div className="flex flex-col gap-4">

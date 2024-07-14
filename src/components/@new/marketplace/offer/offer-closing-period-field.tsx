@@ -7,7 +7,7 @@ import { FC } from "react";
 interface OfferClosingPeriodFieldProps {
   error?: boolean;
   value: number;
-  onChange: (value: number) => void;
+  onChange: (value: 15 | 30 | 45) => void;
 }
 
 const OfferClosingPeriodField: FC<OfferClosingPeriodFieldProps> = ({ onChange, value, error }) => (

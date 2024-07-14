@@ -19,12 +19,12 @@ import ResponsiveAcceptModal from "@/components/@new/shared/modals/ResponsiveAcc
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
-import OfferPriceField from "./offer-price-field";
-import OfferEarnestMoneyField from "./offer-earnest-money-field";
-import OfferInspectionPeriodField from "./offer-inspection-period-field";
-import OfferClosingPeriodField from "./offer-closing-period-field";
-import OfferClosingCostsField from "./offer-closing-costs-field";
-import OfferContingenciesField from "./offer-contigencies-field";
+import OfferPriceField from "../../../../components/@new/marketplace/offer/offer-price-field";
+import OfferEarnestMoneyField from "../../../../components/@new/marketplace/offer/offer-earnest-money-field";
+import OfferInspectionPeriodField from "../../../../components/@new/marketplace/offer/offer-inspection-period-field";
+import OfferClosingPeriodField from "../../../../components/@new/marketplace/offer/offer-closing-period-field";
+import OfferClosingCostsField from "../../../../components/@new/marketplace/offer/offer-closing-costs-field";
+import OfferContingenciesField from "../../../../components/@new/marketplace/offer/offer-contigencies-field";
 
 const LabelWithTooltip = ({ label, description, error }: { label: string; description: string; error?: boolean }) => (
   <div className="flex gap-1">
@@ -47,7 +47,7 @@ const LabelWithTooltip = ({ label, description, error }: { label: string; descri
   </div>
 );
 
-const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sellingPropertyId: any }) => {
+const CreateOffer = ({ sellingPropertyId }: { sellingPropertyId: any }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -104,7 +104,7 @@ const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sel
         pending={pending}
       />
       <div className="flex flex-col gap-8">
-        <SimpleBar className={clsx("p-1 z-20", maxHeight)}>
+        <SimpleBar className={clsx("p-1 z-20")}>
           <div className="flex flex-col gap-8">
             <OfferPriceField onChange={(value) => setValue("price", value, { shouldValidate: isSubmitted })} error={!!errors.price} />
             <OfferEarnestMoneyField

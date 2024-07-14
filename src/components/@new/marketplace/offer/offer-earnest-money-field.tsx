@@ -1,21 +1,21 @@
 "use client";
 
+import React, { FC, useState } from "react";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
 import TextField from "@/components/@new/shared/forms/TextField";
 import LabelWithInfo from "@/components/@new/shared/label-with-info";
-import React, { FC, useEffect, useState } from "react";
 
 interface OfferEarnestMoneyFieldProps {
   error?: boolean;
-  onChange: (value: number | undefined) => void;
+  onChange: (value: number | null) => void;
 }
 
 const OfferEarnestMoneyField: FC<OfferEarnestMoneyFieldProps> = ({ onChange, error }) => {
   const [showInput, setShowInput] = useState(false);
-  const [value, setValue] = useState<string | undefined>();
+  const [value, setValue] = useState<string | null>("");
 
   return (
-    <div className="flex flex-col gap-3" onBlur={() => onChange(value ? Number(value) : undefined)}>
+    <div className="flex flex-col gap-3">
       <LabelWithInfo
         label="Earnest Money"
         description="The deposit you are willing to put down on the land while under contract to close."
@@ -25,16 +25,18 @@ const OfferEarnestMoneyField: FC<OfferEarnestMoneyFieldProps> = ({ onChange, err
         <RadioButton
           name="earnest-money-none"
           onChange={() => {
-            setValue(undefined);
+            setValue(null);
+            onChange(null);
             setShowInput(false);
           }}
-          checked={!showInput && !value}
+          checked={!showInput && value === null}
           label="None"
         />
         <RadioButton
           name="earnest-money-5"
           onChange={() => {
             setValue("5");
+            onChange(5);
             setShowInput(false);
           }}
           checked={!showInput && value === "5"}
@@ -44,6 +46,7 @@ const OfferEarnestMoneyField: FC<OfferEarnestMoneyFieldProps> = ({ onChange, err
           name="earnest-money-10"
           onChange={() => {
             setValue("10");
+            onChange(10);
             setShowInput(false);
           }}
           checked={!showInput && value === "10"}
@@ -53,6 +56,7 @@ const OfferEarnestMoneyField: FC<OfferEarnestMoneyFieldProps> = ({ onChange, err
           name="earnest-money-20"
           onChange={() => {
             setValue("20");
+            onChange(20);
             setShowInput(false);
           }}
           checked={!showInput && value === "20"}
@@ -73,6 +77,7 @@ const OfferEarnestMoneyField: FC<OfferEarnestMoneyFieldProps> = ({ onChange, err
             type="number"
             onChange={(value) => {
               setValue(value);
+              onChange(Number(value));
             }}
           />
         )}

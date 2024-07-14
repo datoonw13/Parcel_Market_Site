@@ -1,14 +1,14 @@
 "use client";
 
+import React, { FC, useState } from "react";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
 import LabelWithInfo from "@/components/@new/shared/label-with-info";
-import React, { FC, useState } from "react";
 
 interface OfferContingenciesFieldProps {
   error?: boolean;
-  value: string | undefined;
-  onChange: (value: string | undefined) => void;
+  value: string | null;
+  onChange: (value: string | null) => void;
 }
 
 const OfferContingenciesField: FC<OfferContingenciesFieldProps> = ({ onChange, value, error }) => {
@@ -18,14 +18,15 @@ const OfferContingenciesField: FC<OfferContingenciesFieldProps> = ({ onChange, v
       <LabelWithInfo
         label="Contigencies"
         description="These are items the deal would be contingent on where buyer is due a full refund if not met."
+        error={error}
       />
       <div className="flex flex-col gap-4">
         <CheckBox
           onChange={() => {
             setShowInput(false);
-            onChange(undefined);
+            onChange(null);
           }}
-          checked={!showInput && !value}
+          checked={!showInput && value === null}
           label="None"
         />
         <CheckBox
@@ -52,7 +53,14 @@ const OfferContingenciesField: FC<OfferContingenciesFieldProps> = ({ onChange, v
           checked={!showInput && value === "Appraisal"}
           label="Appraisal"
         />
-        <CheckBox onChange={() => setShowInput(true)} checked={showInput} label="Other" />
+        <CheckBox
+          onChange={() => {
+            setShowInput(true);
+            onChange("");
+          }}
+          checked={showInput}
+          label="Other"
+        />
         {showInput && <TextField value={value ?? ""} onChange={(value) => onChange(value)} placeholder="Type here" />}
       </div>
     </div>

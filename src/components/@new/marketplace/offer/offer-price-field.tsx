@@ -10,9 +10,17 @@ interface OfferPriceFieldProps {
 const OfferPriceField: FC<OfferPriceFieldProps> = ({ onChange, error }) => {
   const [value, setValue] = useState("");
   return (
-    <div className="flex flex-col gap-3" onBlur={() => onChange(Number(value))}>
+    <div className="flex flex-col gap-3">
       <LabelWithInfo error={!!error} label="Offer Price" description="" />
-      <TextField onChange={(price) => setValue(price)} placeholder="Offer Price" type="number" value={value} />
+      <TextField
+        onChange={(price) => {
+          setValue(price);
+          onChange(Number(price));
+        }}
+        placeholder="Offer Price"
+        type="number"
+        value={value}
+      />
     </div>
   );
 };

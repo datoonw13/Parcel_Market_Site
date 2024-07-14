@@ -26,7 +26,7 @@ const LabelWithInfo: FC<LabelWithInfoProps> = ({ description, error, label, icon
           variant="secondary"
           className="!outline-none !w-6 !h-6 !p-0"
         >
-          <InfoIcon1 color="grey-600" className={clsx(iconClassName)} />
+          <InfoIcon1 color="grey-400" className={clsx(iconClassName)} />
         </Button>
       )}
       renderContent={(setReferenceElement) => (
