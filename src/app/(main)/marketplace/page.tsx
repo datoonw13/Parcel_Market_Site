@@ -1,9 +1,13 @@
-import React from 'react'
+import MarketplaceList from "@/components/@new/marketplace/marketplace-list";
+import MarketplaceListLoading from "@/components/@new/marketplace/marketplace-list-loading";
+import React, { Suspense } from "react";
 
-const MarketPlacePage = () => {
-  return (
-    <div>MarketPlacePage</div>
-  )
-}
+const MarketPlacePage = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
+  <div>
+    <Suspense key={JSON.stringify(searchParams)} fallback={<MarketplaceListLoading />}>
+      <MarketplaceList params={searchParams} />
+    </Suspense>
+  </div>
+);
 
-export default MarketPlacePage
+export default MarketPlacePage;
