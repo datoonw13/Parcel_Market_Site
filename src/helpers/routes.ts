@@ -24,16 +24,16 @@ const routes = {
       protected: false,
     },
   },
-  propertySearch: {
-    url: "find-property",
-    fullUrl: "/find-property",
-    protected: false,
-    signature: {
-      url: "signature",
-      fullUrl: "/find-property/signature",
-      protected: true,
-    },
-  },
+  // propertySearch: {
+  //   url: "find-property",
+  //   fullUrl: "/find-property",
+  //   protected: false,
+  //   signature: {
+  //     url: "signature",
+  //     fullUrl: "/find-property/signature",
+  //     protected: true,
+  //   },
+  // },
   user: {
     url: "user",
     fullUrl: "/user",

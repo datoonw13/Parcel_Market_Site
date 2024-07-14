@@ -37,7 +37,7 @@ const SellQuickly = () => {
             <b>real estate agents, title companies, and land appraisers are vetted by Parcel Market</b> to have years of experience and
             assure they are the best of the best in your market area.
           </Typography>
-          <Link href={routes.propertySearch.url}>
+          <Link href={routes.valueLand.fullUrl}>
             <Button sx={{ width: "fit-content", m: "auto", display: "flex" }} variant="contained">
               Connect with Professional
             </Button>

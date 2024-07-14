@@ -22,7 +22,7 @@ const HomeMain = () => {
   const [county, setCounty] = useState<string | null>(null);
 
   const onStart = () => {
-    router.push(`${routes.propertySearch.url}?state=${state}&county=${county}`);
+    router.push(`${routes.valueLand.fullUrl}?state=${state}&county=${county}`);
   };
   return (
     <>

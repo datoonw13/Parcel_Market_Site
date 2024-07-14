@@ -75,11 +75,10 @@ export const calculateLandPriceAction = async (
 /// TODO Revalidate market place
 export const sellLendAction = async (payload: ISellProperty): Promise<ResponseModel<null>> => {
   try {
-    
     const request = await fetcher<null>(`selling-properties`, {
       method: "POST",
-      body: JSON.stringify({...payload, acrage: Number(payload.acrage)}),
-      cache: 'no-store'
+      body: JSON.stringify({ ...payload, acrage: Number(payload.acrage) }),
+      cache: "no-store",
     });
     return {
       data: request,

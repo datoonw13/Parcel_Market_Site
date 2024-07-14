@@ -104,6 +104,7 @@ const ValueLanSidebar = () => {
           ) : (
             <>
               <Image alt="" src="/parcel-find-cover.png" fill style={{ objectFit: "cover" }} />
+              <div className="absolute w-full h-full bg-black-400" />
               <div className="flex flex-row items-center justify-end gap-4 absolute w-full bottom-0 z-20 text-white font-medium p-6">
                 <div>Let&apos;s connect</div>
                 <div className="cursor-pointer [&>svg>circle]:fill-grey-30 [&>svg>circle]:stroke-white [&>svg>path]:fill-white">
