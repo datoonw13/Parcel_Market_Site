@@ -1,5 +1,5 @@
-import React from "react";
+import ValueLandSignature from "@/components/@new/value-land/value-land-signature";
 
-const ValueLandSignature = () => <ValueLandSignature />;
+const ValueLandSignaturePage = () => <ValueLandSignature />;
 
-export default ValueLandSignature;
+export default ValueLandSignaturePage;

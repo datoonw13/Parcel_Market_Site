@@ -1,3 +1,5 @@
+"use client";
+
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { numFormatter } from "@/helpers/common";
 import routes from "@/helpers/routes";

@@ -4,15 +4,15 @@ import UploadImage from "@/components/@new/user/profile/UploadImage";
 import { getUserFullDetailsAction } from "@/server-actions/user/actions";
 
 const UserProfilePage = async () => {
-  const userDetails = await getUserFullDetailsAction();
+  const { data } = await getUserFullDetailsAction();
 
   return (
     <div className="grid gap-6">
-      {userDetails && (
+      {data && (
         <>
           <UploadImage />
           <PersonalInfoSection />
-          <AdditionalInfoSection user={userDetails} />
+          <AdditionalInfoSection user={data} />
         </>
       )}
     </div>

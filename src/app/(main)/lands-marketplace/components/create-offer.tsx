@@ -66,17 +66,17 @@ const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sel
     try {
       setPending(true);
       const result = await makeOfferAction({ ...data, sellingPropertyId: Number(sellingPropertyId) });
-      if (result.error) {
-        if (result.message) {
-          toast.error(result.message);
-        } else {
-          toast.error("Offer request failed");
-        }
-        setOpen(false);
-      } else {
-        toast.success("Offer sent");
-        router.replace(routes.landsMarketplace.fullUrl);
-      }
+      // if (result.error) {
+      //   if (result.message) {
+      //     toast.error(result.message);
+      //   } else {
+      //     toast.error("Offer request failed");
+      //   }
+      //   setOpen(false);
+      // } else {
+      //   toast.success("Offer sent");
+      //   router.replace(routes.landsMarketplace.fullUrl);
+      // }
     } catch (error) {
       toast.error("Offer request failed");
     } finally {
