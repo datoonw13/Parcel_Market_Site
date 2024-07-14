@@ -1,4 +1,4 @@
 export const marketplaceTags = {
-    list: "list",
-  };
-  
+  list: "list",
+  details: "details",
+};

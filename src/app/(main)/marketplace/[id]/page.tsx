@@ -1,9 +1,10 @@
 import { ArrowIconLeftFilled1 } from "@/components/@new/icons/ArrowIcons";
-import MarketplaceHeader from "@/components/@new/marketplace/list/marketplace-header";
+import LandDetailsWrapper from "@/components/@new/marketplace/details/land-details-wrapper";
+import LandDetailsLoading from "@/components/@new/marketplace/details/land-details-loading";
 import Container from "@/components/@new/shared/Container";
-import React from "react";
+import React, { Suspense } from "react";
 
-const LandDetailsPage = () => (
+const LandDetailsPage = ({ params }: { params: { id: string } }) => (
   <Container className="py-6 md:py-8">
     <div className="flex items-center gap-1.5 cursor-pointer mb-8 md:mb-10">
       <p className="text-sm text-grey-800">Homepage</p>
@@ -16,7 +17,11 @@ const LandDetailsPage = () => (
       </div>
       <p className="text-sm text-primary-main font-medium">Land name</p>
     </div>
-    <div>ae</div>
+    <div>
+      <Suspense fallback={<LandDetailsLoading />}>
+        <LandDetailsWrapper landId={params.id} />
+      </Suspense>
+    </div>
   </Container>
 );
 

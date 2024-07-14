@@ -27,3 +27,22 @@ export const getMarketplaceListAction = async (params: {
     };
   }
 };
+
+export const getLendDetailsAction = async (landId: string): Promise<ResponseModel<ISellingProperty | null>> => {
+  try {
+    const request = await fetcher<ISellingProperty>(`selling-properties/${landId}`, {
+      next: { tags: [marketplaceTags.details] },
+    });
+
+    return {
+      errorMessage: null,
+      data: request,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
