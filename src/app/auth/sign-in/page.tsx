@@ -22,6 +22,8 @@ const SignInPage = () => {
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  console.log(valueLand, 22);
+  
 
   const signIn = async (prevState: any, formData: FormData) => {
     const request = await signInUserAction(prevState, formData);

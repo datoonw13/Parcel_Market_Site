@@ -191,7 +191,7 @@ const ValueLandAbout = ({ user }: { user: ISignInResponse["payload"] | null }) =
       <Divider sx={{ mt: 4 }} />
       <Box
         sx={{
-          mt: 2,
+          my: 2,
           px: { xs: 2, md: 3, lg: 4, mb: 3 },
           display: "flex",
           justifyContent: "flex-end",

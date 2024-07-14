@@ -25,7 +25,6 @@ const ValueLandSignature = () => {
     if (accepted && values) {
       setPending(true);
       const { errorMessage } = await sellLendAction({ ...values });
-
       if (errorMessage) {
         toast.error(errorMessage);
         setPending(false);
@@ -151,13 +150,14 @@ const ValueLandSignature = () => {
           display: "flex",
           justifyContent: "flex-end",
           gap: 1.5,
+          mb: 2,
           flexDirection: { xs: "column", sm: "row" },
         }}
       >
         <Button
           sx={{ width: { xs: "100%", sm: "fit-content" } }}
           variant="outlined"
-          onClick={() => router.push(routes.valueLand.signature.fullUrl)}
+          onClick={() => router.push(routes.valueLand.value.fullUrl)}
         >
           Back
         </Button>
