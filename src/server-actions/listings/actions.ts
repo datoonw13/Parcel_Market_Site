@@ -34,7 +34,7 @@ export const getUserListingAction = async (params: {
 
 export const removeUserListingItemsAction = async (ids: number[]): Promise<ResponseModel<null>> => {
   try {
-    const request = await fetcher<{ data: ISellingProperty[] } & IPagination>(`selling-properties/user/properties`, {
+    await fetcher<{ data: ISellingProperty[] } & IPagination>(`selling-properties/user/properties`, {
       method: "DELETE",
       body: JSON.stringify({ ids }),
     });
