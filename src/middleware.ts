@@ -8,7 +8,19 @@ const allRoute = getAllRoutes();
 export async function middleware(request: NextRequest) {
   const user = request.nextUrl.searchParams.get("logout") ? null : await getUserAction();
 
-  if (allRoute?.[request.nextUrl.pathname]?.protected && !user) {
+  let routeDetails: any = null;
+
+  if (allRoute?.[request.nextUrl.pathname]) {
+    routeDetails = allRoute?.[request.nextUrl.pathname];
+  } else {
+    const url = request.nextUrl.pathname.split("/");
+    url[url.length - 1] = ":id";
+    if (allRoute?.[url.join("/")]) {
+      routeDetails = allRoute?.[url.join("/")];
+    }
+  }
+
+  if (routeDetails?.protected && !user) {
     return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
   if (request.nextUrl.pathname.includes("auth") && user) {

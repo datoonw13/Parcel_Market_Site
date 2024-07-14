@@ -8,6 +8,11 @@ const routes = {
     url: "marketplace",
     fullUrl: "/marketplace",
     protected: true,
+    landDetails: {
+      url: ":id",
+      fullUrl: "/marketplace/:id",
+      protected: true,
+    },
   },
   auth: {
     url: "auth",
