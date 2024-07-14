@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { ISellProperty } from "./find-property";
 
 export enum SortBy {
@@ -33,4 +34,26 @@ export interface ILandsFilters {
   page: number;
   pageSize: number;
   sortBy: SortBy | null;
+}
+
+export interface LandListItemProps {
+  view: "vertical" | "horizontal";
+  data: {
+    name: string;
+    state: string;
+    county: string;
+    availableTill: string;
+    options: {
+      [key: string]: {
+        icon: ReactNode;
+        label: string;
+        value: string;
+      };
+    };
+  };
+  sellingItemId: number;
+  className?: string;
+  selecting?: boolean;
+  selected?: boolean;
+  onClick?: () => void;
 }

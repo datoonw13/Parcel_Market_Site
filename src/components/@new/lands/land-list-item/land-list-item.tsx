@@ -3,36 +3,22 @@ import React, { FC, ReactNode } from "react";
 import Image from "next/image";
 import routes from "@/helpers/routes";
 import Link from "next/link";
-import { LocationIcon1 } from "../icons/LocationIcons";
-import { BookmarkIcon1 } from "../icons/BookMarkIcons";
-import { CalendarIcon1 } from "../icons/CalendarIcons";
-import Button from "../shared/forms/Button";
+import { LandListItemProps } from "@/types/lands";
+import { LocationIcon1 } from "../../icons/LocationIcons";
+import { BookmarkIcon1 } from "../../icons/BookMarkIcons";
+import { CalendarIcon1 } from "../../icons/CalendarIcons";
+import Button from "../../shared/forms/Button";
+import classes from "./styles.module.css";
 
-interface LandListItemProps {
-  view: "vertical" | "horizontal";
-  data: {
-    name: string;
-    state: string;
-    county: string;
-    availableTill: string;
-    options: {
-      [key: string]: {
-        icon: ReactNode;
-        label: string;
-        value: string;
-      };
-    };
-  };
-  sellingItemId: number;
-  className?: string
-}
-
-const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, className }) => (
+const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, className, selected, selecting, onClick }) => (
   <div
     className={clsx(
       "pt-6 border border-grey-100 rounded-2xl w-full flex flex-col gap-4 cursor-pointer group hover:shadow-1 transition-all duration-100",
-      className
+      className,
+      selecting && classes.selecting,
+      selected && classes.selected
     )}
+    onClick={onClick}
   >
     <div className="px-6 flex justify-between items-start gap-6">
       <div className="grid gap-2">

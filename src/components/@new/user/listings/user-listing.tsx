@@ -4,16 +4,14 @@ import { getAllStates } from "@/helpers/states";
 import UserListingHeader from "./user-listing-header";
 import UserListingPagination from "./user-listing-pagination";
 import DataNotFound from "../../shared/DataNotFound";
-import LandListItem from "../../lands/land-list-item";
 import { UserIcon2 } from "../../icons/UserIcons";
 import { IdIcon1 } from "../../icons/IdIcons";
 import { ResizeIcon1 } from "../../icons/ResizeIcons";
 import { MoneyIcon1 } from "../../icons/MoneyIcons";
-
-// const delay = () => new Promise((resolve) => setTimeout(resolve, 5000));
+import UserListingItem from "./user-listing-item";
 
 const UserListing = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
-  const { data, errorMessage } = await getUserListingAction(searchParams);
+  const { data } = await getUserListingAction(searchParams);
 
   return (
     <div className="space-y-6 md:space-y-4">
@@ -27,7 +25,7 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
               const state = getAllStates({ filterBlackList: true }).find((el) => el.value === land.state.toLocaleLowerCase());
               const county = state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
               return (
-                <LandListItem
+                <UserListingItem
                   className="max-w-2xl m-auto"
                   key={land.id}
                   sellingItemId={land.id}
