@@ -1,5 +1,5 @@
 import { getAllStates, getCounties } from "@/helpers/states";
-import { ILandsMarketplaceFilters } from "@/types/lands";
+import { ImarketlpaceFilters } from "@/types/lands";
 import { FilterList, KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, TextField, Typography } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -8,14 +8,14 @@ import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from ".
 type FiltersType = "state" | "county" | "acreage" | "price";
 
 interface IProps {
-  filters: ILandsMarketplaceFilters;
-  setFilters: Dispatch<SetStateAction<ILandsMarketplaceFilters>>;
+  filters: ImarketlpaceFilters;
+  setFilters: Dispatch<SetStateAction<ImarketlpaceFilters>>;
 }
 
-const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
+const marketlpaceMobileFilters = ({ filters, setFilters }: IProps) => {
   const [open, setOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState<FiltersType | null>(null);
-  const [selectedFilters, setSelectedFilters] = useState<ILandsMarketplaceFilters>({
+  const [selectedFilters, setSelectedFilters] = useState<ImarketlpaceFilters>({
     acreageMin: null,
     acreageMax: null,
     county: null,
@@ -314,4 +314,4 @@ const LandsMarketplaceMobileFilters = ({ filters, setFilters }: IProps) => {
   );
 };
 
-export default LandsMarketplaceMobileFilters;
+export default marketlpaceMobileFilters;

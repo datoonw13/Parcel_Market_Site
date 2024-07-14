@@ -96,7 +96,7 @@ const LandBox = ({ view, data, className, follow, select, parcelNumber, sellingI
         <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
           <CalendarIcon1 /> Available till: <span className="text-black">{data.availableTill}</span>
         </p>
-        <Link href={`/${routes.landsMarketplace.url}/${sellingItemId}`}>
+        <Link href={`/${routes.marketlpace.url}/${sellingItemId}`}>
           <Button>Details</Button>
         </Link>
       </div>

@@ -9,7 +9,7 @@ interface ICustomAutocomplete {
   disabled?: boolean;
 }
 
-const LandsMarketplaceFiltersAutocomplete = ({ onSelect, options, placeholder, disabled }: ICustomAutocomplete) => {
+const marketlpaceFiltersAutocomplete = ({ onSelect, options, placeholder, disabled }: ICustomAutocomplete) => {
   const [open, setOpen] = useState(false);
   const [tempValue, setTempValue] = useState<{ label: string; value: string } | null>(null);
   const [value, setValue] = useState<{ label: string; value: string } | null>(null);
@@ -81,4 +81,4 @@ const LandsMarketplaceFiltersAutocomplete = ({ onSelect, options, placeholder, d
   );
 };
 
-export default LandsMarketplaceFiltersAutocomplete;
+export default marketlpaceFiltersAutocomplete;

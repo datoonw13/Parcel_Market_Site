@@ -38,7 +38,7 @@ interface ICustomMinMaxAutocomplete {
   getLabel: (value: IOption | null) => string;
 }
 
-const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placeholder, getLabel }: ICustomMinMaxAutocomplete) => {
+const marketlpaceFiltersMinMaxAutocomplete = ({ onSelect, options, placeholder, getLabel }: ICustomMinMaxAutocomplete) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [value, setValue] = useState<ICustomMinMaxAutocomplete["options"][0]>({ min: null, max: null });
   const [tempValue, setTempValue] = useState<ICustomMinMaxAutocomplete["options"][0]>({ min: null, max: null });
@@ -140,4 +140,4 @@ const LandsMarketplaceFiltersMinMaxAutocomplete = ({ onSelect, options, placehol
     </Box>
   );
 };
-export default LandsMarketplaceFiltersMinMaxAutocomplete;
+export default marketlpaceFiltersMinMaxAutocomplete;

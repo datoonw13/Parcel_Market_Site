@@ -1,36 +1,36 @@
-import { ILandsMarketplaceFilters } from "@/types/lands";
+import { ImarketlpaceFilters } from "@/types/lands";
 import { Box } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { getAllStates, getCounties } from "@/helpers/states";
-import LandsMarketplaceFiltersAutocomplete from "./LandsMarketplaceFiltersAutocomplete";
-import LandsMarketplaceFiltersMinMaxAutocomplete from "./LandsMarketplaceFiltersMinMaxAutocomplete";
+import marketlpaceFiltersAutocomplete from "./marketlpaceFiltersAutocomplete";
+import marketlpaceFiltersMinMaxAutocomplete from "./marketlpaceFiltersMinMaxAutocomplete";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../../lands-marketplace-utils";
 
 interface IProps {
-  filters: ILandsMarketplaceFilters;
-  setFilters: Dispatch<SetStateAction<ILandsMarketplaceFilters>>;
+  filters: ImarketlpaceFilters;
+  setFilters: Dispatch<SetStateAction<ImarketlpaceFilters>>;
 }
 
-const LandsMarketplaceDesktopFilters = ({ filters, setFilters }: IProps) => (
+const marketlpaceDesktopFilters = ({ filters, setFilters }: IProps) => (
   <Box sx={{ display: "flex", gap: 1.5 }}>
-    <LandsMarketplaceFiltersAutocomplete
+    <marketlpaceFiltersAutocomplete
       options={getAllStates({ filterBlackList: true }).map(({ value, label }) => ({ value, label }))}
       onSelect={(state) => setFilters({ ...filters, state, ...(!state && { county: null }) })}
       placeholder="State"
     />
-    <LandsMarketplaceFiltersAutocomplete
+    <marketlpaceFiltersAutocomplete
       options={getCounties(filters.state).map(({ value, label }) => ({ value, label }))}
       onSelect={(county) => setFilters({ ...filters, county })}
       placeholder="County"
       disabled={!filters.state}
     />
-    <LandsMarketplaceFiltersMinMaxAutocomplete
+    <marketlpaceFiltersMinMaxAutocomplete
       options={acreagesFilters}
       onSelect={(acreage) => setFilters({ ...filters, acreageMin: acreage?.min || null, acreageMax: acreage?.max || null })}
       placeholder="Acreage"
       getLabel={(value) => getAcreageLabel(value?.min || null, value?.max || null)}
     />
-    <LandsMarketplaceFiltersMinMaxAutocomplete
+    <marketlpaceFiltersMinMaxAutocomplete
       options={priceFilters}
       onSelect={(price) => setFilters({ ...filters, priceMin: price?.min || null, priceMax: price?.max || null })}
       placeholder="VOLT Price"
@@ -39,4 +39,4 @@ const LandsMarketplaceDesktopFilters = ({ filters, setFilters }: IProps) => (
   </Box>
 );
 
-export default LandsMarketplaceDesktopFilters;
+export default marketlpaceDesktopFilters;

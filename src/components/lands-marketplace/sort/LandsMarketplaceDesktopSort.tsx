@@ -3,14 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 import { getAllStates, getCounties } from "@/helpers/states";
 import AutoCompleteListboxComponent from "@/components/shared/AutoCompleteListboxComponent";
 import { ArrowDown2, ArrowSwapVertical, ArrowUp2 } from "iconsax-react";
-import { ILandsMarketplaceFilters, SortBy } from "@/types/lands";
+import { ImarketlpaceFilters, SortBy } from "@/types/lands";
 
 interface IProps {
-  filters: ILandsMarketplaceFilters;
-  setFilters: Dispatch<SetStateAction<ILandsMarketplaceFilters>>;
+  filters: ImarketlpaceFilters;
+  setFilters: Dispatch<SetStateAction<ImarketlpaceFilters>>;
 }
 
-const LandsMarketplaceDesktopSort = ({ filters, setFilters }: IProps) => (
+const marketlpaceDesktopSort = ({ filters, setFilters }: IProps) => (
   <Autocomplete
     fullWidth
     renderInput={(params) => (
@@ -41,4 +41,4 @@ const LandsMarketplaceDesktopSort = ({ filters, setFilters }: IProps) => (
   />
 );
 
-export default LandsMarketplaceDesktopSort;
+export default marketlpaceDesktopSort;

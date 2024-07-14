@@ -1,18 +1,18 @@
 import { getAllStates, getCounties } from "@/helpers/states";
-import { ILandsMarketplaceFilters, SortBy } from "@/types/lands";
+import { ImarketlpaceFilters, SortBy } from "@/types/lands";
 import { FilterList, KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Button, Collapse, Divider, Drawer, FormControlLabel, Radio, TextField, Typography } from "@mui/material";
 import { ArrowDown2, ArrowUp2 } from "iconsax-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface IProps {
-  filters: ILandsMarketplaceFilters;
-  setFilters: Dispatch<SetStateAction<ILandsMarketplaceFilters>>;
+  filters: ImarketlpaceFilters;
+  setFilters: Dispatch<SetStateAction<ImarketlpaceFilters>>;
 }
 
-const LandsMarketplaceMobileSort = ({ filters, setFilters }: IProps) => {
+const marketlpaceMobileSort = ({ filters, setFilters }: IProps) => {
   const [open, setOpen] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<ILandsMarketplaceFilters>({
+  const [selectedFilters, setSelectedFilters] = useState<ImarketlpaceFilters>({
     acreageMin: null,
     acreageMax: null,
     county: null,
@@ -132,4 +132,4 @@ const LandsMarketplaceMobileSort = ({ filters, setFilters }: IProps) => {
   );
 };
 
-export default LandsMarketplaceMobileSort;
+export default marketlpaceMobileSort;

@@ -7,7 +7,7 @@ interface IProps {
   onSearch: (value: string | null) => void;
 }
 
-const LandsMarketplaceSearch = ({ onSearch }: IProps) => {
+const marketlpaceSearch = ({ onSearch }: IProps) => {
   const [value, setValue] = useState<string | null>(null);
   return (
     <Box
@@ -50,4 +50,4 @@ const LandsMarketplaceSearch = ({ onSearch }: IProps) => {
   );
 };
 
-export default LandsMarketplaceSearch;
+export default marketlpaceSearch;

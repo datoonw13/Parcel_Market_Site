@@ -4,7 +4,7 @@ import { SortEnum } from "@/types/common";
 import { useAtom } from "jotai";
 import { userListingAtom } from "@/atoms/user-listing-atom";
 import { useState } from "react";
-import { removeUserListingItemsAction, revalidateUserListings } from "@/server-actions/listings/actions";
+import { removeUserListingItemsAction, revalidateUserListings } from "@/server-actions/user-listings/actions";
 import toast from "react-hot-toast";
 import Sort from "../../shared/filters/Sort";
 import SelectButton from "../../shared/forms/Button/SelectButton";

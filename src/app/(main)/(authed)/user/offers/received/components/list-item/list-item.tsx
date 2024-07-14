@@ -53,7 +53,7 @@ const ReceivedOfferListItem: FC<ReceivedOfferListItemProps> = ({ data, openDetai
           className="hidden sm:block w-full sm:w-fit !h-10 sm:!h-auto"
           variant="secondary"
           onClick={() => {
-            push(`/${routes.landsMarketplace.url}/${data.sellingPropertyId}`);
+            push(`/${routes.marketlpace.url}/${data.sellingPropertyId}`);
           }}
         >
           View Land

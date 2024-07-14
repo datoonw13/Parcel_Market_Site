@@ -4,9 +4,9 @@ const routes = {
     protected: false,
     fullUrl: "/home",
   },
-  landsMarketplace: {
-    url: "lands-marketplace",
-    fullUrl: "/lands-marketplace",
+  marketplace: {
+    url: "marketplace",
+    fullUrl: "/marketplace",
     protected: true,
   },
   auth: {
@@ -24,16 +24,6 @@ const routes = {
       protected: false,
     },
   },
-  // propertySearch: {
-  //   url: "find-property",
-  //   fullUrl: "/find-property",
-  //   protected: false,
-  //   signature: {
-  //     url: "signature",
-  //     fullUrl: "/find-property/signature",
-  //     protected: true,
-  //   },
-  // },
   user: {
     url: "user",
     fullUrl: "/user",

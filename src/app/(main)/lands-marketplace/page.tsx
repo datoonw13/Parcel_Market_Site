@@ -1,11 +1,11 @@
 "use client";
 
-import LandsMarketplaceSearch from "@/components/lands-marketplace/LandsMarketplaceSearch";
+import marketlpaceSearch from "@/components/lands-marketplace/marketlpaceSearch";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { ILandsMarketplaceFilters } from "@/types/lands";
+import { ImarketlpaceFilters } from "@/types/lands";
 import { Box, Button, CircularProgress, Container, Pagination, Skeleton, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import LandsMarketplaceFilters from "@/components/lands-marketplace/filters/LandsMarketplaceFilters";
+import marketlpaceFilters from "@/components/lands-marketplace/filters/marketlpaceFilters";
 import { BookmarkBorderOutlined, CalendarMonth, FmdGoodOutlined, Place } from "@mui/icons-material";
 import { Location, UserSquare } from "iconsax-react";
 import Image from "next/image";
@@ -17,9 +17,9 @@ import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const LandsMarketPlacePage = () => {
+const marketlpacePage = () => {
   const router = useRouter();
-  const [filters, setFilters] = useState<ILandsMarketplaceFilters>({
+  const [filters, setFilters] = useState<ImarketlpaceFilters>({
     priceMin: null,
     priceMax: null,
     acreageMin: null,
@@ -55,10 +55,10 @@ const LandsMarketPlacePage = () => {
           mt: 4,
         }}
       >
-        <LandsMarketplaceSearch onSearch={(value) => setSearchValue(value)} />
+        <marketlpaceSearch onSearch={(value) => setSearchValue(value)} />
       </Box>
       <Box sx={{ mt: { xs: 5, md: 6 } }}>
-        <LandsMarketplaceFilters filters={filters} setFilters={setFilters} />
+        <marketlpaceFilters filters={filters} setFilters={setFilters} />
       </Box>
       <Box
         sx={{
@@ -191,4 +191,4 @@ const LandsMarketPlacePage = () => {
   );
 };
 
-export default LandsMarketPlacePage;
+export default marketlpacePage;

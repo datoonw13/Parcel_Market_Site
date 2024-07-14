@@ -75,7 +75,7 @@ const CreateOffer = ({ maxHeight, sellingPropertyId }: { maxHeight?: string; sel
       //   setOpen(false);
       // } else {
       //   toast.success("Offer sent");
-      //   router.replace(routes.landsMarketplace.fullUrl);
+      //   router.replace(routes.marketlpace.fullUrl);
       // }
     } catch (error) {
       toast.error("Offer request failed");

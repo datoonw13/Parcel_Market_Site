@@ -24,7 +24,7 @@ interface IProps {
   };
 }
 
-const LandsMarketPlaceItemPage = ({ params }: IProps) => {
+const marketlpaceItemPage = ({ params }: IProps) => {
   const router = useRouter();
   const isSmallDevice = useMediaQuery(768);
   const pathname = usePathname();
@@ -322,7 +322,7 @@ const LandsMarketPlaceItemPage = ({ params }: IProps) => {
   );
 };
 
-export default LandsMarketPlaceItemPage;
+export default marketlpaceItemPage;
 
 // waterFeature: boolean | null;
 // waterFront: boolean | null;

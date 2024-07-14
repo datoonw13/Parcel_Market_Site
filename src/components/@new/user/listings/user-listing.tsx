@@ -1,4 +1,4 @@
-import { getUserListingAction } from "@/server-actions/listings/actions";
+import { getUserListingAction } from "@/server-actions/user-listings/actions";
 import { numFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
 import UserListingHeader from "./user-listing-header";
