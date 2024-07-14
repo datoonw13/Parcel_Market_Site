@@ -1,7 +1,7 @@
-import MarketPlaceFilters from "@/components/@new/marketplace/marketplace-filter";
-import MarketplaceHeader from "@/components/@new/marketplace/marketplace-header";
-import MarketplaceList from "@/components/@new/marketplace/marketplace-list";
-import MarketplaceListLoading from "@/components/@new/marketplace/marketplace-list-loading";
+import MarketPlaceFilters from "@/components/@new/marketplace/list/marketplace-filter";
+import MarketplaceHeader from "@/components/@new/marketplace/list/marketplace-header";
+import MarketplaceList from "@/components/@new/marketplace/list/marketplace-list";
+import MarketplaceListLoading from "@/components/@new/marketplace/list/marketplace-list-loading";
 import Container from "@/components/@new/shared/Container";
 import React, { Suspense } from "react";
 

@@ -3,7 +3,7 @@
 import { priceFilters, getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer";
 import { getAllStates } from "@/helpers/states";
-import { acreagesFilters, getAcreageLabel } from "../lands/filters/lands-filters-utils";
+import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
 const MarketPlaceMobileFilters = () => {
   const filters = {

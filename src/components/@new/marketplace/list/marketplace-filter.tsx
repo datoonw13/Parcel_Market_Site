@@ -1,5 +1,5 @@
 import { SortEnum } from "@/types/common";
-import Sort from "../shared/filters/Sort";
+import Sort from "../../shared/filters/Sort";
 import MarketPlaceMobileFilters from "./marketplace-mobile-filters";
 import MarketPlaceDesktopFilters from "./marketplace-desktop-filters";
 

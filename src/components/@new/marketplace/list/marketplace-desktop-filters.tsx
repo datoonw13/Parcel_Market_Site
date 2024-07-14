@@ -7,7 +7,7 @@ import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
 import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/actions";
 import { getAllStates, getCounties } from "@/helpers/states";
-import { acreagesFilters, getAcreageLabel } from "../lands/filters/lands-filters-utils";
+import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
 const MarketPlaceDesktopFilters = () => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);

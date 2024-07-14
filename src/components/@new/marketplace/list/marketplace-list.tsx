@@ -3,11 +3,11 @@ import { numFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
 import MarketPlacePagination from "./marketplace-pagination";
 import MarketPlaceListItem from "./marketplace-list-item";
-import { UserIcon2 } from "../icons/UserIcons";
-import { IdIcon1 } from "../icons/IdIcons";
-import { ResizeIcon1 } from "../icons/ResizeIcons";
-import { MoneyIcon1 } from "../icons/MoneyIcons";
-import DataNotFound from "../shared/DataNotFound";
+import { UserIcon2 } from "../../icons/UserIcons";
+import { IdIcon1 } from "../../icons/IdIcons";
+import { ResizeIcon1 } from "../../icons/ResizeIcons";
+import { MoneyIcon1 } from "../../icons/MoneyIcons";
+import DataNotFound from "../../shared/DataNotFound";
 
 const MarketplaceList = async ({ params }: { params: { [key: string]: string } }) => {
   const { data } = await getMarketplaceListAction(params);
