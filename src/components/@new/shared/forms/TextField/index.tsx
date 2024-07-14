@@ -22,6 +22,7 @@ interface TextFieldProps {
   type?: "text" | "number" | "password";
   name?: string;
   required?: boolean;
+  endIconClasses?: string;
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -42,6 +43,7 @@ const TextField = (props: TextFieldProps) => {
     type = "text",
     name,
     required,
+    endIconClasses,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -121,7 +123,11 @@ const TextField = (props: TextFieldProps) => {
       )}
       {endIcon && (
         <div
-          className={clsx("absolute right-0 h-full flex items-center pr-3", disabled && "cursor-not-allowed pointer-events-none")}
+          className={clsx(
+            "absolute right-0 h-full flex items-center pr-3",
+            disabled && "cursor-not-allowed pointer-events-none",
+            endIconClasses
+          )}
           ref={endIconRef}
         >
           {endIcon}
