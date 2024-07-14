@@ -4,9 +4,12 @@ import { valueLandAtom } from "@/atoms/value-land-atom";
 import routes from "@/helpers/routes";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
+import { calculateLandPriceAction } from "@/server-actions/value-land/actions";
+import toast from "react-hot-toast";
+import { IFindPropertyEstimatedPrice } from "@/types/find-property";
 import Button from "../shared/forms/Button";
 import { LocationIcon1 } from "../icons/LocationIcons";
 
@@ -15,6 +18,38 @@ const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 const ValueLandFound = () => {
   const router = useRouter();
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
+  const [pending, setPending] = useState(false);
+
+  const onNext = async () => {
+    if (!valueLand.selectedLand) {
+      return;
+    }
+    const reqData: IFindPropertyEstimatedPrice = {
+      body: {
+        county: valueLand.selectedLand?.properties.fields.county.toLocaleLowerCase(),
+        state: valueLand.selectedLand?.properties.fields.state2.toLocaleLowerCase(),
+        parcelNumber: valueLand.selectedLand?.properties.fields.parcelnumb,
+        owner: valueLand.selectedLand.properties.fields.owner,
+        propertyType:
+          valueLand.selectedLand.properties.fields?.zoning_description || valueLand.selectedLand.properties.fields.usedesc || "",
+      },
+      queryParams: {
+        acre: valueLand.selectedLand.properties.fields.ll_gisacre.toString(),
+        lat: valueLand.selectedLand.properties.fields.lat,
+        lon: valueLand.selectedLand.properties.fields.lon,
+      },
+    };
+    setPending(true);
+
+    const { errorMessage, data } = await calculateLandPriceAction(reqData);
+    if (errorMessage) {
+      toast.error(errorMessage);
+      setPending(false);
+    } else {
+      setValueLand((prev) => ({ ...prev, calculatedPrice: data }));
+      router.push(routes.valueLand.value.fullUrl);
+    }
+  };
 
   useEffect(() => {
     if (!valueLand.lands) {
@@ -88,8 +123,12 @@ const ValueLandFound = () => {
         </div>
       </div>
       <div className="border-t border-t-grey-100 flex flex-col sm:flex-row justify-end gap-3 px-4 md:px-6 lg:px-8 py-4">
-        <Button variant="secondary">Back</Button>
-        <Button>Continue</Button>
+        <Button variant="secondary" onClick={() => router.push(routes.valueLand.fullUrl)}>
+          Back
+        </Button>
+        <Button onClick={onNext} loading={pending}>
+          Continue
+        </Button>
       </div>
     </div>
   );

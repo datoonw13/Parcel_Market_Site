@@ -26,7 +26,9 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
     if (!open && rootEl.current && parentEl) {
       console.log(parentEl.getBoundingClientRect(), 22);
 
-      rootEl.current.style.transform = `translateY(${parentEl.getBoundingClientRect().top + parentEl.getBoundingClientRect().bottom - 1}px)`;
+      rootEl.current.style.transform = `translateY(${
+        parentEl.getBoundingClientRect().top + parentEl.getBoundingClientRect().bottom - 1
+      }px)`;
     }
   }, [open, rootId]);
 

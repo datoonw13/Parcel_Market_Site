@@ -53,8 +53,6 @@ export const signInUserAction = async (prevState: any, formData: FormData): Prom
     };
   }
 
-  redirect(`${routes.home.fullUrl}`);
-
   return {
     errorMessage: null,
     data: null,

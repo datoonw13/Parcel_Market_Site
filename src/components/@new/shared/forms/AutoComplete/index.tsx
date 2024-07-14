@@ -33,7 +33,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   loading?: boolean;
   contentClassName?: string;
   disableSameWidth?: boolean;
-  rootClassName?: string
+  rootClassName?: string;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -57,7 +57,7 @@ const AutoComplete = <T extends Array<{}>>({
   loading,
   contentClassName,
   disableSameWidth,
-  rootClassName
+  rootClassName,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);

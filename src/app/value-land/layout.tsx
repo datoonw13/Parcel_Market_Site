@@ -1,4 +1,5 @@
 import Divider from "@/components/@new/shared/Divider";
+import ValueLanSidebar from "@/components/@new/value-land/value-land-sidebar";
 import ValueLandStepInfo from "@/components/@new/value-land/value-land-step-info";
 import ValueLandStepper from "@/components/@new/value-land/value-land-stepper";
 import { AppBarMini } from "@/components/app-bar";
@@ -27,7 +28,7 @@ const ValueLandLayout = ({ children }: { children: ReactNode }) => (
         <MiniFooter />
       </div>
     </div>
-    <div className="bg-error-100 hidden xl:block">SideBar</div>
+    <ValueLanSidebar />
   </div>
 );
 

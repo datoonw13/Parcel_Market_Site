@@ -83,6 +83,11 @@ const routes = {
       fullUrl: "/value-land/value",
       protected: false,
     },
+    signature: {
+      url: "signature",
+      fullUrl: "/value-land/signature",
+      protected: true,
+    },
   },
 };
 

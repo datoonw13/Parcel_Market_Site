@@ -7,15 +7,19 @@ import Button from "@/components/@new/shared/forms/Button";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import TextField from "@/components/@new/shared/forms/TextField";
-import { ErrorResponse } from "@/helpers/error-response";
 import routes from "@/helpers/routes";
 import useEnterClick from "@/hooks/useEnterClick";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { signInUserAction } from "@/server-actions/user/actions";
+import { useAtom } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
+import { useRouter } from "next/navigation";
 
 const SignInPage = () => {
+  const router = useRouter();
+  const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -23,6 +27,8 @@ const SignInPage = () => {
     const request = await signInUserAction(prevState, formData);
     if (request.errorMessage) {
       toast.error(request.errorMessage);
+    } else {
+      router.push(valueLand.sellOptions ? routes.valueLand.signature.fullUrl : routes.home.fullUrl);
     }
   };
 
