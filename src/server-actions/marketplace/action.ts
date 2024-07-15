@@ -14,12 +14,12 @@ export const getMarketplaceListAction = async (params?: {
         next: { tags: [marketplaceTags.list] },
       }
     );
-
     return {
       errorMessage: null,
       data: { list: request.sellingProperties, pagination: request.pagination },
     };
   } catch (error) {
+    
     const errorData = error as ErrorResponse;
     return {
       errorMessage: errorData.message,

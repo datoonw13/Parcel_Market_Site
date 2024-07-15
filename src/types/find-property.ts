@@ -113,6 +113,7 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   totalViews: number;
   availableTill: string;
   user_id?: number;
+  followedListingId?: number
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{
