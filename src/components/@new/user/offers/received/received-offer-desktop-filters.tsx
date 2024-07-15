@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/actions";
 
 const ReceivedOffersDesktopFilters = () => {
-  const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
+  const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>([]);
 
   const getParcelNumbers = async () => {
     const { data } = await getReceivedOffersParcelNumbersAction();
