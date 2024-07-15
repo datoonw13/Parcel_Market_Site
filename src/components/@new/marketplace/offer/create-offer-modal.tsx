@@ -11,7 +11,7 @@ interface CreateOfferModalProps {
 }
 
 const CreateOfferModal: FC<CreateOfferModalProps> = ({ closeModal, open, sellingPropertyId }) => (
-  <Modal open={open} closeModal={() => {}}>
+  <Modal open={open} closeModal={closeModal}>
     <div className="max-w-4xl w-full mx-9 bg-white rounded-xl grid overflow-hidden">
       <div className="flex items-center justify-between gap-4 px-8 py-6 border-b border-b-grey-100 sticky top-0 bg-white z-10">
         <h1 className="font-semibold text-lg">Offer Details</h1>
