@@ -4,7 +4,7 @@ import { ErrorResponse } from "@/helpers/error-response";
 import { fetcher } from "../fetcher";
 import { marketplaceTags } from "./tags";
 
-export const getMarketplaceListAction = async (params: {
+export const getMarketplaceListAction = async (params?: {
   [key: string]: string;
 }): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
   try {
