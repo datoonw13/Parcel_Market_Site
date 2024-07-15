@@ -4,8 +4,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
 import { OfferModel } from "@/types/offer";
 import Link from "next/link";
-import React from "react";
-import OfferDetail from "../details/offer-detail";
+import OfferDetailsWrapper from "./offer-details-wrapper";
 
 const SentOfferDetails = ({ data }: { data: OfferModel }) => (
   <Container className="py-6 px-5 pb-20">
@@ -19,9 +18,8 @@ const SentOfferDetails = ({ data }: { data: OfferModel }) => (
       </Link>
       <p className="text-lg font-semibold my-6">Make an offer</p>
     </div>
-    <div className="font-semibold mt-4 mb-6 border border-grey-100 rounded-2xl pt-4 md:pt-8">
-      {/* <CreateOffer sellingPropertyId={Number(params.id)} goBack={goBack} /> */}
-      <OfferDetail data={data} />
+    <div className="font-semibold border border-grey-100 rounded-2xl p-6">
+      <OfferDetailsWrapper data={data} actionClassName="mt-10 py-4 flex-col-reverse [&>button]:ml-0 [&>a]:w-full [&>a>button]:w-full" />
     </div>
   </Container>
 );

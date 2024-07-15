@@ -7,6 +7,7 @@ import Link from "next/link";
 import routes from "@/helpers/routes";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import OfferDetail from "../details/offer-detail";
+import OfferDetailsWrapper from "./offer-details-wrapper";
 
 interface SentOfferDetailsModalProps {
   closeModal: () => void;
@@ -26,31 +27,13 @@ const SentOfferDetailsModal: FC<SentOfferDetailsModalProps> = ({ closeModal, dat
               <RemoveIcon2 className="!h-3 !w-3 fill-grey-600" />
             </Button>
           </div>
-          <div className="pt-6 h-[70vh] overflow-hidden flex px-8 [&>div]:pb-32">{data && <OfferDetail data={data} />}</div>
-          <div className="py-4 px-8 flex gap-3 border-t border-t-grey-100">
-            <Button variant="secondary">Contact Buyer</Button>
-            <Button color="error" className="ml-auto" onClick={() => setOpenCancelModal(true)}>
-              Cancel Offer
-            </Button>
-            <Link href={`${routes.marketplace.fullUrl}/${data?.id}`}>
-              <Button>View Land</Button>
-            </Link>
-          </div>
+          {data && (
+            <div className="h-[70vh] flex w-full">
+              <OfferDetailsWrapper data={data} contentClassName="px-8 py-6" actionClassName="px-8 py-4" />
+            </div>
+          )}
         </div>
       </Modal>
-      <ResponsiveRemoveModal
-        open={openCancelModal}
-        pending={false}
-        handleClose={() => {
-          setOpenCancelModal(false);
-        }}
-        onReject={() => {
-          setOpenCancelModal(false);
-        }}
-        title="Cancel Offer??"
-        desc="Are you sure you want to cancel your offer?"
-        onOk={() => setOpenCancelModal(false)}
-      />
     </>
   );
 };
