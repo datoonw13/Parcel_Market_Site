@@ -9,7 +9,7 @@ interface ProfileModalContentWrapperProps {
   description: string;
 }
 const ProfileModalContentWrapper: FC<ProfileModalContentWrapperProps> = ({ children, handleClose, description, title }) => (
-  <div className="sm:bg-white sm:shadow-4 sm:rounded-2xl min-h-[70vh] sm:min-h-fit pb-8 sm:pt-8 relative grid">
+  <div className="sm:bg-white md:shadow-4 sm:rounded-2xl min-h-[70vh] sm:min-h-fit pb-8 sm:pt-8 relative grid">
     <div className="flex flex-col">
       <div className="hidden sm:block absolute top-4 right-4" onClick={handleClose}>
         <RemoveIcon2 className="fill-grey-600 flex ml-auto cursor-pointer w-3 h-3 p-2 box-content" />

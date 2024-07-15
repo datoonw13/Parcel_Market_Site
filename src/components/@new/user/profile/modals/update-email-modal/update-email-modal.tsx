@@ -141,7 +141,7 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
             />
           </div>
         )}
-        <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
+        <div className="w-full flex flex-col-reverse md:grid md:grid-cols-2 gap-3 mt-8">
           <Button className="w-full" variant="secondary" onClick={goBack}>
             Back
           </Button>
