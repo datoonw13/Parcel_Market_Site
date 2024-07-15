@@ -54,13 +54,13 @@ export const followLand = async (
   }
 };
 
-export const unFollowLand = async (
-  followedListingId: number
+export const unFollowLands = async (
+  followedListingId: number[]
 ): Promise<ResponseModel<{ userId: number; sellingPropertyId: number; id: number } | null>> => {
   try {
     const request = await fetcher<null>(`followed-listings`, {
       method: "DELETE",
-      body: JSON.stringify({ ids: [followedListingId] }),
+      body: JSON.stringify({ ids: followedListingId }),
     });
     revalidateTag(marketplaceTag);
     revalidateTag(followTag);

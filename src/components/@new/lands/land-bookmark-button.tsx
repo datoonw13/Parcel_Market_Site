@@ -1,5 +1,5 @@
 import { useOptimistic, useState } from "react";
-import { followLand, unFollowLand } from "@/server-actions/follow/actions";
+import { followLand, unFollowLands } from "@/server-actions/follow/actions";
 import toast from "react-hot-toast";
 import { BookmarkIcon1, BookmarkIcon2 } from "../icons/BookMarkIcons";
 import Button from "../shared/forms/Button";
@@ -21,7 +21,7 @@ const LandBookMarkIcon = ({ landId, initialFollowedListingId }: { landId: number
 
   const handleUnFollow = async () => {
     setPending(true);
-    const { data, errorMessage } = await unFollowLand(landId);
+    const { data, errorMessage } = await unFollowLands([landId]);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
