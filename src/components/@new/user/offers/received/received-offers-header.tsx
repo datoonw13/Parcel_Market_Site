@@ -3,16 +3,17 @@
 import { SortEnum } from "@/types/common";
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { sentOffersAtom } from "@/atoms/sent-offers-atom";
 import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
 import toast from "react-hot-toast";
+import { receivedOffersAtom } from "@/atoms/received-offers-atom";
+import { useRouter } from "next/navigation";
 import Sort from "../../../shared/filters/Sort";
 import SelectButton from "../../../shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "../../../shared/modals/ResponsiveRemoveModal";
-import { receivedOffersAtom } from "@/atoms/received-offers-atom";
 import ReceivedOffersMobileFilters from "./received-offer-mobile-filters";
 
 const ReceivedOffersHeader = ({ totalCount }: { totalCount: number }) => {
+  const router = useRouter();
   const [receivedOffersOptions, setReceivedOffersOption] = useAtom(receivedOffersAtom);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
   const [pending, setPending] = useState(false);
@@ -27,7 +28,7 @@ const ReceivedOffersHeader = ({ totalCount }: { totalCount: number }) => {
       } else {
         setOpenRemoveModal(false);
         setReceivedOffersOption({ selecting: false, selectedOffersIds: null });
-        await revalidateSentOffers();
+        router.refresh();
       }
     }
   };

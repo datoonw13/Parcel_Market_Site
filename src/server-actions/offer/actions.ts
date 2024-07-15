@@ -115,20 +115,22 @@ export const acceptReceivedOffer = async (offerId: number): Promise<ResponseMode
 };
 
 export const deleteReceivedOffersAction = async (ids: number[]): Promise<ResponseModel<null>> => {
-  // try {
-  //   await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {
-  //     method: "DELETE",
-  //     body: JSON.stringify({ ids }),
-  //   });
-  //   // revalidateReceivedOffers();
-  //   return { data: null, errorMessage: null };
-  // } catch (error) {
-  //   const errorData = error as ErrorResponse;
-  //   return {
-  //     errorMessage: errorData.message,
-  //     data: null,
-  //   };
-  // }
+  try {
+    await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {
+      method: "DELETE",
+      body: JSON.stringify({ ids }),
+    });
+    revalidateTag(offerTags.receivedOffers);
+    revalidateTag(offerTags.sentOffers);
+    revalidateTag(offerTags.getOffer);
+    return { data: null, errorMessage: null };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
 };
 
 export const getReceivedOffersParcelNumbersAction = async (): Promise<ResponseModel<string[] | null>> => {
