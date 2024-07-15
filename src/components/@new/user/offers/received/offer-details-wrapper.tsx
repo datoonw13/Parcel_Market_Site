@@ -1,12 +1,14 @@
 "use client";
 
 import Button from "@/components/@new/shared/forms/Button";
-import routes from "@/helpers/routes";
-import Link from "next/link";
 import { useState } from "react";
-import { OfferModel } from "@/types/offer";
+import { OfferModel, OfferStatusEnum } from "@/types/offer";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import clsx from "clsx";
+import { acceptReceivedOffer, rejectReceivedOffer } from "@/server-actions/offer/actions";
+import toast from "react-hot-toast";
+import { usePathname, useRouter } from "next/navigation";
+import ResponsiveAcceptModal from "@/components/@new/shared/modals/ResponsiveAcceptModal";
 import OfferDetail from "../details/offer-detail";
 
 const ReceivedOfferDetailsWrapper = ({
@@ -18,7 +20,33 @@ const ReceivedOfferDetailsWrapper = ({
   contentClassName?: string;
   actionClassName?: string;
 }) => {
-  const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [openRejectModal, setOpenRejectModal] = useState(false);
+  const [openAcceptModal, setOpenAcceptModal] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const rejectOffer = async () => {
+    setPending(true);
+    const { errorMessage } = await rejectReceivedOffer(data.id);
+    if (errorMessage) {
+      toast.error(errorMessage);
+      setPending(false);
+    } else {
+      router.replace(`${pathname}?reject=${data.id}`);
+    }
+  };
+
+  const acceptOffer = async () => {
+    setPending(true);
+    const { errorMessage } = await acceptReceivedOffer(data.id);
+    if (errorMessage) {
+      toast.error(errorMessage);
+      setPending(false);
+    } else {
+      router.replace(`${pathname}?accept=${data.id}`);
+    }
+  };
 
   return (
     <>
@@ -28,25 +56,44 @@ const ReceivedOfferDetailsWrapper = ({
         </div>
         <div className={clsx("flex gap-3 border-t border-t-grey-100", actionClassName)}>
           <Button variant="secondary">Contact Buyer</Button>
-          <Button color="error" className="ml-auto" onClick={() => setOpenCancelModal(true)}>
-            Reject
-          </Button>
-          <Button>Accept</Button>
+          {data.offerStatus === OfferStatusEnum.pending && (
+            <>
+              <Button color="error" className="ml-auto" onClick={() => setOpenRejectModal(true)}>
+                Decline
+              </Button>
+              <Button onClick={() => setOpenAcceptModal(true)}>Accept</Button>
+            </>
+          )}
         </div>
       </div>
-      {/* <ResponsiveRemoveModal
-        open={openCancelModal}
-        pending={false}
+      <ResponsiveRemoveModal
+        open={openRejectModal}
+        pending={pending}
         handleClose={() => {
-          setOpenCancelModal(false);
+          setOpenRejectModal(false);
         }}
         onReject={() => {
-          setOpenCancelModal(false);
+          setOpenRejectModal(false);
         }}
-        title="Cancel Offer??"
-        desc="Are you sure you want to cancel your offer?"
-        onOk={() => setOpenCancelModal(false)}
-      /> */}
+        title="Decline Offer?"
+        desc="Are you sure you want to decline this offer?"
+        onOk={rejectOffer}
+        acceptLabel="Decline"
+      />
+      <ResponsiveAcceptModal
+        open={openAcceptModal}
+        pending={pending}
+        handleClose={() => {
+          setOpenAcceptModal(false);
+        }}
+        onReject={() => {
+          setOpenAcceptModal(false);
+        }}
+        title="Accept Offer??"
+        desc="This offer is for initial contact only and is not a binding contract. Please accept to proceed."
+        onOk={acceptOffer}
+        acceptLabel="Accept"
+      />
     </>
   );
 };
