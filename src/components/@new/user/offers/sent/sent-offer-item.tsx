@@ -47,7 +47,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
 
   const openDetail = () => {
     if (isSmallDevice) {
-      router.push(`${pathname}/details/${data.id}`);
+      router.push(`${pathname}/details/${data.sellingPropertyId}`);
     } else {
       setSelectedOffer(data);
     }

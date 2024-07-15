@@ -31,7 +31,7 @@ const OfferDetailsWrapper = ({
           <Button color="error" className="ml-auto" onClick={() => setOpenCancelModal(true)}>
             Cancel Offer
           </Button>
-          <Link href={`${routes.marketplace.fullUrl}/${data?.id}`}>
+          <Link href={`${routes.marketplace.fullUrl}/${data?.sellingPropertyId}`}>
             <Button>View Land</Button>
           </Link>
         </div>
