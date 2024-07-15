@@ -1,15 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
-import { IUserSignUp } from "@/types/auth";
+import { IUserRegistrationReason, IUserSignUp } from "@/types/auth";
 import clsx from "clsx";
 import Link from "next/link";
 import routes from "@/helpers/routes";
 import CheckBox from "../../shared/forms/CheckBox";
 import Button from "../../shared/forms/Button";
 
-const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReason"]) => void }) => {
-  const [value, setValue] = useState<IUserSignUp["registrationReason"]>();
+const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReasons"]) => void }) => {
+  const [value, setValue] = useState<IUserSignUp["registrationReasons"]>([]);
+
+  const handleChange = (item: IUserRegistrationReason) => {
+    if (value.includes(item)) {
+      setValue(value.filter((el) => el !== item));
+    } else {
+      setValue([...value, item]);
+    }
+  };
+
   return (
     <>
       <div className="max-w-xl">
@@ -21,37 +30,37 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
           className={clsx(
             `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
           hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value === "sellLandQuickly" && "bg-primary-main-100 border-primary-main-400"
+            value.includes(IUserRegistrationReason.SellLandQuickly) && "bg-primary-main-100 border-primary-main-400"
           )}
           label="I want to sell my land quickly"
-          checked={value === "sellLandQuickly"}
-          onChange={() => setValue("sellLandQuickly")}
+          checked={value.includes(IUserRegistrationReason.SellLandQuickly)}
+          onChange={() => handleChange(IUserRegistrationReason.SellLandQuickly)}
         />
         <CheckBox
           className={clsx(
             `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
             hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value === "lookingForLandDeal" && "bg-primary-main-100 border-primary-main-400"
+            value.includes(IUserRegistrationReason.LookingForLandDeal) && "bg-primary-main-100 border-primary-main-400"
           )}
           label="I am looking for a land deal"
-          checked={value === "lookingForLandDeal"}
-          onChange={() => setValue("lookingForLandDeal")}
+          checked={value.includes(IUserRegistrationReason.LookingForLandDeal)}
+          onChange={() => handleChange(IUserRegistrationReason.LookingForLandDeal)}
         />
         <CheckBox
           className={clsx(
             `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
           hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value === "researchingPropertyData" && "bg-primary-main-100 border-primary-main-400"
+            value.includes(IUserRegistrationReason.ResearchingPropertyData) && "bg-primary-main-100 border-primary-main-400"
           )}
           label="I am researching property data"
-          checked={value === "researchingPropertyData"}
-          onChange={() => setValue("researchingPropertyData")}
+          checked={value.includes(IUserRegistrationReason.ResearchingPropertyData)}
+          onChange={() => handleChange(IUserRegistrationReason.ResearchingPropertyData)}
         />
         <CheckBox
           className={clsx(
             `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
         hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value === "realEstateProfessional" && "bg-primary-main-100 border-primary-main-400"
+            value.includes(IUserRegistrationReason.RealEstateProfessional) && "bg-primary-main-100 border-primary-main-400"
           )}
           label={
             <p className="flex gap-1">
@@ -59,10 +68,10 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
               <span className="hidden sm:block w-max">certified real estate</span> professional
             </p>
           }
-          checked={value === "realEstateProfessional"}
-          onChange={() => setValue("realEstateProfessional")}
+          checked={value.includes(IUserRegistrationReason.RealEstateProfessional)}
+          onChange={() => handleChange(IUserRegistrationReason.RealEstateProfessional)}
         />
-        <Button disabled={!value} className="w-full mt-5" onClick={() => value && onNext(value)}>
+        <Button disabled={value.length === 0} className="w-full mt-5" onClick={() => value && onNext(value)}>
           Create Account
         </Button>
         <p className="mt-3 text-center font-medium text-sm">

@@ -91,7 +91,7 @@ export interface IUser {
   password: string;
   firstName: string;
   lastName: string;
-  registrationReason: IUserRegistrationReason;
+  registrationReasons: Array<IUserRegistrationReason>;
   unitNumber: string;
   city: string;
   postalCode: string;

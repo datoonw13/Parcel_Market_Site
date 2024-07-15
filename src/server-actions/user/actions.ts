@@ -61,7 +61,7 @@ export const signInUserAction = async (prevState: any, formData: FormData): Prom
 
 export const signUpUserAction = async (values: IUserSignUp): Promise<ResponseModel<null>> => {
   try {
-    const request = await fetcher<null>("user/register", {
+   await fetcher<null>("user/register", {
       method: "POST",
       body: JSON.stringify(values),
       cache: "no-cache",

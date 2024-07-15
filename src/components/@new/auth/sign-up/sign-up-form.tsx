@@ -20,9 +20,9 @@ import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 
 interface SignUpProps {
   onBack: () => void;
-  registrationReason: IUserSignUp["registrationReason"];
+  registrationReasons: IUserSignUp["registrationReasons"];
 }
-const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
+const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack }) => {
   const router = useRouter();
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
@@ -43,7 +43,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReason, onBack }) => {
       state: "",
       streetName: "",
       unitNumber: "",
-      registrationReason,
+      registrationReasons,
       agreeTerm: false,
       sendEmailTips: false,
       repeatPassword: "",

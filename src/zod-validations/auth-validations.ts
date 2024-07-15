@@ -29,7 +29,7 @@ export const userSignUpValidation = z
     state: z.string().trim().min(1),
     postalCode: z.string().trim().min(1),
     password: passwordSchema,
-    registrationReason: z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"]),
+    registrationReasons: z.array(z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"])),
     agreeTerm: z.boolean().refine((val) => val === true, {
       message: "Please read and accept the terms and conditions",
     }),
