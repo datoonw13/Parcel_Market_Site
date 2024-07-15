@@ -12,7 +12,7 @@ const UserMenu = ({ user }: { user: ISignInResponse["payload"] }) => (
     placement="bottom-end"
     renderButton={(setReferenceElement, referenceElement) => (
       <div className="relative" onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}>
-        <Avatar title="LG" />
+        <Avatar title={`${user.firstName[0]}${user.lastName[0]}`} />
         <div className="shadow-2 bg-white rounded-full w-4 h-4 flex items-center justify-center absolute bottom-0 right-0">
           <ArrowIconDown1 className="m-1 w-4 h-4 cursor-pointer" />
         </div>
