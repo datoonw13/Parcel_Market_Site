@@ -204,7 +204,7 @@ export const removeUserAccountAction = async (values: {
   }
 };
 
-export const sendEmailResetCodeAction = async (values: { password: string }): Promise<ResponseModel<null>> => {
+export const sendEmailResetCodeAction = async (values: { password: string; newEmail: string }): Promise<ResponseModel<null>> => {
   try {
     await fetcher<ResponseType<null>>("user/reset/email/send-email-code", {
       method: "POST",

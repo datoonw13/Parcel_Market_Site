@@ -60,9 +60,9 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
 
   const handleCodeSend = async ({ resend }: { resend?: boolean }) => {
     setPending(true);
-    const { errorMessage } = await sendEmailResetCodeAction({ password: values.password });
+    const { errorMessage } = await sendEmailResetCodeAction({ password: values.password, newEmail: values.email });
     if (!errorMessage) {
-      !resend && setStep(UpdateEmailSteps.NEW_EMAIL);
+      !resend && setStep(UpdateEmailSteps.CODE);
       setPending(false);
       return { error: false };
     }
@@ -86,10 +86,10 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
 
   const handleNext = async () => {
     if (step === UpdateEmailSteps.PASSWORD) {
-      await handleCodeSend({ resend: false });
+      setStep(UpdateEmailSteps.NEW_EMAIL);
     }
     if (step === UpdateEmailSteps.NEW_EMAIL) {
-      setStep(UpdateEmailSteps.CODE);
+      await handleCodeSend({ resend: false });
     }
     if (step === UpdateEmailSteps.CODE) {
       await handleEmailUpdate();
