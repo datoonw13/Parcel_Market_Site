@@ -119,13 +119,37 @@ export const getSentOffersAction = async (params: {
     const request = await fetcher<{ data: OfferModel[] } & IPagination>(
       `offers/sent?${new URLSearchParams({ ...params, pageSize: "4" })}`,
       {
-        next: { tags: [offerTags.receivedOffers] },
+        next: { tags: [offerTags.sentOffers] },
       }
     );
     return {
       errorMessage: null,
       data: { list: request.data, pagination: request.pagination },
     };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
+export const revalidateSentOffers = async () => {
+  const path = headers().get("referer");
+  if (path) {
+    revalidateTag(offerTags.sentOffers);
+    redirect(path);
+  }
+};
+
+export const deleteSentOffersAction = async (ids: number[]): Promise<ResponseModel<null>> => {
+  try {
+    await fetcher<ResponseType<{ error: boolean }>>(`offers/sent`, {
+      method: "DELETE",
+      body: JSON.stringify({ ids }),
+    });
+    return { data: null, errorMessage: null };
   } catch (error) {
     const errorData = error as ErrorResponse;
     return {

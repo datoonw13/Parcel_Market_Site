@@ -1,3 +1,5 @@
+"use client";
+
 import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
 import { IdIcon1 } from "@/components/@new/icons/IdIcons";
 import { LocationIcon1 } from "@/components/@new/icons/LocationIcons";
@@ -9,15 +11,37 @@ import { numFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
 import { OfferModel } from "@/types/offer";
 import moment from "moment";
+import clsx from "clsx";
+import { useAtom } from "jotai";
+import { sentOffersAtom } from "@/atoms/sent-offers-atom";
 import OfferStatus from "../offer-status";
 
 const SentOfferItem = ({ data }: { data: OfferModel }) => {
+  const [sentOffersOptions, setSentOffersOption] = useAtom(sentOffersAtom);
+  const handleSelect = () => {
+    if (sentOffersOptions.selectedOffersIds?.includes(data.id)) {
+      setSentOffersOption((prev) => ({
+        ...prev,
+        selectedOffersIds: sentOffersOptions.selectedOffersIds?.filter((id) => id !== data.id) || null,
+      }));
+    } else {
+      setSentOffersOption((prev) => ({ ...prev, selectedOffersIds: [...(prev.selectedOffersIds || []), data.id] }));
+    }
+  };
+
   const state = getAllStates().find((el) => el.value === data.sellingProperty.state.toLocaleLowerCase());
   const county =
     state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === data.sellingProperty.county.toLocaleLowerCase()) || "";
 
   return (
-    <div className="border border-grey-100 rounded-2xl">
+    <div
+      className={clsx(
+        "border border-grey-100 rounded-2xl",
+        sentOffersOptions.selectedOffersIds?.includes(data.id) && "selected",
+        sentOffersOptions.selecting && "selecting"
+      )}
+      onClick={handleSelect}
+    >
       <div className="px-6 pt-6 pb-8 space-y-4">
         <div className="space-y-2">
           <h1 className="font-semibold truncate">

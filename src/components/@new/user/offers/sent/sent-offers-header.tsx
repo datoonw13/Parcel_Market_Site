@@ -3,9 +3,9 @@
 import { SortEnum } from "@/types/common";
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { removeUserListingItemsAction, revalidateUserListings } from "@/server-actions/user-listings/actions";
-import toast from "react-hot-toast";
 import { sentOffersAtom } from "@/atoms/sent-offers-atom";
+import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
+import toast from "react-hot-toast";
 import Sort from "../../../shared/filters/Sort";
 import SelectButton from "../../../shared/forms/Button/SelectButton";
 import UserListingsMobileFilter from "./sent-offers-mobile-filters";
@@ -17,18 +17,18 @@ const SentOffersHeader = ({ totalCount }: { totalCount: number }) => {
   const [pending, setPending] = useState(false);
 
   const onRemove = async () => {
-    // if (userListingOption.selectedLandIds) {
-    //   setPending(true);
-    //   const { errorMessage } = await removeUserListingItemsAction(userListingOption.selectedLandIds);
-    //   if (errorMessage) {
-    //     toast.error(errorMessage);
-    //     setPending(false);
-    //   } else {
-    //     setOpenRemoveModal(false);
-    //     setUserListingOption((prev) => ({ ...prev, selecting: false, selectedLandIds: null }));
-    //     await revalidateUserListings();
-    //   }
-    // }
+    if (sentOffersOptions.selectedOffersIds) {
+      setPending(true);
+      const { errorMessage } = await deleteSentOffersAction(sentOffersOptions.selectedOffersIds);
+      if (errorMessage) {
+        toast.error(errorMessage);
+        setPending(false);
+      } else {
+        setOpenRemoveModal(false);
+        setSentOffersOption({ selecting: false, selectedOffersIds: null });
+        await revalidateSentOffers();
+      }
+    }
   };
 
   return (
@@ -40,7 +40,7 @@ const SentOffersHeader = ({ totalCount }: { totalCount: number }) => {
           setOpenRemoveModal(false);
         }}
         onReject={() => {
-          setSentOffersOption((prev) => ({ ...prev, selecting: false, selectedLandIds: null }));
+          setSentOffersOption((prev) => ({ ...prev, selecting: false, selectedOffersIds: null }));
           setOpenRemoveModal(false);
         }}
         title="Delete Selected Sent Offers??"
@@ -53,7 +53,7 @@ const SentOffersHeader = ({ totalCount }: { totalCount: number }) => {
         </div>
         <SelectButton
           selecting={sentOffersOptions.selecting}
-          onClick={() => setSentOffersOption((prev) => ({ ...prev, selecting: !prev.selecting, selectedLandIds: null }))}
+          onClick={() => setSentOffersOption((prev) => ({ ...prev, selecting: !prev.selecting, selectedOffersIds: null }))}
           total={sentOffersOptions.selectedOffersIds?.length}
           className="ml-auto sm:ml-0"
           onRemove={() => setOpenRemoveModal(true)}
