@@ -6,10 +6,10 @@ import { OfferModel } from "@/types/offer";
 import Link from "next/link";
 import OfferDetailsWrapper from "./offer-details-wrapper";
 
-const SentOfferDetails = ({ data }: { data: OfferModel }) => (
+const ReceivedOfferDetails = ({ data }: { data: OfferModel }) => (
   <Container className="py-6 px-5 pb-20">
     <div>
-      <Link href={routes.user.offers.sent.fullUrl}>
+      <Link href={routes.user.offers.received.fullUrl}>
         <Button variant="secondary" className="!p-0 !h-fit !outline-none">
           <div className="flex items-center gap-2 text-primary-main">
             <ArrowIconLeft1 className="!w-1.5 !h-3" color="primary-main" /> Back
@@ -24,4 +24,4 @@ const SentOfferDetails = ({ data }: { data: OfferModel }) => (
   </Container>
 );
 
-export default SentOfferDetails;
+export default ReceivedOfferDetails;
