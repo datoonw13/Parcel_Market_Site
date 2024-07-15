@@ -10,7 +10,7 @@ import { fetcher } from "../fetcher";
 import { offerTags } from "./tags";
 
 export const getReceivedOffersAction = async (
-  params: ReceivedOffersFilters
+  params: {[key: string]: string}
 ): Promise<ResponseModel<({ list: OfferModel[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ data: OfferModel[] } & IPagination>(
@@ -53,7 +53,7 @@ export const getOfferDetailAction = async (offerId: string): Promise<ResponseMod
 export const getReceivedOffersParcelNumbersAction = async (): Promise<ResponseModel<string[] | null>> => {
   try {
     const request = await fetcher<string[] | null>(`offers/received/parcel-numbers`, {
-      next: { tags: [offerTags.receivedOffers] },
+      next: { tags: [offerTags.getParcelNumber] },
     });
 
     return {
@@ -78,20 +78,20 @@ export const getReceivedOffersParcelNumbersAction = async (): Promise<ResponseMo
 // };
 
 export const deleteReceivedOffersAction = async (ids: number[]): Promise<ResponseModel<null>> => {
-  try {
-    await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {
-      method: "DELETE",
-      body: JSON.stringify({ ids }),
-    });
-    // revalidateReceivedOffers();
-    return { data: null, errorMessage: null };
-  } catch (error) {
-    const errorData = error as ErrorResponse;
-    return {
-      errorMessage: errorData.message,
-      data: null,
-    };
-  }
+  // try {
+  //   await fetcher<ResponseType<{ error: boolean }>>(`offers/received`, {
+  //     method: "DELETE",
+  //     body: JSON.stringify({ ids }),
+  //   });
+  //   // revalidateReceivedOffers();
+  //   return { data: null, errorMessage: null };
+  // } catch (error) {
+  //   const errorData = error as ErrorResponse;
+  //   return {
+  //     errorMessage: errorData.message,
+  //     data: null,
+  //   };
+  // }
 };
 
 export const createOfferAction = async (data: MakeOfferModel & { sellingPropertyId: number }): Promise<ResponseModel<null>> => {
@@ -102,6 +102,7 @@ export const createOfferAction = async (data: MakeOfferModel & { sellingProperty
     });
 
     revalidateTag(offerTags.receivedOffers);
+    revalidateTag(offerTags.getParcelNumber);
     return { data: null, errorMessage: null };
   } catch (error) {
     const errorData = error as ErrorResponse;
