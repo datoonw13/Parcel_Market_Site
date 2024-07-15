@@ -30,7 +30,7 @@ const AdditionalInfoSection = ({ user }: { user: IUser }) => {
           <div className="w-full flex justify-between">
             <div className="flex flex-col gap-1">
               <p className="font-medium text-sm">Email</p>
-              <p className="font-medium text-xs text-grey-600">Davit@Gmail.com</p>
+              <p className="font-medium text-xs text-grey-600">{user.email}</p>
             </div>
             <button type="button" className="font-medium text-xs text-primary-main" onClick={() => setOpenModal("updateEmail")}>
               Change Email
