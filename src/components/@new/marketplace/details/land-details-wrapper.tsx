@@ -1,10 +1,12 @@
 import routes from "@/helpers/routes";
 import { getLendDetailsAction } from "@/server-actions/marketplace/action";
 import { redirect } from "next/navigation";
+import { getUserAction } from "@/server-actions/user/actions";
 import LandDetails from "./land-details";
 
 const LandDetailsWrapper = async ({ landId }: { landId: string }) => {
   const { data } = await getLendDetailsAction(landId);
+  const user = await getUserAction();
 
   if (!data) {
     redirect(routes.marketplace.fullUrl);
@@ -12,7 +14,7 @@ const LandDetailsWrapper = async ({ landId }: { landId: string }) => {
 
   return (
     <div>
-      <LandDetails data={data} />
+      <LandDetails data={data} user={user!} />
     </div>
   );
 };

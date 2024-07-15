@@ -3,6 +3,8 @@ import LandDetailsWrapper from "@/components/@new/marketplace/details/land-detai
 import LandDetailsLoading from "@/components/@new/marketplace/details/land-details-loading";
 import Container from "@/components/@new/shared/Container";
 import React, { Suspense } from "react";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 
 const LandDetailsPage = ({ params }: { params: { id: string } }) => (
   <Container className="py-6 md:py-8">
@@ -11,7 +13,9 @@ const LandDetailsPage = ({ params }: { params: { id: string } }) => (
       <div className="w-5 h-5 flex items-center justify-center">
         <ArrowIconLeftFilled1 className="!w-1.5 h-1.5" color="primary-main" />
       </div>
-      <p className="text-sm text-grey-800">Lands Marketplace</p>
+      <Link href={routes.marketplace.fullUrl}>
+        <p className="text-sm text-grey-800 cursor-pointer">Lands Marketplace</p>
+      </Link>
       <div className="w-5 h-5 flex items-center justify-center">
         <ArrowIconLeftFilled1 className="!w-1.5 h-1.5" color="primary-main" />
       </div>

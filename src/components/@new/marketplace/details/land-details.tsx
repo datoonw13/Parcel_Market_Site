@@ -15,11 +15,12 @@ import React, { useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
 import { ISellProperty, ISellingProperty } from "@/types/find-property";
+import { ISignInResponse } from "@/types/auth";
 import CreateOfferModal from "../offer/create-offer-modal";
 
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
-const LandDetails = ({ data }: { data: ISellingProperty }) => {
+const LandDetails = ({ data, user }: { data: ISellingProperty; user: ISignInResponse["payload"] }) => {
   const router = useRouter();
   const pathname = usePathname();
   const isSmallDevice = useMediaQuery(1024);
@@ -80,7 +81,6 @@ const LandDetails = ({ data }: { data: ISellingProperty }) => {
         </Box>
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 1.5 }}>
           <Box sx={{ height: { xs: 200, sm: 250, md: 350, lg: 448 }, width: "100%", borderRadius: 2, position: "relative" }}>
-            {/* <Image src="/property-map.png" fill alt="" /> */}
             <Map
               geolibInputCoordinates={[[Number(data.lat), Number(data.lon)]]}
               zoom={10}
@@ -218,14 +218,16 @@ const LandDetails = ({ data }: { data: ISellingProperty }) => {
                 {numFormatter.format(data.improvementsValue ?? 0)}
               </Typography>
             </Typography>
-            <Box>
-              <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
-                Contact Seller
-              </Button>
-              <Button sx={{ width: { xs: "100%", sm: "fit-content", mt: { xs: 2, sm: 0 } } }} variant="contained" onClick={createOffer}>
-                Make an offer
-              </Button>
-            </Box>
+            {user.id !== data.user_id && (
+              <Box>
+                <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
+                  Contact Seller
+                </Button>
+                <Button sx={{ width: { xs: "100%", sm: "fit-content", mt: { xs: 2, sm: 0 } } }} variant="contained" onClick={createOffer}>
+                  Make an offer
+                </Button>
+              </Box>
+            )}
           </Box>
         </Box>
         <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>

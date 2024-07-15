@@ -15,9 +15,9 @@ const MiniFooter = ({ sx }: { sx?: SxProps }) => (
     }}
   >
     <Box sx={{ display: "flex", flexDirection: "row", gap: 1.5, alignItems: "center" }}>
-      <Typography sx={{ fontSize: 14, color: "grey.800", "&:hover": { color: 'grey.900' }, cursor: "pointer" }}>Privacy Policy</Typography>
+      <Typography sx={{ fontSize: 14, color: "grey.800", "&:hover": { color: "grey.900" }, cursor: "pointer" }}>Privacy Policy</Typography>
       <Divider orientation="vertical" sx={{ width: 2, height: 16 }} />
-      <Typography sx={{ fontSize: 14, color: "grey.800", "&:hover": { color: 'grey.900' }, cursor: "pointer" }}>Terms of use</Typography>
+      <Typography sx={{ fontSize: 14, color: "grey.800", "&:hover": { color: "grey.900" }, cursor: "pointer" }}>Terms of use</Typography>
     </Box>
     <Typography sx={{ fontSize: 12, fontWeight: 500, color: "grey.600" }}>
       ©{new Date().getFullYear()} Parcel Market. All rights reserved.
