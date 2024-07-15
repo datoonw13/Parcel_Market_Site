@@ -21,9 +21,6 @@ const HeaderMenuItems = async () => {
       <Box>
         <Link href="/">Find a Preferred Land Agent</Link>
       </Box>
-      <Box>
-        <Link href="/find-property">Sell your property</Link>
-      </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <Link href={routes.valueLand.fullUrl}>
           <Button sx={{ textTransform: "none" }} variant="contained">

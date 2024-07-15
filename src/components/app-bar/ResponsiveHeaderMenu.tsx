@@ -89,16 +89,8 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
                 <Link href="/">Find a Preferred Land Agent</Link>
               </Box>
               <Box>
-                <Link href="/find-property">Sell your property</Link>
-              </Box>
-              <Box>
                 <Link href="/find-property">Value my land for free</Link>
               </Box>
-              {/* <Box>
-                <Link href={routes.auth.signIn} onClick={() => dispatch(logOut())}>
-                  <Input fontSize="small" /> {user ? "Sign Out" : "Sign In"}
-                </Link>
-              </Box> */}
             </Box>
             <p className="text-grey-600 text-xs my-4">Personal</p>
             <UserMenuList listItemClasses="!text-sm" close={() => setOpen(false)} />
