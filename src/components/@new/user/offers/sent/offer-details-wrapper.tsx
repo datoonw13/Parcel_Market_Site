@@ -45,7 +45,7 @@ const OfferDetailsWrapper = ({
         onReject={() => {
           setOpenCancelModal(false);
         }}
-        title="Cancel Offer??"
+        title="Cancel Offer?"
         desc="Are you sure you want to cancel your offer?"
         onOk={() => setOpenCancelModal(false)}
       />

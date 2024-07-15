@@ -3,7 +3,7 @@
 import { SortEnum } from "@/types/common";
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
+import { deleteReceivedOffersAction, deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
 import toast from "react-hot-toast";
 import { receivedOffersAtom } from "@/atoms/received-offers-atom";
 import { useRouter } from "next/navigation";
@@ -21,13 +21,14 @@ const ReceivedOffersHeader = ({ totalCount }: { totalCount: number }) => {
   const onRemove = async () => {
     if (receivedOffersOptions.selectedOffersIds) {
       setPending(true);
-      const { errorMessage } = await deleteSentOffersAction(receivedOffersOptions.selectedOffersIds);
+      const { errorMessage } = await deleteReceivedOffersAction(receivedOffersOptions.selectedOffersIds);
       if (errorMessage) {
         toast.error(errorMessage);
         setPending(false);
       } else {
         setOpenRemoveModal(false);
         setReceivedOffersOption({ selecting: false, selectedOffersIds: null });
+        setPending(false);
         router.refresh();
       }
     }
@@ -45,7 +46,7 @@ const ReceivedOffersHeader = ({ totalCount }: { totalCount: number }) => {
           setReceivedOffersOption((prev) => ({ ...prev, selecting: false, selectedOffersIds: null }));
           setOpenRemoveModal(false);
         }}
-        title="Delete Selected Received Offers??"
+        title="Delete Selected Received Offers?"
         desc="Are you sure you want to delete the selected received offers? If so, any outstanding offers will be rescinded and deleted."
         onOk={onRemove}
       />
