@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { valueLandDetailsValidations } from "@/zod-validations/value-land-validations";
 import { z } from "zod";
 import { getFoundedPropertiesAction } from "@/server-actions/value-land/actions";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
@@ -22,6 +22,9 @@ type LandDetailsModel = z.infer<typeof valueLandDetailsValidations>;
 
 const ValueLandDetails = () => {
   const router = useRouter();
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
   const setValueLandAtom = useSetAtom(valueLandAtom);
   const [showError, setShowError] = useState(false);
   const {
@@ -57,6 +60,16 @@ const ValueLandDetails = () => {
       router.push(routes.valueLand.found.fullUrl);
     }
   });
+
+  useEffect(() => {
+    if(params.get('state') && params.get('county')) {
+      setValue('state', params.get('state')!)
+      setValue('county', params.get('county')!)
+      params.delete('state')
+      params.delete('county')
+      router.replace(`${pathname}?${params.toString()}`)
+    }
+  }, [])
 
   return (
     <div className="space-y-8 h-full justify-between gap-2 flex flex-col">
