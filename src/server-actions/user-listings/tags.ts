@@ -1,1 +1,1 @@
-export const userListingsTag = "userListings"
+export const userListingsTag = "userListings";

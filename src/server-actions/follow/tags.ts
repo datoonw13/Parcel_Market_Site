@@ -1,1 +1,1 @@
-export const followTags = {};
+export const followTag = "followTag";

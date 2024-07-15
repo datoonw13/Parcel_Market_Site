@@ -1,6 +1,7 @@
 import { getUserListingAction } from "@/server-actions/user-listings/actions";
 import { numFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
+import { getUserFollowedListingAction } from "@/server-actions/follow/actions";
 import UserListingHeader from "./user-listing-header";
 import UserListingPagination from "./user-listing-pagination";
 import DataNotFound from "../../shared/DataNotFound";
@@ -10,8 +11,8 @@ import { ResizeIcon1 } from "../../icons/ResizeIcons";
 import { MoneyIcon1 } from "../../icons/MoneyIcons";
 import UserListingItem from "./user-listing-item";
 
-const UserListing = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
-  const { data } = await getUserListingAction(searchParams);
+const UserListing = async ({ searchParams, followedListings }: { searchParams: { [key: string]: string }; followedListings?: boolean }) => {
+  const { data } = followedListings ? await getUserFollowedListingAction(searchParams) : await getUserListingAction(searchParams);
 
   return (
     <div className="space-y-8 md:space-y-6">
@@ -26,9 +27,11 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
               const county = state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
               return (
                 <UserListingItem
+                  showBookmark={!!followedListings}
                   className="max-w-2xl m-auto"
                   key={land.id}
                   sellingItemId={land.id}
+                  followedListingId={land.followedListingId}
                   view="vertical"
                   data={{
                     availableTill: land.availableTill,

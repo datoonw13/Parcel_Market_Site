@@ -9,45 +9,30 @@ import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/act
 import { getAllStates, getCounties } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
-const UserListingDesktopFilter = () => {
-  const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
-
-  const getParcelNumbers = async () => {
-    const { data } = await getReceivedOffersParcelNumbersAction();
-    if (data) {
-      setParcelNumbers(data.map((el) => ({ value: el, label: el })));
-    }
-  };
-
-  useEffect(() => {
-    getParcelNumbers();
-  }, []);
-
-  return (
-    <div className="gap-3 mb-6 grid grid-cols-4">
-      <AutoCompleteDesktopFilters
-        filterKey="state"
-        placeholder="State"
-        options={getAllStates().map((state) => ({
-          value: state.value,
-          label: state.label,
-        }))}
-      />
-      <AutoCompleteDesktopFilters filterKey="county" placeholder="County" options={[]} />
-      <MinMaxDesktopFilters
-        filterKey="acreage"
-        options={acreagesFilters}
-        placeHolder="Acreage"
-        getOptionLabel={(item) => getAcreageLabel(item.min, item.max)}
-      />
-      <MinMaxDesktopFilters
-        filterKey="voltPrice"
-        options={priceFilters}
-        placeHolder="VOLT Price"
-        getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
-      />
-    </div>
-  );
-};
+const UserListingDesktopFilter = () => (
+  <div className="gap-3 mb-6 grid grid-cols-4">
+    <AutoCompleteDesktopFilters
+      filterKey="state"
+      placeholder="State"
+      options={getAllStates().map((state) => ({
+        value: state.value,
+        label: state.label,
+      }))}
+    />
+    <AutoCompleteDesktopFilters filterKey="county" placeholder="County" options={[]} />
+    <MinMaxDesktopFilters
+      filterKey="acreage"
+      options={acreagesFilters}
+      placeHolder="Acreage"
+      getOptionLabel={(item) => getAcreageLabel(item.min, item.max)}
+    />
+    <MinMaxDesktopFilters
+      filterKey="voltPrice"
+      options={priceFilters}
+      placeHolder="VOLT Price"
+      getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
+    />
+  </div>
+);
 
 export default UserListingDesktopFilter;

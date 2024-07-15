@@ -8,8 +8,8 @@ import { valueLandDetailsValidations } from "@/zod-validations/value-land-valida
 import { IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { revalidateTag } from "next/cache";
 import { fetcher } from "../fetcher";
-import { userListingsTags } from "../user-listings/tags";
-import { marketplaceTags } from "../marketplace/tags";
+import { userListingsTag } from "../user-listings/tags";
+import { marketplaceTag } from "../marketplace/tags";
 
 export const getFoundedPropertiesAction = async (
   values: z.infer<typeof valueLandDetailsValidations>
@@ -82,8 +82,8 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
       body: JSON.stringify({ ...payload, acrage: Number(payload.acrage) }),
       cache: "no-store",
     });
-    revalidateTag(userListingsTags.list);
-    revalidateTag(marketplaceTags.list);
+    revalidateTag(userListingsTag);
+    revalidateTag(marketplaceTag);
     return {
       data: request,
       errorMessage: null,

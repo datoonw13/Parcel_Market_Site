@@ -44,8 +44,8 @@ const routes = {
       protected: true,
     },
     followedProperties: {
-      url: "followed-properties",
-      fullUrl: "/user/followed-properties",
+      url: "followed-listings",
+      fullUrl: "/user/followed-listings",
       protected: true,
     },
     offers: {

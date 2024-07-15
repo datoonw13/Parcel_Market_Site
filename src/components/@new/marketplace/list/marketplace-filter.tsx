@@ -1,8 +1,8 @@
 import { SortEnum } from "@/types/common";
+import { getMarketplaceListAction } from "@/server-actions/marketplace/action";
 import Sort from "../../shared/filters/Sort";
 import MarketPlaceMobileFilters from "./marketplace-mobile-filters";
 import MarketPlaceDesktopFilters from "./marketplace-desktop-filters";
-import { getMarketplaceListAction } from "@/server-actions/marketplace/action";
 
 const MarketPlaceFilters = async () => {
   const { data } = await getMarketplaceListAction();
@@ -18,7 +18,7 @@ const MarketPlaceFilters = async () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default MarketPlaceFilters;

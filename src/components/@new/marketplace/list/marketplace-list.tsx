@@ -11,7 +11,7 @@ import DataNotFound from "../../shared/DataNotFound";
 
 const MarketplaceList = async ({ params }: { params: { [key: string]: string } }) => {
   const { data } = await getMarketplaceListAction(params);
-  
+
   return (
     <div className="space-y-10 md:space-y-12 mb-32">
       {data && data?.pagination?.totalCount > 0 ? (
