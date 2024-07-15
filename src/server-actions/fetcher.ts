@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 // eslint-disable-next-line no-undef
 export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T> => {
-  const request = await fetch(`http://localhost:4000/api/${url}`, {
+  const request = await fetch(`https://api.parcelmarket.com/api/${url}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
