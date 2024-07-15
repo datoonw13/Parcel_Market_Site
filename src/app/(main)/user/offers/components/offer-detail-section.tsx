@@ -1,8 +1,8 @@
 "use client";
 
 import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
-import OfferStatus from "@/components/@new/offer/OfferStatus";
 import Alert from "@/components/@new/shared/Alert";
+import OfferStatus from "@/components/@new/user/offers/offer-status";
 import { numFormatter } from "@/helpers/common";
 import { OfferModel } from "@/types/offer";
 import clsx from "clsx";

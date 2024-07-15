@@ -1,8 +1,8 @@
 import { priceFilters, getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer";
 import { getAllStates } from "@/helpers/states";
-import { acreagesFilters, getAcreageLabel } from "../../../lands/filters/lands-filters-utils";
 import { OfferStatusEnum } from "@/types/offer";
+import { acreagesFilters, getAcreageLabel } from "../../../lands/filters/lands-filters-utils";
 
 const SentOffersMobileFilter = () => {
   const filters = {
@@ -25,7 +25,7 @@ const SentOffersMobileFilter = () => {
     status: {
       label: "Status",
       type: "default" as const,
-      options: Object.values(OfferStatusEnum).map((value) => ({ label: value, value }))
+      options: Object.values(OfferStatusEnum).map((value) => ({ label: value, value })),
     },
   };
 
