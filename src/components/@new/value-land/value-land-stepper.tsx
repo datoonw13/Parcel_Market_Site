@@ -5,10 +5,27 @@ import clsx from "clsx";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import routes from "@/helpers/routes";
 import { CheckIcon3 } from "../icons/CheckIcons";
 import Divider from "../shared/Divider";
 
-const ValueLandStepper = ({ steps, currentStep }: { steps: number; currentStep: number }) => {
+const currentStep = (path: string) => {
+  switch (path) {
+    case routes.valueLand.found.fullUrl:
+      return 2;
+    case routes.valueLand.value.fullUrl:
+      return 3;
+    case routes.valueLand.about.fullUrl:
+      return 4;
+    default:
+      return 1;
+  }
+};
+const steps = 4;
+
+const ValueLandStepper = () => {
+  const pathname = usePathname();
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
 
   useEffect(() => {
@@ -23,11 +40,11 @@ const ValueLandStepper = ({ steps, currentStep }: { steps: number; currentStep: 
           .fill(0)
           .map((_, i) => i + 1)
           .map((step) =>
-            step >= currentStep ? (
+            step >= currentStep(pathname) ? (
               <div
                 className={clsx(
                   "w-8 h-8 rounded-full border flex items-center justify-center bg-white z-10 top-[-50%] transform-y-[50%] font-medium",
-                  currentStep === step ? "border-success" : "border-grey-200"
+                  currentStep(pathname) === step ? "border-success" : "border-grey-200"
                 )}
                 key={uuid()}
               >
