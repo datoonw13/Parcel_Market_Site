@@ -8,16 +8,16 @@ export const getMarketplaceListAction = async (params: {
   [key: string]: string;
 }): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
   try {
-    const request = await fetcher<{ data: ISellingProperty[] } & IPagination>(
-      `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize: "6" })}`,
+    const request = await fetcher<{ sellingProperties: ISellingProperty[] } & IPagination>(
+      `selling-properties/?${new URLSearchParams({ ...params, pageSize: "6", sellerType: 'sale' })}`,
       {
         next: { tags: [marketplaceTags.list] },
       }
     );
-
+    
     return {
       errorMessage: null,
-      data: { list: request.data, pagination: request.pagination },
+      data: { list: request.sellingProperties, pagination: request.pagination },
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
