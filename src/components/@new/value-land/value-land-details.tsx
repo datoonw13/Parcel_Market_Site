@@ -22,9 +22,9 @@ type LandDetailsModel = z.infer<typeof valueLandDetailsValidations>;
 
 const ValueLandDetails = () => {
   const router = useRouter();
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const setValueLandAtom = useSetAtom(valueLandAtom);
   const [showError, setShowError] = useState(false);
   const {
@@ -62,14 +62,14 @@ const ValueLandDetails = () => {
   });
 
   useEffect(() => {
-    if(params.get('state') && params.get('county')) {
-      setValue('state', params.get('state')!)
-      setValue('county', params.get('county')!)
-      params.delete('state')
-      params.delete('county')
-      router.replace(`${pathname}?${params.toString()}`)
+    if (params.get("state") && params.get("county")) {
+      setValue("state", params.get("state")!);
+      setValue("county", params.get("county")!);
+      params.delete("state");
+      params.delete("county");
+      router.replace(`${pathname}?${params.toString()}`);
     }
-  }, [])
+  }, []);
 
   return (
     <div className="space-y-8 h-full justify-between gap-2 flex flex-col">

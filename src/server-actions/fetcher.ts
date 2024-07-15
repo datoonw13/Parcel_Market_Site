@@ -18,7 +18,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     message: string;
     statusCode: number;
   };
-  
+
   if (!response.statusCode.toString().startsWith("2")) {
     let errorMessage = "Something went wrong";
     if (response.message) {
