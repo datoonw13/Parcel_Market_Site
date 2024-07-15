@@ -20,7 +20,7 @@ const UserListing = async ({ searchParams, followedListings }: { searchParams: {
         <DataNotFound message="No listings yet" />
       ) : (
         <>
-          <UserListingHeader followedListings={followedListings} totalCount={data.pagination.totalCount} />
+          <UserListingHeader totalCount={data.pagination.totalCount} />
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {data.list.map((land) => {
               const state = getAllStates({ filterBlackList: true }).find((el) => el.value === land.state.toLocaleLowerCase());

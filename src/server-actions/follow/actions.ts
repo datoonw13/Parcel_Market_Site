@@ -15,7 +15,7 @@ export const getUserFollowedListingAction = async (params: {
     const request = await fetcher<{ data: ({ sellingProperty: ISellingProperty } & { followedListingId?: number })[] } & IPagination>(
       `followed-listings?${new URLSearchParams({ ...params, pageSize: "4" })}`,
       {
-        next: { tags: [followTag] },
+        cache: 'no-store'
       }
     );
     return {
