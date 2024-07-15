@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { ErrorResponse } from "@/helpers/error-response";
 import { fetcher } from "../fetcher";
-import { offerTags } from "./tags";
+import { offerTag } from "./tags";
 import { getUserAction } from "../user/actions";
 
 export const createOfferAction = async (data: MakeOfferModel & { sellingPropertyId: number }): Promise<ResponseModel<null>> => {
@@ -17,8 +17,7 @@ export const createOfferAction = async (data: MakeOfferModel & { sellingProperty
       body: JSON.stringify(data),
     });
 
-    revalidateTag(offerTags.receivedOffers);
-    revalidateTag(offerTags.getParcelNumber);
+    revalidateTag(offerTag);
     return { data: null, errorMessage: null };
   } catch (error) {
     const errorData = error as ErrorResponse;
@@ -33,7 +32,7 @@ export const getOfferAction = async (offerId: string): Promise<ResponseModel<Off
   try {
     const user = await getUserAction();
     const request = await fetcher<OfferModel>(`offers/details/${offerId}`, {
-      next: { tags: [offerTags.getOffer] },
+      next: { tags: [offerTag] },
     });
     const responseData = {
       ...request,
@@ -60,7 +59,7 @@ export const getReceivedOffersAction = async (params: {
     const request = await fetcher<{ data: OfferModel[] } & IPagination>(
       `offers/received?${new URLSearchParams(params as Record<string, string>)}`,
       {
-        next: { tags: [offerTags.receivedOffers] },
+        next: { tags: [offerTag] },
       }
     );
     return {
@@ -82,9 +81,7 @@ export const rejectReceivedOffer = async (offerId: number): Promise<ResponseMode
       body: JSON.stringify({ ids: [offerId] }),
       method: "POST",
     });
-    revalidateTag(offerTags.receivedOffers);
-    revalidateTag(offerTags.sentOffers);
-    revalidateTag(offerTags.getOffer);
+    revalidateTag(offerTag);
     return {
       errorMessage: null,
       data: null,
@@ -104,9 +101,7 @@ export const acceptReceivedOffer = async (offerId: number): Promise<ResponseMode
       body: JSON.stringify({ ids: [offerId] }),
       method: "POST",
     });
-    revalidateTag(offerTags.receivedOffers);
-    revalidateTag(offerTags.sentOffers);
-    revalidateTag(offerTags.getOffer);
+    revalidateTag(offerTag);
     return {
       errorMessage: null,
       data: null,
@@ -126,9 +121,7 @@ export const deleteReceivedOffersAction = async (ids: number[]): Promise<Respons
       method: "DELETE",
       body: JSON.stringify({ ids }),
     });
-    revalidateTag(offerTags.receivedOffers);
-    revalidateTag(offerTags.sentOffers);
-    revalidateTag(offerTags.getOffer);
+    revalidateTag(offerTag);
     return { data: null, errorMessage: null };
   } catch (error) {
     const errorData = error as ErrorResponse;
@@ -142,7 +135,7 @@ export const deleteReceivedOffersAction = async (ids: number[]): Promise<Respons
 export const getReceivedOffersParcelNumbersAction = async (): Promise<ResponseModel<string[] | null>> => {
   try {
     const request = await fetcher<string[] | null>(`offers/received/parcel-numbers`, {
-      next: { tags: [offerTags.getParcelNumber] },
+      next: { tags: [offerTag] },
     });
 
     return {
@@ -167,7 +160,7 @@ export const getSentOffersAction = async (params: {
     const request = await fetcher<{ data: OfferModel[] } & IPagination>(
       `offers/sent?${new URLSearchParams({ ...params, pageSize: "4" })}`,
       {
-        next: { tags: [offerTags.sentOffers] },
+        next: { tags: [offerTag] },
       }
     );
     const responseData = {
@@ -193,7 +186,7 @@ export const getSentOffersAction = async (params: {
 export const revalidateSentOffers = async () => {
   const path = headers().get("referer");
   if (path) {
-    revalidateTag(offerTags.sentOffers);
+    revalidateTag(offerTag);
     redirect(path);
   }
 };

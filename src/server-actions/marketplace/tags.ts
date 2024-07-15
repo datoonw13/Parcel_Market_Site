@@ -1,4 +1,1 @@
-export const marketplaceTags = {
-  list: "list",
-  details: "details",
-};
+export const marketplaceTag = "marketPlace";

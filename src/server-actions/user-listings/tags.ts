@@ -1,3 +1,1 @@
-export const userListingsTags = {
-  list: "list",
-};
+export const userListingsTag = "userListings"

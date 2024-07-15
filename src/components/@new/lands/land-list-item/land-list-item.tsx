@@ -8,9 +8,19 @@ import { LocationIcon1 } from "../../icons/LocationIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
-import LanListItemBookmark from "./land-list-item-bookmark";
+import LandBookMarkIcon from "../land-bookmark-button";
 
-const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, className, selected, selecting, onClick, bookmark }) => (
+const LandListItem: FC<LandListItemProps> = ({
+  view,
+  data,
+  sellingItemId,
+  className,
+  selected,
+  selecting,
+  onClick,
+  showBookmark,
+  followedListingId,
+}) => (
   <div
     className={clsx(
       "pt-6 border border-grey-100 rounded-2xl w-full flex flex-col gap-4 cursor-pointer group hover:shadow-1 transition-all duration-100",
@@ -30,7 +40,7 @@ const LandListItem: FC<LandListItemProps> = ({ view, data, sellingItemId, classN
         </h2>
       </div>
 
-      {!selecting && bookmark && <LanListItemBookmark {...bookmark} />}
+      {!selecting && showBookmark && <LandBookMarkIcon landId={sellingItemId} initialFollowedListingId={followedListingId} />}
     </div>
     <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
       <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>

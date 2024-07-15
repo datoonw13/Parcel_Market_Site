@@ -6,7 +6,7 @@ import { ISellingProperty } from "@/types/find-property";
 import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { userListingsTags } from "./tags";
+import { userListingsTag } from "./tags";
 import { fetcher } from "../fetcher";
 
 export const getUserListingAction = async (params: {
@@ -16,7 +16,7 @@ export const getUserListingAction = async (params: {
     const request = await fetcher<{ data: ISellingProperty[] } & IPagination>(
       `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize: "4" })}`,
       {
-        next: { tags: [userListingsTags.list] },
+        next: { tags: [userListingsTag] },
       }
     );
     return {
@@ -52,7 +52,7 @@ export const removeUserListingItemsAction = async (ids: number[]): Promise<Respo
 };
 
 export const revalidateUserListings = async () => {
-  revalidateTag(userListingsTags.list);
+  revalidateTag(userListingsTag);
   const path = headers().get("referer");
   if (path) {
     redirect(path);

@@ -56,9 +56,6 @@ export interface LandListItemProps {
   selecting?: boolean;
   selected?: boolean;
   onClick?: () => void;
-  bookmark?: {
-    bookmarked?: boolean;
-    pending?: boolean;
-    onClick: () => void;
-  };
+  showBookmark?: boolean
+  followedListingId?: number
 }

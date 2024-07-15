@@ -26,6 +26,8 @@ const MarketplaceList = async ({ params }: { params: { [key: string]: string } }
                   key={land.id}
                   sellingItemId={land.id}
                   view="vertical"
+                  showBookmark
+                  followedListingId={land.followedListingId}
                   data={{
                     availableTill: land.availableTill,
                     state: state?.label || "",
