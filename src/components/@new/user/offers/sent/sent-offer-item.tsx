@@ -16,12 +16,14 @@ import { useAtom } from "jotai";
 import { sentOffersAtom } from "@/atoms/sent-offers-atom";
 import { useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { usePathname, useRouter } from "next/navigation";
 import OfferStatus from "../offer-status";
 import SentOfferDetailsModal from "./sent-offer-details-modal";
 
 const SentOfferItem = ({ data }: { data: OfferModel }) => {
   const isSmallDevice = useMediaQuery(1024);
-
+  const pathname = usePathname();
+  const router = useRouter();
   const [sentOffersOptions, setSentOffersOption] = useAtom(sentOffersAtom);
   const [selectedOffer, setSelectedOffer] = useState<OfferModel | null>(null);
 
@@ -30,6 +32,9 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
     state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === data.sellingProperty.county.toLocaleLowerCase()) || "";
 
   const handleSelect = () => {
+    if (!sentOffersOptions.selecting) {
+      return;
+    }
     if (sentOffersOptions.selectedOffersIds?.includes(data.id)) {
       setSentOffersOption((prev) => ({
         ...prev,
@@ -42,6 +47,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
 
   const openDetail = () => {
     if (isSmallDevice) {
+      router.push(`${pathname}/details/${data.id}`);
     } else {
       setSelectedOffer(data);
     }

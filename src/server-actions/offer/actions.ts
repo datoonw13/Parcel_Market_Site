@@ -112,6 +112,24 @@ export const createOfferAction = async (data: MakeOfferModel & { sellingProperty
   }
 };
 
+export const getOfferAction = async (offerId: string): Promise<ResponseModel<OfferModel | null>> => {
+  try {
+    const request = await fetcher<OfferModel>(`offers/details/${offerId}`, {
+      next: { tags: [offerTags.getOffer] },
+    });
+    return {
+      errorMessage: null,
+      data: request,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
 export const getSentOffersAction = async (params: {
   [key: string]: string;
 }): Promise<ResponseModel<({ list: OfferModel[] } & IPagination) | null>> => {

@@ -15,7 +15,6 @@ const SentOffersPage = ({ searchParams }: { searchParams: { [key: string]: strin
       </div>
     </Suspense>
     <Suspense fallback={<SentOffersLoading />} key={JSON.stringify(searchParams)}>
-      {/* <UserListing searchParams={searchParams} /> */}
       <SentOffers searchParams={searchParams} />
     </Suspense>
   </div>
