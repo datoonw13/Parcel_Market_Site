@@ -56,7 +56,7 @@ const list = [
   {
     label: "Sent Offers",
     icon: DiscountIcon2,
-    path: "/",
+    path: routes.user.offers.sent.fullUrl,
   },
   {
     label: "My saved properties",

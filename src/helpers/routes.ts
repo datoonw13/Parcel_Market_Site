@@ -57,6 +57,11 @@ const routes = {
         fullUrl: "/user/offers/received",
         protected: true,
       },
+      sent: {
+        url: "sent",
+        fullUrl: "/user/offers/sent",
+        protected: true,
+      },
     },
   },
   valueLand: {

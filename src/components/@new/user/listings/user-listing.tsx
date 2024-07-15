@@ -14,7 +14,7 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
   const { data } = await getUserListingAction(searchParams);
 
   return (
-    <div className="space-y-6 md:space-y-4">
+    <div className="space-y-8 md:space-y-6">
       {!data || data.pagination.totalCount === 0 ? (
         <DataNotFound message="No listings yet" />
       ) : (

@@ -1,9 +1,9 @@
 import React from "react";
 import clsx from "clsx";
 import { OfferStatusEnum } from "@/types/offer";
-import { RemoveIcon2 } from "../icons/RemoveIcons";
-import { ClockIcon1, ClockIcon2 } from "../icons/ClockIcons";
-import { CheckIcon3 } from "../icons/CheckIcons";
+import { RemoveIcon2 } from "../../icons/RemoveIcons";
+import { ClockIcon1, ClockIcon2 } from "../../icons/ClockIcons";
+import { CheckIcon3 } from "../../icons/CheckIcons";
 
 const options = {
   pending: {
@@ -18,7 +18,7 @@ const options = {
     color: "success",
     icon: <CheckIcon3 className="!w-3" color="white" />,
   },
-  declined: {
+  rejected: {
     color: "error",
     icon: <RemoveIcon2 className="!w-2 !h-2" color="white" />,
   },

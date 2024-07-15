@@ -101,9 +101,31 @@ export const createOfferAction = async (data: MakeOfferModel & { sellingProperty
       body: JSON.stringify(data),
     });
 
-    // TODO: revalidte sent offers page
     revalidateTag(offerTags.receivedOffers);
     return { data: null, errorMessage: null };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
+export const getSentOffersAction = async (params: {
+  [key: string]: string;
+}): Promise<ResponseModel<({ list: OfferModel[] } & IPagination) | null>> => {
+  try {
+    const request = await fetcher<{ data: OfferModel[] } & IPagination>(
+      `offers/sent?${new URLSearchParams({ ...params, pageSize: "4" })}`,
+      {
+        next: { tags: [offerTags.receivedOffers] },
+      }
+    );
+    return {
+      errorMessage: null,
+      data: { list: request.data, pagination: request.pagination },
+    };
   } catch (error) {
     const errorData = error as ErrorResponse;
     return {
