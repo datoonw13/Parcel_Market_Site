@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { ErrorResponse } from "@/helpers/error-response";
 import { fetcher } from "../fetcher";
 import { offerTags } from "./tags";
+import { getUserAction } from "../user/actions";
 
 export const createOfferAction = async (data: MakeOfferModel & { sellingPropertyId: number }): Promise<ResponseModel<null>> => {
   try {
@@ -30,12 +31,17 @@ export const createOfferAction = async (data: MakeOfferModel & { sellingProperty
 
 export const getOfferAction = async (offerId: string): Promise<ResponseModel<OfferModel | null>> => {
   try {
+    const user = await getUserAction();
     const request = await fetcher<OfferModel>(`offers/details/${offerId}`, {
       next: { tags: [offerTags.getOffer] },
     });
+    const responseData = {
+      ...request,
+      offerGivenBy: { firstName: user?.firstName ?? "", lastName: user?.lastName ?? "", id: user?.id ?? 0 },
+    };
     return {
       errorMessage: null,
-      data: request,
+      data: { ...responseData },
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
@@ -157,15 +163,23 @@ export const getSentOffersAction = async (params: {
   [key: string]: string;
 }): Promise<ResponseModel<({ list: OfferModel[] } & IPagination) | null>> => {
   try {
+    const user = await getUserAction();
     const request = await fetcher<{ data: OfferModel[] } & IPagination>(
       `offers/sent?${new URLSearchParams({ ...params, pageSize: "4" })}`,
       {
         next: { tags: [offerTags.sentOffers] },
       }
     );
+    const responseData = {
+      ...request,
+      list: request.data.map((el) => ({
+        ...el,
+        offerGivenBy: { firstName: user?.firstName ?? "", lastName: user?.lastName ?? "", id: user?.id ?? 0 },
+      })),
+    };
     return {
       errorMessage: null,
-      data: { list: request.data, pagination: request.pagination },
+      data: { ...responseData },
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
