@@ -9,12 +9,12 @@ export const getMarketplaceListAction = async (params: {
 }): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ sellingProperties: ISellingProperty[] } & IPagination>(
-      `selling-properties/?${new URLSearchParams({ ...params, pageSize: "6", sellerType: 'sale' })}`,
+      `selling-properties/?${new URLSearchParams({ ...params, pageSize: "6", sellerType: "sale" })}`,
       {
         next: { tags: [marketplaceTags.list] },
       }
     );
-    
+
     return {
       errorMessage: null,
       data: { list: request.sellingProperties, pagination: request.pagination },
