@@ -4,7 +4,6 @@ import ReceivedOffersDesktopFilters from "@/components/@new/user/offers/received
 import ReceivedOffers from "@/components/@new/user/offers/received/received-offers";
 import ReceivedOfferListLoading from "@/components/@new/user/offers/received/received-offers-loading";
 
-
 const ReceivedOffersPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
   <div className="w-full space-y-8">
     <div className="flex justify-between flex-col sm:flex-row gap-6">
@@ -16,7 +15,7 @@ const ReceivedOffersPage = ({ searchParams }: { searchParams: { [key: string]: s
       </div>
     </Suspense>
     <Suspense fallback={<ReceivedOfferListLoading />} key={JSON.stringify(searchParams)}>
-        <ReceivedOffers searchParams={searchParams} />
+      <ReceivedOffers searchParams={searchParams} />
     </Suspense>
   </div>
 );
