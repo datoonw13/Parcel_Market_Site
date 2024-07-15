@@ -89,6 +89,9 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
                 <Link href="/">Find a Preferred Land Agent</Link>
               </Box>
               <Box>
+                <Link href={routes.marketplace.fullUrl}>Market Place</Link>
+              </Box>
+              <Box>
                 <Link href="/find-property">Value my land for free</Link>
               </Box>
             </Box>
