@@ -184,11 +184,7 @@ export const getSentOffersAction = async (params: {
 };
 
 export const revalidateSentOffers = async () => {
-  const path = headers().get("referer");
-  if (path) {
-    revalidateTag(offerTag);
-    redirect(path);
-  }
+  revalidateTag(offerTag);
 };
 
 export const deleteSentOffersAction = async (ids: number[]): Promise<ResponseModel<null>> => {

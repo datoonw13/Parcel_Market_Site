@@ -5,7 +5,6 @@ import { Suspense } from "react";
 import UserListingLoader from "@/components/@new/user/listings/user-listing-loader";
 
 const UserFollowedListingsPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
-  console.log("aqa");
 
   return (
     <div className="w-full space-y-8">
