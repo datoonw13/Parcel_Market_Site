@@ -2,8 +2,9 @@
 
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { ISellingProperty } from "@/types/find-property";
+import routes from "@/helpers/routes";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "../marketplace/tags";
 import { followTag } from "./tags";
@@ -40,7 +41,7 @@ export const followLand = async (
       method: "POST",
       body: JSON.stringify({ sellingPropertyId: landId }),
     });
-    // revalidateTag(marketplaceTag);
+    revalidateTag(marketplaceTag);
     revalidateTag(followTag);
     return { data: request, errorMessage: null };
   } catch (error) {
@@ -60,7 +61,7 @@ export const unFollowLands = async (
       method: "DELETE",
       body: JSON.stringify({ ids: followedListingId }),
     });
-    // revalidateTag(marketplaceTag);
+    revalidateTag(marketplaceTag);
     revalidateTag(followTag);
     return { data: request, errorMessage: null };
   } catch (error) {
