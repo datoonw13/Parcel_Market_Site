@@ -46,7 +46,7 @@ export default function RootLayout({
             <AppRouterCacheProvider>
               <Provider>
                 <ThemeProvider theme={theme}>
-                  <Toaster position="top-right" toastOptions={{ duration: 1500 }} />
+                  <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
                   {children}
                 </ThemeProvider>
               </Provider>
