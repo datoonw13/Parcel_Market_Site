@@ -25,6 +25,9 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
     watch,
   } = useForm<MakeOfferModel>({
     resolver: zodResolver(offerValidation),
+    defaultValues: {
+      offerActiveForDays: 3,
+    },
   });
 
   const createOffer = handleSubmit(async (data) => {
@@ -40,7 +43,7 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
   return (
     <div className="overflow-hidden grid w-full">
       <div className="flex overflow-hidden">
-        <SimpleBar className="w-full">
+        <SimpleBar className="w-full py-2 z-10">
           <div className="flex flex-col gap-8 px-4 md:px-8">
             <OfferPriceField onChange={(value) => setValue("price", value, { shouldValidate: isSubmitted })} error={!!errors.price} />
             <OfferEarnestMoneyField
@@ -71,16 +74,16 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
               <div className="flex flex-col gap-4">
                 <AutoComplete
                   contentClassName="z-20"
-                  options={[3, 4, 5]}
+                  options={new Array(14).fill(0).map((_, i) => i + 1)}
                   getOptionLabel={(item) => `${item} Day${item > 1 ? "s" : ""}`}
                   getOptionKey={(item) => item.toString()}
                   onChange={(item) => {
                     if (item) {
-                      const value = item as 3 | 4 | 5;
+                      const value = item as MakeOfferModel["offerActiveForDays"];
                       setValue("offerActiveForDays", value, { shouldValidate: isSubmitted });
                     }
                   }}
-                  onFilter={(searchValue, items) => items}
+                  onFilter={(_, items) => items}
                   value={watch("offerActiveForDays") ?? null}
                 />
               </div>

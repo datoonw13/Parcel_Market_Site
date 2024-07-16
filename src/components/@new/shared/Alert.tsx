@@ -1,9 +1,10 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { InfoIcon2 } from "../icons/InfoIcons";
 import { RemoveIcon2 } from "../icons/RemoveIcons";
+import Button from "./forms/Button";
 
 type AlertType = "success" | "warning" | "info";
 
@@ -25,23 +26,35 @@ const colors = {
 type AlertProps = {
   title: string;
   description: string;
-  onClose: () => void;
+  onClose?: () => void;
   type?: AlertType;
+  disableClose?: boolean;
 };
 
-const Alert: FC<AlertProps> = ({ type = "success", description, onClose, title }) => (
-  <div className={twMerge("flex w-full px-4 py-3 rounded-lg", `bg-${colors[type].bg}`)}>
-    <InfoIcon2 color={colors[type].icon} className="min-w-5 min-h-5 !w-5 !h-5 mr-3 translate-y-1" />
-    <div>
-      <p className="font-semibold text-sm ">{title}</p>
-      <p className="text-xs text-grey-800">{description} </p>
-    </div>
-    {onClose && (
-      <div onClick={onClose} className="ml-auto  cursor-pointer translate-y-1">
-        <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
+const Alert: FC<AlertProps> = ({ type = "success", description, onClose, title, disableClose }) => {
+  const [show, setShow] = useState(true);
+  return show ? (
+    <div className={twMerge("flex w-full px-4 py-3 rounded-lg", `bg-${colors[type].bg}`)}>
+      <InfoIcon2 color={colors[type].icon} className="min-w-5 min-h-5 !w-5 !h-5 mr-3 translate-y-1" />
+      <div>
+        <p className="font-semibold text-sm ">{title}</p>
+        <p className="text-xs text-grey-800">{description} </p>
       </div>
-    )}
-  </div>
-);
+      {!disableClose && (
+        <div
+          onClick={() => {
+            setShow(false);
+            onClose && onClose();
+          }}
+          className="ml-auto  cursor-pointer translate-y-1"
+        >
+          <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6">
+            <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
+          </Button>
+        </div>
+      )}
+    </div>
+  ) : null;
+};
 
 export default Alert;
