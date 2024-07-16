@@ -4,7 +4,7 @@ import Pagination from "@/components/@new/shared/Pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 6;
 
 const UserListingPagination = ({ totalCount }: { totalCount: number }) => {
   const searchParams = useSearchParams();

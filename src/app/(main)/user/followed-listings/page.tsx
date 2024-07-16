@@ -3,10 +3,6 @@ import UserListingDesktopFilter from "@/components/@new/user/listings/user-listi
 import UserListing from "@/components/@new/user/listings/user-listing";
 import { Suspense } from "react";
 import UserListingLoader from "@/components/@new/user/listings/user-listing-loader";
-import Button from "@/components/@new/shared/forms/Button";
-import { AddIcon1 } from "@/components/@new/icons/AddIcons";
-import Link from "next/link";
-import routes from "@/helpers/routes";
 
 const UserFollowedListingsPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
   <div className="w-full space-y-8">

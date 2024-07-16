@@ -13,10 +13,8 @@ export const getUserFollowedListingAction = async (params: {
 }): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ data: ({ sellingProperty: ISellingProperty } & { followedListingId?: number })[] } & IPagination>(
-      `followed-listings?${new URLSearchParams({ ...params, pageSize: "4" })}`,
-      {
-        cache: 'no-store'
-      }
+      `followed-listings?${new URLSearchParams({ ...params, pageSize: "6" })}`,
+      { next: { tags: [followTag] } }
     );
     return {
       errorMessage: null,
@@ -42,7 +40,7 @@ export const followLand = async (
       method: "POST",
       body: JSON.stringify({ sellingPropertyId: landId }),
     });
-    revalidateTag(marketplaceTag);
+    // revalidateTag(marketplaceTag);
     revalidateTag(followTag);
     return { data: request, errorMessage: null };
   } catch (error) {
@@ -62,7 +60,7 @@ export const unFollowLands = async (
       method: "DELETE",
       body: JSON.stringify({ ids: followedListingId }),
     });
-    revalidateTag(marketplaceTag);
+    // revalidateTag(marketplaceTag);
     revalidateTag(followTag);
     return { data: request, errorMessage: null };
   } catch (error) {
