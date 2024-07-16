@@ -102,7 +102,8 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
               variant="secondary"
               onClick={() => {
                 setReferenceElement(null);
-                setFilters({ min: selectedValue.min, max: selectedValue.max });
+                setFilters({ min: null, max: null });
+                handleSelect({ min: null, max: null });
               }}
             >
               Clear
