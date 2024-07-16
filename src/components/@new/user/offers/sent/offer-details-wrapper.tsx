@@ -4,7 +4,7 @@ import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { useState } from "react";
-import { OfferModel } from "@/types/offer";
+import { OfferModel, OfferStatusEnum } from "@/types/offer";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import clsx from "clsx";
 import toast from "react-hot-toast";
@@ -43,10 +43,15 @@ const OfferDetailsWrapper = ({
         </div>
         <div className={clsx("flex gap-3 border-t border-t-grey-100", actionClassName)}>
           <Button variant="secondary">Contact Buyer</Button>
-          <Button color="error" className="ml-auto" onClick={() => setOpenCancelModal(true)}>
-            Cancel Offer
-          </Button>
-          <Link href={`${routes.marketplace.fullUrl}/${data?.sellingPropertyId}`}>
+          {data.offerStatus === OfferStatusEnum.pending && (
+            <Button color="error" className="ml-auto" onClick={() => setOpenCancelModal(true)}>
+              Cancel Offer
+            </Button>
+          )}
+          <Link
+            className={clsx(data.offerStatus !== OfferStatusEnum.pending && "ml-auto")}
+            href={`${routes.marketplace.fullUrl}/${data?.sellingPropertyId}`}
+          >
             <Button>View Land</Button>
           </Link>
         </div>
