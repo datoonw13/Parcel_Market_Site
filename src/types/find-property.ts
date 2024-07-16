@@ -114,6 +114,7 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   availableTill: string;
   user_id?: number;
   followedListingId?: number;
+  offerId?: string;
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{

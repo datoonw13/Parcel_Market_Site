@@ -223,9 +223,11 @@ const LandDetails = ({ data, user }: { data: ISellingProperty; user: ISignInResp
                 <Button sx={{ width: { xs: "100%", sm: "fit-content" }, mr: 1 }} variant="outlined">
                   Contact Seller
                 </Button>
-                <Button sx={{ width: { xs: "100%", sm: "fit-content", mt: { xs: 2, sm: 0 } } }} variant="contained" onClick={createOffer}>
-                  Make an offer
-                </Button>
+                {!data.offerId && (
+                  <Button sx={{ width: { xs: "100%", sm: "fit-content", mt: { xs: 2, sm: 0 } } }} variant="contained" onClick={createOffer}>
+                    Make an offer
+                  </Button>
+                )}
               </Box>
             )}
           </Box>
