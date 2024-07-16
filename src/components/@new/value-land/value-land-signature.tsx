@@ -29,7 +29,6 @@ const ValueLandSignature = () => {
         toast.error(errorMessage);
         setPending(false);
       } else {
-        toast.success("Check your email");
         router.push(routes.user.listings.fullUrl);
       }
     }
