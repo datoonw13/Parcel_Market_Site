@@ -7,6 +7,8 @@ import { useState } from "react";
 import { OfferModel } from "@/types/offer";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import clsx from "clsx";
+import toast from "react-hot-toast";
+import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
 import OfferDetail from "../details/offer-detail";
 
 const OfferDetailsWrapper = ({
@@ -19,6 +21,19 @@ const OfferDetailsWrapper = ({
   actionClassName?: string;
 }) => {
   const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [pending, setPending] = useState(false);
+
+  const cancelOffer = async () => {
+    setPending(true);
+    const { errorMessage } = await deleteSentOffersAction([data.id]);
+    if (errorMessage) {
+      toast.error(errorMessage);
+      setPending(false);
+    } else {
+      setOpenCancelModal(false);
+      await revalidateSentOffers();
+    }
+  };
 
   return (
     <>
@@ -38,7 +53,7 @@ const OfferDetailsWrapper = ({
       </div>
       <ResponsiveRemoveModal
         open={openCancelModal}
-        pending={false}
+        pending={pending}
         handleClose={() => {
           setOpenCancelModal(false);
         }}
@@ -47,7 +62,7 @@ const OfferDetailsWrapper = ({
         }}
         title="Cancel Offer?"
         desc="Are you sure you want to cancel your offer?"
-        onOk={() => setOpenCancelModal(false)}
+        onOk={cancelOffer}
       />
     </>
   );
