@@ -190,7 +190,6 @@ export const removeUserAccountAction = async (values: {
       body: JSON.stringify(values),
       cache: "no-store",
     });
-    await logOutUserAction();
     return {
       data: null,
       errorMessage: null,

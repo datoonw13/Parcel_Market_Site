@@ -24,6 +24,5 @@ export enum SortEnum {
   PriceLowHigh = "price-lo-hi",
   AreaHighLow = "area-hi-lo",
   AreaLowHigh = "area-lo-hi",
-  Updated = "updated",
   Oldest = "oldest",
 }
