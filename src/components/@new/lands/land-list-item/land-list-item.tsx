@@ -32,9 +32,11 @@ const LandListItem: FC<LandListItemProps> = ({
   >
     <div className="px-6 flex justify-between items-start gap-6">
       <div className="grid gap-2">
-        <h1 className="font-semibold group-hover:text-primary-main transition-all duration-100 text-ellipsis whitespace-nowrap overflow-hidden">
-          {data.name}
-        </h1>
+        <Link href={`${routes.marketplace.fullUrl}/${sellingItemId}`}>
+          <h1 className="font-semibold group-hover:text-primary-main transition-all duration-100 text-ellipsis whitespace-nowrap overflow-hidden">
+            {data.name}
+          </h1>
+        </Link>
         <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">
           <LocationIcon1 /> {data.state}; {data.county}
         </h2>

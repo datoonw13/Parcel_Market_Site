@@ -13,6 +13,7 @@ import { numFormatter } from "@/helpers/common";
 import { receivedOffersAtom } from "@/atoms/received-offers-atom";
 import { useAtom } from "jotai";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import Link from "next/link";
 import OfferDetailSection from "../details/offer-detail-section";
 import ReceivedOfferDetailsModal from "./received-offer-details-modal";
 
@@ -65,9 +66,11 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
       >
         <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8 mb-3 sm:mb-4">
           <div className="space-y-2 grid">
-            <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
-              long names with 3 dots long names with 3 dot long names with 3 dot...
-            </h1>
+            <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`}>
+              <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
+                long names with 3 dots long names with 3 dot long names with 3 dot...
+              </h1>
+            </Link>
             <div className="flex items-center gap-1.5">
               <LocationIcon1 color="white" className="w-3 h-3.5 fill-white sm:fill-grey-600" />
               <h6 className="text-xs text-white sm:text-grey-600">

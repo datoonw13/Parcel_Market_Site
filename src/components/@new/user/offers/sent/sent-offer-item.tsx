@@ -17,6 +17,8 @@ import { sentOffersAtom } from "@/atoms/sent-offers-atom";
 import { useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import OfferStatus from "../offer-status";
 import SentOfferDetailsModal from "./sent-offer-details-modal";
 
@@ -66,9 +68,11 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
       >
         <div className="px-6 pt-6 pb-8 space-y-4">
           <div className="space-y-2">
-            <h1 className="font-semibold truncate">
-              land in Los Angeles County, California, USA. County, California, USA. County, California, USA.
-            </h1>
+            <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`}>
+              <h1 className="font-semibold truncate">
+                land in Los Angeles County, California, USA. County, California, USA. County, California, USA.
+              </h1>
+            </Link>
             <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">
               <LocationIcon1 /> {state?.label}; {county}
             </h2>
