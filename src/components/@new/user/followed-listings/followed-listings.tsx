@@ -6,7 +6,7 @@ const FollowedListings = async ({ searchParams }: { searchParams: { [key: string
   const { data } = await getUserFollowedListingAction(searchParams);
   return (
     <div>
-      <FollowedListingsWrapper data={data} />
+      <FollowedListingsWrapper data={data} searchParams={searchParams} />
     </div>
   );
 };
