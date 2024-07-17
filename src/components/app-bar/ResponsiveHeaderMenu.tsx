@@ -84,7 +84,7 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
                 <Link href="/about-us">About Us</Link>
               </Box>
               <Box>
-                <Link href="/">Find a Preferred Land Agent</Link>
+                <Link href="/">Find a Land Professional</Link>
               </Box>
               <Box>
                 <Link href={routes.marketplace.fullUrl}>Market Place</Link>

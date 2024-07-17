@@ -19,10 +19,10 @@ const HeaderMenuItems = async () => {
         <Link href="/about-us">About Us</Link>
       </Box>
       <Box>
-        <Link href="/">Find a Preferred Land Agent</Link>
+        <Link href="/">Find a Land Professional</Link>
       </Box>
       <Box>
-        <Link href={routes.marketplace.fullUrl}>Market Place</Link>
+        <Link href={routes.marketplace.fullUrl}>Parcel MarketPlace</Link>
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <Link href={routes.valueLand.fullUrl}>

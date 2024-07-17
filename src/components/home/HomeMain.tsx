@@ -78,11 +78,9 @@ const HomeMain = () => {
                 fontSize: { xs: 36, sm: 42, md: 56, lg: 64 },
               }}
             >
-              Value, Buy & Sell vacant land
+              Value. Buy. Sell. <br /> Vacant Land
             </Typography>
-            <Typography sx={{ textAlign: "center", fontWeight: 500, fontSize: { xs: 14, md: 16 }, mt: 1 }}>
-              Value your land for FREE in less than 3 minutes!
-            </Typography>
+
             <Box
               component={Paper}
               sx={{
@@ -123,6 +121,9 @@ const HomeMain = () => {
                 Get Started
               </Button>
             </Box>
+            <Typography sx={{ textAlign: "center", fontWeight: 600, fontSize: 18, mt: 1, display: { xs: "none", md: "block" } }}>
+              View land values around your property in just a few clicks!
+            </Typography>
             <Box sx={{ display: "flex", gap: 1, position: "absolute", zIndex: 2, bottom: 0, mb: { xs: 8, sm: 6, md: 4 } }}>
               {images.map((el, i) => (
                 <Box

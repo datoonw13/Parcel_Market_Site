@@ -8,14 +8,13 @@ const LandingSection1 = () => (
       display: "grid",
       gridTemplateColumns: { xs: "1fr", md: "1.2fr 1fr" },
       alignItems: "center",
-      gap: { xs: 3, md: 6, lg: 8 },
-      //   py: { xs: 10, md: 11, lg: 12.5 },
+      gap: { xs: 3 },
     }}
   >
     <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28 }, textAlign: "center", display: { md: "none" } }}>
       The Parcel Market <br /> value of land tool
     </Typography>
-    <Box boxShadow={2} sx={{ position: "relative", width: "100%", height: { xs: 230, sm: "45vw", md: 350, lg: 400 }, borderRadius: 4 }}>
+    <Box boxShadow={0} sx={{ position: "relative", width: "100%", height: { xs: 230, sm: "45vw", md: 350, lg: 400 }, borderRadius: 4 }}>
       <Image alt="" src="/volt.png" fill />
     </Box>
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -23,9 +22,9 @@ const LandingSection1 = () => (
         VOLT - Value of Land Tool
       </Typography>
       <Typography sx={{ fontSize: 14, color: "grey.800" }}>
-        Before we get into the Parcel Market options, let’s explain VOLT, Parcel Market’s Value of Land Tool. Our team is proud to have
-        developed the first FREE, no obligation land valuation tool to hit the web. We do not ask for any personal information or require
-        you to register with us to use VOLT.
+        VOLT is the first free, no obligation land value information tool to hit the web! By using proprietary algorithms and county sale
+        data, VOLT is able to estimate an average value for similar sized properties in a market area. You can also use VOLT to search,
+        save, and export county sale data.
       </Typography>
       <Button sx={{ width: { xs: "100%", md: "fit-content" }, mt: 4 }} variant="contained">
         Continue Reading

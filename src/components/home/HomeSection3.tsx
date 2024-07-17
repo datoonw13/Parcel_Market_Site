@@ -35,10 +35,10 @@ const HomeSection3 = () => {
     <Box sx={{ pr: 0, display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 2fr" }, gap: 4 }} ref={ref}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 4, position: "relative", pr: { xs: 2.5, md: 0 } }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-          <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28, md: 32, lg: 36 } }}>Buy land near you</Typography>
+          <Typography sx={{ fontWeight: 600, fontSize: { xs: 24, sm: 28, md: 32, lg: 36 } }}>Featured Marketplace Deals</Typography>
           <Typography sx={{ color: "grey.800", fontSize: 14 }}>
-            Welcome to Parcel Market and thank You for being here. At Parcel Market, our goal is simple, to provide a FREE and convenient
-            place to start when making decisions regarding vacant land.
+            Check out these land deals near you on the Parcel Marketplace. Parcel Marketplace is the premier platform for connecting Sellers
+            and Buyers of wholesale land deals.
           </Typography>
         </Box>
         <Button

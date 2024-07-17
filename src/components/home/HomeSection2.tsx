@@ -17,9 +17,11 @@ const HomeSection2 = () => (
     }}
   >
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography sx={{ fontSize: 16, textAlign: "center", mb: 0.5, color: "primary.main" }}>OUR OFFERS</Typography>
+      {/* <Typography sx={{ fontSize: 16, textAlign: "center", mb: 0.5, color: "primary.main" }}>OUR OFFERS</Typography> */}
       <Typography sx={{ fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, textAlign: "center", fontWeight: 600 }}>
-        Connect to your favorite tools
+        We’re all about easy.
+        <br />
+        One Subscription. Full Access..
       </Typography>
     </Box>
     <Box
@@ -74,20 +76,20 @@ export default HomeSection2;
 
 const list = [
   {
-    title: "Sell Quickly With No <br/> Closing Expenses",
-    desc: "Get quick cash for your property, with zero closing costs and zero hassle with our Parcel Market Purchase Option.",
+    title: "Parcel Marketplace",
+    desc: "The only Real Estate Marketplace of its kind. A place where Landowners and Investors of vacant land can connect, chat, and negotiate land deals.",
     icon: SellingIcon,
-    path: "/sell-quickly",
+    path: "/marketplace",
   },
   {
-    title: "Discover Your next <br/> Land Deal",
-    desc: "Utilize The Parcel Market Marketplace to discover new land deals or expose your property to investors.",
+    title: "Vacant Land Sales Data",
+    desc: "Use VOLT to easily and quickly search, save, and export sale data relevant to a particular property or market area.",
     icon: DiscoverIcon,
-    path: "/discover-deal",
+    path: "/value-land",
   },
   {
-    title: "Connect with a <br/> Preferred Professional",
-    desc: "Connect with an experienced land professional in your area using Parcel Market’s Preferred Professional Network",
+    title: "Connect with a Professional",
+    desc: "Need the expertise of a real estate Professional? Use our Preferred land professional Network to connect with an experienced land specialist in your area.",
     icon: ConnectIcon,
     path: "/connect-professional",
   },
