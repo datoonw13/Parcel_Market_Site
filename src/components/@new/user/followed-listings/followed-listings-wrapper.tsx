@@ -1,19 +1,28 @@
-import { getUserListingAction } from "@/server-actions/user-listings/actions";
-import { numFormatter } from "@/helpers/common";
+"use client";
+
+import { IPagination } from "@/types/common";
+import { ISellingProperty } from "@/types/find-property";
+import React, { FC } from "react";
 import { getAllStates } from "@/helpers/states";
-import UserListingHeader from "./user-listing-header";
-import UserListingPagination from "./user-listing-pagination";
+import { numFormatter } from "@/helpers/common";
 import DataNotFound from "../../shared/DataNotFound";
+import UserListingHeader from "../listings/user-listing-header";
+import UserListingItem from "../listings/user-listing-item";
 import { UserIcon2 } from "../../icons/UserIcons";
 import { IdIcon1 } from "../../icons/IdIcons";
 import { ResizeIcon1 } from "../../icons/ResizeIcons";
 import { MoneyIcon1 } from "../../icons/MoneyIcons";
-import UserListingItem from "./user-listing-item";
+import UserListingPagination from "../listings/user-listing-pagination";
 
-const UserListing = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
-  const { data } = await getUserListingAction(searchParams);
-
-  return (
+interface FollowedListingsWrapperProps {
+  data:
+    | ({
+        list: ISellingProperty[];
+      } & IPagination)
+    | null;
+}
+const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data }) => (
+  <div>
     <div className="space-y-8 md:space-y-6">
       {!data || data.pagination.totalCount === 0 ? (
         <DataNotFound message="No listings yet" />
@@ -26,6 +35,7 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
               const county = state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
               return (
                 <UserListingItem
+                  showBookmark
                   className="max-w-2xl m-auto"
                   key={land.id}
                   sellingItemId={land.id}
@@ -67,7 +77,7 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
         </>
       )}
     </div>
-  );
-};
+  </div>
+);
 
-export default UserListing;
+export default FollowedListingsWrapper;

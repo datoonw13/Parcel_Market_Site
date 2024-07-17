@@ -3,6 +3,7 @@ import UserListingDesktopFilter from "@/components/@new/user/listings/user-listi
 import UserListing from "@/components/@new/user/listings/user-listing";
 import { Suspense } from "react";
 import UserListingLoader from "@/components/@new/user/listings/user-listing-loader";
+import FollowedListings from "@/components/@new/user/followed-listings/followed-listings";
 
 const UserFollowedListingsPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
   <div className="w-full space-y-8">
@@ -18,7 +19,8 @@ const UserFollowedListingsPage = ({ searchParams }: { searchParams: { [key: stri
       </div>
     </Suspense>
     <Suspense fallback={<UserListingLoader />} key={JSON.stringify(searchParams)}>
-      <UserListing searchParams={searchParams} followedListings />
+      {/* <UserListing searchParams={searchParams} followedListings /> */}
+      <FollowedListings searchParams={searchParams} />
     </Suspense>
   </div>
 );
