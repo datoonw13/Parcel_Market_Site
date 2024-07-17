@@ -3,7 +3,7 @@
 import { SortEnum } from "@/types/common";
 import { useAtom } from "jotai";
 import { userListingAtom } from "@/atoms/user-listing-atom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { removeUserListingItemsAction, revalidateUserListings } from "@/server-actions/user-listings/actions";
 import toast from "react-hot-toast";
 import { unFollowLands } from "@/server-actions/follow/actions";
@@ -33,6 +33,13 @@ const UserListingHeader = ({ totalCount, followedListings }: { totalCount: numbe
       }
     }
   };
+
+  useEffect(
+    () => () => {
+      setUserListingOption({ bookmarkedLandIds: null, selectedLandIds: null, selecting: false });
+    },
+    [setUserListingOption]
+  );
 
   return (
     <>
