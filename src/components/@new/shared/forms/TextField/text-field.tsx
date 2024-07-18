@@ -1,8 +1,8 @@
 "use client";
 
 import clsx from "clsx";
-import { MouseEvent, ReactElement, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { numericInput } from "@/helpers/common";
+import { MouseEvent, ReactElement, useLayoutEffect, useRef } from "react";
+import { NumericFormat } from "react-number-format";
 import classes from "./textfield.module.css";
 
 interface TextFieldProps {
@@ -23,6 +23,9 @@ interface TextFieldProps {
   name?: string;
   required?: boolean;
   endIconClasses?: string;
+  decimalScale?: number;
+  suffix?: string;
+  prefix?: string;
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -44,6 +47,9 @@ const TextField = (props: TextFieldProps) => {
     name,
     required,
     endIconClasses,
+    decimalScale,
+    suffix,
+    prefix,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -60,14 +66,7 @@ const TextField = (props: TextFieldProps) => {
     if (!onChange) {
       return;
     }
-    if (type === "number") {
-      const { valid, result } = numericInput(newValue);
-      if (valid) {
-        onChange(result);
-      }
-    } else {
-      onChange(newValue);
-    }
+    onChange(newValue);
   };
 
   useLayoutEffect(() => {
@@ -76,15 +75,16 @@ const TextField = (props: TextFieldProps) => {
 
   return (
     <div className={clsx(classes.root, className)} onClick={(e) => !disabled && onClick && onClick(e)}>
-      <input
-        className={clsx(
-          "group",
-          label && classes[`input-${variant}`],
-          classes.input,
-          error && classes.error,
-          disabled && "cursor-not-allowed",
-          required && classes["required-placeholder"],
-          `[&+.placeholder]:text-grey-800 
+      {type === "number" ? (
+        <NumericFormat
+          className={clsx(
+            "group",
+            label && classes[`input-${variant}`],
+            classes.input,
+            error && classes.error,
+            disabled && "cursor-not-allowed",
+            required && classes["required-placeholder"],
+            `[&+.placeholder]:text-grey-800 
           [&+.placeholder]:text-xs 
           [&+.placeholder]:absolute 
           [&+.placeholder]:pointer-events-none 
@@ -96,19 +96,57 @@ const TextField = (props: TextFieldProps) => {
           [&:focus+.placeholder]:text-grey-800
           [&:not(:placeholder-shown)+.placeholder]:hidden
           `
-        )}
-        value={value}
-        onChange={(e) => handleChange(e.target.value)}
-        ref={inputRef}
-        placeholder=" "
-        disabled={disabled}
-        onBlur={onBlur}
-        defaultValue={defaultValue}
-        readOnly={readOnly}
-        type={type === "number" ? "text" : type}
-        name={name}
-        autoComplete="new-password"
-      />
+          )}
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+          getInputRef={inputRef}
+          placeholder=" "
+          disabled={disabled}
+          onBlur={onBlur}
+          defaultValue={defaultValue}
+          readOnly={readOnly}
+          type={type === "number" ? "text" : type}
+          name={name}
+          autoComplete="new-password"
+          decimalScale={decimalScale}
+          suffix={suffix}
+          prefix={prefix}
+        />
+      ) : (
+        <input
+          className={clsx(
+            "group",
+            label && classes[`input-${variant}`],
+            classes.input,
+            error && classes.error,
+            disabled && "cursor-not-allowed",
+            required && classes["required-placeholder"],
+            `[&+.placeholder]:text-grey-800 
+        [&+.placeholder]:text-xs 
+        [&+.placeholder]:absolute 
+        [&+.placeholder]:pointer-events-none 
+        [&+.placeholder]:top-[50%] 
+        [&+.placeholder]:translate-y-[-50%] 
+        [&+.placeholder]:left-2 
+        [&+.placeholder]:px-1.5 
+        [&+.placeholder]:font-medium
+        [&:focus+.placeholder]:text-grey-800
+        [&:not(:placeholder-shown)+.placeholder]:hidden
+        `
+          )}
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+          ref={inputRef}
+          placeholder=" "
+          disabled={disabled}
+          onBlur={onBlur}
+          defaultValue={defaultValue}
+          readOnly={readOnly}
+          name={name}
+          autoComplete="new-password"
+        />
+      )}
+
       {label && (
         <p className={clsx(label && classes[`label-${variant}`], "pointer-events-none")}>
           {label}

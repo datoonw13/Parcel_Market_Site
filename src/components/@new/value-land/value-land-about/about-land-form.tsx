@@ -7,6 +7,7 @@ import TextField from "../../shared/forms/TextField/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
+import { CalendarIcon1 } from "../../icons/CalendarIcons";
 
 const AboutLandForm = () => (
   <>
@@ -47,7 +48,7 @@ const AboutLandForm = () => (
         ))}
         <div className="space-y-3 w-full">
           <p className="font-medium text-sm">10. Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.</p>
-          <TextField type="number" placeholder="Type here" />
+          <TextField prefix="$" suffix=" USD" type="number" placeholder="Type here" onChange={(value) => console.log(value, 22)} />
         </div>
         <CheckBox
           label={
