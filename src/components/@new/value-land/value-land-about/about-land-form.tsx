@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import classes from "@/app/value-land/styles.module.css";
+import classes from "@/app/value-land/(main)/styles.module.css";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
@@ -9,20 +9,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IFindPropertyAbout } from "@/types/find-property";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAtom } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
-import { useState } from "react";
 import ValueLandSubmitTermsModal from "../terms/terms-modal";
-import { useAtom } from "jotai";
-import { valueLandAtom } from "@/atoms/value-land-atom";
 
 const AboutLandForm = () => {
   const router = useRouter();
-  const [valueLandData, setValueLandData] = useAtom(valueLandAtom) 
-  const [showTermsModal, setShowTermsModal] = useState(false)
+  const isSmallDevice = useMediaQuery(768);
+  const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting, isValid },
@@ -34,12 +36,15 @@ const AboutLandForm = () => {
 
   const onSubmit = handleSubmit(
     (aboutLand) => {
-      setValueLandData(prev => ({...prev, aboutLand}))
-      setShowTermsModal(true)
+      setValueLandData((prev) => ({ ...prev, aboutLand }));
+      if (isSmallDevice) {
+        router.push(routes.valueLand.terms.fullUrl);
+      } else {
+        setShowTermsModal(true);
+      }
     },
     (err) => console.log(err, 22)
   );
-  
 
   // reset atom on success submit
 
@@ -108,8 +113,8 @@ const AboutLandForm = () => {
               value={watch("improvmentsValue")?.toString() ?? ""}
               onChange={(value) => {
                 console.log(value, 22);
-                
-                setValue("improvmentsValue", value ? Number(value) : undefined, { shouldValidate: true })
+
+                setValue("improvmentsValue", value ? Number(value) : undefined, { shouldValidate: true });
               }}
             />
           </div>

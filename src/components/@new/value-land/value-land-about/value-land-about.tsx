@@ -1,6 +1,6 @@
 import { getUserAction } from "@/server-actions/user/actions";
 import clsx from "clsx";
-import classes from "@/app/value-land/styles.module.css";
+import classes from "@/app/value-land/(main)/styles.module.css";
 import AboutLandForm from "./about-land-form";
 import ValueLandStepper from "../value-land-stepper";
 

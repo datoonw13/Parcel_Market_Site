@@ -88,6 +88,11 @@ const routes = {
       fullUrl: "/value-land/signature",
       protected: true,
     },
+    terms: {
+      url: "terms",
+      fullUrl: "/value-land/terms",
+      protected: true,
+    },
   },
 };
 

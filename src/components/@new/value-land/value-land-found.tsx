@@ -10,7 +10,7 @@ import clsx from "clsx";
 import { calculateLandPriceAction } from "@/server-actions/value-land/actions";
 import toast from "react-hot-toast";
 import { IFindPropertyEstimatedPrice } from "@/types/find-property";
-import classes from "@/app/value-land/styles.module.css";
+import classes from "@/app/value-land/(main)/styles.module.css";
 import Button from "../shared/forms/Button";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";

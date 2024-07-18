@@ -1,16 +1,24 @@
 "use clint";
 
 import SimpleBar from "simplebar-react";
-import CheckBox from "../../shared/forms/CheckBox";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
+import routes from "@/helpers/routes";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
+import CheckBox from "../../shared/forms/CheckBox";
 
 const ValueLendTerms = () => {
-  console.log("aqa");
+  const pathname = usePathname();
   // reset atom on success submit
 
   return (
     <div className="flex flex-col justify-between h-full overflow-hidden">
-      <div className="mx-8 mt-6 mb-8 border border-grey-100 rounded-2xl h-full overflow-hidden">
+      <div
+        className={clsx(
+          "mt-6 mb-8 border border-grey-100 rounded-2xl h-full overflow-hidden",
+          pathname !== routes.valueLand.terms.fullUrl && "mx-8 "
+        )}
+      >
         <SimpleBar className="h-full">
           <div className="px-4 sm:px-6 md:px-8 py-6 md:py-8 space-y-6">
             <p className="text-sm font-bold">Terms and Conditions of Land Marketplace</p>

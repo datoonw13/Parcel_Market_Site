@@ -11,7 +11,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import classes from "@/app/value-land/styles.module.css";
+import classes from "@/app/value-land/(main)/styles.module.css";
 import clsx from "clsx";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";

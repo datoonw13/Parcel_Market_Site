@@ -1,5 +1,5 @@
 import { getUserAction } from "@/server-actions/user/actions";
-import classes from "@/app/value-land/styles.module.css";
+import classes from "@/app/value-land/(main)/styles.module.css";
 import clsx from "clsx";
 import CalculatedPriceDetails from "./caluclation-details";
 import SubmitLand from "./submit-land";

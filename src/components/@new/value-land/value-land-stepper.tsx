@@ -4,7 +4,7 @@ import { uuid } from "short-uuid";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import routes from "@/helpers/routes";
-import classes from "@/app/value-land/styles.module.css";
+import classes from "@/app/value-land/(main)/styles.module.css";
 import { CheckIcon3 } from "../icons/CheckIcons";
 import Divider from "../shared/Divider";
 
