@@ -53,12 +53,6 @@ const ValueLandFound = () => {
     }
   };
 
-  useEffect(() => {
-    if (!valueLand.lands) {
-      router.replace(routes.valueLand.fullUrl);
-    }
-  }, [router, valueLand]);
-
   return (
     <div className="h-full flex flex-col w-full gap-6">
       <ValueLandStepper currentStep={2} />

@@ -7,6 +7,8 @@ import { z } from "zod";
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IFindPropertyAbout } from "@/types/find-property";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
@@ -27,6 +29,8 @@ const AboutLandForm = () => {
     () => {},
     (err) => console.log(err, 22)
   );
+
+  // reset atom on success submit
 
   return (
     <>
@@ -106,7 +110,9 @@ const AboutLandForm = () => {
         </div>
       </div>
       <div className={classes.action}>
-        <Button variant="secondary">Back</Button>
+        <Link href={routes.valueLand.value.fullUrl}>
+          <Button variant="secondary">Back</Button>
+        </Link>
         <Button onClick={onSubmit} disabled={!isValid}>
           Add Land
         </Button>
