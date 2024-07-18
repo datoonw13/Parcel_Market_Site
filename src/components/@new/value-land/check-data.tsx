@@ -4,14 +4,14 @@ import { valueLandAtom } from "@/atoms/value-land-atom";
 import routes from "@/helpers/routes";
 import { useAtomValue } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 const ValueLandCheckData = () => {
   const valueLandData = useAtomValue(valueLandAtom);
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleCheck = () => {
+  const handleCheck = useCallback(() => {
     if (pathname === routes.valueLand.found.fullUrl && !valueLandData.lands) {
       router.replace(routes.valueLand.fullUrl);
     }
@@ -24,17 +24,11 @@ const ValueLandCheckData = () => {
     ) {
       router.replace(routes.valueLand.fullUrl);
     }
-    // if (
-    //   pathname === routes.valueLand.terms.fullUrl &&
-    //   (!valueLandData.lands || !valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand)
-    // ) {
-    //   router.replace(routes.valueLand.fullUrl);
-    // }
-  };
+  }, [pathname, router, valueLandData.calculatedPrice, valueLandData.lands, valueLandData.selectedLand]);
 
   useEffect(() => {
-    // handleCheck();
-  }, []);
+    handleCheck();
+  }, [handleCheck]);
 
   return null;
 };
