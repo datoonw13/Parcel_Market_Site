@@ -27,7 +27,7 @@ const ValueLandCheckData = () => {
   };
 
   useEffect(() => {
-    handleCheck();
+    // handleCheck();
   }, []);
 
   return null;

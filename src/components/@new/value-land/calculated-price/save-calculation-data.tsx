@@ -28,13 +28,12 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
       setSaveDataPending(false);
     } else {
       params.set("from", routes.valueLand.value.fullUrl);
-      params.set("action", ACTION);
       router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
     }
   }, [params, router, user]);
 
   useEffect(() => {
-    if (searchParams.get("action") === ACTION && params.get("from") === routes.valueLand.value.fullUrl) {
+    if (params.get("from")) {
       saveSearchData();
       router.replace(routes.valueLand.value.fullUrl);
     }

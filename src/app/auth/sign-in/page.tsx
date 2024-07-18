@@ -18,15 +18,23 @@ import TextField from "@/components/@new/shared/forms/text-field";
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
   const ref = useRef<HTMLButtonElement | null>(null);
+  const params = new URLSearchParams(searchParams)
   const [passwordVisible, setPasswordVisible] = useState(false);
+  
 
   const signIn = async (prevState: any, formData: FormData) => {
     const request = await signInUserAction(prevState, formData);
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
-      const redirectTo = searchParams?.from;
-      router.push(redirectTo ? `${redirectTo}?${new URLSearchParams(searchParams).toString()}` : routes.home.fullUrl);
+      if(params.get('from')) {
+        const fromUrl = params.get('from')
+        params.delete('from')
+        const newLocation = `${fromUrl}?${params.toString()}`
+        router.replace(newLocation)
+        return
+      }
+      router.replace(routes.home.fullUrl)
     }
   };
 
