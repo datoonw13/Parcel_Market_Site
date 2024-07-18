@@ -6,18 +6,17 @@ import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
 import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
-import TextField from "@/components/@new/shared/forms/TextField";
 import routes from "@/helpers/routes";
 import useEnterClick from "@/hooks/useEnterClick";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { signInUserAction } from "@/server-actions/user/actions";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import TextField from "@/components/@new/shared/forms/text-field";
 
-const SignInPage = () => {
+const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -26,8 +25,8 @@ const SignInPage = () => {
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
-      const redirectTo = searchParams.get("from");
-      router.push(redirectTo ? `${redirectTo}?${searchParams.toString()}` : routes.home.fullUrl);
+      const redirectTo = searchParams?.from;
+      router.push(redirectTo ? `${redirectTo}?${new URLSearchParams(searchParams).toString()}` : routes.home.fullUrl);
     }
   };
 

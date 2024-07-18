@@ -8,7 +8,7 @@ import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IFindPropertyAbout } from "@/types/find-property";
 import TextArea from "../../shared/forms/text-area/text-area";
-import TextField from "../../shared/forms/TextField/text-field";
+import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";

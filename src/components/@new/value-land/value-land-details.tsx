@@ -17,7 +17,7 @@ import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
 import AutoComplete from "../shared/forms/AutoComplete";
-import TextField from "../shared/forms/TextField/text-field";
+import TextField from "../shared/forms/text-field";
 import Alert from "../shared/Alert";
 import ValueLandStepper from "./value-land-stepper";
 

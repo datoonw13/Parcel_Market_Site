@@ -2,8 +2,8 @@
 
 import React, { FC, useState } from "react";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
-import TextField from "@/components/@new/shared/forms/TextField";
 import LabelWithInfo from "@/components/@new/shared/label-with-info";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 interface OfferEarnestMoneyFieldProps {
   error?: boolean;

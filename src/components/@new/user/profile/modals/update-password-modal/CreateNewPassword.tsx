@@ -2,11 +2,11 @@
 
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Button from "@/components/@new/shared/forms/Button";
-import TextField from "@/components/@new/shared/forms/TextField";
 import { sendPasswordResetCodeAction } from "@/server-actions/user/actions";
 import { userPasswordResetValidations } from "@/zod-validations/auth-validations";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 const CreateNewPassword = ({
   onNext,

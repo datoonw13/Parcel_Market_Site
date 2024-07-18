@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { ArrowIconLeftFilled1 } from "../../icons/ArrowIcons";
 import { SearchIcon1 } from "../../icons/SearchIcons";
-import TextField from "../../shared/forms/TextField/text-field";
+import TextField from "../../shared/forms/text-field";
 
 const MarketplaceHeader = () => {
   const router = useRouter();

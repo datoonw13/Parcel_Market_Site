@@ -4,13 +4,13 @@ import React, { FC, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "@/components/@new/shared/forms/Button";
 import { IUser } from "@/types/auth";
-import TextField from "@/components/@new/shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import { emailSchema } from "@/zod-validations/auth-validations";
 import { maskEmail } from "@/helpers/common";
 import ResendButton from "@/components/@new/shared/ResendButton";
+import TextField from "@/components/@new/shared/forms/text-field";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });

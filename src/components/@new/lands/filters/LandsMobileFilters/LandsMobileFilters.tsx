@@ -10,8 +10,8 @@ import clsx from "clsx";
 import RadioButton from "@/components/@new/shared/forms/RadioButton/";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { ILandsFilters, SortBy } from "@/types/lands";
-import TextField from "@/components/@new/shared/forms/TextField";
 import { RemoveIcon1 } from "@/components/@new/icons/RemoveIcons";
+import TextField from "@/components/@new/shared/forms/text-field";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
 
 interface LandsMobileFiltersProps {

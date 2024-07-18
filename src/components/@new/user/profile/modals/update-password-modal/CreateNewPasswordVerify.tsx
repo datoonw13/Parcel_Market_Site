@@ -2,10 +2,10 @@
 
 import ResendButton from "@/components/@new/shared/ResendButton";
 import Button from "@/components/@new/shared/forms/Button";
-import TextField from "@/components/@new/shared/forms/TextField";
 import { sendPasswordResetCodeAction, setNewPasswordAction } from "@/server-actions/user/actions";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 interface CreateNewPasswordVerifyProps {
   passwords: { oldPassword: string; newPassword: string };

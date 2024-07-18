@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { ErrorResponse } from "@/helpers/error-response";
 import Button from "../../shared/forms/Button";
-import TextField from "../../shared/forms/TextField/text-field";
+import TextField from "../../shared/forms/text-field";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 
 interface SignUpProps {

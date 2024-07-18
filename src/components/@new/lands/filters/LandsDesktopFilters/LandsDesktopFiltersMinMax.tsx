@@ -3,8 +3,8 @@ import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import AutoCompleteListBox from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListBox";
 import AutoCompleteListItem from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListItem";
 import Button from "@/components/@new/shared/forms/Button";
-import TextField from "@/components/@new/shared/forms/TextField";
 import clsx from "clsx";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 interface LandsDesktopFiltersMinMaxProps {
   options: Array<{ min: number | string | null; max: number | string | null }>;

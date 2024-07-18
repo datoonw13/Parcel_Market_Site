@@ -3,9 +3,9 @@ import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import AutoCompleteListBox from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListBox";
 import AutoCompleteListItem from "@/components/@new/shared/forms/AutoComplete/AutoCompleteListItem";
 import Button from "@/components/@new/shared/forms/Button";
-import TextField from "@/components/@new/shared/forms/TextField";
 import clsx from "clsx";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 interface MinMaxDesktopFiltersProps {
   options: Array<{ min: number | null; max: number | null }>;

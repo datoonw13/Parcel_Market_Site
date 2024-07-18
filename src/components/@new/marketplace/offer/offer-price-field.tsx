@@ -1,6 +1,6 @@
-import TextField from "@/components/@new/shared/forms/TextField";
 import LabelWithInfo from "@/components/@new/shared/label-with-info";
 import React, { FC, useState } from "react";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 interface OfferPriceFieldProps {
   error?: boolean;

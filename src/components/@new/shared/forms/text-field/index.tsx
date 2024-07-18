@@ -105,7 +105,7 @@ const TextField = (props: TextFieldProps) => {
           onBlur={onBlur}
           defaultValue={defaultValue}
           readOnly={readOnly}
-          type={type === "number" ? "text" : type}
+          type="text"
           name={name}
           autoComplete="new-password"
           decimalScale={decimalScale}
@@ -143,6 +143,7 @@ const TextField = (props: TextFieldProps) => {
           defaultValue={defaultValue}
           readOnly={readOnly}
           name={name}
+          type={type}
           autoComplete="new-password"
         />
       )}

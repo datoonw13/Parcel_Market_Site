@@ -2,13 +2,13 @@
 
 import React, { FC, useState } from "react";
 import dynamic from "next/dynamic";
-import TextField from "@/components/@new/shared/forms/TextField";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Button from "@/components/@new/shared/forms/Button";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
 import { DeletionAccountReason } from "@/types/auth";
 import { logOutUserAction, removeUserAccountAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
+import TextField from "@/components/@new/shared/forms/text-field";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });
