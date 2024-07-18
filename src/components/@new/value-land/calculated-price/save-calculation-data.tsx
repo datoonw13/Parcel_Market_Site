@@ -4,7 +4,7 @@ import { saveSearchDataAction } from "@/server-actions/value-land/actions";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { ISignInResponse } from "@/types/auth";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import Button from "../../shared/forms/Button";
 
@@ -12,7 +12,6 @@ const ACTION = "saveSearchData";
 
 const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null }) => {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
   const [saveDataPending, setSaveDataPending] = useState(false);

@@ -1,5 +1,5 @@
 import { IAuthSliceInitial } from "@/types/auth";
-import { IFindPropertyEstimatedPriceResponse } from "@/types/find-property";
+import { IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
 import { IMap } from "@/types/map";
 import { atom } from "jotai";
 
@@ -301,4 +301,5 @@ export const valueLandAtom = atom<{
   selectedLand: null | IMap[0];
   calculatedPrice: IFindPropertyEstimatedPriceResponse | null;
   sellOptions: IAuthSliceInitial["selectedParcelOptions"] | null;
-}>({ lands: null, selectedLand: null, calculatedPrice: null, sellOptions: null, ...testData });
+  sellerType: ISellProperty['sellerType'] | null
+}>({ lands: null, selectedLand: null, calculatedPrice: null, sellOptions: null, sellerType: null, ...testData });
