@@ -7,15 +7,19 @@ import { z } from "zod";
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IFindPropertyAbout } from "@/types/find-property";
-import Link from "next/link";
 import routes from "@/helpers/routes";
+import { useRouter } from "next/navigation";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
+import { useState } from "react";
+import ValueLandSubmitTermsModal from "../terms/terms-modal";
 
 const AboutLandForm = () => {
+  const router = useRouter();
+  const [showTermsModal, setShowTermsModal] = useState(false)
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting, isValid },
@@ -34,6 +38,7 @@ const AboutLandForm = () => {
 
   return (
     <>
+      <ValueLandSubmitTermsModal open={showTermsModal} onClose={() => setShowTermsModal(false)} />
       <div className={classes["content-space-x"]}>
         <div className={clsx("gap-6 md:gap-8 flex flex-col w-full lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl")}>
           <div className="space-y-3 w-full">
@@ -110,9 +115,9 @@ const AboutLandForm = () => {
         </div>
       </div>
       <div className={classes.action}>
-        <Link href={routes.valueLand.value.fullUrl}>
-          <Button variant="secondary">Back</Button>
-        </Link>
+        <Button variant="secondary" onClick={() => router.push(routes.valueLand.value.fullUrl)}>
+          Back
+        </Button>
         <Button onClick={onSubmit} disabled={!isValid}>
           Add Land
         </Button>
