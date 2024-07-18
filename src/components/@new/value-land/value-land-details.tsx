@@ -11,13 +11,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
+import classes from "@/app/value-land/styles.module.css";
+import clsx from "clsx";
+import SimpleBar from "simplebar-react";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
 import AutoComplete from "../shared/forms/AutoComplete";
 import TextField from "../shared/forms/TextField";
 import Alert from "../shared/Alert";
-import Divider from "../shared/Divider";
+import ValueLandStepper from "./value-land-stepper";
 
 type LandDetailsModel = z.infer<typeof valueLandDetailsValidations>;
 
@@ -73,15 +76,11 @@ const ValueLandDetails = () => {
   }, [params, pathname, router, setValue]);
 
   return (
-    <>
-      <div>
-        <Divider />
-        <div className="mx-4 md:mx-6 lg:mx-8 mb-6 mt-8 md:mt-6">
-          <h1 className="text-lg font-semibold">Let’s locate your property using some basic information </h1>
-        </div>
-      </div>
-      <div className="space-y-8 h-full justify-between gap-2 flex flex-col">
-        <div className="mx-4 md:mx-6 lg:mx-8 lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl">
+    <div className="flex flex-col justify-between h-full overflow-auto">
+      <div className={clsx(classes["content-space-x"])}>
+        <ValueLandStepper currentStep={1} />
+        <h1 className="text-lg font-semibold mt-8 md:mt-6 my-6">Let’s locate your property using some basic information</h1>
+        <div className="lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl">
           <div className="space-y-6">
             <div className="space-y-3">
               <LabelWithInfo
@@ -214,14 +213,13 @@ const ValueLandDetails = () => {
             )}
           </div>
         </div>
-        <div className="border-t border-t-grey-100 flex flex-col sm:flex-row justify-end gap-3 px-4 md:px-6 lg:px-8 py-4">
-          {/* <Button variant="secondary">Back</Button> */}
-          <Button onClick={onSubmit} loading={isSubmitting}>
-            Continue
-          </Button>
-        </div>
       </div>
-    </>
+      <div className={classes.action}>
+        <Button onClick={onSubmit} loading={isSubmitting}>
+          Continue
+        </Button>
+      </div>
+    </div>
   );
 };
 

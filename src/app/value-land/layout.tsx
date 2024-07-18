@@ -1,9 +1,8 @@
-import Divider from "@/components/@new/shared/Divider";
 import ValueLanSidebar from "@/components/@new/value-land/value-land-sidebar";
-import ValueLandStepper from "@/components/@new/value-land/value-land-stepper";
 import { AppBarMini } from "@/components/app-bar";
 import { MiniFooter } from "@/components/footer";
 import { ReactNode } from "react";
+import classes from "./styles.module.css";
 
 const ValueLandLayout = ({ children }: { children: ReactNode }) => (
   <div className="h-screen grid grid-cols-1 xl:grid-cols-[1fr_400px] 2xl:grid-cols-[1fr_544px]">
@@ -13,9 +12,7 @@ const ValueLandLayout = ({ children }: { children: ReactNode }) => (
           <AppBarMini />
         </div>
       </div>
-      <div className="overflow-hidden flex flex-col border border-grey-100 md:border-none md:shadow-4 pt-6 rounded-2xl h-full mx-5 sm:mx-7 md:mx-10 lg:mx-13 xl:mx-16">
-        {children}
-      </div>
+      <div className={classes.content}>{children}</div>
       <div className="mx-5 sm:mx-7 md:mx-10 lg:mx-13 xl:mx-16">
         <MiniFooter />
       </div>
