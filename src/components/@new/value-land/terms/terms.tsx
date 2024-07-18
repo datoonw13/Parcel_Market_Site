@@ -1,60 +1,103 @@
 "use clint";
 
 import SimpleBar from "simplebar-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import routes from "@/helpers/routes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
+import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 
 const ValueLendTerms = () => {
+  const [agreed, setAgreed] = useState(false);
   const pathname = usePathname();
-  // reset atom on success submit
+  const router = useRouter();
+  const [openModal, setOpenModal] = useState<"error" | "success" | null>(null);
+  const [landId, setLendId] = useState<number | null>(null);
+  const [pending, setPending] = useState(false);
+
+  const handleSubmit = async () => {
+    setPending(true);
+    // const id = await sellLendActionTest();
+    setPending(false);
+    setOpenModal("success");
+    // setLendId(id);
+  };
+
+  const closeModal = () => {
+    if (openModal === "success") {
+      router.push(routes.user.listings.fullUrl);
+    } else {
+      setOpenModal(null);
+    }
+  };
+
+  const onOK = () => {
+    if (openModal === "success") {
+      router.push(`${routes.marketplace.fullUrl}/${landId}`);
+    } else {
+      handleSubmit();
+    }
+  };
 
   return (
-    <div className="flex flex-col justify-between h-full overflow-hidden">
-      <div
-        className={clsx(
-          "mt-6 mb-8 border border-grey-100 rounded-2xl h-full overflow-hidden",
-          pathname !== routes.valueLand.terms.fullUrl && "mx-8 "
-        )}
-      >
-        <SimpleBar className="h-full">
-          <div className="px-4 sm:px-6 md:px-8 py-6 md:py-8 space-y-6">
-            <p className="text-sm font-bold">Terms and Conditions of Land Marketplace</p>
-            <p className="text-sm text-grey-800">
-              These terms and conditions (&quot;Terms&quot;) govern your use of the Land Marketplace (&quot;the Marketplace&quot;) provided
-              by [Company Name]. By accessing or using the Marketplace, you agree to be bound by these Terms. If you do not agree to these
-              Terms, you may not use the Marketplace.
-            </p>
-            {terms.map((term, termI) => (
-              <div key={term.title} className="space-y-1">
-                <p className="text-sm font-bold">
-                  {termI + 1}. {term.title}
-                </p>
-                {term.options.map((opt, optI) => (
-                  <p className="text-sm text-grey-800" key={opt}>
-                    {`${termI + 1}.${optI + 1}.`} {opt}
+    <>
+      <ResponsiveWarningModal
+        variant={openModal === "success" ? "success" : "error"}
+        title={openModal === "success" ? "Land added" : "Something occurred"}
+        description={openModal === "success" ? "Congratulations! Your Listing has posted to Parcel Marketplace." : "Please try again"}
+        open={!!openModal}
+        closeModal={closeModal}
+        onCancel={closeModal}
+        cancelLabel="Close"
+        onOK={onOK}
+        okLabel={openModal === "success" ? "View Land" : "Try Again"}
+      />
+      <div className="flex flex-col justify-between h-full overflow-hidden">
+        <div
+          className={clsx(
+            "mt-6 mb-8 border border-grey-100 rounded-2xl h-full overflow-hidden",
+            pathname !== routes.valueLand.terms.fullUrl && "mx-8 "
+          )}
+        >
+          <SimpleBar className="h-full">
+            <div className="px-4 sm:px-6 md:px-8 py-6 md:py-8 space-y-6">
+              <p className="text-sm font-bold">Terms and Conditions of Land Marketplace</p>
+              <p className="text-sm text-grey-800">
+                These terms and conditions (&quot;Terms&quot;) govern your use of the Land Marketplace (&quot;the Marketplace&quot;)
+                provided by [Company Name]. By accessing or using the Marketplace, you agree to be bound by these Terms. If you do not agree
+                to these Terms, you may not use the Marketplace.
+              </p>
+              {terms.map((term, termI) => (
+                <div key={term.title} className="space-y-1">
+                  <p className="text-sm font-bold">
+                    {termI + 1}. {term.title}
                   </p>
-                ))}
-              </div>
-            ))}
-            <CheckBox
-              // checked={watch("agreement")}
-              onChange={() => {}}
-              label={
-                <p className="space-x-1">
-                  Yes, I understand and agree to the Parcel Market <span className="text-primary-main underline">Terms of Service</span> and
-                  <span className="text-primary-main underline">Privacy Policy</span>.
-                </p>
-              }
-            />
-          </div>
-        </SimpleBar>
+                  {term.options.map((opt, optI) => (
+                    <p className="text-sm text-grey-800" key={opt}>
+                      {`${termI + 1}.${optI + 1}.`} {opt}
+                    </p>
+                  ))}
+                </div>
+              ))}
+              <CheckBox
+                checked={agreed}
+                onChange={() => setAgreed(!agreed)}
+                label={
+                  <p className="space-x-1">
+                    Yes, I understand and agree to the Parcel Market <span className="text-primary-main underline">Terms of Service</span>{" "}
+                    and
+                    <span className="text-primary-main underline">Privacy Policy</span>.
+                  </p>
+                }
+              />
+            </div>
+          </SimpleBar>
+        </div>
+        <DialogActions disableSubmit={!agreed} onClose={() => setOpenModal(null)} onSubmit={handleSubmit} submitPending={pending} />
       </div>
-      <DialogActions onClose={() => {}} onSubmit={() => {}} />
-    </div>
+    </>
   );
 };
 

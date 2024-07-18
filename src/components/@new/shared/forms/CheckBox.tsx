@@ -20,8 +20,8 @@ const CheckBox: FC<CheckBoxProps> = ({ name, checked, onChange, label, className
     )}
   >
     <input checked={checked} className="peer relative appearance-none w-4 h-4 hidden" type="checkbox" name={name} onChange={onChange} />
-    <CheckIcon1 className={clsx("block peer-checked:hidden", error && "stroke-error")} />
-    <CheckIcon2 className="hidden peer-checked:block" />
+    <CheckIcon1 className={clsx("block peer-checked:hidden !w-4 !min-w-4 !h-4 min-h-4", error && "stroke-error")} />
+    <CheckIcon2 className="hidden peer-checked:block !w-4 !min-w-4 !h-4 min-h-4" />
     {label}
   </label>
 );

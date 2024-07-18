@@ -11,9 +11,10 @@ interface DialogActionsProps {
   submitLabel?: string;
   submitPending?: boolean;
   className?: string;
+  disableSubmit?: boolean;
 }
 
-const DialogActions: FC<DialogActionsProps> = ({ onClose, onSubmit, closeLabel, submitLabel, submitPending, className }) =>
+const DialogActions: FC<DialogActionsProps> = ({ onClose, onSubmit, closeLabel, submitLabel, submitPending, className, disableSubmit }) =>
   (onClose || onSubmit) && (
     <div className={clsx("flex gap-3 flex-col sm:flex-row sm:justify-end py-4 px-8 border-t border-t-grey-100", className)}>
       {onClose && (
@@ -21,7 +22,7 @@ const DialogActions: FC<DialogActionsProps> = ({ onClose, onSubmit, closeLabel, 
           {closeLabel || "Close"}
         </Button>
       )}
-      <Button onClick={onSubmit} loading={submitPending}>
+      <Button onClick={onSubmit} loading={submitPending} disabled={disableSubmit}>
         {submitLabel || "Submit"}
       </Button>
     </div>
