@@ -1,10 +1,5 @@
-import ValueLandAbout from "@/components/@new/value-land/value-land-about";
-import { getUserAction } from "@/server-actions/user/actions";
+import AboutLand from "@/components/@new/value-land/value-land-about/value-land-about";
 
-const ValueLandAboutPage = async () => {
-  const user = await getUserAction();
-
-  return <ValueLandAbout user={user} />;
-};
+const ValueLandAboutPage = async () => <AboutLand />;
 
 export default ValueLandAboutPage;

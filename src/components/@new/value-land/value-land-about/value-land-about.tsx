@@ -320,15 +320,17 @@
 // ];
 
 import { getUserAction } from "@/server-actions/user/actions";
+import SimpleBar from "simplebar-react";
+import AboutLandForm from "./about-pand-form";
 
 const AboutLand = async () => {
   const user = await getUserAction();
   return (
     <>
       <h1 className="text-lg font-semibold mx-4 md:mx-6 lg:mx-8 md:mt-1.5 mb-6">Tell us about your property </h1>
-      <div className="space-y-8 h-full justify-between gap-2 flex flex-col">
-        <div className="mx-4 md:mx-6 lg:mx-8 lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl h-full space-y-3 md:space-y-4">
-          <div className="rounded-2xl [&>div]:rounded-2xl h-60 sm:h-[230px] md:h-[220px] lg:h-[200px]">ragaca</div>
+      <div className="space-y-8 h-full justify-between gap-2 flex flex-col overflow-hidden">
+        <div className="mx-4 md:mx-6 lg:mx-8 lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl h-full space-y-3 md:space-y-4 overflow-hidden">
+          <AboutLandForm />
         </div>
         <div className="border-t border-t-grey-100 flex flex-col sm:flex-row justify-end gap-3 px-4 md:px-6 lg:px-8 py-4">
           action
