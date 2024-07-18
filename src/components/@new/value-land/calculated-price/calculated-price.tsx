@@ -12,7 +12,7 @@ const ValueLandCalculatedPrice = async () => {
   return (
     <>
       <div className="h-full flex flex-col w-full gap-6 pb-4 sm:pb-5 md:pb-6 lg:pb-8">
-        <ValueLandStepper currentStep={2} />
+        <ValueLandStepper currentStep={3} />
         <div className={clsx("flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between", classes["content-space-x"])}>
           <div className="space-y-2">
             <h1 className="text-lg font-semibold">The average price for similar sized property in your area</h1>

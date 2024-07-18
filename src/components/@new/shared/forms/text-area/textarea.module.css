@@ -1,0 +1,7 @@
+.root {
+    @apply border border-grey-100 rounded-lg text-xs font-medium outline-none w-full resize-none py-3 px-4 placeholder:text-grey-800
+}
+
+.root:focus {
+    @apply border-primary-main
+}

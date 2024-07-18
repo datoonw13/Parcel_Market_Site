@@ -6,7 +6,7 @@ import clsx from "clsx";
 import UserProfileSection from "./UserProfileSection";
 import Button from "../../shared/forms/Button";
 import { EditIcon1 } from "../../icons/EditIcons";
-import TextField from "../../shared/forms/TextField";
+import TextField from "../../shared/forms/TextField/text-field";
 
 const PersonalInfoSection = () => {
   const [editMode, setEditMode] = useState(false);

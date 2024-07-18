@@ -14,7 +14,7 @@ import OfferClosingCostsField from "./offer-closing-costs-field";
 import OfferContingenciesField from "./offer-contigencies-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import AutoComplete from "../../shared/forms/AutoComplete";
-import TextField from "../../shared/forms/TextField";
+import TextField from "../../shared/forms/TextField/text-field";
 import Alert from "../../shared/Alert";
 
 const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number; goBack: () => void }) => {

@@ -10,7 +10,7 @@ import { Clear } from "@mui/icons-material";
 import Popper from "../../Popper";
 import AutoCompleteListBox from "./AutoCompleteListBox";
 import AutoCompleteListItem from "./AutoCompleteListItem";
-import TextField from "../TextField";
+import TextField from "../TextField/text-field";
 
 interface AutoCompleteProps<T extends Array<{}>> {
   options: T;
