@@ -96,3 +96,20 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
     };
   }
 };
+
+const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
+export const saveSearchDataAction = async (): Promise<ResponseModel<null>> => {
+  try {
+    await delay();
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      data: null,
+      errorMessage: errorData.message,
+    };
+  }
+};

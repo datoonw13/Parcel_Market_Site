@@ -1,16 +1,23 @@
-import { FC } from "react";
+"use client";
+
 import { numFormatter } from "@/helpers/common";
+import { useAtom } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
 import { LocationIcon2 } from "../../icons/LocationIcons";
 
-interface CalculatedPriceDetailsProps {
-  voltValue: number;
-  minPricePerAcre: number;
-  maxPricePerAcre: number;
-  data: Array<number>;
-  averagePrice: number;
-}
+const CalculationDetails = () => {
+  const [valueLand, setValueLand] = useAtom(valueLandAtom);
 
-const CalculatedPriceDetails: FC<CalculatedPriceDetailsProps> = ({ voltValue, minPricePerAcre, maxPricePerAcre, data, averagePrice }) => {
+  if (!valueLand.calculatedPrice) {
+    return null;
+  }
+
+  const voltValue = valueLand.calculatedPrice.price;
+  const minPricePerAcre = valueLand.calculatedPrice.range.min;
+  const maxPricePerAcre = valueLand.calculatedPrice.range.max;
+  const data = valueLand.calculatedPrice.properties.map((el) => el.price / el.arcage);
+  const averagePrice = valueLand.calculatedPrice.median_middle_price;
+
   const formattedData = data.map((el) => ({ value: el, percent: Math.floor((100 * el) / maxPricePerAcre) }));
 
   return (
@@ -63,4 +70,4 @@ const CalculatedPriceDetails: FC<CalculatedPriceDetailsProps> = ({ voltValue, mi
   );
 };
 
-export default CalculatedPriceDetails;
+export default CalculationDetails;

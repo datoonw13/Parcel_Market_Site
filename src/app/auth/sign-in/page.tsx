@@ -13,23 +13,21 @@ import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { signInUserAction } from "@/server-actions/user/actions";
-import { useAtom } from "jotai";
-import { valueLandAtom } from "@/atoms/value-land-atom";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SignInPage = () => {
   const router = useRouter();
-  const [valueLand, setValueLand] = useAtom(valueLandAtom);
+  const searchParams = useSearchParams()
   const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  console.log(valueLand, 22);
 
   const signIn = async (prevState: any, formData: FormData) => {
     const request = await signInUserAction(prevState, formData);
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
-      router.push(valueLand.sellOptions ? routes.valueLand.signature.fullUrl : routes.home.fullUrl);
+      const redirectTo = searchParams.get('from')
+      router.push(redirectTo ? `${redirectTo}?${searchParams.toString()}` : routes.home.fullUrl);
     }
   };
 
