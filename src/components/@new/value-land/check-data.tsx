@@ -24,12 +24,12 @@ const ValueLandCheckData = () => {
     ) {
       router.replace(routes.valueLand.fullUrl);
     }
-    if (
-      pathname === routes.valueLand.terms.fullUrl &&
-      (!valueLandData.lands || !valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand)
-    ) {
-      router.replace(routes.valueLand.fullUrl);
-    }
+    // if (
+    //   pathname === routes.valueLand.terms.fullUrl &&
+    //   (!valueLandData.lands || !valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand)
+    // ) {
+    //   router.replace(routes.valueLand.fullUrl);
+    // }
   };
 
   useEffect(() => {

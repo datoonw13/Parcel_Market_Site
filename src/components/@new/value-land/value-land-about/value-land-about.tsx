@@ -13,7 +13,7 @@ const AboutLand = async () => {
         <h1 className="text-lg font-semibold ">Did we find your property?</h1>
         <h2 className="text-sm text-grey-800">Use the map or list below to select your property.</h2>
       </div>
-      <AboutLandForm />
+      <AboutLandForm user={user} />
     </div>
   );
 };

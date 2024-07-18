@@ -8,11 +8,12 @@ import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IFindPropertyAbout } from "@/types/find-property";
 import routes from "@/helpers/routes";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { ISignInResponse } from "@/types/auth";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
@@ -20,31 +21,42 @@ import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
 import ValueLandSubmitTermsModal from "../terms/terms-modal";
 
-const AboutLandForm = () => {
+const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const params = new URLSearchParams();
   const isSmallDevice = useMediaQuery(768);
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const {
     handleSubmit,
-    formState: { isSubmitted, errors, isSubmitting, isValid },
+    formState: { isValid },
     setValue,
     watch,
+    reset,
   } = useForm<z.infer<typeof aboutLandSchema>>({
     resolver: zodResolver(aboutLandSchema),
   });
 
-  const onSubmit = handleSubmit(
-    (aboutLand) => {
-      setValueLandData((prev) => ({ ...prev, aboutLand }));
-      if (isSmallDevice) {
-        router.push(routes.valueLand.terms.fullUrl);
-      } else {
-        setShowTermsModal(true);
-      }
-    },
-    (err) => console.log(err, 22)
-  );
+  const onSubmit = handleSubmit((aboutLand) => {
+    setValueLandData((prev) => ({ ...prev, aboutLand }));
+    if (!user) {
+      params.set("from", pathname);
+      router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
+      return;
+    }
+    if (isSmallDevice) {
+      router.push(routes.valueLand.terms.fullUrl);
+    } else {
+      setShowTermsModal(true);
+    }
+  });
+
+  useEffect(() => {
+    if (valueLandData.aboutLand) {
+      reset({ ...valueLandData.aboutLand });
+    }
+  }, [reset, valueLandData.aboutLand]);
 
   // reset atom on success submit
 

@@ -4,6 +4,7 @@ import SimpleBar from "simplebar-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import routes from "@/helpers/routes";
+import { useEffect } from "react";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
 
