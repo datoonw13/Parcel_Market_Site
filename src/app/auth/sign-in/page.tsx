@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const SignInPage = () => {
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const ref = useRef<HTMLButtonElement | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -26,7 +26,7 @@ const SignInPage = () => {
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
-      const redirectTo = searchParams.get('from')
+      const redirectTo = searchParams.get("from");
       router.push(redirectTo ? `${redirectTo}?${searchParams.toString()}` : routes.home.fullUrl);
     }
   };

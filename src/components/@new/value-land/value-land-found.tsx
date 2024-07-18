@@ -10,9 +10,10 @@ import clsx from "clsx";
 import { calculateLandPriceAction } from "@/server-actions/value-land/actions";
 import toast from "react-hot-toast";
 import { IFindPropertyEstimatedPrice } from "@/types/find-property";
+import classes from "@/app/value-land/styles.module.css";
 import Button from "../shared/forms/Button";
+import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
-import Divider from "../shared/Divider";
 
 const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
 
@@ -59,54 +60,52 @@ const ValueLandFound = () => {
   }, [router, valueLand]);
 
   return (
-    <>
-      <div>
-        <Divider />
-        <div className="mx-4 md:mx-6 lg:mx-8 mb-6 mt-8 md:mt-6 space-y-3 md:space-y-2">
-          <h1 className="text-lg font-semibold">Did we find your property? </h1>
-          <h2 className="text-grey-800 text-sm">Use the map or list below to select your property.</h2>
-        </div>
+    <div className="h-full flex flex-col w-full gap-6">
+      <ValueLandStepper currentStep={2} />
+      <div className={clsx("space-y-3 md:space-y-2", classes["content-space-x"])}>
+        <h1 className="text-lg font-semibold ">Did we find your property?</h1>
+        <h2 className="text-sm text-grey-800">Use the map or list below to select your property.</h2>
       </div>
-      <div className="space-y-8 h-full justify-between gap-2 flex flex-col">
-        <div className="mx-4 md:mx-6 lg:mx-8 lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl h-full space-y-3 md:space-y-4">
-          <div className="rounded-2xl [&>div]:rounded-2xl h-60 sm:h-[230px] md:h-[220px] lg:h-[200px]">
-            {valueLand.lands && valueLand.lands.length > 0 && (
-              <Map
-                data={valueLand.lands.map((el) => ({
-                  centerCoordinate: [Number(el.properties.fields.lat), Number(el.properties.fields.lon)],
-                  polygon: el.geometry.coordinates,
-                  owner: el.properties.fields.owner,
-                  parcelNumber: el.properties.fields.parcelnumb,
-                  showMarker: true,
-                  markerColor: "default",
-                  popup: {
-                    owner: {
-                      label: "Owner",
-                      value: el.properties.fields.owner,
-                    },
-                    parcelNumber: {
-                      label: "Parcel Number",
-                      value: el.properties.fields.parcelnumb,
-                    },
-                    showSelectButton: !!(valueLand.lands && valueLand.lands.length > 1),
+      <div className={clsx("flex flex-col  w-full", classes["content-space-x"])}>
+        <div className="rounded-t-2xl [&>div]:rounded-t-2xl h-60 min-h-60 md:h-[220px] md:min-h-[220px]">
+          {valueLand.lands && valueLand.lands.length > 0 && (
+            <Map
+              data={valueLand.lands.map((el) => ({
+                centerCoordinate: [Number(el.properties.fields.lat), Number(el.properties.fields.lon)],
+                polygon: el.geometry.coordinates,
+                owner: el.properties.fields.owner,
+                parcelNumber: el.properties.fields.parcelnumb,
+                showMarker: true,
+                markerColor: "default",
+                popup: {
+                  owner: {
+                    label: "Owner",
+                    value: el.properties.fields.owner,
                   },
-                }))}
-                selectedParcelNumber={valueLand.selectedLand?.properties.fields.parcelnumb || ""}
-                onSelect={(parcelNumber) => {
-                  const item = valueLand.lands?.find((el) => el.properties.fields.parcelnumb === parcelNumber);
-                  if (item) {
-                    setValueLand((prev) => ({ ...prev, selectedLand: item }));
-                  }
-                }}
-                onDiscard={() => setValueLand((prev) => ({ ...prev, selectedLand: null }))}
-                zoom={5}
-                geolibInputCoordinates={valueLand.lands.map((el) => [Number(el.properties.fields.lat), Number(el.properties.fields.lon)])}
-              />
-            )}
-          </div>
+                  parcelNumber: {
+                    label: "Parcel Number",
+                    value: el.properties.fields.parcelnumb,
+                  },
+                  showSelectButton: !!(valueLand.lands && valueLand.lands.length > 1),
+                },
+              }))}
+              selectedParcelNumber={valueLand.selectedLand?.properties.fields.parcelnumb || ""}
+              onSelect={(parcelNumber) => {
+                const item = valueLand.lands?.find((el) => el.properties.fields.parcelnumb === parcelNumber);
+                if (item) {
+                  setValueLand((prev) => ({ ...prev, selectedLand: item }));
+                }
+              }}
+              onDiscard={() => setValueLand((prev) => ({ ...prev, selectedLand: null }))}
+              zoom={5}
+              geolibInputCoordinates={valueLand.lands.map((el) => [Number(el.properties.fields.lat), Number(el.properties.fields.lon)])}
+            />
+          )}
+        </div>
+        <div className="mt-3 lg:mt-0 lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-b-2xl border-t-0 w-full flex">
           <div
-            className=" border border-grey-100 rounded-2xl [&>div:not(:last-child)]:border-b [&>div:not(:last-child)]:border-b-grey-100 
-        [&>div:last-child]:rounded-b-2xl [&>div:first-child]:rounded-t-2xl"
+            className=" border border-grey-100 rounded-2xl [&>div:not(:last-child)]:border-b [&>div:not(:last-child)]:border-b-grey-100
+        [&>div:last-child]:rounded-b-2xl [&>div:first-child]:rounded-t-2xl flex flex-col w-full "
           >
             {valueLand.lands?.map((land) => (
               <div
@@ -114,7 +113,7 @@ const ValueLandFound = () => {
                 onClick={() => setValueLand((prev) => ({ ...prev, selectedLand: land }))}
                 className={clsx(
                   "flex justify-between gap-2 py-3 px-4 cursor-pointer transition-all duration-100 hover:bg-primary-main-50",
-                  land.properties.fields.parcelnumb_no_formatting === valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting &&
+                  land.properties.fields.parcelnumb_no_formatting !== valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting &&
                     "bg-primary-main-100"
                 )}
               >
@@ -132,16 +131,16 @@ const ValueLandFound = () => {
             ))}
           </div>
         </div>
-        <div className="border-t border-t-grey-100 flex flex-col sm:flex-row justify-end gap-3 px-4 md:px-6 lg:px-8 py-4">
-          <Button variant="secondary" onClick={() => router.push(routes.valueLand.fullUrl)}>
-            Back
-          </Button>
-          <Button onClick={onNext} loading={pending}>
-            Continue
-          </Button>
-        </div>
       </div>
-    </>
+      <div className={classes.action}>
+        <Button variant="secondary" onClick={() => router.push(routes.valueLand.fullUrl)}>
+          Back
+        </Button>
+        <Button onClick={onNext} loading={pending}>
+          Continue
+        </Button>
+      </div>
+    </div>
   );
 };
 

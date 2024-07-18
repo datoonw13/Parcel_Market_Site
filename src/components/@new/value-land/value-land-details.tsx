@@ -13,7 +13,6 @@ import { useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import classes from "@/app/value-land/styles.module.css";
 import clsx from "clsx";
-import SimpleBar from "simplebar-react";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
@@ -76,11 +75,13 @@ const ValueLandDetails = () => {
   }, [params, pathname, router, setValue]);
 
   return (
-    <div className="flex flex-col justify-between h-full overflow-auto">
-      <div className={clsx(classes["content-space-x"])}>
-        <ValueLandStepper currentStep={1} />
-        <h1 className="text-lg font-semibold mt-8 md:mt-6 my-6">Let’s locate your property using some basic information</h1>
-        <div className="lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl">
+    <div className="h-full flex flex-col w-full gap-6">
+      <ValueLandStepper currentStep={1} />
+      <div className={clsx("space-y-3 md:space-y-2", classes["content-space-x"])}>
+        <h1 className="text-lg font-semibold ">Let’s locate your property using some basic information?</h1>
+      </div>
+      <div className={classes["content-space-x"]}>
+        <div className={clsx("flex flex-col w-full lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl")}>
           <div className="space-y-6">
             <div className="space-y-3">
               <LabelWithInfo

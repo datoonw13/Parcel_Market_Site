@@ -1,30 +1,32 @@
 import { getUserAction } from "@/server-actions/user/actions";
+import classes from "@/app/value-land/styles.module.css";
+import clsx from "clsx";
 import CalculatedPriceDetails from "./caluclation-details";
 import SubmitLand from "./submit-land";
 import SaveCalculationData from "./save-calculation-data";
 import CalculationDetailsMap from "./calculatation-details-map";
-import Divider from "../../shared/Divider";
+import ValueLandStepper from "../value-land-stepper";
 
 const ValueLandCalculatedPrice = async () => {
   const user = await getUserAction();
   return (
     <>
-      <Divider />
-      <div className="mx-4 md:mx-6 lg:mx-8 pb-4 md:pb-6 lg:pb-8 space-y-12 mt-6">
-        <div className="space-y-4 md:space-y-6">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between">
-            <div className="space-y-2">
-              <h1 className="text-lg font-semibold">The average price for similar sized property in your area</h1>
-              <h2 className="text-grey-800 text-sm">
-                To view, save, or export sales data used in this calculation, you must sign in or create an account with us.
-              </h2>
-            </div>
-            <SaveCalculationData user={user} />
+      <div className="h-full flex flex-col w-full gap-6 pb-4 sm:pb-5 md:pb-6 lg:pb-8">
+        <ValueLandStepper currentStep={2} />
+        <div className={clsx("flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between", classes["content-space-x"])}>
+          <div className="space-y-2">
+            <h1 className="text-lg font-semibold">The average price for similar sized property in your area</h1>
+            <h2 className="text-grey-800 text-sm">
+              To view, save, or export sales data used in this calculation, you must sign in or create an account with us.
+            </h2>
           </div>
-          <CalculatedPriceDetails />
+          <SaveCalculationData user={user} />
         </div>
-        <SubmitLand />
-        <CalculationDetailsMap />
+        <div className={clsx("space-y-12", classes["content-space-x"])}>
+          <CalculatedPriceDetails />
+          <SubmitLand />
+          <CalculationDetailsMap />
+        </div>
       </div>
     </>
   );

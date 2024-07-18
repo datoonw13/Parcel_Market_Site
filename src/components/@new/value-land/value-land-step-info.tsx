@@ -33,11 +33,13 @@ const ValueLandStepInfo = () => {
   const pathname = usePathname();
   const { stepDesc, stepTitle } = getStepInfo(pathname);
 
-  return (stepTitle || stepDesc) &&   (
-    <div className="space-y-3 px-4 md:px-6 lg:px-8">
-      {stepTitle && <h1 className="text-lg sm:text-xl md:text-2xl font-bold">{stepTitle}</h1>}
-      {stepDesc && <h6 className="font-medium text-sm md:text-base text-grey-800">{stepDesc}</h6>}
-    </div>
+  return (
+    (stepTitle || stepDesc) && (
+      <div className="space-y-3 px-4 md:px-6 lg:px-8">
+        {stepTitle && <h1 className="text-lg sm:text-xl md:text-2xl font-bold">{stepTitle}</h1>}
+        {stepDesc && <h6 className="font-medium text-sm md:text-base text-grey-800">{stepDesc}</h6>}
+      </div>
+    )
   );
 };
 

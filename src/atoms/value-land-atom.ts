@@ -301,5 +301,5 @@ export const valueLandAtom = atom<{
   selectedLand: null | IMap[0];
   calculatedPrice: IFindPropertyEstimatedPriceResponse | null;
   sellOptions: IAuthSliceInitial["selectedParcelOptions"] | null;
-  sellerType: ISellProperty['sellerType'] | null
+  sellerType: ISellProperty["sellerType"] | null;
 }>({ lands: null, selectedLand: null, calculatedPrice: null, sellOptions: null, sellerType: null, ...testData });

@@ -21,29 +21,31 @@ const currentStep = (path: string) => {
 const steps = 3;
 
 const ValueLandStepper = ({ currentStep }: { currentStep: number }) => (
-  <div className={clsx("relative flex items-center my-6 h-8")}>
-    <Divider />
-    <div className="absolute flex justify-between gap-2 w-full">
-      {new Array(steps)
-        .fill(0)
-        .map((_, i) => i + 1)
-        .map((step) =>
-          step >= currentStep ? (
-            <div
-              className={clsx(
-                "w-8 h-8 rounded-full border flex items-center justify-center bg-white z-10 top-[-50%] transform-y-[50%] font-medium",
-                currentStep === step ? "border-success" : "border-grey-200"
-              )}
-              key={uuid()}
-            >
-              {step}
-            </div>
-          ) : (
-            <div className="w-8 h-8 bg-success rounded-full flex justify-center items-center" key={uuid()}>
-              <CheckIcon3 color="white" className="!w-6 !h-4" />
-            </div>
-          )
-        )}
+  <div className={clsx("border-b border-b-grey-100", classes["content-space-x"])}>
+    <div className={clsx("relative flex items-center my-6 h-8")}>
+      <Divider />
+      <div className="absolute flex justify-between gap-2 w-full">
+        {new Array(steps)
+          .fill(0)
+          .map((_, i) => i + 1)
+          .map((step) =>
+            step >= currentStep ? (
+              <div
+                className={clsx(
+                  "w-8 h-8 rounded-full border flex items-center justify-center bg-white z-10 top-[-50%] transform-y-[50%] font-medium",
+                  currentStep === step ? "border-success" : "border-grey-200"
+                )}
+                key={uuid()}
+              >
+                {step}
+              </div>
+            ) : (
+              <div className="w-8 h-8 bg-success rounded-full flex justify-center items-center" key={uuid()}>
+                <CheckIcon3 color="white" className="!w-6 !h-4" />
+              </div>
+            )
+          )}
+      </div>
     </div>
   </div>
 );
