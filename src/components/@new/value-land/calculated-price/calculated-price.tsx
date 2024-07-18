@@ -3,12 +3,14 @@ import CalculatedPriceDetails from "./caluclation-details";
 import SubmitLand from "./submit-land";
 import SaveCalculationData from "./save-calculation-data";
 import CalculationDetailsMap from "./calculatation-details-map";
+import Divider from "../../shared/Divider";
 
 const ValueLandCalculatedPrice = async () => {
   const user = await getUserAction();
   return (
     <>
-      <div className="mx-4 md:mx-6 lg:mx-8 pb-4 md:pb-6 lg:pb-8 space-y-12">
+      <Divider />
+      <div className="mx-4 md:mx-6 lg:mx-8 pb-4 md:pb-6 lg:pb-8 space-y-12 mt-6">
         <div className="space-y-4 md:space-y-6">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between">
             <div className="space-y-2">
