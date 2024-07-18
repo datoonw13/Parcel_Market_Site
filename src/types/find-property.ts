@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { IPagination, ResponseType } from "./common";
 
 export interface IFindPropertyInfo {
@@ -10,16 +12,7 @@ export interface IFindPropertyInfo {
   county: string | null;
 }
 
-export interface IFindPropertyAbout {
-  waterFeature: boolean | null;
-  waterFront: boolean | null;
-  langCoverType: string | null;
-  wetProperty: string | null;
-  propertyRestriction: string | null;
-  propertyAccess: string | null;
-  improvementsValue: number | null;
-  agreement: boolean;
-}
+export type IFindPropertyAbout = z.infer<typeof aboutLandSchema>;
 
 export interface IRegridReq {
   state: string;

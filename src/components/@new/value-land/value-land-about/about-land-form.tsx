@@ -2,70 +2,118 @@
 
 import clsx from "clsx";
 import classes from "@/app/value-land/styles.module.css";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { aboutLandSchema } from "@/zod-validations/value-land-validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { IFindPropertyAbout } from "@/types/find-property";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/TextField/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
-import { CalendarIcon1 } from "../../icons/CalendarIcons";
 
-const AboutLandForm = () => (
-  <>
-    <div className={classes["content-space-x"]}>
-      <div className={clsx("gap-6 md:gap-8 flex flex-col w-full lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl")}>
-        <div className="space-y-3 w-full">
-          <LabelWithInfo
-            labelClassName="text-sm"
-            label="1. Property Name"
-            description="Give your property a unique name. This usually includes a feature on the property such as the road name, creek name, etc"
-          />
-          <TextField placeholder="Type here" className="w-full" />
-        </div>
-        <div className="space-y-3 w-full">
-          <LabelWithInfo
-            labelClassName="text-sm"
-            label="2. Land Description"
-            description="Briefly describe your property's features as well as the local area."
-          />
-          <div className="w-full flex flex-col justify-end gap-1">
-            <TextArea rows={5} placeholder="Type here" value="" onChange={() => {}} />
-            <p className="text-xss text-grey-600 text-end">0/300</p>
+const AboutLandForm = () => {
+  const {
+    handleSubmit,
+    formState: { isSubmitted, errors, isSubmitting, isValid },
+    setValue,
+    watch,
+  } = useForm<z.infer<typeof aboutLandSchema>>({
+    resolver: zodResolver(aboutLandSchema),
+  });
+
+  const onSubmit = handleSubmit(
+    () => {},
+    (err) => console.log(err, 22)
+  );
+
+  return (
+    <>
+      <div className={classes["content-space-x"]}>
+        <div className={clsx("gap-6 md:gap-8 flex flex-col w-full lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl")}>
+          <div className="space-y-3 w-full">
+            <LabelWithInfo
+              labelClassName="text-sm"
+              label="1. Property Name"
+              description="Give your property a unique name. This usually includes a feature on the property such as the road name, creek name, etc"
+            />
+            <TextField
+              placeholder="Type here"
+              className="w-full"
+              value={watch("title")}
+              onChange={(value) => setValue("title", value, { shouldValidate: true })}
+            />
           </div>
-        </div>
-        {list.map((item, i) => (
-          <div className="space-y-3" key={item.key}>
-            <p className="text-sm font-medium">
-              {i + 3}. {item.label}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {item.options.map((opt) => (
-                <div key={item.key + opt.label} className="cursor-pointer border border-grey-100 rounded-3xl py-1 px-4 text-xs font-medium">
-                  {opt.label}
-                </div>
-              ))}
+          <div className="space-y-3 w-full">
+            <LabelWithInfo
+              labelClassName="text-sm"
+              label="2. Land Description"
+              description="Briefly describe your property's features as well as the local area."
+            />
+            <div className="w-full flex flex-col justify-end gap-1">
+              <TextArea
+                rows={5}
+                placeholder="Type here"
+                value={watch("description")}
+                onChange={(value) => setValue("description", value.length <= 300 ? value : "", { shouldValidate: true })}
+              />
+              <p className="text-xss text-grey-600 text-end">{watch("description")?.length ?? 0}/300</p>
             </div>
           </div>
-        ))}
-        <div className="space-y-3 w-full">
-          <p className="font-medium text-sm">10. Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.</p>
-          <TextField prefix="$" suffix=" USD" type="number" placeholder="Type here" onChange={(value) => console.log(value, 22)} />
+          {list.map((item, i) => (
+            <div className="space-y-3" key={item.key}>
+              <p className="text-sm font-medium">
+                {i + 3}. {item.label}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {item.options.map((opt) => (
+                  <div
+                    key={item.key + opt.label}
+                    className={clsx(
+                      "cursor-pointer border border-grey-100 rounded-3xl py-1 px-4 text-xs font-medium",
+                      watch(item.key as keyof IFindPropertyAbout) === opt.value && "bg-primary-main-100 border-primary-main-200"
+                    )}
+                    onClick={() => setValue(item.key as keyof IFindPropertyAbout, opt.value, { shouldValidate: true })}
+                  >
+                    {opt.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          <div className="space-y-3 w-full">
+            <p className="font-medium text-sm">10. Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.</p>
+            <TextField
+              prefix="$"
+              suffix=" USD"
+              type="number"
+              placeholder="Type here"
+              value={watch("improvmentsValue")?.toString() ?? ""}
+              onChange={(value) => setValue("improvmentsValue", value ? Number(value) : undefined, { shouldValidate: true })}
+            />
+          </div>
+          <CheckBox
+            checked={watch("agreement")}
+            onChange={() => setValue("agreement", !watch("agreement"), { shouldValidate: true })}
+            label={
+              <p className="space-x-1">
+                Yes, I understand and agree to theParcel Market <span className="text-primary-main underline">Terms of Service</span> and
+                <span className="text-primary-main underline">Privacy Policy</span>.
+              </p>
+            }
+          />
         </div>
-        <CheckBox
-          label={
-            <p className="space-x-1">
-              Yes, I understand and agree to theParcel Market <span className="text-primary-main underline">Terms of Service</span> and
-              <span className="text-primary-main underline">Privacy Policy</span>.
-            </p>
-          }
-        />
       </div>
-    </div>
-    <div className={classes.action}>
-      <Button variant="secondary">Back</Button>
-      <Button>Add Land</Button>
-    </div>
-  </>
-);
+      <div className={classes.action}>
+        <Button variant="secondary">Back</Button>
+        <Button onClick={onSubmit} disabled={!isValid}>
+          Add Land
+        </Button>
+      </div>
+    </>
+  );
+};
 
 export default AboutLandForm;
 
@@ -148,7 +196,7 @@ const list = [
   },
   {
     label: "How wet is your property?",
-    key: "topography",
+    key: "wet",
     options: [
       {
         label: "Wet",
