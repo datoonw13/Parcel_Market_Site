@@ -1,4 +1,4 @@
-import ValueLandCalculatedPrice from "@/components/@new/value-land/value-land-calculated-price";
+import ValueLandCalculatedPrice from "@/components/@new/value-land/calculated-price/calculated-price";
 
 const LandValue = () => <ValueLandCalculatedPrice />;
 

@@ -87,6 +87,7 @@ export interface IFindPropertyEstimatedPriceResponse {
     id: number;
     dateCreated: Date;
   }[];
+  median_middle_price: number;
 }
 
 export interface ISellProperty {

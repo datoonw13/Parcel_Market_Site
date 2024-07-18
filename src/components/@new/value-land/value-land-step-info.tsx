@@ -18,8 +18,8 @@ const getStepInfo = (path: string) => {
       };
     case routes.valueLand.value.fullUrl:
       return {
-        stepTitle: "The average sale price for similar property in your area",
-        stepDesc: "",
+        stepTitle: null,
+        stepDesc: null,
       };
     default:
       return {
@@ -33,8 +33,8 @@ const ValueLandStepInfo = () => {
   const pathname = usePathname();
   const { stepDesc, stepTitle } = getStepInfo(pathname);
 
-  return (
-    <div className="space-y-3">
+  return (stepTitle || stepDesc) &&   (
+    <div className="space-y-3 px-4 md:px-6 lg:px-8">
       {stepTitle && <h1 className="text-lg sm:text-xl md:text-2xl font-bold">{stepTitle}</h1>}
       {stepDesc && <h6 className="font-medium text-sm md:text-base text-grey-800">{stepDesc}</h6>}
     </div>

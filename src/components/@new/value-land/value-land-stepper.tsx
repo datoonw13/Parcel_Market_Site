@@ -28,9 +28,9 @@ const ValueLandStepper = () => {
   const pathname = usePathname();
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
 
-  useEffect(() => {
-    setValueLand({ calculatedPrice: null, lands: null, selectedLand: null, sellOptions: null });
-  }, [setValueLand]);
+  // useEffect(() => {
+  //   setValueLand({ calculatedPrice: null, lands: null, selectedLand: null, sellOptions: null });
+  // }, [setValueLand]);
 
   return (
     <div className="relative h-8 flex items-center">

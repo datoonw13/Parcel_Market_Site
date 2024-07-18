@@ -19,9 +19,7 @@ const ValueLandLayout = ({ children }: { children: ReactNode }) => (
           <ValueLandStepper />
         </div>
         <Divider />
-        <div className="px-4 md:px-6 lg:px-8">
           <ValueLandStepInfo />
-        </div>
         {children}
       </div>
       <div className="mx-5 sm:mx-7 md:mx-10 lg:mx-13 xl:mx-16">
