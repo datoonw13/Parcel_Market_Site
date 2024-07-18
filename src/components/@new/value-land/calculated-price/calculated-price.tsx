@@ -52,24 +52,26 @@ const ValueLandCalculatedPrice = () => {
 
   return (
     <div className="mx-4 md:mx-6 lg:mx-8 ">
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between">
-        <div className="space-y-2">
-          <h1 className="text-lg font-semibold">The average price for similar sized property in your area</h1>
-          <h2 className="text-grey-800 text-sm">
-            To view, save, or export sales data used in this calculation, you must sign in or create an account with us.
-          </h2>
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between">
+          <div className="space-y-2">
+            <h1 className="text-lg font-semibold">The average price for similar sized property in your area</h1>
+            <h2 className="text-grey-800 text-sm">
+              To view, save, or export sales data used in this calculation, you must sign in or create an account with us.
+            </h2>
+          </div>
+          <Button className="w-full sm:w-fit min-w-max">Save Search Data</Button>
         </div>
-        <Button className="w-full sm:w-fit min-w-max">Save Search Data</Button>
+        {valueLand.calculatedPrice && (
+          <CalculatedPriceDetails
+            voltValue={valueLand.calculatedPrice.price}
+            minPricePerAcre={valueLand.calculatedPrice.range.min}
+            maxPricePerAcre={valueLand.calculatedPrice.range.max}
+            data={valueLand.calculatedPrice.properties.map((el) => el.price / el.arcage)}
+            averagePrice={valueLand.calculatedPrice.median_middle_price}
+          />
+        )}
       </div>
-      {valueLand.calculatedPrice && (
-        <CalculatedPriceDetails
-          voltValue={valueLand.calculatedPrice.price}
-          minPricePerAcre={valueLand.calculatedPrice.range.min}
-          maxPricePerAcre={valueLand.calculatedPrice.range.max}
-          data={valueLand.calculatedPrice.properties.map((el) => el.price / el.arcage)}
-          averagePrice={valueLand.calculatedPrice.median_middle_price}
-        />
-      )}
     </div>
   );
 };

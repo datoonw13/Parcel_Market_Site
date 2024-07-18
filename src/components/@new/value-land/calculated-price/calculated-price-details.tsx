@@ -25,7 +25,7 @@ const CalculatedPriceDetails: FC<CalculatedPriceDetailsProps> = ({ voltValue, mi
           <div className="h-1.5 rounded-3xl bg-primary-main absolute w-[50%]" />
           <div
             className={`
-            left-[48%] translate-x-[50%]
+            left-[50%] -translate-x-1/2
             w-5 h-5 rounded-full bg-white
             absolute top-1/2 -translate-y-1/2 
             after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:w-4 after:h-4 
