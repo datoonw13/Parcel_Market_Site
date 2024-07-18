@@ -329,7 +329,7 @@ const AboutLand = async () => {
     <>
       <h1 className="text-lg font-semibold mx-4 md:mx-6 lg:mx-8 md:mt-1.5 mb-6">Tell us about your property </h1>
       <div className="space-y-8 h-full justify-between gap-2 flex flex-col overflow-hidden">
-        <div className="mx-4 md:mx-6 lg:mx-8 lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl h-full space-y-3 md:space-y-4 overflow-hidden">
+        <div className="mx-4 md:mx-6 lg:mx-8 lg:p-6 xl:p-8 lg:border lg:border-grey-100 h-full space-y-3 md:space-y-4 overflow-hidden">
           <AboutLandForm />
         </div>
         <div className="border-t border-t-grey-100 flex flex-col sm:flex-row justify-end gap-3 px-4 md:px-6 lg:px-8 py-4">

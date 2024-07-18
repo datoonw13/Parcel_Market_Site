@@ -13,8 +13,7 @@ const ValueLandLayout = ({ children }: { children: ReactNode }) => (
           <AppBarMini />
         </div>
       </div>
-      <div className="overflow-hidden grid border border-grey-100 md:border-none md:shadow-4 pt-6 rounded-2xl h-full mx-5 sm:mx-7 md:mx-10 lg:mx-13 xl:mx-16">
-        <ValueLandStepper />
+      <div className="overflow-hidden flex flex-col border border-grey-100 md:border-none md:shadow-4 pt-6 rounded-2xl h-full mx-5 sm:mx-7 md:mx-10 lg:mx-13 xl:mx-16">
         {children}
       </div>
       <div className="mx-5 sm:mx-7 md:mx-10 lg:mx-13 xl:mx-16">

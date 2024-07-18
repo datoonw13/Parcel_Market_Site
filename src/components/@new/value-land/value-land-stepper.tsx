@@ -2,9 +2,6 @@
 
 import { uuid } from "short-uuid";
 import clsx from "clsx";
-import { useAtom } from "jotai";
-import { valueLandAtom } from "@/atoms/value-land-atom";
-import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import routes from "@/helpers/routes";
 import { CheckIcon3 } from "../icons/CheckIcons";
@@ -24,12 +21,6 @@ const steps = 3;
 
 const ValueLandStepper = () => {
   const pathname = usePathname();
-  const [valueLand, setValueLand] = useAtom(valueLandAtom);
-
-  // useEffect(() => {
-  //   setValueLand({ calculatedPrice: null, lands: null, selectedLand: null, sellOptions: null });
-  // }, [setValueLand]);
-
   return (
     pathname !== routes.valueLand.about.fullUrl && (
       <div className="relative h-8 flex items-center mx-4 md:mx-6 lg:mx-8 mb-6">
