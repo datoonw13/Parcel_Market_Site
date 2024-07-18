@@ -16,9 +16,12 @@ import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
 import { useState } from "react";
 import ValueLandSubmitTermsModal from "../terms/terms-modal";
+import { useAtom } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
 
 const AboutLandForm = () => {
   const router = useRouter();
+  const [valueLandData, setValueLandData] = useAtom(valueLandAtom) 
   const [showTermsModal, setShowTermsModal] = useState(false)
   const {
     handleSubmit,
@@ -30,9 +33,13 @@ const AboutLandForm = () => {
   });
 
   const onSubmit = handleSubmit(
-    () => {},
+    (aboutLand) => {
+      setValueLandData(prev => ({...prev, aboutLand}))
+      setShowTermsModal(true)
+    },
     (err) => console.log(err, 22)
   );
+  
 
   // reset atom on success submit
 
@@ -99,7 +106,11 @@ const AboutLandForm = () => {
               type="number"
               placeholder="Type here"
               value={watch("improvmentsValue")?.toString() ?? ""}
-              onChange={(value) => setValue("improvmentsValue", value ? Number(value) : undefined, { shouldValidate: true })}
+              onChange={(value) => {
+                console.log(value, 22);
+                
+                setValue("improvmentsValue", value ? Number(value) : undefined, { shouldValidate: true })
+              }}
             />
           </div>
           <CheckBox
