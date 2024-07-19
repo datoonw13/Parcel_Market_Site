@@ -1,22 +1,25 @@
 "use client";
 
 import { numFormatter } from "@/helpers/common";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { LocationIcon2 } from "../../icons/LocationIcons";
 
 const CalculationDetails = () => {
-  const [valueLand, setValueLand] = useAtom(valueLandAtom);
+  const valueLandData = useAtomValue(valueLandAtom);
 
-  if (!valueLand.calculatedPrice) {
+  if (!valueLandData.calculatedPrice) {
     return null;
   }
 
-  const voltValue = valueLand.calculatedPrice.price;
-  const minPricePerAcre = valueLand.calculatedPrice.range.min;
-  const maxPricePerAcre = valueLand.calculatedPrice.range.max;
-  const data = valueLand.calculatedPrice.properties.map((el) => el.price / el.arcage);
-  const averagePrice = valueLand.calculatedPrice.median_middle_price;
+  const voltValue = valueLandData.calculatedPrice.price;
+  const minPricePerAcre = valueLandData.calculatedPrice.range.min;
+  const maxPricePerAcre = valueLandData.calculatedPrice.range.max;
+  const data = valueLandData.calculatedPrice.properties.map((el) => el.price / el.arcage);
+  const averagePrice = (
+    valueLandData.calculatedPrice.properties.reduce((acc, cur) => acc + cur.price / cur.arcage, 0) /
+    valueLandData.calculatedPrice.properties.length
+  ).toFixed(2);
 
   const formattedData = data.map((el) => ({ value: el, percent: Math.floor((100 * el) / maxPricePerAcre) }));
 

@@ -5,11 +5,15 @@ import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import routes from "@/helpers/routes";
 import { useEffect, useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 
 const ValueLendTerms = () => {
+  const [values, setValues] = useState<typeof valueLandData | null>(null);
+  const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const [agreed, setAgreed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();

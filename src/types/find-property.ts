@@ -83,20 +83,34 @@ export interface IFindPropertyEstimatedPriceResponse {
   median_middle_price: number;
 }
 
-export interface ISellProperty {
-  state: string;
+export interface ISellProperty extends IFindPropertyAbout {
+  sellerType: "instantsale" | "sale";
   county: string;
   propertyType: string;
-  acrage: number;
+  acrage: string;
   parcelNumber: string;
-  sellerType: "instantsale" | "sale";
   owner: string;
-  salePrice: number;
-  accepted: boolean;
+  salePrice: string;
+  accepted: string;
   coordinates: string;
   lat: string;
   lon: string;
+  propertyId: string;
 }
+
+// state: selectedRegridItem?.properties.fields.state2,
+// county: selectedRegridItem?.properties.fields.county,
+// propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
+// acrage: selectedRegridItem.properties.fields.ll_gisacre,
+// parcelNumber: selectedRegridItem?.properties.fields.parcelnumb_no_formatting,
+// sellerType,
+// owner: selectedRegridItem.properties.fields.owner,
+// salePrice: price || 0,
+// accepted: true,
+// coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
+// lat: selectedRegridItem.properties.fields.lat,
+// lon: selectedRegridItem.properties.fields.lon,
+// propertyId,
 
 export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout, "agreement"> {
   user: { id: string; name: string; email: string };

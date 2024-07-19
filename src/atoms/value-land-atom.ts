@@ -11,5 +11,5 @@ export const valueLandAtom = atom<{
   calculatedPrice: IFindPropertyEstimatedPriceResponse | null;
   sellOptions: IAuthSliceInitial["selectedParcelOptions"] | null;
   sellerType: ISellProperty["sellerType"] | null;
-  aboutLand: z.infer<typeof aboutLandSchema> | null
+  aboutLand: z.infer<typeof aboutLandSchema> | null;
 }>({ lands: null, selectedLand: null, calculatedPrice: null, sellOptions: null, sellerType: null, aboutLand: null });

@@ -107,7 +107,7 @@ const ValueLandFound = () => {
                 onClick={() => setValueLand((prev) => ({ ...prev, selectedLand: land }))}
                 className={clsx(
                   "flex justify-between gap-2 py-3 px-4 cursor-pointer transition-all duration-100 hover:bg-primary-main-50",
-                  land.properties.fields.parcelnumb_no_formatting !== valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting &&
+                  land.properties.fields.parcelnumb_no_formatting === valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting &&
                     "bg-primary-main-100"
                 )}
               >

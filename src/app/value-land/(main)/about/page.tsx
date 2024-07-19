@@ -1,7 +1,5 @@
 import AboutLand from "@/components/@new/value-land/value-land-about/value-land-about";
 
-const ValueLandAboutPage = async () => {
-  return <AboutLand  />;
-};
+const ValueLandAboutPage = async () => <AboutLand />;
 
 export default ValueLandAboutPage;

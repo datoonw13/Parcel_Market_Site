@@ -8,13 +8,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import Button from "../../shared/forms/Button";
 
-const ACTION = "saveSearchData";
-
 const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
   const [saveDataPending, setSaveDataPending] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const saveSearchData = useCallback(async () => {
     if (user) {
@@ -24,6 +23,7 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
         toast.error(errorMessage);
       } else {
         toast.success("Search data successfully saved");
+        setSaved(true);
       }
       setSaveDataPending(false);
     } else {
@@ -40,9 +40,11 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
   }, [params, router, saveSearchData, searchParams]);
 
   return (
-    <Button onClick={saveSearchData} loading={saveDataPending} className="w-full sm:w-fit min-w-max">
-      Save Search Data
-    </Button>
+    !saved && (
+      <Button onClick={saveSearchData} loading={saveDataPending} className="w-full sm:w-fit min-w-max">
+        Save Search Data
+      </Button>
+    )
   );
 };
 

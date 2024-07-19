@@ -98,7 +98,7 @@ const TextField = (props: TextFieldProps) => {
           `
           )}
           value={value}
-          onValueChange={e => handleChange(e.value)}
+          onValueChange={(e) => handleChange(e.value)}
           getInputRef={inputRef}
           placeholder=" "
           disabled={disabled}
