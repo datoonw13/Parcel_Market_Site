@@ -74,7 +74,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
             <TextField
               placeholder="Type here"
               className="w-full"
-              value={watch("title")}
+              value={watch("title") ?? ''}
               onChange={(value) => setValue("title", value, { shouldValidate: true })}
             />
           </div>
@@ -124,8 +124,6 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
               placeholder="Type here"
               value={watch("improvmentsValue")?.toString() ?? ""}
               onChange={(value) => {
-                console.log(value, 22);
-
                 setValue("improvmentsValue", value ? Number(value) : undefined, { shouldValidate: true });
               }}
             />

@@ -4,8 +4,8 @@ import SimpleBar from "simplebar-react";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 import routes from "@/helpers/routes";
-import { useEffect, useState } from "react";
-import { useAtom, useAtomValue } from "jotai";
+import { useState } from "react";
+import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { sellLendAction } from "@/server-actions/value-land/actions";
 import { ISellProperty } from "@/types/find-property";
@@ -14,7 +14,6 @@ import CheckBox from "../../shared/forms/CheckBox";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 
 const ValueLendTerms = () => {
-  const [values, setValues] = useState<typeof valueLandData | null>(null);
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const [agreed, setAgreed] = useState(false);
   const pathname = usePathname();
@@ -22,12 +21,12 @@ const ValueLendTerms = () => {
   const [openModal, setOpenModal] = useState<"error" | "success" | null>(null);
   const [landId, setLendId] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
+  const [error, setError] = useState('')
 
   const handleSubmit = async () => {
-    if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand) {
+    if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand || !valueLandData.sellerType) {
       return;
     }
-    const about = valueLandData.aboutLand!;
     const reqData: ISellProperty = {
       ...valueLandData.aboutLand,
       accepted: true,
@@ -42,15 +41,20 @@ const ValueLendTerms = () => {
       owner: valueLandData.selectedLand.properties.fields.owner,
       parcelNumber: valueLandData.selectedLand.properties.fields.parcelnumb_no_formatting,
       propertyId: valueLandData.calculatedPrice.id,
-      sellerType: "sale",
+      sellerType: valueLandData.sellerType,
       salePrice: valueLandData.calculatedPrice.price,
     };
-    const { errorMessage, data } = await sellLendAction(reqData);
     setPending(true);
-    // const id = await sellLendActionTest();
+    const { errorMessage, data } = await sellLendAction(reqData);
     setPending(false);
-    setOpenModal("success");
-    // setLendId(id);
+    if(errorMessage) {
+      setError(errorMessage)
+      setOpenModal('error')
+    }
+    else {
+      setOpenModal("success");
+      setLendId(data)
+    }
   };
 
   const closeModal = () => {
@@ -58,6 +62,9 @@ const ValueLendTerms = () => {
       router.push(routes.user.listings.fullUrl);
     } else {
       setOpenModal(null);
+      if(error === 'Posting already exists') {
+        router.push(routes.marketplace.fullUrl)
+      }
     }
   };
 
@@ -73,13 +80,15 @@ const ValueLendTerms = () => {
     <>
       <ResponsiveWarningModal
         variant={openModal === "success" ? "success" : "error"}
-        title={openModal === "success" ? "Land added" : "Something occurred"}
+        title={openModal === "success" ? "Land added" : error}
         description={openModal === "success" ? "Congratulations! Your Listing has posted to Parcel Marketplace." : "Please try again"}
         open={!!openModal}
         closeModal={closeModal}
         onCancel={closeModal}
         cancelLabel="Close"
         onOK={onOK}
+        okPending={pending}
+        disableOK={error === 'Posting already exists'}
         okLabel={openModal === "success" ? "View Land" : "Try Again"}
       />
       <div className="flex flex-col justify-between h-full overflow-hidden">

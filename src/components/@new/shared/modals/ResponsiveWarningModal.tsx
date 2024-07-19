@@ -17,11 +17,13 @@ interface ResponsiveWarningModalProps {
   onOK: () => void;
   okPending?: boolean;
   okLabel?: string;
+  disableOK?: boolean;
   onCancel: () => void;
   cancelLabel?: string;
   variant?: "success" | "error";
   SuccessIcon?: FC<{ color?: string }>;
   ErrorIcon?: FC<{ color?: string }>;
+  
 }
 const Content: FC<ResponsiveWarningModalProps> = ({
   open,
@@ -36,8 +38,9 @@ const Content: FC<ResponsiveWarningModalProps> = ({
   okLabel,
   onCancel,
   cancelLabel,
+  disableOK
 }) => (
-  <div className="pt-1 pb-11 px-5 flex flex-col justify-center items-center md:bg-white md:rounded-2xl md:p-6 relative">
+  <div className="pt-1 pb-11 px-5 flex flex-col justify-center items-center md:bg-white md:rounded-2xl md:p-6 relative max-w-sm w-full">
     <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6 hidden md:flex absolute top-6 right-6" onClick={closeModal}>
       <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
     </Button>
@@ -54,10 +57,10 @@ const Content: FC<ResponsiveWarningModalProps> = ({
       <p className="text-center text-grey-800 text-sm">{description}</p>
     </div>
     <div className="flex flex-col-reverse md:flex-row gap-3 w-full">
-      <Button className="md:w-full" variant="secondary" onClick={onCancel}>
+      <Button className="md:min-w-max md:w-full" variant="secondary" onClick={onCancel}>
         {cancelLabel || "Cancel"}
       </Button>
-      <Button className="md:w-full" onClick={onOK} loading={okPending} color={variant === "success" ? "default" : "error"}>
+      <Button className="md:min-w-max md:w-full" onClick={onOK} loading={okPending} color={variant === "success" ? "default" : "error"} disabled={disableOK}>
         {okLabel || "Accept"}
       </Button>
     </div>

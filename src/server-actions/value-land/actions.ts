@@ -75,9 +75,9 @@ export const calculateLandPriceAction = async (
   }
 };
 
-export const sellLendAction = async (payload: ISellProperty): Promise<ResponseModel<null>> => {
+export const sellLendAction = async (payload: ISellProperty): Promise<ResponseModel<number | null>> => {
   try {
-    const request = await fetcher<null>(`selling-properties`, {
+    const request = await fetcher<ISellProperty>(`selling-properties`, {
       method: "POST",
       body: JSON.stringify({ ...payload, acrage: Number(payload.acrage) }),
       cache: "no-store",
@@ -85,7 +85,7 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
     revalidateTag(userListingsTag);
     revalidateTag(marketplaceTag);
     return {
-      data: request,
+      data: request.propertyId,
       errorMessage: null,
     };
   } catch (error) {
