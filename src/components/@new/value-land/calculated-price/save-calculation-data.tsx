@@ -13,7 +13,6 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
   const [saveDataPending, setSaveDataPending] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   const saveSearchData = useCallback(async () => {
     if (user) {
@@ -23,7 +22,7 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
         toast.error(errorMessage);
       } else {
         toast.success("Search data successfully saved");
-        setSaved(true);
+        router.replace(routes.valueLand.value.fullUrl);
       }
       setSaveDataPending(false);
     } else {
@@ -31,16 +30,16 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
       router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
     }
   }, [params, router, user]);
+  
 
   useEffect(() => {
     if (params.get("from")) {
       saveSearchData();
-      router.replace(routes.valueLand.value.fullUrl);
     }
   }, [params, router, saveSearchData, searchParams]);
 
   return (
-    !saved && (
+    (saveDataPending || !user) && (
       <Button onClick={saveSearchData} loading={saveDataPending} className="w-full sm:w-fit min-w-max">
         Save Search Data
       </Button>

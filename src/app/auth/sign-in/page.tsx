@@ -29,6 +29,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
       if (params.get("from")) {
         const fromUrl = params.get("from");
         params.delete("from");
+        params.set('from', routes.auth.signIn.fullUrl)
         const newLocation = `${fromUrl}?${params.toString()}`;
         router.replace(newLocation);
         return;

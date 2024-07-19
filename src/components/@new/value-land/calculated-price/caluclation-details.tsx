@@ -62,7 +62,7 @@ const CalculationDetails = () => {
         </p>
         <p className="text-xs text-grey-600">
           <span className="md:hidden">Average</span> Per Acre:{" "}
-          <span className="text-black font-medium">{numFormatter.format(averagePrice)}</span>
+          <span className="text-black font-medium">{numFormatter.format(Number(averagePrice))}</span>
         </p>
         <p className="text-xs text-grey-600">
           <span className="md:hidden">Maximum</span> Per Acre:{" "}

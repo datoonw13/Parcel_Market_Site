@@ -7,6 +7,8 @@ import routes from "@/helpers/routes";
 import { useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
+import { sellLendAction } from "@/server-actions/value-land/actions";
+import { ISellProperty } from "@/types/find-property";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
@@ -22,6 +24,28 @@ const ValueLendTerms = () => {
   const [pending, setPending] = useState(false);
 
   const handleSubmit = async () => {
+    if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand) {
+      return;
+    }
+    const about = valueLandData.aboutLand!;
+    const reqData: ISellProperty = {
+      ...valueLandData.aboutLand,
+      accepted: true,
+      propertyType:
+        valueLandData.selectedLand.properties.fields.zoning_description || valueLandData.selectedLand.properties.fields.usedesc || "",
+      acrage: valueLandData.selectedLand.properties.fields.ll_gisacre,
+      coordinates: JSON.stringify(valueLandData.selectedLand.geometry.coordinates),
+      state: valueLandData.selectedLand.properties.fields.state2,
+      county: valueLandData.selectedLand.properties.fields.county,
+      lat: valueLandData.selectedLand.properties.fields.lat,
+      lon: valueLandData.selectedLand.properties.fields.lon,
+      owner: valueLandData.selectedLand.properties.fields.owner,
+      parcelNumber: valueLandData.selectedLand.properties.fields.parcelnumb_no_formatting,
+      propertyId: valueLandData.calculatedPrice.id,
+      sellerType: "sale",
+      salePrice: valueLandData.calculatedPrice.price,
+    };
+    const { errorMessage, data } = await sellLendAction(reqData);
     setPending(true);
     // const id = await sellLendActionTest();
     setPending(false);

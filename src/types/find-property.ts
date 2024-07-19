@@ -85,17 +85,18 @@ export interface IFindPropertyEstimatedPriceResponse {
 
 export interface ISellProperty extends IFindPropertyAbout {
   sellerType: "instantsale" | "sale";
+  state: string;
   county: string;
   propertyType: string;
-  acrage: string;
+  acrage: number;
   parcelNumber: string;
   owner: string;
-  salePrice: string;
-  accepted: string;
+  salePrice: number;
+  accepted: boolean;
   coordinates: string;
   lat: string;
   lon: string;
-  propertyId: string;
+  propertyId: number;
 }
 
 // state: selectedRegridItem?.properties.fields.state2,

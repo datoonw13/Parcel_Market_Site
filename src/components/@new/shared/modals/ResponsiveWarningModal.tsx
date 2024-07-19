@@ -37,7 +37,10 @@ const Content: FC<ResponsiveWarningModalProps> = ({
   onCancel,
   cancelLabel,
 }) => (
-  <div className="md:bg-white pt-1 pb-11 px-5 flex flex-col justify-center items-center">
+  <div className="pt-1 pb-11 px-5 flex flex-col justify-center items-center md:bg-white md:rounded-2xl md:p-6 relative">
+    <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6 hidden md:flex absolute top-6 right-6" onClick={closeModal}>
+      <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
+    </Button>
     <div
       className={clsx(
         "h-12 w-12 rounded-full flex items-center justify-center mb-3",
@@ -50,11 +53,11 @@ const Content: FC<ResponsiveWarningModalProps> = ({
       <p className="text-center font-semibold">{title}</p>
       <p className="text-center text-grey-800 text-sm">{description}</p>
     </div>
-    <div className="flex flex-col-reverse gap-3 w-full">
-      <Button variant="secondary" onClick={onCancel}>
+    <div className="flex flex-col-reverse md:flex-row gap-3 w-full">
+      <Button className="md:w-full" variant="secondary" onClick={onCancel}>
         {cancelLabel || "Cancel"}
       </Button>
-      <Button onClick={onOK} loading={okPending} color={variant === "success" ? "default" : "error"}>
+      <Button className="md:w-full" onClick={onOK} loading={okPending} color={variant === "success" ? "default" : "error"}>
         {okLabel || "Accept"}
       </Button>
     </div>
