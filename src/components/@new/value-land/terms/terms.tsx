@@ -21,7 +21,7 @@ const ValueLendTerms = () => {
   const [openModal, setOpenModal] = useState<"error" | "success" | null>(null);
   const [landId, setLendId] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
-  const [error, setError] = useState('')
+  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand || !valueLandData.sellerType) {
@@ -47,13 +47,12 @@ const ValueLendTerms = () => {
     setPending(true);
     const { errorMessage, data } = await sellLendAction(reqData);
     setPending(false);
-    if(errorMessage) {
-      setError(errorMessage)
-      setOpenModal('error')
-    }
-    else {
+    if (errorMessage) {
+      setError(errorMessage === "Posting already exists" ? "Posting already exists" : "Something went wrong");
+      setOpenModal("error");
+    } else {
       setOpenModal("success");
-      setLendId(data)
+      setLendId(data);
     }
   };
 
@@ -62,8 +61,8 @@ const ValueLendTerms = () => {
       router.push(routes.user.listings.fullUrl);
     } else {
       setOpenModal(null);
-      if(error === 'Posting already exists') {
-        router.push(routes.marketplace.fullUrl)
+      if (error === "Posting already exists") {
+        router.push(routes.marketplace.fullUrl);
       }
     }
   };
@@ -88,7 +87,7 @@ const ValueLendTerms = () => {
         cancelLabel="Close"
         onOK={onOK}
         okPending={pending}
-        disableOK={error === 'Posting already exists'}
+        disableOK={error === "Posting already exists"}
         okLabel={openModal === "success" ? "View Land" : "Try Again"}
       />
       <div className="flex flex-col justify-between h-full overflow-hidden">

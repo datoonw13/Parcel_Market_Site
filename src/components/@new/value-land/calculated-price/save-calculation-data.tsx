@@ -30,7 +30,6 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
       router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
     }
   }, [params, router, user]);
-  
 
   useEffect(() => {
     if (params.get("from")) {

@@ -75,8 +75,8 @@ const ValueLandDetails = () => {
   }, [params, pathname, router, setValue]);
 
   useEffect(() => {
-    setValueLandAtom({aboutLand: null ,calculatedPrice: null, lands: null, selectedLand: null, sellerType: null, sellOptions: null})
-  }, [])
+    setValueLandAtom({ aboutLand: null, calculatedPrice: null, lands: null, selectedLand: null, sellerType: null, sellOptions: null });
+  }, []);
 
   return (
     <div className="h-full flex flex-col w-full gap-6">
