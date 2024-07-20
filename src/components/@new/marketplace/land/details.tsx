@@ -1,10 +1,11 @@
-import { ISellProperty } from "@/types/find-property";
+import { ISellingProperty } from "@/types/find-property";
 import { numFormatter } from "@/helpers/common";
 import { BookmarkIcon1, BookmarkIcon2 } from "../../icons/BookMarkIcons";
 import Button from "../../shared/forms/Button";
 import FollowLandButton from "./follow-button";
+import LandFollowButton from "../../lands/land-follow-button";
 
-const LandDetails = ({ data }: { data: ISellProperty }) => {
+const LandDetails = ({ data }: { data: ISellingProperty }) => {
   console.log("aq", data);
 
   return (
@@ -40,6 +41,7 @@ const LandDetails = ({ data }: { data: ISellProperty }) => {
         </div>
       </div>
       <div className="border-t border-t-grey-100 py-4 px-4 md:px-6 lg:px-8 flex flex-col sm:flex-row gap-3 sm:justify-between">
+        <LandFollowButton landId={data.id} initialFollowedListingId={data.followedListingId} />
         {/* <FollowLandButton followId={data.followId} /> */}
         {/* <Button className="bg-primary-main-100 hover:bg-primary-main-200 !text-primary-main [&>svg]:!fill-primary-main" startIcon={BookmarkIcon1}>Save Property</Button>
         <div className="flex flex-col-reverse sm:flex-row gap-3">
