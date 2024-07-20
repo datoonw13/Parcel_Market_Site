@@ -1,12 +1,12 @@
 import { ISellingProperty } from "@/types/find-property";
 import { numFormatter } from "@/helpers/common";
-import { BookmarkIcon1, BookmarkIcon2 } from "../../icons/BookMarkIcons";
-import Button from "../../shared/forms/Button";
-import FollowLandButton from "./follow-button";
+import { getUserAction } from "@/server-actions/user/actions";
 import LandFollowButton from "../../lands/land-follow-button";
+import Button from "../../shared/forms/Button";
+import MakeOfferButton from "./make-offer-button";
 
-const LandDetails = ({ data }: { data: ISellingProperty }) => {
-  console.log("aq", data);
+const LandDetails = async ({ data }: { data: ISellingProperty }) => {
+  const user = await getUserAction();
 
   return (
     <div className="rounded-2xl border border-grey-100">
@@ -40,15 +40,15 @@ const LandDetails = ({ data }: { data: ISellingProperty }) => {
           </p>
         </div>
       </div>
-      <div className="border-t border-t-grey-100 py-4 px-4 md:px-6 lg:px-8 flex flex-col sm:flex-row gap-3 sm:justify-between">
-        <LandFollowButton landId={data.id} initialFollowedListingId={data.followedListingId} />
-        {/* <FollowLandButton followId={data.followId} /> */}
-        {/* <Button className="bg-primary-main-100 hover:bg-primary-main-200 !text-primary-main [&>svg]:!fill-primary-main" startIcon={BookmarkIcon1}>Save Property</Button>
-        <div className="flex flex-col-reverse sm:flex-row gap-3">
+      {data.user_id !== user?.id && (
+        <div className="border-t border-t-grey-100 py-4 px-4 md:px-6 lg:px-8 flex flex-col sm:flex-row gap-3 sm:justify-between">
+          <LandFollowButton landId={data.id} initialFollowedListingId={data.followedListingId} />
+          <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Button variant="secondary">Contact Seller</Button>
-            <Button>Make An Offer</Button>
-        </div> */}
-      </div>
+            {!data.offerId && <MakeOfferButton sellingPropertyId={data.id} />}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
