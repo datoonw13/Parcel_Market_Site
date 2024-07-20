@@ -8,36 +8,8 @@ import { EyeIcon1 } from "../../icons/EyeIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import LandDetails from "./details";
 
-// import routes from "@/helpers/routes";
-// import { getLendDetailsAction } from "@/server-actions/marketplace/action";
-// import { redirect } from "next/navigation";
-// import { getUserAction } from "@/server-actions/user/actions";
-// import Land from "./land";
-
-// const LandWrapper = async ({ landId }: { landId: string }) => {
-//   const { data } = await getLendDetailsAction(landId);
-//   const user = await getUserAction();
-
-//   if (!data) {
-//     redirect(routes.marketplace.fullUrl);
-//   }
-
-//   return (
-//     <div>
-//       <Land data={data} user={user!} />
-//     </div>
-//   );
-// };
-
-// export default LandWrapper;
-
-// const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
-
-const Land = async ({ landId }: { landId: string }) => {
-  if (!landId) {
-    redirect(routes.marketplace.fullUrl);
-  }
-  const { data } = await getLendDetailsAction(landId);
+const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
+  const { data } = await getLendDetailsAction(sellingPropertyId);
   if (!data) {
     redirect(routes.marketplace.fullUrl);
   }
@@ -45,19 +17,8 @@ const Land = async ({ landId }: { landId: string }) => {
   const state = getAllStates().find((state) => state.value === data.state.toLocaleLowerCase())?.label;
   const county = getCounties(data.state.toLocaleLowerCase() || null).find((el) => el.value === data.county)?.label;
 
-  // const [openModal, setOpenModal] = useState(false);
-
-  // const createOffer = () => {
-  //   if (!isSmallDevice) {
-  //     setOpenModal(true);
-  //   } else {
-  //     router.push(`${pathname}/offer`);
-  //   }
-  // };
-
   return (
     <>
-      {/* <CreateOfferModal open={openModal} closeModal={() => setOpenModal(false)} sellingPropertyId={data.id.toString()} /> */}
       <div>
         <div className="space-y-3 mb-6">
           <h1 className="font-semibold text-lg md:text-xl lg:text-2xl">{data.title}</h1>
