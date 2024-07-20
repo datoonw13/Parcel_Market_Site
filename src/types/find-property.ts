@@ -99,20 +99,6 @@ export interface ISellProperty extends IFindPropertyAbout {
   propertyId: number;
 }
 
-// state: selectedRegridItem?.properties.fields.state2,
-// county: selectedRegridItem?.properties.fields.county,
-// propertyType: selectedRegridItem?.properties?.fields?.zoning_description || selectedRegridItem?.properties?.fields?.usedesc || "",
-// acrage: selectedRegridItem.properties.fields.ll_gisacre,
-// parcelNumber: selectedRegridItem?.properties.fields.parcelnumb_no_formatting,
-// sellerType,
-// owner: selectedRegridItem.properties.fields.owner,
-// salePrice: price || 0,
-// accepted: true,
-// coordinates: JSON.stringify(selectedRegridItem.geometry.coordinates),
-// lat: selectedRegridItem.properties.fields.lat,
-// lon: selectedRegridItem.properties.fields.lon,
-// propertyId,
-
 export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout, "agreement"> {
   user: { id: string; name: string; email: string };
   dataCreated: Date;
@@ -124,6 +110,7 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   user_id?: number;
   followedListingId?: number;
   offerId?: string;
+  city?: string;
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{

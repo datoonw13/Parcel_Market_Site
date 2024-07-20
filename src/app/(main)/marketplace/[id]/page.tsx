@@ -1,13 +1,13 @@
 import { ArrowIconLeftFilled1 } from "@/components/@new/icons/ArrowIcons";
-import LandDetailsWrapper from "@/components/@new/marketplace/details/land-details-wrapper";
-import LandDetailsLoading from "@/components/@new/marketplace/details/land-details-loading";
+import LandLoading from "@/components/@new/marketplace/land/land-loading";
 import Container from "@/components/@new/shared/Container";
 import React, { Suspense } from "react";
 import Link from "next/link";
 import routes from "@/helpers/routes";
+import Land from "@/components/@new/marketplace/land/land";
 
 const LandDetailsPage = ({ params }: { params: { id: string } }) => (
-  <Container className="py-6 md:py-8">
+  <Container className="pt-6 md:pt-8 pb-20 sm:pb-24 md:pb-32 lg:pb-36">
     <div className="flex items-center gap-1.5 cursor-pointer mb-8 md:mb-10">
       <p className="text-sm text-grey-800">Homepage</p>
       <div className="w-5 h-5 flex items-center justify-center">
@@ -21,11 +21,9 @@ const LandDetailsPage = ({ params }: { params: { id: string } }) => (
       </div>
       <p className="text-sm text-primary-main font-medium">Land name</p>
     </div>
-    <div>
-      <Suspense fallback={<LandDetailsLoading />}>
-        <LandDetailsWrapper landId={params.id} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<LandLoading />}>
+      <Land landId={params.id} />
+    </Suspense>
   </Container>
 );
 

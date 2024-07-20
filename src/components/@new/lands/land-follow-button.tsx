@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { BookmarkIcon1, BookmarkIcon2 } from "../icons/BookMarkIcons";
 import Button from "../shared/forms/Button";
 
-const LandBookMarkIcon = ({ landId, initialFollowedListingId }: { landId: number; initialFollowedListingId?: number }) => {
+const LandFollowButton = ({ landId, initialFollowedListingId }: { landId: number; initialFollowedListingId?: number }) => {
   const [followedListingsOptions, setFollowedListingsOptions] = useAtom(followedListingsAtom);
   const [followedListingId, setFollowedListingId] = useState(initialFollowedListingId ?? null);
   const [pending, setPending] = useState(false);
@@ -57,4 +57,4 @@ const LandBookMarkIcon = ({ landId, initialFollowedListingId }: { landId: number
   );
 };
 
-export default LandBookMarkIcon;
+export default LandFollowButton;

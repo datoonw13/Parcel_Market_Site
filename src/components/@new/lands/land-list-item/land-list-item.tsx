@@ -8,7 +8,7 @@ import { LocationIcon1 } from "../../icons/LocationIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
-import LandBookMarkIcon from "../land-bookmark-button";
+import LandFollowButton from "../land-follow-button";
 
 const LandListItem: FC<LandListItemProps> = ({
   view,
@@ -42,7 +42,7 @@ const LandListItem: FC<LandListItemProps> = ({
         </h2>
       </div>
 
-      {!selecting && showBookmark && <LandBookMarkIcon landId={sellingItemId} initialFollowedListingId={followedListingId} />}
+      {!selecting && showBookmark && <LandFollowButton landId={sellingItemId} initialFollowedListingId={followedListingId} />}
     </div>
     <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
       <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>

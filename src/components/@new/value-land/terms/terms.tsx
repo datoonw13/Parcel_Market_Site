@@ -34,7 +34,7 @@ const ValueLendTerms = () => {
         valueLandData.selectedLand.properties.fields.zoning_description || valueLandData.selectedLand.properties.fields.usedesc || "",
       acrage: valueLandData.selectedLand.properties.fields.ll_gisacre,
       coordinates: JSON.stringify(valueLandData.selectedLand.geometry.coordinates),
-      state: valueLandData.selectedLand.properties.fields.state2,
+      state: valueLandData.selectedLand.properties.fields.state2.toLocaleLowerCase(),
       county: valueLandData.selectedLand.properties.fields.county,
       lat: valueLandData.selectedLand.properties.fields.lat,
       lon: valueLandData.selectedLand.properties.fields.lon,
