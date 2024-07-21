@@ -12,10 +12,10 @@ interface CalculationMapProps {
   data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
 }
 
-const CalculationMap: FC<CalculationMapProps> = ({  data }) => (
+const CalculationMap: FC<CalculationMapProps> = ({ data }) => (
   <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl [&>div]:rounded-2xl">
     <Map
-      geolibInputCoordinates={data.map(el => [Number(el.latitude), Number(el.longitude)])}
+      geolibInputCoordinates={data.map((el) => [Number(el.latitude), Number(el.longitude)])}
       zoom={10}
       data={[
         ...data.map((el) => ({
