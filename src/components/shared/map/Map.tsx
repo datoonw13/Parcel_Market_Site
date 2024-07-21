@@ -14,11 +14,12 @@ interface IProps {
   geolibInputCoordinates: Array<LatLngTuple>;
   zoom: number;
   data: Array<{
+    active?: boolean;
     centerCoordinate: LatLngTuple;
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
     showMarker?: boolean;
-    markerColor?: "default" | "red" | "green" | "custom";
+    markerColor?: "default" | "active" | "custom";
     customMarkerIcon?: ReactElement;
     popup?: {
       showSelectButton: boolean;
@@ -29,51 +30,29 @@ interface IProps {
   onDiscard?: (parcelNumber: string) => void;
   setMapRef?: (ref: LeafletMap) => void;
   setMarkerRef?: (key: string, ref: LeafletMaker) => void;
-  initialMarkerOpacity?: number;
 }
 
-const markerGrey = new Icon({
-  iconUrl: "/marker-grey.svg",
-  iconSize: [35, 35],
+const markerDefault = new Icon({
+  iconUrl: "/map-default-icon.svg",
+  iconSize: [18, 24],
 });
 
-const markerRed = new Icon({
-  iconUrl: "/marker-red.svg",
-  iconSize: [35, 35],
+const markerActive = new Icon({
+  iconUrl: "/map-active-icon.svg",
+  iconSize: [36, 48],
 });
 
-const markerGreen = new Icon({
-  iconUrl: "/marker-red.svg",
-  iconSize: [35, 35],
-});
-
-const getMarkerIcon = (mapItem: IProps["data"][0], selectedParcelNumber: IProps["selectedParcelNumber"]) => {
-  if (mapItem.parcelNumber === selectedParcelNumber) {
-    return markerRed;
+const getMarkerIcon = (mapItem: IProps["data"][0], active?: boolean) => {
+  if (active) {
+    return markerActive;
   }
-  if (mapItem.markerColor === "default") {
-    return markerGrey;
+  if (mapItem.markerColor === "active") {
+    return markerActive;
   }
-  if (mapItem.markerColor === "red") {
-    return markerRed;
-  }
-  if (mapItem.markerColor === "green") {
-    return markerGreen;
-  }
-  return markerGrey;
+  return markerDefault;
 };
 
-const Map = ({
-  geolibInputCoordinates,
-  data,
-  zoom,
-  selectedParcelNumber,
-  onSelect,
-  onDiscard,
-  setMapRef,
-  setMarkerRef,
-  initialMarkerOpacity,
-}: IProps) => {
+const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelect, onDiscard, setMapRef, setMarkerRef }: IProps) => {
   const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
 
   const generateCustomIcon = (customMarkerIcon?: ReactElement) => {
@@ -106,16 +85,13 @@ const Map = ({
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
             {mapItem.showMarker && (
               <Marker
-                opacity={initialMarkerOpacity || 1}
                 ref={(ref) => {
                   if (setMarkerRef && ref) {
                     setMarkerRef(JSON.stringify(mapItem.centerCoordinate), ref);
                   }
                 }}
                 icon={
-                  mapItem.markerColor === "custom"
-                    ? generateCustomIcon(mapItem.customMarkerIcon)
-                    : getMarkerIcon(mapItem, selectedParcelNumber)
+                  mapItem.markerColor === "custom" ? generateCustomIcon(mapItem.customMarkerIcon) : getMarkerIcon(mapItem, mapItem.active)
                 }
                 position={mapItem.centerCoordinate}
               >

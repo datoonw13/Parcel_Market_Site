@@ -9,7 +9,7 @@ import { FC } from "react";
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 interface CalculationMapProps {
-  data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
+  data: Array<NonNullable<ISellingProperty["usedForPriceCalculations"]>[0] & { active: boolean }>;
   setMapRef: (ref: LeafletMap) => void;
   setMarkerRef: (key: string, ref: Marker) => void;
 }
@@ -18,7 +18,6 @@ const CalculationMap: FC<CalculationMapProps> = ({ data, setMapRef, setMarkerRef
   <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl [&>div]:rounded-2xl">
     <Map
       setMapRef={setMapRef}
-      initialMarkerOpacity={0.5}
       setMarkerRef={setMarkerRef}
       geolibInputCoordinates={data.map((el) => [Number(el.latitude), Number(el.longitude)])}
       zoom={10}
@@ -27,6 +26,7 @@ const CalculationMap: FC<CalculationMapProps> = ({ data, setMapRef, setMarkerRef
           centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
           parcelNumber: el.parcelNumber,
           showMarker: true,
+          active: el.active,
           popup: {
             parcelNumber: {
               label: "Parcel Number",

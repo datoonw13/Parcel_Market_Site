@@ -3,7 +3,6 @@
 import { ISellingProperty } from "@/types/find-property";
 import { useRef, useState } from "react";
 import { Map, Marker } from "leaflet";
-import dynamic from "next/dynamic";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
@@ -11,6 +10,7 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
   const mapRef = useRef<Map>();
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   console.log(selectedItem, 22);
 
   return (
@@ -22,7 +22,12 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
         </h2>
       </div>
       <CalculationMap
-        data={data}
+        data={data.map((el) => ({
+          ...el,
+          active:
+            hoveredItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]) ||
+            selectedItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
+        }))}
         setMapRef={(ref) => {
           mapRef.current = ref;
         }}
@@ -34,15 +39,11 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
         data={data}
         onMouseEnter={(value) => {
           const key = JSON.stringify(value);
-          if (markerRefs.current) {
-            markerRefs.current[key].setOpacity(1);
-          }
+          setHoveredItem(key);
         }}
         onMouseLeave={(value) => {
           const key = JSON.stringify(value);
-          if (markerRefs.current) {
-            markerRefs.current[key].setOpacity(0.8);
-          }
+          setHoveredItem(null);
         }}
         selectedItem={selectedItem}
         onSelect={(value) => {
