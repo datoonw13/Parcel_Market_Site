@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import { Button } from "@mui/material";
-import { LatLngTuple, Icon, DivIcon } from "leaflet";
+import { LatLngTuple, Icon, DivIcon, Map as LeafletMap, Marker as LeafletMaker } from "leaflet";
 import { Fragment, ReactElement } from "react";
 import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
 import { getCenter } from "geolib";
@@ -27,6 +27,9 @@ interface IProps {
   selectedParcelNumber?: string | null;
   onSelect?: (parcelNumber: string) => void;
   onDiscard?: (parcelNumber: string) => void;
+  setMapRef?: (ref: LeafletMap) => void;
+  setMarkerRef?: (key: string, ref: LeafletMaker) => void;
+  initialMarkerOpacity?: number;
 }
 
 const markerGrey = new Icon({
@@ -60,7 +63,17 @@ const getMarkerIcon = (mapItem: IProps["data"][0], selectedParcelNumber: IProps[
   return markerGrey;
 };
 
-const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelect, onDiscard }: IProps) => {
+const Map = ({
+  geolibInputCoordinates,
+  data,
+  zoom,
+  selectedParcelNumber,
+  onSelect,
+  onDiscard,
+  setMapRef,
+  setMarkerRef,
+  initialMarkerOpacity,
+}: IProps) => {
   const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
 
   const generateCustomIcon = (customMarkerIcon?: ReactElement) => {
@@ -80,14 +93,25 @@ const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelec
       center={mapCenter ? [mapCenter.latitude, mapCenter.longitude] : [0, 0]}
       scrollWheelZoom
       style={{ height: "100%", width: "100%", zIndex: 0 }}
+      ref={(mapRef) => {
+        if (mapRef) {
+          setMapRef && setMapRef(mapRef);
+        }
+      }}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <FeatureGroup pathOptions={{ color: "green" }}>
-        {data?.map((mapItem) => (
+        {data?.map((mapItem, mapItemI) => (
           <Fragment key={mapItem.parcelNumber}>
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
             {mapItem.showMarker && (
               <Marker
+                opacity={initialMarkerOpacity || 1}
+                ref={(ref) => {
+                  if (setMarkerRef && ref) {
+                    setMarkerRef(JSON.stringify(mapItem.centerCoordinate), ref);
+                  }
+                }}
                 icon={
                   mapItem.markerColor === "custom"
                     ? generateCustomIcon(mapItem.customMarkerIcon)

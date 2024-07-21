@@ -10,6 +10,7 @@ import moment from "moment";
 import { orderBy } from "lodash";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import Image from "next/image";
+import { LatLngTuple } from "leaflet";
 import { ArrowIconLeft1, ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 
 const HEADER_ROWS = [
@@ -21,7 +22,19 @@ const HEADER_ROWS = [
   { label: "Last Sale Date", key: "lastSalesDate" as const },
 ];
 
-const LandPriceCalculationTable = ({ data }: { data: NonNullable<ISellingProperty["usedForPriceCalculations"]> }) => {
+const LandPriceCalculationTable = ({
+  data,
+  onSelect,
+  onMouseEnter,
+  onMouseLeave,
+  selectedItem,
+}: {
+  data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
+  onSelect: (value: LatLngTuple) => void;
+  onMouseEnter: (value: LatLngTuple) => void;
+  onMouseLeave: (value: LatLngTuple) => void;
+  selectedItem: string | null;
+}) => {
   const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "arcage", dir: "desc" });
   const formattedData = data.map((el) => ({
     ...el,
@@ -38,7 +51,7 @@ const LandPriceCalculationTable = ({ data }: { data: NonNullable<ISellingPropert
     <div className="w-full  border border-grey-100 rounded-2xl lg:min-w-96 relative">
       <table className={clsx("w-full hidden lg:table")}>
         <thead>
-          <tr className="bg-grey-30 rounded-2xl [&>th:first-child]:rounded-tl-2xl [&>th:last-child]:rounded-tr-2xl">
+          <tr className={clsx("bg-grey-30 rounded-2xl [&>th:first-child]:rounded-tl-2xl [&>th:last-child]:rounded-tr-2xl")}>
             <th className="py-3 px-6 text-sm font-normal group cursor-pointer" align="left" />
             {HEADER_ROWS.map((item) => (
               <th className="py-3 px-6 text-sm font-normal group cursor-pointer" align="left" key={item.key}>
@@ -62,7 +75,16 @@ const LandPriceCalculationTable = ({ data }: { data: NonNullable<ISellingPropert
         [&>tr:not(:last-child)]:border-b [&>tr:not(:last-child)]:border-b-grey-50"
         >
           {sortedData.map((item, itemI) => (
-            <tr key={item.latitude + item.longitude} className="hover:bg-primary-main-50 transition-all duration-100 cursor-pointer">
+            <tr
+              key={item.latitude + item.longitude}
+              className={clsx(
+                "hover:bg-primary-main-50 transition-all duration-100 cursor-pointer",
+                selectedItem === JSON.stringify([Number(item.latitude), Number(item.longitude)]) && "bg-primary-main-100"
+              )}
+              onClick={() => onSelect([Number(item.latitude), Number(item.longitude)])}
+              onMouseEnter={() => onMouseEnter([Number(item.latitude), Number(item.longitude)])}
+              onMouseLeave={() => onMouseLeave([Number(item.latitude), Number(item.longitude)])}
+            >
               <td className="py-3 px-6 text-grey-800 text-xs" align="left">
                 {itemI + 1}
               </td>

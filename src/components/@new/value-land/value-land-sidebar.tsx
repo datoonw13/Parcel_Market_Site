@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
+const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 function formatCompactNumber(number: number) {
   const formatter = Intl.NumberFormat("en", { notation: "compact" });

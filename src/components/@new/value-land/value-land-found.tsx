@@ -15,7 +15,7 @@ import Button from "../shared/forms/Button";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 
-const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
+const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 const ValueLandFound = () => {
   const router = useRouter();

@@ -4,7 +4,7 @@ import { FC } from "react";
 import { ISellingProperty } from "@/types/find-property";
 import dynamic from "next/dynamic";
 
-const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
+const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 interface OfferDetailMapProps {
   data: ISellingProperty;

@@ -11,7 +11,7 @@ function formatCompactNumber(number: number) {
   return formatter.format(number);
 }
 
-const Map = dynamic(() => import("@/components/shared/Map"), { ssr: false });
+const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 const CalculationDetailsMap = () => {
   const valueLandData = useAtomValue(valueLandAtom);

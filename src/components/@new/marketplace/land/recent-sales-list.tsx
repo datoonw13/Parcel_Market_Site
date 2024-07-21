@@ -1,11 +1,17 @@
 "use client";
 
 import { ISellingProperty } from "@/types/find-property";
+import { useRef, useState } from "react";
+import { Map, Marker } from "leaflet";
+import dynamic from "next/dynamic";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
 const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedForPriceCalculations"]> }) => {
-  console.log("aq");
+  const mapRef = useRef<Map>();
+  const markerRefs = useRef<{ [key: string]: Marker }>();
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  console.log(selectedItem, 22);
 
   return (
     <div className="space-y-6">
@@ -15,8 +21,38 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
           Below are recent sales used by VOLT for similar acreage within 10 miles and over the past 2 years.
         </h2>
       </div>
-      <CalculationMap data={data} />
-      <LandPriceCalculationTable data={data} />
+      <CalculationMap
+        data={data}
+        setMapRef={(ref) => {
+          mapRef.current = ref;
+        }}
+        setMarkerRef={(key, ref) => {
+          markerRefs.current = { ...markerRefs.current, [key]: ref };
+        }}
+      />
+      <LandPriceCalculationTable
+        data={data}
+        onMouseEnter={(value) => {
+          const key = JSON.stringify(value);
+          if (markerRefs.current) {
+            markerRefs.current[key].setOpacity(1);
+          }
+        }}
+        onMouseLeave={(value) => {
+          const key = JSON.stringify(value);
+          if (markerRefs.current) {
+            markerRefs.current[key].setOpacity(0.8);
+          }
+        }}
+        selectedItem={selectedItem}
+        onSelect={(value) => {
+          const key = JSON.stringify(value);
+          setSelectedItem(key);
+          if (markerRefs.current) {
+            markerRefs.current?.[key]?.openPopup();
+          }
+        }}
+      />
     </div>
   );
 };
