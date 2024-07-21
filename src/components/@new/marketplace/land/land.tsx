@@ -3,13 +3,17 @@ import routes from "@/helpers/routes";
 import { getLendDetailsAction } from "@/server-actions/marketplace/action";
 import moment from "moment";
 import { getAllStates, getCounties } from "@/helpers/states";
+import clsx from "clsx";
 import { LocationIcon1 } from "../../icons/LocationIcons";
 import { EyeIcon1 } from "../../icons/EyeIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import LandDetails from "./details";
+import LandPriceCalculationTable from "./calculation-table";
 
 const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
   const { data } = await getLendDetailsAction(sellingPropertyId);
+  console.log(data, 22);
+
   if (!data) {
     redirect(routes.marketplace.fullUrl);
   }
@@ -45,34 +49,50 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
             </div>
           </div>
         </div>
-        <div className="mb-8">
-          <h2 className="font-semibold text-lg mb-3">About The Land</h2>
-          <p className="text-sm text-grey-600">{data.description || "There is no description"}</p>
-          <div className="space-y-4 mt-4">
-            <p className="text-sm font-medium">Features we have on the land:</p>
-            <div className="flex flex-wrap gap-3">
-              <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                {data.waterFeature ? "Water Feature" : "No Water Feature"}
-              </div>
-              <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                {data.frontNavigable ? "Water Front" : "No Water Front"}
-              </div>
-              <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                {data.cover}
-              </div>
-              <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                {data.wet}
-              </div>
-              <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                {data.restriction ? "Restriction" : "No Restrictions"}
-              </div>
-              <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                {data.access}
+        <div className={clsx("flex gap-8 mb-20 sm:mb-26 md:mb-32 lg:mb-36", data.description ? "flex-col" : "flex-col-reverse")}>
+          <div className="flex flex-col gap-4">
+            {data.description && (
+              <>
+                <h2 className="font-semibold text-lg mb-3">About The Land</h2>
+                <p className="text-sm text-grey-600">{data.description || "There is no description"}</p>
+              </>
+            )}
+            <div className="space-y-4">
+              {data.description && <p className="text-sm font-medium">Features we have on the land:</p>}
+              <div className="flex flex-wrap gap-3">
+                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
+                  {data.waterFeature ? "Water Feature" : "No Water Feature"}
+                </div>
+                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
+                  {data.frontNavigable ? "Water Front" : "No Water Front"}
+                </div>
+                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
+                  {data.cover}
+                </div>
+                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
+                  {data.wet}
+                </div>
+                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
+                  {data.restriction ? "Restriction" : "No Restrictions"}
+                </div>
+                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
+                  {data.access}
+                </div>
               </div>
             </div>
           </div>
+          {data && <LandDetails data={data} />}
         </div>
-        {data && <LandDetails data={data} />}
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <h1 className="text-center font-semibold text-lg md:text-xl lg:text-2xl">Recent Sales List</h1>
+            <h2 className="text-center text-grey-800 text-sm">
+              Below are recent sales used by VOLT for similar acreage within 10 miles and over the past 2 years.
+            </h2>
+          </div>
+          <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl">MAp</div>
+          {data.usedForPriceCalculations && <LandPriceCalculationTable data={data.usedForPriceCalculations} />}
+        </div>
       </div>
     </>
   );
