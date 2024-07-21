@@ -12,11 +12,27 @@ interface CalculationMapProps {
   data: Array<NonNullable<ISellingProperty["usedForPriceCalculations"]>[0] & { active: boolean }>;
   setMapRef: (ref: LeafletMap) => void;
   setMarkerRef: (key: string, ref: Marker) => void;
+  markerMouseEnter: (value: LatLngTuple) => void;
+  markerMouseLeave: (value: LatLngTuple) => void;
+  popupOpen: (value: LatLngTuple) => void;
+  popupClose: (value: LatLngTuple) => void;
 }
 
-const CalculationMap: FC<CalculationMapProps> = ({ data, setMapRef, setMarkerRef }) => (
+const CalculationMap: FC<CalculationMapProps> = ({
+  data,
+  setMapRef,
+  setMarkerRef,
+  markerMouseEnter,
+  markerMouseLeave,
+  popupClose,
+  popupOpen,
+}) => (
   <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl [&>div]:rounded-2xl">
     <Map
+      markerMouseEnter={markerMouseEnter}
+      markerMouseLeave={markerMouseLeave}
+      popupOpen={popupOpen}
+      popupClose={popupClose}
       setMapRef={setMapRef}
       setMarkerRef={setMarkerRef}
       geolibInputCoordinates={data.map((el) => [Number(el.latitude), Number(el.longitude)])}

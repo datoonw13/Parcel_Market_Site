@@ -11,7 +11,6 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  console.log(selectedItem, 22);
 
   return (
     <div className="space-y-6">
@@ -34,6 +33,23 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
         setMarkerRef={(key, ref) => {
           markerRefs.current = { ...markerRefs.current, [key]: ref };
         }}
+        markerMouseEnter={(value) => {
+          const key = JSON.stringify(value);
+          setHoveredItem(key);
+        }}
+        markerMouseLeave={(value) => {
+          setHoveredItem(null);
+        }}
+        popupOpen={(value) => {
+          const key = JSON.stringify(value);
+          setSelectedItem(key);
+          if (markerRefs.current) {
+            markerRefs.current?.[key]?.openPopup();
+          }
+        }}
+        popupClose={() => {
+          setSelectedItem(null)
+        }}
       />
       <LandPriceCalculationTable
         data={data}
@@ -42,10 +58,10 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
           setHoveredItem(key);
         }}
         onMouseLeave={(value) => {
-          const key = JSON.stringify(value);
           setHoveredItem(null);
         }}
         selectedItem={selectedItem}
+        hoveredItem={hoveredItem}
         onSelect={(value) => {
           const key = JSON.stringify(value);
           setSelectedItem(key);

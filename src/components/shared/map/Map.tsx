@@ -30,6 +30,10 @@ interface IProps {
   onDiscard?: (parcelNumber: string) => void;
   setMapRef?: (ref: LeafletMap) => void;
   setMarkerRef?: (key: string, ref: LeafletMaker) => void;
+  markerMouseEnter?: (value: LatLngTuple) => void;
+  markerMouseLeave?: (value: LatLngTuple) => void;
+  popupOpen?: (value: LatLngTuple) => void;
+  popupClose?: (value: LatLngTuple) => void;
 }
 
 const markerDefault = new Icon({
@@ -52,7 +56,20 @@ const getMarkerIcon = (mapItem: IProps["data"][0], active?: boolean) => {
   return markerDefault;
 };
 
-const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelect, onDiscard, setMapRef, setMarkerRef }: IProps) => {
+const Map = ({
+  geolibInputCoordinates,
+  data,
+  zoom,
+  selectedParcelNumber,
+  onSelect,
+  onDiscard,
+  setMapRef,
+  setMarkerRef,
+  markerMouseEnter,
+  markerMouseLeave,
+  popupClose,
+  popupOpen,
+}: IProps) => {
   const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
 
   const generateCustomIcon = (customMarkerIcon?: ReactElement) => {
@@ -85,6 +102,12 @@ const Map = ({ geolibInputCoordinates, data, zoom, selectedParcelNumber, onSelec
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
             {mapItem.showMarker && (
               <Marker
+                eventHandlers={{
+                  mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.centerCoordinate),
+                  mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.centerCoordinate),
+                  popupopen: () => popupOpen && popupOpen(mapItem.centerCoordinate),
+                  popupclose: () => popupClose && popupClose(mapItem.centerCoordinate),
+                }}
                 ref={(ref) => {
                   if (setMarkerRef && ref) {
                     setMarkerRef(JSON.stringify(mapItem.centerCoordinate), ref);

@@ -28,12 +28,14 @@ const LandPriceCalculationTable = ({
   onMouseEnter,
   onMouseLeave,
   selectedItem,
+  hoveredItem,
 }: {
   data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
   onSelect: (value: LatLngTuple) => void;
   onMouseEnter: (value: LatLngTuple) => void;
   onMouseLeave: (value: LatLngTuple) => void;
   selectedItem: string | null;
+  hoveredItem: string | null;
 }) => {
   const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "arcage", dir: "desc" });
   const formattedData = data.map((el) => ({
@@ -78,8 +80,9 @@ const LandPriceCalculationTable = ({
             <tr
               key={item.latitude + item.longitude}
               className={clsx(
-                "hover:bg-primary-main-50 transition-all duration-100 cursor-pointer",
-                selectedItem === JSON.stringify([Number(item.latitude), Number(item.longitude)]) && "bg-primary-main-100"
+                "transition-all duration-100 cursor-pointer",
+                selectedItem === JSON.stringify([Number(item.latitude), Number(item.longitude)]) && "bg-primary-main-100",
+                hoveredItem === JSON.stringify([Number(item.latitude), Number(item.longitude)]) && "bg-primary-main-50"
               )}
               onClick={() => onSelect([Number(item.latitude), Number(item.longitude)])}
               onMouseEnter={() => onMouseEnter([Number(item.latitude), Number(item.longitude)])}
