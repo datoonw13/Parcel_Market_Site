@@ -9,10 +9,10 @@ import { EyeIcon1 } from "../../icons/EyeIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import LandDetails from "./details";
 import LandPriceCalculationTable from "./calculation-table";
+import CalculationMap from "./calculation-map";
 
 const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
   const { data } = await getLendDetailsAction(sellingPropertyId);
-  console.log(data, 22);
 
   if (!data) {
     redirect(routes.marketplace.fullUrl);
@@ -90,7 +90,11 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
               Below are recent sales used by VOLT for similar acreage within 10 miles and over the past 2 years.
             </h2>
           </div>
-          <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl">MAp</div>
+          {data.usedForPriceCalculations && (
+            <CalculationMap
+              data={data.usedForPriceCalculations}
+            />
+          )}
           {data.usedForPriceCalculations && <LandPriceCalculationTable data={data.usedForPriceCalculations} />}
         </div>
       </div>

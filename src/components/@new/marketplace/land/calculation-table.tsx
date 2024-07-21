@@ -8,6 +8,8 @@ import { ISellingProperty } from "@/types/find-property";
 import { headers } from "next/headers";
 import moment from "moment";
 import { orderBy } from "lodash";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import Image from "next/image";
 import { ArrowIconLeft1, ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 
 const HEADER_ROWS = [
@@ -33,8 +35,8 @@ const LandPriceCalculationTable = ({ data }: { data: NonNullable<ISellingPropert
   };
 
   return (
-    <div className="w-full  border border-grey-100 rounded-2xl">
-      <table className="w-full">
+    <div className="w-full  border border-grey-100 rounded-2xl lg:min-w-96 relative">
+      <table className={clsx("w-full hidden lg:table")}>
         <thead>
           <tr className="bg-grey-30 rounded-2xl [&>th:first-child]:rounded-tl-2xl [&>th:last-child]:rounded-tr-2xl">
             <th className="py-3 px-6 text-sm font-normal group cursor-pointer" align="left" />
@@ -86,6 +88,16 @@ const LandPriceCalculationTable = ({ data }: { data: NonNullable<ISellingPropert
           ))}
         </tbody>
       </table>
+      <div className="w-full h-96 blur-md lg:hidden" />
+      <div className="lg:hidden absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white border border-grey-100 rounded-2xl p-5 space-y-6">
+        <div className="relative w-16 h-14 m-auto">
+          <Image src="/no-mobile-support.png" fill alt="" className="w-16 h-14 m-auto" />
+        </div>
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-center">No Mobile Support</p>
+          <p className="text-xs text-grey-600 text-center">We don’t support this information for mobile, Please open up Desktop version.</p>
+        </div>
+      </div>
     </div>
   );
 };
