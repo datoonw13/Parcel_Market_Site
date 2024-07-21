@@ -18,7 +18,7 @@ const OfferDetailMap: FC<OfferDetailMapProps> = ({ data }) => {
         owner: data.owner,
         parcelNumber: data.parcelNumber,
         showMarker: true,
-        markerColor: "red" as const,
+        markerColor: "default" as const,
       },
     ],
   };

@@ -48,7 +48,7 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
           }
         }}
         popupClose={() => {
-          setSelectedItem(null)
+          setSelectedItem(null);
         }}
       />
       <LandPriceCalculationTable

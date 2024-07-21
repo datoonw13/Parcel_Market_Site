@@ -36,7 +36,8 @@ const LandDetails = async ({ data }: { data: ISellingProperty }) => {
             Acreage: <span className="text-black">{data.acrage}</span>
           </p>
           <p className="text-grey-600">
-            Volt Value Per Acre: <span className="text-black">{(data.salePrice / data.acrage).toFixed(2)}</span>
+            Volt Value Per Acre:{" "}
+            <span className="text-black">{numFormatter.format(Number((data.salePrice / data.acrage).toFixed(2)))}</span>
           </p>
         </div>
       </div>
