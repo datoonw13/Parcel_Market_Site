@@ -7,7 +7,7 @@ import { LocationIcon2 } from "../../icons/LocationIcons";
 
 const CalculationDetails = () => {
   const valueLandData = useAtomValue(valueLandAtom);
-
+  
   if (!valueLandData.calculatedPrice) {
     return null;
   }

@@ -4,13 +4,14 @@ import { valueLandAtom } from "@/atoms/value-land-atom";
 import routes from "@/helpers/routes";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
 import { calculateLandPriceAction } from "@/server-actions/value-land/actions";
 import toast from "react-hot-toast";
 import { IFindPropertyEstimatedPrice } from "@/types/find-property";
 import classes from "@/app/value-land/(main)/styles.module.css";
+import { Marker } from "leaflet";
 import Button from "../shared/forms/Button";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
@@ -19,8 +20,10 @@ const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false })
 
 const ValueLandFound = () => {
   const router = useRouter();
+  const markerRefs = useRef<{ [key: string]: Marker }>();
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const [pending, setPending] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const onNext = async () => {
     if (!valueLand.selectedLand) {
@@ -64,7 +67,34 @@ const ValueLandFound = () => {
         <div className="rounded-t-2xl [&>div]:rounded-t-2xl h-60 min-h-60 md:h-[220px] md:min-h-[220px]">
           {valueLand.lands && valueLand.lands.length > 0 && (
             <Map
+              setMarkerRef={(key, ref) => {
+                markerRefs.current = { ...markerRefs.current, [key]: ref };
+              }}
+              markerMouseEnter={(value) => {
+                const key = JSON.stringify(value);
+                setHoveredItem(key);
+              }}
+              markerMouseLeave={(value) => {
+                setHoveredItem(null);
+              }}
+              popupOpen={(value) => {
+                const selectedLand = valueLand.lands?.find(
+                  (el) => Number(el.properties.fields.lat) === value[0] && Number(el.properties.fields.lon) === value[1]
+                );
+                if (selectedLand) {
+                  setValueLand((prev) => ({ ...prev, selectedLand }));
+                }
+              }}
+              popupClose={() => {
+                // setValueLand((prev) => ({ ...prev, selectedLand: null }));
+              }}
               data={valueLand.lands.map((el) => ({
+                active:
+                  hoveredItem === JSON.stringify([Number(el.properties.fields.lat), Number(el.properties.fields.lon)]) ||
+                  JSON.stringify([
+                    Number(valueLand.selectedLand?.properties.fields.lat),
+                    Number(valueLand.selectedLand?.properties.fields.lon),
+                  ]) === JSON.stringify([Number(el.properties.fields.lat), Number(el.properties.fields.lon)]),
                 centerCoordinate: [Number(el.properties.fields.lat), Number(el.properties.fields.lon)],
                 polygon: el.geometry.coordinates,
                 owner: el.properties.fields.owner,
@@ -103,12 +133,24 @@ const ValueLandFound = () => {
           >
             {valueLand.lands?.map((land) => (
               <div
+                onMouseEnter={() =>
+                  setHoveredItem(JSON.stringify([Number(land.properties.fields.lat), Number(land.properties.fields.lon)]))
+                }
+                onMouseLeave={() => setHoveredItem(null)}
                 key={land.properties.fields.parcelnumb_no_formatting}
-                onClick={() => setValueLand((prev) => ({ ...prev, selectedLand: land }))}
+                onClick={() => {
+                  setValueLand((prev) => ({ ...prev, selectedLand: land }));
+                  const key = JSON.stringify([Number(land.properties.fields.lat), Number(land.properties.fields.lon)]);
+                  if (markerRefs.current) {
+                    markerRefs.current?.[key]?.openPopup();
+                  }
+                }}
                 className={clsx(
-                  "flex justify-between gap-2 py-3 px-4 cursor-pointer transition-all duration-100 hover:bg-primary-main-50",
+                  "flex justify-between gap-2 py-3 px-4 cursor-pointer transition-all duration-100",
                   land.properties.fields.parcelnumb_no_formatting === valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting &&
-                    "bg-primary-main-100"
+                    "bg-primary-main-100",
+                  hoveredItem === JSON.stringify([Number(land.properties.fields.lat), Number(land.properties.fields.lon)]) &&
+                    "bg-primary-main-50"
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -130,7 +172,7 @@ const ValueLandFound = () => {
         <Button variant="secondary" onClick={() => router.push(routes.valueLand.fullUrl)}>
           Back
         </Button>
-        <Button onClick={onNext} loading={pending}>
+        <Button onClick={onNext} loading={pending} disabled={!valueLand.selectedLand}>
           Continue
         </Button>
       </div>

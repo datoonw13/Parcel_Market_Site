@@ -7,7 +7,6 @@ import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
 const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedForPriceCalculations"]> }) => {
-  const mapRef = useRef<Map>();
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -27,9 +26,6 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
             hoveredItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]) ||
             selectedItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
         }))}
-        setMapRef={(ref) => {
-          mapRef.current = ref;
-        }}
         setMarkerRef={(key, ref) => {
           markerRefs.current = { ...markerRefs.current, [key]: ref };
         }}
