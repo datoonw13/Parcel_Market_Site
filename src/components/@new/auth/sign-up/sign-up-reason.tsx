@@ -22,7 +22,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
   return (
     <>
       <div className="max-w-xl">
-        <h1 className="font-semibold text-2xl md:text-5xl text-center">Welcome to Parcel Market</h1>
+        <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center">Welcome to Parcel Market</h1>
         <h3 className="text-grey-800 mt-3 text-center text-xs md:text-base">First, tell us why are you here and select all that apply</h3>
       </div>
       <div className="flex flex-col max-w-fit w-full gap-3">

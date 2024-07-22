@@ -1,7 +1,6 @@
 import React, { FC, useMemo, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
-import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import { getAllStates, getCitiesByState } from "@/helpers/states";
 import Link from "next/link";
@@ -21,8 +20,9 @@ import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 interface SignUpProps {
   onBack: () => void;
   registrationReasons: IUserSignUp["registrationReasons"];
+  onFinish: (errorMessage?: string, email?: string) => void;
 }
-const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack }) => {
+const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
   const router = useRouter();
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
@@ -57,10 +57,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack }) => {
   const onSubmit = handleSubmit(async (data) => {
     const request = await signUpUserAction(data);
     if (request?.errorMessage) {
-      toast.error(request.errorMessage);
+      onFinish(request.errorMessage);
     } else {
-      toast.success("User registered successfully, please activate your account by clicking on email we have sent.", { duration: 3000 });
-      router.replace(`/${routes.home.url}`);
+      onFinish(undefined, watch("email"));
     }
   });
 
@@ -70,7 +69,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack }) => {
         <h1 className="font-semibold text-2xl md:text-5xl text-center">Sign Up</h1>
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
       </div>
-      <GoogleButton className="!w-fit px-14" onClick={() => {}} />
+      {/* <GoogleButton className="!w-fit px-14" onClick={() => {}} /> */}
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col sm:grid sm:grid-cols-2 gap-4">
         <TextField

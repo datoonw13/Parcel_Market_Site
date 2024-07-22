@@ -254,3 +254,26 @@ export const setNewEmailAction = async (values: { code: string; email: string })
     };
   }
 };
+
+const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
+export const resendSignUpVerificationCodeAction = async (email: string): Promise<ResponseModel<null>> => {
+  try {
+    await delay();
+    // const request = await fetcher<ISignInResponse>("user/reset/email", {
+    //   method: "POST",
+    //   body: JSON.stringify(values),
+    //   cache: "no-store",
+    // });
+    // setAuthToken(request.access_token);
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
