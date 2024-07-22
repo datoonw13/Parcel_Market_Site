@@ -1,13 +1,13 @@
 "use client";
 
 import { numFormatter } from "@/helpers/common";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { LocationIcon2 } from "../../icons/LocationIcons";
 
 const CalculationDetails = () => {
-  const valueLandData = useAtomValue(valueLandAtom);
-  
+  const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
+
   if (!valueLandData.calculatedPrice) {
     return null;
   }
@@ -15,13 +15,20 @@ const CalculationDetails = () => {
   const voltValue = valueLandData.calculatedPrice.price;
   const minPricePerAcre = valueLandData.calculatedPrice.range.min;
   const maxPricePerAcre = valueLandData.calculatedPrice.range.max;
-  const data = valueLandData.calculatedPrice.properties.map((el) => el.price / el.arcage);
+  const data = valueLandData.calculatedPrice.properties.map((el) => ({
+    value: el.price / el.arcage,
+    stringifiedCoordinates: JSON.stringify([Number(el.latitude), Number(el.longitude)]),
+  }));
   const averagePrice = (
     valueLandData.calculatedPrice.properties.reduce((acc, cur) => acc + cur.price / cur.arcage, 0) /
     valueLandData.calculatedPrice.properties.length
   ).toFixed(2);
 
-  const formattedData = data.map((el) => ({ value: el, percent: Math.floor((100 * el) / maxPricePerAcre) }));
+  const formattedData = data.map((el) => ({
+    value: el,
+    percent: Math.floor((100 * el.value) / maxPricePerAcre),
+    stringifiedCoordinates: el.stringifiedCoordinates,
+  }));
 
   return (
     <div className="bg-primary-main-50 border border-primary-main-400 rounded-2xl px-4 sm:px-5 md:px-6 lg:px-8 py-6 md:py-8">
@@ -44,7 +51,17 @@ const CalculationDetails = () => {
           before:bg-primary-main before:rounded-full before:left-1/2 before:-translate-x-1/2`}
           />
           {formattedData.map((el) => (
-            <div key={el.value} className="absolute -translate-x-1/2 top-0 -translate-y-full" style={{ left: `${el.percent}%` }}>
+            <div
+              key={el.value.toString()}
+              className="absolute -translate-x-1/2 top-0 -translate-y-full"
+              style={{ left: `${el.percent}%` }}
+              onMouseEnter={() => {
+                setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: el.stringifiedCoordinates } }));
+              }}
+              onMouseLeave={() => {
+                setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));
+              }}
+            >
               <LocationIcon2 className="!w-5 min-w-5 !h-6 min-h-6" />
             </div>
           ))}

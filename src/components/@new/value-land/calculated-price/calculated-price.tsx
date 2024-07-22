@@ -9,6 +9,7 @@ import ValueLandStepper from "../value-land-stepper";
 
 const ValueLandCalculatedPrice = async () => {
   const user = await getUserAction();
+
   return (
     <>
       <div className="h-full flex flex-col w-full gap-6 pb-4 sm:pb-5 md:pb-6 lg:pb-8">
@@ -23,9 +24,13 @@ const ValueLandCalculatedPrice = async () => {
           <SaveCalculationData user={user} />
         </div>
         <div className={clsx("space-y-12", classes["content-space-x"])}>
-          <CalculatedPriceDetails />
+          <div className="space-y-4">
+            <CalculatedPriceDetails />
+            <div className="h-72 sm:h-80 w-full xl:hidden [&>div]:rounded-2xl">
+              <CalculationDetailsMap user={user} />
+            </div>
+          </div>
           <SubmitLand />
-          <CalculationDetailsMap />
         </div>
       </div>
     </>

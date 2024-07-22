@@ -40,8 +40,6 @@ const ValueLandSignature = () => {
     }
   }, [router, valueLand.sellOptions]);
 
-  console.log(valueLand.sellOptions, values);
-
   useEffect(() => {
     if (!valueLand.sellOptions && !values) {
       router.push(routes.valueLand.fullUrl);

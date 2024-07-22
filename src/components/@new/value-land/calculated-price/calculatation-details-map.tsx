@@ -2,73 +2,70 @@
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { numFormatter } from "@/helpers/common";
+import { ISignInResponse } from "@/types/auth";
 import { useAtomValue } from "jotai";
-import { LatLngTuple } from "leaflet";
+import { LatLngTuple, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-
-function formatCompactNumber(number: number) {
-  const formatter = Intl.NumberFormat("en", { notation: "compact" });
-  return formatter.format(number);
-}
+import { useEffect, useRef } from "react";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
-const CalculationDetailsMap = () => {
+const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | null }) => {
   const valueLandData = useAtomValue(valueLandAtom);
+  const markerRefs = useRef<{ [key: string]: Marker }>();
+
+  useEffect(() => {
+    if (valueLandData.mapInteraction.hoveredLand && markerRefs.current) {
+      markerRefs.current[valueLandData.mapInteraction.hoveredLand].openPopup();
+    } else if (markerRefs.current) {
+      Object.keys(markerRefs.current).forEach((key) => {
+        markerRefs.current?.[key as keyof typeof markerRefs.current].closePopup();
+      });
+    }
+  }, [valueLandData.mapInteraction.hoveredLand]);
 
   return (
     valueLandData.selectedLand &&
     valueLandData.calculatedPrice && (
-      <div className="h-72 sm:h-80 w-full xl:hidden [&>div]:rounded-2xl">
-        <Map
-          geolibInputCoordinates={[
-            [Number(valueLandData.selectedLand.properties.fields.lat), Number(valueLandData.selectedLand.properties.fields.lon)],
-          ]}
-          zoom={10}
-          data={[
-            {
-              centerCoordinate: [
-                Number(valueLandData.selectedLand.properties.fields.lat),
-                Number(valueLandData.selectedLand.properties.fields.lon),
-              ],
-              markerColor: "custom",
-              customMarkerIcon: (
-                <div
-                  style={{
-                    background: "#3EA266",
-                    boxShadow: "0px 0px 20px 0px #00000026",
-                    width: 80,
-                    height: 35,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 600,
-                    color: "white",
-                    borderRadius: 60,
-                  }}
-                >
-                  {formatCompactNumber(valueLandData.calculatedPrice.price)}
-                </div>
-              ),
-              parcelNumber: valueLandData.selectedLand.properties.fields.parcelnumb,
-              polygon: valueLandData.selectedLand.geometry.coordinates,
-              showMarker: true,
-              popup: {
-                parcelNumber: {
-                  label: "Parcel Number",
-                  value: valueLandData.selectedLand.properties.fields.parcelnumb,
-                },
-                acreage: {
-                  label: "Acreage",
-                  value: valueLandData.selectedLand.properties.fields.ll_gisacre.toFixed(2),
-                },
-                showSelectButton: false,
+      <Map
+        setMarkerRef={(key, ref) => {
+          markerRefs.current = { ...markerRefs.current, [key]: ref };
+        }}
+        geolibInputCoordinates={[
+          [Number(valueLandData.selectedLand.properties.fields.lat), Number(valueLandData.selectedLand.properties.fields.lon)],
+        ]}
+        zoom={10}
+        data={[
+          {
+            centerCoordinate: [
+              Number(valueLandData.selectedLand.properties.fields.lat),
+              Number(valueLandData.selectedLand.properties.fields.lon),
+            ],
+            active: true,
+            parcelNumber: valueLandData.selectedLand.properties.fields.parcelnumb,
+            polygon: valueLandData.selectedLand.geometry.coordinates,
+            showMarker: true,
+            popup: {
+              owner: {
+                label: "Owner",
+                value: valueLandData.selectedLand.properties.fields.owner,
               },
+              parcelNumber: {
+                label: "Parcel Number",
+                value: valueLandData.selectedLand.properties.fields.parcelnumb,
+              },
+              acreage: {
+                label: "Acreage",
+                value: valueLandData.selectedLand.properties.fields.ll_gisacre.toFixed(2),
+              },
+              showSelectButton: false,
             },
-            ...valueLandData.calculatedPrice.properties.map((el) => ({
-              centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
-              parcelNumber: el.parselId,
-              showMarker: true,
+          },
+          ...valueLandData.calculatedPrice.properties.map((el) => ({
+            centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
+            parcelNumber: el.parselId,
+            showMarker: true,
+            ...(user && {
               popup: {
                 parcelNumber: {
                   label: "Parcel Number",
@@ -88,10 +85,10 @@ const CalculationDetailsMap = () => {
                 },
                 showSelectButton: false,
               },
-            })),
-          ]}
-        />
-      </div>
+            }),
+          })),
+        ]}
+      />
     )
   );
 };

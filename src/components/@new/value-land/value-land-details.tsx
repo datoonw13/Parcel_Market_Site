@@ -76,7 +76,15 @@ const ValueLandDetails = () => {
   }, []);
 
   useEffect(() => {
-    setValueLandAtom({ aboutLand: null, calculatedPrice: null, lands: null, selectedLand: null, sellerType: null, sellOptions: null });
+    setValueLandAtom({
+      aboutLand: null,
+      calculatedPrice: null,
+      lands: null,
+      selectedLand: null,
+      sellerType: null,
+      sellOptions: null,
+      mapInteraction: { hoveredLand: null },
+    });
   }, [setValueLandAtom]);
 
   return (
