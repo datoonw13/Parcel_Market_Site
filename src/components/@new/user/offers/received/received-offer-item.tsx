@@ -66,8 +66,8 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
       >
         <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8 mb-3 sm:mb-4">
           <div className="space-y-2 grid">
-            <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`}>
-              <h1 className="font-semibold text-white truncate max-w-[80%] sm:max-w-[40%] md:sm:max-w-[50%] lg:max-w-[calc(100%-160px)] sm:text-black sm:text-lg">
+            <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`} className="truncate sm:w-[calc(100%-120px)] ">
+              <h1 className="truncate font-semibold text-white w-full sm:text-black sm:text-lg">
                 long names with 3 dots long names with 3 dot long names with 3 dot...
               </h1>
             </Link>
@@ -80,8 +80,8 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
             </div>
           </div>
           <div className="flex justify-between sm:flex-col sm:justify-start items-center">
-            <p className="text-xs font-medium sm:text-white sm:ml-auto">Offered Price</p>
-            <p className="font-semibold text-primary-main sm:text-white sm:text-2xl">{numFormatter.format(Number(data.price))}</p>
+            <p className="text-xs font-medium sm:text-white sm:ml-auto sm:min-w-full sm:w-max">Offered Price</p>
+            <p className="font-semibold text-primary-main sm:text-white sm:text-2xl sm:min-w-full sm:w-max">{numFormatter.format(Number(data.price))}</p>
           </div>
         </div>
         <OfferDetailSection data={data} rootClasses="mx-4 md:mx-8 mb-8" alertClasses="mt-3" />
