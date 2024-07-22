@@ -38,7 +38,7 @@ interface IProps {
 
 const markerDefault = new Icon({
   iconUrl: "/map-default-icon.svg",
-  iconSize: [18, 24],
+  iconSize: [28, 36],
 });
 
 const markerActive = new Icon({

@@ -11,6 +11,9 @@ import { orderBy } from "lodash";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import Image from "next/image";
 import { LatLngTuple } from "leaflet";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+import { numFormatter } from "@/helpers/common";
 import { ArrowIconLeft1, ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 
 const HEADER_ROWS = [
@@ -40,6 +43,7 @@ const LandPriceCalculationTable = ({
   const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "arcage", dir: "desc" });
   const formattedData = data.map((el) => ({
     ...el,
+    county: el.county ?? "",
     pricePerAcre: Number((Number(el.lastSalesPrice) / Number(el.arcage)).toFixed(2)),
   }));
 
@@ -47,6 +51,40 @@ const LandPriceCalculationTable = ({
 
   const handleSort = (key: typeof HEADER_ROWS[0]["key"]) => {
     setSort({ key, dir: sort.key === key && sort.dir === "desc" ? "asc" : "desc" });
+  };
+
+  const exportToCSV = () => {
+    const ws = XLSX.utils.json_to_sheet(
+      formattedData.map((el) => ({
+        parcelNumber: el.parcelNumber,
+        county: el.county,
+        arcage: el.arcage,
+        lastSalesPrice: numFormatter.format(Number(el.lastSalesPrice)),
+        pricePerAcre: numFormatter.format(el.pricePerAcre),
+        lastSalesDate: el.lastSalesDate,
+      }))
+    );
+    const maxLengthData = {
+      parcelNumber: [...formattedData].sort((a, b) => b.parcelNumber.length - a.parcelNumber.length)[0].parcelNumber.length,
+      county: [...formattedData].sort((a, b) => b.county.length - a.county.length)[0].county.length,
+      arcage: [...formattedData].sort((a, b) => b.arcage.toString().length - a.arcage.toString().length)[0].arcage.length,
+      lastSalesPrice: [...formattedData].sort((a, b) => b.lastSalesPrice!.toString().length - a.lastSalesPrice!.toString().length)[0]
+        .lastSalesPrice!.length,
+      pricePerAcre: [...formattedData]
+        .sort((a, b) => b.pricePerAcre.toString().length - a.pricePerAcre.toString().length)[0]
+        .pricePerAcre.toString().length,
+      lastSalesDate: [...formattedData].sort((a, b) => b.lastSalesDate!.toString().length - a.lastSalesDate!.toString().length)[0]
+        .lastSalesDate!.length,
+    };
+
+    const wscols = Object.values(maxLengthData).map((el) => ({ wch: el + 10 }));
+
+    ws["!cols"] = wscols;
+    XLSX.utils.sheet_add_aoa(ws, [HEADER_ROWS.map((el) => el.label)], { origin: "A1" });
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: "xlsx" });
+    saveAs(data, `${new Date()}.xlsx`);
   };
 
   return (
@@ -123,6 +161,7 @@ const LandPriceCalculationTable = ({
           <p className="text-xs text-grey-600 text-center">We don’t support this information for mobile, Please open up Desktop version.</p>
         </div>
       </div>
+      <button onClick={exportToCSV}>exportt</button>
     </div>
   );
 };
