@@ -28,8 +28,8 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
       <div className="flex flex-col max-w-fit w-full gap-3">
         <CheckBox
           className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
-          hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
+          hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value.includes(IUserRegistrationReason.SellLandQuickly) && "bg-primary-main-100 border-primary-main-400"
           )}
           label="I want to sell my land quickly"
@@ -38,8 +38,8 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         />
         <CheckBox
           className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
-            hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
+            hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value.includes(IUserRegistrationReason.LookingForLandDeal) && "bg-primary-main-100 border-primary-main-400"
           )}
           label="I am looking for a land deal"
@@ -48,8 +48,8 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         />
         <CheckBox
           className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
-          hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
+          hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value.includes(IUserRegistrationReason.ResearchingPropertyData) && "bg-primary-main-100 border-primary-main-400"
           )}
           label="I am researching property data"
@@ -58,8 +58,8 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         />
         <CheckBox
           className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl hover:bg-primary-main-100
-        hover:border-primary-main-400 !text-black text-xs md:text-base checked:bg-primary-dark`,
+            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
+        hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
             value.includes(IUserRegistrationReason.RealEstateProfessional) && "bg-primary-main-100 border-primary-main-400"
           )}
           label={
