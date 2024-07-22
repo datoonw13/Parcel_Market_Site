@@ -14,7 +14,7 @@ import * as XLSX from "xlsx";
 import { numFormatter } from "@/helpers/common";
 import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 import Button from "../../shared/forms/Button";
-import { ExportIcon1 } from "../../icons/ExportIcons";
+import { ExportIcon1, ExportMapIcon1 } from "../../icons/ExportIcons";
 
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
@@ -167,6 +167,9 @@ const LandPriceCalculationTable = ({
         </div>
       </div>
       <div className="hidden lg:flex gap-3 mt-4 justify-end">
+        <Button startIcon={ExportMapIcon1} onClick={exportToExcel} variant="secondary">
+          Export Map
+        </Button>
         <Button startIcon={ExportIcon1} onClick={exportToExcel}>
           Export Data
         </Button>
