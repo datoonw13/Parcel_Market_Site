@@ -5,16 +5,14 @@
 import { useState } from "react";
 import clsx from "clsx";
 import { ISellingProperty } from "@/types/find-property";
-import { headers } from "next/headers";
 import moment from "moment";
 import { orderBy } from "lodash";
-import useMediaQuery from "@/hooks/useMediaQuery";
 import Image from "next/image";
 import { LatLngTuple } from "leaflet";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { numFormatter } from "@/helpers/common";
-import { ArrowIconLeft1, ArrowIconsUnion1 } from "../../icons/ArrowIcons";
+import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 import Button from "../../shared/forms/Button";
 import { ExportIcon1 } from "../../icons/ExportIcons";
 
