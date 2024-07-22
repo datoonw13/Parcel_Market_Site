@@ -4,7 +4,6 @@ import { forwardRef, useRef, useState } from "react";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
-import GoogleButton from "@/components/@new/shared/forms/Button/GoogleButton";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import routes from "@/helpers/routes";
 import useEnterClick from "@/hooks/useEnterClick";
@@ -14,6 +13,8 @@ import toast from "react-hot-toast";
 import { signInUserAction } from "@/server-actions/user/actions";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/@new/shared/forms/text-field";
+import SignInGoogle from "@/components/@new/auth/sign-in/sign-in-google";
+import GoogleAuthProvider from "@/components/@new/auth/sign-in/google-auth-provider";
 
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
         <SubmitButton ref={ref} />
       </form>
       <Divider label="OR" className="my-3" />
-      <GoogleButton onClick={() => {}} />
+      <GoogleAuthProvider />
       <p className="font-medium text-sm mt-auto">
         Don&apos;t have an account?{" "}
         <Link href={`/${routes.auth.url}/${routes.auth.signUp.url}`}>
