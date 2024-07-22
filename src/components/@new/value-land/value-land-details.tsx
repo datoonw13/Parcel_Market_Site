@@ -72,11 +72,12 @@ const ValueLandDetails = () => {
       params.delete("county");
       router.replace(`${pathname}?${params.toString()}`);
     }
-  }, [params, pathname, router, setValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setValueLandAtom({ aboutLand: null, calculatedPrice: null, lands: null, selectedLand: null, sellerType: null, sellOptions: null });
-  }, []);
+  }, [setValueLandAtom]);
 
   return (
     <div className="h-full flex flex-col w-full gap-6">
