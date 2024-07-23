@@ -31,7 +31,7 @@ const AccountActivation = ({ email, errorMessage }: { email: string; errorMessag
     }
   }, []);
   return (
-    !errorMessage && (
+    errorMessage && (
       <div className="sm:p-16">
         <div className="w-12 h-12 rounded-full flex justify-center items-center m-auto bg-info text-white font-semibold rotate-180 text-lg mb-4">
           !
