@@ -81,7 +81,9 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
           </div>
           <div className="flex justify-between sm:flex-col sm:justify-start items-center">
             <p className="text-xs font-medium sm:text-white sm:ml-auto sm:min-w-full sm:w-max">Offered Price</p>
-            <p className="font-semibold text-primary-main sm:text-white sm:text-2xl sm:min-w-full sm:w-max">{numFormatter.format(Number(data.price))}</p>
+            <p className="font-semibold text-primary-main sm:text-white sm:text-2xl sm:min-w-full sm:w-max">
+              {numFormatter.format(Number(data.price))}
+            </p>
           </div>
         </div>
         <OfferDetailSection data={data} rootClasses="mx-4 md:mx-8 mb-8" alertClasses="mt-3" />

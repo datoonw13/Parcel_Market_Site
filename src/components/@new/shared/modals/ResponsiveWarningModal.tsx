@@ -21,15 +21,13 @@ interface ResponsiveWarningModalProps {
   onCancel: () => void;
   cancelLabel?: string;
   variant?: "success" | "error";
-  SuccessIcon?: FC<{ color?: string }>;
-  ErrorIcon?: FC<{ color?: string }>;
+  customIcon?: ReactNode;
 }
 const Content: FC<ResponsiveWarningModalProps> = ({
   open,
   closeModal,
   variant = "success",
-  SuccessIcon = CheckIcon3,
-  ErrorIcon = RemoveIcon2,
+  customIcon,
   title,
   description,
   onOK,
@@ -49,7 +47,12 @@ const Content: FC<ResponsiveWarningModalProps> = ({
         variant === "error" ? "bg-error-100" : "bg-primary-main-100"
       )}
     >
-      {variant === "success" ? <SuccessIcon className="!h-4 !w-4" color="success" /> : <ErrorIcon className="!h-4 !w-4" color="error" />}
+      {customIcon ||
+        (variant === "success" ? (
+          <CheckIcon3 className="!h-4 !w-4" color="success" />
+        ) : (
+          <RemoveIcon2 className="!h-4 !w-4" color="error" />
+        ))}
     </div>
     <div className="space-y-1.5 mb-6">
       <p className="text-center font-semibold">{title}</p>
