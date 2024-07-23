@@ -19,7 +19,7 @@ const ValueLendTermsPage = () => {
         </Button>
         <p className="text-lg font-semibold my-6">Information before we calculate</p>
       </div>
-      <ValueLendTerms />
+      <ValueLendTerms closeRootModal={() => {}} />
     </Container>
   );
 };

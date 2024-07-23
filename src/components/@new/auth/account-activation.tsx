@@ -31,25 +31,27 @@ const AccountActivation = ({ email, errorMessage }: { email: string; errorMessag
     }
   }, []);
   return (
-    <div className="sm:p-16">
-      <div className="w-12 h-12 rounded-full flex justify-center items-center m-auto bg-info text-white font-semibold rotate-180 text-lg mb-4">
-        !
+    !errorMessage && (
+      <div className="sm:p-16">
+        <div className="w-12 h-12 rounded-full flex justify-center items-center m-auto bg-info text-white font-semibold rotate-180 text-lg mb-4">
+          !
+        </div>
+        <div className="space-y-1 mb-8 md:mb-6 max-w-96 mx-auto">
+          <h1 className="text-center text-lg font-medium">Link has been expired</h1>
+          <h2 className="text-center text-sm text-grey-800">
+            Your validation link has been expired, please resend request to continue process
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 gap-3  max-w-96 mx-auto">
+          <Button variant="secondary" onClick={() => router.push(routes.auth.signIn.fullUrl)}>
+            Close
+          </Button>
+          <Button onClick={resendEmail} loading={resendLoading}>
+            Resend Email
+          </Button>
+        </div>
       </div>
-      <div className="space-y-1 mb-8 md:mb-6 max-w-96 mx-auto">
-        <h1 className="text-center text-lg font-medium">Link has been expired</h1>
-        <h2 className="text-center text-sm text-grey-800">
-          Your validation link has been expired, please resend request to continue process
-        </h2>
-      </div>
-      <div className="grid grid-cols-2 gap-3  max-w-96 mx-auto">
-        <Button variant="secondary" onClick={() => router.push(routes.auth.signIn.fullUrl)}>
-          Close
-        </Button>
-        <Button onClick={resendEmail} loading={resendLoading}>
-          Resend Email
-        </Button>
-      </div>
-    </div>
+    )
   );
 };
 
