@@ -3,19 +3,33 @@
 import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
 import { resendSignUpVerificationCodeAction } from "@/server-actions/user/actions";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
-const AccountActivation = ({ email }: { email: string }) => {
+const AccountActivation = ({ email, errorMessage }: { email: string; errorMessage?: string | null }) => {
   const router = useRouter();
+  const toastId = useRef(null);
   const [resendLoading, setResendLoading] = useState(false);
 
   const resendEmail = async () => {
     setResendLoading(true);
-    await resendSignUpVerificationCodeAction(email!);
+    const { errorMessage } = await resendSignUpVerificationCodeAction(email!);
+    if (errorMessage) {
+      toast.error(errorMessage);
+    }
     setResendLoading(false);
   };
 
+  useEffect(() => {
+    if (!errorMessage) {
+      toast.success("Your email address has been successfully confirmed, now sign into your account", {
+        duration: 3500,
+        id: "activation-toast",
+      });
+      router.push(routes.auth.signIn.fullUrl);
+    }
+  }, []);
   return (
     <div className="sm:p-16">
       <div className="w-12 h-12 rounded-full flex justify-center items-center m-auto bg-info text-white font-semibold rotate-180 text-lg mb-4">

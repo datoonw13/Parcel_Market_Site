@@ -10,12 +10,7 @@ const AccountActivationPage = async ({ searchParams }: { searchParams: { token?:
   }
   const { errorMessage } = await activateUserAccountAction(searchParams.token);
 
-  if (!errorMessage) {
-    toast.success("Your email address has been successfully confirmed, now sign into your account", { duration: 3500 });
-    redirect(routes.auth.signIn.fullUrl);
-  }
-
-  return <AccountActivation email={searchParams.email} />;
+  return <AccountActivation email={searchParams.email} errorMessage={errorMessage} />;
 };
 
 export default AccountActivationPage;

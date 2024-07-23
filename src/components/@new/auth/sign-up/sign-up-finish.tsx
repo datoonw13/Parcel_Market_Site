@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import { resendSignUpVerificationCodeAction } from "@/server-actions/user/actions";
+import toast from "react-hot-toast";
 import { CheckIcon3 } from "../../icons/CheckIcons";
 import Button from "../../shared/forms/Button";
 import { RemoveIcon2 } from "../../icons/RemoveIcons";
@@ -19,7 +20,10 @@ const SignUpFinish: FC<SignUpFinishProps> = ({ variant = "success", errorMessage
 
   const resendEmail = async () => {
     setResendLoading(true);
-    await resendSignUpVerificationCodeAction(email!);
+    const { errorMessage } = await resendSignUpVerificationCodeAction(email!);
+    if (errorMessage) {
+      toast.error(errorMessage);
+    }
     setResendLoading(false);
   };
   const handleClick = () => {

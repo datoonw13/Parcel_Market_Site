@@ -255,16 +255,13 @@ export const setNewEmailAction = async (values: { code: string; email: string })
   }
 };
 
-const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
 export const resendSignUpVerificationCodeAction = async (email: string): Promise<ResponseModel<null>> => {
   try {
-    await delay();
-    // const request = await fetcher<ISignInResponse>("user/reset/email", {
-    //   method: "POST",
-    //   body: JSON.stringify(values),
-    //   cache: "no-store",
-    // });
-    // setAuthToken(request.access_token);
+    await fetcher<ISignInResponse>("user/activate/resend/emal", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      cache: "no-store",
+    });
     return {
       data: null,
       errorMessage: null,
