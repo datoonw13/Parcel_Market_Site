@@ -34,6 +34,7 @@ interface IProps {
   markerMouseLeave?: (value: LatLngTuple) => void;
   popupOpen?: (value: LatLngTuple) => void;
   popupClose?: (value: LatLngTuple) => void;
+  onMarkerClick?: (value: LatLngTuple) => void;
 }
 
 const markerDefault = new Icon({
@@ -69,6 +70,7 @@ const Map = ({
   markerMouseLeave,
   popupClose,
   popupOpen,
+  onMarkerClick,
 }: IProps) => {
   const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
 
@@ -107,6 +109,7 @@ const Map = ({
                   mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.centerCoordinate),
                   popupopen: () => popupOpen && popupOpen(mapItem.centerCoordinate),
                   popupclose: () => popupClose && popupClose(mapItem.centerCoordinate),
+                  click: () => onMarkerClick && onMarkerClick(mapItem.centerCoordinate),
                 }}
                 ref={(ref) => {
                   if (setMarkerRef && ref) {

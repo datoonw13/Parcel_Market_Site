@@ -8,7 +8,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import Button from "../../shared/forms/Button";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
-import { CheckIcon1, CheckIcon2 } from "../../icons/CheckIcons";
 import { InfoIcon2 } from "../../icons/InfoIcons";
 
 const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null }) => {

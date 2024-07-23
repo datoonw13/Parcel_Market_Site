@@ -3,6 +3,7 @@
 import { numFormatter } from "@/helpers/common";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
+import clsx from "clsx";
 import { LocationIcon2 } from "../../icons/LocationIcons";
 
 const CalculationDetails = () => {
@@ -62,7 +63,13 @@ const CalculationDetails = () => {
                 setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));
               }}
             >
-              <LocationIcon2 className="!w-5 min-w-5 !h-6 min-h-6" />
+              <LocationIcon2
+                className={clsx(
+                  valueLandData.mapInteraction.hoveredLand === el.stringifiedCoordinates
+                    ? "!w-6 min-w-6 !h-8 min-h-8 [&>path:first-child]:!fill-[#F44D61]"
+                    : "!w-5 min-w-5 !h-6 min-h-6 "
+                )}
+              />
             </div>
           ))}
         </div>
