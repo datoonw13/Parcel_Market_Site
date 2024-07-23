@@ -13,7 +13,7 @@ import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 
-const ValueLendTerms = () => {
+const ValueLendTerms = ({closeRootModal}: {closeRootModal: () => void}) => {
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const [agreed, setAgreed] = useState(false);
   const pathname = usePathname();
@@ -22,7 +22,7 @@ const ValueLendTerms = () => {
   const [landId, setLendId] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
-
+  
   const handleSubmit = async () => {
     if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand || !valueLandData.sellerType) {
       return;
@@ -132,7 +132,7 @@ const ValueLendTerms = () => {
             </div>
           </SimpleBar>
         </div>
-        <DialogActions disableSubmit={!agreed} onClose={() => setOpenModal(null)} onSubmit={handleSubmit} submitPending={pending} />
+        <DialogActions disableSubmit={!agreed} onClose={closeRootModal} onSubmit={handleSubmit} submitPending={pending} />
       </div>
     </>
   );

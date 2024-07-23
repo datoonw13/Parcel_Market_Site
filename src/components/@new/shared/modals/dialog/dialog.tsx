@@ -40,7 +40,7 @@ const Dialog: FC<DialogProps> = ({
     <div className={clsx("bg-white shadow-4 rounded-2xl flex flex-col", className)}>
       <div className="flex items-center justify-between gap-2 px-8 py-6 border-b border-b-grey-100">
         <h1 className="text-lg font-semibold">{title}</h1>
-        <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6">
+        <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6" onClick={closeModal}>
           <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
         </Button>
       </div>

@@ -12,7 +12,7 @@ const ValueLandSubmitTermsModal = ({ open, onClose }: { open: boolean; onClose: 
     className="max-w-[60vw] w-full h-[80vh]"
     contentClasses="overflow-hidden"
   >
-    <ValueLendTerms />
+    <ValueLendTerms closeRootModal={onClose} />
   </Dialog>
 );
 
