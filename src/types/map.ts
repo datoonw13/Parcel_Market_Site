@@ -18,6 +18,7 @@ export interface IMapItem {
       county: string;
       state2: string;
       parcelnumb_no_formatting: string;
+      city: string
     };
   };
 }

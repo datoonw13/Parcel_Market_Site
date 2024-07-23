@@ -22,7 +22,8 @@ const ValueLendTerms = () => {
   const [landId, setLendId] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
-
+  console.log(valueLandData, 22);
+  
   const handleSubmit = async () => {
     if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand || !valueLandData.sellerType) {
       return;
@@ -43,6 +44,7 @@ const ValueLendTerms = () => {
       propertyId: valueLandData.calculatedPrice.id,
       sellerType: valueLandData.sellerType,
       salePrice: valueLandData.calculatedPrice.price,
+      city:  valueLandData.selectedLand.properties.fields.city,
     };
     setPending(true);
     const { errorMessage, data } = await sellLendAction(reqData);

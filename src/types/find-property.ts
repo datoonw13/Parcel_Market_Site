@@ -97,6 +97,7 @@ export interface ISellProperty extends IFindPropertyAbout {
   lat: string;
   lon: string;
   propertyId: number;
+  city: string;
 }
 
 export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout, "agreement"> {
@@ -118,7 +119,7 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   user_id?: number;
   followedListingId?: number;
   offerId?: string;
-  city?: string;
+  city: string;
 }
 
 export type IUserSellingPropertiesResponse = ResponseType<{
