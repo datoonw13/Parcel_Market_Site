@@ -22,7 +22,6 @@ const ValueLendTerms = () => {
   const [landId, setLendId] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
-  console.log(valueLandData, 22);
 
   const handleSubmit = async () => {
     if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand || !valueLandData.sellerType) {
