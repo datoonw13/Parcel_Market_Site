@@ -28,6 +28,7 @@ interface ResponsiveWarningModalProps {
   descriptionClasses?: string;
   paddingXClasses?: string;
   contentClasses?: string;
+  rootClasses?: string;
 }
 const Content: FC<ResponsiveWarningModalProps> = ({
   open,
@@ -47,8 +48,14 @@ const Content: FC<ResponsiveWarningModalProps> = ({
   titleClasses,
   paddingXClasses = "px-5",
   contentClasses,
+  rootClasses,
 }) => (
-  <div className="pt-1 pb-11 flex flex-col justify-center items-center md:bg-white md:rounded-2xl md:p-6 relative max-w-sm w-full">
+  <div
+    className={clsx(
+      "pt-1 pb-11 flex flex-col justify-center items-center md:bg-white md:rounded-2xl md:p-6 relative md:max-w-md w-full",
+      rootClasses
+    )}
+  >
     <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6 hidden md:flex absolute top-6 right-6" onClick={closeModal}>
       <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
     </Button>
@@ -68,9 +75,9 @@ const Content: FC<ResponsiveWarningModalProps> = ({
           ))}
       </div>
     )}
-    <div className={clsx("space-y-1.5 mb-6", hideIcon && "mt-2", paddingXClasses, contentClasses)}>
-      <p className={clsx("text-center font-semibold", titleClasses)}>{title}</p>
-      <p className={clsx("text-center text-grey-800 text-sm", descriptionClasses)}>{description}</p>
+    <div className={clsx("space-y-1.5 mb-6 w-full", hideIcon && "mt-2", paddingXClasses, contentClasses)}>
+      <div className={clsx("text-center font-semibold", titleClasses)}>{title}</div>
+      <div className={clsx("text-center text-grey-800 text-sm", descriptionClasses)}>{description}</div>
     </div>
     <div className={clsx("flex flex-col-reverse md:flex-row gap-3 w-full", paddingXClasses)}>
       <Button className="md:min-w-max md:w-full" variant="secondary" onClick={onCancel}>
