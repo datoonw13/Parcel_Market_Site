@@ -1,10 +1,6 @@
-import Subscriptions from '@/components/@new/subscriptions/subscriptions'
-import React from 'react'
+import Subscriptions from "@/components/@new/subscriptions/subscriptions";
+import React from "react";
 
-const page = () => {
-  return (
-   <Subscriptions />
-  )
-}
+const page = () => <Subscriptions />;
 
-export default page
+export default page;
