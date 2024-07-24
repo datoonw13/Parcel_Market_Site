@@ -154,7 +154,7 @@ const LandPriceCalculationTable = ({
         </table>
 
         <div className="w-full h-96 blur-md lg:hidden" />
-        <div className="lg:hidden absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white border border-grey-100 rounded-2xl p-5 space-y-6">
+        <div className="w-[90%] lg:hidden absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white border border-grey-100 rounded-2xl p-5 space-y-6">
           <div className="relative w-16 h-14 m-auto">
             <Image src="/no-mobile-support.png" fill alt="" className="w-16 h-14 m-auto" />
           </div>
