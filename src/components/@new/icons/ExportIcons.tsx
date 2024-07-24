@@ -44,17 +44,17 @@ export const ExportMapIcon1 = ({ className }: { className?: string }) => (
     <path
       d="M8.00567 0.0928381C12.405 0.0928381 15.9785 3.64589 16.0035 8.04525V7.99981C16.0035 3.58272 12.4228 0.00195312 8.00567 0.00195312C3.58858 0.00195312 0.0078125 3.58272 0.0078125 7.99981V8.04525C0.0328027 3.64589 3.6063 0.0928381 8.00567 0.0928381Z"
       fill="white"
-      fill-opacity="0.2"
+      fillOpacity="0.2"
     />
     <path
       d="M8.00567 15.9068C3.6063 15.9068 0.0328063 12.3537 0.0078125 7.95435V7.99979C0.0078125 12.4169 3.58857 15.9976 8.00567 15.9976C12.4228 15.9976 16.0035 12.4169 16.0035 7.99979V7.95435C15.9785 12.3537 12.405 15.9068 8.00567 15.9068Z"
       fill="#1A237E"
-      fill-opacity="0.2"
+      fillOpacity="0.2"
     />
     <path
       d="M8.00567 15.9991C12.4228 15.9991 16.0035 12.4184 16.0035 8.00128C16.0035 3.58418 12.4228 0.00341797 8.00567 0.00341797C3.58858 0.00341797 0.0078125 3.58418 0.0078125 8.00128C0.0078125 12.4184 3.58858 15.9991 8.00567 15.9991Z"
       fill="url(#paint0_radial_4120_84409)"
-      fill-opacity="0.1"
+      fillOpacity="0.1"
     />
     <defs>
       <radialGradient
@@ -65,8 +65,8 @@ export const ExportMapIcon1 = ({ className }: { className?: string }) => (
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(2.42374 2.41943) scale(15.8902)"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </radialGradient>
     </defs>
   </svg>
