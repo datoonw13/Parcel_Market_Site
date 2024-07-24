@@ -17,13 +17,21 @@ const isSelected = (plan: SubscriptionsEnum) => currentPlan === plan;
 const Subscriptions = () => (
   <>
     <ResponsiveWarningModal
-      open
+      open={false}
       closeModal={() => {}}
-      description="Are you sure you would like to proceed with Annual and save 10% per month"
+      description={
+        <p className="text-sm text-grey-800">
+          Are you sure you would like to proceed with Annual and
+          <span className="font-semibold text-black text-sm"> save 10% per month</span>
+        </p>
+      }
       title="Upgrade Subscription plan"
       onOK={() => {}}
       onCancel={() => {}}
       hideIcon
+      titleClasses="text-start"
+      descriptionClasses="text-start"
+      contentClasses="border-b border-b-grey-100 mb-[40vh] pb-4"
     />
     <div className="space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16">
       <div className="space-y-6">
