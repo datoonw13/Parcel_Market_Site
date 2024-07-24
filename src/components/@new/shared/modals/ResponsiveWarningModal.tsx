@@ -22,6 +22,9 @@ interface ResponsiveWarningModalProps {
   cancelLabel?: string;
   variant?: "success" | "error";
   customIcon?: ReactNode;
+  hideIcon?: boolean;
+  titleClasses?: string;
+  descriptionClasses?: string;
 }
 const Content: FC<ResponsiveWarningModalProps> = ({
   open,
@@ -36,27 +39,32 @@ const Content: FC<ResponsiveWarningModalProps> = ({
   onCancel,
   cancelLabel,
   disableOK,
+  hideIcon,
+  descriptionClasses,
+  titleClasses,
 }) => (
   <div className="pt-1 pb-11 px-5 flex flex-col justify-center items-center md:bg-white md:rounded-2xl md:p-6 relative max-w-sm w-full">
     <Button variant="secondary" className="!p-0 !outline-none !w-6 !h-6 hidden md:flex absolute top-6 right-6" onClick={closeModal}>
       <RemoveIcon2 className="!w-3 !h-3" color="grey-600" />
     </Button>
-    <div
-      className={clsx(
-        "h-12 w-12 rounded-full flex items-center justify-center mb-3",
-        variant === "error" ? "bg-error-100" : "bg-primary-main-100"
-      )}
-    >
-      {customIcon ||
-        (variant === "success" ? (
-          <CheckIcon3 className="!h-4 !w-4" color="success" />
-        ) : (
-          <RemoveIcon2 className="!h-4 !w-4" color="error" />
-        ))}
-    </div>
-    <div className="space-y-1.5 mb-6">
-      <p className="text-center font-semibold">{title}</p>
-      <p className="text-center text-grey-800 text-sm">{description}</p>
+    {!hideIcon && (
+      <div
+        className={clsx(
+          "h-12 w-12 rounded-full flex items-center justify-center mb-3",
+          variant === "error" ? "bg-error-100" : "bg-primary-main-100"
+        )}
+      >
+        {customIcon ||
+          (variant === "success" ? (
+            <CheckIcon3 className="!h-4 !w-4" color="success" />
+          ) : (
+            <RemoveIcon2 className="!h-4 !w-4" color="error" />
+          ))}
+      </div>
+    )}
+    <div className={clsx("space-y-1.5 mb-6", hideIcon && "mt-2")}>
+      <p className={clsx("text-center font-semibold", titleClasses)}>{title}</p>
+      <p className={clsx("text-center text-grey-800 text-sm", descriptionClasses)}>{description}</p>
     </div>
     <div className="flex flex-col-reverse md:flex-row gap-3 w-full">
       <Button className="md:min-w-max md:w-full" variant="secondary" onClick={onCancel}>

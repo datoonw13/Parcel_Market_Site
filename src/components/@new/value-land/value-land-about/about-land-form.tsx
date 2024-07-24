@@ -41,7 +41,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
   const onSubmit = handleSubmit((aboutLand) => {
     setValueLandData((prev) => ({ ...prev, aboutLand }));
     if (!user) {
-      params.set("from", pathname);
+      params.set("from", routes.valueLand.about.fullUrl);
       router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
       return;
     }
