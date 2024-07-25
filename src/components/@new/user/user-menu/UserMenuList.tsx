@@ -39,6 +39,11 @@ const list = [
     path: routes.user.profile.fullUrl,
   },
   {
+    label: "My Subscription",
+    icon: UserIcon1,
+    path: routes.user.subscription.fullUrl,
+  },
+  {
     label: "My Messages",
     icon: SmsIcon1,
     path: "/",

@@ -63,6 +63,11 @@ const routes = {
         protected: true,
       },
     },
+    subscription: {
+      url: "subscription",
+      fullUrl: "/user/subscription",
+      protected: true,
+    },
   },
   valueLand: {
     url: "value-land",
