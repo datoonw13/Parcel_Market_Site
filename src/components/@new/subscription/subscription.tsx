@@ -11,17 +11,17 @@ import PlanBox from "./plan-box";
 import UpdatePlanDialog from "./update-plan-dialog";
 import CancelPlanDialog from "./cancel-plan-dialog";
 
-enum SubscriptionsEnum {
+enum SubscriptionEnum {
   FREE,
   MONTHLY,
   ANNUAL,
 }
 
-const currentPlan = SubscriptionsEnum.MONTHLY;
+const currentPlan = SubscriptionEnum.MONTHLY;
 
-const isSelected = (plan: SubscriptionsEnum) => currentPlan === plan;
+const isSelected = (plan: SubscriptionEnum) => currentPlan === plan;
 
-const Subscriptions = () => {
+const Subscription = () => {
   const [openChangePlanModal, setOpenChangePlanModal] = useState(false);
   return (
     <>
@@ -116,4 +116,4 @@ const Subscriptions = () => {
   );
 };
 
-export default Subscriptions;
+export default Subscription;
