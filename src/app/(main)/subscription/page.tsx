@@ -1,6 +1,7 @@
 import { ArrowIconLeftFilled1 } from "@/components/@new/icons/ArrowIcons";
 import Container from "@/components/@new/shared/Container";
 import Subscription from "@/components/@new/subscription/subscription";
+import UserProfileSection from "@/components/@new/user/profile/UserProfileSection";
 import React from "react";
 
 const SubscriptionPage = () => (
