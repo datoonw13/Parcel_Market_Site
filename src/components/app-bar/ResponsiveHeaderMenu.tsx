@@ -2,19 +2,15 @@
 
 import routes from "@/helpers/routes";
 import BurgerIcon from "@/icons/BurgerIcon";
-import { logOut } from "@/lib/features/slices/authedUserSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { Input } from "@mui/icons-material";
 import { Box, ClickAwayListener, Drawer, IconButton } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ISignInResponse } from "@/types/auth";
 import UserMenuList from "../@new/user/user-menu/UserMenuList";
 
-const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
+const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: ISignInResponse["payload"] | null }) => {
   const pathname = usePathname();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.authedUser.user);
 
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -87,14 +83,18 @@ const ResponsiveHeaderMenu = ({ rootId }: { rootId: string }) => {
                 <Link href="/">Find a Land Professional</Link>
               </Box>
               <Box>
-                <Link href={routes.marketplace.fullUrl}>Market Place</Link>
+                <Link href={routes.marketplace.fullUrl}>Parcel MarketPlace</Link>
               </Box>
               <Box>
                 <Link href="/find-property">Value my land for free</Link>
               </Box>
             </Box>
-            <p className="text-grey-600 text-xs my-4">Personal</p>
-            <UserMenuList listItemClasses="!text-sm" close={() => setOpen(false)} />
+            {user && (
+              <>
+                <p className="text-grey-600 text-xs my-4">Personal</p>
+                <UserMenuList listItemClasses="!text-sm" close={() => setOpen(false)} />
+              </>
+            )}
           </Drawer>
         </>
       </Box>
