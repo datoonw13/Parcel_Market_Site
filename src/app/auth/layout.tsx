@@ -16,7 +16,9 @@ const AuthLayout = ({ children }: { children: ReactNode }) => (
   //   <div className="bg-white rounded-2xl max-w-[736px] w-full h-full mx-auto my-auto">{children}</div>
   //   <MiniFooter />
   // </div>
-  <MiniLayout>{children}</MiniLayout>
+  <MiniLayout>
+    <div className="bg-white rounded-2xl max-w-[736px] w-full h-full mx-auto my-auto">{children}</div>
+  </MiniLayout>
 );
 
 export default AuthLayout;

@@ -11,8 +11,6 @@ const AppBarMini = () => (
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      // pt: { xs: 2, sm: 4, md: 6, lg: 8 },
-      // mb: { xs: 6, md: 5 },
     }}
   >
     <Link href="/">
