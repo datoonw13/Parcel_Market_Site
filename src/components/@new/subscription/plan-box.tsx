@@ -30,7 +30,7 @@ const PlanBox: FC<PlanBoxProps> = ({
   onChange,
   pending,
 }) => (
-  <div className={clsx("space-y-8 p-4 md:p-6 lg:8 border border-grey-100 rounded-2xl", className, selected && "border-primary-main")}>
+  <div className={clsx("space-y-8 p-4 md:p-6 lg:8 border border-grey-100 rounded-2xl justify-between flex flex-col", className, selected && "border-primary-main")}>
     <div className="space-y-4 ">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">

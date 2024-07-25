@@ -1,7 +1,7 @@
 import MiniLayout from "@/components/@new/shared/mini-layout";
 import Subscription from "@/components/@new/subscription/subscription";
 
-const SignInSubscription = () => (
+const UserSubscriptionPage = () => (
   <MiniLayout>
     <div className="rounded-2xl lg:bg-white lg:p-12 xl:p-16">
       <Subscription />
@@ -9,4 +9,4 @@ const SignInSubscription = () => (
   </MiniLayout>
 );
 
-export default SignInSubscription;
+export default UserSubscriptionPage;
