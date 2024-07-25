@@ -23,13 +23,19 @@ const isSelected = (plan: SubscriptionEnum) => currentPlan === plan;
 
 const Subscription = () => {
   const [openChangePlanModal, setOpenChangePlanModal] = useState(false);
+  const [openCancelModal, setOpenCancelModal] = useState(false);
   return (
     <>
-      <UpdatePlanDialog closeDialog={() => {}} open={false} onSubmit={() => {}} pending={false} />
+      <UpdatePlanDialog
+        closeDialog={() => setOpenChangePlanModal(false)}
+        open={openChangePlanModal}
+        onSubmit={() => setOpenChangePlanModal(false)}
+        pending={false}
+      />
       <CancelPlanDialog
-        closeDialog={() => {}}
-        open={false}
-        onSubmit={() => {}}
+        closeDialog={() => setOpenCancelModal(false)}
+        open={openCancelModal}
+        onSubmit={() => setOpenCancelModal(false)}
         pending={false}
         selectReason={() => {}}
         selectedReason={null}
@@ -106,9 +112,28 @@ const Subscription = () => {
         <div className="space-y-6">
           <h2 className="hidden sm:block text-center text-lg font-semibold">How Would You like to Pay?</h2>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            <PlanBox title="14 Days" price="Free" period="14 Days" periodDesc="(No card needed)" onChange={() => {}} />
-            <PlanBox title="Monthly" price="$20.00" period="Per Month" selected activeUntil={new Date()} onChange={() => {}} />
-            <PlanBox title="Annual" price="215.00" period="Per Year" periodDesc="(Save 10% per month)" onChange={() => {}} />
+            <PlanBox
+              title="14 Days"
+              price="Free"
+              period="14 Days"
+              periodDesc="(No card needed)"
+              onChange={() => setOpenChangePlanModal(true)}
+            />
+            <PlanBox
+              title="Monthly"
+              price="$20.00"
+              period="Per Month"
+              selected
+              activeUntil={new Date()}
+              onChange={() => setOpenCancelModal(true)}
+            />
+            <PlanBox
+              title="Annual"
+              price="215.00"
+              period="Per Year"
+              periodDesc="(Save 10% per month)"
+              onChange={() => setOpenChangePlanModal(true)}
+            />
           </div>
         </div>
       </div>
