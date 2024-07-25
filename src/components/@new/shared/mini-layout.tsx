@@ -5,10 +5,10 @@ import { ReactNode } from "react";
 import Container from "./Container";
 
 const MiniLayout = ({ children, className }: { children: ReactNode; className?: string }) => (
-  <div className={clsx("flex flex-col min-h-screen justify-between h-full", className)}>
+  <div className={clsx("flex flex-col justify-between min-h-screen bg-white sm:bg-grey-30", className, "space-y-16")}>
     <AppBarMini />
-    <div>{children}</div>
-    <Container maxWidth="max-w-full" className="pt-8 pb-4 sm:pb-5 md:pb-6 lg:pb-[30px]">
+    <Container>{children}</Container>
+    <Container maxWidth="max-w-full" className="pb-4 sm:pb-5 md:pb-6 lg:pb-[30px]">
       <MiniFooter />
     </Container>
   </div>
