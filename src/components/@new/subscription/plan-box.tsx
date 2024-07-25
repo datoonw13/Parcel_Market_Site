@@ -40,7 +40,7 @@ const PlanBox: FC<PlanBoxProps> = ({
           </div>
         </div>
         {selected && activeUntil && (
-          <p className="text-sm text-grey-600 font-medium">Active Until {moment(activeUntil).format("DD/MM/YYYY")}</p>
+          <p className="text-end text-sm text-grey-600 font-medium">Active Until {moment(activeUntil).format("DD/MM/YYYY")}</p>
         )}
       </div>
       <div className="space-y-1">

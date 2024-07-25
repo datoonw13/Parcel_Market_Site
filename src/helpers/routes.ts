@@ -94,6 +94,16 @@ const routes = {
       protected: true,
     },
   },
+  checkout: {
+    url: "checkout",
+    protected: true,
+    fullUrl: "/checkout",
+  },
+  subscription: {
+    url: "subscription",
+    protected: true,
+    fullUrl: "/subscription",
+  },
 };
 
 export const getAllRoutes = (
