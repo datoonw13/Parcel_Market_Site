@@ -99,6 +99,11 @@ const routes = {
     protected: true,
     fullUrl: "/checkout",
   },
+  subscription: {
+    url: "subscription",
+    protected: true,
+    fullUrl: "/subscription",
+  },
   userSubscription: {
     url: "user-subscription",
     protected: true,
