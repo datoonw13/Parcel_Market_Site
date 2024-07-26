@@ -117,7 +117,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           getOptionKey={(item) => item.value}
           onChange={(item) => {
             setValue("state", item?.value ?? "", { shouldValidate: isSubmitted });
-            setValue("city", "", { shouldValidate: isSubmitted });
           }}
           placeholder="State"
           value={getAllStates().find((el) => el.value === watch("state")) || null}
@@ -128,19 +127,12 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           getSelectedOption={(item) => item.value === watch("state")}
           error={!!errors.state}
         />
-        <AutoComplete
-          options={cities}
-          getOptionLabel={(item) => item.label}
-          getOptionKey={(item) => item.value}
-          onChange={(item) => setValue("city", item?.value ?? "", { shouldValidate: isSubmitted })}
-          placeholder="City"
-          value={cities.find((el) => el.value === watch("city")) || null}
-          onFilter={(searchValue, items) =>
-            items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-          }
+        <TextField
           required
-          disabled={!watch("state")}
-          getSelectedOption={(item) => item.value === watch("city")}
+          className="w-full"
+          label="City"
+          onChange={(value) => setValue("city", value, { shouldValidate: isSubmitted })}
+          value={watch("city")}
           error={!!errors.city}
         />
         <TextField
