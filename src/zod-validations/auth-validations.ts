@@ -52,19 +52,13 @@ export const userPasswordResetValidations = z
     path: ["repeatNewPassword"],
   });
 
-
-  export const updateUserInfoSchema = z
-  .object({
-    firstName: z.string().trim().min(1),
-    lastName: z.string().trim().min(1),
-    email: emailSchema,
-    streetName: z.string().trim().min(1),
-    unitNumber: z
-      .string()
-      .trim()
-      .optional(),
-    city: z.string().trim().min(1),
-    state: z.string().trim().min(1),
-    postalCode: z.string().trim().min(1),
-  })
- 
+export const updateUserInfoSchema = z.object({
+  firstName: z.string().trim().min(1),
+  lastName: z.string().trim().min(1),
+  email: emailSchema,
+  streetName: z.string().trim().min(1),
+  unitNumber: z.string().trim().optional(),
+  city: z.string().trim().min(1),
+  state: z.string().trim().min(1),
+  postalCode: z.string().trim().min(1),
+});

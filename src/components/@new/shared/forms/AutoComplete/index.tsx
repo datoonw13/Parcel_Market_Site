@@ -90,7 +90,6 @@ const AutoComplete = <T extends Array<{}>>({
     return options;
   };
 
-
   return (
     <div className={clsx(rootClassName)}>
       <Popper
