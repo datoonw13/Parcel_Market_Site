@@ -1,6 +1,6 @@
 "use server";
 
-import { userSignInValidation } from "@/zod-validations/auth-validations";
+import { updateUserInfoSchema, userSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseModel, ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -9,6 +9,7 @@ import moment from "moment";
 import routes from "@/helpers/routes";
 import { revalidatePath } from "next/cache";
 import { ErrorResponse } from "@/helpers/error-response";
+import { z } from "zod";
 import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
@@ -271,6 +272,28 @@ export const resendSignUpVerificationCodeAction = async (email: string): Promise
     return {
       errorMessage: errorData.message,
       data: null,
+    };
+  }
+};
+
+export const updateUserInfoAction = async (values: z.infer<typeof updateUserInfoSchema>): Promise<ResponseModel<null>> => {
+  try {
+    const request = await fetcher<ISignInResponse>("user/profile", {
+      method: "PATCH",
+      body: JSON.stringify(values),
+      cache: "no-store",
+    });
+    setAuthToken(request.access_token);
+    revalidatePath(routes.user.profile.fullUrl);
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      data: null,
+      errorMessage: errorData.message,
     };
   }
 };

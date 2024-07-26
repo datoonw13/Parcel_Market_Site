@@ -19,7 +19,7 @@ const AdditionalInfoSection = ({ user }: { user: IUser }) => {
           <div className="w-full flex justify-between items-center">
             <div className="flex flex-col gap-1">
               <p className="font-medium text-sm">Password</p>
-              <p className="font-medium text-xs text-grey-600">Set a permanent password to login to your account</p>
+              <p className="font-medium text-xs text-grey-600">••••••••••</p>
             </div>
             <button type="button" className="font-medium text-xs text-primary-main" onClick={() => setOpenModal("updatePassword")}>
               Change Password

@@ -15,7 +15,9 @@ const UserProfileSection: FC<UserProfileSectionProps> = (props) => {
         {headerButton && headerButton}
       </div>
       <div className="p-8">{children}</div>
-      {actions && <div className="border-t border-grey-100 py-4 px-8 flex items-center justify-end gap-3">{actions}</div>}
+      {actions && (
+        <div className="border-t border-grey-100 py-4 px-8 flex flex-col-reverse sm:flex-row items-center justify-end gap-3">{actions}</div>
+      )}
     </div>
   );
 };

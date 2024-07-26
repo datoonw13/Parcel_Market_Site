@@ -34,6 +34,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   contentClassName?: string;
   disableSameWidth?: boolean;
   rootClassName?: string;
+  disableClear?: boolean;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -58,6 +59,7 @@ const AutoComplete = <T extends Array<{}>>({
   contentClassName,
   disableSameWidth,
   rootClassName,
+  disableClear,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -87,6 +89,7 @@ const AutoComplete = <T extends Array<{}>>({
     }
     return options;
   };
+
 
   return (
     <div className={clsx(rootClassName)}>
@@ -124,15 +127,16 @@ const AutoComplete = <T extends Array<{}>>({
             className={inputRootClassName}
             endIcon={
               <div className="flex items-center gap-2">
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onChange(null);
-                  }}
-                >
-                  <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
-                </div>
-
+                {!disableClear && (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onChange(null);
+                    }}
+                  >
+                    <Clear className={clsx("text-black !w-4 cursor-pointer", clearIconClassName, !value ? "opacity-0" : "opacity-100")} />
+                  </div>
+                )}
                 {loading ? (
                   <LoadingIcon1 className="!h-3 !w-3" color="grey-600" />
                 ) : isOpen ? (
