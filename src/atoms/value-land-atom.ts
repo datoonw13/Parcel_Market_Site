@@ -15,6 +15,7 @@ export const valueLandAtom = atom<{
   mapInteraction: {
     hoveredLand: string | null;
   };
+  searchDataSaved: boolean;
 }>({
   lands: null,
   selectedLand: null,
@@ -23,4 +24,5 @@ export const valueLandAtom = atom<{
   sellerType: null,
   aboutLand: null,
   mapInteraction: { hoveredLand: null },
+  searchDataSaved: false,
 });

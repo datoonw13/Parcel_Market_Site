@@ -84,6 +84,7 @@ const ValueLandDetails = () => {
       sellerType: null,
       sellOptions: null,
       mapInteraction: { hoveredLand: null },
+      searchDataSaved: false,
     });
   }, [setValueLandAtom]);
 

@@ -12,13 +12,15 @@ import toast from "react-hot-toast";
 import { IFindPropertyEstimatedPrice } from "@/types/find-property";
 import classes from "@/app/value-land/(main)/styles.module.css";
 import { Marker } from "leaflet";
+import { ISignInResponse } from "@/types/auth";
+import { Nullable } from "@/types/common";
 import Button from "../shared/forms/Button";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
-const ValueLandFound = () => {
+const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }) => {
   const router = useRouter();
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
@@ -51,7 +53,7 @@ const ValueLandFound = () => {
       toast.error(errorMessage);
       setPending(false);
     } else {
-      setValueLand((prev) => ({ ...prev, calculatedPrice: data }));
+      setValueLand((prev) => ({ ...prev, calculatedPrice: data, searchDataSaved: !!user }));
       router.push(routes.valueLand.value.fullUrl);
     }
   };

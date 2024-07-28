@@ -9,11 +9,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IFindPropertyAbout } from "@/types/find-property";
 import routes from "@/helpers/routes";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ISignInResponse } from "@/types/auth";
+import { saveSearchDataAction } from "@/server-actions/value-land/actions";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
@@ -26,6 +27,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
   const pathname = usePathname();
   const params = new URLSearchParams();
   const isSmallDevice = useMediaQuery(768);
+  const [saveDataPending, setSaveDataPending] = useState(false);
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const {
@@ -52,13 +54,23 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
     }
   });
 
+  const saveSearchData = useCallback(async () => {
+    setSaveDataPending(true);
+    await saveSearchDataAction();
+    setSaveDataPending(false);
+  }, []);
+
   useEffect(() => {
     if (valueLandData.aboutLand) {
       reset({ ...valueLandData.aboutLand });
     }
   }, [reset, valueLandData.aboutLand]);
 
-  // reset atom on success submit
+  useEffect(() => {
+    if (user && !valueLandData.searchDataSaved) {
+      saveSearchData();
+    }
+  }, [saveSearchData, user, valueLandData]);
 
   return (
     <>
@@ -144,7 +156,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
         <Button variant="secondary" onClick={() => router.push(routes.valueLand.value.fullUrl)}>
           Back
         </Button>
-        <Button onClick={onSubmit} disabled={!isValid}>
+        <Button onClick={onSubmit} loading={saveDataPending} disabled={!isValid}>
           Add Land
         </Button>
       </div>

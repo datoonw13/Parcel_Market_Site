@@ -75,7 +75,6 @@ const ValueLendTerms = ({ closeRootModal }: { closeRootModal: () => void }) => {
       handleSubmit();
     }
   };
-  console.log(landId, 22);
 
   return (
     <>

@@ -26,3 +26,5 @@ export enum SortEnum {
   AreaLowHigh = "area-lo-hi",
   Oldest = "oldest",
 }
+
+export type Nullable<T> = T | null;

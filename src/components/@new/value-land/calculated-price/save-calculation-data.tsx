@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import { ISignInResponse } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
+import { useAtom } from "jotai";
+import { valueLandAtom } from "@/atoms/value-land-atom";
 import Button from "../../shared/forms/Button";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import { InfoIcon2 } from "../../icons/InfoIcons";
@@ -14,6 +16,7 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
+  const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const [saveDataPending, setSaveDataPending] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);
 
@@ -27,11 +30,12 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
         toast.success("Search data successfully saved");
         router.replace(routes.valueLand.value.fullUrl);
       }
+      setValueLand((prev) => ({ ...prev, searchDataSaved: true }));
       setSaveDataPending(false);
     } else {
       setOpenWarningModal(true);
     }
-  }, [router, user]);
+  }, [router, setValueLand, user]);
 
   useEffect(() => {
     if (params.get("from")) {
@@ -40,7 +44,7 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
   }, [params, router, saveSearchData, searchParams]);
 
   return (
-    (saveDataPending || !user) && (
+    !valueLand.searchDataSaved && (
       <>
         <ResponsiveWarningModal
           customIcon={<InfoIcon2 className="!w-4 !h-4" color="primary-main" />}
