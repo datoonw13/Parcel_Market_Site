@@ -19,7 +19,7 @@ import { ExportIcon1, ExportMapIcon1 } from "../../icons/ExportIcons";
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
   { label: "County", key: "county" as const },
-  { label: "Acrage", key: "arcage" as const },
+  { label: "Acreage", key: "arcage" as const },
   { label: "Sold Price", key: "lastSalesPrice" as const },
   { label: "Price Per Acre", key: "pricePerAcre" as const },
   { label: "Last Sale Date", key: "lastSalesDate" as const },

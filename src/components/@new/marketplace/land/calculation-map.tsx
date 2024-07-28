@@ -48,7 +48,7 @@ const CalculationMap: FC<CalculationMapProps> = ({ data, setMarkerRef, markerMou
             },
             lastSalePrice: {
               label: "Last Sale Price",
-              value: numFormatter.format(Number(el.lastSalesPrice)),
+              value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
             },
             showSelectButton: false,
           },

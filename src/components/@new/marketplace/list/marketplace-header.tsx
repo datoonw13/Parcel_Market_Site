@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import { ArrowIconLeftFilled1 } from "../../icons/ArrowIcons";
 import { SearchIcon1 } from "../../icons/SearchIcons";
 import TextField from "../../shared/forms/text-field";
@@ -30,7 +32,9 @@ const MarketplaceHeader = () => {
   return (
     <div className="mb-10 md:mb-12">
       <div className="flex items-center gap-1.5 cursor-pointer mb-8 md:mb-10">
-        <p className="text-sm text-grey-800">Homepage</p>
+        <Link href={routes.home.fullUrl}>
+          <p className="text-sm text-grey-800">Homepage</p>
+        </Link>
         <div className="w-5 h-5 flex items-center justify-center">
           <ArrowIconLeftFilled1 className="!w-1.5 h-1.5" color="primary-main" />
         </div>

@@ -12,7 +12,9 @@ const LandDetailsBreadcrumb = async ({ sellingPropertyId }: { sellingPropertyId:
   }
   return (
     <div className="flex items-center gap-1.5 cursor-pointer mb-8 md:mb-10">
-      <p className="text-sm text-grey-800">Homepage</p>
+      <Link href={routes.home.fullUrl}>
+        <p className="text-sm text-grey-800">Homepage</p>
+      </Link>
       <div className="w-5 h-5 flex items-center justify-center">
         <ArrowIconLeftFilled1 className="!w-1.5 h-1.5" color="primary-main" />
       </div>

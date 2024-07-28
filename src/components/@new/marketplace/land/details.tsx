@@ -8,6 +8,11 @@ import MakeOfferButton from "./make-offer-button";
 const LandDetails = async ({ data }: { data: ISellingProperty }) => {
   const user = await getUserAction();
 
+  const getSaleRangePerAcre = () => {
+    const totalSum = data.usedForPriceCalculations!.reduce((acc, cur) => acc + Number(cur.lastSalesPrice) / Number(cur.arcage), 0);
+    return numFormatter.format(totalSum / data.usedForPriceCalculations!.length);
+  };
+
   return (
     <div className="rounded-2xl border border-grey-100">
       <div className="p-4 md:p-6 lg:p-8 space-y-4">
@@ -20,7 +25,7 @@ const LandDetails = async ({ data }: { data: ISellingProperty }) => {
             Property Type: <span className="text-black">{data.propertyType || "N/A"}</span>
           </p>
           <p className="text-grey-600">
-            Sale Range Per Acre: <span className="text-black">??</span>
+            Sale Range Per Acre: <span className="text-black">{getSaleRangePerAcre()}</span>
           </p>
           <p className="text-grey-600">
             Parcel ID: <span className="text-black">{data.parcelNumber}</span>
