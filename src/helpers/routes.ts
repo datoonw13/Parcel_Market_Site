@@ -72,6 +72,11 @@ const routes = {
   valueLand: {
     url: "value-land",
     fullUrl: "/value-land",
+    calculationTerms: {
+      url: "calculation-terms",
+      fullUrl: "/value-land/calculation-terms",
+      protected: false,
+    },
     protected: false,
     found: {
       url: "found",
