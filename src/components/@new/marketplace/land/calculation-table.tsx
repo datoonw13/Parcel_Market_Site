@@ -12,6 +12,9 @@ import { LatLngTuple } from "leaflet";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { numFormatter } from "@/helpers/common";
+import geo from "geojson";
+// @ts-ignore
+import tokml from "@maphubs/tokml";
 import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
 import Button from "../../shared/forms/Button";
 import { ExportIcon1, ExportMapIcon1 } from "../../icons/ExportIcons";
@@ -85,6 +88,17 @@ const LandPriceCalculationTable = ({
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: "xlsx" });
     saveAs(data, `${new Date()}.xlsx`);
+  };
+
+  const exportToKml = () => {
+    const points = data.map((el) => ({ latitude: Number(el.latitude), longitude: Number(el.longitude) }));
+    // @ts-ignore
+    const geojsonObject = geo.parse(points, {
+      Point: ["latitude", "longitude"],
+      LineString: "line",
+    });
+    const blob = new Blob([tokml(geojsonObject)], { type: "text/plain" });
+    saveAs(blob, `${new Date()}.kml`);
   };
 
   return (
@@ -167,7 +181,7 @@ const LandPriceCalculationTable = ({
         </div>
       </div>
       <div className="hidden lg:flex gap-3 mt-4 justify-end">
-        <Button startIcon={ExportMapIcon1} onClick={exportToExcel} variant="secondary">
+        <Button startIcon={ExportMapIcon1} onClick={exportToKml} variant="secondary">
           Export Map
         </Button>
         <Button startIcon={ExportIcon1} onClick={exportToExcel}>
