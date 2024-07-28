@@ -1,9 +1,7 @@
 "use clint";
 
 import SimpleBar from "simplebar-react";
-import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import routes from "@/helpers/routes";
 import { useState } from "react";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
@@ -18,16 +16,10 @@ const CalculationTerms = ({
   isSubmitting?: boolean;
 }) => {
   const [agreed, setAgreed] = useState(false);
-  const pathname = usePathname();
   return (
     <>
       <div className="flex flex-col justify-between h-full overflow-hidden">
-        <div
-          className={clsx(
-            "mt-6 mb-8 border border-grey-100 rounded-2xl h-full overflow-hidden",
-            pathname !== routes.valueLand.calculationTerms.fullUrl && "mx-8"
-          )}
-        >
+        <div className={clsx("lg:mt-6 lg:mb-8 lg:border lg:border-grey-100 lg:rounded-2xl lg:mx-8 h-full overflow-hidden")}>
           <SimpleBar className="h-full">
             <div className="px-4 sm:px-6 md:px-8 py-6 md:py-8 space-y-6">
               <p className="text-sm font-bold">Some information Before we calculate your price</p>

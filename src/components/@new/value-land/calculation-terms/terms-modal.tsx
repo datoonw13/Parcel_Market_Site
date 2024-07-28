@@ -1,7 +1,7 @@
 "use client";
 
 import Dialog from "../../shared/modals/dialog/dialog";
-import ValueLendTerms from "./terms";
+import CalculationTerms from "./terms";
 
 const CalculationTermsModal = ({
   open,
@@ -22,7 +22,7 @@ const CalculationTermsModal = ({
     className="max-w-[60vw] w-full h-[80vh]"
     contentClasses="overflow-hidden"
   >
-    <ValueLendTerms onDecline={onClose} onSubmit={onSubmit} isSubmitting={isSubmitting} />
+    <CalculationTerms onDecline={onClose} onSubmit={onSubmit} isSubmitting={isSubmitting} />
   </Dialog>
 );
 
