@@ -2,7 +2,7 @@ import Payment from "@/components/@new/payment/payment";
 import MiniLayout from "@/components/@new/shared/mini-layout";
 
 const CheckoutPage = () => (
-  <MiniLayout>
+  <MiniLayout rootClasses="min-h-screen">
     <Payment />
   </MiniLayout>
 );
