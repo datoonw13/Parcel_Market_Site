@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { ReactNode } from "react";
 import Container from "./Container";
 
-const MiniLayout = ({ children, rootClasses, contentClasses }: { children: ReactNode; rootClasses?: string, contentClasses?: string }) => (
+const MiniLayout = ({ children, rootClasses, contentClasses }: { children: ReactNode; rootClasses?: string; contentClasses?: string }) => (
   <div className={clsx("flex flex-col justify-between bg-white sm:bg-grey-30", rootClasses, "space-y-8")}>
     <AppBarMini />
     <Container className={contentClasses}>{children}</Container>
