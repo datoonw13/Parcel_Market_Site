@@ -1,22 +1,35 @@
 import React, { FC } from "react";
+import { SubscriptionType } from "@/types/subcriptions";
 import ResponsiveWarningModal from "../shared/modals/ResponsiveWarningModal";
 
 interface UpdatePlanDialogProps {
-  open: boolean;
   closeDialog: () => void;
   pending: boolean;
   onSubmit: () => void;
+  subscription: SubscriptionType;
 }
-const UpdatePlanDialog: FC<UpdatePlanDialogProps> = ({ open, closeDialog, pending, onSubmit }) => (
+
+const planDescription = (subscription: SubscriptionType) => {
+  switch (subscription) {
+    case SubscriptionType.Monthly:
+      return <p className="text-sm text-grey-800">Are you sure you would like to proceed with Monthly?</p>;
+    case SubscriptionType.Annual:
+      return (
+        <p className="text-sm text-grey-800">
+          Are you sure you would like to proceed with Annual and{" "}
+          <span className="font-semibold text-black text-sm"> save 10% per month</span>
+        </p>
+      );
+    default:
+      return <p className="text-sm text-grey-800">Are you sure you would like to proceed with 14 day free?</p>;
+  }
+};
+
+const UpdatePlanDialog: FC<UpdatePlanDialogProps> = ({ closeDialog, pending, onSubmit, subscription }) => (
   <ResponsiveWarningModal
-    open={open}
+    open
     closeModal={closeDialog}
-    description={
-      <p className="text-sm text-grey-800">
-        Are you sure you would like to proceed with Annual and
-        <span className="font-semibold text-black text-sm"> save 10% per month</span>
-      </p>
-    }
+    description={planDescription(subscription)}
     title="Upgrade Subscription plan"
     onOK={onSubmit}
     okPending={pending}

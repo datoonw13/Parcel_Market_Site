@@ -35,6 +35,8 @@ export interface ISignInResponse {
     role: null;
     sub: number;
     id: number;
+    planSelected?: boolean;
+    isSubscribed?: boolean;
   };
 }
 

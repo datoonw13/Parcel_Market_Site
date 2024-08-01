@@ -46,6 +46,7 @@ export const signInUserAction = async (prevState: any, formData: FormData): Prom
       body: JSON.stringify(validations.data),
       cache: "no-cache",
     });
+
     setAuthToken(data.access_token);
   } catch (error) {
     return {

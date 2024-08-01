@@ -1,37 +1,35 @@
 "use client";
 
-import { DeletionAccountReason } from "@/types/auth";
 import { useState } from "react";
-import { CheckIcon3, CheckIcon4 } from "../icons/CheckIcons";
-import Button from "../shared/forms/Button";
-import CheckBox from "../shared/forms/CheckBox";
-import RadioButton from "../shared/forms/RadioButton";
-import ResponsiveWarningModal from "../shared/modals/ResponsiveWarningModal";
+import { ISubscription, SubscriptionType } from "@/types/subcriptions";
+import { useRouter } from "next/navigation";
+import routes from "@/helpers/routes";
+import { CheckIcon4 } from "../icons/CheckIcons";
 import PlanBox from "./plan-box";
 import UpdatePlanDialog from "./update-plan-dialog";
 import CancelPlanDialog from "./cancel-plan-dialog";
+import SubscriptionHeader from "./subscription-header";
 
-enum SubscriptionEnum {
-  FREE,
-  MONTHLY,
-  ANNUAL,
-}
-
-const currentPlan = SubscriptionEnum.MONTHLY;
-
-const isSelected = (plan: SubscriptionEnum) => currentPlan === plan;
-
-const Subscription = () => {
-  const [openChangePlanModal, setOpenChangePlanModal] = useState(false);
+const Subscription = ({ data }: { data: ISubscription[] | null }) => {
+  const router = useRouter();
+  const userActiveSubscription = data?.find((el) => el.status === "active");
+  const [upgradeSubscriptionTo, setUpgradeSubscriptionTo] = useState<SubscriptionType | null>(null);
   const [openCancelModal, setOpenCancelModal] = useState(false);
+
+  const handleSubscriptionUpgrade = () => {
+    router.push(`${routes.checkout.fullUrl}?plan=${upgradeSubscriptionTo}`);
+  };
+
   return (
     <>
-      <UpdatePlanDialog
-        closeDialog={() => setOpenChangePlanModal(false)}
-        open={openChangePlanModal}
-        onSubmit={() => setOpenChangePlanModal(false)}
-        pending={false}
-      />
+      {upgradeSubscriptionTo && (
+        <UpdatePlanDialog
+          closeDialog={() => setUpgradeSubscriptionTo(null)}
+          onSubmit={handleSubscriptionUpgrade}
+          pending={false}
+          subscription={upgradeSubscriptionTo}
+        />
+      )}
       <CancelPlanDialog
         closeDialog={() => setOpenCancelModal(false)}
         open={openCancelModal}
@@ -41,74 +39,7 @@ const Subscription = () => {
         selectedReason={null}
       />
       <div className="space-y-6 sm:space-y-8 md:space-y-12 lg:space-y-16">
-        <div className="space-y-6">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center">One Subscription. Full Access</h1>
-          <div className="border border-primary-main-400 rounded-2xl bg-primary-main-50 p-4 md:p-6 lg:8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="space-y-3">
-              <h3 className="font-medium text-lg">Sale and Value Data</h3>
-              <ul className="space-y-3">
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  VOLT Tool
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Save Property Searches
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  View Sales in Map
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Export Sale Data to KML and XML
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-3">
-              <h3 className="font-medium text-lg"> Parcel Marketplace</h3>
-              <ul className="space-y-3">
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Search and Post Wholesale Land Deals
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Make and Receive Offers
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Chat Directly with Investors and Landowners
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Save and Follow Listings
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-3">
-              <h3 className="font-medium text-lg">Sale and Value Data</h3>
-              <ul className="space-y-3">
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Contact Experienced Land Professionals
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Local to Your area
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Parcel Market Vetted and Approved
-                </li>
-                <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-                  <CheckIcon4 className="!h-3.5" color="primary-main" />
-                  Brokers, Appraisers, and more...
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <SubscriptionHeader />
         <div className="space-y-6">
           <h2 className="hidden sm:block text-center text-lg font-semibold">How Would You like to Pay?</h2>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -117,22 +48,24 @@ const Subscription = () => {
               price="Free"
               period="14 Days"
               periodDesc="(No card needed)"
-              onChange={() => setOpenChangePlanModal(true)}
+              onChange={() => setUpgradeSubscriptionTo(SubscriptionType.Trial)}
+              selected={userActiveSubscription?.type === SubscriptionType.Trial}
             />
             <PlanBox
               title="Monthly"
               price="$20.00"
               period="Per Month"
-              selected
+              selected={userActiveSubscription?.type === SubscriptionType.Monthly}
               activeUntil={new Date()}
-              onChange={() => setOpenCancelModal(true)}
+              onChange={() => setUpgradeSubscriptionTo(SubscriptionType.Monthly)}
             />
             <PlanBox
               title="Annual"
               price="215.00"
               period="Per Year"
               periodDesc="(Save 10% per month)"
-              onChange={() => setOpenChangePlanModal(true)}
+              onChange={() => setUpgradeSubscriptionTo(SubscriptionType.Annual)}
+              selected={userActiveSubscription?.type === SubscriptionType.Annual}
             />
           </div>
         </div>

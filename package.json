@@ -27,6 +27,8 @@
     "@popperjs/core": "^2.11.8",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.3",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.1.0",
     "@typescript/analyze-trace": "^0.10.1",
     "add": "^2.0.6",
     "clsx": "^2.1.1",

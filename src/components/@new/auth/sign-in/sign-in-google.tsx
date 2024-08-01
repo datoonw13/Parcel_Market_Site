@@ -3,7 +3,6 @@
 import clsx from "clsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import GoogleAuthProvider from "./google-auth-provider";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 import { LoadingIcon1 } from "../../icons/LoadingIcons";
 
