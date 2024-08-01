@@ -91,27 +91,27 @@ const OrderDetails = () => {
                 </div>
               )}
             />
-            <p className="font-medium">{getPlanDetails(params.get("plan") as SubscriptionType).price}</p>
+            <p className="font-medium min-w-max">{getPlanDetails(params.get("plan") as SubscriptionType).price}</p>
           </div>
         </div>
         <Divider />
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-1">
             <p className="font-semibold">Total</p>
-            <p className="font-semibold">{getPlanDetails(params.get("plan") as SubscriptionType).price}</p>
+            <p className="font-semibold min-w-max">{getPlanDetails(params.get("plan") as SubscriptionType).price}</p>
           </div>
           <p className="text-xs font-medium">
             By confirming your purchase, you agree to the The Parcel Market{" "}
             <span className="text-xs font-medium text-primary-main underline">terms and conditions</span>
           </p>
         </div>
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <Button className="w-full">Confirm Purchase</Button>
           <div className="flex items-center gap-1.5 justify-center">
             <LockIcon1 />
             <p className="text-grey-800 text-xs font-medium">Purchase protected by (here goes name)</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

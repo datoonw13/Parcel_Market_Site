@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import RadioButton from "../shared/forms/RadioButton";
-import Stripe from "./stripe";
+import Stripe from "./stripe/stripe";
 import Paypal from "./paypal";
 
 const PaymentMethods = () => {
-  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "paypal" | null>(null);
+  const searchParams = useSearchParams();
+  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "paypal" | null>("stripe");
   return (
     <div className="border border-grey-100 rounded-2xl w-full bg-white">
       <h1 className="px-6 pt-6 pb-4 border-b border-b-grey-100 md:text-lg font-medium md:font-semibold">Payment Method</h1>
@@ -36,7 +38,7 @@ const PaymentMethods = () => {
               }
               checked={paymentMethod === "stripe"}
             />
-            <RadioButton
+            {/* <RadioButton
               name="paypal"
               onChange={() => setPaymentMethod("paypal")}
               labelClassName="font-normal"
@@ -46,11 +48,11 @@ const PaymentMethods = () => {
                 </div>
               }
               checked={paymentMethod === "paypal"}
-            />
+            /> */}
           </div>
         </div>
-        {paymentMethod === "stripe" && <Stripe />}
-        {paymentMethod === "paypal" && <Paypal />}
+        {paymentMethod === "stripe" && <Stripe key={searchParams.toString()} />}
+        {/* {paymentMethod === "paypal" && <Paypal />} */}
       </div>
     </div>
   );
