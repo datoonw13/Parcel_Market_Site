@@ -24,7 +24,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     if (response.message) {
       errorMessage = response.message;
     } else if (response.errors.length > 0) {
-      errorMessage = response.errors.join("; ");
+      errorMessage = response?.errors?.join("; ");
     }
     throw new ErrorResponse(errorMessage, response.statusCode);
   }

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { SubscriptionType } from "@/types/subcriptions";
+import { SubscriptionType } from "@/types/subscriptions";
 import ResponsiveWarningModal from "../shared/modals/ResponsiveWarningModal";
 
 interface UpdatePlanDialogProps {

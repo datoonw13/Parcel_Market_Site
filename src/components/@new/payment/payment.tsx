@@ -1,4 +1,3 @@
-import React from "react";
 import PaymentMethods from "./payment-methods";
 import OrderDetails from "./order-details";
 

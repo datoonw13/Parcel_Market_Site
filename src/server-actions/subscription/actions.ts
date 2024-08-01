@@ -1,5 +1,5 @@
 import { ErrorResponse } from "@/helpers/error-response";
-import { ISubscription, SubscriptionType } from "@/types/subcriptions";
+import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 import { ResponseModel } from "@/types/common";
 import { fetcher } from "../fetcher";
 
@@ -12,7 +12,7 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
 
     return {
       errorMessage: null,
-      data: data.clientSecret,
+      data: null,
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
@@ -27,6 +27,7 @@ export const getUserSubscriptions = async (): Promise<ResponseModel<ISubscriptio
   try {
     const data = await fetcher<{ data: ISubscription[] }>(`stripe/subscriptions`, {
       method: "GET",
+      cache: "no-store",
     });
     return {
       errorMessage: null,

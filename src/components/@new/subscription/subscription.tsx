@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ISubscription, SubscriptionType } from "@/types/subcriptions";
+import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import { CheckIcon4 } from "../icons/CheckIcons";

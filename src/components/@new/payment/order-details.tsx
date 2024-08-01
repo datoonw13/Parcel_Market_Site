@@ -1,20 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { SubscriptionType } from "@/types/subscriptions";
 import Popper from "../shared/Popper";
 import { ArrowIconDown1, ArrowIconUp1 } from "../icons/ArrowIcons";
 import Divider from "../shared/Divider";
 import Button from "../shared/forms/Button";
 import { LockIcon1 } from "../icons/lock-icons";
 
+const getPlanDetails = (plan: SubscriptionType) => {
+  switch (plan) {
+    case SubscriptionType.Monthly:
+      return {
+        label: "Monthly",
+        price: "$20.00 USD",
+      };
+    case SubscriptionType.Annual:
+      return {
+        label: "Annually",
+        price: "$215.00 USD",
+      };
+    default:
+      return {
+        label: "Trial",
+        price: "$0.00 USD",
+      };
+  }
+};
+
 const OrderDetails = () => {
-  const [openMenu, setOpenMenu] = useState(false);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const params = new URLSearchParams(searchParams);
+
   return (
-    <div className="border border-grey-100 rounded-2xl w-full bg-white">
+    <div className="border border-grey-100 rounded-2xl w-full bg-white h-fit">
       <h1 className="px-6 pt-6 pb-4 border-b border-b-grey-100 md:text-lg font-medium md:font-semibold">Order Details</h1>
       <div className="px-6 py-4 pb-6 space-y-4">
         <div className="space-y-3">
-          <h2 className="text-grey-800 font-semibold">Monthly Plan</h2>
+          <h2 className="text-grey-800 font-semibold">{getPlanDetails(params.get("plan") as SubscriptionType).label} Plan</h2>
           <div className="flex items-center justify-between gap-2">
             <Popper
               placement="bottom-end"
@@ -23,7 +48,7 @@ const OrderDetails = () => {
                   className="cursor-pointer flex items-center gap-1.5"
                   onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}
                 >
-                  <p className="text-grey-800">Monthly Subscription</p>
+                  <p className="text-grey-800">{getPlanDetails(params.get("plan") as SubscriptionType).label} Subscription</p>
                   {!referenceElement ? (
                     <ArrowIconDown1 className="!w-2.5 !h-3" color="grey-800" />
                   ) : (
@@ -33,23 +58,47 @@ const OrderDetails = () => {
               )}
               renderContent={(setReferenceElement) => (
                 <div className="z-10 rounded-xl bg-white shadow-1">
-                  <div className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50">
+                  <div
+                    className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
+                    onClick={() => {
+                      params.set("plan", SubscriptionType.Trial);
+                      router.replace(`${pathname}?${params.toString()}`);
+                      setReferenceElement(null);
+                    }}
+                  >
+                    Trial
+                  </div>
+                  <div
+                    className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
+                    onClick={() => {
+                      params.set("plan", SubscriptionType.Monthly);
+                      router.replace(`${pathname}?${params.toString()}`);
+                      setReferenceElement(null);
+                    }}
+                  >
                     Monthly
                   </div>
-                  <div className="py-2 px-4 text-xs font-medium rounded-b-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50">
+                  <div
+                    className="py-2 px-4 text-xs font-medium rounded-b-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
+                    onClick={() => {
+                      params.set("plan", SubscriptionType.Annual);
+                      router.replace(`${pathname}?${params.toString()}`);
+                      setReferenceElement(null);
+                    }}
+                  >
                     Annually
                   </div>
                 </div>
               )}
             />
-            <p className="font-medium">$20.00</p>
+            <p className="font-medium">{getPlanDetails(params.get("plan") as SubscriptionType).price}</p>
           </div>
         </div>
         <Divider />
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-1">
             <p className="font-semibold">Total</p>
-            <p className="font-semibold">20 USD</p>
+            <p className="font-semibold">{getPlanDetails(params.get("plan") as SubscriptionType).price}</p>
           </div>
           <p className="text-xs font-medium">
             By confirming your purchase, you agree to the The Parcel Market{" "}
