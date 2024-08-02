@@ -35,7 +35,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
         router.replace(newLocation);
         return;
       }
-      router.replace(routes.home.fullUrl);
+      router.replace(request.data?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
     }
   };
 

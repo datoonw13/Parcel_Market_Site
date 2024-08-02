@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import routes, { getAllRoutes } from "./helpers/routes";
 import { getUserAction, refreshToken } from "./server-actions/user/actions";
-import { redirect } from "next/navigation";
 
 const allRoute = getAllRoutes();
 
@@ -26,9 +25,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // update token after subscription change
-  if(request.nextUrl.pathname === routes.user.subscription.fullUrl && request.nextUrl.searchParams.get('success')) {
-    await refreshToken()
-    return NextResponse.redirect(new URL(routes.user.subscription.fullUrl, request.nextUrl.origin))
+  if (request.nextUrl.pathname === routes.user.subscription.fullUrl && request.nextUrl.searchParams.get("success")) {
+    await refreshToken();
+    return NextResponse.redirect(new URL(routes.user.subscription.fullUrl, request.nextUrl.origin));
   }
 
   if (request.nextUrl.pathname.includes("auth") && user) {

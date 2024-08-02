@@ -47,7 +47,7 @@ export const refreshToken = async (): Promise<ResponseModel<null>> => {
   }
 };
 
-export const signInUserAction = async (prevState: any, formData: FormData): Promise<ResponseModel<null>> => {
+export const signInUserAction = async (prevState: any, formData: FormData): Promise<ResponseModel<ISignInResponse | null>> => {
   const values = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -66,19 +66,14 @@ export const signInUserAction = async (prevState: any, formData: FormData): Prom
       body: JSON.stringify(validations.data),
       cache: "no-cache",
     });
-
     setAuthToken(data.access_token);
+    return { data, errorMessage: null };
   } catch (error) {
     return {
       errorMessage: (error as ErrorResponse).message,
       data: null,
     };
   }
-
-  return {
-    errorMessage: null,
-    data: null,
-  };
 };
 
 export const signUpUserAction = async (values: IUserSignUp): Promise<ResponseModel<null>> => {
