@@ -4,8 +4,8 @@ import { DeletionAccountReason } from "@/types/auth";
 import { FC, useState } from "react";
 import { cancelSubscriptionAction } from "@/server-actions/subscription/actions";
 import { ISubscription } from "@/types/subscriptions";
-import ResponsiveWarningModal from "../shared/modals/ResponsiveWarningModal";
-import RadioButton from "../shared/forms/RadioButton";
+import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
+import RadioButton from "../../shared/forms/RadioButton";
 
 interface CancelPlanDialogProps {
   closeDialog: () => void;

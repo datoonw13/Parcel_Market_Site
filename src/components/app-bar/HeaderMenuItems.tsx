@@ -6,8 +6,6 @@ import UserMenu from "../@new/user/user-menu/UserMenu";
 
 const HeaderMenuItems = async () => {
   const user = await getUserAction();
-  console.log(user, 22);
-  
   return (
     <Box
       sx={{
