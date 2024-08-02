@@ -40,7 +40,7 @@ const PlanBox: FC<PlanBoxProps> = ({
     <div className="space-y-4 ">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h2 className="text-primary-main text-lg md:text-xl lg:text-2xl font-semibold">{title}</h2>
+          <h2 className="text-primary-main text-lg md:text-xl lg:text-2xl font-semibold min-w-max">{title}</h2>
           <div className="w-6 h-6 rounded-full bg-primary-main p-1">
             <CheckIcon3 color="white" />
           </div>

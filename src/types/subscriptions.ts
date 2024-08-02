@@ -4,6 +4,8 @@ export enum SubscriptionType {
   Trial = "Trial",
 }
 
+export type IStripeStatuses = "active" | "canceled" | "incomplete" | "incomplete_expired" | "past_due" | "paused" | "trialing" | "unpaid";
+
 export interface ISubscription {
   id: string;
   type: SubscriptionType;
@@ -11,5 +13,5 @@ export interface ISubscription {
   created: Date;
   activeTo: Date;
   currency: string;
-  status: string;
+  status: IStripeStatuses;
 }

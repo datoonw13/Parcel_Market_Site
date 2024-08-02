@@ -5,6 +5,7 @@ import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 import { ResponseModel } from "@/types/common";
 import { revalidatePath } from "next/cache";
 import { fetcher } from "../fetcher";
+import { DeletionAccountReason } from "@/types/auth";
 
 export const getStripeSessionAction = async (subscriptionType: SubscriptionType): Promise<any | null> => {
   try {
@@ -43,10 +44,11 @@ export const getUserSubscriptions = async (): Promise<ResponseModel<ISubscriptio
   }
 };
 
-export const cancelSubscriptionAction = async (subscriptionId: string): Promise<ResponseModel<null>> => {
+export const cancelSubscriptionAction = async (subscriptionId: string, deleteReason: DeletionAccountReason): Promise<ResponseModel<null>> => {
   try {
     await fetcher<null>(`stripe/subscription`, {
       method: "DELETE",
+      body: JSON.stringify({ deleteReason, subscriptionId })
     });
     revalidatePath("/");
     return {

@@ -8,7 +8,7 @@ const UserSubscriptionPage = async () => {
   return (
     <MiniLayout rootClasses="min-h-screen">
       <div className="rounded-2xl lg:bg-white lg:p-12 xl:p-16">
-        <Subscription data={userSubscriptions.data} />
+        <Subscription userSubscriptions={userSubscriptions.data} />
       </div>
     </MiniLayout>
   );
