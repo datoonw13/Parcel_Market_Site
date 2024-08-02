@@ -27,6 +27,26 @@ export const setAuthToken = (token: string) => {
   revalidatePath("/");
 };
 
+export const refreshToken = async (): Promise<ResponseModel<null>> => {
+  try {
+    const data = await fetcher<ISignInResponse>("user/token/refresh", {
+      method: "POST",
+      cache: "no-cache",
+    });
+    setAuthToken(data.access_token);
+    revalidatePath("/");
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      errorMessage: null,
+      data: null,
+    };
+  }
+};
+
 export const signInUserAction = async (prevState: any, formData: FormData): Promise<ResponseModel<null>> => {
   const values = {
     email: formData.get("email"),
@@ -89,8 +109,10 @@ export const getUserAction = async (): Promise<ISignInResponse["payload"] | null
   const userString = cookies().get("jwt")?.value;
   if (userString) {
     try {
-      const { id, sub, firstName, lastName, email, role } = jwtDecode(userString!) as ISignInResponse["payload"];
-      const user = { id, sub, firstName, lastName, email, role };
+      const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed } = jwtDecode(
+        userString!
+      ) as ISignInResponse["payload"];
+      const user = { id, sub, firstName, lastName, email, role, planSelected, isSubscribed };
       return { ...user };
     } catch (error) {
       return null;

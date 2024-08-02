@@ -12,13 +12,14 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
       cookie: cookies().toString(),
     },
   });
+
   const response = (await request.json()) as {
     data: any;
     errors: string[];
     message: string;
     statusCode: number;
   };
-  
+
   if (!response?.statusCode?.toString()?.startsWith("2")) {
     let errorMessage = "Something went wrong";
     if (response.message) {
