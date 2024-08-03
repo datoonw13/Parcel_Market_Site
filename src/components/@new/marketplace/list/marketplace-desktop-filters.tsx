@@ -9,7 +9,7 @@ import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/act
 import { getAllStates, getCounties } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
-const MarketPlaceDesktopFilters = () => {
+const MarketPlaceDesktopFilters = ({ disabled }: { disabled: boolean }) => {
   const [parcelNumbers, setParcelNumbers] = useState<{ value: string; label: string }[] | null>(null);
 
   const getParcelNumbers = async () => {
@@ -26,6 +26,7 @@ const MarketPlaceDesktopFilters = () => {
   return (
     <div className="gap-3 grid-cols-[120px_120px_120px_120px] hidden lg:grid">
       <AutoCompleteDesktopFilters
+        disabled={disabled}
         filterKey="state"
         placeholder="State"
         options={getAllStates().map((state) => ({
@@ -33,14 +34,16 @@ const MarketPlaceDesktopFilters = () => {
           label: state.label,
         }))}
       />
-      <AutoCompleteDesktopFilters filterKey="county" placeholder="County" options={[]} />
+      <AutoCompleteDesktopFilters disabled={disabled} filterKey="county" placeholder="County" options={[]} />
       <MinMaxDesktopFilters
+        disabled={disabled}
         filterKey="acreage"
         options={acreagesFilters}
         placeHolder="Acreage"
         getOptionLabel={(item) => getAcreageLabel(item.min, item.max)}
       />
       <MinMaxDesktopFilters
+        disabled={disabled}
         filterKey="voltPrice"
         options={priceFilters}
         placeHolder="VOLT Price"

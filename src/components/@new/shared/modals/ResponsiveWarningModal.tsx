@@ -69,9 +69,9 @@ const Content: FC<ResponsiveWarningModalProps> = ({
       >
         {customIcon ||
           (variant === "success" ? (
-            <CheckIcon3 className="!h-4 !w-4" color="success" />
+            <CheckIcon3 className="!h-4 !min-h-4 !w-4 !min-w-4" color="success" />
           ) : (
-            <RemoveIcon2 className="!h-4 !w-4" color="error" />
+            <RemoveIcon2 className="!h-4 !min-h-4 !w-4 !min-w-4" color="error" />
           ))}
       </div>
     )}

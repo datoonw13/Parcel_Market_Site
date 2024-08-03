@@ -4,11 +4,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import routes from "@/helpers/routes";
+import { ISignInResponse } from "@/types/auth";
+import clsx from "clsx";
 import { ArrowIconLeftFilled1 } from "../../icons/ArrowIcons";
 import { SearchIcon1 } from "../../icons/SearchIcons";
 import TextField from "../../shared/forms/text-field";
 
-const MarketplaceHeader = () => {
+const MarketplaceHeader = ({ user }: { user: ISignInResponse["payload"] | null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -48,12 +50,18 @@ const MarketplaceHeader = () => {
         </h6>
       </div>
       <TextField
+        disabled={!user?.planSelected}
         onChange={handleSearch}
         className="max-w-96 [&>input]:rounded-3xl [&>input]:h-11 m-auto"
         placeholder="Enter any keyword to search"
         endIconClasses="!pr-1 !h-fit"
         endIcon={
-          <div className="bg-primary-main h-9 w-9 rounded-full flex items-center justify-center">
+          <div
+            className={clsx(
+              "h-9 w-9 rounded-full flex items-center justify-center",
+              user?.planSelected ? "bg-primary-main" : "bg-grey-100"
+            )}
+          >
             <SearchIcon1 color="white" />
           </div>
         }

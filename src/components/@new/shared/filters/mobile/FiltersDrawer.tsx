@@ -96,9 +96,10 @@ interface FiltersDrawerProps {
       renderLabel?: (priceMin: MinMaxFilterType["min"], priceMax: MinMaxFilterType["max"]) => string;
     };
   };
+  disabled?: boolean;
 }
 
-const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
+const FiltersDrawer: FC<FiltersDrawerProps> = ({ data, disabled }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -165,7 +166,7 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data }) => {
 
   return (
     <>
-      <Button variant="secondary" onClick={() => setOpen(true)} className="!py-2 !px-4 !rounded-3xl">
+      <Button disabled={disabled} variant="secondary" onClick={() => setOpen(true)} className="!py-2 !px-4 !rounded-3xl">
         <div className="flex items-center gap-2 font-medium text-xs ">
           Filter <FilterIcon1 className="!w-3.5 !h-2.5" />
         </div>

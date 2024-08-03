@@ -5,7 +5,7 @@ import FiltersDrawer from "@/components/@new/shared/filters/mobile/FiltersDrawer
 import { getAllStates } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
-const MarketPlaceMobileFilters = () => {
+const MarketPlaceMobileFilters = ({ disabled }: { disabled: boolean }) => {
   const filters = {
     state: {
       label: "State",
@@ -33,7 +33,7 @@ const MarketPlaceMobileFilters = () => {
 
   return (
     <div className="block lg:hidden">
-      <FiltersDrawer data={filters} />
+      <FiltersDrawer disabled={disabled} data={filters} />
     </div>
   );
 };

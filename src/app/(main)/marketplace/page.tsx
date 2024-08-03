@@ -3,20 +3,27 @@ import MarketplaceHeader from "@/components/@new/marketplace/list/marketplace-he
 import MarketplaceList from "@/components/@new/marketplace/list/marketplace-list";
 import MarketplaceListLoading from "@/components/@new/marketplace/list/marketplace-list-loading";
 import Container from "@/components/@new/shared/Container";
+import SubscriptionAlert from "@/components/@new/shared/subscription-alert";
+import { getUserAction } from "@/server-actions/user/actions";
 import React, { Suspense } from "react";
 
-const MarketPlacePage = ({ searchParams }: { searchParams: { [key: string]: string } }) => (
-  <Container className="py-6 md:py-8">
-    <MarketplaceHeader />
-    <Suspense fallback={<div className="animate-pulse bg-primary-main-100 w-full rounded-xl h-9 mb-6 md:mb-8 lg:mb-10" />}>
-      <MarketPlaceFilters />
-    </Suspense>
-    <div>
-      <Suspense key={JSON.stringify(searchParams)} fallback={<MarketplaceListLoading />}>
-        <MarketplaceList params={searchParams} />
+const MarketPlacePage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+  const user = await getUserAction();
+
+  return (
+    <Container className="py-6 md:py-8">
+      <SubscriptionAlert />
+      <MarketplaceHeader user={user} />
+      <Suspense fallback={<div className="animate-pulse bg-primary-main-100 w-full rounded-xl h-9 mb-6 md:mb-8 lg:mb-10" />}>
+        <MarketPlaceFilters />
       </Suspense>
-    </div>
-  </Container>
-);
+      <div>
+        <Suspense key={JSON.stringify(searchParams)} fallback={<MarketplaceListLoading />}>
+          <MarketplaceList params={searchParams} />
+        </Suspense>
+      </div>
+    </Container>
+  );
+};
 
 export default MarketPlacePage;

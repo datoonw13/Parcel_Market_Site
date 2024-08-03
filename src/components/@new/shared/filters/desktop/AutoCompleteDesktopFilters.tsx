@@ -11,9 +11,10 @@ interface AutoCompleteDesktopFiltersProps {
   placeholder: string;
   filterKey: string;
   loading?: boolean;
+  disabled?: boolean;
 }
 
-const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ options, placeholder, filterKey, loading }) => {
+const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ options, placeholder, filterKey, loading, disabled }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -43,7 +44,7 @@ const AutoCompleteDesktopFilters: FC<AutoCompleteDesktopFiltersProps> = ({ optio
       )}
       options={filterKey === "county" ? getCounties(params.get("state")) : options}
       loading={loading}
-      disabled={filterKey === "county" && !params.get("state")}
+      disabled={(filterKey === "county" && !params.get("state")) || disabled}
       getOptionLabel={(item) => item.label}
       getOptionKey={(item) => item.value}
       onChange={(option) => handleSelect(option?.value || null)}

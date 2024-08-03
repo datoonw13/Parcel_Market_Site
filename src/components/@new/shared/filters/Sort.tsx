@@ -15,8 +15,19 @@ import Divider from "../Divider";
 
 const Drawer = dynamic(() => import("@/components/@new/shared/modals/Drawer"), { ssr: false });
 
-const SortButton = ({ onClick, selectedFilter }: { onClick: (e: MouseEvent<HTMLDivElement>) => void; selectedFilter: string | null }) => (
-  <div className="flex items-center gap-2 cursor-pointer" onClick={onClick}>
+const SortButton = ({
+  onClick,
+  selectedFilter,
+  disabled,
+}: {
+  onClick: (e: MouseEvent<HTMLDivElement>) => void;
+  selectedFilter: string | null;
+  disabled?: boolean;
+}) => (
+  <div
+    className={clsx("flex items-center gap-2 cursor-pointer", disabled && "pointer-events-none opacity-55 !cursor-not-allowed")}
+    onClick={onClick}
+  >
     <p className="font-medium text-xs capitalize">{selectedFilter || "Sort by"}</p>
     <ArrowIconsUnion1 className="!h-2.5 !w-2" />
   </div>
@@ -24,9 +35,10 @@ const SortButton = ({ onClick, selectedFilter }: { onClick: (e: MouseEvent<HTMLD
 
 interface SortProps {
   options: { [key: string]: string };
+  disabled?: boolean;
 }
 
-const Sort: FC<SortProps> = ({ options }) => {
+const Sort: FC<SortProps> = ({ options, disabled }) => {
   const isSmallDevice = useMediaQuery(640);
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -54,7 +66,11 @@ const Sort: FC<SortProps> = ({ options }) => {
           placement="bottom-end"
           disableSameWidth
           renderButton={(setReferenceElement, referenceElement) => (
-            <SortButton onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)} selectedFilter={selectedValue} />
+            <SortButton
+              disabled={disabled}
+              onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}
+              selectedFilter={selectedValue}
+            />
           )}
           renderContent={(setReferenceElement) => (
             <AutoCompleteListBox className="!w-32">
@@ -77,7 +93,7 @@ const Sort: FC<SortProps> = ({ options }) => {
       )}
       {isSmallDevice && (
         <>
-          <SortButton onClick={(e) => setOpenDrawer(true)} selectedFilter={selectedValue} />
+          <SortButton disabled={disabled} onClick={(e) => setOpenDrawer(true)} selectedFilter={selectedValue} />
           <Drawer
             closeDrawer={() => {
               setOpenDrawer(false);

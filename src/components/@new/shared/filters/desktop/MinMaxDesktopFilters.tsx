@@ -12,9 +12,10 @@ interface MinMaxDesktopFiltersProps {
   placeHolder?: string;
   getOptionLabel: (item: { min: number | null; max: number | null }) => string;
   filterKey: string;
+  disabled?: boolean;
 }
 
-const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHolder, getOptionLabel, filterKey }) => {
+const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHolder, getOptionLabel, filterKey, disabled }) => {
   const [filters, setFilters] = useState<{ min: number | null; max: number | null }>({
     min: null,
     max: null,
@@ -51,6 +52,7 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
       )}
       options={options}
       disableSameWidth
+      disabled={disabled}
       getOptionLabel={getOptionLabel}
       getOptionKey={(item) => ""}
       onChange={(item) => {

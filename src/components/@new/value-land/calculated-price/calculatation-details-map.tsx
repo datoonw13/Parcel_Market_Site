@@ -44,18 +44,26 @@ const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | nu
     valueLandData.calculatedPrice && (
       <>
         <ResponsiveWarningModal
-          customIcon={<InfoIcon2 className="!w-4 !h-4" color="primary-main" />}
+          customIcon={<InfoIcon2 className="!w-4 !h-4 min-w-4 min-h-4" color="primary-main" />}
           open={openWarningModal}
           variant="success"
           closeModal={() => setOpenWarningModal(false)}
           onOK={() => {
-            params.set("from", routes.valueLand.value.fullUrl);
-            router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
+            if (!user) {
+              params.set("from", routes.valueLand.value.fullUrl);
+              router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
+            } else {
+              router.push(routes.user.subscription.fullUrl);
+            }
           }}
           onCancel={() => setOpenWarningModal(false)}
-          title="Log in to See the information"
-          description="Your are not logged in, if you want to see this information please log into your account"
-          okLabel="Log In"
+          title={!user ? "Log in to See the information" : "Closed content"}
+          description={
+            !user
+              ? "Your are not logged in, if you want to see this information please log into your account"
+              : "Subscribe now to view, save, and export sales data."
+          }
+          okLabel={!user ? "Log In" : "Subscribe"}
           cancelLabel="Close"
         />
         <Map
@@ -66,7 +74,7 @@ const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | nu
             [Number(valueLandData.selectedLand.properties.fields.lat), Number(valueLandData.selectedLand.properties.fields.lon)],
           ]}
           zoom={10}
-          onMarkerClick={() => !user && setOpenWarningModal(true)}
+          onMarkerClick={() => (!user || !user.isSubscribed) && setOpenWarningModal(true)}
           markerMouseEnter={(value) => {
             setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: JSON.stringify(value) } }));
           }}
@@ -103,27 +111,28 @@ const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | nu
               centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
               parcelNumber: el.parselId,
               showMarker: true,
-              ...(user && {
-                popup: {
-                  parcelNumber: {
-                    label: "Parcel Number",
-                    value: el.parselId,
+              ...(user &&
+                user.isSubscribed && {
+                  popup: {
+                    parcelNumber: {
+                      label: "Parcel Number",
+                      value: el.parselId,
+                    },
+                    acreage: {
+                      label: "Acreage",
+                      value: el.arcage.toFixed(2),
+                    },
+                    lastSaleDate: {
+                      label: "Last Sale Date",
+                      value: el.lastSalesDate,
+                    },
+                    lastSalePrice: {
+                      label: "Last Sale Price",
+                      value: numFormatter.format(el.lastSalesPrice),
+                    },
+                    showSelectButton: false,
                   },
-                  acreage: {
-                    label: "Acreage",
-                    value: el.arcage.toFixed(2),
-                  },
-                  lastSaleDate: {
-                    label: "Last Sale Date",
-                    value: el.lastSalesDate,
-                  },
-                  lastSalePrice: {
-                    label: "Last Sale Price",
-                    value: numFormatter.format(el.lastSalesPrice),
-                  },
-                  showSelectButton: false,
-                },
-              }),
+                }),
             })),
           ]}
         />

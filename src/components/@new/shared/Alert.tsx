@@ -29,12 +29,13 @@ type AlertProps = {
   onClose?: () => void;
   type?: AlertType;
   disableClose?: boolean;
+  className?: string;
 };
 
-const Alert: FC<AlertProps> = ({ type = "success", description, onClose, title, disableClose }) => {
+const Alert: FC<AlertProps> = ({ type = "success", description, onClose, title, disableClose, className }) => {
   const [show, setShow] = useState(true);
   return show ? (
-    <div className={twMerge("flex w-full px-4 py-3 rounded-lg", `bg-${colors[type].bg}`)}>
+    <div className={twMerge("flex w-full px-4 py-3 rounded-lg", `bg-${colors[type].bg}`, className)}>
       <InfoIcon2 color={colors[type].icon} className="min-w-5 min-h-5 !w-5 !h-5 mr-3 translate-y-1" />
       <div>
         <p className="font-semibold text-sm ">{title}</p>
