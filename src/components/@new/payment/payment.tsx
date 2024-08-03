@@ -12,7 +12,7 @@ const Payment = async () => {
         <h2 className="text-center text-sm md:text-base text-grey-800">Choose Payment method</h2>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] lg:gap-8 gap-6 w-full">
-        {userPaymentMethods.data && <PaymentMethods userPaymentMethods={userPaymentMethods.data} />}
+        <PaymentMethods userPaymentMethods={userPaymentMethods.data} />
         <OrderDetails />
       </div>
     </div>

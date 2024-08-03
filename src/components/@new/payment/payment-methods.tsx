@@ -7,7 +7,7 @@ import { IStripePaymentMethods } from "@/types/subscriptions";
 import RadioButton from "../shared/forms/RadioButton";
 import Stripe from "./stripe/stripe";
 
-const PaymentMethods = ({ userPaymentMethods }: { userPaymentMethods: IStripePaymentMethods }) => {
+const PaymentMethods = ({ userPaymentMethods }: { userPaymentMethods?: IStripePaymentMethods | null }) => {
   const searchParams = useSearchParams();
   const [paymentMethod, setPaymentMethod] = useState<string | null>("stripe");
 
@@ -17,7 +17,7 @@ const PaymentMethods = ({ userPaymentMethods }: { userPaymentMethods: IStripePay
       <div className="space-y-8 px-6 py-4 pb-6">
         <div className="">
           <div className="space-y-4 md:Space-y-6">
-            {userPaymentMethods.data.map((el) => (
+            {userPaymentMethods?.data.map((el) => (
               <RadioButton
                 key={el.id}
                 name={el.id}
