@@ -1,8 +1,7 @@
-import { CheckIcon4 } from '../icons/CheckIcons'
+import { CheckIcon4 } from "../icons/CheckIcons";
 
-const SubscriptionHeader = () => {
-  return (
-    <div className="space-y-6">
+const SubscriptionHeader = () => (
+  <div className="space-y-6">
     <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center">One Subscription. Full Access</h1>
     <div className="border border-primary-main-400 rounded-2xl bg-primary-main-50 p-4 md:p-6 lg:8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
       <div className="space-y-3">
@@ -70,7 +69,6 @@ const SubscriptionHeader = () => {
       </div>
     </div>
   </div>
-  )
-}
+);
 
-export default SubscriptionHeader
+export default SubscriptionHeader;

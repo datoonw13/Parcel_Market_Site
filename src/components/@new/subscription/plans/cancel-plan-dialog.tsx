@@ -19,7 +19,7 @@ const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSu
   const cancelSubscription = async () => {
     setCancelPending(true);
     await cancelSubscriptionAction(userActiveSubscription.id, reason!);
-    closeDialog()
+    closeDialog();
   };
 
   return (

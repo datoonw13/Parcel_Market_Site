@@ -5,11 +5,15 @@ import routes from "@/helpers/routes";
 import Land from "@/components/@new/marketplace/land/land";
 import LandDetailsBreadcrumb from "@/components/@new/marketplace/land/breadcrumb";
 import { redirect } from "next/navigation";
+import { getUserAction } from "@/server-actions/user/actions";
 
-const LandDetailsPage = ({ params }: { params: { id: string } }) => {
-  if (!params.id) {
+const LandDetailsPage = async ({ params }: { params: { id: string } }) => {
+  const user = await getUserAction();
+
+  if (!params.id || !user?.isSubscribed) {
     redirect(routes.marketplace.fullUrl);
   }
+
   return (
     <Container className="pt-6 md:pt-8 pb-20 sm:pb-24 md:pb-32 lg:pb-36">
       <Suspense>

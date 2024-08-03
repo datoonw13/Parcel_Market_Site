@@ -35,6 +35,7 @@ const LandPriceCalculationTable = ({
   onMouseLeave,
   selectedItem,
   hoveredItem,
+  isUserSubscriptionTrial,
 }: {
   data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
   onSelect: (value: LatLngTuple) => void;
@@ -42,6 +43,7 @@ const LandPriceCalculationTable = ({
   onMouseLeave: (value: LatLngTuple) => void;
   selectedItem: string | null;
   hoveredItem: string | null;
+  isUserSubscriptionTrial: boolean;
 }) => {
   const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "arcage", dir: "desc" });
   const formattedData = data.map((el) => ({
@@ -142,7 +144,7 @@ const LandPriceCalculationTable = ({
                 onMouseLeave={() => onMouseLeave([Number(item.latitude), Number(item.longitude)])}
               >
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {itemI + 1}
+                  {itemI + 1}export
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
                   {item.parcelNumber}
@@ -181,10 +183,20 @@ const LandPriceCalculationTable = ({
         </div>
       </div>
       <div className="hidden lg:flex gap-3 mt-4 justify-end">
-        <Button startIcon={ExportMapIcon1} onClick={exportToKml} variant="secondary">
+        <Button
+          className={clsx(isUserSubscriptionTrial && "opacity-50")}
+          disabled={isUserSubscriptionTrial}
+          startIcon={ExportMapIcon1}
+          onClick={exportToKml}
+        >
           Export Map
         </Button>
-        <Button startIcon={ExportIcon1} onClick={exportToExcel}>
+        <Button
+          className={clsx(isUserSubscriptionTrial && "opacity-50")}
+          disabled={isUserSubscriptionTrial}
+          startIcon={ExportIcon1}
+          onClick={exportToExcel}
+        >
           Export Data
         </Button>
       </div>

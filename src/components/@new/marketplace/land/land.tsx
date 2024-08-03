@@ -4,6 +4,7 @@ import { getLendDetailsAction } from "@/server-actions/marketplace/action";
 import moment from "moment";
 import { getAllStates, getCounties } from "@/helpers/states";
 import clsx from "clsx";
+import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import { LocationIcon1 } from "../../icons/LocationIcons";
 import { EyeIcon1 } from "../../icons/EyeIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
@@ -12,6 +13,8 @@ import RecentSalesList from "./recent-sales-list";
 
 const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
   const { data } = await getLendDetailsAction(sellingPropertyId);
+  const userSubscription = await getUserSubscriptions();
+  const isUserSubscriptionTrial = !!userSubscription.data?.find((el) => el.status === "trialing");
 
   if (!data) {
     redirect(routes.marketplace.fullUrl);
@@ -82,7 +85,9 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
           </div>
           {data && <LandDetails data={data} />}
         </div>
-        {data.usedForPriceCalculations && <RecentSalesList data={data.usedForPriceCalculations} />}
+        {data.usedForPriceCalculations && (
+          <RecentSalesList isUserSubscriptionTrial={isUserSubscriptionTrial} data={data.usedForPriceCalculations} />
+        )}
       </div>
     </>
   );

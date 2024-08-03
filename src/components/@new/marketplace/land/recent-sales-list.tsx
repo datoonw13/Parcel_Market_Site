@@ -6,7 +6,13 @@ import { Map, Marker } from "leaflet";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
-const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedForPriceCalculations"]> }) => {
+const RecentSalesList = ({
+  data,
+  isUserSubscriptionTrial,
+}: {
+  data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
+  isUserSubscriptionTrial: boolean;
+}) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -56,6 +62,7 @@ const RecentSalesList = ({ data }: { data: NonNullable<ISellingProperty["usedFor
         onMouseLeave={(value) => {
           setHoveredItem(null);
         }}
+        isUserSubscriptionTrial={isUserSubscriptionTrial}
         selectedItem={selectedItem}
         hoveredItem={hoveredItem}
         onSelect={(value) => {
