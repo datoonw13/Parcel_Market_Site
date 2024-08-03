@@ -1,6 +1,7 @@
 import { FC } from "react";
 import clsx from "clsx";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { LandListItemProps } from "@/types/lands";
@@ -9,6 +10,8 @@ import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
 import LandFollowButton from "../land-follow-button";
+
+const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 const LandListItem: FC<LandListItemProps> = ({
   view,
@@ -20,6 +23,8 @@ const LandListItem: FC<LandListItemProps> = ({
   onClick,
   showBookmark,
   followedListingId,
+  disableDetail,
+  disableMap,
 }) => (
   <div
     className={clsx(
@@ -32,7 +37,10 @@ const LandListItem: FC<LandListItemProps> = ({
   >
     <div className="px-6 flex justify-between items-start gap-6">
       <div className="grid gap-2">
-        <Link href={`${routes.marketplace.fullUrl}/${sellingItemId}`}>
+        <Link
+          className={clsx(disableDetail && "pointer-events-none cursor-not-allowed")}
+          href={disableDetail ? "/" : `${routes.marketplace.fullUrl}/${sellingItemId}`}
+        >
           <h1 className="font-semibold group-hover:text-primary-main transition-all duration-100 text-ellipsis whitespace-nowrap overflow-hidden">
             {data.name}
           </h1>
@@ -46,7 +54,30 @@ const LandListItem: FC<LandListItemProps> = ({
     </div>
     <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
       <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>
-        <Image alt="" src="/property-map.png" fill className="rounded-xl" />
+        {/* <Image alt="" src="/property-map.png" fill className="rounded-xl" /> */}
+        {/* <Map
+          data={valueLand.lands.map((el) => ({
+            centerCoordinate: [Number(el.properties.fields.lat), Number(el.properties.fields.lon)],
+            polygon: el.geometry.coordinates,
+            owner: el.properties.fields.owner,
+            parcelNumber: el.properties.fields.parcelnumb,
+            showMarker: true,
+            markerColor: "default",
+            popup: {
+              owner: {
+                label: "Owner",
+                value: el.properties.fields.owner,
+              },
+              parcelNumber: {
+                label: "Parcel Number",
+                value: el.properties.fields.parcelnumb,
+              },
+              showSelectButton: !!(valueLand.lands && valueLand.lands.length > 1),
+            },
+          }))}
+          zoom={5}
+          geolibInputCoordinates={valueLand.lands.map((el) => [Number(el.properties.fields.lat), Number(el.properties.fields.lon)])}
+        /> */}
       </div>
       <ul className="flex flex-col gap-3">
         {Object.keys(data.options).map((key) => (
@@ -66,8 +97,11 @@ const LandListItem: FC<LandListItemProps> = ({
       <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
         <CalendarIcon1 /> Available till: <span className="text-black">{data.availableTill}</span>
       </p>
-      <Link href={`${routes.marketplace.fullUrl}/${sellingItemId}`}>
-        <Button>Details</Button>
+      <Link
+        className={clsx(disableDetail && "pointer-events-none cursor-not-allowed")}
+        href={disableDetail ? "/" : `${routes.marketplace.fullUrl}/${sellingItemId}`}
+      >
+        <Button disabled={disableDetail}>Details</Button>
       </Link>
     </div>
   </div>

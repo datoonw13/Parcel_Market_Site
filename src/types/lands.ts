@@ -57,4 +57,6 @@ export interface LandListItemProps {
   onClick?: () => void;
   showBookmark?: boolean;
   followedListingId?: number;
+  disableDetail?: boolean;
+  disableMap?: boolean;
 }

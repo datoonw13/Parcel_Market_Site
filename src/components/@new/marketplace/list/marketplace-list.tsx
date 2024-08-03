@@ -1,6 +1,7 @@
 import { getMarketplaceListAction } from "@/server-actions/marketplace/action";
 import { numFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
+import { getUserAction } from "@/server-actions/user/actions";
 import MarketPlacePagination from "./marketplace-pagination";
 import MarketPlaceListItem from "./marketplace-list-item";
 import { UserIcon2 } from "../../icons/UserIcons";
@@ -11,6 +12,8 @@ import DataNotFound from "../../shared/DataNotFound";
 
 const MarketplaceList = async ({ params }: { params: { [key: string]: string } }) => {
   const { data } = await getMarketplaceListAction(params);
+  const user = await getUserAction();
+  console.log(data, 222);
 
   return (
     <div className="space-y-10 md:space-y-12 mb-32">
@@ -25,8 +28,9 @@ const MarketplaceList = async ({ params }: { params: { [key: string]: string } }
                   className="max-w-md md:max-w-full m-auto"
                   key={land.id}
                   sellingItemId={land.id}
+                  disableDetail={!user?.isSubscribed}
                   view="vertical"
-                  showBookmark
+                  showBookmark={user?.isSubscribed}
                   followedListingId={land.followedListingId}
                   data={{
                     availableTill: land.availableTill,
@@ -37,12 +41,12 @@ const MarketplaceList = async ({ params }: { params: { [key: string]: string } }
                       owner: {
                         icon: <UserIcon2 className="w-4 h-4 " />,
                         label: "Owner",
-                        value: land.owner,
+                        value: user?.isSubscribed ? land.owner : "*********",
                       },
                       parcelNumber: {
                         icon: <IdIcon1 className="w-4 h-4 fill-grey-600" />,
                         label: "Parcel ID",
-                        value: land.parcelNumber,
+                        value: user?.planSelected ? land.parcelNumber : "*********",
                       },
                       acreage: {
                         icon: <ResizeIcon1 className="w-4 h-4 fill-grey-600" />,
