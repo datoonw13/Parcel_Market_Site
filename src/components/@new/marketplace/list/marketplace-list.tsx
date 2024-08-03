@@ -13,7 +13,6 @@ import DataNotFound from "../../shared/DataNotFound";
 const MarketplaceList = async ({ params }: { params: { [key: string]: string } }) => {
   const { data } = await getMarketplaceListAction(params);
   const user = await getUserAction();
-  console.log(data, 222);
 
   return (
     <div className="space-y-10 md:space-y-12 mb-32">
@@ -25,6 +24,7 @@ const MarketplaceList = async ({ params }: { params: { [key: string]: string } }
               const county = state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
               return (
                 <MarketPlaceListItem
+                  disableZoom
                   className="max-w-md md:max-w-full m-auto"
                   key={land.id}
                   sellingItemId={land.id}
@@ -32,6 +32,10 @@ const MarketplaceList = async ({ params }: { params: { [key: string]: string } }
                   view="vertical"
                   showBookmark={user?.isSubscribed}
                   followedListingId={land.followedListingId}
+                  map={{
+                    canView: user?.isSubscribed,
+                    mainLandCoordinate: [Number(land.lat), Number(land.lon)],
+                  }}
                   data={{
                     availableTill: land.availableTill,
                     state: state?.label || "",

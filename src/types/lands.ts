@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { LatLngTuple } from "leaflet";
 import { ISellProperty } from "./find-property";
 
 export enum SortBy {
@@ -58,5 +59,9 @@ export interface LandListItemProps {
   showBookmark?: boolean;
   followedListingId?: number;
   disableDetail?: boolean;
-  disableMap?: boolean;
+  map?: {
+    canView?: boolean;
+    mainLandCoordinate?: LatLngTuple;
+  };
+  disableZoom?: boolean;
 }

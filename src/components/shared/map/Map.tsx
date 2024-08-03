@@ -35,6 +35,7 @@ interface IProps {
   popupOpen?: (value: LatLngTuple) => void;
   popupClose?: (value: LatLngTuple) => void;
   onMarkerClick?: (value: LatLngTuple) => void;
+  disableZoom?: boolean;
 }
 
 const markerDefault = new Icon({
@@ -71,6 +72,7 @@ const Map = ({
   popupClose,
   popupOpen,
   onMarkerClick,
+  disableZoom,
 }: IProps) => {
   const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
 
@@ -87,9 +89,10 @@ const Map = ({
 
   return (
     <MapContainer
+      zoomControl={!disableZoom}
       zoom={zoom}
       center={mapCenter ? [mapCenter.latitude, mapCenter.longitude] : [0, 0]}
-      scrollWheelZoom
+      scrollWheelZoom={!disableZoom}
       style={{ height: "100%", width: "100%", zIndex: 0 }}
       ref={(mapRef) => {
         if (mapRef) {

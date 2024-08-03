@@ -10,6 +10,7 @@ import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
 import LandFollowButton from "../land-follow-button";
+import { CameraIcon1 } from "../../icons/CameraIcons";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -24,7 +25,8 @@ const LandListItem: FC<LandListItemProps> = ({
   showBookmark,
   followedListingId,
   disableDetail,
-  disableMap,
+  map,
+  disableZoom,
 }) => (
   <div
     className={clsx(
@@ -53,31 +55,38 @@ const LandListItem: FC<LandListItemProps> = ({
       {!selecting && showBookmark && <LandFollowButton onlyIcon landId={sellingItemId} initialFollowedListingId={followedListingId} />}
     </div>
     <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
-      <div className={clsx("relative rounded-xl", view === "horizontal" ? "" : "xs:h-32 md:h-40")}>
-        {/* <Image alt="" src="/property-map.png" fill className="rounded-xl" /> */}
-        {/* <Map
-          data={valueLand.lands.map((el) => ({
-            centerCoordinate: [Number(el.properties.fields.lat), Number(el.properties.fields.lon)],
-            polygon: el.geometry.coordinates,
-            owner: el.properties.fields.owner,
-            parcelNumber: el.properties.fields.parcelnumb,
-            showMarker: true,
-            markerColor: "default",
-            popup: {
-              owner: {
-                label: "Owner",
-                value: el.properties.fields.owner,
+      <div
+        className={clsx(
+          "relative rounded-xl [&>div]:w-full [&>div]:h-full [&>div]:rounded-xl",
+          view === "horizontal" ? "" : "xs:h-32 md:h-40"
+        )}
+      >
+        {!map && <Image alt="" src="/property-map.png" fill className="rounded-xl" />}
+        {map && map.canView && (
+          <Map
+            disableZoom={disableZoom}
+            data={[
+              {
+                centerCoordinate: map.mainLandCoordinate as any,
+                parcelNumber: Math.random().toString(),
+                showMarker: true,
+                markerColor: "default",
               },
-              parcelNumber: {
-                label: "Parcel Number",
-                value: el.properties.fields.parcelnumb,
-              },
-              showSelectButton: !!(valueLand.lands && valueLand.lands.length > 1),
-            },
-          }))}
-          zoom={5}
-          geolibInputCoordinates={valueLand.lands.map((el) => [Number(el.properties.fields.lat), Number(el.properties.fields.lon)])}
-        /> */}
+            ]}
+            zoom={5}
+            geolibInputCoordinates={[map.mainLandCoordinate] as any}
+          />
+        )}
+        {map && !map.canView && (
+          <div className="relative">
+            <div className="backdrop-blur-lg bg-white/30 w-full h-full z-10 absolute rounded-xl" />
+            <CameraIcon1
+              className="absolute"
+              color="white !w-9 !h-9 z-10 m-auto top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+            />
+            <Image alt="" src="/property-map.png" fill className="rounded-xl" />
+          </div>
+        )}
       </div>
       <ul className="flex flex-col gap-3">
         {Object.keys(data.options).map((key) => (
