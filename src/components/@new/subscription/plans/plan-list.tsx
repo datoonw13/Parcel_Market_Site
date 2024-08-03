@@ -12,11 +12,9 @@ const PlanList = async () => {
 
   return (
     <div className={clsx("grid gap-4 grid-cols-1 sm:grid-cols-2", !user?.planSelected && "lg:grid-cols-3")}>
-      {Object.keys(SubscriptionType).map((type) =>
-        type === SubscriptionType.Trial && user?.planSelected ? null : (
-          <PlanItem key={type} type={type as SubscriptionType} userActiveSubscription={userActiveSubscription} />
-        )
-      )}
+      {Object.keys(SubscriptionType).map((type) => (
+        <PlanItem key={type} type={type as SubscriptionType} userActiveSubscription={userActiveSubscription} />
+      ))}
     </div>
   );
 };
