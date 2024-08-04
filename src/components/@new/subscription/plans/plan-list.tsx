@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React from "react";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import { SubscriptionType } from "@/types/subscriptions";
 import { getUserAction } from "@/server-actions/user/actions";

@@ -1,7 +1,7 @@
 "use server";
 
 import { ErrorResponse } from "@/helpers/error-response";
-import { IStripePaymentMethods, ISubscription, SubscriptionType } from "@/types/subscriptions";
+import { IStripeCharge, IStripePaymentMethods, ISubscription, SubscriptionType } from "@/types/subscriptions";
 import { ResponseModel } from "@/types/common";
 import { revalidatePath } from "next/cache";
 import { DeletionAccountReason } from "@/types/auth";
@@ -77,6 +77,26 @@ export const getUserPaymentMethods = async (): Promise<ResponseModel<IStripePaym
     return {
       errorMessage: null,
       data,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
+export const getUserBillingHistoryAction = async (): Promise<ResponseModel<IStripeCharge[] | null>> => {
+  try {
+    const data = await fetcher<{ charges: IStripeCharge[] }>(`stripe/history`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    return {
+      errorMessage: null,
+      data: data.charges,
     };
   } catch (error) {
     const errorData = error as ErrorResponse;

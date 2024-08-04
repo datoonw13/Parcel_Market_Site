@@ -22,9 +22,11 @@ const DialogActions: FC<DialogActionsProps> = ({ onClose, onSubmit, closeLabel, 
           {closeLabel || "Close"}
         </Button>
       )}
-      <Button onClick={onSubmit} loading={submitPending} disabled={disableSubmit}>
-        {submitLabel || "Submit"}
-      </Button>
+      {onSubmit && (
+        <Button onClick={onSubmit} loading={submitPending} disabled={disableSubmit}>
+          {submitLabel || "Submit"}
+        </Button>
+      )}
     </div>
   );
 

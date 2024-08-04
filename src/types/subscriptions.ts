@@ -59,3 +59,14 @@ export interface IStripePaymentMethods {
   has_more: boolean;
   url: string;
 }
+
+export interface IStripeCharge {
+  amount: number;
+  id: string;
+  invoice: string;
+  receipt_number: string;
+  success: boolean;
+  created: number;
+  receipt_url: string;
+  paid: boolean;
+}
