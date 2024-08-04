@@ -4,7 +4,7 @@ import Alert from "./Alert";
 const SubscriptionAlert = async () => {
   const user = await getUserAction();
   return (
-    !user?.planSelected && (
+    !user?.isSubscribed && (
       <Alert
         className="mb-6 md:mb-8"
         type="warning"

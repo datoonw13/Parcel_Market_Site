@@ -5,7 +5,7 @@ import AddPaymentModal from "./add-payment-modal";
 
 const AddPaymentMethod = () => (
   <>
-    <AddPaymentModal open closeModal={() => {}} />
+    <AddPaymentModal open={false} closeModal={() => {}} />
     <PaymentDetailsItem title="Add New Payment Method" description="Add New Card" buttonLabel="Add Payment Method" onClick={() => {}} />
   </>
 );
