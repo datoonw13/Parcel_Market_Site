@@ -1,5 +1,6 @@
 "use client";
 
+import AddPaymentMethod from "./add-payment-method/add-payment-method";
 import BillingHistory from "./billing-history/billing-history";
 
 const PaymentDetails = () => (
@@ -16,15 +17,7 @@ const PaymentDetails = () => (
         </button>
       </div>
       <hr className="border-grey-100" />
-      <div className="w-full flex justify-between items-center">
-        <div className="flex flex-col gap-1">
-          <p className="font-medium text-sm">Add New Payment Method</p>
-          <p className="font-medium text-xs text-grey-600">Add New Card or paypal </p>
-        </div>
-        <button type="button" className="font-medium text-xs text-primary-main" onClick={() => {}}>
-          Add Payment Method
-        </button>
-      </div>
+      <AddPaymentMethod />
       <hr className="border-grey-100" />
       <BillingHistory />
     </div>
