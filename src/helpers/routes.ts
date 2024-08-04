@@ -68,6 +68,11 @@ const routes = {
       fullUrl: "/user/subscription",
       protected: true,
     },
+    searches: {
+      url: "searches",
+      fullUrl: "/user/searches",
+      protected: true,
+    },
   },
   valueLand: {
     url: "value-land",

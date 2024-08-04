@@ -10,6 +10,7 @@ import { DiscountIcon1, DiscountIcon2 } from "../../icons/DiscountIcons";
 import { BookmarkIcon1 } from "../../icons/BookMarkIcons";
 import { LogoutIcon1 } from "../../icons/LogutIcons";
 import UserMenuListItem from "./UserMenuListItem";
+import { ClockIcon1, ClockIcon2, ClockIcon3 } from "../../icons/ClockIcons";
 
 const UserMenuList = ({ listItemClasses, hideLogout, close }: { listItemClasses?: string; hideLogout?: boolean; close?: () => void }) => (
   <ul className="flex flex-col gap-4 min-w-[306px]">
@@ -54,18 +55,18 @@ const list = [
     path: routes.user.listings.fullUrl,
   },
   {
-    label: "Received Offers",
+    label: "My Received Offers",
     icon: DiscountIcon1,
     path: routes.user.offers.received.fullUrl,
   },
   {
-    label: "Sent Offers",
+    label: "My Sent Offers",
     icon: DiscountIcon2,
     path: routes.user.offers.sent.fullUrl,
   },
   {
-    label: "My saved properties",
-    icon: BookmarkIcon1,
-    path: routes.user.followedProperties.fullUrl,
+    label: "My Recent Searches",
+    icon: ClockIcon3,
+    path: routes.user.searches.fullUrl,
   },
 ];

@@ -18,7 +18,7 @@ export const setAuthToken = (token: string) => {
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
   // set jwt token in cookie
   cookies().set({
-    name: "jwt",
+    name: "jwt1",
     value: token,
     httpOnly: true,
     secure: true,
@@ -27,21 +27,19 @@ export const setAuthToken = (token: string) => {
   revalidatePath("/");
 };
 
-export const refreshToken = async (): Promise<ResponseModel<null>> => {
+export const refreshToken = async (): Promise<ResponseModel<string | null>> => {
   try {
     const data = await fetcher<ISignInResponse>("user/token/refresh", {
       method: "POST",
       cache: "no-cache",
     });
-    setAuthToken(data.access_token);
-    revalidatePath("/");
     return {
-      data: null,
+      data: data.access_token,
       errorMessage: null,
     };
   } catch (error) {
     return {
-      errorMessage: null,
+      errorMessage: 'error',
       data: null,
     };
   }
