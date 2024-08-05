@@ -55,6 +55,11 @@ const list = [
     path: routes.user.listings.fullUrl,
   },
   {
+    label: "My Followed Listings",
+    icon: BookIcon1,
+    path: routes.user.followedProperties.fullUrl,
+  },
+  {
     label: "My Received Offers",
     icon: DiscountIcon1,
     path: routes.user.offers.received.fullUrl,
