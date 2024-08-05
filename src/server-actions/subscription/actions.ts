@@ -107,6 +107,26 @@ export const getUserBillingHistoryAction = async (): Promise<ResponseModel<IStri
   }
 };
 
+export const addPaymentMethodAction = async (paymentMethodId: string): Promise<ResponseModel<IStripeCharge[] | null>> => {
+  try {
+    await fetcher<{ charges: IStripeCharge[] }>(`stripe/paymentMethod`, {
+      method: "PUT",
+      body: JSON.stringify({ paymentMethodId }),
+    });
+    revalidatePath("/", "layout");
+    return {
+      errorMessage: null,
+      data: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
 export const revalidateAllPath = () => {
   revalidatePath("/");
 };

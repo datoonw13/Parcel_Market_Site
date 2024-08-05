@@ -16,7 +16,7 @@ interface DialogActionsProps {
 
 const DialogActions: FC<DialogActionsProps> = ({ onClose, onSubmit, closeLabel, submitLabel, submitPending, className, disableSubmit }) =>
   (onClose || onSubmit) && (
-    <div className={clsx("flex gap-3 flex-col sm:flex-row sm:justify-end py-4 px-8 border-t border-t-grey-100", className)}>
+    <div className={clsx("flex gap-3 flex-col-reverse sm:flex-row sm:justify-end py-4 px-8 border-t border-t-grey-100", className)}>
       {onClose && (
         <Button variant="secondary" onClick={onClose}>
           {closeLabel || "Close"}
