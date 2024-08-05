@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import routes, { getAllRoutes } from "./helpers/routes";
-import { getUserAction, refreshToken } from "./server-actions/user/actions";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
+import routes, { getAllRoutes } from "./helpers/routes";
+import { getUserAction, refreshToken } from "./server-actions/user/actions";
 
 const allRoute = getAllRoutes();
 
@@ -29,18 +29,18 @@ export async function middleware(request: NextRequest) {
   // update token after subscription change
   if (request.nextUrl.pathname === routes.user.subscription.fullUrl && request.nextUrl.searchParams.get("success")) {
     const { data } = await refreshToken();
-    if(data) {
+    if (data) {
       const decodedToken = jwtDecode(data) as { exp: number };
       const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
-      let response = NextResponse.redirect(new URL(routes.user.subscription.fullUrl, request.nextUrl.origin))
+      const response = NextResponse.redirect(new URL(routes.user.subscription.fullUrl, request.nextUrl.origin));
       response.cookies.set({
         name: "jwt",
         value: data,
         httpOnly: true,
         secure: true,
         maxAge: maxAgeInSeconds,
-      })
-      return response
+      });
+      return response;
     }
   }
 

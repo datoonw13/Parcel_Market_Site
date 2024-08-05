@@ -25,7 +25,6 @@ export const ClockIcon2 = ({ className, color = "black" }: { className?: string;
   </svg>
 );
 
-
 export const ClockIcon3 = ({ className, color = "black" }: { className?: string; color?: string }) => (
   <svg aria-label="fill" className={clsx(`w-4 h-4`, `fill-${color}`, className)} viewBox="0 0 16 15" fill="none">
     <path d="M1.85282 9.89591L0.294922 7.20117H3.41072L1.85282 9.89591Z" fill="#0E8B40" />

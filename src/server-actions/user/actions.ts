@@ -39,7 +39,7 @@ export const refreshToken = async (): Promise<ResponseModel<string | null>> => {
     };
   } catch (error) {
     return {
-      errorMessage: 'error',
+      errorMessage: "error",
       data: null,
     };
   }
