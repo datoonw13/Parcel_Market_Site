@@ -15,9 +15,9 @@ import { numFormatter } from "@/helpers/common";
 import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
-import { ArrowIconsUnion1 } from "../../icons/ArrowIcons";
-import Button from "../../shared/forms/Button";
-import { ExportIcon1, ExportMapIcon1 } from "../../icons/ExportIcons";
+import { ArrowIconsUnion1 } from "../icons/ArrowIcons";
+import Button from "../shared/forms/Button";
+import { ExportIcon1, ExportMapIcon1 } from "../icons/ExportIcons";
 
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
@@ -144,7 +144,7 @@ const LandPriceCalculationTable = ({
                 onMouseLeave={() => onMouseLeave([Number(item.latitude), Number(item.longitude)])}
               >
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {itemI + 1}export
+                  {itemI + 1}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
                   {item.parcelNumber}
