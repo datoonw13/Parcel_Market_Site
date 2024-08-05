@@ -6,7 +6,7 @@ import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/fil
 import { getAllStates } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
-const UserSearchesDesktopFilters = () => (
+const SearchDesktopFilters = () => (
   <div className="gap-3 mb-6 grid grid-cols-4">
     <AutoCompleteDesktopFilters
       filterKey="state"
@@ -32,4 +32,4 @@ const UserSearchesDesktopFilters = () => (
   </div>
 );
 
-export default UserSearchesDesktopFilters;
+export default SearchDesktopFilters;
