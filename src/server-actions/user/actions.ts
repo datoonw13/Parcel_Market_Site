@@ -18,7 +18,7 @@ export const setAuthToken = (token: string) => {
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
   // set jwt token in cookie
   cookies().set({
-    name: "jwt1",
+    name: "jwt",
     value: token,
     httpOnly: true,
     secure: true,
