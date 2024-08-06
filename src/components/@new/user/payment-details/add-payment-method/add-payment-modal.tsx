@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, ElementsConsumer } from "@stripe/react-stripe-js";
+import { Elements, CardElement, ElementsConsumer, AddressElement } from "@stripe/react-stripe-js";
 import { addPaymentMethodAction } from "@/server-actions/subscription/actions";
 import toast from "react-hot-toast";
 import { RemoveIcon2 } from "../../../icons/RemoveIcons";
 import Button from "../../../shared/forms/Button";
 import ResponsiveModal from "../../../shared/modals/ResponsiveModal";
 import DialogActions from "../../../shared/modals/dialog/dialog-actions";
+import TextField from "@/components/@new/shared/forms/text-field";
 
 interface AddPaymentModalProps {
   open: boolean;
@@ -18,6 +19,7 @@ const stripePromise = loadStripe(
 );
 const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
   const [addPending, setAddPending] = useState(false);
+  const [fullName, setFullName] = useState('')
 
   const handleSubmit = async (event: any, elements: any, stripe: any) => {
     event.preventDefault();
@@ -29,6 +31,9 @@ const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: cardElement,
+      billing_details: {
+        name: fullName,
+      }
     });
     if (paymentMethod) {
       const { errorMessage } = await addPaymentMethodAction(paymentMethod.id);
@@ -39,7 +44,6 @@ const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
     }
     setAddPending(false);
   };
-  console.log(closeModal, 22);
 
   return (
     <div className="w-full md:bg-white md:shadow-4 rounded-2xl flex flex-col">
@@ -54,12 +58,13 @@ const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
           <ElementsConsumer>
             {({ elements, stripe }) => (
               <form onSubmit={(e) => handleSubmit(e, elements, stripe)}>
+                <TextField className="mb-3" label="Full name on card" value={fullName} onChange={value => setFullName(value)} />
                 <CardElement className="border border-grey-100 rounded-lg py-4 px-6" options={{ hidePostalCode: true }} />
                 <div className="flex gap-3 flex-col-reverse sm:flex-row sm:justify-end py-4 border-t border-t-grey-100 mt-7">
                   <Button className="w-full" variant="secondary" onClick={closeModal}>
                     Close
                   </Button>
-                  <Button className="w-full" type="submit" disabled={!stripe} loading={addPending}>
+                  <Button className="w-full" type="submit" disabled={!stripe || fullName.length < 3 } loading={addPending}>
                     Add Card
                   </Button>
                 </div>

@@ -133,6 +133,27 @@ export const addPaymentMethodAction = async (paymentMethodId: string): Promise<R
   }
 };
 
+export const removePaymentMethodsAction = async (paymentMethodIds: string[]): Promise<ResponseModel<IStripeCharge[] | null>> => {
+  try {
+    await fetcher<{ charges: IStripeCharge[] }>(`stripe/paymentMethod`, {
+      method: "DELETE",
+      body: JSON.stringify({ paymentMethodIds: paymentMethodIds }),
+    });
+    revalidateTag(subscriptionTags.paymentMethods);
+    return {
+      errorMessage: null,
+      data: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
+
 export const revalidateAllPath = () => {
   revalidatePath("/");
 };

@@ -10,9 +10,10 @@ interface PaymentDetailsItemProps {
   buttonLabel: string;
   onClick: () => void;
   pending?: boolean;
+  buttonClassName?: string;
 }
 
-const PaymentDetailsItem: FC<PaymentDetailsItemProps> = ({ title, description, buttonLabel, onClick, pending }) => (
+const PaymentDetailsItem: FC<PaymentDetailsItemProps> = ({ title, description, buttonLabel, onClick, pending, buttonClassName }) => (
   <div className="w-full flex justify-between items-center">
     <div className="flex flex-col gap-1">
       <p className="font-medium text-sm">{title}</p>
@@ -21,7 +22,7 @@ const PaymentDetailsItem: FC<PaymentDetailsItemProps> = ({ title, description, b
     <button
       disabled={pending}
       type="button"
-      className="font-medium text-xs text-primary-main flex items-center gap-3 relative cursor-pointer"
+      className={clsx("font-medium text-xs text-primary-main flex items-center gap-3 relative cursor-pointer", buttonClassName)}
       onClick={onClick}
     >
       <div className={clsx(pending && "opacity-0")}>{buttonLabel}</div>
