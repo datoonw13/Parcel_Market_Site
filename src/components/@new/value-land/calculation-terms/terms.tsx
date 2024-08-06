@@ -82,6 +82,7 @@ const terms = [
     options: [
       "All listings on the Marketplace are subject to review and approval by [Company Name].",
       "You are responsible for the accuracy of all information provided in your listings. ",
+      "[Company Name] reserves the right to reject or remove any listing that violates these Terms or is otherwise deemed inappropriate.",
     ],
   },
   {
