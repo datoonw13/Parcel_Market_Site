@@ -35,7 +35,7 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
     if (errorMessage) {
       toast.error(errorMessage, { duration: 3000 });
     } else {
-      toast.success("Offer sent successfully");
+      toast.success("Offer Has Been Sent");
       goBack();
     }
   });
