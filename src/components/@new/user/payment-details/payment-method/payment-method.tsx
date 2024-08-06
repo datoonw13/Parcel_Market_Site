@@ -48,7 +48,7 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
               <RadioButton
                 rootClassName={clsx("w-full", !edit && "[&>input]:hidden")}
                 labelClassName="w-full"
-                label={<TextField disabled variant="primary" value={el.last4} label={el.name} />}
+                label={<TextField disabled variant="primary" value={`***** **** **** ${el.last4}`} label={el.name} />}
                 checked={el.isDefault}
                 name={el.id}
                 onChange={() => {

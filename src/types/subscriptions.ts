@@ -17,12 +17,12 @@ export interface ISubscription {
 }
 
 export type IStripePaymentMethods = Array<{
-  "id": string,
-  "name": string,
-  "last4": string,
-  "brand": "visa" | 'mastercard' | 'amex',
-  "isDefault": boolean
-}> 
+  id: string;
+  name: string;
+  last4: string;
+  brand: "visa" | "mastercard" | "amex";
+  isDefault: boolean;
+}>;
 
 export interface IStripeCharge {
   amount: number;

@@ -137,7 +137,7 @@ export const removePaymentMethodsAction = async (paymentMethodIds: string[]): Pr
   try {
     await fetcher<{ charges: IStripeCharge[] }>(`stripe/paymentMethod`, {
       method: "DELETE",
-      body: JSON.stringify({ paymentMethodIds: paymentMethodIds }),
+      body: JSON.stringify({ paymentMethodIds }),
     });
     revalidateTag(subscriptionTags.paymentMethods);
     return {
@@ -153,6 +153,39 @@ export const removePaymentMethodsAction = async (paymentMethodIds: string[]): Pr
   }
 };
 
+// Put: api/stripe/subscription
+// 10:54
+// export class UpdateSubscriptionDto {
+//   @IsNotEmpty()
+//   @IsEnum(SubscriptionType)
+//   subscriptionType: SubscriptionType;
+
+//   @IsString()
+//   @IsNotEmpty()
+//   paymentMethodId: string;
+// }
+export const updateSubscriptionAction = async (
+  subscriptionType: SubscriptionType,
+  paymentMethodId: string
+): Promise<ResponseModel<IStripeCharge[] | null>> => {
+  try {
+    await fetcher<{ charges: IStripeCharge[] }>(`stripe/subscription`, {
+      method: "PUT",
+      body: JSON.stringify({ paymentMethodId, subscriptionType }),
+    });
+    revalidatePath("/", "layout");
+    return {
+      errorMessage: null,
+      data: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
 
 export const revalidateAllPath = () => {
   revalidatePath("/");
