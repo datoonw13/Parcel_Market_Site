@@ -70,6 +70,16 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
               onChange={(value) => setValue("contigencies", value, { shouldValidate: isSubmitted })}
             />
             <div className="flex flex-col gap-3">
+              <LabelWithInfo label="Other Terms" description="Provide any extra details you'd like to include in the offer" />
+              <div className="flex flex-col gap-4">
+                <TextField
+                  value={watch("otherTerms") ?? ""}
+                  onChange={(value) => setValue("otherTerms", value, { shouldValidate: isSubmitted })}
+                  placeholder="Type here"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-3">
               <LabelWithInfo error={!!errors.offerActiveForDays} label="Offer active for" description="How long the offer is good for. " />
               <div className="flex flex-col gap-4">
                 <AutoComplete
@@ -85,16 +95,6 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
                   }}
                   onFilter={(_, items) => items}
                   value={watch("offerActiveForDays") ?? null}
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <LabelWithInfo label="Other Terms" description="Provide any extra details you'd like to include in the offer" />
-              <div className="flex flex-col gap-4">
-                <TextField
-                  value={watch("otherTerms") ?? ""}
-                  onChange={(value) => setValue("otherTerms", value, { shouldValidate: isSubmitted })}
-                  placeholder="Type here"
                 />
               </div>
             </div>
