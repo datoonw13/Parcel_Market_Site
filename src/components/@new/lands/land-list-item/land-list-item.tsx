@@ -52,7 +52,9 @@ const LandListItem: FC<LandListItemProps> = ({
         </h2>
       </div>
 
-      {!selecting && showBookmark && <LandFollowButton onlyIcon landId={sellingItemId} initialFollowedListingId={followedListingId} />}
+      {!selecting && showBookmark && (
+        <LandFollowButton showTooltip onlyIcon landId={sellingItemId} initialFollowedListingId={followedListingId} />
+      )}
     </div>
     <div className={clsx("px-6 grid gap-4", view === "horizontal" ? "grid-cols-2" : "grid-cols-1")}>
       <div

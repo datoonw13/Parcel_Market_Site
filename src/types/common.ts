@@ -20,8 +20,8 @@ export interface IPagination {
 
 export enum SortEnum {
   Newest = "newest",
-  PriceHighLow = "price-hi-lo",
-  PriceLowHigh = "price-lo-hi",
+  PriceHighLow = "volt-hi-lo",
+  PriceLowHigh = "volt-lo-hi",
   AreaHighLow = "area-hi-lo",
   AreaLowHigh = "area-lo-hi",
   Oldest = "oldest",

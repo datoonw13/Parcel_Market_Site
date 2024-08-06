@@ -3,10 +3,9 @@
 import MinMaxDesktopFilters from "@/components/@new/shared/filters/desktop/MinMaxDesktopFilters";
 import AutoCompleteDesktopFilters from "@/components/@new/shared/filters/desktop/AutoCompleteDesktopFilters";
 import { getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
-import { OfferStatusEnum } from "@/types/offer";
 import { useEffect, useState } from "react";
 import { getReceivedOffersParcelNumbersAction } from "@/server-actions/offer/actions";
-import { getAllStates, getCounties } from "@/helpers/states";
+import { getAllStates } from "@/helpers/states";
 import { acreagesFilters, getAcreageLabel } from "../../lands/filters/lands-filters-utils";
 
 const MarketPlaceDesktopFilters = ({ disabled }: { disabled: boolean }) => {
@@ -46,7 +45,7 @@ const MarketPlaceDesktopFilters = ({ disabled }: { disabled: boolean }) => {
         disabled={disabled}
         filterKey="voltPrice"
         options={priceFilters}
-        placeHolder="VOLT Price"
+        placeHolder="VOLT Value"
         getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
       />
     </div>
