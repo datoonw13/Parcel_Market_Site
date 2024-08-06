@@ -129,7 +129,11 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           required
           className="w-full"
           label="City"
-          onChange={(value) => setValue("city", value, { shouldValidate: isSubmitted })}
+          onChange={(value) => {
+            if (/^[a-zA-Z]+$/.test(value)) {
+              setValue("city", value, { shouldValidate: isSubmitted });
+            }
+          }}
           value={watch("city")}
           error={!!errors.city}
         />
