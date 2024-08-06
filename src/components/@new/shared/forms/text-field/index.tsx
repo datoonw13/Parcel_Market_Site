@@ -107,6 +107,8 @@ const TextField = (props: TextFieldProps) => {
           readOnly={readOnly}
           type="text"
           name={name}
+          thousandSeparator=","
+          decimalSeparator="."
           autoComplete="new-password"
           decimalScale={decimalScale}
           suffix={suffix}

@@ -10,8 +10,10 @@ const AboutLand = async () => {
     <div className="h-full flex flex-col w-full gap-6">
       <ValueLandStepper currentStep={3} />
       <div className={clsx("space-y-3 md:space-y-2", classes["content-space-x"])}>
-        <h1 className="text-lg font-semibold ">Did we find your property?</h1>
-        <h2 className="text-sm text-grey-800">Use the map or list below to select your property.</h2>
+        <h1 className="text-lg font-semibold ">Tell us a bit about your property.</h1>
+        <h2 className="text-sm text-grey-800">
+          Use the form below to name, highlight, and explain the details of your property you want buyers to know.
+        </h2>
       </div>
       <AboutLandForm user={user} />
     </div>

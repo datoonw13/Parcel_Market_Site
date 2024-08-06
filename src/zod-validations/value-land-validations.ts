@@ -54,10 +54,10 @@ export const landOwnerValidation = z
 
 export const aboutLandSchema = z.object({
   title: z.string().min(1),
-  description: z.string().max(300).optional(),
+  description: z.string().max(500).optional(),
   waterFeature: z.boolean(),
   frontNavigable: z.boolean(),
-  cover: z.enum(["Wooded", "Open Field", "Mixed", "Clear Cut", "Dessert"]),
+  cover: z.enum(["Wooded", "Open Field", "Mixed", "Clear Cut", "Desert"]),
   topography: z.enum(["Very Steep", "Some Steep areas", "Gently Rolling", "Flat"]),
   wet: z.enum(["Wet", "Some portions wet", "Not Wet"]),
   restriction: z.boolean(),

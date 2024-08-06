@@ -39,7 +39,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
   } = useForm<z.infer<typeof aboutLandSchema>>({
     resolver: zodResolver(aboutLandSchema),
   });
-
+  
   const onSubmit = handleSubmit((aboutLand) => {
     setValueLandData((prev) => ({ ...prev, aboutLand }));
     if (!user) {
@@ -101,9 +101,9 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
                 rows={5}
                 placeholder="Type here"
                 value={watch("description")}
-                onChange={(value) => setValue("description", value.length <= 300 ? value : "", { shouldValidate: true })}
+                onChange={(value) => setValue("description", value.length <= 500 ? value : watch("description"), { shouldValidate: true })}
               />
-              <p className="text-xss text-grey-600 text-end">{watch("description")?.length ?? 0}/300</p>
+              <p className="text-xss text-grey-600 text-end">{watch("description")?.length ?? 0}/500</p>
             </div>
           </div>
           {list.map((item, i) => (
@@ -131,7 +131,6 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
             <p className="font-medium text-sm">10. Please estimate a value for any improvements. Sheds, Barns, Well installed, etc.</p>
             <TextField
               prefix="$"
-              suffix=" USD"
               type="number"
               placeholder="Type here"
               value={watch("improvmentsValue")?.toString() ?? ""}
