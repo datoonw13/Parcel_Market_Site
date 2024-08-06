@@ -93,6 +93,7 @@ const ReceivedOfferDetailsWrapper = ({
         desc="This offer is for initial contact only and is not a binding contract. Please accept to proceed."
         onOk={acceptOffer}
         acceptLabel="Accept"
+        cancelLabel="Close"
       />
     </>
   );
