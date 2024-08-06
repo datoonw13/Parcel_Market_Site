@@ -5,10 +5,10 @@ import routes from "@/helpers/routes";
 import Link from "next/link";
 import { useState } from "react";
 import { OfferModel, OfferStatusEnum } from "@/types/offer";
-import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
+import ResponsiveWarningModal from "@/components/@new/shared/modals/ResponsiveWarningModal";
 import OfferDetail from "../details/offer-detail";
 
 const OfferDetailsWrapper = ({
@@ -56,18 +56,19 @@ const OfferDetailsWrapper = ({
           </Link>
         </div>
       </div>
-      <ResponsiveRemoveModal
+      <ResponsiveWarningModal
         open={openCancelModal}
-        pending={pending}
-        handleClose={() => {
+        okLabel="Cancel Offer"
+        okPending={pending}
+        closeModal={() => {
           setOpenCancelModal(false);
         }}
-        onReject={() => {
+        onCancel={() => {
           setOpenCancelModal(false);
         }}
         title="Cancel Offer?"
-        desc="Are you sure you want to cancel your offer?"
-        onOk={cancelOffer}
+        description="Are you sure you want to cancel your offer?"
+        onOK={cancelOffer}
       />
     </>
   );
