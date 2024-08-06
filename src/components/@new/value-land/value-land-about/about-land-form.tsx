@@ -39,7 +39,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
   } = useForm<z.infer<typeof aboutLandSchema>>({
     resolver: zodResolver(aboutLandSchema),
   });
-  
+
   const onSubmit = handleSubmit((aboutLand) => {
     setValueLandData((prev) => ({ ...prev, aboutLand }));
     if (!user) {
