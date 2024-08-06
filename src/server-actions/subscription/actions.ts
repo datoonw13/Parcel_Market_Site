@@ -3,10 +3,11 @@
 import { ErrorResponse } from "@/helpers/error-response";
 import { IStripeCharge, IStripePaymentMethods, ISubscription, SubscriptionType } from "@/types/subscriptions";
 import { ResponseModel } from "@/types/common";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { DeletionAccountReason } from "@/types/auth";
 import { fetcher } from "../fetcher";
 import { refreshToken } from "../user/actions";
+import { subscriptionTags } from "./tags";
 
 export const getStripeSessionAction = async (subscriptionType: SubscriptionType): Promise<any | null> => {
   try {
@@ -29,7 +30,9 @@ export const getUserSubscriptions = async (): Promise<ResponseModel<ISubscriptio
   try {
     const data = await fetcher<ISubscription[]>(`stripe/subscriptions`, {
       method: "GET",
-      cache: "no-store",
+      next: {
+        tags: [subscriptionTags.subscription],
+      },
     });
 
     return {
@@ -54,6 +57,7 @@ export const cancelSubscriptionAction = async (
       method: "DELETE",
       body: JSON.stringify({ deleteReason, subscriptionId }),
     });
+    revalidateTag(subscriptionTags.subscription);
     await refreshToken();
     return {
       errorMessage: null,
@@ -72,7 +76,9 @@ export const getUserPaymentMethods = async (): Promise<ResponseModel<IStripePaym
   try {
     const data = await fetcher<IStripePaymentMethods>(`stripe/paymentMethods`, {
       method: "GET",
-      cache: "no-cache",
+      next: {
+        tags: [subscriptionTags.paymentMethods],
+      },
     });
     return {
       errorMessage: null,
@@ -113,7 +119,7 @@ export const addPaymentMethodAction = async (paymentMethodId: string): Promise<R
       method: "PUT",
       body: JSON.stringify({ paymentMethodId }),
     });
-    revalidatePath("/", "layout");
+    revalidateTag(subscriptionTags.paymentMethods);
     return {
       errorMessage: null,
       data: null,
