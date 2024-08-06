@@ -143,7 +143,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           label="Postal Code"
           onChange={(value) => setValue("postalCode", value, { shouldValidate: isSubmitted })}
           value={watch("postalCode")}
+          type="number"
           error={!!errors.postalCode}
+          disableThousandsSeparator
+          decimalScale={0}
         />
         <TextField
           className="w-full"

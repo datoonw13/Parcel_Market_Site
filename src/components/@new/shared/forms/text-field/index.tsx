@@ -26,6 +26,7 @@ interface TextFieldProps {
   decimalScale?: number;
   suffix?: string;
   prefix?: string;
+  disableThousandsSeparator?: boolean;
 }
 
 const TextField = (props: TextFieldProps) => {
@@ -50,6 +51,7 @@ const TextField = (props: TextFieldProps) => {
     decimalScale,
     suffix,
     prefix,
+    disableThousandsSeparator,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -107,7 +109,7 @@ const TextField = (props: TextFieldProps) => {
           readOnly={readOnly}
           type="text"
           name={name}
-          thousandSeparator=","
+          thousandSeparator={disableThousandsSeparator ? false : ","}
           decimalSeparator="."
           autoComplete="new-password"
           decimalScale={decimalScale}
