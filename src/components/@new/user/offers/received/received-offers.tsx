@@ -12,7 +12,7 @@ const ReceivedOffers = async ({ searchParams }: { searchParams: { [key: string]:
   return (
     <div className="space-y-8 md:space-y-6">
       {!data || data.pagination.totalCount === 0 ? (
-        <DataNotFound message="No sent offers" />
+        <DataNotFound message="No received offers" />
       ) : (
         <>
           <ReceivedOffersHeader totalCount={data.pagination.totalCount} />
