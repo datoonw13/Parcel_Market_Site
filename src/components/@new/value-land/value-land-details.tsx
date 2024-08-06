@@ -244,7 +244,7 @@ const ValueLandDetails = () => {
           </div>
           <div className={classes.action}>
             <Button onClick={() => setShowTerms(true)} loading={isSubmitting}>
-              Continue
+              Next Step
             </Button>
           </div>
         </div>
