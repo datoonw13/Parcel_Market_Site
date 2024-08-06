@@ -30,9 +30,7 @@ const OfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, i
           </li>
           <li>
             Price per acre:{" "}
-            <span className="ml-1 text-black">
-              {numFormatter.format(Number(Number(data.sellingProperty.marketPrice) / data.sellingProperty.acrage))}
-            </span>
+            <span className="ml-1 text-black">{numFormatter.format(Number(Number(data.price) / data.sellingProperty.acrage))}</span>
           </li>
         </ul>
       </div>
