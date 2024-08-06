@@ -50,7 +50,7 @@ const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data, searc
     <div>
       <div className="space-y-8 md:space-y-6">
         {!data || data.pagination.totalCount === 0 ? (
-          <DataNotFound message="No listings yet" />
+          <DataNotFound message="You have not saved any properties yet" />
         ) : (
           <>
             <UserListingHeader totalCount={data.pagination.totalCount} />
