@@ -115,7 +115,7 @@ const ValueLandDetails = () => {
                     iconClassName="!fill-grey-200"
                     labelClassName="text-sm text-grey-800"
                     label="Search By"
-                    description="What king of criteria user needs to fill, or other info message"
+                    description="What kind of criteria user needs to fill, or other info message"
                   />
                   <div className="flex flex-col sm:flex-row gap-5">
                     <RadioButton
@@ -127,7 +127,7 @@ const ValueLandDetails = () => {
                           iconClassName="!fill-grey-200"
                           labelClassName="text-base text-grey-800"
                           label="Parcel Number"
-                          description="What king of criteria user needs to fill, or other info message"
+                          description="This is the land's unique number assigned by the county and is the best way to locate your property."
                         />
                       }
                     />
