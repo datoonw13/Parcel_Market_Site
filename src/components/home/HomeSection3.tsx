@@ -1,7 +1,7 @@
 "use client";
 
 import routes from "@/helpers/routes";
-import { useAppSelector } from "@/lib/hooks";
+// import { useAppSelector } from "@/lib/hooks";
 import { Box, Button, Typography, alpha } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 const HomeSection3 = () => {
   const ref = useRef<HTMLDivElement>();
-  const user = useAppSelector((state) => state.authedUser.user);
   const router = useRouter();
 
   const calcLeftSpace = () => {
@@ -45,11 +44,7 @@ const HomeSection3 = () => {
           variant="contained"
           sx={{ width: { md: "fit-content" } }}
           onClick={() => {
-            if (user) {
-              router.push(`${routes.marketplace.url}`);
-            } else {
-              router.push(`${routes.auth.signIn.url}?from=marketplace`);
-            }
+            router.push(`${routes.marketplace.fullUrl}`);
           }}
         >
           View All

@@ -6,8 +6,8 @@
 import { UIKitSettingsBuilder } from "@cometchat/uikit-shared";
 import { CometChatUIKit, CometChatConversationsWithMessages } from "@cometchat/chat-uikit-react";
 import { useCallback, useEffect, useState } from "react";
-import useAuthCheck from "@/hooks/useAuthCheck";
-import { useAppSelector } from "@/lib/hooks";
+// import useAuthCheck from "@/hooks/useAuthCheck";
+// import { useAppSelector } from "@/lib/hooks";
 import { CometChat as Chat } from "@cometchat/chat-sdk-javascript";
 import { CircularProgress } from "@mui/material";
 
@@ -20,7 +20,7 @@ const COMETCHAT_CONSTANTS = {
 
 const CometChat = () => {
   const [user, setUser] = useState<any>();
-  useAuthCheck();
+  // useAuthCheck();
   // const authedUser = useAppSelector((state) => state.authedUser.user);
   const authedUser = true;
   const loginUser = async (userUUID: string) => {

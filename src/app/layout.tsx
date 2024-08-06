@@ -10,7 +10,6 @@ import { ThemeProvider } from "@mui/material";
 import theme from "@/theme";
 import NextTopLoader from "nextjs-toploader";
 import { Provider } from "jotai";
-import StoreProvider from "./StoreProvider";
 import "simplebar-react/dist/simplebar.min.css";
 
 const inter = Inter({
@@ -39,21 +38,19 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <StoreProvider>
-        <html lang="en">
-          <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
-            <NextTopLoader color="#0E8B40" showSpinner={false} />
-            <AppRouterCacheProvider>
-              <Provider>
-                <ThemeProvider theme={theme}>
-                  <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-                  {children}
-                </ThemeProvider>
-              </Provider>
-            </AppRouterCacheProvider>
-          </body>
-        </html>
-      </StoreProvider>
+      <html lang="en">
+        <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
+          <NextTopLoader color="#0E8B40" showSpinner={false} />
+          <AppRouterCacheProvider>
+            <Provider>
+              <ThemeProvider theme={theme}>
+                <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
+                {children}
+              </ThemeProvider>
+            </Provider>
+          </AppRouterCacheProvider>
+        </body>
+      </html>
     </>
   );
 }
