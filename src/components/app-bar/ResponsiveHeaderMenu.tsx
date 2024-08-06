@@ -7,7 +7,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ISignInResponse } from "@/types/auth";
+import clsx from "clsx";
 import UserMenuList from "../@new/user/user-menu/UserMenuList";
+import { LogoutIcon1 } from "../@new/icons/LogutIcons";
 
 const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: ISignInResponse["payload"] | null }) => {
   const pathname = usePathname();
@@ -77,23 +79,36 @@ const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: ISignInR
               }}
             >
               <Box sx={{ color: pathname.includes("/about-us") ? "primary.main" : "inherit" }}>
-                <Link href="/about-us">About Us</Link>
+                <Link onClick={() => setOpen(false)} href="/about-us">
+                  About Us
+                </Link>
               </Box>
               <Box>
-                <Link href="/">Find a Land Professional</Link>
+                <Link onClick={() => setOpen(false)} href="/">
+                  Find a Land Professional
+                </Link>
               </Box>
               <Box>
-                <Link href={routes.marketplace.fullUrl}>Parcel MarketPlace</Link>
+                <Link onClick={() => setOpen(false)} href={routes.marketplace.fullUrl}>
+                  Parcel MarketPlace
+                </Link>
               </Box>
               <Box>
-                <Link href="/find-property">Value my land for free</Link>
+                <Link onClick={() => setOpen(false)} href={routes.valueLand.fullUrl}>
+                  Value my land for free
+                </Link>
               </Box>
             </Box>
-            {user && (
-              <>
-                <p className="text-grey-600 text-xs my-4">Personal</p>
-                <UserMenuList listItemClasses="!text-sm" close={() => setOpen(false)} />
-              </>
+            <p className="text-grey-600 text-xs my-4">Personal</p>
+            {user ? (
+              <UserMenuList listItemClasses="!text-sm" close={() => setOpen(false)} />
+            ) : (
+              <Link href={routes.auth.signIn.fullUrl}>
+                <li className="flex items-center  gap-1.5 cursor-pointer group">
+                  <LogoutIcon1 color="primary-main" className="!fill-primary-main transition-all duration-0.1" />
+                  <p className={clsx("text-sm transition-all duration-0.1")}>Log In</p>
+                </li>
+              </Link>
             )}
           </Drawer>
         </>

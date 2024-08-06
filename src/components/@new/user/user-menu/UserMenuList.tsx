@@ -7,10 +7,9 @@ import { UserIcon1 } from "../../icons/UserIcons";
 import { SmsIcon1 } from "../../icons/SmsIcons";
 import { BookIcon1 } from "../../icons/BookIcons";
 import { DiscountIcon1, DiscountIcon2 } from "../../icons/DiscountIcons";
-import { BookmarkIcon1 } from "../../icons/BookMarkIcons";
 import { LogoutIcon1 } from "../../icons/LogutIcons";
 import UserMenuListItem from "./UserMenuListItem";
-import { ClockIcon1, ClockIcon2, ClockIcon3 } from "../../icons/ClockIcons";
+import { ClockIcon3 } from "../../icons/ClockIcons";
 
 const UserMenuList = ({ listItemClasses, hideLogout, close }: { listItemClasses?: string; hideLogout?: boolean; close?: () => void }) => (
   <ul className="flex flex-col gap-4 min-w-[306px]">
