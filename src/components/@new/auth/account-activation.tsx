@@ -17,6 +17,8 @@ const AccountActivation = ({ email, errorMessage }: { email: string; errorMessag
     const { errorMessage } = await resendSignUpVerificationCodeAction(email!);
     if (errorMessage) {
       toast.error(errorMessage);
+    } else {
+      toast.success("Verification code sent successfully");
     }
     setResendLoading(false);
   };
