@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";

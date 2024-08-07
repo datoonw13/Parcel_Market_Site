@@ -18,7 +18,7 @@ const UserSearchHeader = ({ totalCount }: { totalCount: number }) => {
   const onRemove = async () => {
     if (userSearchAtom.selectedIds) {
       setPending(true);
-     const x =  await removeUserSearches(userSearchAtom.selectedIds);
+      await removeUserSearches(userSearchAtom.selectedIds);
       setPending(false);
       setOpenRemoveModal(false);
       setUserSearchAtom({ selectedIds: null, selecting: false });
