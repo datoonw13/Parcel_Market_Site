@@ -8,7 +8,7 @@ import { useUserSearchAtom } from "@/atoms/user-search-atom";
 import { ArrowIconDown1, ArrowIconUp1 } from "../../icons/ArrowIcons";
 import CheckBox from "../../shared/forms/CheckBox";
 
-const SearchAccordion = ({ children, id }: { children: ReactNode; id: number }) => {
+const SearchAccordion = ({ children, id, title }: { children: ReactNode; id: number; title: string }) => {
   const [open, setOpen] = useState(false);
   const [userSearchAtom, setUserSearchAtom] = useAtom(useUserSearchAtom);
 
@@ -27,9 +27,12 @@ const SearchAccordion = ({ children, id }: { children: ReactNode; id: number }) 
   }, [userSearchAtom.selecting]);
 
   return (
-    <div className={clsx(open && "!border-b-0")}>
+    <div className={clsx(open && "!border-b-0 ")}>
       <div
-        className="py-3 px-6 flex items-center justify-between cursor-pointer"
+        className={clsx(
+          "py-3 px-6 flex items-center justify-between cursor-pointer transition-all duration-100 hover:bg-primary-main-50",
+          open && "!bg-primary-main-100 !rounded-none"
+        )}
         onClick={() => {
           if (userSearchAtom.selecting) {
             handleSelect();
@@ -42,7 +45,7 @@ const SearchAccordion = ({ children, id }: { children: ReactNode; id: number }) 
           {userSearchAtom.selecting && (
             <CheckBox onChange={() => {}} className="pointer-events-none" checked={userSearchAtom.selectedIds?.includes(id) || false} />
           )}
-          <p className=" text-sm font-medium">State/County/Acreage/Volt Value 7</p>
+          <p className=" text-sm font-medium">{title}</p>
         </div>
         {open ? <ArrowIconUp1 /> : <ArrowIconDown1 />}
       </div>

@@ -10,6 +10,7 @@ import { revalidateTag } from "next/cache";
 import { fetcher } from "../fetcher";
 import { userListingsTag } from "../user-listings/tags";
 import { marketplaceTag } from "../marketplace/tags";
+import { userSearchesTag } from "../user-searches/tags";
 
 export const getFoundedPropertiesAction = async (
   values: z.infer<typeof valueLandDetailsValidations>
@@ -62,6 +63,7 @@ export const calculateLandPriceAction = async (
         },
       }
     );
+    revalidateTag(userSearchesTag);
     return {
       data: request,
       errorMessage: null,
@@ -84,6 +86,7 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
     });
     revalidateTag(userListingsTag);
     revalidateTag(marketplaceTag);
+    revalidateTag(userSearchesTag);
     return {
       data: request.id,
       errorMessage: null,

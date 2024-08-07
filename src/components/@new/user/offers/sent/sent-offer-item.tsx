@@ -97,7 +97,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
                   <MoneyIcon1 color="grey-600" />
                   <p className="text-sm text-grey-600">
                     VOLT Value:{" "}
-                    <span className="text-sm text-black font-medium">{numFormatter.format(Number(data.sellingProperty.marketPrice))}</span>
+                    <span className="text-sm text-black font-medium">{numFormatter.format(Number(data.sellingProperty.salePrice))}</span>
                   </p>
                 </div>
               </div>

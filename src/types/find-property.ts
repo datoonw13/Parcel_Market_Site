@@ -29,6 +29,7 @@ export interface IFindPropertyEstimatedPrice {
     propertyType: string;
     state: string;
     county: string;
+    coordinates: string;
   };
   queryParams: {
     lat: string;
@@ -126,3 +127,22 @@ export type IUserSellingPropertiesResponse = ResponseType<{
   sellingProperties: Array<ISellingProperty>;
   pagination: IPagination;
 }>;
+
+export interface IUserSearches {
+  id: number;
+  owner: string;
+  user_id: number;
+  state: string;
+  county: string;
+  propertyType: string;
+  acrage: string;
+  parcelNumber: string;
+  price: string;
+  price_sum: string;
+  median_middle_price: string;
+  accepted: false;
+  dateCreated: Date;
+  lastsalesprice: string;
+  lastsalesdate: Date;
+  coordinates: string;
+}

@@ -91,7 +91,7 @@ const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data, searc
                         voltValue: {
                           icon: <MoneyIcon1 className="w-4 h-4 fill-grey-600" />,
                           label: "VOLT value",
-                          value: numFormatter.format(Number(land.marketPrice)).toString(),
+                          value: numFormatter.format(Number(land.salePrice)).toString(),
                         },
                       },
                     }}

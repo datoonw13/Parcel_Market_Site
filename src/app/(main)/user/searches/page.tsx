@@ -4,9 +4,13 @@ import SearchDesktopFilters from "@/components/@new/user/searches/search-filters
 import UserSearches from "@/components/@new/user/searches/user-searches";
 import { getUserAction } from "@/server-actions/user/actions";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-const UserSearchesPage = async () => {
+const UserSearchesPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+  if (!searchParams.page) {
+    redirect("?page=1");
+  }
   const user = await getUserAction();
 
   return (
@@ -18,12 +22,14 @@ const UserSearchesPage = async () => {
       {user?.isSubscribed ? (
         <>
           <div className="hidden sm:block">
-            <Suspense>
+            <Suspense fallback="Loading">
               <div className="hidden sm:block">
                 <SearchDesktopFilters />
               </div>
             </Suspense>
-            <UserSearches />
+            <Suspense key={JSON.stringify(searchParams)}>
+              <UserSearches searchParams={searchParams} />
+            </Suspense>
           </div>
           <div className="relative rounded-2xl border border-grey-100 sm:hidden">
             <div className="w-full h-96 blur-md " />
