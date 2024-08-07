@@ -1,3 +1,5 @@
+"use server"
+
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { IUserSearches } from "@/types/find-property";
