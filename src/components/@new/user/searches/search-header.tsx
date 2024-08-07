@@ -4,6 +4,7 @@ import { SortEnum } from "@/types/common";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useUserSearchAtom } from "@/atoms/user-search-atom";
+import { removeUserSearches } from "@/server-actions/user-searches/actions";
 import Sort from "../../shared/filters/Sort";
 import SelectButton from "../../shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "../../shared/modals/ResponsiveRemoveModal";
@@ -17,19 +18,10 @@ const UserSearchHeader = ({ totalCount }: { totalCount: number }) => {
   const onRemove = async () => {
     if (userSearchAtom.selectedIds) {
       setPending(true);
+      await removeUserSearches(userSearchAtom.selectedIds);
       setPending(false);
-      // setPending(true);
-      // const { errorMessage } = followedListings
-      //   ? await unFollowLands(userListingOption.selectedLandIds)
-      //   : await removeUserListingItemsAction(userListingOption.selectedLandIds);
-      // if (errorMessage) {
-      //   toast.error(errorMessage);
-      //   setPending(false);
-      // } else {
-      //   setOpenRemoveModal(false);
-      //   setUserListingOption((prev) => ({ ...prev, selecting: false, selectedLandIds: null }));
-      //   !followedListings && (await revalidateUserListings());
-      // }
+      setOpenRemoveModal(false);
+      setUserSearchAtom({ selectedIds: null, selecting: false });
     }
   };
 
