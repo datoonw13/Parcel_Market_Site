@@ -21,9 +21,9 @@ const UserSearchesPage = async ({ searchParams }: { searchParams: { [key: string
       />
       {user?.isSubscribed ? (
         <>
-          <div className="hidden sm:block">
+          <div className="hidden lg:block">
             <Suspense fallback="Loading">
-              <div className="hidden sm:block">
+              <div className="hidden lg:block">
                 <SearchDesktopFilters />
               </div>
             </Suspense>
@@ -31,7 +31,7 @@ const UserSearchesPage = async ({ searchParams }: { searchParams: { [key: string
               <UserSearches searchParams={searchParams} />
             </Suspense>
           </div>
-          <div className="relative rounded-2xl border border-grey-100 sm:hidden">
+          <div className="relative rounded-2xl border border-grey-100 lg:hidden">
             <div className="w-full h-96 blur-md " />
             <div className="w-[90%] lg:hidden absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white border border-grey-100 rounded-2xl p-5 space-y-6">
               <div className="relative w-16 h-14 m-auto">
@@ -45,9 +45,6 @@ const UserSearchesPage = async ({ searchParams }: { searchParams: { [key: string
               </div>
             </div>
           </div>
-          {/* <Suspense fallback={<UserListingLoader />} key={JSON.stringify(searchParams)}>
-            <UserListing searchParams={searchParams} />
-          </Suspense> */}
         </>
       ) : (
         <SubscribeError />
