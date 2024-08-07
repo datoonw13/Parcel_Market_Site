@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const offerValidation = z.object({
-  price: z.number().min(1),
+  price: z.number().min(1).max(999999999),
   earnestMoney: z.number().min(1).max(100).nullable(),
   inspectionPeriodDays: z.number().min(1).nullable(),
   closingPeriodDays: z.union([z.literal(15), z.literal(30), z.literal(45)]),
