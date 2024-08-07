@@ -101,8 +101,8 @@ const Map = ({
       }}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <FeatureGroup pathOptions={{ color: "green" }}>
-        {data?.map((mapItem, mapItemI) => (
+      <FeatureGroup pathOptions={{ color: "#F44D61", fillColor: "#F44D61", fillOpacity: 0.2, weight: 1 }}>
+        {data?.map((mapItem) => (
           <Fragment key={mapItem.parcelNumber}>
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
             {mapItem.showMarker && (

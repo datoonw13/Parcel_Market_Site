@@ -100,10 +100,13 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
   }
 };
 
-const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
-export const saveSearchDataAction = async (): Promise<ResponseModel<null>> => {
+export const saveSearchDataAction = async (id: number): Promise<ResponseModel<null>> => {
   try {
-    await delay();
+    await fetcher<ISellProperty & { id: number }>(`properties/saveData`, {
+      method: "POST",
+      body: JSON.stringify({ id }),
+    });
+    revalidateTag(userSearchesTag);
     return {
       data: null,
       errorMessage: null,

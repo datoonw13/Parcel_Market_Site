@@ -15,47 +15,87 @@ interface CalculationMapProps {
   markerMouseLeave: (value: LatLngTuple) => void;
   popupOpen: (value: LatLngTuple) => void;
   popupClose: (value: LatLngTuple) => void;
+  mainLandData?: {
+    latitude: number;
+    longitude: number;
+    coordinates: string;
+    lastSaleDate: Date;
+    lastSalePrice: number;
+    owner: string;
+    parcelNumber: string;
+    acreage: string;
+  };
 }
 
-const CalculationMap: FC<CalculationMapProps> = ({ data, setMarkerRef, markerMouseEnter, markerMouseLeave, popupClose, popupOpen }) => (
-  <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl [&>div]:rounded-2xl">
-    <Map
-      markerMouseEnter={markerMouseEnter}
-      markerMouseLeave={markerMouseLeave}
-      popupOpen={popupOpen}
-      popupClose={popupClose}
-      setMarkerRef={setMarkerRef}
-      geolibInputCoordinates={data.map((el) => [Number(el.latitude), Number(el.longitude)])}
-      zoom={10}
-      data={[
-        ...data.map((el) => ({
-          centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
-          parcelNumber: el.parcelNumber,
-          showMarker: true,
-          active: el.active,
-          popup: {
-            parcelNumber: {
-              label: "Parcel Number",
-              value: el.parcelNumber,
-            },
-            acreage: {
-              label: "Acreage",
-              value: el.arcage,
-            },
-            lastSaleDate: {
-              label: "Last Sale Date",
-              value: el.lastSalesDate!,
-            },
-            lastSalePrice: {
-              label: "Last Sale Price",
-              value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
-            },
-            showSelectButton: false,
-          },
-        })),
-      ]}
-    />
-  </div>
-);
+const CalculationMap: FC<CalculationMapProps> = ({
+  data,
+  setMarkerRef,
+  markerMouseEnter,
+  markerMouseLeave,
+  popupClose,
+  popupOpen,
+  mainLandData,
+}) => {
+  const usedForPriceCalculation = data.map((el) => ({
+    centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
+    parcelNumber: el.parcelNumber,
+    showMarker: true,
+    active: el.active,
+    popup: {
+      parcelNumber: {
+        label: "Parcel Number",
+        value: el.parcelNumber,
+      },
+      acreage: {
+        label: "Acreage",
+        value: el.arcage,
+      },
+      lastSaleDate: {
+        label: "Last Sale Date",
+        value: el.lastSalesDate!,
+      },
+      lastSalePrice: {
+        label: "Last Sale Price",
+        value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
+      },
+      showSelectButton: false,
+    },
+  }));
+
+  const mainLand = {
+    centerCoordinate: [Number(mainLandData?.latitude || 0), Number(mainLandData?.longitude) || 0] as LatLngTuple,
+    parcelNumber: mainLandData?.parcelNumber || "",
+    showMarker: true,
+    active: true,
+    polygon: mainLandData ? JSON.parse(mainLandData.coordinates) : [],
+    popup: {
+      owner: {
+        label: "Owner",
+        value: mainLandData?.owner || "",
+      },
+      acreage: {
+        label: "Acreage",
+        value: mainLandData?.acreage || "",
+      },
+    },
+  } as any;
+
+  return (
+    <div className="bg-error-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl [&>div]:rounded-2xl">
+      <Map
+        markerMouseEnter={markerMouseEnter}
+        markerMouseLeave={markerMouseLeave}
+        popupOpen={popupOpen}
+        popupClose={popupClose}
+        setMarkerRef={setMarkerRef}
+        geolibInputCoordinates={
+          mainLandData ? [[mainLandData.latitude, mainLandData.longitude]] : data.map((el) => [Number(el.latitude), Number(el.longitude)])
+        }
+        zoom={10}
+        data={mainLandData ? [mainLand, ...usedForPriceCalculation] : usedForPriceCalculation}
+      />
+    </div>
+  );
+};
 
 export default CalculationMap;

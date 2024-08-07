@@ -39,7 +39,7 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
         owner: valueLand.selectedLand.properties.fields.owner,
         propertyType:
           valueLand.selectedLand.properties.fields?.zoning_description || valueLand.selectedLand.properties.fields.usedesc || "",
-        coordinates: JSON.stringify(valueLand.selectedLand.geometry.coordinates)
+        coordinates: JSON.stringify(valueLand.selectedLand.geometry.coordinates),
       },
       queryParams: {
         acre: valueLand.selectedLand.properties.fields.ll_gisacre.toString(),

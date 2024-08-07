@@ -10,7 +10,6 @@ import UserSearchesPagination from "./user-searches-pagination";
 
 const UserSearches = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const { data } = await getUserSearches(searchParams);
-
   return (
     <div className="space-y-8 md:space-y-6">
       {!data || data.pagination.totalCount === 0 ? (

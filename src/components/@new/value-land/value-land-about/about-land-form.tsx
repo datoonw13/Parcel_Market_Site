@@ -56,7 +56,7 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
 
   const saveSearchData = useCallback(async () => {
     setSaveDataPending(true);
-    await saveSearchDataAction();
+    await saveSearchDataAction(valueLandData.calculatedPrice!.id);
     setSaveDataPending(false);
   }, []);
 

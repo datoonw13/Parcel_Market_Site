@@ -9,9 +9,20 @@ import LandPriceCalculationTable from "./calculation-table";
 const TableWithMap = ({
   data,
   isUserSubscriptionTrial,
+  mainLandData,
 }: {
   data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
   isUserSubscriptionTrial: boolean;
+  mainLandData?: {
+    coordinates: string;
+    lastSaleDate: Date;
+    lastSalePrice: number;
+    owner: string;
+    parcelNumber: string;
+    acreage: string;
+    latitude: number;
+    longitude: number;
+  };
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -20,12 +31,15 @@ const TableWithMap = ({
   return (
     <div className="space-y-6">
       <CalculationMap
-        data={data.map((el) => ({
-          ...el,
-          active:
-            hoveredItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]) ||
-            selectedItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
-        }))}
+        mainLandData={mainLandData}
+        data={[
+          ...data.map((el) => ({
+            ...el,
+            active:
+              hoveredItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]) ||
+              selectedItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
+          })),
+        ]}
         setMarkerRef={(key, ref) => {
           markerRefs.current = { ...markerRefs.current, [key]: ref };
         }}

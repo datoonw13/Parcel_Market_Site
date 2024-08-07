@@ -1,6 +1,6 @@
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
-import { ISellingProperty, IUserSearches } from "@/types/find-property";
+import { IUserSearches } from "@/types/find-property";
 import { fetcher } from "../fetcher";
 import { userSearchesTag } from "./tags";
 
@@ -9,7 +9,7 @@ export const getUserSearches = async (params: {
 }): Promise<ResponseModel<({ list: IUserSearches[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ data: IUserSearches[] } & IPagination>(
-      `properties?${new URLSearchParams({ ...params, pageSize: "16" })}`,
+      `properties?${new URLSearchParams({ ...params, pageSize: "6" })}`,
       {
         next: { tags: [userSearchesTag] },
       }

@@ -1,7 +1,7 @@
 "use client";
 
 import { saveSearchDataAction } from "@/server-actions/value-land/actions";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { ISignInResponse } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,11 +19,12 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const [saveDataPending, setSaveDataPending] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const saved = useRef(false);
 
   const saveSearchData = useCallback(async () => {
     if (user) {
       setSaveDataPending(true);
-      const { errorMessage } = await saveSearchDataAction();
+      const { errorMessage } = await saveSearchDataAction(valueLand.calculatedPrice!.id);
       if (errorMessage) {
         toast.error(errorMessage);
       } else {
@@ -38,8 +39,9 @@ const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null
   }, [router, setValueLand, user]);
 
   useEffect(() => {
-    if (params.get("from")) {
+    if (params.get("from") && !saved.current) {
       saveSearchData();
+      saved.current = true;
     }
   }, [params, router, saveSearchData, searchParams]);
 

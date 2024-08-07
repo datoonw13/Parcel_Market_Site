@@ -145,4 +145,25 @@ export interface IUserSearches {
   lastsalesprice: string;
   lastsalesdate: Date;
   coordinates: string;
+  assessments: {
+    id: number;
+    owner: null;
+    parselId: string;
+    propertyType: string;
+    arcage: string;
+    price: string;
+    isValid: boolean;
+    isMedianValid: boolean;
+    address: string;
+    lastSalesPrice: string;
+    lastSalesDate: string;
+    property_id: number;
+    dateCreated: string;
+    latitude: string;
+    longitude: string;
+    state: string;
+    county: string;
+  }[];
+  lat: string;
+  lon: string;
 }
