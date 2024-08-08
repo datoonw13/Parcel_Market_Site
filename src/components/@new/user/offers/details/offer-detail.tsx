@@ -16,7 +16,7 @@ const OfferDetail = ({ data }: { data: OfferModel }) => (
     <div className="w-full">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 mb-3 sm:mb-4 md:mb-8">
         <div className="grid gap-2">
-          <p className="font-semibold truncate">land in Los Angeles County, California, USA</p>
+          <p className="font-semibold truncate">{data.sellingProperty.title}</p>
           <p className="flex items-center gap-1.5 text-grey-600 text-xs">
             <LocationIcon1 className="!w-3 !h-3.5" color="primary-main" />
             {getStateValue(data.sellingProperty.state)?.label};{" "}

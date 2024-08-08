@@ -70,7 +70,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
           <div className="space-y-2">
             <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`}>
               <h1 className="font-semibold truncate">
-                land in Los Angeles County, California, USA. County, California, USA. County, California, USA.
+               {data.sellingProperty.title}
               </h1>
             </Link>
             <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">

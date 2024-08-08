@@ -68,7 +68,7 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
           <div className="space-y-2 grid">
             <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`} className="truncate sm:w-[calc(100%-120px)] ">
               <h1 className="truncate font-semibold text-white w-full sm:text-black sm:text-lg">
-                long names with 3 dots long names with 3 dot long names with 3 dot...
+               {data.sellingProperty.title}
               </h1>
             </Link>
             <div className="flex items-center gap-1.5">
