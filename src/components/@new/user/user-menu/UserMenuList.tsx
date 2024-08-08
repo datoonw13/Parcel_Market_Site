@@ -72,5 +72,6 @@ const list = [
     label: "My Recent Searches",
     icon: ClockIcon3,
     path: routes.user.searches.fullUrl,
+    requireSubscription: true
   },
 ];

@@ -30,7 +30,7 @@ const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSu
       description={
         <div>
           <p className="text-sm text-grey-800 mb-4 md:mb-6 px-5 border-b md:border-0 border-b-grey-100 pb-4 md:pb-0">
-            Are you sure you would like to proceed with Annual and By canceling your subscription, you will have
+            Are you sure you would like to proceed with Yearly and By canceling your subscription, you will have
             <span className="font-semibold text-black text-sm mx-1">limited access</span>to the website&apos;s features from
             <span className="font-semibold text-black text-sm mx-1">August 1st.</span>Please tell Us reason of cancelation
           </p>
