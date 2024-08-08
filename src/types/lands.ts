@@ -3,12 +3,12 @@ import { LatLngTuple } from "leaflet";
 import { ISellProperty } from "./find-property";
 
 export enum SortBy {
+  Oldest = "oldest",
   Newest = "newest",
   PriceHighLow = "price-hi-lo",
   PriceLowHigh = "price-lo-hi",
   AreaHighLow = "area-hi-lo",
   AreaLowHigh = "area-lo-hi",
-  Oldest = "oldest",
 }
 
 export interface IMarketplaceFilters {
