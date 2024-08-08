@@ -4,8 +4,8 @@ const passwordSchema = z
   .string()
   .trim()
   .regex(
-    /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{6,}$/,
-    "Password must be at least 6 characters long and include at least one letter, one number, and one special character (!@$%)."
+    /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/,
+    "Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & special characters ($, ^, *, +)"
   );
 
 export const emailSchema = z.string().trim().email();
@@ -34,10 +34,10 @@ export const userSignUpValidation = z
       message: "Please read and accept the terms and conditions",
     }),
     sendEmailTips: z.boolean(),
-    repeatPassword: z.string().trim().min(1),
+    repeatPassword: z.string().trim().min(1, { message: "Password doesn’t match" }),
   })
   .refine((data) => data.password === data.repeatPassword, {
-    message: "Passwords don't match",
+    message: "Password doesn’t match",
     path: ["repeatPassword"],
   });
 
@@ -48,7 +48,7 @@ export const userPasswordResetValidations = z
     repeatNewPassword: passwordSchema,
   })
   .refine((data) => data.newPassword === data.repeatNewPassword, {
-    message: "Passwords don't match",
+    message: "Password doesn’t match",
     path: ["repeatNewPassword"],
   });
 

@@ -1,8 +1,8 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
-import { getAllStates, getCitiesByState } from "@/helpers/states";
+import { getAllStates } from "@/helpers/states";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,6 @@ import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { signUpUserAction } from "@/server-actions/user/actions";
-import { useRouter } from "next/navigation";
 import Button from "../../shared/forms/Button";
 import TextField from "../../shared/forms/text-field";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
@@ -21,7 +20,6 @@ interface SignUpProps {
   onFinish: (errorMessage?: string, email?: string) => void;
 }
 const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
-  const router = useRouter();
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
   const {
@@ -48,9 +46,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
     },
   });
 
-  const selectedState = watch("state");
-
-  const cities = useMemo(() => getCitiesByState(selectedState), [selectedState]);
+  console.log(errors, 22);
 
   const onSubmit = handleSubmit(async (data) => {
     const request = await signUpUserAction(data);
@@ -148,32 +144,38 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           disableThousandsSeparator
           decimalScale={0}
         />
-        <TextField
-          className="w-full"
-          label="Password"
-          value={watch("password")}
-          onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
-          type={visiblePassword ? "text" : "password"}
-          endIcon={
-            <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
-              {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
-            </div>
-          }
-          error={!!errors.password}
-        />
-        <TextField
-          value={watch("repeatPassword")}
-          onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
-          className="w-full"
-          label="Retype Password"
-          type={visibleRepeatPassword ? "text" : "password"}
-          endIcon={
-            <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
-              {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
-            </div>
-          }
-          error={!!errors.repeatPassword}
-        />
+        <div className="space-y-1">
+          <TextField
+            className="w-full"
+            label="Password"
+            value={watch("password")}
+            onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
+            type={visiblePassword ? "text" : "password"}
+            endIcon={
+              <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
+                {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
+              </div>
+            }
+            error={!!errors.password}
+          />
+          {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
+        </div>
+        <div className="space-y-1">
+          <TextField
+            value={watch("repeatPassword")}
+            onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
+            className="w-full"
+            label="Retype Password"
+            type={visibleRepeatPassword ? "text" : "password"}
+            endIcon={
+              <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
+                {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+              </div>
+            }
+            error={!!errors.repeatPassword}
+          />
+          {errors.repeatPassword && <p className="text-xss text-error font-medium">{errors.repeatPassword.message}</p>}
+        </div>
         <CheckBox
           onChange={() => setValue("sendEmailTips", !watch("sendEmailTips"))}
           label="Send me emails with tips on how to find talent that fits my needs."
