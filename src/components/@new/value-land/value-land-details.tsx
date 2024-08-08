@@ -60,6 +60,7 @@ const ValueLandDetails = () => {
     const { data: foundedProperties, errorMessage } = await getFoundedPropertiesAction(data);
     if (errorMessage) {
       setShowError(true);
+      setShowTerms(false)
     } else {
       setValueLandAtom((prev) => ({
         ...prev,
