@@ -1,3 +1,4 @@
+import { IUserSearches } from "@/types/find-property";
 import { atom } from "jotai";
 
 export const useUserSearchAtom = atom<{

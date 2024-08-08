@@ -10,7 +10,7 @@ import SelectButton from "../../shared/forms/Button/SelectButton";
 import ResponsiveRemoveModal from "../../shared/modals/ResponsiveRemoveModal";
 import SearchMobileFilters from "./search-mobile-filters";
 
-const UserSearchHeader = ({ totalCount }: { totalCount: number }) => {
+const UserSearchHeader = ({ totalCount, totalDataInView }: { totalCount: number; totalDataInView: number }) => {
   const [userSearchAtom, setUserSearchAtom] = useAtom(useUserSearchAtom);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
   const [pending, setPending] = useState(false);
@@ -60,6 +60,7 @@ const UserSearchHeader = ({ totalCount }: { totalCount: number }) => {
           total={userSearchAtom.selectedIds?.length}
           className="ml-auto sm:ml-0"
           onRemove={() => setOpenRemoveModal(true)}
+          allSelected={totalDataInView === userSearchAtom.selectedIds?.length}
         />
         <div className="flex items-center gap-3">
           <p className="hidden sm:block text-grey-600 text-xs">{totalCount} Lands</p>

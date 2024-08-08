@@ -11,9 +11,10 @@ interface SelectButtonProps {
   selecting: boolean;
   className?: string;
   onRemove: () => void;
+  allSelected?: boolean;
 }
 
-const SelectButton: FC<SelectButtonProps> = ({ onClick, total, selecting, className, onRemove }) => (
+const SelectButton: FC<SelectButtonProps> = ({ onClick, total, selecting, className, onRemove, allSelected }) => (
   <div className="flex items-center gap-2">
     <Button
       onClick={onClick}
@@ -24,7 +25,7 @@ const SelectButton: FC<SelectButtonProps> = ({ onClick, total, selecting, classN
       )}
       variant="secondary"
     >
-      {`${total || ""}`} Select
+      {allSelected ? "All Selected" : `${total || ""} Select`}
     </Button>
     {!!total && (
       <Button

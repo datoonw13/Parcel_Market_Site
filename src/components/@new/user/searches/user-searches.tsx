@@ -7,6 +7,7 @@ import SearchDetails from "./search-details";
 import DataNotFound from "../../shared/DataNotFound";
 import UserSearchHeader from "./search-header";
 import UserSearchesPagination from "./user-searches-pagination";
+import SelectAllSearches from "./select-all-searches";
 
 const UserSearches = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const { data } = await getUserSearches(searchParams);
@@ -16,13 +17,14 @@ const UserSearches = async ({ searchParams }: { searchParams: { [key: string]: s
         <DataNotFound message="Data not found..." />
       ) : (
         <>
-          <UserSearchHeader totalCount={data.pagination.totalCount} />
+          <UserSearchHeader totalDataInView={data.list.length} totalCount={data.pagination.totalCount} />
           <div
             className="border border-grey-100 rounded-2xl 
             [&>div:not(:last-child)]:border-b [&>div:not(:last-child)]:border-grey-100
             [&>div:first-child>div:first-child]:!pt-5 [&>div:last-child>div:first-child]:!pb-5
             [&>div:first-child>div:first-child]:!rounded-t-2xl [&>div:last-child>div:first-child]:rounded-b-2xl"
           >
+            {data.list.length > 0 && <SelectAllSearches data={data.list} />}
             {data.list.map((item) => (
               <SearchAccordion
                 title={`${getStateValue(item.state)?.label}/${getCountyValue(item.county, item.state)?.label}/${
