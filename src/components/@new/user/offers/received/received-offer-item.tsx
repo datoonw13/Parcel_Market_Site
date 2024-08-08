@@ -67,9 +67,7 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
         <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8 mb-3 sm:mb-4">
           <div className="space-y-2 grid">
             <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`} className="truncate sm:w-[calc(100%-120px)] ">
-              <h1 className="truncate font-semibold text-white w-full sm:text-black sm:text-lg">
-               {data.sellingProperty.title}
-              </h1>
+              <h1 className="truncate font-semibold text-white w-full sm:text-black sm:text-lg">{data.sellingProperty.title}</h1>
             </Link>
             <div className="flex items-center gap-1.5">
               <LocationIcon1 color="white" className="w-3 h-3.5 fill-white sm:fill-grey-600" />

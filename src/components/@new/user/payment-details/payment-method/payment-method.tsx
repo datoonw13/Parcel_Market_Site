@@ -16,7 +16,7 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState<(IStripePaymentMethods[0] & { deleted: boolean })[]>([]);
   const [pending, setPending] = useState(false);
-  const [removeItem, setRemoveItem] = useState<IStripePaymentMethods[0] & { deleted: boolean } | null>(null)
+  const [removeItem, setRemoveItem] = useState<(IStripePaymentMethods[0] & { deleted: boolean }) | null>(null);
 
   const handleSave = async () => {
     setPending(true);
@@ -46,11 +46,11 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
         open={!!removeItem}
         closeModal={() => setRemoveItem(null)}
         description={`Delete **** **** **** ${removeItem?.last4} ?`}
-        title={"Are you sure you want to delete this Card"}
+        title="Are you sure you want to delete this Card"
         onOK={() => {
           const newData = data.map((item) => ({ ...item, deleted: item.id === removeItem?.id ? true : item.deleted }));
           setData([...newData]);
-          setRemoveItem(null)
+          setRemoveItem(null);
         }}
         onCancel={() => setRemoveItem(null)}
         okLabel="Delete"
@@ -91,7 +91,7 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
                 {edit && (
                   <Button
                     onClick={() => {
-                      setRemoveItem(el)
+                      setRemoveItem(el);
                     }}
                     variant="secondary"
                     className="!outline-none !p-0 w-8 h-8 rounded-full hover:bg-error-100 flex items-center justify-center group !bg-white"

@@ -69,9 +69,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
         <div className="px-6 pt-6 pb-8 space-y-4">
           <div className="space-y-2">
             <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`}>
-              <h1 className="font-semibold truncate">
-               {data.sellingProperty.title}
-              </h1>
+              <h1 className="font-semibold truncate">{data.sellingProperty.title}</h1>
             </Link>
             <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">
               <LocationIcon1 /> {state?.label}; {county}
