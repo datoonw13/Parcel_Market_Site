@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IStripePaymentMethods } from "@/types/subscriptions";
 import TextField from "@/components/@new/shared/forms/text-field";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
@@ -9,10 +9,11 @@ import Button from "@/components/@new/shared/forms/Button";
 import { RemoveIcon1 } from "@/components/@new/icons/RemoveIcons";
 import { addPaymentMethodAction, removePaymentMethodsAction } from "@/server-actions/subscription/actions";
 import PaymentDetailsItem from "../payment-details-item";
+import CardIcon from "../card-icon";
 
 const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0] & { deleted: boolean })[] }) => {
   const [edit, setEdit] = useState(false);
-  const [data, setData] = useState<(IStripePaymentMethods[0] & { deleted: boolean })[]>(initialData);
+  const [data, setData] = useState<(IStripePaymentMethods[0] & { deleted: boolean })[]>([]);
   const [pending, setPending] = useState(false);
 
   const handleSave = async () => {
@@ -32,6 +33,9 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
     setEdit(false);
   };
 
+  useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
   return (
     <div className="space-y-3">
       <PaymentDetailsItem
@@ -48,7 +52,15 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
               <RadioButton
                 rootClassName={clsx("w-full", !edit && "[&>input]:hidden")}
                 labelClassName="w-full"
-                label={<TextField disabled variant="primary" value={`***** **** **** ${el.last4}`} label={el.name} />}
+                label={
+                  <TextField
+                    disabled
+                    variant="primary"
+                    value={`***** **** **** ${el.last4}`}
+                    label={el.name}
+                    endIcon={<CardIcon card={el.brand} />}
+                  />
+                }
                 checked={el.isDefault}
                 name={el.id}
                 onChange={() => {
