@@ -48,7 +48,9 @@ const LandDetails = async ({ data }: { data: ISellingProperty }) => {
       </div>
       {data.user_id !== user?.id && (
         <div className="border-t border-t-grey-100 py-4 px-4 md:px-6 lg:px-8 flex flex-col sm:flex-row gap-3 sm:justify-between">
-          <LandFollowButton landId={data.id} initialFollowedListingId={data.followedListingId} />
+          <div className="[&>*>button]:w-full sm:[&>*>button]:w-fit">
+            <LandFollowButton landId={data.id} initialFollowedListingId={data.followedListingId} />
+          </div>
           <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Button variant="secondary">Contact Seller</Button>
             {!data.offerId && <MakeOfferButton sellingPropertyId={data.id} />}

@@ -3,8 +3,6 @@ import { offerValidation } from "@/zod-validations/offer-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import SimpleBar from "simplebar-react";
-import { createOfferAction } from "@/server-actions/offer/actions";
-import toast from "react-hot-toast";
 import OfferPriceField from "./offer-price-field";
 import Button from "../../shared/forms/Button";
 import OfferEarnestMoneyField from "./offer-earnest-money-field";
@@ -16,6 +14,7 @@ import LabelWithInfo from "../../shared/label-with-info";
 import AutoComplete from "../../shared/forms/AutoComplete";
 import TextField from "../../shared/forms/text-field";
 import Alert from "../../shared/Alert";
+import SendOfferButton from "./send-offer-button";
 
 const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number; goBack: () => void }) => {
   const {
@@ -23,21 +22,12 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
     formState: { isSubmitted, errors, isSubmitting },
     setValue,
     watch,
+    getValues,
   } = useForm<MakeOfferModel>({
     resolver: zodResolver(offerValidation),
     defaultValues: {
       offerActiveForDays: 3,
     },
-  });
-
-  const createOffer = handleSubmit(async (data) => {
-    const { errorMessage } = await createOfferAction({ ...data, sellingPropertyId });
-    if (errorMessage) {
-      toast.error(errorMessage, { duration: 3000 });
-    } else {
-      toast.success("Offer Has Been Sent");
-      goBack();
-    }
   });
 
   return (
@@ -113,9 +103,16 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
         <Button className="w-full sm:w-fit" variant="secondary" onClick={goBack}>
           Close
         </Button>
-        <Button className="w-full sm:w-fit" loading={isSubmitting} onClick={createOffer}>
-          Offer Price
-        </Button>
+        <SendOfferButton
+          onClick={(openWarningModal) => {
+            handleSubmit(() => {
+              openWarningModal();
+            })();
+          }}
+          sellingPropertyId={sellingPropertyId}
+          data={getValues()}
+          goBack={goBack}
+        />
       </div>
     </div>
   );
