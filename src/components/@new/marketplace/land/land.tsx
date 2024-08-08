@@ -86,7 +86,18 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
           {data && <LandDetails data={data} />}
         </div>
         {data.usedForPriceCalculations && (
-          <RecentSalesList isUserSubscriptionTrial={isUserSubscriptionTrial} data={data.usedForPriceCalculations} />
+          <RecentSalesList
+            mainLandData={{
+              acreage: data.acrage.toString(),
+              coordinates: data.coordinates,
+              latitude: Number(data.lat || 1),
+              longitude: Number(data.lon || 1),
+              owner: data.owner,
+              parcelNumber: data.parcelNumber,
+            }}
+            isUserSubscriptionTrial={isUserSubscriptionTrial}
+            data={data.usedForPriceCalculations}
+          />
         )}
       </div>
     </>

@@ -71,8 +71,6 @@ const SearchDetails = async ({ data }: { data: IUserSearches }) => {
         mainLandData={{
           acreage: data.acrage,
           coordinates: data.coordinates,
-          lastSaleDate: data.lastsalesdate,
-          lastSalePrice: Number(data.lastsalesprice),
           latitude: Number(data.lat || 1),
           longitude: Number(data.lon || 1),
           owner: data.owner,

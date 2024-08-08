@@ -4,9 +4,18 @@ import TableWithMap from "../../table-with-map/table-with-map";
 const RecentSalesList = ({
   data,
   isUserSubscriptionTrial,
+  mainLandData,
 }: {
   data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
   isUserSubscriptionTrial: boolean;
+  mainLandData: {
+    latitude: number;
+    longitude: number;
+    coordinates: string;
+    owner: string;
+    parcelNumber: string;
+    acreage: string;
+  };
 }) => (
   <div className="space-y-6">
     <div className="space-y-3">
@@ -15,7 +24,7 @@ const RecentSalesList = ({
         Below are recent sales used by VOLT for similar acreage within 10 miles and over the past 2 years.
       </h2>
     </div>
-    <TableWithMap data={data} isUserSubscriptionTrial={isUserSubscriptionTrial} />
+    <TableWithMap mainLandData={mainLandData} data={data} isUserSubscriptionTrial={isUserSubscriptionTrial} />
   </div>
 );
 

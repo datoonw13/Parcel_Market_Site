@@ -15,8 +15,6 @@ const TableWithMap = ({
   isUserSubscriptionTrial: boolean;
   mainLandData?: {
     coordinates: string;
-    lastSaleDate: Date;
-    lastSalePrice: number;
     owner: string;
     parcelNumber: string;
     acreage: string;
