@@ -45,7 +45,7 @@ export const userPasswordResetValidations = z
   .object({
     oldPassword: z.string().trim().min(1),
     newPassword: passwordSchema,
-    repeatNewPassword: passwordSchema,
+    repeatNewPassword: z.string().trim().min(1, { message: "Password doesn’t match" }),
   })
   .refine((data) => data.newPassword === data.repeatNewPassword, {
     message: "Password doesn’t match",

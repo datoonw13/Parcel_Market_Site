@@ -7,6 +7,9 @@ import { userPasswordResetValidations } from "@/zod-validations/auth-validations
 import { useState } from "react";
 import toast from "react-hot-toast";
 import TextField from "@/components/@new/shared/forms/text-field";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const CreateNewPassword = ({
   onNext,
@@ -20,23 +23,30 @@ const CreateNewPassword = ({
     new: false,
     repeatNew: false,
   });
-  const [values, setValues] = useState({
-    oldPassword: "",
-    newPassword: "",
-    repeatNewPassword: "",
-  });
-  const [loading, setLoading] = useState(false);
 
-  const onSubmit = async () => {
-    setLoading(true);
-    const { errorMessage } = await sendPasswordResetCodeAction({ newPassword: values.newPassword, oldPassword: values.oldPassword });
+  const {
+    handleSubmit,
+    formState: { isSubmitted, errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm<z.infer<typeof userPasswordResetValidations>>({
+    resolver: zodResolver(userPasswordResetValidations),
+    defaultValues: {
+      oldPassword: "",
+      newPassword: "",
+      repeatNewPassword: "",
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    const { errorMessage } = await sendPasswordResetCodeAction(data);
     if (errorMessage) {
       toast.error(errorMessage);
-      setLoading(false);
     } else {
-      onNext(values.oldPassword, values.newPassword);
+      onNext(data.oldPassword, data.newPassword);
     }
-  };
+  });
+
   return (
     <>
       <div className="space-y-4">
@@ -48,31 +58,40 @@ const CreateNewPassword = ({
               {showPassword.current ? <EyeIcon1 /> : <EyeIcon2 />}
             </div>
           }
-          value={values.oldPassword}
-          onChange={(oldPassword) => setValues({ ...values, oldPassword })}
+          value={watch("oldPassword")}
+          onChange={(oldPassword) => setValue("oldPassword", oldPassword, { shouldValidate: isSubmitted })}
+          error={!!errors.oldPassword}
         />
-        <TextField
-          placeholder="New password"
-          type={showPassword.new ? "text" : "password"}
-          endIcon={
-            <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, new: !showPassword.new })}>
-              {showPassword.new ? <EyeIcon1 /> : <EyeIcon2 />}
-            </div>
-          }
-          value={values.newPassword}
-          onChange={(newPassword) => setValues({ ...values, newPassword })}
-        />
-        <TextField
-          placeholder="Re-type password"
-          type={showPassword.repeatNew ? "text" : "password"}
-          endIcon={
-            <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, repeatNew: !showPassword.repeatNew })}>
-              {showPassword.repeatNew ? <EyeIcon1 /> : <EyeIcon2 />}
-            </div>
-          }
-          value={values.repeatNewPassword}
-          onChange={(repeatNewPassword) => setValues({ ...values, repeatNewPassword })}
-        />
+        <div className="space-y-1">
+          <TextField
+            placeholder="New password"
+            type={showPassword.new ? "text" : "password"}
+            endIcon={
+              <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, new: !showPassword.new })}>
+                {showPassword.new ? <EyeIcon1 /> : <EyeIcon2 />}
+              </div>
+            }
+            value={watch("newPassword")}
+            onChange={(newPassword) => setValue("newPassword", newPassword, { shouldValidate: isSubmitted })}
+            error={!!errors.newPassword}
+          />
+          {errors.newPassword && <p className="text-xss text-error font-medium">{errors.newPassword.message}</p>}
+        </div>
+        <div className="space-y-1">
+          <TextField
+            placeholder="Re-type password"
+            type={showPassword.repeatNew ? "text" : "password"}
+            endIcon={
+              <div className="cursor-pointer" onClick={() => setShowPassword({ ...showPassword, repeatNew: !showPassword.repeatNew })}>
+                {showPassword.repeatNew ? <EyeIcon1 /> : <EyeIcon2 />}
+              </div>
+            }
+            value={watch("repeatNewPassword")}
+            onChange={(repeatNewPassword) => setValue("repeatNewPassword", repeatNewPassword, { shouldValidate: isSubmitted })}
+            error={!!errors.repeatNewPassword}
+          />
+          {errors.repeatNewPassword && <p className="text-xss text-error font-medium">{errors.repeatNewPassword.message}</p>}
+        </div>
         <button type="button" className="font-medium text-xs text-primary-main">
           Forgot Password?
         </button>
@@ -81,7 +100,7 @@ const CreateNewPassword = ({
         <Button className="w-full" variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button className="w-full" onClick={onSubmit} loading={loading} disabled={!userPasswordResetValidations.safeParse(values).success}>
+        <Button className="w-full" onClick={onSubmit} loading={isSubmitting}>
           Continue
         </Button>
       </div>
