@@ -13,7 +13,7 @@ import Divider from "../Divider";
 interface ResponsiveWarningModalProps {
   open: boolean;
   closeModal: () => void;
-  title: string;
+  title: string | ReactNode;
   description: string | ReactNode;
   onOK: () => void;
   okPending?: boolean;
