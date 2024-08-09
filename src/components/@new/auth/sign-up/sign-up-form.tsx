@@ -46,7 +46,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
     },
   });
 
-  console.log(errors, 22);
 
   const onSubmit = handleSubmit(async (data) => {
     const request = await signUpUserAction(data);
@@ -126,7 +125,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           className="w-full"
           label="City"
           onChange={(value) => {
-            if (/^[a-zA-Z]+$/.test(value)) {
+            if (/^[a-zA-Z]+$/.test(value) || value === '') {
               setValue("city", value, { shouldValidate: isSubmitted });
             }
           }}
