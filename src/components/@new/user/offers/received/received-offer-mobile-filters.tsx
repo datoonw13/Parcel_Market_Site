@@ -10,7 +10,8 @@ const ReceivedOffersMobileFilters = () => {
   const getParcelNumbers = async () => {
     const { data } = await getReceivedOffersParcelNumbersAction();
     if (data) {
-      setParcelNumbers(data.map((el) => ({ value: el, label: el })));
+      const parcelNums = new Set(data.map((el) => el));
+      setParcelNumbers(Array.from(parcelNums).map(el => ({value: el, label: el})));
     }
   };
 
