@@ -7,12 +7,14 @@ import TextField from "@/components/@new/shared/forms/text-field";
 
 interface OfferContingenciesFieldProps {
   error?: boolean;
-  value: string | null;
-  onChange: (value: string | null) => void;
+  values: string[] | null;
+  onChange: (value: string[] | null) => void;
 }
 
-const OfferContingenciesField: FC<OfferContingenciesFieldProps> = ({ onChange, value, error }) => {
+const OfferContingenciesField: FC<OfferContingenciesFieldProps> = ({ onChange, values, error }) => {
   const [showInput, setShowInput] = useState(false);
+  const otherValue = values?.filter((el) => el !== "Title" && el !== "Financing" && el !== "Appraisal")?.[0] || "";
+
   return (
     <div className="flex flex-col gap-3">
       <LabelWithInfo
@@ -26,42 +28,82 @@ const OfferContingenciesField: FC<OfferContingenciesFieldProps> = ({ onChange, v
             setShowInput(false);
             onChange(null);
           }}
-          checked={!showInput && value === null}
+          checked={values === null}
           label="None"
         />
         <CheckBox
           onChange={() => {
-            setShowInput(false);
-            onChange("Title");
+            if (!values) {
+              onChange(["Title"]);
+            } else if (values.includes("Title")) {
+              const newValues = values.filter((el) => el !== "Title");
+              onChange(newValues.length > 0 ? newValues : null);
+            } else {
+              const newValues = values || [];
+              newValues.push("Title");
+              onChange(newValues);
+            }
           }}
-          checked={!showInput && value === "Title"}
+          checked={!!values?.includes("Title")}
           label="Title"
         />
         <CheckBox
           onChange={() => {
-            setShowInput(false);
-            onChange("Financing");
+            if (!values) {
+              onChange(["Financing"]);
+            } else if (values.includes("Financing")) {
+              const newValues = values.filter((el) => el !== "Financing");
+              onChange(newValues.length > 0 ? newValues : null);
+            } else {
+              const newValues = values || [];
+              newValues.push("Financing");
+              onChange(newValues);
+            }
           }}
-          checked={!showInput && value === "Financing"}
+          checked={!!values?.includes("Financing")}
           label="Financing"
         />
         <CheckBox
           onChange={() => {
-            setShowInput(false);
-            onChange("Appraisal");
+            if (!values) {
+              onChange(["Appraisal"]);
+            } else if (values.includes("Appraisal")) {
+              const newValues = values.filter((el) => el !== "Appraisal");
+              onChange(newValues.length > 0 ? newValues : null);
+            } else {
+              const newValues = values || [];
+              newValues.push("Appraisal");
+              onChange(newValues);
+            }
           }}
-          checked={!showInput && value === "Appraisal"}
+          checked={!!values?.includes("Appraisal")}
           label="Appraisal"
         />
         <CheckBox
           onChange={() => {
-            setShowInput(true);
-            onChange("");
+            const show = !showInput;
+            setShowInput(show);
+
+            if (show) {
+              const newValues = [...(values || []), ""];
+              onChange(newValues);
+            } else if (!show) {
+              const newValues = values?.filter((el) => el !== otherValue);
+              onChange(newValues && newValues?.length > 0 ? newValues : null);
+            }
           }}
           checked={showInput}
           label="Other"
         />
-        {showInput && <TextField value={value ?? ""} onChange={(value) => onChange(value)} placeholder="Type here" />}
+        {showInput && (
+          <TextField
+            value={otherValue}
+            onChange={(value) => {
+              onChange([...(values?.filter((el) => el !== otherValue) || []), value]);
+            }}
+            placeholder="Type here"
+          />
+        )}
       </div>
     </div>
   );

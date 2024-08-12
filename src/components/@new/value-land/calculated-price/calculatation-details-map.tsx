@@ -21,7 +21,6 @@ const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | nu
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [openWarningModal, setOpenWarningModal] = useState(false);
-  
 
   useEffect(() => {
     if (valueLandData.mapInteraction.hoveredLand && markerRefs.current) {

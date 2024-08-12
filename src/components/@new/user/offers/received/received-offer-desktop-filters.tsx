@@ -14,7 +14,7 @@ const ReceivedOffersDesktopFilters = () => {
     const { data } = await getReceivedOffersParcelNumbersAction();
     if (data) {
       const parcelNums = new Set(data.map((el) => el));
-      setParcelNumbers(Array.from(parcelNums).map(el => ({value: el, label: el})));
+      setParcelNumbers(Array.from(parcelNums).map((el) => ({ value: el, label: el })));
     }
   };
 

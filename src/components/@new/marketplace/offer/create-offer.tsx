@@ -56,8 +56,10 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
             />
             <OfferContingenciesField
               error={!!errors.contigencies}
-              value={watch("contigencies")}
-              onChange={(value) => setValue("contigencies", value, { shouldValidate: isSubmitted })}
+              values={watch("contigencies")}
+              onChange={(value) => {
+                setValue("contigencies", value, { shouldValidate: isSubmitted });
+              }}
             />
             <div className="flex flex-col gap-3">
               <LabelWithInfo label="Other Terms" description="Provide any extra details you'd like to include in the offer" />
