@@ -46,7 +46,7 @@ const SendOfferButton: FC<SendOfferButtonProps> = ({ onClick, goBack, sellingPro
         cancelLabel="Close"
       />
       <Button className="w-full sm:w-fit" onClick={() => onClick(() => setOpenModal(true))}>
-        Offer Price
+        Submit to Seller
       </Button>
     </>
   );
