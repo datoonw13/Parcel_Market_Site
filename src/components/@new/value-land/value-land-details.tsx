@@ -13,7 +13,6 @@ import { useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import classes from "@/app/value-land/(main)/styles.module.css";
 import clsx from "clsx";
-import useMediaQuery from "@/hooks/useMediaQuery";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
@@ -21,8 +20,6 @@ import AutoComplete from "../shared/forms/AutoComplete";
 import TextField from "../shared/forms/text-field";
 import Alert from "../shared/Alert";
 import ValueLandStepper from "./value-land-stepper";
-import CalculationTermsModal from "./calculation-terms/terms-modal";
-import CalculationTerms from "./calculation-terms/terms";
 
 type LandDetailsModel = z.infer<typeof valueLandDetailsValidations>;
 
@@ -31,11 +28,9 @@ const ValueLandDetails = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
-  const isSmallDevice = useMediaQuery(1024);
 
   const setValueLandAtom = useSetAtom(valueLandAtom);
   const [showError, setShowError] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -60,7 +55,6 @@ const ValueLandDetails = () => {
     const { data: foundedProperties, errorMessage } = await getFoundedPropertiesAction(data);
     if (errorMessage) {
       setShowError(true);
-      setShowTerms(false);
     } else {
       setValueLandAtom((prev) => ({
         ...prev,
@@ -96,161 +90,152 @@ const ValueLandDetails = () => {
   }, [setValueLandAtom]);
 
   return (
-    <>
-      {!isSmallDevice && (
-        <CalculationTermsModal open={showTerms} onClose={() => setShowTerms(false)} onSubmit={onSubmit} isSubmitting={isSubmitting} />
-      )}
-      {isSmallDevice && showTerms ? (
-        <CalculationTerms onDecline={() => setShowTerms(false)} onSubmit={onSubmit} isSubmitting={isSubmitting} />
-      ) : (
-        <div className="h-full flex flex-col w-full gap-6">
-          <ValueLandStepper currentStep={1} />
-          <div className={clsx("space-y-3 md:space-y-2", classes["content-space-x"])}>
-            <h1 className="text-lg font-semibold ">Let’s locate your property using some basic information?</h1>
-          </div>
-          <div className={classes["content-space-x"]}>
-            <div className={clsx("flex flex-col w-full lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl")}>
-              <div className="space-y-6">
-                <div className="space-y-3">
-                  <LabelWithInfo
-                    iconClassName="!fill-grey-200"
-                    labelClassName="text-sm text-grey-800"
-                    label="Search By"
-                    description="What kind of criteria user needs to fill, or other info message"
-                  />
-                  <div className="flex flex-col sm:flex-row gap-5">
-                    <RadioButton
-                      checked={watch("type") === "parcelNumber"}
-                      name="parcelNumber"
-                      onChange={() => handleSearchBy("parcelNumber")}
-                      label={
-                        <LabelWithInfo
-                          iconClassName="!fill-grey-200"
-                          labelClassName="text-base text-grey-800"
-                          label="Parcel Number"
-                          description="This is the land's unique number assigned by the county and is the best way to locate your property."
-                        />
-                      }
+    <div className="h-full flex flex-col w-full gap-6">
+      <ValueLandStepper currentStep={1} />
+      <div className={clsx("space-y-3 md:space-y-2", classes["content-space-x"])}>
+        <h1 className="text-lg font-semibold ">Let’s locate your property using some basic information?</h1>
+      </div>
+      <div className={classes["content-space-x"]}>
+        <div className={clsx("flex flex-col w-full lg:p-6 xl:p-8 lg:border lg:border-grey-100 rounded-2xl")}>
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <LabelWithInfo
+                iconClassName="!fill-grey-200"
+                labelClassName="text-sm text-grey-800"
+                label="Search By"
+                description="What kind of criteria user needs to fill, or other info message"
+              />
+              <div className="flex flex-col sm:flex-row gap-5">
+                <RadioButton
+                  checked={watch("type") === "parcelNumber"}
+                  name="parcelNumber"
+                  onChange={() => handleSearchBy("parcelNumber")}
+                  label={
+                    <LabelWithInfo
+                      iconClassName="!fill-grey-200"
+                      labelClassName="text-base text-grey-800"
+                      label="Parcel Number"
+                      description="This is the land's unique number assigned by the county and is the best way to locate your property."
                     />
-                    <RadioButton
-                      checked={watch("type") === "fullName"}
-                      name="fullName"
-                      onChange={() => handleSearchBy("fullName")}
-                      label={
-                        <LabelWithInfo
-                          iconClassName="!fill-grey-200"
-                          labelClassName="text-base text-grey-800"
-                          label="Full Name"
-                          description="The owner name registered to the land with the County."
-                        />
-                      }
+                  }
+                />
+                <RadioButton
+                  checked={watch("type") === "fullName"}
+                  name="fullName"
+                  onChange={() => handleSearchBy("fullName")}
+                  label={
+                    <LabelWithInfo
+                      iconClassName="!fill-grey-200"
+                      labelClassName="text-base text-grey-800"
+                      label="Full Name"
+                      description="The owner name registered to the land with the County."
                     />
-                    <RadioButton
-                      checked={watch("type") === "entityName"}
-                      name="entityName"
-                      onChange={() => handleSearchBy("entityName")}
-                      label={
-                        <LabelWithInfo
-                          iconClassName="!fill-grey-200"
-                          labelClassName="text-base text-grey-800"
-                          label="Legal Entity"
-                          description="The legal entity registered to the land with the County, such as an LLC, Inc, Corp, etc."
-                        />
-                      }
+                  }
+                />
+                <RadioButton
+                  checked={watch("type") === "entityName"}
+                  name="entityName"
+                  onChange={() => handleSearchBy("entityName")}
+                  label={
+                    <LabelWithInfo
+                      iconClassName="!fill-grey-200"
+                      labelClassName="text-base text-grey-800"
+                      label="Legal Entity"
+                      description="The legal entity registered to the land with the County, such as an LLC, Inc, Corp, etc."
                     />
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    {watch("type") === "parcelNumber" && (
-                      <TextField
-                        label="Enter parcel ID"
-                        value={watch("parcelNumber") || ""}
-                        onChange={(value) => setValue("parcelNumber", value, { shouldValidate: isSubmitted })}
-                        error={!!errors.parcelNumber}
-                      />
-                    )}
-                    {watch("type") === "entityName" && (
-                      <TextField
-                        label="Enter name of the entity"
-                        value={watch("entityName") || ""}
-                        onChange={(value) => setValue("entityName", value, { shouldValidate: isSubmitted })}
-                        error={!!errors.entityName}
-                      />
-                    )}
-                    {watch("type") === "fullName" && (
-                      <>
-                        <TextField
-                          label="First name"
-                          onChange={(value) => setValue("firstName", value, { shouldValidate: isSubmitted })}
-                          value={watch("firstName")}
-                          error={!!errors.firstName}
-                        />
-                        <TextField
-                          label="Last name"
-                          onChange={(value) => setValue("lastName", value, { shouldValidate: isSubmitted })}
-                          value={watch("lastName")}
-                          error={!!errors.lastName}
-                        />
-                      </>
-                    )}
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-4 w-full">
-                    <AutoComplete
-                      rootClassName="w-full"
-                      options={getAllStates({ filterBlackList: true })}
-                      getOptionLabel={(item) => item.label}
-                      getOptionKey={(item) => item.value}
-                      onChange={(item) => {
-                        setValue("state", item?.value || "", { shouldValidate: isSubmitted });
-                        setValue("county", "", { shouldValidate: isSubmitted });
-                      }}
-                      placeholder="State"
-                      value={getStateValue(watch("state"))}
-                      onFilter={(searchValue, items) =>
-                        items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-                      }
-                      getSelectedOption={(item) => item.value === watch("state")}
-                      error={!!errors.state}
-                    />
-                    <AutoComplete
-                      rootClassName="w-full"
-                      options={getCounties(watch("state"))}
-                      getOptionLabel={(item) => item.label}
-                      getOptionKey={(item) => item.value}
-                      disabled={!watch("state")}
-                      onChange={(item) => {
-                        setValue("county", item?.value || "", { shouldValidate: isSubmitted });
-                      }}
-                      placeholder="County"
-                      value={getCountyValue(watch("county"), watch("state"))}
-                      onFilter={(searchValue, items) =>
-                        items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-                      }
-                      getSelectedOption={(item) => item.value === watch("county")}
-                      error={!!errors.county}
-                    />
-                  </div>
-                </div>
-                {showError && (
-                  <Alert
-                    type="warning"
-                    description="Please check your information and try again."
-                    title="We could not find your property."
-                    onClose={() => setShowError(false)}
-                  />
-                )}
+                  }
+                />
               </div>
             </div>
-          </div>
-          <div className={classes.action}>
-            <Button onClick={() => setShowTerms(true)} loading={isSubmitting}>
-              Next Step
-            </Button>
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-4">
+                {watch("type") === "parcelNumber" && (
+                  <TextField
+                    label="Enter parcel ID"
+                    value={watch("parcelNumber") || ""}
+                    onChange={(value) => setValue("parcelNumber", value, { shouldValidate: isSubmitted })}
+                    error={!!errors.parcelNumber}
+                  />
+                )}
+                {watch("type") === "entityName" && (
+                  <TextField
+                    label="Enter name of the entity"
+                    value={watch("entityName") || ""}
+                    onChange={(value) => setValue("entityName", value, { shouldValidate: isSubmitted })}
+                    error={!!errors.entityName}
+                  />
+                )}
+                {watch("type") === "fullName" && (
+                  <>
+                    <TextField
+                      label="First name"
+                      onChange={(value) => setValue("firstName", value, { shouldValidate: isSubmitted })}
+                      value={watch("firstName")}
+                      error={!!errors.firstName}
+                    />
+                    <TextField
+                      label="Last name"
+                      onChange={(value) => setValue("lastName", value, { shouldValidate: isSubmitted })}
+                      value={watch("lastName")}
+                      error={!!errors.lastName}
+                    />
+                  </>
+                )}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 w-full">
+                <AutoComplete
+                  rootClassName="w-full"
+                  options={getAllStates({ filterBlackList: true })}
+                  getOptionLabel={(item) => item.label}
+                  getOptionKey={(item) => item.value}
+                  onChange={(item) => {
+                    setValue("state", item?.value || "", { shouldValidate: isSubmitted });
+                    setValue("county", "", { shouldValidate: isSubmitted });
+                  }}
+                  placeholder="State"
+                  value={getStateValue(watch("state"))}
+                  onFilter={(searchValue, items) =>
+                    items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+                  }
+                  getSelectedOption={(item) => item.value === watch("state")}
+                  error={!!errors.state}
+                />
+                <AutoComplete
+                  rootClassName="w-full"
+                  options={getCounties(watch("state"))}
+                  getOptionLabel={(item) => item.label}
+                  getOptionKey={(item) => item.value}
+                  disabled={!watch("state")}
+                  onChange={(item) => {
+                    setValue("county", item?.value || "", { shouldValidate: isSubmitted });
+                  }}
+                  placeholder="County"
+                  value={getCountyValue(watch("county"), watch("state"))}
+                  onFilter={(searchValue, items) =>
+                    items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+                  }
+                  getSelectedOption={(item) => item.value === watch("county")}
+                  error={!!errors.county}
+                />
+              </div>
+            </div>
+            {showError && (
+              <Alert
+                type="warning"
+                description="Please check your information and try again."
+                title="We could not find your property."
+                onClose={() => setShowError(false)}
+              />
+            )}
           </div>
         </div>
-      )}
-    </>
+      </div>
+      <div className={classes.action}>
+        <Button onClick={onSubmit} loading={isSubmitting}>
+          Next Step
+        </Button>
+      </div>
+    </div>
   );
 };
 

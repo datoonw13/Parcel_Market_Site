@@ -17,15 +17,20 @@ import { Nullable } from "@/types/common";
 import Button from "../shared/forms/Button";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
+import CalculationTermsModal from "./calculation-terms/terms-modal";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import CalculationTerms from "./calculation-terms/terms";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }) => {
   const router = useRouter();
   const markerRefs = useRef<{ [key: string]: Marker }>();
+  const isSmallDevice = useMediaQuery(1024);
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const [pending, setPending] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [showTerms, setShowTerms] = useState(false);
 
   const onNext = async () => {
     if (!valueLand.selectedLand) {
@@ -60,7 +65,13 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
   };
 
   return (
-    <div className="h-full flex flex-col w-full gap-6">
+    <>
+     {!isSmallDevice && (
+        <CalculationTermsModal open={showTerms} onClose={() => setShowTerms(false)} onSubmit={onNext} isSubmitting={pending} />
+      )}
+      {isSmallDevice && showTerms ? (
+        <CalculationTerms onDecline={() => setShowTerms(false)} onSubmit={onNext} isSubmitting={pending} />
+      ) :  <div className="h-full flex flex-col w-full gap-6">
       <ValueLandStepper currentStep={2} />
       <div className={clsx("space-y-3 md:space-y-2", classes["content-space-x"])}>
         <h1 className="text-lg font-semibold ">Did we find your property?</h1>
@@ -179,11 +190,13 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
         <Button variant="secondary" onClick={() => router.push(routes.valueLand.fullUrl)}>
           Back
         </Button>
-        <Button onClick={onNext} loading={pending} disabled={!valueLand.selectedLand}>
+        <Button onClick={() => setShowTerms(true)} loading={pending} disabled={!valueLand.selectedLand}>
           Continue
         </Button>
       </div>
-    </div>
+    </div> }
+   
+    </>
   );
 };
 
