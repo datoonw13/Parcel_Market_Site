@@ -21,6 +21,7 @@ const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | nu
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  
 
   useEffect(() => {
     if (valueLandData.mapInteraction.hoveredLand && markerRefs.current) {
@@ -110,6 +111,7 @@ const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | nu
             ...valueLandData.calculatedPrice.properties.map((el) => ({
               centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
               parcelNumber: el.parselId,
+              active: valueLandData.mapInteraction.hoveredLand === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
               showMarker: true,
               ...(user &&
                 user.isSubscribed && {
