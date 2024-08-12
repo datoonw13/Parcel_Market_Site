@@ -95,7 +95,7 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
         <Alert
           type="info"
           title="Check your information"
-          description="Please check your information one more time, before you submit. You won’t be able to edit, or send offer again, but you can contact to the seller and manage changes."
+          description="Please make sure your information is correct before submitting. You will not be able to edit any information on this form once submitted. However, if a change is needed, you can contact the seller to manage any changes."
           onClose={() => {}}
         />
       </div>
