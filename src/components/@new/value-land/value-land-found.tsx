@@ -113,6 +113,10 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
                     label: "Parcel Number",
                     value: el.properties.fields.parcelnumb,
                   },
+                  acreage: {
+                    label: "Acreages",
+                    value: el.properties.fields.ll_gisacre.toFixed(2),
+                  },
                   showSelectButton: !!(valueLand.lands && valueLand.lands.length > 1),
                 },
               }))}
