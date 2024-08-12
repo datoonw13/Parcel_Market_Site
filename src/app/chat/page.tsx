@@ -1,12 +1,16 @@
-import dynamic from "next/dynamic";
-import React from "react";
+"use client";
 
-const CometChat = dynamic(() => import("@/components/comet-chat/CometChat"), { ssr: false });
+import { Session, Inbox } from "@talkjs/react";
+import { useSearchParams } from "next/navigation";
 
-const ChatPage = () => (
-  <div>
-    <CometChat />
-  </div>
-);
-
-export default ChatPage;
+export default function Chat() {
+  const searchParams = useSearchParams();
+  return (
+    <div className="h-full">
+      <Session appId="tRQUwomA" userId={searchParams.get("userId")!}>
+        <Inbox className="h-full" />
+        {/* <Chatbox conversationId="sample_conversation" /> */}
+      </Session>
+    </div>
+  );
+}
