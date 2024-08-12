@@ -18,6 +18,7 @@ import tokml from "@maphubs/tokml";
 import { ArrowIconsUnion1 } from "../icons/ArrowIcons";
 import Button from "../shared/forms/Button";
 import { ExportIcon1, ExportMapIcon1 } from "../icons/ExportIcons";
+import Popper from "../shared/Popper";
 
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
@@ -183,22 +184,54 @@ const LandPriceCalculationTable = ({
         </div>
       </div>
       <div className="hidden lg:flex gap-3 mt-4 justify-end">
-        <Button
-          className={clsx(isUserSubscriptionTrial && "opacity-50")}
-          disabled={isUserSubscriptionTrial}
-          startIcon={ExportMapIcon1}
-          onClick={exportToKml}
-        >
-          Export Map
-        </Button>
-        <Button
-          className={clsx(isUserSubscriptionTrial && "opacity-50")}
-          disabled={isUserSubscriptionTrial}
-          startIcon={ExportIcon1}
-          onClick={exportToExcel}
-        >
-          Export Data
-        </Button>
+        <Popper
+          disableSameWidth
+          renderButton={(setReferenceElement, referenceElement) => (
+            <div
+              onMouseEnter={(e) => isUserSubscriptionTrial && setReferenceElement(referenceElement ? null : e.currentTarget)}
+              onMouseLeave={(e) => isUserSubscriptionTrial && setReferenceElement(null)}
+            >
+              <Button
+                className={clsx(isUserSubscriptionTrial && "opacity-50 relative")}
+                disabled={isUserSubscriptionTrial}
+                startIcon={ExportMapIcon1}
+                onClick={exportToKml}
+                variant="secondary"
+              >
+                Export Map
+              </Button>
+            </div>
+          )}
+          renderContent={(setReferenceElement) => (
+            <div className="bg-black rounded-md py-1.5 px-3 text-xss text-white max-w-60 text-center font-medium">
+              You cannot export this data with the free plan
+            </div>
+          )}
+        />
+
+        <Popper
+          disableSameWidth
+          renderButton={(setReferenceElement, referenceElement) => (
+            <div
+              onMouseEnter={(e) => isUserSubscriptionTrial && setReferenceElement(referenceElement ? null : e.currentTarget)}
+              onMouseLeave={(e) => isUserSubscriptionTrial && setReferenceElement(null)}
+            >
+              <Button
+                className={clsx(isUserSubscriptionTrial && "opacity-50")}
+                disabled={isUserSubscriptionTrial}
+                startIcon={ExportIcon1}
+                onClick={exportToExcel}
+              >
+                Export Data
+              </Button>
+            </div>
+          )}
+          renderContent={(setReferenceElement) => (
+            <div className="bg-black rounded-md py-1.5 px-3 text-xss text-white max-w-60 text-center font-medium">
+              You cannot export this data with the free plan
+            </div>
+          )}
+        />
       </div>
     </div>
   );
