@@ -71,6 +71,8 @@ const OfferInspectionPeriodField: FC<OfferInspectionPeriodFieldProps> = ({ onCha
         />
         {showInput && (
           <TextField
+            type="number"
+            disableThousandsSeparator
             value={value || ""}
             placeholder="Type here"
             onChange={(value) => {
