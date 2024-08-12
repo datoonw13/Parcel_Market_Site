@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { MouseEvent, ReactElement, useLayoutEffect, useRef } from "react";
+import { MouseEvent, ReactElement, forwardRef, useLayoutEffect, useRef } from "react";
 import { NumericFormat } from "react-number-format";
 import classes from "./textfield.module.css";
 
@@ -29,7 +29,7 @@ interface TextFieldProps {
   disableThousandsSeparator?: boolean;
 }
 
-const TextField = (props: TextFieldProps) => {
+const TextField = forwardRef((props: TextFieldProps, ref: any) => {
   const {
     variant = "primary",
     label,
@@ -76,7 +76,7 @@ const TextField = (props: TextFieldProps) => {
   }, [endIcon]);
 
   return (
-    <div className={clsx(classes.root, className)} onClick={(e) => !disabled && onClick && onClick(e)}>
+    <div ref={ref} className={clsx(classes.root, className)} onClick={(e) => !disabled && onClick && onClick(e)}>
       {type === "number" ? (
         <NumericFormat
           className={clsx(
@@ -178,6 +178,6 @@ const TextField = (props: TextFieldProps) => {
       )}
     </div>
   );
-};
+});
 
 export default TextField;

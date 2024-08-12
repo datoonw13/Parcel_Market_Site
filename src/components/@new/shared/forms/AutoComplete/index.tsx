@@ -64,6 +64,7 @@ const AutoComplete = <T extends Array<{}>>({
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
+  const ref = useRef();
 
   const handleSelect = (item: typeof options[0], setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => {
     onChange(item);
@@ -110,17 +111,21 @@ const AutoComplete = <T extends Array<{}>>({
         }}
         renderButton={(setReferenceElement, referenceElement) => (
           <TextField
+            ref={ref}
             readOnly={readOnly}
             error={error}
             required={required}
             onChange={(value) => {
               setSearchValue(value);
+              if (!referenceElement) {
+                setReferenceElement(ref.current as any);
+              }
               isSearching.current = true;
             }}
             placeholder={placeholder}
             onClick={(e) => {
               setSearchValue(value ? getOptionLabel(value) : null);
-              setReferenceElement(referenceElement ? null : e.currentTarget);
+              setReferenceElement(referenceElement ? null : (ref.current as any));
             }}
             value={getInputValue(!!referenceElement)}
             className={inputRootClassName}
