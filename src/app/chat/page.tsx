@@ -1,16 +1,10 @@
-"use client";
+import Chat from '@/components/comet-chat/CometChat'
+import React, { Suspense } from 'react'
 
-import { Session, Inbox } from "@talkjs/react";
-import { useSearchParams } from "next/navigation";
-
-export default function Chat() {
-  const searchParams = useSearchParams();
+const page = () => {
   return (
-    <div className="h-full">
-      <Session appId="tRQUwomA" userId={searchParams.get("userId")!}>
-        <Inbox className="h-full" />
-        {/* <Chatbox conversationId="sample_conversation" /> */}
-      </Session>
-    </div>
-  );
+    <Suspense><Chat /></Suspense>
+  )
 }
+
+export default page
