@@ -65,7 +65,11 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col sm:grid sm:grid-cols-2 gap-4">
         <TextField
-          onChange={(value) => setValue("firstName", value, { shouldValidate: isSubmitted })}
+          onChange={(value) => {
+            if (/^[a-zA-Z]+$/.test(value) || value === "") {
+              setValue("firstName", value, { shouldValidate: isSubmitted });
+            }
+          }}
           required
           className="w-full"
           label="First Name"
@@ -73,7 +77,11 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           error={!!errors.firstName}
         />
         <TextField
-          onChange={(value) => setValue("lastName", value, { shouldValidate: isSubmitted })}
+          onChange={(value) => {
+            if (/^[a-zA-Z]+$/.test(value) || value === "") {
+              setValue("lastName", value, { shouldValidate: isSubmitted });
+            }
+          }}
           required
           className="w-full"
           label="Last Name"
@@ -209,7 +217,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           <Button className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={onBack}>
             Back
           </Button>
-          <Button className="w-full max-w-96 sm:w-fit" onClick={onSubmit} loading={isSubmitting}>
+          <Button className="w-full max-w-96 sm:w-fit" onClick={onSubmit} loading={isSubmitting} disabled={!watch("agreeTerm")}>
             Create Account
           </Button>
         </div>
