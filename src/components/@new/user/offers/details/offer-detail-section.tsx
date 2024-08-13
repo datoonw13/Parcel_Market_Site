@@ -50,7 +50,7 @@ const OfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, i
             Closing Costs:<span className="ml-1 text-black">{data.closingCosts || "-"}</span>
           </li>
           <li>
-            Contigencies:<span className="ml-1 text-black">{data.contigencies || "-"}</span>
+            Contigencies:<span className="ml-1 text-black break-words">{data.contigencies ? data.contigencies.join(";") : "-"}</span>
           </li>
           <li>
             Other Terms:<span className="ml-1 text-black">{data.otherTerms || "-"}</span>

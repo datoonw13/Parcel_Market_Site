@@ -61,7 +61,7 @@ export interface OfferModel {
   inspectionPeriodDays: OfferInspectionPeriodEnum;
   closingPeriodDays: OfferClosingPeriodOfferEnum;
   closingCosts: OfferClosingCostsOfferEnum;
-  contigencies: OfferContingenciesOfferEnum;
+  contigencies: OfferContingenciesOfferEnum[] | null;
   offerActiveForDays: number;
   offerStatus: OfferStatusEnum;
   offerGivenByUserId: number;
