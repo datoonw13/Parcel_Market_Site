@@ -70,7 +70,7 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
                   {data.frontNavigable ? "Water Front" : "No Water Front"}
                 </div>
                 <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                  {data.cover.join(";")}
+                  {data?.cover?.join(";")}
                 </div>
                 <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
                   {data.wet}
