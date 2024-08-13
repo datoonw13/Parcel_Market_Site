@@ -65,7 +65,7 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
         onClick={handleSelect}
       >
         <div className="flex flex-col sm:flex-row gap-9 px-4 md:px-8 mb-3 sm:mb-4">
-          <div className="space-y-2 grid">
+          <div className="space-y-2 grid w-full">
             <Link href={`${routes.marketplace.fullUrl}/${data.sellingProperty.id}`} className="truncate sm:w-[calc(100%-120px)] ">
               <h1 className="truncate font-semibold text-white w-full sm:text-black sm:text-lg">{data.sellingProperty.title}</h1>
             </Link>
