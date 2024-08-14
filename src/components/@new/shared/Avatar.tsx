@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/helpers/common";
 import Image from "next/image";
 import React from "react";
 
@@ -10,7 +10,7 @@ interface AvatarProps {
 
 const Avatar = ({ className, title, src }: AvatarProps) => (
   <div
-    className={clsx(
+    className={cn(
       "w-10 h-10 text-sm font-medium rounded-full bg-primary-main-200 flex items-center justify-center relative cursor-pointer",
       className
     )}

@@ -3,16 +3,23 @@
 import React from "react";
 import Avatar from "@/components/@new/shared/Avatar";
 import { ISignInResponse } from "@/types/auth";
+import { cn } from "@/helpers/common";
 import Popper from "../../shared/Popper";
 import UserMenuList from "./UserMenuList";
 import { ArrowIconDown1 } from "../../icons/ArrowIcons";
 
 const UserMenu = ({ user }: { user: ISignInResponse["payload"] }) => (
   <Popper
-    placement="bottom-end"
+    placement="bottom"
     renderButton={(setReferenceElement, referenceElement) => (
       <div className="relative" onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}>
-        <Avatar title={`${user.firstName[0]}${user.lastName[0]}`} />
+        <Avatar
+          className={cn(
+            "border border-[#ffffff00] bg-grey-30 hover:bg-grey-50 hover:border-primary-main-200",
+            referenceElement && "!bg-primary-main-200"
+          )}
+          title={`${user.firstName[0]}${user.lastName[0]}`}
+        />
         <div className="shadow-2 bg-white rounded-full w-4 h-4 flex items-center justify-center absolute bottom-0 right-0">
           <ArrowIconDown1 className="m-1 w-4 h-4 cursor-pointer" />
         </div>

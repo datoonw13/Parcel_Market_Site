@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material";
 import Link from "next/link";
 import { getUserAction } from "@/server-actions/user/actions";
 import UserMenu from "../@new/user/user-menu/UserMenu";
+import UserMenuDesktopNotifications from "../@new/user/notification/user-menu-desktop-notifications";
 
 const HeaderMenuItems = async () => {
   const user = await getUserAction();
@@ -25,13 +26,11 @@ const HeaderMenuItems = async () => {
         <Link href={routes.marketplace.fullUrl}>Parcel MarketPlace</Link>
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-        <Link href={routes.valueLand.fullUrl}>
-          <Button sx={{ textTransform: "none" }} variant="contained">
-            Value my land for free
-          </Button>
-        </Link>
         {user ? (
-          <UserMenu user={user} />
+          <>
+            <UserMenuDesktopNotifications />
+            <UserMenu user={user} />
+          </>
         ) : (
           <Link href={`${routes.auth.url}/${routes.auth.signIn.url}`}>
             <Button sx={{ textTransform: "none" }} variant="outlined">
@@ -39,6 +38,11 @@ const HeaderMenuItems = async () => {
             </Button>
           </Link>
         )}
+        <Link href={routes.valueLand.fullUrl}>
+          <Button sx={{ textTransform: "none" }} variant="contained">
+            Value my land for free
+          </Button>
+        </Link>
       </Box>
     </Box>
   );

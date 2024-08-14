@@ -1,3 +1,6 @@
+import clsx, { ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 export const numFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
 export const numericInput = (number: string) => {
@@ -18,3 +21,5 @@ export const numericInput = (number: string) => {
 
 export const maskEmail = (email: string) =>
   `${email.split("@")[0][0]}****${email.split("@")[0][email.split("@")[0].length - 1]}@${email.split("@")[1]}`;
+
+export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
