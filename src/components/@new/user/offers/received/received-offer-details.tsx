@@ -4,10 +4,11 @@ import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
 import { OfferModel } from "@/types/offer";
 import Link from "next/link";
+import { cn } from "@/helpers/common";
 import OfferDetailsWrapper from "./offer-details-wrapper";
 
-const ReceivedOfferDetails = ({ data }: { data: OfferModel }) => (
-  <Container className="py-6 px-5 pb-20">
+const ReceivedOfferDetails = ({ data, className }: { data: OfferModel; className?: string }) => (
+  <Container className={cn("py-6 px-5 pb-20", className)}>
     <div>
       <Link href={routes.user.offers.received.fullUrl}>
         <Button variant="secondary" className="!p-0 !h-fit !outline-none">

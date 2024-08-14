@@ -10,7 +10,7 @@ const ReceivedOfferDetailsPage = async ({ params }: { params: { id: string } }) 
     redirect(routes.user.offers.received.fullUrl);
   }
 
-  return <ReceivedOfferDetails data={data} />;
+  return <ReceivedOfferDetails data={data} className="!p-0" />;
 };
 
 export default ReceivedOfferDetailsPage;
