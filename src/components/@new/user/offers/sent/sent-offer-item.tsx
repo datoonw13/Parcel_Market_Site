@@ -16,7 +16,7 @@ import { useAtom } from "jotai";
 import { sentOffersAtom } from "@/atoms/sent-offers-atom";
 import { useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import routes from "@/helpers/routes";
 import OfferStatus from "../offer-status";
@@ -26,6 +26,8 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
   const isSmallDevice = useMediaQuery(1024);
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const [sentOffersOptions, setSentOffersOption] = useAtom(sentOffersAtom);
   const [selectedOffer, setSelectedOffer] = useState<OfferModel | null>(null);
 
@@ -49,9 +51,11 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
 
   const openDetail = () => {
     if (isSmallDevice) {
-      router.push(`${pathname}/details/${data.sellingPropertyId}`);
+      router.push(`${pathname}/details/${data.id}`);
     } else {
-      setSelectedOffer(data);
+      params.set("offerId", data.id.toString());
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      // setSelectedOffer(data);
     }
   };
 

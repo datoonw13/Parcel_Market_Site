@@ -8,6 +8,7 @@ import SubscribeError from "@/components/@new/shared/subscribe-error";
 
 const ReceivedOffersPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const user = await getUserAction();
+  const { offerId, ...params } = searchParams;
 
   return (
     <div className="w-full space-y-8">
@@ -21,8 +22,8 @@ const ReceivedOffersPage = async ({ searchParams }: { searchParams: { [key: stri
               <ReceivedOffersDesktopFilters />
             </div>
           </Suspense>
-          <Suspense fallback={<ReceivedOfferListLoading />} key={JSON.stringify(searchParams)}>
-            <ReceivedOffers searchParams={searchParams} />
+          <Suspense fallback={<ReceivedOfferListLoading />} key={JSON.stringify(params)}>
+            <ReceivedOffers searchParams={params} />
           </Suspense>
         </>
       ) : (

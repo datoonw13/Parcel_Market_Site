@@ -7,7 +7,7 @@ import { LocationIcon1 } from "@/components/@new/icons/LocationIcons";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { numFormatter } from "@/helpers/common";
 import { receivedOffersAtom } from "@/atoms/received-offers-atom";
@@ -24,6 +24,7 @@ interface ReceivedOfferItemProps {
 const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const isSmallDevice = useMediaQuery(1024);
   const router = useRouter();
   const pathname = usePathname();
@@ -34,7 +35,10 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
     if (isSmallDevice) {
       router.push(`${pathname}/details/${data.id}`);
     } else {
-      setSelectedOffer(data);
+      params.set("offerId", data.id.toString());
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+      // setSelectedOffer(data);
     }
   };
 
