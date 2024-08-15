@@ -114,6 +114,11 @@ export const getUserAction = async (): Promise<ISignInResponse["payload"] | null
   return null;
 };
 
+export const getUserToken = async (): Promise<string | null> => {
+  const jwt = cookies().get("jwt")?.value;
+  return jwt || null;
+};
+
 export const getUserFullDetailsAction = async (): Promise<ResponseModel<IUser | null>> => {
   try {
     const user = await fetcher<IUser>("user/profile", { cache: "no-cache" });

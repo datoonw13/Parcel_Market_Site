@@ -56,3 +56,7 @@ export const markNotificationAsReadAction = async (notificationId: number): Prom
     };
   }
 };
+
+export const revalidateOffers = () => {
+  revalidateTag(notificationsTag);
+};
