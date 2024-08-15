@@ -1,3 +1,5 @@
 "use server";
 
-export const revalidatePath = (path: string) => revalidatePath(path);
+import { revalidatePath as revalidate } from "next/cache";
+
+export const revalidatePath1 = (path: string) => revalidate(path);
