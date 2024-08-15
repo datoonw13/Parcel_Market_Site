@@ -15,7 +15,7 @@ const ReceivedOfferDetailsPage = async ({ params }: { params: { id: string } }) 
   }
 
   return (
-    <Container>
+    <Container className="!p-0">
       <div>
         <Link href={routes.user.offers.received.fullUrl}>
           <Button variant="secondary" className="!p-0 !h-fit !outline-none">
