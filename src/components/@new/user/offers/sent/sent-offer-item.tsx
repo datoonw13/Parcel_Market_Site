@@ -20,7 +20,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import routes from "@/helpers/routes";
 import OfferStatus from "../offer-status";
-import SentOfferDetailsModal from "./sent-offer-details-modal";
 
 const SentOfferItem = ({ data }: { data: OfferModel }) => {
   const isSmallDevice = useMediaQuery(1024);
@@ -61,7 +60,6 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
 
   return (
     <>
-      <SentOfferDetailsModal data={selectedOffer} closeModal={() => setSelectedOffer(null)} />
       <div
         className={clsx(
           "border border-grey-100 rounded-2xl",

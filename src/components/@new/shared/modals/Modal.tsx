@@ -14,10 +14,19 @@ interface ModalProps {
   children: ReactNode;
   disableBackdrop?: boolean;
   contentClasses?: string;
-  className?: string
+  className?: string;
 }
 
-const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, disableBackdrop, contentClasses, className }) => {
+const Modal: FC<ModalProps> = ({
+  open,
+  onModalClose,
+  closeModal,
+  disableCloseOnAwayClick,
+  children,
+  disableBackdrop,
+  contentClasses,
+  className,
+}) => {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(null, popperElement, {
     strategy: "fixed",
