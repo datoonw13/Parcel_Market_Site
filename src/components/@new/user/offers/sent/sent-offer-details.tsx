@@ -9,9 +9,9 @@ import clsx from "clsx";
 import toast from "react-hot-toast";
 import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
 import ResponsiveWarningModal from "@/components/@new/shared/modals/ResponsiveWarningModal";
-import OfferDetail from "../details/offer-detail";
 import { useRouter } from "next/navigation";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import OfferDetail from "../details/offer-detail";
 
 const SentOfferDetails = ({
   data,
@@ -24,8 +24,8 @@ const SentOfferDetails = ({
 }) => {
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const [pending, setPending] = useState(false);
-  const isSmallDevice = useMediaQuery(1024)
-  const router = useRouter()
+  const isSmallDevice = useMediaQuery(1024);
+  const router = useRouter();
 
   const cancelOffer = async () => {
     setPending(true);
@@ -40,11 +40,10 @@ const SentOfferDetails = ({
   };
 
   useEffect(() => {
-    if(isSmallDevice) {
-      router.push(`${routes.user.offers.received.fullUrl}/details/${data.id}`)
+    if (isSmallDevice) {
+      router.push(`${routes.user.offers.received.fullUrl}/details/${data.id}`);
     }
-  }, [isSmallDevice])
-
+  }, [isSmallDevice]);
 
   return (
     <>

@@ -12,7 +12,7 @@ export const getUserSearches = async (params: {
 }): Promise<ResponseModel<({ list: IUserSearches[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ data: IUserSearches[] } & IPagination>(
-      `properties?${new URLSearchParams({ ...params, pageSize: "6" })}`,
+      `properties?${new URLSearchParams({ pageSize: "8", ...params })}`,
       {
         next: { tags: [userSearchesTag] },
       }

@@ -8,11 +8,10 @@ import { fetcher } from "../fetcher";
 import { notificationsTag } from "./tags";
 
 export const getNotificationsAction = async (params: {
-  page: number;
-  pageSize: number;
+  [key: string]: string;
 }): Promise<ResponseModel<({ list: INotification[] } & IPagination) | null>> => {
   try {
-    const searchParams = new URLSearchParams({ page: params.page.toString(), pageSize: params.pageSize.toString() });
+    const searchParams = new URLSearchParams(params);
     const data = await fetcher<({ data: INotification[] } & IPagination) | null>(`notifications?${searchParams.toString()}`, {
       method: "GET",
       next: {

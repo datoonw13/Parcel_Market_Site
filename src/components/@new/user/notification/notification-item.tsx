@@ -42,13 +42,13 @@ const NotificationItem = <T extends NotificationType>({
   data: INotificationEnum[T];
   isHeaderItem?: boolean;
   className?: string;
-  onClick: (notification: INotification) => void;
+  onClick?: (notification: INotification) => void;
 }) => {
   const router = useRouter();
   const dayDiff = Number(moment(new Date()).diff(data.createdAt, "days"));
 
   const handleClick = async () => {
-    onClick(data);
+    onClick && onClick(data);
     if (!data.isRead) {
       markNotificationAsReadAction(data.id);
     }

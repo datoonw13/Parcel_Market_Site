@@ -9,9 +9,9 @@ import { acceptReceivedOffer, rejectReceivedOffer } from "@/server-actions/offer
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import ResponsiveAcceptModal from "@/components/@new/shared/modals/ResponsiveAcceptModal";
-import OfferDetail from "../details/offer-detail";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import routes from "@/helpers/routes";
+import OfferDetail from "../details/offer-detail";
 
 const ReceivedOfferDetails = ({
   data,
@@ -27,7 +27,7 @@ const ReceivedOfferDetails = ({
   const [openAcceptModal, setOpenAcceptModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const isSmallDevice = useMediaQuery(1024)
+  const isSmallDevice = useMediaQuery(1024);
 
   const rejectOffer = async () => {
     setPending(true);
@@ -52,10 +52,10 @@ const ReceivedOfferDetails = ({
   };
 
   useEffect(() => {
-    if(isSmallDevice) {
-      router.push(`${routes.user.offers.received.fullUrl}/details/${data.id}`)
+    if (isSmallDevice) {
+      router.push(`${routes.user.offers.received.fullUrl}/details/${data.id}`);
     }
-  }, [isSmallDevice])
+  }, [isSmallDevice]);
 
   return (
     <>
