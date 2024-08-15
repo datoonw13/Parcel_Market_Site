@@ -3,13 +3,15 @@
 import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OfferModel, OfferStatusEnum } from "@/types/offer";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import { deleteSentOffersAction, revalidateSentOffers } from "@/server-actions/offer/actions";
 import ResponsiveWarningModal from "@/components/@new/shared/modals/ResponsiveWarningModal";
 import OfferDetail from "../details/offer-detail";
+import { useRouter } from "next/navigation";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const SentOfferDetails = ({
   data,
@@ -22,6 +24,8 @@ const SentOfferDetails = ({
 }) => {
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const [pending, setPending] = useState(false);
+  const isSmallDevice = useMediaQuery(1024)
+  const router = useRouter()
 
   const cancelOffer = async () => {
     setPending(true);
@@ -34,6 +38,13 @@ const SentOfferDetails = ({
       await revalidateSentOffers();
     }
   };
+
+  useEffect(() => {
+    if(isSmallDevice) {
+      router.push(`${routes.user.offers.received.fullUrl}/details/${data.id}`)
+    }
+  }, [isSmallDevice])
+
 
   return (
     <>

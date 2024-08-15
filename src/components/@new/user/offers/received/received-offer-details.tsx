@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/@new/shared/forms/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OfferModel, OfferStatusEnum } from "@/types/offer";
 import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import clsx from "clsx";
@@ -10,6 +10,8 @@ import toast from "react-hot-toast";
 import { usePathname, useRouter } from "next/navigation";
 import ResponsiveAcceptModal from "@/components/@new/shared/modals/ResponsiveAcceptModal";
 import OfferDetail from "../details/offer-detail";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import routes from "@/helpers/routes";
 
 const ReceivedOfferDetails = ({
   data,
@@ -25,6 +27,7 @@ const ReceivedOfferDetails = ({
   const [openAcceptModal, setOpenAcceptModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const isSmallDevice = useMediaQuery(1024)
 
   const rejectOffer = async () => {
     setPending(true);
@@ -47,6 +50,12 @@ const ReceivedOfferDetails = ({
       router.replace(`${pathname}?accept=${data.id}`);
     }
   };
+
+  useEffect(() => {
+    if(isSmallDevice) {
+      router.push(`${routes.user.offers.received.fullUrl}/details/${data.id}`)
+    }
+  }, [isSmallDevice])
 
   return (
     <>
