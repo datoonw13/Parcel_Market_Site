@@ -3,13 +3,16 @@
 import clsx from "clsx";
 import routes from "@/helpers/routes";
 import { logOutUserAction } from "@/server-actions/user/actions";
-import { UserIcon1 } from "../../icons/UserIcons";
-import { SmsIcon1 } from "../../icons/SmsIcons";
-import { BookIcon1 } from "../../icons/BookIcons";
-import { DiscountIcon1, DiscountIcon2 } from "../../icons/DiscountIcons";
+import { TbBellRinging } from "react-icons/tb";
+import { HiOutlineUser } from "react-icons/hi2";
+import { BsClockHistory } from "react-icons/bs";
 import { LogoutIcon1 } from "../../icons/LogutIcons";
 import UserMenuListItem from "./UserMenuListItem";
-import { ClockIcon3 } from "../../icons/ClockIcons";
+import BellOutline from "../../icons/bell-outline";
+import EnvelopeIcon from "../../icons/envelope-icon";
+import BookOpen from "../../icons/book-open";
+import DiscountBox from "../../icons/discount-box";
+import DiscountCircle from "../../icons/discount-circle";
 
 const UserMenuList = ({ listItemClasses, hideLogout, close }: { listItemClasses?: string; hideLogout?: boolean; close?: () => void }) => (
   <ul className="flex flex-col gap-4 min-w-[306px]">
@@ -35,43 +38,47 @@ export default UserMenuList;
 const list = [
   {
     label: "My Profile",
-    icon: UserIcon1,
+    icon: HiOutlineUser,
     path: routes.user.profile.fullUrl,
   },
   {
+    label: "Notifications",
+    icon: TbBellRinging,
+    path: routes.user.notifications.fullUrl,
+  },
+  {
     label: "My Subscription",
-    icon: UserIcon1,
+    icon: BellOutline,
     path: routes.user.subscription.fullUrl,
   },
   {
     label: "My Messages",
-    icon: SmsIcon1,
+    icon: EnvelopeIcon,
     path: "/",
   },
   {
     label: "My Listings",
-    icon: BookIcon1,
+    icon: BookOpen,
     path: routes.user.listings.fullUrl,
   },
   {
     label: "My Followed Listings",
-    icon: BookIcon1,
+    icon: BookOpen,
     path: routes.user.followedProperties.fullUrl,
   },
   {
     label: "My Received Offers",
-    icon: DiscountIcon1,
+    icon: DiscountBox,
     path: routes.user.offers.received.fullUrl,
   },
   {
     label: "My Sent Offers",
-    icon: DiscountIcon2,
+    icon: DiscountCircle,
     path: routes.user.offers.sent.fullUrl,
   },
   {
     label: "My Recent Searches",
-    icon: ClockIcon3,
+    icon: BsClockHistory,
     path: routes.user.searches.fullUrl,
-    requireSubscription: true,
   },
 ];

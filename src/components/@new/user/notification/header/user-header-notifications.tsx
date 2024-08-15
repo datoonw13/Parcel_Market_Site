@@ -1,14 +1,15 @@
 "use client";
 
-import React, { FC } from "react";
 import { INotification, NotificationType } from "@/types/notifications";
 import { OfferStatusEnum } from "@/types/offer";
 import moment from "moment";
-import Popper from "../../shared/Popper";
-import UserMenuNotificationButton from "./user-menu-notification-button";
-import NotificationItem from "./notification-item";
-import Button from "../../shared/forms/Button";
-import DataNotFound from "../../shared/DataNotFound";
+import { IPagination } from "@/types/common";
+import { useEffect, useOptimistic, useTransition } from "react";
+import Popper from "../../../shared/Popper";
+import UserHeaderNotificationButton from "./user-header-notification-button";
+import NotificationItem from "../notification-item";
+import Button from "../../../shared/forms/Button";
+import DataNotFound from "../../../shared/DataNotFound";
 
 const notifications: Array<INotification> = [
   {
@@ -92,23 +93,27 @@ const notifications: Array<INotification> = [
   },
 ];
 
-const UserMenuDesktopNotifications = () => (
+const UserHeaderNotifications = ({ data }: { data: INotification[] | null }) => (
   <Popper
     placement="bottom"
     renderButton={(setReferenceElement, referenceElement) => (
-      <UserMenuNotificationButton
+      <UserHeaderNotificationButton
         onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}
         active={!!referenceElement}
+        unreadMessages={data?.filter((el) => !el.isRead)?.length}
       />
     )}
     renderContent={(setReferenceElement) => (
       <div className="z-10 rounded-xl bg-white shadow-1 flex flex-col items-center w-96 [&>div:not(:last-child)]:border-b [&>div:not(:last-child)]:border-b-grey-100">
         <p className="text-xs text-grey-600 w-full text-start py-3 px-6 !border-b-0">Notifications</p>
-        {true ? (
+        {data && data.length > 0 ? (
           <>
-            {notifications.map((notification) => (
-              <div key={notification.id} onClick={() => setReferenceElement(null)} className="w-full">
+            {data.map((notification) => (
+              <div key={notification.id} className="w-full">
                 <NotificationItem
+                  onClick={() => {
+                    setReferenceElement(null);
+                  }}
                   data={notification}
                   isHeaderItem
                   className="py-2 px-6 hover:bg-primary-main-100 transition-all duration-100"
@@ -127,4 +132,4 @@ const UserMenuDesktopNotifications = () => (
   />
 );
 
-export default UserMenuDesktopNotifications;
+export default UserHeaderNotifications;

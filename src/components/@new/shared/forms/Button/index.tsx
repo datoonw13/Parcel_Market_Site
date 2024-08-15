@@ -14,14 +14,14 @@ const primary = {
   default: `
   rounded-lg disabled:bg-grey-100 
   bg-primary-main hover:bg-primary-main-hover 
-  [&>svg[aria-label="fill"]]:fill-white [&>svg[aria-label="stroke"]]:stroke-white
+  [&>svg[aria-label="fill"]]:fill-white [&>svg[aria-label="stroke"]]:strokeWhite
   [&:disabled>svg[aria-label="fill"]]:fill-black-400 [&:disabled>svg[aria-label="stroke"]]:stroke-black-400  
   text-white disabled:text-black-400
   `,
   error: `
   rounded-lg disabled:bg-grey-100 
   bg-error hover:bg-error-hover 
-  [&>svg[aria-label="fill"]]:fill-white [&>svg[aria-label="stroke"]]:stroke-white
+  [&>svg[aria-label="fill"]]:fill-white [&>svg[aria-label="stroke"]]:strokeWhite
   [&:disabled>svg[aria-label="fill"]]:fill-black-400 [&:disabled>svg[aria-label="stroke"]]:stroke-black-400  
   text-white disabled:text-black-400
   `,

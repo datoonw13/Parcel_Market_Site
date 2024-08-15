@@ -1,6 +1,7 @@
-import { INotificationEnum, NotificationType } from "@/types/notifications";
+"use client";
+
+import { INotification, INotificationEnum, NotificationType } from "@/types/notifications";
 import { OfferStatusEnum } from "@/types/offer";
-import React, { useState } from "react";
 import { IoMdGift } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 import { TbMessageDots } from "react-icons/tb";
@@ -11,6 +12,7 @@ import { cn } from "@/helpers/common";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
+import { markNotificationAsReadAction } from "@/server-actions/notifications/actions";
 
 const getIcon = <T extends keyof INotificationEnum>(data: INotificationEnum[T]) => {
   switch (data.type) {
@@ -31,22 +33,24 @@ const getIcon = <T extends keyof INotificationEnum>(data: INotificationEnum[T]) 
   }
 };
 
-const handleRead = () => new Promise((resolve) => setTimeout(resolve, 1500));
 const NotificationItem = <T extends NotificationType>({
   data,
   isHeaderItem,
   className,
+  onClick,
 }: {
   data: INotificationEnum[T];
   isHeaderItem?: boolean;
   className?: string;
+  onClick: (notification: INotification) => void;
 }) => {
   const router = useRouter();
   const dayDiff = Number(moment(new Date()).diff(data.createdAt, "days"));
 
-  const onClick = async () => {
+  const handleClick = async () => {
+    onClick(data);
     if (!data.isRead) {
-      await handleRead();
+      markNotificationAsReadAction(data.id);
     }
     if (data.type === NotificationType.NewMessage) {
       console.log("open chat");
@@ -60,7 +64,7 @@ const NotificationItem = <T extends NotificationType>({
   };
 
   return (
-    <div onClick={onClick} className={cn("space-y-0.5 w-full cursor-pointer", className)}>
+    <div onClick={handleClick} className={cn("space-y-0.5 w-full cursor-pointer", className)}>
       <div className="flex justify-between gap-5 items-center3">
         <div
           className={cn(

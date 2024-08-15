@@ -43,7 +43,7 @@ const buttonStyles = (color: ButtonProps["color"], type: ButtonProps["type"], di
   const startIconClassnames = `[&_div_svg]:w-[24px] ${
     disableStartIconColor
       ? ""
-      : "[&_div_svg_*]:stroke-dark-green [&_div_svg_*]:hover:stroke-white [&_div_svg_*]:disabled:stroke-dark-green-100 [&_div_svg_*]:transition-all"
+      : "[&_div_svg_*]:stroke-dark-green [&_div_svg_*]:hover:strokeWhite [&_div_svg_*]:disabled:stroke-dark-green-100 [&_div_svg_*]:transition-all"
   }`;
   let classNames = `${baseClassnames} ${startIconClassnames}`;
   if (type === "primary") {

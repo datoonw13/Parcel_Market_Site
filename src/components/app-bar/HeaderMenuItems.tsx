@@ -2,8 +2,10 @@ import routes from "@/helpers/routes";
 import { Box, Button } from "@mui/material";
 import Link from "next/link";
 import { getUserAction } from "@/server-actions/user/actions";
+import { Suspense } from "react";
 import UserMenu from "../@new/user/user-menu/UserMenu";
-import UserMenuDesktopNotifications from "../@new/user/notification/user-menu-desktop-notifications";
+import UserHeaderNotificationWrapper from "../@new/user/notification/header/user-header-notifications-wrapper";
+import UserHeaderNotificationButton from "../@new/user/notification/header/user-header-notification-button";
 
 const HeaderMenuItems = async () => {
   const user = await getUserAction();
@@ -28,7 +30,9 @@ const HeaderMenuItems = async () => {
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         {user ? (
           <>
-            <UserMenuDesktopNotifications />
+            <Suspense fallback={<UserHeaderNotificationButton loading active={false} />}>
+              <UserHeaderNotificationWrapper />
+            </Suspense>
             <UserMenu user={user} />
           </>
         ) : (

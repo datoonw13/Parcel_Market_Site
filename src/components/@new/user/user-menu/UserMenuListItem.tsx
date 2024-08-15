@@ -17,7 +17,7 @@ const UserMenuListItem = ({ path, onClick, label, icon: Icon, listItemClasses }:
   return (
     <Link key={label} href={path} onClick={onClick}>
       <li className="flex items-center  gap-1.5 cursor-pointer group">
-        <Icon className={clsx("group-hover:fill-primary-main transition-all duration-0.1", pathname === path && "fill-primary-main")} />
+        <Icon className={clsx("group-hover:text-primary-main transition-all duration-0.1", pathname === path && "text-primary-main")} />
         <p
           className={clsx(
             "text-xs group-hover:text-primary-main transition-all duration-0.1",
