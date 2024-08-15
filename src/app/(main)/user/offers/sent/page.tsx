@@ -1,5 +1,7 @@
 import SubscribeError from "@/components/@new/shared/subscribe-error";
 import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
+import OfferDetailModal from "@/components/@new/user/offers/details/offer-detail-modal";
+import ReceivedOfferDetailWrapper from "@/components/@new/user/offers/received/received-offer-details-wrapper";
 import SentOffers from "@/components/@new/user/offers/sent/sent-offers";
 import SentOffersDesktopFilter from "@/components/@new/user/offers/sent/sent-offers-desktop-filters";
 import SentOffersLoading from "@/components/@new/user/offers/sent/sent-offers-loading";
@@ -17,6 +19,13 @@ const SentOffersPage = async ({ searchParams }: { searchParams: { [key: string]:
       </div>
       {user?.isSubscribed ? (
         <>
+          {searchParams.offerId && (
+            <OfferDetailModal>
+              <Suspense>
+                <ReceivedOfferDetailWrapper offerId={searchParams.offerId} />
+              </Suspense>
+            </OfferDetailModal>
+          )}
           <Suspense>
             <div className="hidden sm:block">
               <SentOffersDesktopFilter />

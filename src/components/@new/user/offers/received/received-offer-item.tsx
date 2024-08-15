@@ -15,7 +15,6 @@ import { useAtom } from "jotai";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import Link from "next/link";
 import OfferDetailSection from "../details/offer-detail-section";
-import ReceivedOfferDetailsModal from "./received-offer-details-modal";
 
 interface ReceivedOfferItemProps {
   data: OfferModel;
@@ -58,7 +57,6 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
 
   return (
     <>
-      <ReceivedOfferDetailsModal data={selectedOffer} closeModal={() => setSelectedOffer(null)} />
       <div
         className={clsx(
           `border border-grey-100 w-full bg-[url('/offer-box-mobile-gradient.png')] bg-[length:100%_115px] bg-no-repeat pt-6 pb-4 rounded-2xl

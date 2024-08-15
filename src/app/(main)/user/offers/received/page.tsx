@@ -5,6 +5,8 @@ import ReceivedOffers from "@/components/@new/user/offers/received/received-offe
 import ReceivedOfferListLoading from "@/components/@new/user/offers/received/received-offers-loading";
 import { getUserAction } from "@/server-actions/user/actions";
 import SubscribeError from "@/components/@new/shared/subscribe-error";
+import OfferDetailModal from "@/components/@new/user/offers/details/offer-detail-modal";
+import ReceivedOfferDetailWrapper from "@/components/@new/user/offers/received/received-offer-details-wrapper";
 
 const ReceivedOffersPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const user = await getUserAction();
@@ -17,6 +19,13 @@ const ReceivedOffersPage = async ({ searchParams }: { searchParams: { [key: stri
       </div>
       {user?.isSubscribed ? (
         <>
+          {searchParams.offerId && (
+            <OfferDetailModal>
+              <Suspense>
+                <ReceivedOfferDetailWrapper offerId={searchParams.offerId} />
+              </Suspense>
+            </OfferDetailModal>
+          )}
           <Suspense>
             <div className="hidden sm:block">
               <ReceivedOffersDesktopFilters />

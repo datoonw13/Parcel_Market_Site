@@ -4,6 +4,7 @@ import React, { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
+import { cn } from "@/helpers/common";
 
 interface ModalProps {
   open: boolean;
@@ -13,9 +14,10 @@ interface ModalProps {
   children: ReactNode;
   disableBackdrop?: boolean;
   contentClasses?: string;
+  className?: string
 }
 
-const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, disableBackdrop, contentClasses }) => {
+const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnAwayClick, children, disableBackdrop, contentClasses, className }) => {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(null, popperElement, {
     strategy: "fixed",
@@ -64,7 +66,7 @@ const Modal: FC<ModalProps> = ({ open, onModalClose, closeModal, disableCloseOnA
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             style={{ ...styles.popper, background: !disableBackdrop ? "rgba(0, 0, 0, 0.4)" : "transparent" }}
-            className="!m-auto z-50 w-full h-full flex items-center justify-center"
+            className={cn("!m-auto z-50 w-full h-full flex items-center justify-center", className)}
             {...attributes.popper}
           >
             <div ref={setPopperElement} className={clsx(contentClasses, "flex items-center justify-center w-full")}>
