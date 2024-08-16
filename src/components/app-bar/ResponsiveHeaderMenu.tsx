@@ -95,7 +95,7 @@ const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: ISignInR
               </Box>
               <Box>
                 <Link onClick={() => setOpen(false)} href={routes.valueLand.fullUrl}>
-                  Value my land for free
+                  Get Land Values
                 </Link>
               </Box>
             </Box>

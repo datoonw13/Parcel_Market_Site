@@ -44,7 +44,7 @@ const HeaderMenuItems = async () => {
         )}
         <Link href={routes.valueLand.fullUrl}>
           <Button sx={{ textTransform: "none" }} variant="contained">
-            Value my land for free
+            Get Land Values
           </Button>
         </Link>
       </Box>
