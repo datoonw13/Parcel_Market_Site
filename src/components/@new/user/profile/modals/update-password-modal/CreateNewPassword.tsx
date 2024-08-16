@@ -5,11 +5,11 @@ import Button from "@/components/@new/shared/forms/Button";
 import { sendPasswordResetCodeAction } from "@/server-actions/user/actions";
 import { userPasswordResetValidations } from "@/zod-validations/auth-validations";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import TextField from "@/components/@new/shared/forms/text-field";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import useNotification from "@/hooks/useNotification";
 
 const CreateNewPassword = ({
   onNext,
@@ -18,6 +18,7 @@ const CreateNewPassword = ({
   onNext: (oldPassword: string, newPassword: string) => void;
   handleClose: () => void;
 }) => {
+  const { notify } = useNotification();
   const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,
@@ -41,7 +42,7 @@ const CreateNewPassword = ({
   const onSubmit = handleSubmit(async (data) => {
     const { errorMessage } = await sendPasswordResetCodeAction(data);
     if (errorMessage) {
-      toast.error(errorMessage);
+      notify({ title: "Error", description: errorMessage }, { variant: "error" });
     } else {
       onNext(data.oldPassword, data.newPassword);
     }

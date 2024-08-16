@@ -4,8 +4,9 @@ import ResendButton from "@/components/@new/shared/ResendButton";
 import Button from "@/components/@new/shared/forms/Button";
 import { sendPasswordResetCodeAction, setNewPasswordAction } from "@/server-actions/user/actions";
 import { FC, useState } from "react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import TextField from "@/components/@new/shared/forms/text-field";
+import useNotification from "@/hooks/useNotification";
 
 interface CreateNewPasswordVerifyProps {
   passwords: { oldPassword: string; newPassword: string };
@@ -15,13 +16,14 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
   const [codeSending, setCodeSending] = useState(false);
   const [passwordUpdating, setPasswordUpdating] = useState(false);
   const [code, setCode] = useState("");
+  const { notify } = useNotification();
 
   const handleResend = async () => {
     setCodeSending(true);
     const { errorMessage } = await sendPasswordResetCodeAction(passwords);
     setCodeSending(false);
     if (errorMessage) {
-      toast.error(errorMessage);
+      notify({ title: "Error", description: errorMessage }, { variant: "error" });
       throw Error();
     }
   };
@@ -30,10 +32,10 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
     setPasswordUpdating(true);
     const { errorMessage } = await setNewPasswordAction({ code, newPassword: passwords.newPassword });
     if (errorMessage) {
-      toast.error(errorMessage);
+      notify({ title: "Error", description: errorMessage }, { variant: "error" });
       setPasswordUpdating(false);
     } else {
-      toast.success("Your password has been successfully reset");
+      notify({ title: "Information Has been updated", description: "Your Information has been successfully Updated." });
       handleClose();
     }
   };
