@@ -20,7 +20,6 @@ const HomeMain = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [state, setState] = useState<string | null>(null);
   const [county, setCounty] = useState<string | null>(null);
-
   const onStart = () => {
     router.push(`${routes.valueLand.fullUrl}?state=${state}&county=${county}`);
   };

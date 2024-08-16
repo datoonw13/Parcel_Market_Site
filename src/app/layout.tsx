@@ -11,6 +11,8 @@ import theme from "@/theme";
 import NextTopLoader from "nextjs-toploader";
 import { Provider } from "jotai";
 import "simplebar-react/dist/simplebar.min.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,6 +43,14 @@ export default function RootLayout({
       <html lang="en">
         <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
           <NextTopLoader color="#0E8B40" showSpinner={false} />
+          <ToastContainer
+            hideProgressBar
+            autoClose={3500}
+            toastClassName="!rounded-2xl !p-3"
+            className="sm:max-w-sm !w-full"
+            closeOnClick
+            closeButton={false}
+          />
           <AppRouterCacheProvider>
             <Provider>
               <ThemeProvider theme={theme}>
