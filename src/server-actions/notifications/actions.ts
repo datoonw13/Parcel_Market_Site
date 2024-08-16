@@ -17,6 +17,7 @@ export const getNotificationsAction = async (params: {
       next: {
         tags: [notificationsTag],
       },
+      cache: "no-cache",
     });
 
     return {
