@@ -20,7 +20,7 @@ const getIcon = <T extends keyof INotificationEnum>(data: INotificationEnum[T]) 
       return <TbMessageDots className="size-4" />;
     case NotificationType.NewOfferReceived:
       return <IoMdGift className="size-4" />;
-    case NotificationType.SentOfferStatusUpdate:
+    case NotificationType.OfferStatusUpdate:
       return data.status === OfferStatusEnum.accepted ? <IoCheckmarkOutline className="size-4" /> : <MdClose className="size-4" />;
     case NotificationType.ReceivedOfferExpiring:
       return <LuAlarmClock className="size-4" />;
@@ -58,7 +58,7 @@ const NotificationItem = <T extends NotificationType>({
       router.push(routes.user.subscription.fullUrl);
     } else if (data.type === NotificationType.NewOfferReceived || data.type === NotificationType.ReceivedOfferExpiring) {
       router.push(`${routes.user.offers.received.fullUrl}?offerId=${data.offerId}`);
-    } else if (data.type === NotificationType.SentOfferExpiring || data.type === NotificationType.SentOfferStatusUpdate) {
+    } else if (data.type === NotificationType.SentOfferExpiring || data.type === NotificationType.OfferStatusUpdate) {
       router.push(`${routes.user.offers.sent.fullUrl}?offerId=${data.offerId}`);
     }
   };

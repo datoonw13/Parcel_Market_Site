@@ -37,7 +37,7 @@ const notifications: Array<INotification> = [
   },
   {
     id: 3,
-    type: NotificationType.SentOfferStatusUpdate,
+    type: NotificationType.OfferStatusUpdate,
     title: "Sent Offer Status Update",
     message: "Offer rejected",
     status: OfferStatusEnum.rejected,
@@ -49,7 +49,7 @@ const notifications: Array<INotification> = [
   },
   {
     id: 4,
-    type: NotificationType.SentOfferStatusUpdate,
+    type: NotificationType.OfferStatusUpdate,
     title: "Sent Offer Status Update",
     message: "Offer accepted",
     status: OfferStatusEnum.accepted,
