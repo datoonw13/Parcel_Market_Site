@@ -4,7 +4,7 @@ import { OfferStatusEnum } from "./offer";
 export enum NotificationType {
   NewMessage = "newMessage",
   NewOfferReceived = "newOfferReceived",
-  SentOfferStatusUpdate = "sentOfferStatusUpdate",
+  OfferStatusUpdate = "offerStatusUpdate",
   ReceivedOfferExpiring = "receivedOfferExpiring",
   SentOfferExpiring = "sentOfferExpiring",
   SubscriptionExpired = "subscriptionExpired",
@@ -31,8 +31,8 @@ export interface INewOfferReceivedNotification extends INotificationBase {
   offerId: number;
 }
 
-export interface ISentOfferStatusUpdateNotification extends INotificationBase {
-  type: NotificationType.SentOfferStatusUpdate;
+export interface IOfferStatusUpdateNotification extends INotificationBase {
+  type: NotificationType.OfferStatusUpdate;
   offerId: number;
   status: OfferStatusEnum;
 }
@@ -54,7 +54,7 @@ export interface SubscriptionExpiredNotification extends INotificationBase {
 export interface INotificationEnum {
   [NotificationType.NewMessage]: INewMessageNotification;
   [NotificationType.NewOfferReceived]: INewOfferReceivedNotification;
-  [NotificationType.SentOfferStatusUpdate]: ISentOfferStatusUpdateNotification;
+  [NotificationType.OfferStatusUpdate]: IOfferStatusUpdateNotification;
   [NotificationType.ReceivedOfferExpiring]: IReceivedOfferExpiringNotification;
   [NotificationType.SentOfferExpiring]: ISentOfferExpiringNotification;
   [NotificationType.SubscriptionExpired]: SubscriptionExpiredNotification;
@@ -63,7 +63,7 @@ export interface INotificationEnum {
 export type INotification =
   | INewMessageNotification
   | INewOfferReceivedNotification
-  | ISentOfferStatusUpdateNotification
+  | IOfferStatusUpdateNotification
   | IReceivedOfferExpiringNotification
   | ISentOfferExpiringNotification
   | SubscriptionExpiredNotification;
