@@ -18,32 +18,38 @@ const LandDetails = async ({ data }: { data: ISellingProperty }) => {
       <div className="p-4 md:p-6 lg:p-8 space-y-4">
         <p className="text-lg font-semibold">Detail Information</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-1.5 md:gap-y-3 gap-x-6">
-          <p className="text-grey-600">
-            Owner: <span className="text-black">{data?.owner}</span>
-          </p>
-          <p className="text-grey-600">
-            Property Type: <span className="text-black">{data.propertyType || "N/A"}</span>
-          </p>
-          <p className="text-grey-600">
-            Sale Range Per Acre: <span className="text-black">{getSaleRangePerAcre()}</span>
-          </p>
-          <p className="text-grey-600">
-            Parcel ID: <span className="text-black">{data.parcelNumber}</span>
-          </p>
-          <p className="text-grey-600">
-            VOLT Value: <span className="text-black">{numFormatter.format(data.salePrice)}</span>
-          </p>
-          <p className="text-grey-600">
-            Price For Improvements:{" "}
-            <span className="text-black">{data.improvmentsValue ? numFormatter.format(Number(data.improvmentsValue)) : "N/A"}</span>
-          </p>
-          <p className="text-grey-600">
-            Acreage: <span className="text-black">{data.acrage}</span>
-          </p>
-          <p className="text-grey-600">
-            Volt Value Per Acre:{" "}
-            <span className="text-black">{numFormatter.format(Number((data.salePrice / data.acrage).toFixed(2)))}</span>
-          </p>
+          <div className="space-y-1.5 md:space-y-3">
+            <p className="text-grey-600">
+              Owner: <span className="text-black">{data?.owner}</span>
+            </p>
+            <p className="text-grey-600">
+              Parcel ID: <span className="text-black">{data.parcelNumber}</span>
+            </p>
+            <p className="text-grey-600">
+              Acreage: <span className="text-black">{data.acrage}</span>
+            </p>
+          </div>
+          <div className="space-y-1.5 md:space-y-3">
+            <p className="text-grey-600">
+              Property Type: <span className="text-black">{data.propertyType || "N/A"}</span>
+            </p>
+            <p className="text-grey-600">
+              VOLT Value: <span className="text-black">{numFormatter.format(data.salePrice)}</span>
+            </p>
+            <p className="text-grey-600">
+              Volt Value Per Acre:{" "}
+              <span className="text-black">{numFormatter.format(Number((data.salePrice / data.acrage).toFixed(2)))}</span>
+            </p>
+          </div>
+          <div className="space-y-1.5 md:space-y-3">
+            <p className="text-grey-600">
+              Sale Range Per Acre: <span className="text-black">{getSaleRangePerAcre()}</span>
+            </p>
+            <p className="text-grey-600">
+              Price For Improvements:{" "}
+              <span className="text-black">{data.improvmentsValue ? numFormatter.format(Number(data.improvmentsValue)) : "N/A"}</span>
+            </p>
+          </div>
         </div>
       </div>
       {data.user_id !== user?.id && (
