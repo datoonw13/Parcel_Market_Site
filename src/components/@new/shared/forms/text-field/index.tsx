@@ -27,6 +27,8 @@ interface TextFieldProps {
   suffix?: string;
   prefix?: string;
   disableThousandsSeparator?: boolean;
+  max?: number;
+  allowNegative?: boolean;
 }
 
 const TextField = forwardRef((props: TextFieldProps, ref: any) => {
@@ -52,6 +54,8 @@ const TextField = forwardRef((props: TextFieldProps, ref: any) => {
     suffix,
     prefix,
     disableThousandsSeparator,
+    max,
+    allowNegative,
   } = props;
   const endIconRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -107,6 +111,12 @@ const TextField = forwardRef((props: TextFieldProps, ref: any) => {
           onBlur={onBlur}
           defaultValue={defaultValue}
           readOnly={readOnly}
+          isAllowed={(values) => {
+            const { floatValue } = values;
+            return max && floatValue ? floatValue < max : true;
+          }}
+          allowNegative={allowNegative}
+          allowLeadingZeros={false}
           type="text"
           name={name}
           thousandSeparator={disableThousandsSeparator ? false : ","}

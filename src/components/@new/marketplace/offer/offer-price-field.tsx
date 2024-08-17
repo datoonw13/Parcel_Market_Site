@@ -20,6 +20,7 @@ const OfferPriceField: FC<OfferPriceFieldProps> = ({ onChange, error }) => {
         placeholder="Offer Price"
         type="number"
         value={value}
+        max={999999999}
       />
     </div>
   );
