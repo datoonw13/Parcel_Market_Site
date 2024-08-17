@@ -19,12 +19,12 @@ export interface IPagination {
 }
 
 export enum SortEnum {
+  Newest = "newest",
   Oldest = "oldest",
   PriceHighLow = "volt-hi-lo",
   PriceLowHigh = "volt-lo-hi",
   AreaHighLow = "area-hi-lo",
   AreaLowHigh = "area-lo-hi",
-  Newest = "newest",
 }
 
 export type Nullable<T> = T | null;
