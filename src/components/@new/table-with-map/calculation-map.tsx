@@ -22,6 +22,7 @@ interface CalculationMapProps {
     owner: string;
     parcelNumber: string;
     acreage: string;
+    salePrice: number;
   };
 }
 
@@ -34,31 +35,33 @@ const CalculationMap: FC<CalculationMapProps> = ({
   popupOpen,
   mainLandData,
 }) => {
-  const usedForPriceCalculation = data.map((el) => ({
-    centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
-    parcelNumber: el.parcelNumber,
-    showMarker: true,
-    active: el.active,
-    popup: {
-      parcelNumber: {
-        label: "Parcel Number",
-        value: el.parcelNumber,
+  const usedForPriceCalculation = data
+    .filter((el) => el.parcelNumber !== "03-0429-004-01-09")
+    .map((el) => ({
+      centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
+      parcelNumber: el.parcelNumber,
+      showMarker: true,
+      active: el.active,
+      popup: {
+        parcelNumber: {
+          label: "Parcel Number",
+          value: el.parcelNumber,
+        },
+        acreage: {
+          label: "Acreage",
+          value: el.arcage,
+        },
+        lastSaleDate: {
+          label: "Last Sale Date",
+          value: el.lastSalesDate!,
+        },
+        lastSalePrice: {
+          label: "Last Sale Price",
+          value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
+        },
+        showSelectButton: false,
       },
-      acreage: {
-        label: "Acreage",
-        value: el.arcage,
-      },
-      lastSaleDate: {
-        label: "Last Sale Date",
-        value: el.lastSalesDate!,
-      },
-      lastSalePrice: {
-        label: "Last Sale Price",
-        value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
-      },
-      showSelectButton: false,
-    },
-  }));
+    }));
 
   const mainLand = {
     centerCoordinate: [Number(mainLandData?.latitude || 0), Number(mainLandData?.longitude) || 0] as LatLngTuple,
@@ -74,6 +77,10 @@ const CalculationMap: FC<CalculationMapProps> = ({
       acreage: {
         label: "Acreage",
         value: mainLandData?.acreage || "",
+      },
+      pricePerAcreage: {
+        label: "Price Per Acreage",
+        value: mainLandData ? numFormatter.format(mainLandData.salePrice / Number(mainLandData.acreage)) : "",
       },
     },
   } as any;

@@ -15,6 +15,7 @@ const RecentSalesList = ({
     owner: string;
     parcelNumber: string;
     acreage: string;
+    salePrice: number;
   };
 }) => (
   <div className="space-y-6">

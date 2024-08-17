@@ -20,6 +20,7 @@ const TableWithMap = ({
     acreage: string;
     latitude: number;
     longitude: number;
+    salePrice: number;
   };
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();

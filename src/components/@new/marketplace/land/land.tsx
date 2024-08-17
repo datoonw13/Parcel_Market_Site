@@ -95,6 +95,7 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
               longitude: Number(data.lon || 1),
               owner: data.owner,
               parcelNumber: data.parcelNumber,
+              salePrice: data.salePrice,
             }}
             isUserSubscriptionTrial={isUserSubscriptionTrial}
             data={data.usedForPriceCalculations}
