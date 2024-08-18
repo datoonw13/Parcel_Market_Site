@@ -79,7 +79,9 @@ const HomeMain = () => {
             >
               Value. Buy. Sell. <br /> Vacant Land
             </Typography>
-
+            <Typography sx={{ textAlign: "center", fontWeight: 600, fontSize: 18, mt: 1, display: { xs: "block", md: "none" } }}>
+              View land values around your property in just a few clicks!
+            </Typography>
             <Box
               component={Paper}
               sx={{
