@@ -2,7 +2,7 @@
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { numFormatter } from "@/helpers/common";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import { useAtom } from "jotai";
 import { LatLngTuple, Marker } from "leaflet";
 import dynamic from "next/dynamic";
@@ -14,7 +14,7 @@ import { InfoIcon2 } from "../../icons/InfoIcons";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
-const CalculationDetailsMap = ({ user }: { user: ISignInResponse["payload"] | null }) => {
+const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);

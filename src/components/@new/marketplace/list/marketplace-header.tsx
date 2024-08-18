@@ -4,13 +4,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import routes from "@/helpers/routes";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import clsx from "clsx";
 import { ArrowIconLeftFilled1 } from "../../icons/ArrowIcons";
 import { SearchIcon1 } from "../../icons/SearchIcons";
 import TextField from "../../shared/forms/text-field";
 
-const MarketplaceHeader = ({ user }: { user: ISignInResponse["payload"] | null }) => {
+const MarketplaceHeader = ({ user }: { user: IDecodedAccessToken| null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

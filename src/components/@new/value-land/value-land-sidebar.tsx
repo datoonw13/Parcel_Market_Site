@@ -10,12 +10,12 @@ import { LatLngTuple } from "leaflet";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import CalculationDetailsMap from "./calculated-price/calculatation-details-map";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
-const ValueLanSidebar = ({ user }: { user: ISignInResponse["payload"] | null }) => {
+const ValueLanSidebar = ({ user }: { user: IDecodedAccessToken | null }) => {
   const pathname = usePathname();
 
   return (

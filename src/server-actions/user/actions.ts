@@ -10,7 +10,7 @@ import routes from "@/helpers/routes";
 import { revalidatePath } from "next/cache";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
-import { DeletionAccountReason, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
+import { DeletionAccountReason, IDecodedAccessToken, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
 export const setAuthToken = (token: string) => {
@@ -98,13 +98,13 @@ export const logOutUserAction = async () => {
   redirect("?logout=true");
 };
 
-export const getUserAction = async (): Promise<ISignInResponse["payload"] | null> => {
+export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
   const userString = cookies().get("jwt")?.value;
   if (userString) {
     try {
       const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed } = jwtDecode(
         userString!
-      ) as ISignInResponse["payload"];
+      ) as IDecodedAccessToken;
       const user = { id, sub, firstName, lastName, email, role, planSelected, isSubscribed };
       return { ...user };
     } catch (error) {

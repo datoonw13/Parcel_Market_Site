@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import { saveSearchDataAction } from "@/server-actions/value-land/actions";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
@@ -22,7 +22,7 @@ import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
 import ValueLandSubmitTermsModal from "../terms/terms-modal";
 
-const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) => {
+const AboutLandForm = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = new URLSearchParams();

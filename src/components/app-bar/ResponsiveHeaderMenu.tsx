@@ -6,12 +6,12 @@ import { Box, ClickAwayListener, Drawer, IconButton } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import clsx from "clsx";
 import UserMenuList from "../@new/user/user-menu/UserMenuList";
 import { LogoutIcon1 } from "../@new/icons/LogutIcons";
 
-const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: ISignInResponse["payload"] | null }) => {
+const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: IDecodedAccessToken | null }) => {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);

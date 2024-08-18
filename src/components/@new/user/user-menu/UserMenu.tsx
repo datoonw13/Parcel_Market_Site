@@ -2,13 +2,13 @@
 
 import React from "react";
 import Avatar from "@/components/@new/shared/Avatar";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import { cn } from "@/helpers/common";
 import Popper from "../../shared/Popper";
 import UserMenuList from "./UserMenuList";
 import { ArrowIconDown1 } from "../../icons/ArrowIcons";
 
-const UserMenu = ({ user }: { user: ISignInResponse["payload"] }) => (
+const UserMenu = ({ user }: { user: IDecodedAccessToken }) => (
   <Popper
     placement="bottom"
     renderButton={(setReferenceElement, referenceElement) => (

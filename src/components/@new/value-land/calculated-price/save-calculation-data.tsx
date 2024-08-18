@@ -3,7 +3,7 @@
 import { saveSearchDataAction } from "@/server-actions/value-land/actions";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { useAtom } from "jotai";
@@ -12,7 +12,7 @@ import Button from "../../shared/forms/Button";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import { InfoIcon2 } from "../../icons/InfoIcons";
 
-const SaveCalculationData = ({ user }: { user: ISignInResponse["payload"] | null }) => {
+const SaveCalculationData = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
