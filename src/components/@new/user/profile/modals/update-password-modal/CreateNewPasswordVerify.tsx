@@ -41,7 +41,7 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
   };
 
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div className="flex flex-col justify-between h-full mb-8">
       <div className="space-y-4">
         <TextField placeholder="Code" value={code} onChange={(value) => setCode(value)} />
         <ResendButton
@@ -50,12 +50,12 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
           }}
         />
       </div>
-      <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
+      <div className="w-full flex flex-col-reverse md:grid md:grid-cols-2 gap-3 mt-auto">
         <Button className="w-full" variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button className="w-full" disabled={codeSending || !code} loading={passwordUpdating} onClick={onSubmit}>
-          Continue
+          Change Password
         </Button>
       </div>
     </div>

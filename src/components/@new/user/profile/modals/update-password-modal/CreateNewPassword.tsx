@@ -52,7 +52,7 @@ const CreateNewPassword = ({
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="space-y-4 mb-8">
         <TextField
           placeholder="Current password"
           type={showPassword.current ? "text" : "password"}
@@ -103,7 +103,7 @@ const CreateNewPassword = ({
           Forgot Password?
         </Button>
       </div>
-      <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
+      <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-auto md:mt-8">
         <Button className="w-full" variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
