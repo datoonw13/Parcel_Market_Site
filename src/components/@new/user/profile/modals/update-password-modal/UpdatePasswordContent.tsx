@@ -9,8 +9,9 @@ import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 interface UpdatePasswordContentProps {
   user: IUser;
   handleClose: () => void;
+  openForgotPasswordModal: () => void;
 }
-const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ user, handleClose }) => {
+const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ user, handleClose, openForgotPasswordModal }) => {
   const [passwords, setPasswords] = useState<{ oldPassword: string; newPassword: string } | null>(null);
   const emailArr = user.email.split("@");
   const currentUserEmail = `${emailArr[0][0]}****${emailArr[0][emailArr[0].length - 1]}@${emailArr[1]}`;
@@ -26,7 +27,11 @@ const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ user, handleClo
       title={passwords ? "Check Your Email" : "Change Password"}
     >
       {!passwords && (
-        <CreateNewPassword handleClose={handleClose} onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })} />
+        <CreateNewPassword
+          openForgotPasswordModal={openForgotPasswordModal}
+          handleClose={handleClose}
+          onNext={(oldPassword, newPassword) => setPasswords({ oldPassword, newPassword })}
+        />
       )}
       {passwords && <CreateNewPasswordVerify passwords={passwords} handleClose={handleClose} />}
     </ProfileModalContentWrapper>

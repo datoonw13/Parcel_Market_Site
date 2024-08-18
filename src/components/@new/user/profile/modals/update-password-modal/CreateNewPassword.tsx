@@ -14,9 +14,11 @@ import useNotification from "@/hooks/useNotification";
 const CreateNewPassword = ({
   onNext,
   handleClose,
+  openForgotPasswordModal,
 }: {
   onNext: (oldPassword: string, newPassword: string) => void;
   handleClose: () => void;
+  openForgotPasswordModal: () => void;
 }) => {
   const { notify } = useNotification();
   const [showPassword, setShowPassword] = useState({
@@ -93,9 +95,13 @@ const CreateNewPassword = ({
           />
           {errors.repeatNewPassword && <p className="text-xss text-error font-medium">{errors.repeatNewPassword.message}</p>}
         </div>
-        <button type="button" className="font-medium text-xs text-primary-main">
+        <Button
+          onClick={openForgotPasswordModal}
+          variant="secondary"
+          className="!outline-none !text-xs !font-medium !text-primary-main !p-0"
+        >
           Forgot Password?
-        </button>
+        </Button>
       </div>
       <div className="w-full flex flex-col-reverse sm:flex-row gap-3 mt-8">
         <Button className="w-full" variant="secondary" onClick={handleClose}>
