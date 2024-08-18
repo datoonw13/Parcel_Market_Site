@@ -1,11 +1,11 @@
 import { numFormatter } from "@/helpers/common";
 import { getStateValue } from "@/helpers/states";
-import { IUserSearches } from "@/types/find-property";
 import moment from "moment";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
+import { AuthedUserSearches } from "@/types/auth";
 import TableWithMap from "../../table-with-map/table-with-map";
 
-const SearchDetails = async ({ data }: { data: IUserSearches }) => {
+const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
   const userSubscription = await getUserSubscriptions();
   const isUserSubscriptionTrial = !!userSubscription.data?.find((el) => el.status === "trialing");
 
@@ -69,7 +69,7 @@ const SearchDetails = async ({ data }: { data: IUserSearches }) => {
           lastSalesPrice: el.lastSalesPrice,
         }))}
         mainLandData={{
-          acreage: data.acrage,
+          acreage: data.acrage.toString(),
           coordinates: data.coordinates,
           latitude: Number(data.lat || 1),
           longitude: Number(data.lon || 1),

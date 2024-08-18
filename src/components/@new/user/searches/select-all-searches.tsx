@@ -3,10 +3,10 @@
 import { useAtom } from "jotai";
 import { useUserSearchAtom } from "@/atoms/user-search-atom";
 import clsx from "clsx";
-import { IUserSearches } from "@/types/find-property";
+import { AuthedUserSearches } from "@/types/auth";
 import CheckBox from "../../shared/forms/CheckBox";
 
-const SelectAllSearches = ({ data }: { data: IUserSearches[] }) => {
+const SelectAllSearches = ({ data }: { data: AuthedUserSearches[] }) => {
   const [userSearchAtom, setUserSearchAtom] = useAtom(useUserSearchAtom);
 
   return (
