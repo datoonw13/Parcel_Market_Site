@@ -1,27 +1,7 @@
 import { z } from "zod";
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
-import { IPagination, ResponseType } from "./common";
-
-export interface IFindPropertyInfo {
-  type: "fullName" | "entityName" | "parcelNumber";
-  firstName: string | null;
-  lastName: string | null;
-  entityName: string | null;
-  parcelNumber: string | null;
-  state: string | null;
-  county: string | null;
-}
 
 export type IFindPropertyAbout = z.infer<typeof aboutLandSchema>;
-
-export interface IRegridReq {
-  state: string;
-  county: string;
-  firstName?: string;
-  lastName?: string;
-  parcelNumber?: string;
-}
-
 export interface IFindPropertyEstimatedPrice {
   body: {
     owner?: string;
@@ -122,12 +102,6 @@ export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout
   offerId?: string;
   city: string;
 }
-
-export type IUserSellingPropertiesResponse = ResponseType<{
-  sellingProperties: Array<ISellingProperty>;
-  pagination: IPagination;
-}>;
-
 export interface IUserSearches {
   id: number;
   owner: string;

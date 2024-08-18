@@ -10,7 +10,7 @@ import { ArrowIconLeftFilled1 } from "../../icons/ArrowIcons";
 import { SearchIcon1 } from "../../icons/SearchIcons";
 import TextField from "../../shared/forms/text-field";
 
-const MarketplaceHeader = ({ user }: { user: IDecodedAccessToken| null }) => {
+const MarketplaceHeader = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
