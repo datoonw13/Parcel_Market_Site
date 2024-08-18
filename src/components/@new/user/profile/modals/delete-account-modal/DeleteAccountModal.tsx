@@ -147,6 +147,7 @@ const DeleteAccountModalContent: FC<Pick<DeleteAccountModalProps, "handleClose">
           <Button
             className="w-full"
             loading={removePending}
+            color={step === AccountRemoveSteps.CONFIRM_DELETE ? "error" : "default"}
             disabled={
               (step === AccountRemoveSteps.TYPE_PASSWORD && !values.password) ||
               (step === AccountRemoveSteps.SELECT_REASON && !values.deletionResult)
