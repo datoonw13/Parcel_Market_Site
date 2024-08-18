@@ -129,7 +129,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
                     },
                     lastSalePrice: {
                       label: "Last Sale Price",
-                      value: numFormatter.format(Number(el.lastSalesPrice)),
+                      value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
                     },
                     showSelectButton: false,
                   },
