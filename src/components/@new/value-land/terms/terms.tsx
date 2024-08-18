@@ -49,6 +49,7 @@ const ValueLendTerms = ({ closeRootModal }: { closeRootModal: () => void }) => {
     const { errorMessage, data } = await sellLendAction(reqData);
     setPending(false);
     if (errorMessage) {
+      console.error("Land post error: ", errorMessage);
       setError(errorMessage === "Posting already exists" ? "Posting already exists" : "Something went wrong");
       setOpenModal("error");
     } else {

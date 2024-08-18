@@ -59,7 +59,7 @@ export const aboutLandSchema = z.object({
   frontNavigable: z.boolean(),
   cover: z.array(z.enum(["Wooded", "Open Field", "Mixed", "Clear Cut", "Desert"])).min(1),
   topography: z.enum(["Very Steep", "Some Steep areas", "Gently Rolling", "Flat"]),
-  wet: z.enum(["Wet", "Some portions wet", "Not Wet"]),
+  wet: z.enum(["Wet", "Some portions wet", "Not wet"]),
   restriction: z.boolean(),
   access: z.enum(["Road Frontage", "Legal easement", "Non-recorded easement", "No legal access"]),
   improvmentsValue: z.number().min(1).optional(),

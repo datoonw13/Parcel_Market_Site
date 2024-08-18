@@ -72,8 +72,6 @@ const AboutLandForm = ({ user }: { user: ISignInResponse["payload"] | null }) =>
     }
   }, [saveSearchData, user, valueLandData]);
 
-  console.log(watch());
-
   return (
     <>
       <ValueLandSubmitTermsModal open={showTermsModal} onClose={() => setShowTermsModal(false)} />
@@ -292,8 +290,8 @@ const list = [
         value: "Some portions wet",
       },
       {
-        label: "Not Wet",
-        value: "Not Wet",
+        label: "Not wet",
+        value: "Not wet",
       },
     ],
   },
