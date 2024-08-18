@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getAllStates } from "@/helpers/states";
 import { updateUserInfoAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
+import useNotification from "@/hooks/useNotification";
 import TextField from "../../shared/forms/text-field";
 import { EditIcon2 } from "../../icons/EditIcons";
 import Button from "../../shared/forms/Button";
@@ -18,6 +19,7 @@ import UserProfileSection from "./UserProfileSection";
 import AutoComplete from "../../shared/forms/AutoComplete";
 
 const PersonalInfoSection = ({ user }: { user: IUser }) => {
+  const { notify } = useNotification();
   const [editMode, setEditMode] = useState(false);
   const {
     handleSubmit,
@@ -55,8 +57,10 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
   const onSubmit = handleSubmit(async (data) => {
     const { errorMessage } = await updateUserInfoAction(data);
     if (errorMessage) {
+      notify({ title: errorMessage }, { variant: "error" });
       toast.error(errorMessage);
     } else {
+      notify({ title: "Information Has been updated", description: "Your Information has been successfully Updated." });
       setEditMode(false);
     }
   });
