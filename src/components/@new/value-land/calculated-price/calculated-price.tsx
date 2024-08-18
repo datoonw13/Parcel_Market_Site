@@ -25,7 +25,7 @@ const ValueLandCalculatedPrice = async () => {
         </div>
         <div className={clsx("space-y-12", classes["content-space-x"])}>
           <div className="space-y-4">
-            <CalculatedPriceDetails />
+            <CalculatedPriceDetails user={user} />
             <div className="h-72 sm:h-80 w-full xl:hidden [&>div]:rounded-2xl">
               <CalculationDetailsMap user={user} />
             </div>

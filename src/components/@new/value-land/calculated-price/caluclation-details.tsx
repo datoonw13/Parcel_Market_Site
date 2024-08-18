@@ -4,10 +4,20 @@ import { numFormatter } from "@/helpers/common";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import clsx from "clsx";
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import routes from "@/helpers/routes";
+import { IDecodedAccessToken } from "@/types/auth";
 import { LocationIcon2 } from "../../icons/LocationIcons";
+import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
+import { InfoIcon2 } from "../../icons/InfoIcons";
 
-const CalculationDetails = () => {
+const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
+  const [openWarningModal, setOpenWarningModal] = useState(false);
 
   if (!valueLandData.calculatedPrice) {
     return null;
@@ -32,17 +42,41 @@ const CalculationDetails = () => {
   }));
 
   return (
-    <div className="bg-primary-main-50 border border-primary-main-400 rounded-2xl px-4 sm:px-5 md:px-6 lg:px-8 py-6 md:py-8">
-      <div>
-        <h2 className="text-center font-medium text-sm text-grey-800">VOLT Value</h2>
-        <h1 className="text-center font-semibold text-3xl md:text-4xl">{numFormatter.format(voltValue)}</h1>
-      </div>
-      <div className="flex flex-col md:flex-row gap-2 items-center mt-14">
-        <p className="text-xs text-grey-600 hidden md:block">Min</p>
-        <div className="w-full h-1.5 rounded-3xl bg-primary-main-400 relative">
-          <div className="h-1.5 rounded-3xl bg-primary-main absolute w-[50%]" />
-          <div
-            className={`
+    <>
+      <ResponsiveWarningModal
+        customIcon={<InfoIcon2 className="!w-4 !h-4 min-w-4 min-h-4" color="primary-main" />}
+        open={openWarningModal}
+        variant="success"
+        closeModal={() => setOpenWarningModal(false)}
+        onOK={() => {
+          if (!user) {
+            params.set("from", routes.valueLand.value.fullUrl);
+            router.replace(`${routes.auth.signIn.fullUrl}?${params.toString()}`);
+          } else {
+            router.push(routes.user.subscription.fullUrl);
+          }
+        }}
+        onCancel={() => setOpenWarningModal(false)}
+        title={!user ? "Log in to See the information" : "Closed content"}
+        description={
+          !user
+            ? "Your are not logged in, if you want to see this information please log into your account"
+            : "Subscribe now to view, save, and export sales data."
+        }
+        okLabel={!user ? "Log In" : "Subscribe"}
+        cancelLabel="Close"
+      />
+      <div className="bg-primary-main-50 border border-primary-main-400 rounded-2xl px-4 sm:px-5 md:px-6 lg:px-8 py-6 md:py-8">
+        <div>
+          <h2 className="text-center font-medium text-sm text-grey-800">VOLT Value</h2>
+          <h1 className="text-center font-semibold text-3xl md:text-4xl">{numFormatter.format(voltValue)}</h1>
+        </div>
+        <div className="flex flex-col md:flex-row gap-2 items-center mt-14">
+          <p className="text-xs text-grey-600 hidden md:block">Min</p>
+          <div className="w-full h-1.5 rounded-3xl bg-primary-main-400 relative">
+            <div className="h-1.5 rounded-3xl bg-primary-main absolute w-[50%]" />
+            <div
+              className={`
             left-[50%] -translate-x-1/2
             w-5 h-5 rounded-full bg-white
             absolute top-1/2 -translate-y-1/2 
@@ -50,50 +84,56 @@ const CalculationDetails = () => {
             after:border-2 after:border-primary-main after:rounded-full after:left-1/2 after:-translate-x-1/2
             before:content-[''] before:absolute before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 
           before:bg-primary-main before:rounded-full before:left-1/2 before:-translate-x-1/2`}
-          />
-          {formattedData.map((el) => (
-            <div
-              key={el.value.toString()}
-              className="absolute -translate-x-1/2 top-0 -translate-y-full"
-              style={{ left: `${el.percent}%` }}
-              onMouseEnter={() => {
-                setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: el.stringifiedCoordinates } }));
-              }}
-              onMouseLeave={() => {
-                setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));
-              }}
-            >
-              <LocationIcon2
-                className={clsx(
-                  valueLandData.mapInteraction.hoveredLand === el.stringifiedCoordinates
-                    ? "!w-6 min-w-6 !h-8 min-h-8 [&>path:first-child]:!fill-[#F44D61]"
-                    : "!w-5 min-w-5 !h-6 min-h-6 "
-                )}
-              />
-            </div>
-          ))}
+            />
+            {formattedData.map((el) => (
+              <div
+                key={el.value.toString()}
+                className="absolute -translate-x-1/2 top-0 -translate-y-full"
+                style={{ left: `${el.percent}%` }}
+                onClick={() => {
+                  if (!user || !user.isSubscribed) {
+                    setOpenWarningModal(true);
+                  }
+                }}
+                onMouseEnter={() => {
+                  setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: el.stringifiedCoordinates } }));
+                }}
+                onMouseLeave={() => {
+                  setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));
+                }}
+              >
+                <LocationIcon2
+                  className={clsx(
+                    valueLandData.mapInteraction.hoveredLand === el.stringifiedCoordinates
+                      ? "!w-6 min-w-6 !h-8 min-h-8 [&>path:first-child]:!fill-[#F44D61]"
+                      : "!w-5 min-w-5 !h-6 min-h-6 "
+                  )}
+                />
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-grey-600 hidden md:block">Max</p>
+          <div className="flex justify-between w-full md:hidden">
+            <p className="text-xs text-grey-600">Min</p>
+            <p className="text-xs text-grey-600">Max</p>
+          </div>
         </div>
-        <p className="text-xs text-grey-600 hidden md:block">Max</p>
-        <div className="flex justify-between w-full md:hidden">
-          <p className="text-xs text-grey-600">Min</p>
-          <p className="text-xs text-grey-600">Max</p>
+        <div className="mt-6 md:mt-2 flex flex-col md:flex-row md:justify-between gap-2.5">
+          <p className="text-xs text-grey-600">
+            <span className="md:hidden">Minimum</span> Per Acre:{" "}
+            <span className="text-black font-medium">{numFormatter.format(minPricePerAcre)}</span>
+          </p>
+          <p className="text-xs text-grey-600">
+            <span className="md:hidden">Average</span> Per Acre:{" "}
+            <span className="text-black font-medium">{numFormatter.format(Number(averagePrice))}</span>
+          </p>
+          <p className="text-xs text-grey-600">
+            <span className="md:hidden">Maximum</span> Per Acre:{" "}
+            <span className="text-black font-medium">{numFormatter.format(maxPricePerAcre)}</span>
+          </p>
         </div>
       </div>
-      <div className="mt-6 md:mt-2 flex flex-col md:flex-row md:justify-between gap-2.5">
-        <p className="text-xs text-grey-600">
-          <span className="md:hidden">Minimum</span> Per Acre:{" "}
-          <span className="text-black font-medium">{numFormatter.format(minPricePerAcre)}</span>
-        </p>
-        <p className="text-xs text-grey-600">
-          <span className="md:hidden">Average</span> Per Acre:{" "}
-          <span className="text-black font-medium">{numFormatter.format(Number(averagePrice))}</span>
-        </p>
-        <p className="text-xs text-grey-600">
-          <span className="md:hidden">Maximum</span> Per Acre:{" "}
-          <span className="text-black font-medium">{numFormatter.format(maxPricePerAcre)}</span>
-        </p>
-      </div>
-    </div>
+    </>
   );
 };
 
