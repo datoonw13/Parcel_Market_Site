@@ -191,7 +191,14 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
             <Button variant="secondary" onClick={() => router.push(routes.valueLand.fullUrl)}>
               Back
             </Button>
-            <Button onClick={() => setShowTerms(true)} loading={pending} disabled={!valueLand.selectedLand}>
+            <Button onClick={() => {
+              if(user) {
+                onNext()
+              }
+              else {
+                setShowTerms(true)
+              }
+            }} loading={pending} disabled={!valueLand.selectedLand}>
               Continue
             </Button>
           </div>
