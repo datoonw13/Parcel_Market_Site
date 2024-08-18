@@ -3,6 +3,7 @@
 import { ButtonHTMLAttributes, FC, MouseEvent, MouseEventHandler, ReactNode, forwardRef } from "react";
 import clsx from "clsx";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
+import { cn } from "@/helpers/common";
 
 const sizes = {
   sm: "py-1 px-3 text-xs [&>svg]:w-3.5 [&>svg]:h-3.5",
@@ -97,7 +98,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={clsx(
+      className={cn(
         "flex items-center justify-center h-fit gap-1.5 transition-all duration-100 disabled:pointer-events-none font-medium leading-6",
         sizes[size],
         buttonTypes[variant][color],

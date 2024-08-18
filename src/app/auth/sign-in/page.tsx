@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import TextField from "@/components/@new/shared/forms/text-field";
 import SignInGoogle from "@/components/@new/auth/sign-in/sign-in-google";
 import GoogleAuthProvider from "@/components/@new/auth/sign-in/google-auth-provider";
+import ForgotPasswordButton from "@/app/(main)/user/forgot-password/forgot-password-button";
 
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
@@ -60,9 +61,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
         />
         <div className="flex justify-between gap-4">
           <CheckBox label="Remember me" name="sign-in-remember" />
-          <Link href="/">
-            <p className="text-xs font-medium text-primary-main">Forgot Password?</p>
-          </Link>
+          <ForgotPasswordButton />
         </div>
         <SubmitButton ref={ref} />
       </form>

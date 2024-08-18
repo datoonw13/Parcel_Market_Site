@@ -316,3 +316,66 @@ export const updateUserInfoAction = async (values: z.infer<typeof updateUserInfo
     };
   }
 };
+
+// reset password
+const delay = (rejectPromise?: boolean) => new Promise((resolve, reject) => setTimeout(rejectPromise ? reject : resolve, 1500));
+
+export const sendResetPasswordVerificationCodeAction = async (email: string, reject?: boolean): Promise<ResponseModel<null>> => {
+  try {
+    // await fetcher<null>("user/register", {
+    //   method: "POST",
+    //   body: JSON.stringify({ email }),
+    //   cache: "no-cache",
+    // });
+    await delay(reject);
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      errorMessage: (error as ErrorResponse)?.message,
+    };
+  }
+};
+
+export const resetPasswordVerificationCodeVerifyAction = async (code: string, reject?: boolean): Promise<ResponseModel<null>> => {
+  try {
+    // await fetcher<null>("user/register", {
+    //   method: "POST",
+    //   body: JSON.stringify({ email }),
+    //   cache: "no-cache",
+    // });
+    await delay(reject);
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).statusCode === 409 ? "Email already registered" : "Registration failed",
+      data: null,
+    };
+  }
+};
+
+export const setResetPasswordNewPasswordAction = async (password: string, reject?: boolean): Promise<ResponseModel<null>> => {
+  try {
+    // await fetcher<null>("user/register", {
+    //   method: "POST",
+    //   body: JSON.stringify({ email }),
+    //   cache: "no-cache",
+    // });
+    await delay(reject);
+    return {
+      data: null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).statusCode === 409 ? "Email already registered" : "Registration failed",
+      data: null,
+    };
+  }
+};

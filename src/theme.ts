@@ -3,7 +3,6 @@
 import { Inter } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
 
-
 declare module "@mui/material/styles" {
   interface Palette {
     darkGreen: Palette["primary"];
