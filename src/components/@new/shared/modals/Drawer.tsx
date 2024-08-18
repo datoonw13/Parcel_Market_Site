@@ -4,6 +4,7 @@ import React, { FC, ReactElement, ReactNode, useCallback, useEffect, useRef, use
 import { usePopper } from "react-popper";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
+import { cn } from "@/helpers/common";
 
 interface ModalProps {
   open: boolean;
@@ -12,9 +13,10 @@ interface ModalProps {
   children: ReactNode;
   disableBackDrop?: boolean;
   title?: string;
+  className?: string;
 }
 
-const Drawer: FC<ModalProps> = ({ open, closeDrawer, disableCloseOnAwayClick, children, disableBackDrop, title }) => {
+const Drawer: FC<ModalProps> = ({ open, closeDrawer, disableCloseOnAwayClick, children, disableBackDrop, title, className }) => {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const { styles, attributes } = usePopper(null, popperElement, {
@@ -85,7 +87,7 @@ const Drawer: FC<ModalProps> = ({ open, closeDrawer, disableCloseOnAwayClick, ch
           <div
             ref={setPopperElement}
             style={{ ...styles.popper, background: disableBackDrop ? "transparent" : "rgba(0, 0, 0, 0.4)" }}
-            className="!m-auto z-50 w-full h-full flex items-end justify-center"
+            className={cn("!m-auto z-50 w-full h-full flex items-end justify-center", className)}
             {...attributes.popper}
           >
             <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} transition={{ ease: "linear", duration: 0.1 }}>

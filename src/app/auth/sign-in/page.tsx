@@ -61,7 +61,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
         />
         <div className="flex justify-between gap-4">
           <CheckBox label="Remember me" name="sign-in-remember" />
-          <ForgotPasswordButton />
+          <ForgotPasswordButton user={null} />
         </div>
         <SubmitButton ref={ref} />
       </form>

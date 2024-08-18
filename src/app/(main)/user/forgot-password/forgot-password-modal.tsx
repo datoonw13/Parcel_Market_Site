@@ -11,7 +11,7 @@ import {
   sendResetPasswordVerificationCodeAction,
   setResetPasswordNewPasswordAction,
 } from "@/server-actions/user/actions";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IDecodedAccessToken, IUser } from "@/types/auth";
 import { emailSchema, passwordSchema } from "@/zod-validations/auth-validations";
 import { FC, useCallback, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
@@ -25,7 +25,7 @@ enum ForgotPasswordSteps {
 interface ForgotPasswordModalProps {
   open: boolean;
   closeModal: () => void;
-  user: IDecodedAccessToken | null;
+  user: IDecodedAccessToken | IUser | null;
 }
 
 const renderModalHeader = (step: ForgotPasswordSteps, email?: string) => {
@@ -71,7 +71,7 @@ const renderButtonsLabel = (step: ForgotPasswordSteps, user: boolean) => {
 const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user }) => {
   const { notify } = useNotification();
   const [step, setStep] = useState<ForgotPasswordSteps>(ForgotPasswordSteps.EMAIL);
-  const [values, setValues] = useState({ email: user?.email || "", code: "", password: "", repeatPassword: "" });
+  const [values, setValues] = useState({ email: "", code: "", password: "", repeatPassword: "" });
   const { title, description } = renderModalHeader(step, values.email);
   const { closeLabel, submitLabel } = renderButtonsLabel(step, !!user);
   const [pending, setPending] = useState(false);
@@ -146,6 +146,12 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
     }
   }, [user, step, sendResetPasswordVerificationCode]);
 
+  useEffect(() => {
+    if (user) {
+      setValues({ ...values, email: user.email });
+    }
+  }, [user, values]);
+
   return (
     <div className={cn("flex flex-col", "h-[70vh]", "md:bg-white md:shadow-3 md:max-w-lg md:w-full md:rounded-2xl md:h-fit")}>
       {user && pending && step === ForgotPasswordSteps.EMAIL ? (
@@ -154,7 +160,7 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
         <>
           <IoMdClose className="hidden md:flex size-6 cursor-pointer text-grey-600 ml-auto mt-4 mr-4" onClick={closeModal} />
           <div className="space-y-4 md:space-y-6">
-            <div className={cn("border-b border-b-grey-100 px-5 pb-4 pt-1", "md:border-b-0 py-0 px-8")}>
+            <div className={cn("border-b border-b-grey-100 px-5 pb-4 pt-1", "md:border-b-0 md:py-0 md:px-8")}>
               <h1 className="font-semibold text-lg">{title}</h1>
               <h2 className="text-grey-800 text-xs">{description}</h2>
             </div>

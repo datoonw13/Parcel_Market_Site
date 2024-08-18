@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "@/components/@new/shared/forms/Button";
 import { IUser } from "@/types/auth";
@@ -8,9 +8,11 @@ import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import { emailSchema } from "@/zod-validations/auth-validations";
-import { maskEmail } from "@/helpers/common";
+import { cn, maskEmail } from "@/helpers/common";
 import ResendButton from "@/components/@new/shared/ResendButton";
 import TextField from "@/components/@new/shared/forms/text-field";
+import ForgotPasswordButton from "@/app/(main)/user/forgot-password/forgot-password-button";
+import ForgotPasswordModal from "@/app/(main)/user/forgot-password/forgot-password-modal";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });
@@ -47,7 +49,11 @@ const generateModalMeta = (step: UpdateEmailSteps, user: IUser, newEmail: string
   }
 };
 
-const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "user">> = ({ handleClose, user }) => {
+const UpdateEmailModalContent: FC<
+  Pick<UpdateEmailModalProps, "handleClose" | "user"> & {
+    openForgotPasswordModal: () => void;
+  }
+> = ({ handleClose, user, openForgotPasswordModal }) => {
   const [step, setStep] = useState<UpdateEmailSteps>(UpdateEmailSteps.PASSWORD);
   const [pending, setPending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -120,9 +126,13 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
               value={values.password}
               onChange={(password) => setValues({ ...values, password })}
             />
-            <button type="button" className="font-medium text-xs text-primary-main">
+            <Button
+              onClick={openForgotPasswordModal}
+              variant="secondary"
+              className="!outline-none !text-xs !font-medium !text-primary-main !p-0"
+            >
               Forgot Password?
-            </button>
+            </Button>
           </div>
         )}
         {step === UpdateEmailSteps.NEW_EMAIL && (
@@ -163,14 +173,38 @@ const UpdateEmailModalContent: FC<Pick<UpdateEmailModalProps, "handleClose" | "u
   );
 };
 
-const UpdateEmailModal: FC<UpdateEmailModalProps> = ({ open, handleClose, user }) => (
-  <ResponsiveModal
-    content={open && <UpdateEmailModalContent handleClose={handleClose} user={user} />}
-    responsiveContent={open && <UpdateEmailModalContent handleClose={handleClose} user={user} />}
-    open={open}
-    handleClose={handleClose}
-    desktopModalContentClasses="max-w-lg w-full"
-  />
-);
+const UpdateEmailModal: FC<UpdateEmailModalProps> = ({ open, handleClose, user }) => {
+  const [isForgotPasswordModalOpen, setForgotPasswordModalOpen] = useState(false);
+  return (
+    <>
+      <ForgotPasswordModal open={isForgotPasswordModalOpen} closeModal={() => setForgotPasswordModalOpen(false)} user={user} />
+      {!isForgotPasswordModalOpen && (
+        <ResponsiveModal
+          content={
+            open && (
+              <UpdateEmailModalContent
+                openForgotPasswordModal={() => setForgotPasswordModalOpen(true)}
+                handleClose={handleClose}
+                user={user}
+              />
+            )
+          }
+          responsiveContent={
+            open && (
+              <UpdateEmailModalContent
+                openForgotPasswordModal={() => setForgotPasswordModalOpen(true)}
+                handleClose={handleClose}
+                user={user}
+              />
+            )
+          }
+          open={open}
+          handleClose={handleClose}
+          desktopModalContentClasses="max-w-lg w-full"
+        />
+      )}
+    </>
+  );
+};
 
 export default UpdateEmailModal;

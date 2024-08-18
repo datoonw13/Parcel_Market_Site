@@ -1,12 +1,13 @@
 "use client";
 
 import Button from "@/components/@new/shared/forms/Button";
-import { useState } from "react";
-import { IDecodedAccessToken } from "@/types/auth";
+import { useEffect, useState } from "react";
+import { IDecodedAccessToken, IUser } from "@/types/auth";
 import ForgotPasswordModal from "./forgot-password-modal";
 
-const ForgotPasswordButton = ({ user }: { user: IDecodedAccessToken | null }) => {
-  const [openModal, setOpenModal] = useState(true);
+const ForgotPasswordButton = ({ user }: { user: IDecodedAccessToken | IUser | null }) => {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <>
       <ForgotPasswordModal open={openModal} closeModal={() => setOpenModal(false)} user={user} />
