@@ -17,11 +17,11 @@ const CalculationDetails = () => {
   const minPricePerAcre = valueLandData.calculatedPrice.range.min;
   const maxPricePerAcre = valueLandData.calculatedPrice.range.max;
   const data = valueLandData.calculatedPrice.properties.map((el) => ({
-    value: el.price / el.arcage,
+    value: el.price / Number(el.arcage),
     stringifiedCoordinates: JSON.stringify([Number(el.latitude), Number(el.longitude)]),
   }));
   const averagePrice = (
-    valueLandData.calculatedPrice.properties.reduce((acc, cur) => acc + cur.price / cur.arcage, 0) /
+    valueLandData.calculatedPrice.properties.reduce((acc, cur) => acc + cur.price / Number(cur.arcage), 0) /
     valueLandData.calculatedPrice.properties.length
   ).toFixed(2);
 

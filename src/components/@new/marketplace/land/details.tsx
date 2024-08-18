@@ -1,11 +1,11 @@
-import { ISellingProperty } from "@/types/find-property";
 import { numFormatter } from "@/helpers/common";
 import { getUserAction } from "@/server-actions/user/actions";
+import { SellingPropertyDetails } from "@/types/property";
 import LandFollowButton from "../../lands/land-follow-button";
 import Button from "../../shared/forms/Button";
 import MakeOfferButton from "./make-offer-button";
 
-const LandDetails = async ({ data }: { data: ISellingProperty }) => {
+const LandDetails = async ({ data }: { data: SellingPropertyDetails }) => {
   const user = await getUserAction();
 
   const getSaleRangePerAcre = () => {

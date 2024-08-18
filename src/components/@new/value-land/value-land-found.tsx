@@ -14,12 +14,12 @@ import { Marker } from "leaflet";
 import { ISignInResponse } from "@/types/auth";
 import { Nullable } from "@/types/common";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { PropertyPriceCalculationReq } from "@/types/property";
 import Button from "../shared/forms/Button";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 import CalculationTermsModal from "./calculation-terms/terms-modal";
 import CalculationTerms from "./calculation-terms/terms";
-import { PropertyPriceCalculationReq } from "@/types/property";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 

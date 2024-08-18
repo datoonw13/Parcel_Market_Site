@@ -14,13 +14,13 @@ import { valueLandAtom } from "@/atoms/value-land-atom";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import { saveSearchDataAction } from "@/server-actions/value-land/actions";
+import type { AboutProperty } from "@/types/property";
 import TextArea from "../../shared/forms/text-area/text-area";
 import TextField from "../../shared/forms/text-field";
 import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
 import ValueLandSubmitTermsModal from "../terms/terms-modal";
-import type { AboutProperty } from "@/types/property";
 
 const AboutLandForm = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();

@@ -2,7 +2,7 @@
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { numFormatter } from "@/helpers/common";
-import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
+import { IDecodedAccessToken } from "@/types/auth";
 import { useAtom } from "jotai";
 import { LatLngTuple, Marker } from "leaflet";
 import dynamic from "next/dynamic";
@@ -121,7 +121,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
                     },
                     acreage: {
                       label: "Acreage",
-                      value: el.arcage.toFixed(2),
+                      value: Number(el.arcage).toFixed(2),
                     },
                     lastSaleDate: {
                       label: "Last Sale Date",
@@ -129,7 +129,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
                     },
                     lastSalePrice: {
                       label: "Last Sale Price",
-                      value: numFormatter.format(el.lastSalesPrice),
+                      value: numFormatter.format(Number(el.lastSalesPrice)),
                     },
                     showSelectButton: false,
                   },

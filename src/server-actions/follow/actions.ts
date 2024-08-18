@@ -3,17 +3,17 @@
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { ISellingProperty } from "@/types/find-property";
 import routes from "@/helpers/routes";
+import { SellingPropertyDetails } from "@/types/property";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "../marketplace/tags";
 import { followTag } from "./tags";
 
 export const getUserFollowedListingAction = async (params: {
   [key: string]: string;
-}): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
+}): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
   try {
-    const request = await fetcher<{ data: ({ sellingProperty: ISellingProperty } & { followedListingId?: number })[] } & IPagination>(
+    const request = await fetcher<{ data: ({ sellingProperty: SellingPropertyDetails } & { followedListingId?: number })[] } & IPagination>(
       `followed-listings?${new URLSearchParams({ ...params, pageSize: "6" })}`,
       { next: { tags: [followTag] } }
     );

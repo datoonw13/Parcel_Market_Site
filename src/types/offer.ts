@@ -2,7 +2,7 @@ import { z } from "zod";
 import { offerValidation } from "@/zod-validations/offer-validations";
 import { IUser } from "./auth";
 import { SortEnum } from "./common";
-import { ISellingProperty } from "./find-property";
+import { SellingPropertyDetails } from "./property";
 
 export enum OfferStatusEnum {
   pending = "Pending",
@@ -70,7 +70,7 @@ export interface OfferModel {
   otherTerms: null;
   createdAt: Date;
   activeUntil: string;
-  sellingProperty: ISellingProperty;
+  sellingProperty: SellingPropertyDetails;
   offerGivenBy: { id: number; firstName: string; lastName: string };
   offerGivenTo: { id: number; firstName: string; lastName: string };
 }

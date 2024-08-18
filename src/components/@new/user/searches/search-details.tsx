@@ -75,6 +75,7 @@ const SearchDetails = async ({ data }: { data: IUserSearches }) => {
           longitude: Number(data.lon || 1),
           owner: data.owner,
           parcelNumber: data.parcelNumber,
+          salePrice: Number(data.price),
         }}
         isUserSubscriptionTrial={isUserSubscriptionTrial}
       />

@@ -1,14 +1,14 @@
 import { IPagination, ResponseModel } from "@/types/common";
-import { ISellingProperty } from "@/types/find-property";
 import { ErrorResponse } from "@/helpers/error-response";
+import { SellingPropertyDetails } from "@/types/property";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "./tags";
 
 export const getMarketplaceListAction = async (params?: {
   [key: string]: string;
-}): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
+}): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
   try {
-    const request = await fetcher<{ sellingProperties: ISellingProperty[] } & IPagination>(
+    const request = await fetcher<{ sellingProperties: SellingPropertyDetails[] } & IPagination>(
       `selling-properties/?${new URLSearchParams({ ...params, pageSize: "6", sellerType: "sale" })}`,
       {
         next: { tags: [marketplaceTag] },
@@ -27,9 +27,9 @@ export const getMarketplaceListAction = async (params?: {
   }
 };
 
-export const getLendDetailsAction = async (landId: string): Promise<ResponseModel<ISellingProperty | null>> => {
+export const getLendDetailsAction = async (landId: string): Promise<ResponseModel<SellingPropertyDetails | null>> => {
   try {
-    const request = await fetcher<ISellingProperty>(`selling-properties/${landId}`, {
+    const request = await fetcher<SellingPropertyDetails>(`selling-properties/${landId}`, {
       next: { tags: [marketplaceTag] },
     });
 

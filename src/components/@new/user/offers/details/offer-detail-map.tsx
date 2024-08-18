@@ -1,13 +1,13 @@
 "use client";
 
 import { FC } from "react";
-import { ISellingProperty } from "@/types/find-property";
 import dynamic from "next/dynamic";
+import { SellingPropertyDetails } from "@/types/property";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 interface OfferDetailMapProps {
-  data: ISellingProperty;
+  data: SellingPropertyDetails;
 }
 const OfferDetailMap: FC<OfferDetailMapProps> = ({ data }) => {
   const mapOptions = {

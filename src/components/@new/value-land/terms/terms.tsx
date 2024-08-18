@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import { sellLendAction } from "@/server-actions/value-land/actions";
-import { ISellProperty } from "@/types/find-property";
+import { PropertySellReq } from "@/types/property";
 import DialogActions from "../../shared/modals/dialog/dialog-actions";
 import CheckBox from "../../shared/forms/CheckBox";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
@@ -27,7 +27,7 @@ const ValueLendTerms = ({ closeRootModal }: { closeRootModal: () => void }) => {
     if (!valueLandData.selectedLand || !valueLandData.calculatedPrice || !valueLandData.aboutLand || !valueLandData.sellerType) {
       return;
     }
-    const reqData: ISellProperty = {
+    const reqData: PropertySellReq = {
       ...valueLandData.aboutLand,
       accepted: true,
       propertyType:

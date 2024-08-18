@@ -6,7 +6,7 @@ import routes from "@/helpers/routes";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import CheckboxIcon from "@/icons/CheckboxIcon";
 import { sellLendAction } from "@/server-actions/value-land/actions";
-import { ISellProperty } from "@/types/find-property";
+import { PropertySellReq } from "@/types/property";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Checkbox, Divider, FormControlLabel, Typography } from "@mui/material";
 import { useAtom } from "jotai";
@@ -19,7 +19,7 @@ const ValueLandSignature = () => {
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const [accepted, setAccepted] = useState<boolean>(false);
   const [pending, setPending] = useState(false);
-  const [values, setValues] = useState<ISellProperty | null>(null);
+  const [values, setValues] = useState<PropertySellReq | null>(null);
 
   const handleSubmit = async () => {
     if (accepted && values) {

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { LatLngTuple } from "leaflet";
-import { ISellProperty } from "./find-property";
+import { PropertySellReq } from "./property";
 
 export enum SortBy {
   Oldest = "oldest",
@@ -20,7 +20,7 @@ export interface IMarketplaceFilters {
   priceMax: number | null;
   page: number;
   pageSize: number;
-  sellerType: ISellProperty["sellerType"];
+  sellerType: PropertySellReq["sellerType"];
   sortBy: SortBy | null;
 }
 

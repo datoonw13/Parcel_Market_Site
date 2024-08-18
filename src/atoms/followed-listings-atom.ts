@@ -1,9 +1,9 @@
-import { ISellingProperty } from "@/types/find-property";
+import { SellingPropertyDetails } from "@/types/property";
 import { atom } from "jotai";
 
 export const followedListingsAtom = atom<{
   key: string | null;
-  data: ISellingProperty[] | null;
+  data: SellingPropertyDetails[] | null;
 }>({
   key: null,
   data: null,

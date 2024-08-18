@@ -5,9 +5,8 @@ import { ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
 import { valueLandDetailsValidations } from "@/zod-validations/value-land-validations";
-import { ISellProperty } from "@/types/find-property";
 import { revalidateTag } from "next/cache";
-import { PropertyPriceCalculationReq, PropertyPriceCalculationRes } from "@/types/property";
+import { PropertyPriceCalculationReq, PropertyPriceCalculationRes, PropertySellReq } from "@/types/property";
 import { fetcher } from "../fetcher";
 import { userListingsTag } from "../user-listings/tags";
 import { marketplaceTag } from "../marketplace/tags";
@@ -75,9 +74,9 @@ export const calculateLandPriceAction = async (
   }
 };
 
-export const sellLendAction = async (payload: ISellProperty): Promise<ResponseModel<number | null>> => {
+export const sellLendAction = async (payload: PropertySellReq): Promise<ResponseModel<number | null>> => {
   try {
-    const request = await fetcher<ISellProperty & { id: number }>(`selling-properties`, {
+    const request = await fetcher<PropertySellReq & { id: number }>(`selling-properties`, {
       method: "POST",
       body: JSON.stringify({ ...payload, acrage: Number(payload.acrage) }),
       cache: "no-store",
@@ -100,7 +99,7 @@ export const sellLendAction = async (payload: ISellProperty): Promise<ResponseMo
 
 export const saveSearchDataAction = async (id: number): Promise<ResponseModel<null>> => {
   try {
-    await fetcher<ISellProperty & { id: number }>(`properties/saveData`, {
+    await fetcher<PropertySellReq & { id: number }>(`properties/saveData`, {
       method: "POST",
       body: JSON.stringify({ id }),
     });

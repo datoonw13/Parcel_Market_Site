@@ -4,7 +4,6 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import { ISellingProperty } from "@/types/find-property";
 import moment from "moment";
 import { orderBy } from "lodash";
 import Image from "next/image";
@@ -15,6 +14,7 @@ import { numFormatter } from "@/helpers/common";
 import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
+import { SellingPropertyDetails, UsedForPriceCalculationItem } from "@/types/property";
 import { ArrowIconsUnion1 } from "../icons/ArrowIcons";
 import Button from "../shared/forms/Button";
 import { ExportIcon1, ExportMapIcon1 } from "../icons/ExportIcons";
@@ -38,7 +38,14 @@ const LandPriceCalculationTable = ({
   hoveredItem,
   isUserSubscriptionTrial,
 }: {
-  data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
+  data: NonNullable<
+    Array<
+      Pick<
+        UsedForPriceCalculationItem,
+        "arcage" | "county" | "latitude" | "longitude" | "parcelNumber" | "lastSalesDate" | "lastSalesPrice"
+      >
+    >
+  >;
   onSelect: (value: LatLngTuple) => void;
   onMouseEnter: (value: LatLngTuple) => void;
   onMouseLeave: (value: LatLngTuple) => void;

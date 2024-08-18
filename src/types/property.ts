@@ -50,10 +50,10 @@ export interface UsedForPriceCalculationItem {
   owner: string | null;
   parselId: string;
   propertyType: string;
-  arcage: number;
+  arcage: string;
   price: number;
   isValid: boolean;
-  lastSalesPrice: number;
+  lastSalesPrice: string;
   lastSalesDate: string;
   address: string;
   isMedianValid: boolean;
@@ -62,4 +62,36 @@ export interface UsedForPriceCalculationItem {
   id?: number;
   state?: string;
   county?: string;
+  parcelNumber: string;
+}
+
+export interface PropertySellReq extends AboutProperty {
+  sellerType: "instantsale" | "sale";
+  state: string;
+  county: string;
+  propertyType: string;
+  acrage: number;
+  parcelNumber: string;
+  owner: string;
+  salePrice: number;
+  accepted: boolean;
+  coordinates: string;
+  lat: string;
+  lon: string;
+  propertyId: number;
+  city: string;
+}
+
+export interface SellingPropertyDetails extends PropertySellReq, Omit<AboutProperty, "agreement"> {
+  user: { id: string; name: string; email: string };
+  dataCreated: Date;
+  marketPrice: string;
+  id: number;
+  usedForPriceCalculations?: Array<UsedForPriceCalculationItem>;
+  totalViews: number;
+  availableTill: string;
+  user_id?: number;
+  followedListingId?: number;
+  offerId?: string;
+  city: string;
 }

@@ -1,4 +1,4 @@
-import { ISellingProperty } from "@/types/find-property";
+import { SellingPropertyDetails } from "@/types/property";
 import TableWithMap from "../../table-with-map/table-with-map";
 
 const RecentSalesList = ({
@@ -6,7 +6,7 @@ const RecentSalesList = ({
   isUserSubscriptionTrial,
   mainLandData,
 }: {
-  data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
+  data: NonNullable<SellingPropertyDetails["usedForPriceCalculations"]>;
   isUserSubscriptionTrial: boolean;
   mainLandData: {
     latitude: number;

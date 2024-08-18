@@ -1,6 +1,5 @@
-import { ISellProperty } from "@/types/find-property";
 import { IMap } from "@/types/map";
-import { PropertyPriceCalculationRes } from "@/types/property";
+import { PropertyPriceCalculationRes, PropertySellReq } from "@/types/property";
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { atom } from "jotai";
 import { z } from "zod";
@@ -10,7 +9,7 @@ export const valueLandAtom = atom<{
   selectedLand: null | IMap[0];
   calculatedPrice: PropertyPriceCalculationRes | null;
   sellOptions: any | null;
-  sellerType: ISellProperty["sellerType"] | null;
+  sellerType: PropertySellReq["sellerType"] | null;
   aboutLand: z.infer<typeof aboutLandSchema> | null;
   mapInteraction: {
     hoveredLand: string | null;

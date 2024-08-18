@@ -1,12 +1,12 @@
 "use client";
 
 import { IPagination } from "@/types/common";
-import { ISellingProperty } from "@/types/find-property";
 import React, { FC, useEffect } from "react";
 import { getAllStates } from "@/helpers/states";
 import { numFormatter } from "@/helpers/common";
 import { useAtom } from "jotai";
 import { followedListingsAtom } from "@/atoms/followed-listings-atom";
+import { SellingPropertyDetails } from "@/types/property";
 import DataNotFound from "../../shared/DataNotFound";
 import UserListingHeader from "../listings/user-listing-header";
 import UserListingItem from "../listings/user-listing-item";
@@ -19,7 +19,7 @@ import UserListingPagination from "../listings/user-listing-pagination";
 interface FollowedListingsWrapperProps {
   data:
     | ({
-        list: ISellingProperty[];
+        list: SellingPropertyDetails[];
       } & IPagination)
     | null;
   searchParams: { [key: string]: string };

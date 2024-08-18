@@ -1,43 +1,22 @@
-import type { AboutProperty } from "./property";
+import type { AboutProperty, PropertySellReq } from "./property";
 
-export interface ISellProperty extends AboutProperty {
-  sellerType: "instantsale" | "sale";
-  state: string;
-  county: string;
-  propertyType: string;
-  acrage: number;
-  parcelNumber: string;
-  owner: string;
-  salePrice: number;
-  accepted: boolean;
-  coordinates: string;
-  lat: string;
-  lon: string;
-  propertyId: number;
-  city: string;
-}
+// export interface ISellProperty extends AboutProperty {
+//   sellerType: "instantsale" | "sale";
+//   state: string;
+//   county: string;
+//   propertyType: string;
+//   acrage: number;
+//   parcelNumber: string;
+//   owner: string;
+//   salePrice: number;
+//   accepted: boolean;
+//   coordinates: string;
+//   lat: string;
+//   lon: string;
+//   propertyId: number;
+//   city: string;
+// }
 
-export interface ISellingProperty extends ISellProperty, Omit<AboutProperty, "agreement"> {
-  user: { id: string; name: string; email: string };
-  dataCreated: Date;
-  marketPrice: string;
-  id: number;
-  usedForPriceCalculations?: Array<{
-    latitude: string;
-    longitude: string;
-    lastSalesDate?: string;
-    lastSalesPrice?: string;
-    arcage: string;
-    county: string;
-    parcelNumber: string;
-  }>;
-  totalViews: number;
-  availableTill: string;
-  user_id?: number;
-  followedListingId?: number;
-  offerId?: string;
-  city: string;
-}
 export interface IUserSearches {
   id: number;
   owner: string;

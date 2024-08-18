@@ -1,15 +1,22 @@
 "use client";
 
 import { numFormatter } from "@/helpers/common";
-import { ISellingProperty } from "@/types/find-property";
-import { LatLngTuple, Map as LeafletMap, Marker } from "leaflet";
+import { SellingPropertyDetails, UsedForPriceCalculationItem } from "@/types/property";
+import { LatLngTuple, Marker } from "leaflet";
 import dynamic from "next/dynamic";
 import { FC } from "react";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 interface CalculationMapProps {
-  data: Array<NonNullable<ISellingProperty["usedForPriceCalculations"]>[0] & { active: boolean }>;
+  data: Array<
+    NonNullable<
+      Pick<
+        UsedForPriceCalculationItem,
+        "arcage" | "county" | "latitude" | "longitude" | "parcelNumber" | "lastSalesDate" | "lastSalesPrice"
+      >
+    > & { active: boolean }
+  >;
   setMarkerRef: (key: string, ref: Marker) => void;
   markerMouseEnter: (value: LatLngTuple) => void;
   markerMouseLeave: (value: LatLngTuple) => void;

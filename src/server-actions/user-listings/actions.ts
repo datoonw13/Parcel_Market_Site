@@ -2,18 +2,18 @@
 
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
-import { ISellingProperty } from "@/types/find-property";
 import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { SellingPropertyDetails } from "@/types/property";
 import { userListingsTag } from "./tags";
 import { fetcher } from "../fetcher";
 
 export const getUserListingAction = async (params: {
   [key: string]: string;
-}): Promise<ResponseModel<({ list: ISellingProperty[] } & IPagination) | null>> => {
+}): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
   try {
-    const request = await fetcher<{ data: ISellingProperty[] } & IPagination>(
+    const request = await fetcher<{ data: SellingPropertyDetails[] } & IPagination>(
       `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize: "4" })}`,
       {
         next: { tags: [userListingsTag] },
@@ -34,7 +34,7 @@ export const getUserListingAction = async (params: {
 
 export const removeUserListingItemsAction = async (ids: number[]): Promise<ResponseModel<null>> => {
   try {
-    await fetcher<{ data: ISellingProperty[] } & IPagination>(`selling-properties/user/properties`, {
+    await fetcher<{ data: SellingPropertyDetails[] } & IPagination>(`selling-properties/user/properties`, {
       method: "DELETE",
       body: JSON.stringify({ ids }),
     });

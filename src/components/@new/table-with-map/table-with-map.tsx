@@ -1,8 +1,8 @@
 "use client";
 
-import { ISellingProperty } from "@/types/find-property";
 import { useRef, useState } from "react";
 import { Map, Marker } from "leaflet";
+import { UsedForPriceCalculationItem } from "@/types/property";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
@@ -11,7 +11,14 @@ const TableWithMap = ({
   isUserSubscriptionTrial,
   mainLandData,
 }: {
-  data: NonNullable<ISellingProperty["usedForPriceCalculations"]>;
+  data: NonNullable<
+    Array<
+      Pick<
+        UsedForPriceCalculationItem,
+        "arcage" | "county" | "latitude" | "longitude" | "parcelNumber" | "lastSalesDate" | "lastSalesPrice"
+      >
+    >
+  >;
   isUserSubscriptionTrial: boolean;
   mainLandData?: {
     coordinates: string;

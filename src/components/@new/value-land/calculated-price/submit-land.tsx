@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useAtom, useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import { ISellProperty } from "@/types/find-property";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
+import { PropertySellReq } from "@/types/property";
 import Button from "../../shared/forms/Button";
 
 const SubmitLand = () => {
@@ -13,7 +13,7 @@ const SubmitLand = () => {
 
   const setValueLandData = useSetAtom(valueLandAtom);
 
-  const handleNext = (sellerType: ISellProperty["sellerType"]) => {
+  const handleNext = (sellerType: PropertySellReq["sellerType"]) => {
     setValueLandData((prev) => ({ ...prev, sellerType }));
     router.push(routes.valueLand.about.fullUrl);
   };
