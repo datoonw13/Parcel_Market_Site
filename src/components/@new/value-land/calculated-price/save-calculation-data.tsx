@@ -36,7 +36,7 @@ const SaveCalculationData = ({ user }: { user: IDecodedAccessToken | null }) => 
     } else {
       setOpenWarningModal(true);
     }
-  }, [router, setValueLand, user]);
+  }, [router, setValueLand, user, valueLand.calculatedPrice]);
 
   useEffect(() => {
     if (params.get("from") && !saved.current) {
