@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "react-toastify";
-import ToastNotification from "@/components/shared/toast-notification";
+import ToastNotification from "@/components/@new/shared/toast-notification";
 
 const useNotification = () => {
   const notify = (

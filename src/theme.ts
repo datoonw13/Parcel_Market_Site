@@ -1,10 +1,8 @@
 "use client";
 
 import { Inter } from "next/font/google";
-import { Shadows, createTheme } from "@mui/material/styles";
-import { green } from "@mui/material/colors";
-import { BorderColor, Opacity } from "@mui/icons-material";
-import { colors } from "../tailwind.config";
+import { createTheme } from "@mui/material/styles";
+
 
 declare module "@mui/material/styles" {
   interface Palette {
