@@ -63,124 +63,126 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       </div>
       {/* <GoogleButton className="!w-fit px-14" onClick={() => {}} /> */}
       <Divider label="OR" className="my-1.5" />
-      <div className="w-full flex flex-col sm:grid sm:grid-cols-2 gap-4">
-        <TextField
-          onChange={(value) => {
-            if (/^[a-zA-Z]+$/.test(value) || value === "") {
-              setValue("firstName", value, { shouldValidate: isSubmitted });
-            }
-          }}
-          required
-          className="w-full"
-          label="First Name"
-          value={watch("firstName")}
-          error={!!errors.firstName}
-        />
-        <TextField
-          onChange={(value) => {
-            if (/^[a-zA-Z]+$/.test(value) || value === "") {
-              setValue("lastName", value, { shouldValidate: isSubmitted });
-            }
-          }}
-          required
-          className="w-full"
-          label="Last Name"
-          value={watch("lastName")}
-          error={!!errors.lastName}
-        />
-        <TextField
-          onChange={(value) => setValue("email", value, { shouldValidate: isSubmitted })}
-          required
-          className="w-full"
-          label="Email Address"
-          value={watch("email")}
-          error={!!errors.email}
-        />
-        <TextField
-          onChange={(value) => setValue("streetName", value, { shouldValidate: isSubmitted })}
-          required
-          className="w-full"
-          label="Street Address"
-          value={watch("streetName")}
-          error={!!errors.streetName}
-        />
-        <TextField
-          onChange={(value) => setValue("unitNumber", value, { shouldValidate: isSubmitted })}
-          className="w-full"
-          label="Unit Number"
-          value={watch("unitNumber")}
-          error={!!errors.unitNumber}
-        />
-        <AutoComplete
-          options={getAllStates()}
-          getOptionLabel={(item) => item.label}
-          getOptionKey={(item) => item.value}
-          onChange={(item) => {
-            setValue("state", item?.value ?? "", { shouldValidate: isSubmitted });
-          }}
-          placeholder="State"
-          value={getAllStates().find((el) => el.value === watch("state")) || null}
-          onFilter={(searchValue, items) =>
-            items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-          }
-          required
-          getSelectedOption={(item) => item.value === watch("state")}
-          error={!!errors.state}
-        />
-        <TextField
-          required
-          className="w-full"
-          label="City"
-          onChange={(value) => {
-            if (/^[a-zA-Z]+$/.test(value) || value === "") {
-              setValue("city", value, { shouldValidate: isSubmitted });
-            }
-          }}
-          value={watch("city")}
-          error={!!errors.city}
-        />
-        <TextField
-          required
-          className="w-full"
-          label="Postal Code"
-          onChange={(value) => setValue("postalCode", value, { shouldValidate: isSubmitted })}
-          value={watch("postalCode")}
-          type="number"
-          error={!!errors.postalCode}
-          disableThousandsSeparator
-          decimalScale={0}
-        />
-        <div className="space-y-1">
+      <div className="w-full flex flex-col gap-4">
+        <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
+            onChange={(value) => {
+              if (/^[a-zA-Z]+$/.test(value) || value === "") {
+                setValue("firstName", value, { shouldValidate: isSubmitted });
+              }
+            }}
+            required
             className="w-full"
-            label="Password"
-            value={watch("password")}
-            onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
-            type={visiblePassword ? "text" : "password"}
-            endIcon={
-              <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
-                {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
-              </div>
-            }
-            error={!!errors.password}
+            label="First Name"
+            value={watch("firstName")}
+            error={!!errors.firstName}
           />
-          {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
-        </div>
-        <div className="space-y-1">
           <TextField
-            value={watch("repeatPassword")}
-            onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
+            onChange={(value) => {
+              if (/^[a-zA-Z]+$/.test(value) || value === "") {
+                setValue("lastName", value, { shouldValidate: isSubmitted });
+              }
+            }}
+            required
             className="w-full"
-            label="Retype Password"
-            type={visibleRepeatPassword ? "text" : "password"}
-            endIcon={
-              <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
-                {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
-              </div>
-            }
-            error={!!errors.repeatPassword}
+            label="Last Name"
+            value={watch("lastName")}
+            error={!!errors.lastName}
           />
-          {errors.repeatPassword && <p className="text-xss text-error font-medium">{errors.repeatPassword.message}</p>}
+          <TextField
+            onChange={(value) => setValue("email", value, { shouldValidate: isSubmitted })}
+            required
+            className="w-full"
+            label="Email Address"
+            value={watch("email")}
+            error={!!errors.email}
+          />
+          <TextField
+            onChange={(value) => setValue("streetName", value, { shouldValidate: isSubmitted })}
+            required
+            className="w-full"
+            label="Street Address"
+            value={watch("streetName")}
+            error={!!errors.streetName}
+          />
+          <TextField
+            onChange={(value) => setValue("unitNumber", value, { shouldValidate: isSubmitted })}
+            className="w-full"
+            label="Unit Number"
+            value={watch("unitNumber")}
+            error={!!errors.unitNumber}
+          />
+          <AutoComplete
+            options={getAllStates()}
+            getOptionLabel={(item) => item.label}
+            getOptionKey={(item) => item.value}
+            onChange={(item) => {
+              setValue("state", item?.value ?? "", { shouldValidate: isSubmitted });
+            }}
+            placeholder="State"
+            value={getAllStates().find((el) => el.value === watch("state")) || null}
+            onFilter={(searchValue, items) =>
+              items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+            }
+            required
+            getSelectedOption={(item) => item.value === watch("state")}
+            error={!!errors.state}
+          />
+          <TextField
+            required
+            className="w-full row-start-6 sm:row-start-auto"
+            label="City"
+            onChange={(value) => {
+              if (/^[a-zA-Z]+$/.test(value) || value === "") {
+                setValue("city", value, { shouldValidate: isSubmitted });
+              }
+            }}
+            value={watch("city")}
+            error={!!errors.city}
+          />
+          <TextField
+            required
+            className="w-full"
+            label="Postal Code"
+            onChange={(value) => setValue("postalCode", value, { shouldValidate: isSubmitted })}
+            value={watch("postalCode")}
+            type="number"
+            error={!!errors.postalCode}
+            disableThousandsSeparator
+            decimalScale={0}
+          />
+          <div className="space-y-1">
+            <TextField
+              className="w-full"
+              label="Password"
+              value={watch("password")}
+              onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
+              type={visiblePassword ? "text" : "password"}
+              endIcon={
+                <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
+                  {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                </div>
+              }
+              error={!!errors.password}
+            />
+            {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
+          </div>
+          <div className="space-y-1">
+            <TextField
+              value={watch("repeatPassword")}
+              onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
+              className="w-full"
+              label="Retype Password"
+              type={visibleRepeatPassword ? "text" : "password"}
+              endIcon={
+                <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
+                  {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                </div>
+              }
+              error={!!errors.repeatPassword}
+            />
+            {errors.repeatPassword && <p className="text-xss text-error font-medium">{errors.repeatPassword.message}</p>}
+          </div>
         </div>
         <CheckBox
           onChange={() => setValue("sendEmailTips", !watch("sendEmailTips"))}
