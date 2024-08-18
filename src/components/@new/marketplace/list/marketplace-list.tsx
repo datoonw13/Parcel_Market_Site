@@ -15,7 +15,7 @@ const MarketplaceList = async ({ params }: { params: { [key: string]: string } }
   const user = await getUserAction();
 
   return (
-    <div className="space-y-10 md:space-y-12 mb-32">
+    <div className="space-y-10 md:space-y-12">
       {data && data?.pagination?.totalCount > 0 ? (
         <>
           <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">

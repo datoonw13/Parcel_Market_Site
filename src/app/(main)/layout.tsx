@@ -11,9 +11,7 @@ const MainLayout = ({ children }: { children: ReactElement }) => (
       <AppBar />
       {children}
       <SubscribeNow />
-      <div className="bg-white py-20 md:py-20.5">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   </>
 );

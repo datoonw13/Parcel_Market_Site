@@ -4,6 +4,11 @@ const routes = {
     protected: false,
     fullUrl: "/home",
   },
+  aboutUs: {
+    url: "about-us",
+    protected: false,
+    fullUrl: "/about-us",
+  },
   marketplace: {
     url: "marketplace",
     fullUrl: "/marketplace",
