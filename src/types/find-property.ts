@@ -1,70 +1,6 @@
-import { z } from "zod";
-import { aboutLandSchema } from "@/zod-validations/value-land-validations";
+import type { AboutProperty } from "./property";
 
-export type IFindPropertyAbout = z.infer<typeof aboutLandSchema>;
-export interface IFindPropertyEstimatedPrice {
-  body: {
-    owner?: string;
-    parcelNumber: string;
-    propertyType: string;
-    state: string;
-    county: string;
-    coordinates: string;
-  };
-  queryParams: {
-    lat: string;
-    lon: string;
-    acre: string;
-  };
-}
-
-export interface IFindPropertyEstimatedPriceResponse {
-  state: string;
-  county: string;
-  parcelNumber: string;
-  waterFeature: boolean;
-  waterFront: boolean;
-  langCoverType: string;
-  propertyCondition: string;
-  wetProperty: string;
-  propertyRestriction: string;
-  propertyAccess: string;
-  improvementsValue: number;
-  price: number;
-  name_owner: string;
-  user_id: string | null;
-  legalDescription: string | null;
-  apiOwnerName: string | null;
-  lotSize: string | null;
-  salePrice: string | null;
-  saleYear: string | null;
-  id: number;
-  dateCreated: Date;
-  range: {
-    min: number;
-    max: number;
-  };
-  properties: {
-    owner: string | null;
-    parselId: string;
-    propertyType: string;
-    arcage: number;
-    price: number;
-    isValid: boolean;
-    lastSalesPrice: number;
-    lastSalesDate: string;
-    address: string;
-    isMedianValid: boolean;
-    latitude: string;
-    longitude: string;
-    property_id: number;
-    id: number;
-    dateCreated: Date;
-  }[];
-  median_middle_price: number;
-}
-
-export interface ISellProperty extends IFindPropertyAbout {
+export interface ISellProperty extends AboutProperty {
   sellerType: "instantsale" | "sale";
   state: string;
   county: string;
@@ -81,7 +17,7 @@ export interface ISellProperty extends IFindPropertyAbout {
   city: string;
 }
 
-export interface ISellingProperty extends ISellProperty, Omit<IFindPropertyAbout, "agreement"> {
+export interface ISellingProperty extends ISellProperty, Omit<AboutProperty, "agreement"> {
   user: { id: string; name: string; email: string };
   dataCreated: Date;
   marketPrice: string;

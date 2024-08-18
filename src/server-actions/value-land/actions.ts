@@ -5,8 +5,9 @@ import { ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
 import { valueLandDetailsValidations } from "@/zod-validations/value-land-validations";
-import { IFindPropertyEstimatedPrice, IFindPropertyEstimatedPriceResponse, ISellProperty } from "@/types/find-property";
+import { ISellProperty } from "@/types/find-property";
 import { revalidateTag } from "next/cache";
+import { PropertyPriceCalculationReq, PropertyPriceCalculationRes } from "@/types/property";
 import { fetcher } from "../fetcher";
 import { userListingsTag } from "../user-listings/tags";
 import { marketplaceTag } from "../marketplace/tags";
@@ -50,19 +51,16 @@ export const getFoundedPropertiesAction = async (
 };
 
 export const calculateLandPriceAction = async (
-  payload: IFindPropertyEstimatedPrice
-): Promise<ResponseModel<IFindPropertyEstimatedPriceResponse | null>> => {
+  payload: PropertyPriceCalculationReq
+): Promise<ResponseModel<PropertyPriceCalculationRes | null>> => {
   try {
-    const request = await fetcher<IFindPropertyEstimatedPriceResponse>(
-      `properties/calculate/price?${new URLSearchParams(payload.queryParams)}`,
-      {
-        method: "POST",
-        body: JSON.stringify(payload.body),
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
+    const request = await fetcher<PropertyPriceCalculationRes>(`properties/calculate/price?${new URLSearchParams(payload.queryParams)}`, {
+      method: "POST",
+      body: JSON.stringify(payload.body),
+      next: {
+        revalidate: 3600,
+      },
+    });
     revalidateTag(userSearchesTag);
     return {
       data: request,

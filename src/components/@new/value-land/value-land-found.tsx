@@ -9,7 +9,6 @@ import dynamic from "next/dynamic";
 import clsx from "clsx";
 import { calculateLandPriceAction } from "@/server-actions/value-land/actions";
 import toast from "react-hot-toast";
-import { IFindPropertyEstimatedPrice } from "@/types/find-property";
 import classes from "@/app/value-land/(main)/styles.module.css";
 import { Marker } from "leaflet";
 import { ISignInResponse } from "@/types/auth";
@@ -20,6 +19,7 @@ import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 import CalculationTermsModal from "./calculation-terms/terms-modal";
 import CalculationTerms from "./calculation-terms/terms";
+import { PropertyPriceCalculationReq } from "@/types/property";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -36,7 +36,7 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
     if (!valueLand.selectedLand) {
       return;
     }
-    const reqData: IFindPropertyEstimatedPrice = {
+    const reqData: PropertyPriceCalculationReq = {
       body: {
         county: valueLand.selectedLand?.properties.fields.county.toLocaleLowerCase(),
         state: valueLand.selectedLand?.properties.fields.state2.toLocaleLowerCase(),

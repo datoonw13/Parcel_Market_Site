@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IFindPropertyAbout } from "@/types/find-property";
 import routes from "@/helpers/routes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +20,7 @@ import LabelWithInfo from "../../shared/label-with-info";
 import Button from "../../shared/forms/Button";
 import CheckBox from "../../shared/forms/CheckBox";
 import ValueLandSubmitTermsModal from "../terms/terms-modal";
+import type { AboutProperty } from "@/types/property";
 
 const AboutLandForm = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
@@ -123,12 +123,12 @@ const AboutLandForm = ({ user }: { user: IDecodedAccessToken | null }) => {
                       onClick={() => {
                         if (watch("cover")?.includes(opt.value as any)) {
                           setValue(
-                            item.key as keyof IFindPropertyAbout,
+                            item.key as keyof AboutProperty,
                             watch("cover").filter((el) => el !== opt.value),
                             { shouldValidate: true }
                           );
                         } else {
-                          setValue(item.key as keyof IFindPropertyAbout, [...((watch("cover") || []) as any), opt.value], {
+                          setValue(item.key as keyof AboutProperty, [...((watch("cover") || []) as any), opt.value], {
                             shouldValidate: true,
                           });
                         }
@@ -150,9 +150,9 @@ const AboutLandForm = ({ user }: { user: IDecodedAccessToken | null }) => {
                       key={item.key + opt.label}
                       className={clsx(
                         "cursor-pointer border border-grey-100 rounded-3xl py-1 px-4 text-xs font-medium",
-                        watch(item.key as keyof IFindPropertyAbout) === opt.value && "bg-primary-main-100 border-primary-main-200"
+                        watch(item.key as keyof AboutProperty) === opt.value && "bg-primary-main-100 border-primary-main-200"
                       )}
-                      onClick={() => setValue(item.key as keyof IFindPropertyAbout, opt.value, { shouldValidate: true })}
+                      onClick={() => setValue(item.key as keyof AboutProperty, opt.value, { shouldValidate: true })}
                     >
                       {opt.label}
                     </div>
