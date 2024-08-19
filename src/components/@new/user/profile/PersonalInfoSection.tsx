@@ -130,7 +130,7 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
           error={!!errors.streetName}
           onChange={(streetName) => setValue("streetName", streetName, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
-          label="Street Name"
+          label="Address"
         />
         <TextField
           value={watch("unitNumber") || ""}
