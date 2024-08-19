@@ -14,13 +14,9 @@ const EventSourceListener = ({ jwt, userId }: { jwt: string; userId: number }) =
     eventSource.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data) as { statusCode: number; message: string; data: INotification };
-        if (data.data.type === NotificationType.NewOfferReceived || data.data.type === NotificationType.ReceivedOfferExpiring) {
-          revalidatePath(routes.user.offers.sent.fullUrl);
-        }
-        if (data.data.type === NotificationType.SentOfferExpiring || data.data.type === NotificationType.OfferStatusUpdate) {
-          revalidatePath(routes.user.offers.sent.fullUrl);
-        }
         revalidateTag(notificationsTag);
+        revalidatePath(routes.user.offers.received.fullUrl);
+        revalidatePath(routes.user.offers.sent.fullUrl);
       } catch (error) {}
     };
 
