@@ -4,6 +4,8 @@ import { INotification } from "@/types/notifications";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { notificationsAtom } from "@/atoms/notifications-atom";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import Popper from "../../../shared/Popper";
 import NotificationItem from "../notification-item";
 import Button from "../../../shared/forms/Button";
@@ -48,9 +50,11 @@ const UserHeaderNotifications = ({ data }: { data: INotification[] | null }) => 
                   />
                 </div>
               ))}
-              <Button variant="secondary" className="!text-primary-main !text-sm !outline-none">
-                View All notifications
-              </Button>
+              <Link href={routes.user.notifications.fullUrl}>
+                <Button variant="secondary" className="!text-primary-main !text-sm !outline-none">
+                  View All notifications
+                </Button>
+              </Link>
             </>
           ) : (
             <DataNotFound className="w-full bg-white rounded-none rounded-b-xl text-sm space-y-6" message="No Notifications Yet" />
