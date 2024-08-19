@@ -24,22 +24,27 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
   }
 
   const voltValue = valueLandData.calculatedPrice.price;
-  const minPricePerAcre = valueLandData.calculatedPrice.range.min;
-  const maxPricePerAcre = valueLandData.calculatedPrice.range.max;
-  const data = valueLandData.calculatedPrice.properties.map((el) => ({
-    value: el.price / Number(el.arcage),
-    stringifiedCoordinates: JSON.stringify([Number(el.latitude), Number(el.longitude)]),
-  }));
+  const sortedData =  [...valueLandData.calculatedPrice.properties].sort((a,b) => (Number(a.price) / Number(a.arcage))  - (Number(b.price) / Number(b.arcage)))
+  const minPricePerAcre =sortedData[0].price / Number(sortedData[0].arcage);
+  const maxPricePerAcre = sortedData[sortedData.length - 1].price / Number(sortedData[sortedData.length - 1].arcage);
   const averagePrice = (
     valueLandData.calculatedPrice.properties.reduce((acc, cur) => acc + cur.price / Number(cur.arcage), 0) /
     valueLandData.calculatedPrice.properties.length
   ).toFixed(2);
 
+  const data = valueLandData.calculatedPrice.properties.map((el) => ({
+    value: el.price / Number(el.arcage),
+    stringifiedCoordinates: JSON.stringify([Number(el.latitude), Number(el.longitude)]),
+  }));
+
+  const  s = maxPricePerAcre - minPricePerAcre
+
   const formattedData = data.map((el) => ({
     value: el,
-    percent: Math.floor((100 * el.value) / maxPricePerAcre),
+    percent: (el.value - minPricePerAcre) / s * 100,
     stringifiedCoordinates: el.stringifiedCoordinates,
   }));
+  
 
   return (
     <>
