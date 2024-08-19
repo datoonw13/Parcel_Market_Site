@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { InfoIcon2 } from "../icons/InfoIcons";
 import { RemoveIcon2 } from "../icons/RemoveIcons";
@@ -25,7 +25,7 @@ const colors = {
 
 type AlertProps = {
   title: string;
-  description: string;
+  description: string | ReactNode;
   onClose?: () => void;
   type?: AlertType;
   disableClose?: boolean;
