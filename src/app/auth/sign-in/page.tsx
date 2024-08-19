@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import TextField from "@/components/@new/shared/forms/text-field";
 import SignInGoogle from "@/components/@new/auth/sign-in/sign-in-google";
 import GoogleAuthProvider from "@/components/@new/auth/sign-in/google-auth-provider";
-import ForgotPasswordButton from "@/app/(main)/user/forgot-password/forgot-password-button";
+import ForgotPasswordButton from "@/components/@new/user/profile/modals/forgot-password/forgot-password-button";
 
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();

@@ -32,8 +32,8 @@ const ResendButton: FC<ResendButtonProps> = ({ handleResend, label }) => {
       timerRef.current = setInterval(() => {
         setTimer((timer) => timer - 1);
       }, 1000);
-    } catch (error) {
-      notify({ title: "Verification Code Resend", description: "Verification code resend failed" }, { variant: "error" });
+    } catch (error: any) {
+      notify({ title: "Verification Code Resend", description: error?.message || "Verification code resend failed" }, { variant: "error" });
     } finally {
       setLoading(false);
     }

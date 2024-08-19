@@ -3,7 +3,7 @@
 import React, { FC, useState } from "react";
 import dynamic from "next/dynamic";
 import { IUser } from "@/types/auth";
-import ForgotPasswordModal from "@/app/(main)/user/forgot-password/forgot-password-modal";
+import ForgotPasswordModal from "@/components/@new/user/profile/modals/forgot-password/forgot-password-modal";
 import UpdatePasswordContent from "./UpdatePasswordContent";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });

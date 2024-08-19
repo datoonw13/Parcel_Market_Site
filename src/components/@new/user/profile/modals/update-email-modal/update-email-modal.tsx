@@ -11,8 +11,7 @@ import { emailSchema } from "@/zod-validations/auth-validations";
 import { cn, maskEmail } from "@/helpers/common";
 import ResendButton from "@/components/@new/shared/ResendButton";
 import TextField from "@/components/@new/shared/forms/text-field";
-import ForgotPasswordButton from "@/app/(main)/user/forgot-password/forgot-password-button";
-import ForgotPasswordModal from "@/app/(main)/user/forgot-password/forgot-password-modal";
+import ForgotPasswordModal from "@/components/@new/user/profile/modals/forgot-password/forgot-password-modal";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });

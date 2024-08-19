@@ -1,3 +1,4 @@
+import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 import ResendButton from "@/components/@new/shared/ResendButton";
 import TextField from "@/components/@new/shared/forms/text-field";
@@ -5,12 +6,7 @@ import ResponsiveModal from "@/components/@new/shared/modals/ResponsiveModal";
 import DialogActions from "@/components/@new/shared/modals/dialog/dialog-actions";
 import { cn, maskEmail } from "@/helpers/common";
 import useNotification from "@/hooks/useNotification";
-import LoadingCircle from "@/icons/LoadingCircle";
-import {
-  resetPasswordVerificationCodeVerifyAction,
-  sendResetPasswordVerificationCodeAction,
-  setResetPasswordNewPasswordAction,
-} from "@/server-actions/user/actions";
+import { sendResetPasswordVerificationCodeAction, setResetPasswordNewPasswordAction } from "@/server-actions/user/actions";
 import { IDecodedAccessToken, IUser } from "@/types/auth";
 import { emailSchema, passwordSchema } from "@/zod-validations/auth-validations";
 import { FC, useCallback, useEffect, useState } from "react";
@@ -57,7 +53,7 @@ const renderButtonsLabel = (step: ForgotPasswordSteps, user: boolean) => {
       };
     case ForgotPasswordSteps.NEW_PASSWORD:
       return {
-        closeLabel: "Cancel",
+        closeLabel: "Back",
         submitLabel: "Save",
       };
     default:
@@ -71,7 +67,9 @@ const renderButtonsLabel = (step: ForgotPasswordSteps, user: boolean) => {
 const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user }) => {
   const { notify } = useNotification();
   const [step, setStep] = useState<ForgotPasswordSteps>(ForgotPasswordSteps.EMAIL);
-  const [values, setValues] = useState({ email: "", code: "", password: "", repeatPassword: "" });
+  const [values, setValues] = useState({ email: "", code: "", newPassword: "", repeatNewPassword: "" });
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showRepeatNewPassword, setShowRepeatNewPassword] = useState(false);
   const { title, description } = renderModalHeader(step, values.email);
   const { closeLabel, submitLabel } = renderButtonsLabel(step, !!user);
   const [pending, setPending] = useState(false);
@@ -79,7 +77,12 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
   const onCancel = () => {
     if (step === ForgotPasswordSteps.VERIFICATION_CODE && !user) {
       setStep(ForgotPasswordSteps.EMAIL);
-      setValues({ ...values, code: "" });
+      setValues({ ...values, code: "", newPassword: "", repeatNewPassword: "" });
+    }
+    if (step === ForgotPasswordSteps.NEW_PASSWORD) {
+      setShowNewPassword(false);
+      setShowRepeatNewPassword(false);
+      setStep(ForgotPasswordSteps.VERIFICATION_CODE);
     } else {
       closeModal();
     }
@@ -88,13 +91,13 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
   const sendResetPasswordVerificationCode = useCallback(async () => {
     setPending(true);
     const { errorMessage } = await sendResetPasswordVerificationCodeAction(values.email);
-    if (!errorMessage) {
+    if (!errorMessage || errorMessage === "You have to wait 1 minute after sending another code") {
       setStep(ForgotPasswordSteps.VERIFICATION_CODE);
       setPending(false);
     } else {
       closeModal();
     }
-    return { errorMessage };
+    return { errorMessage: errorMessage === "You have to wait 1 minute after sending another code" ? "" : errorMessage };
   }, [closeModal, values.email]);
 
   const onNext = async () => {
@@ -105,17 +108,14 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
         error = errorMessage;
       }
     } else if (step === ForgotPasswordSteps.VERIFICATION_CODE) {
-      setPending(true);
-      const { errorMessage } = await resetPasswordVerificationCodeVerifyAction(values.code);
-      if (errorMessage) {
-        error = errorMessage;
-      } else {
-        setStep(ForgotPasswordSteps.NEW_PASSWORD);
-      }
-      setPending(false);
+      setStep(ForgotPasswordSteps.NEW_PASSWORD);
     } else {
       setPending(true);
-      const { errorMessage } = await setResetPasswordNewPasswordAction(values.code);
+      const { errorMessage } = await setResetPasswordNewPasswordAction({
+        newPassword: values.newPassword,
+        code: values.code,
+        email: values.email,
+      });
       if (errorMessage) {
         error = errorMessage;
         setPending(false);
@@ -137,20 +137,21 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
     if (step === ForgotPasswordSteps.VERIFICATION_CODE) {
       return !values.code;
     }
-    return !passwordSchema.safeParse(values.password).success || values.password !== values.repeatPassword;
+    return !passwordSchema.safeParse(values.newPassword).success || values.newPassword !== values.repeatNewPassword;
   };
 
   useEffect(() => {
-    if (user && step === ForgotPasswordSteps.EMAIL) {
+    if (user && step === ForgotPasswordSteps.EMAIL && values.email) {
       sendResetPasswordVerificationCode();
     }
-  }, [user, step, sendResetPasswordVerificationCode]);
+  }, [user, step, sendResetPasswordVerificationCode, values.email]);
 
   useEffect(() => {
     if (user) {
       setValues({ ...values, email: user.email });
     }
-  }, [user, values]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className={cn("flex flex-col", "h-[70vh]", "md:bg-white md:shadow-3 md:max-w-lg md:w-full md:rounded-2xl md:h-fit")}>
@@ -176,7 +177,7 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
                     handleResend={async () => {
                       const { errorMessage } = await sendResetPasswordVerificationCodeAction(values.email);
                       if (errorMessage) {
-                        throw new Error();
+                        throw new Error(errorMessage);
                       }
                     }}
                   />
@@ -186,13 +187,23 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
                 <div className="space-y-4">
                   <TextField
                     placeholder="New password"
-                    value={values.password}
-                    onChange={(password) => setValues({ ...values, password })}
+                    value={values.newPassword}
+                    onChange={(newPassword) => setValues({ ...values, newPassword })}
+                    endIcon={
+                      <div className="cursor-pointer" onClick={() => setShowNewPassword(!showNewPassword)}>
+                        {showNewPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                      </div>
+                    }
                   />
                   <TextField
                     placeholder="Re-type new password"
-                    value={values.repeatPassword}
-                    onChange={(repeatPassword) => setValues({ ...values, repeatPassword })}
+                    value={values.repeatNewPassword}
+                    onChange={(repeatNewPassword) => setValues({ ...values, repeatNewPassword })}
+                    endIcon={
+                      <div className="cursor-pointer" onClick={() => setShowRepeatNewPassword(!showRepeatNewPassword)}>
+                        {showRepeatNewPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                      </div>
+                    }
                   />
                 </div>
               )}
