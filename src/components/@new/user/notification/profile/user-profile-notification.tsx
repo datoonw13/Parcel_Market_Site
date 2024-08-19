@@ -5,7 +5,6 @@ import UserProfileNotificationsPagination from "./user-profile-notifications-pag
 
 const UserProfileNotifications = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const { data, errorMessage } = await getNotificationsAction({ ...searchParams, pageSize: "10" });
-  console.log(data, 22);
 
   return (
     <div className="md:border md:border-grey-100 rounded-2xl pb-6">
