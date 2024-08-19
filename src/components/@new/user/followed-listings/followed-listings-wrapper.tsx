@@ -28,20 +28,14 @@ const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data, searc
   const [followedListingsOptions, setFollowedListingsOptions] = useAtom(followedListingsAtom);
 
   useEffect(() => {
-    if (JSON.stringify(searchParams) !== followedListingsOptions.key) {
-      setFollowedListingsOptions({
-        key: JSON.stringify(searchParams),
-        data: data?.list || null,
-      });
+    if (data && data.list.length > 0 && !followedListingsOptions) {
+      setFollowedListingsOptions(data?.list || null);
     }
-  }, [data?.list, followedListingsOptions.key, searchParams, setFollowedListingsOptions]);
+  }, [data, setFollowedListingsOptions, searchParams, followedListingsOptions]);
 
   useEffect(
     () => () => {
-      setFollowedListingsOptions({
-        key: null,
-        data: null,
-      });
+      setFollowedListingsOptions(null);
     },
     [setFollowedListingsOptions]
   );
@@ -49,13 +43,13 @@ const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data, searc
   return (
     <div>
       <div className="space-y-8 md:space-y-6">
-        {!data || data.pagination.totalCount === 0 ? (
-          <DataNotFound message="You have not saved any properties yet" />
+        {data?.pagination?.totalCount === 0 && !followedListingsOptions ? (
+          <DataNotFound message={data?.pagination?.totalCount > 0 ? "Properties not found" : "You have not saved any properties yet"} />
         ) : (
           <>
-            <UserListingHeader totalCount={data.pagination.totalCount} />
+            <UserListingHeader totalCount={data?.pagination?.totalCount || 0} />
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              {followedListingsOptions.data?.map((land) => {
+              {followedListingsOptions?.map((land) => {
                 const state = getAllStates({ filterBlackList: true }).find((el) => el.value === land.state.toLocaleLowerCase());
                 const county =
                   state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
@@ -71,7 +65,7 @@ const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data, searc
                       availableTill: land.availableTill,
                       state: state?.label || "",
                       county: county || "",
-                      name: `${land.acrage} - Acreages lands for sale...`,
+                      name: land.title,
                       options: {
                         owner: {
                           icon: <UserIcon2 className="w-4 h-4 " />,
@@ -99,7 +93,7 @@ const FollowedListingsWrapper: FC<FollowedListingsWrapperProps> = ({ data, searc
                 );
               })}
             </div>
-            <UserListingPagination totalCount={data.pagination.totalCount} />
+            <UserListingPagination totalCount={data?.pagination?.totalCount || 0} />
           </>
         )}
       </div>

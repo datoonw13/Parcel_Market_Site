@@ -40,10 +40,10 @@ const LandListItem: FC<LandListItemProps> = ({
     <div className="px-6 flex justify-between items-start gap-6">
       <div className="grid gap-2">
         <Link
-          className={clsx(disableDetail && "pointer-events-none cursor-not-allowed")}
+          className={clsx(disableDetail && "pointer-events-none cursor-not-allowed", "grid truncate")}
           href={disableDetail ? "/" : `${routes.marketplace.fullUrl}/${sellingItemId}`}
         >
-          <h1 className="font-semibold group-hover:text-primary-main transition-all duration-100 text-ellipsis whitespace-nowrap overflow-hidden">
+          <h1 className=" font-semibold group-hover:text-primary-main transition-all duration-100 text-ellipsis whitespace-nowrap overflow-hidden">
             {data.name}
           </h1>
         </Link>

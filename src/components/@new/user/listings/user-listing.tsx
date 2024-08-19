@@ -35,7 +35,7 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
                     availableTill: land.availableTill,
                     state: state?.label || "",
                     county: county || "",
-                    name: `${land.acrage} - Acreages lands for sale...`,
+                    name: land.title,
                     options: {
                       owner: {
                         icon: <UserIcon2 className="w-4 h-4 " />,

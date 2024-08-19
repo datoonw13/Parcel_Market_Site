@@ -24,7 +24,6 @@ const UserFollowedListingsPage = async ({ searchParams }: { searchParams: { [key
             </div>
           </Suspense>
           <Suspense fallback={<UserListingLoader />} key={JSON.stringify(searchParams)}>
-            {/* <UserListing searchParams={searchParams} followedListings /> */}
             <FollowedListings searchParams={searchParams} />
           </Suspense>
         </>
