@@ -14,7 +14,7 @@ const MarketPlaceFilters = async () => {
         <MarketPlaceDesktopFilters disabled={!user?.isSubscribed} />
         <MarketPlaceMobileFilters disabled={!user?.isSubscribed} />
         <div className="flex items-center gap-3 justify-end">
-          <p className="text-grey-600 text-xs">{data?.pagination.totalCount} Lands</p>
+          <p className="text-grey-600 text-xs">{data?.pagination.totalCount} Properties</p>
           <Sort disabled={!user?.isSubscribed} options={SortEnum} />
         </div>
       </div>

@@ -45,8 +45,7 @@ const MarketplaceHeader = ({ user }: { user: IDecodedAccessToken | null }) => {
       <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 mb-8">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-center">Parcel Marketplace</h1>
         <h6 className="font-medium md:text-sm md:text-grey-800 text-center max-w-3xl m-auto">
-          Welcome to Parcel Marketplace where investors and sellers can connect for unique, off-market land opportunities. Browse listings
-          below and connect with a buyer or seller today!
+          Welcome to Parcel Marketplace where investors and sellers can connect for unique, off-market land opportunities.
         </h6>
       </div>
       <TextField
