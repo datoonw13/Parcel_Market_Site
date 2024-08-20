@@ -34,11 +34,10 @@ const LandFollowButton = ({
       toast.error(errorMessage);
     } else if (data) {
       setFollowedListingId(data.id);
-      if (followedListingsOptions.data) {
-        setFollowedListingsOptions((prev) => ({
-          ...prev,
-          data: prev.data?.map((el) => (el.id === landId ? { ...el, followedListingId: data.id } : { ...el })) || null,
-        }));
+      if (followedListingsOptions) {
+        setFollowedListingsOptions(
+          followedListingsOptions.map((el) => (el.id === landId ? { ...el, followedListingId: data.id } : { ...el })) || null
+        );
       }
     }
     setPending(false);
@@ -51,11 +50,10 @@ const LandFollowButton = ({
       toast.error(errorMessage);
     } else {
       setFollowedListingId(null);
-      if (followedListingsOptions.data) {
-        setFollowedListingsOptions((prev) => ({
-          ...prev,
-          data: prev.data?.map((el) => (el.id === landId ? { ...el, followedListingId: undefined } : { ...el })) || null,
-        }));
+      if (followedListingsOptions) {
+        setFollowedListingsOptions(
+          followedListingsOptions.map((el) => (el.id === landId ? { ...el, followedListingId: undefined } : { ...el })) || null
+        );
       }
     }
     setPending(false);
