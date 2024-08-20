@@ -25,7 +25,7 @@ export const userSignUpValidation = (isGoogleUser?: boolean) =>
       unitNumber: z.string().trim().min(1),
       city: z.string().trim().min(1),
       state: z.string().trim().min(1),
-      postalCode: z.string().trim().min(1),
+      postalCode: z.string().trim().min(1).max(5),
       password: isGoogleUser ? z.undefined() : passwordSchema,
       registrationReasons: z.array(z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"])),
       agreeTerm: z.boolean().refine((val) => val === true, {
