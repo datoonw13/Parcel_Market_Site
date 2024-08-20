@@ -26,7 +26,13 @@ export const getCounties = (stateValue: string | null) => {
     return [];
   }
   const counties = getAllStates().find(({ value }) => value === stateValue.toLocaleLowerCase())?.counties || [];
-  const formattedCounties = counties.map((el) => ({ label: el, value: el.split(" ")[0].toLowerCase() }));
+  const formattedCounties = counties.map((el) => ({
+    label: el,
+    value: el
+      .split(" ")
+      .map((x) => x.toLocaleLowerCase())
+      .join("-"),
+  }));
   return formattedCounties;
 };
 
