@@ -38,7 +38,7 @@ const MarketplaceDesktopFilters = ({
         selectedOptions={filters.counties || []}
         onChange={(newCounties) => setFilters({ ...filters, counties: newCounties.length === 0 ? null : newCounties })}
         initialOptions={counties}
-        disabled={filters.states?.length === 0 || disabled}
+        disabled={!filters.states || filters.states?.length === 0 || disabled}
         placeholder="Counties"
       />
       <MinMaxDesktopFilters

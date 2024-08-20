@@ -4,12 +4,15 @@ import { SellingPropertyDetails } from "@/types/property";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "./tags";
 
-export const getMarketplaceListAction = async (params?: {
-  [key: string]: string;
-}): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
+export const getMarketplaceListAction = async (
+  pageSize: number,
+  params?: {
+    [key: string]: string;
+  }
+): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ sellingProperties: SellingPropertyDetails[] } & IPagination>(
-      `selling-properties/?${new URLSearchParams({ ...params, pageSize: "6", sellerType: "sale" })}`,
+      `selling-properties/?${new URLSearchParams({ ...params, pageSize: pageSize.toString(), sellerType: "sale" })}`,
       {
         next: { tags: [marketplaceTag] },
       }
