@@ -1,13 +1,13 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import { FC } from "react";
 import { OfferModel } from "@/types/offer";
 import clsx from "clsx";
 import { LocationIcon1 } from "@/components/@new/icons/LocationIcons";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { numFormatter } from "@/helpers/common";
 import { receivedOffersAtom } from "@/atoms/received-offers-atom";
@@ -27,7 +27,6 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
   const isSmallDevice = useMediaQuery(1024);
   const router = useRouter();
   const pathname = usePathname();
-  const [selectedOffer, setSelectedOffer] = useState<OfferModel | null>(null);
   const [receivedOffersOptions, setReceivedOffersOption] = useAtom(receivedOffersAtom);
 
   const openDetail = () => {
@@ -36,8 +35,6 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
     } else {
       params.set("offerId", data.id.toString());
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
-
-      // setSelectedOffer(data);
     }
   };
 
