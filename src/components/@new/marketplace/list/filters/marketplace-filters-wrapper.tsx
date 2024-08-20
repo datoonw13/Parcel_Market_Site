@@ -3,13 +3,13 @@
 import { SortEnum } from "@/types/common";
 import Sort from "@/components/@new/shared/filters/Sort";
 import { IDecodedAccessToken } from "@/types/auth";
-import MobileFiltersDrawer from "@/components/@new/filters/mobile/mobile-filters-drawer";
 import { IMarketplaceFilters } from "@/types/lands";
 import { useEffect, useRef, useState } from "react";
 import TextField from "@/components/@new/shared/forms/text-field";
 import { IoSearchOutline } from "react-icons/io5";
 import { cn } from "@/helpers/common";
 import MarketplaceDesktopFilters from "./marketplace-desktop-filters";
+import MarketplaceMobileFilters from "./marketplace-mobile-filters";
 
 const MarketPlaceFiltersWrapper = ({ totalLends, user }: { totalLends: number; user: IDecodedAccessToken | null }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -25,6 +25,8 @@ const MarketPlaceFiltersWrapper = ({ totalLends, user }: { totalLends: number; u
     voltValueMin: null,
     voltValueMax: null,
   });
+
+  console.log(filters, 22);
 
   const handleSearch = (value: string) => {
     timerRef.current && window.clearTimeout(timerRef.current);
@@ -54,7 +56,7 @@ const MarketPlaceFiltersWrapper = ({ totalLends, user }: { totalLends: number; u
       <div className="mb-6 md:mb-8 lg:mb-10">
         <div className="flex justify-between items-center gap-5 lg:gap-32 xl:gap-60">
           <div className="flex lg:hidden">
-            <MobileFiltersDrawer disabled={!user?.isSubscribed} />
+            <MarketplaceMobileFilters disabled={!user?.isSubscribed} filters={filters} setFilters={setFilters} />
           </div>
           <div className="hidden lg:flex">
             <MarketplaceDesktopFilters filters={filters} setFilters={setFilters} disabled={!user?.isSubscribed} />

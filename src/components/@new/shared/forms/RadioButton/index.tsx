@@ -13,11 +13,7 @@ interface RadioButtonProps {
 const RadioButton: FC<RadioButtonProps> = ({ name, checked, onChange, label, labelClassName, rootClassName }) => (
   <div className={clsx("flex items-center gap-3 cursor-pointer w-fit", rootClassName)} onClick={(e) => onChange()}>
     <input className={classes.root} type="radio" id={name} checked={checked} onChange={() => {}} />
-    {label && (
-      <label className={clsx("font-medium text-sm cursor-pointer", labelClassName)} htmlFor={name}>
-        {label}
-      </label>
-    )}
+    {label && <label className={clsx("font-medium text-sm cursor-pointer", labelClassName)}>{label}</label>}
   </div>
 );
 

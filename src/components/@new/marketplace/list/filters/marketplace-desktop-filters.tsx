@@ -27,14 +27,16 @@ const MarketplaceDesktopFilters = ({
     <div className="grid w-full grid-cols-4 gap-3">
       <MultiSelect
         selectedOptions={filters.states || []}
-        onChange={(states) => setFilters({ ...filters, states: states.length === 0 ? null : [], counties: [] })}
+        onChange={(newStates) => {
+          setFilters({ ...filters, states: newStates.length === 0 ? null : newStates, counties: null });
+        }}
         disabled={disabled}
         initialOptions={states}
         placeholder="States"
       />
       <MultiSelect
         selectedOptions={filters.counties || []}
-        onChange={(counties) => setFilters({ ...filters, counties: counties.length === 0 ? null : counties })}
+        onChange={(newCounties) => setFilters({ ...filters, counties: newCounties.length === 0 ? null : newCounties })}
         initialOptions={counties}
         disabled={filters.states?.length === 0 || disabled}
         placeholder="Counties"
