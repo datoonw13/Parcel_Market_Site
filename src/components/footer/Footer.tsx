@@ -3,13 +3,14 @@
 import FbIcon from "@/icons/FbIcon";
 import Logo from "@/icons/Logo";
 import TwitterIcon from "@/icons/TwitterIcon";
-import { Box, Container, Divider, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
+import Container from "../@new/shared/Container";
 
 const Footer = () => {
   const pathname = usePathname();
   return (
-    <div className="bg-white py-20 md:py-20.5">
+    <div className="bg-white pt-20 md:pt-20.5">
       <Container>
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Box sx={{ width: { xs: 85, sm: 95, md: 125, lg: 140 }, height: { xs: 24, sm: 30, md: 34, lg: 40 } }}>
