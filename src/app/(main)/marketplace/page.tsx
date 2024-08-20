@@ -1,4 +1,4 @@
-import MarketPlaceFilters from "@/components/@new/marketplace/list/marketplace-filter";
+import MarketPlaceFilters from "@/components/@new/marketplace/list/filters/marketplace-filters";
 import MarketplaceHeader from "@/components/@new/marketplace/list/marketplace-header";
 import MarketplaceList from "@/components/@new/marketplace/list/marketplace-list";
 import MarketplaceListLoading from "@/components/@new/marketplace/list/marketplace-list-loading";

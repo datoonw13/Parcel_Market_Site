@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { MouseEvent, ReactElement, forwardRef, useLayoutEffect, useRef } from "react";
 import { NumericFormat } from "react-number-format";
 import classes from "./textfield.module.css";
+import { cn } from "@/helpers/common";
 
 interface TextFieldProps {
   variant?: "primary" | "secondary";
@@ -128,7 +129,7 @@ const TextField = forwardRef((props: TextFieldProps, ref: any) => {
         />
       ) : (
         <input
-          className={clsx(
+          className={cn(
             "group",
             label && classes[`input-${variant}`],
             classes.input,
