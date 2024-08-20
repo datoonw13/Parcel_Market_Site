@@ -15,31 +15,29 @@ export const userSignInValidation = z.object({
   password: z.string().trim().min(1),
 });
 
-export const userSignUpValidation = z
-  .object({
-    firstName: z.string().trim().min(1),
-    lastName: z.string().trim().min(1),
-    email: emailSchema,
-    streetName: z.string().trim().min(1),
-    unitNumber: z
-      .string()
-      .trim()
-      .transform((val) => val || undefined),
-    city: z.string().trim().min(1),
-    state: z.string().trim().min(1),
-    postalCode: z.string().trim().min(1),
-    password: passwordSchema,
-    registrationReasons: z.array(z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"])),
-    agreeTerm: z.boolean().refine((val) => val === true, {
-      message: "Please read and accept the terms and conditions",
-    }),
-    sendEmailTips: z.boolean(),
-    repeatPassword: z.string().trim().min(1, { message: "Password doesn’t match" }),
-  })
-  .refine((data) => data.password === data.repeatPassword, {
-    message: "Password doesn’t match",
-    path: ["repeatPassword"],
-  });
+export const userSignUpValidation = (isGoogleUser?: boolean) =>
+  z
+    .object({
+      firstName: z.string().trim().min(1),
+      lastName: z.string().trim().min(1),
+      email: emailSchema,
+      streetName: z.string().trim().min(1),
+      unitNumber: z.string().trim().min(1),
+      city: z.string().trim().min(1),
+      state: z.string().trim().min(1),
+      postalCode: z.string().trim().min(1),
+      password: isGoogleUser ? z.undefined() : passwordSchema,
+      registrationReasons: z.array(z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"])),
+      agreeTerm: z.boolean().refine((val) => val === true, {
+        message: "Please read and accept the terms and conditions",
+      }),
+      sendEmailTips: z.boolean(),
+      repeatPassword: isGoogleUser ? z.undefined() : z.string().trim().min(1, { message: "Password doesn’t match" }),
+    })
+    .refine((data) => data.password === data.repeatPassword, {
+      message: "Password doesn’t match",
+      path: ["repeatPassword"],
+    });
 
 export const userPasswordResetValidations = z
   .object({

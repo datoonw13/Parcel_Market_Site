@@ -14,7 +14,7 @@ const ToastNotification = ({
   title?: string;
   description?: string;
 }) => (
-  <div className="grid grid-cols-[minmax(0,_max-content)_1fr] gap-4">
+  <div className="grid grid-cols-[minmax(0,_max-content)_1fr] gap-4 items-center">
     <div
       className={cn(
         "size-10 rounded-full  flex items-center justify-center",

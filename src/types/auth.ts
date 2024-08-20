@@ -18,8 +18,8 @@ export interface IRegisterGoogleUser {
 
 // new types
 export type IUserSignIn = z.infer<typeof userSignInValidation>;
-export type IUserSignUp = z.infer<typeof userSignUpValidation>;
-export type IUser = Omit<z.infer<typeof userSignUpValidation>, "agreeTerm" | "repeatPassword">;
+export type IUserSignUp = z.infer<ReturnType<typeof userSignUpValidation>>;
+export type IUser = Omit<z.infer<ReturnType<typeof userSignUpValidation>>, "agreeTerm" | "repeatPassword">;
 
 export enum IUserRegistrationReason {
   SellLandQuickly = "sellLandQuickly",

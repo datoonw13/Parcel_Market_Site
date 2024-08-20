@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
@@ -9,17 +9,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
-import { signUpUserAction } from "@/server-actions/user/actions";
+import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/actions";
+import { useSearchParams } from "next/navigation";
+import useNotification from "@/hooks/useNotification";
 import Button from "../../shared/forms/Button";
 import TextField from "../../shared/forms/text-field";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
+import GoogleAuthProvider from "../sign-in/google-auth-provider";
 
 interface SignUpProps {
   onBack: () => void;
   registrationReasons: IUserSignUp["registrationReasons"];
   onFinish: (errorMessage?: string, email?: string) => void;
 }
+
 const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
+  const searchParams = useSearchParams();
+  const access_token = searchParams.get("access_token");
+  const firstName = searchParams.get("firstName");
+  const lastName = searchParams.get("lastName");
+  const email = searchParams.get("email");
+  const isGoogleUser = access_token && firstName && lastName && email;
+  const { notify } = useNotification();
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
   const {
@@ -27,14 +38,15 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
     formState: { isSubmitted, errors, isSubmitting },
     setValue,
     watch,
+    getValues,
+    reset,
   } = useForm<IUserSignUp>({
-    resolver: zodResolver(userSignUpValidation),
+    resolver: zodResolver(userSignUpValidation(!!isGoogleUser)),
     defaultValues: {
       city: "",
       email: "",
       firstName: "",
       lastName: "",
-      password: "",
       postalCode: "",
       state: "",
       streetName: "",
@@ -42,18 +54,30 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       registrationReasons,
       agreeTerm: false,
       sendEmailTips: false,
-      repeatPassword: "",
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const request = await signUpUserAction(data);
-    if (request?.errorMessage) {
-      onFinish(request.errorMessage);
+    if (isGoogleUser) {
+      const { errorMessage } = await googleSignUpUserAction(data, access_token);
+      if (errorMessage) {
+        notify({ title: errorMessage }, { variant: "error" });
+      }
     } else {
-      onFinish(undefined, watch("email"));
+      const request = await signUpUserAction(data);
+      if (request?.errorMessage) {
+        onFinish(request.errorMessage);
+      } else {
+        onFinish(undefined, watch("email"));
+      }
     }
   });
+
+  useEffect(() => {
+    if (isGoogleUser) {
+      reset({ ...getValues(), email, firstName, lastName });
+    }
+  }, [access_token, email, firstName, getValues, isGoogleUser, lastName, reset, searchParams]);
 
   return (
     <>
@@ -61,7 +85,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
         <h1 className="font-semibold text-2xl md:text-5xl text-center">Sign Up</h1>
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
       </div>
-      {/* <GoogleButton className="!w-fit px-14" onClick={() => {}} /> */}
+      <div className="w-full max-w-72 flex">
+        <GoogleAuthProvider />
+      </div>
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col gap-4">
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -94,6 +120,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             required
             className="w-full"
             label="Email Address"
+            disabled={!!isGoogleUser}
             value={watch("email")}
             error={!!errors.email}
           />
@@ -111,6 +138,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             label="Unit Number"
             value={watch("unitNumber")}
             error={!!errors.unitNumber}
+            required
           />
           <AutoComplete
             options={getAllStates()}
@@ -151,38 +179,42 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             disableThousandsSeparator
             decimalScale={0}
           />
-          <div className="space-y-1">
-            <TextField
-              className="w-full"
-              label="Password"
-              value={watch("password")}
-              onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
-              type={visiblePassword ? "text" : "password"}
-              endIcon={
-                <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
-                  {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
-                </div>
-              }
-              error={!!errors.password}
-            />
-            {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
-          </div>
-          <div className="space-y-1">
-            <TextField
-              value={watch("repeatPassword")}
-              onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
-              className="w-full"
-              label="Retype Password"
-              type={visibleRepeatPassword ? "text" : "password"}
-              endIcon={
-                <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
-                  {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
-                </div>
-              }
-              error={!!errors.repeatPassword}
-            />
-            {errors.repeatPassword && <p className="text-xss text-error font-medium">{errors.repeatPassword.message}</p>}
-          </div>
+          {!isGoogleUser && (
+            <>
+              <div className="space-y-1">
+                <TextField
+                  className="w-full"
+                  label="Password"
+                  value={watch("password") || ""}
+                  onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
+                  type={visiblePassword ? "text" : "password"}
+                  endIcon={
+                    <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
+                      {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                    </div>
+                  }
+                  error={!!errors.password}
+                />
+                {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
+              </div>
+              <div className="space-y-1">
+                <TextField
+                  value={watch("repeatPassword") || ""}
+                  onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
+                  className="w-full"
+                  label="Retype Password"
+                  type={visibleRepeatPassword ? "text" : "password"}
+                  endIcon={
+                    <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
+                      {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                    </div>
+                  }
+                  error={!!errors.repeatPassword}
+                />
+                {errors.repeatPassword && <p className="text-xss text-error font-medium">{errors.repeatPassword.message}</p>}
+              </div>
+            </>
+          )}
         </div>
         <CheckBox
           onChange={() => setValue("sendEmailTips", !watch("sendEmailTips"))}

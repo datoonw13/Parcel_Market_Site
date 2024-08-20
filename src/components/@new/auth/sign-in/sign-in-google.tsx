@@ -3,16 +3,25 @@
 import clsx from "clsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
+import { cn } from "@/helpers/common";
+import { googleSignInUserAction } from "@/server-actions/user/actions";
+import { useRouter } from "next/navigation";
+import routes from "@/helpers/routes";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
-import { LoadingIcon1 } from "../../icons/LoadingIcons";
 
 const SignInGoogle = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const login = useGoogleLogin({
-    onSuccess: (token) => {
-      console.log(token);
-      setLoading(false);
-      // onSuccess(token);
+    onSuccess: async (data) => {
+      const { errorMessage } = await googleSignInUserAction(data.access_token);
+      if (errorMessage) {
+        const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
+        const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
+        router.push(
+          `${routes.auth.signUp.fullUrl}?access_token=${data.access_token}&firstName=${googleCredentials.given_name}&lastName=${googleCredentials.family_name}&email=${googleCredentials.email}`
+        );
+      }
     },
     onError: () => {
       setLoading(false);
@@ -25,8 +34,9 @@ const SignInGoogle = () => {
   return (
     <button
       type="button"
-      className={clsx(
-        "w-full p-3 flex justify-center items-center gap-4 shadow-[0px_2px_3px_0px_rgba(0,0,0,0.17)] text-black-400 font-medium rounded-[40px]"
+      className={cn(
+        "w-full p-3 flex justify-center items-center gap-4 shadow-[0px_2px_3px_0px_rgba(0,0,0,0.17)] text-black-400 font-medium rounded-[40px]",
+        loading && "opacity-40"
       )}
       onClick={() => {
         setLoading(true);
@@ -36,7 +46,6 @@ const SignInGoogle = () => {
     >
       <GoogleIcon1 />
       Continue with Google
-      {loading && <LoadingIcon1 className="fill-black-400" />}
     </button>
   );
 };
