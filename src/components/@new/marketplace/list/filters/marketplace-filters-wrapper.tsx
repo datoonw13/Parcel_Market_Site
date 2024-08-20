@@ -26,8 +26,6 @@ const MarketPlaceFiltersWrapper = ({ totalLends, user }: { totalLends: number; u
     voltValueMax: null,
   });
 
-  console.log(filters, 22);
-
   const handleSearch = (value: string) => {
     timerRef.current && window.clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {

@@ -4,9 +4,9 @@ import { Dispatch, SetStateAction, useMemo } from "react";
 import MultiSelect from "@/components/@new/filters/desktop/multi-select";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { uniqBy } from "lodash";
-import MinMaxDesktopFilters from "@/components/@new/shared/filters/desktop/MinMaxDesktopFilters";
 import { acreagesFilters, getAcreageLabel, getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 import { IMarketplaceFilters } from "@/types/lands";
+import MinMaxDesktopFilters from "@/components/@new/filters/desktop/min-max-filter";
 
 const MarketplaceDesktopFilters = ({
   disabled,

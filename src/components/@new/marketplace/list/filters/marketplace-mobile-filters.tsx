@@ -1,12 +1,13 @@
+import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import MobileFilterItem from "@/components/@new/filters/mobile/mobile-filter-item";
 import MobileFiltersDrawer from "@/components/@new/filters/mobile/mobile-filters-drawer";
 import MinMaxMobileFilter from "@/components/@new/filters/mobile/mobile-min-max-filter";
 import { acreagesFilters, getAcreageLabel, priceFilters } from "@/components/@new/lands/filters/lands-filters-utils";
 import { getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
-import { getAllStates } from "@/helpers/states";
+import { getAllStates, getCounties } from "@/helpers/states";
 import { IMarketplaceFilters } from "@/types/lands";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { uniqBy } from "lodash";
 
 interface MarketplaceMobileFiltersProps {
   filters: IMarketplaceFilters;
@@ -16,15 +17,16 @@ interface MarketplaceMobileFiltersProps {
 const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled, filters, setFilters }) => {
   const [localFilters, setLocalFilters] = useState<IMarketplaceFilters | null>(null);
   const [open, setOpen] = useState<"states" | "counties" | "acreage" | "voltValue" | null>(null);
+  const states = useMemo(() => getAllStates(), []);
+  const counties = useMemo(() => {
+    const countiesList = filters.states?.map((state) => getCounties(state)) || [];
+    return uniqBy(countiesList.flat(), "value");
+  }, [filters.states]);
 
   return (
     <MobileFiltersDrawer
       onOpen={() => setLocalFilters(filters)}
       onClose={() => {
-        setLocalFilters(filters);
-        setOpen(null);
-      }}
-      onReset={() => {
         setLocalFilters(filters);
         setOpen(null);
       }}
@@ -37,7 +39,7 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
       disabled={disabled}
     >
       <MobileFilterItem open={open === "states"} toggleFilter={() => setOpen(open === "states" ? null : "states")} filterName="States">
-        {getAllStates().map((state) => (
+        {states.map((state) => (
           <RadioButton
             checked={!!localFilters?.states?.includes(state.value)}
             key={state.value}
@@ -63,7 +65,7 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
         filterName="Counties"
         disabled={!localFilters?.states || localFilters?.states?.length === 0}
       >
-        {getAllStates().map((state) => (
+        {counties.map((state) => (
           <RadioButton
             checked={!!localFilters?.states?.includes(state.value)}
             key={state.value}
@@ -87,9 +89,11 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
         <MinMaxMobileFilter
           options={acreagesFilters}
           onChange={(acreage) => {
-            setFilters({ ...filters, acreageMin: acreage.min, acreageMax: acreage.max });
+            if (localFilters) {
+              setLocalFilters({ ...localFilters, acreageMin: acreage.min, acreageMax: acreage.max });
+            }
           }}
-          value={{ min: filters.acreageMin, max: filters.acreageMax }}
+          value={{ min: localFilters?.acreageMin || null, max: localFilters?.acreageMax || null }}
           renderLabel={getAcreageLabel}
         />
       </MobileFilterItem>
@@ -101,9 +105,11 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
         <MinMaxMobileFilter
           options={priceFilters}
           onChange={(acreage) => {
-            setFilters({ ...filters, acreageMin: acreage.min, acreageMax: acreage.max });
+            if (localFilters) {
+              setLocalFilters({ ...localFilters, voltValueMin: acreage.min, voltValueMax: acreage.max });
+            }
           }}
-          value={{ min: filters.acreageMin, max: filters.acreageMax }}
+          value={{ min: localFilters?.voltValueMin || null, max: localFilters?.voltValueMax || null }}
           renderLabel={getMinMaxFilterLabel}
         />
       </MobileFilterItem>

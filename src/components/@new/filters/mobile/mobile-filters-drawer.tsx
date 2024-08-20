@@ -11,13 +11,12 @@ const Drawer = dynamic(() => import("@/components/@new/shared/modals/Drawer"), {
 interface MobileFiltersDrawerProps {
   disabled?: boolean;
   children: ReactNode;
-  onReset: () => void;
   onOK: () => void;
   onClose: () => void;
   onOpen: () => void;
 }
 
-const MobileFiltersDrawer: FC<MobileFiltersDrawerProps> = ({ disabled, children, onReset, onOK, onClose, onOpen }) => {
+const MobileFiltersDrawer: FC<MobileFiltersDrawerProps> = ({ disabled, children, onOK, onClose, onOpen }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -48,7 +47,7 @@ const MobileFiltersDrawer: FC<MobileFiltersDrawerProps> = ({ disabled, children,
         <div className="flex flex-col gap-3 p-4">
           <Button
             onClick={() => {
-              onReset();
+              onOK();
               setOpen(false);
             }}
           >
@@ -58,7 +57,6 @@ const MobileFiltersDrawer: FC<MobileFiltersDrawerProps> = ({ disabled, children,
             className="!outline-none"
             variant="secondary"
             onClick={() => {
-              onOK();
               setOpen(false);
             }}
           >
