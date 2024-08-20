@@ -55,6 +55,7 @@ const MarketplaceList: FC<MarketplaceListProps> = ({ user, initialData, pageSize
         ...acc,
       };
     }, {});
+
     setData(null);
     const req = await getMarketplaceListAction(pageSize, params);
     if (req.data) {

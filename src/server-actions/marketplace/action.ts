@@ -12,7 +12,7 @@ export const getMarketplaceListAction = async (
 ): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ sellingProperties: SellingPropertyDetails[] } & IPagination>(
-      `selling-properties/?${new URLSearchParams({ ...params, pageSize: pageSize.toString(), sellerType: "sale" })}`,
+      `selling-properties/?${new URLSearchParams({ ...params, pageSize: pageSize.toString(), sellerType: "sale" }).toString()}`,
       {
         next: { tags: [marketplaceTag] },
       }

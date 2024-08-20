@@ -1,13 +1,13 @@
 "use client";
 
 import { SortEnum } from "@/types/common";
-import Sort from "@/components/@new/shared/filters/Sort";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import TextField from "@/components/@new/shared/forms/text-field";
 import { IoSearchOutline } from "react-icons/io5";
 import { cn } from "@/helpers/common";
 import { IMarketplaceFilters } from "@/types/lands";
+import Sort from "@/components/@new/filters/sort";
 import MarketplaceDesktopFilters from "./marketplace-desktop-filters";
 import MarketplaceMobileFilters from "./marketplace-mobile-filters";
 
@@ -56,7 +56,12 @@ const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, fil
           </div>
           <div className="flex items-center gap-3 justify-end min-w-max">
             <p className="text-grey-600 text-xs">{totalCount} Properties</p>
-            <Sort disabled={!user?.isSubscribed} options={SortEnum} />
+            <Sort
+              value={filters.sortBy}
+              onChange={(sortBy: any) => setFilters({ ...filters, sortBy })}
+              disabled={!user?.isSubscribed}
+              options={SortEnum}
+            />
           </div>
         </div>
       </div>

@@ -63,7 +63,7 @@ export const getAcreageLabel = (acreageMin: IMarketplaceFilters["acreageMin"], a
   return "";
 };
 
-export const getPriceLabel = (priceMin: IMarketplaceFilters["priceMin"], priceMax: IMarketplaceFilters["priceMax"]) => {
+export const getPriceLabel = (priceMin: number | null, priceMax: number | null) => {
   if (!priceMin && !priceMax) {
     return "";
   }
