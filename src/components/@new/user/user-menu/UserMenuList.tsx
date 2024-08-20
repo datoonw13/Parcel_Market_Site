@@ -62,11 +62,6 @@ const list = [
     path: routes.user.listings.fullUrl,
   },
   {
-    label: "My Saved Properties",
-    icon: BookOpen,
-    path: routes.user.followedProperties.fullUrl,
-  },
-  {
     label: "My Received Offers",
     icon: DiscountBox,
     path: routes.user.offers.received.fullUrl,
@@ -75,6 +70,11 @@ const list = [
     label: "My Sent Offers",
     icon: DiscountCircle,
     path: routes.user.offers.sent.fullUrl,
+  },
+  {
+    label: "My Saved Properties",
+    icon: BookOpen,
+    path: routes.user.followedProperties.fullUrl,
   },
   {
     label: "My Recent Searches",
