@@ -57,6 +57,7 @@ const MarketplaceList: FC<MarketplaceListProps> = ({ user, initialData, pageSize
     }, {});
 
     setData(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     const req = await getMarketplaceListAction(pageSize, params);
     if (req.data) {
       setData(req.data);
