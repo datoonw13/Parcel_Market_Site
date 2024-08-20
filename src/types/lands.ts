@@ -12,15 +12,14 @@ export enum SortBy {
 }
 
 export interface IMarketplaceFilters {
-  state: string | null;
-  county: string | null;
+  search: string | null;
+  states: string[] | null;
+  counties: string[] | null;
   acreageMin: number | null;
   acreageMax: number | null;
-  priceMin: number | null;
-  priceMax: number | null;
+  voltValueMin: number | null;
+  voltValueMax: number | null;
   page: number;
-  pageSize: number;
-  sellerType: PropertySellReq["sellerType"];
   sortBy: SortBy | null;
 }
 

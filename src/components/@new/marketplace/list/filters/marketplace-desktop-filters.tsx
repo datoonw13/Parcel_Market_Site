@@ -1,50 +1,48 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import MultiSelect from "@/components/@new/filters/desktop/multi-select";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { uniqBy } from "lodash";
 import MinMaxDesktopFilters from "@/components/@new/shared/filters/desktop/MinMaxDesktopFilters";
 import { acreagesFilters, getAcreageLabel, getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
+import { IMarketplaceFilters } from "@/types/lands";
 
-const MarketplaceDesktopFilters = ({ disabled }: { disabled?: boolean }) => {
-  const [filters, setFilters] = useState<{
-    states: string[];
-    counties: string[];
-    acreage: { min: number | null; max: number | null };
-    voltValue: { min: number | null; max: number | null };
-  }>({
-    states: [],
-    counties: [],
-    acreage: { min: null, max: null },
-    voltValue: { min: null, max: null },
-  });
+const MarketplaceDesktopFilters = ({
+  disabled,
+  filters,
+  setFilters,
+}: {
+  disabled?: boolean;
+  filters: IMarketplaceFilters;
+  setFilters: Dispatch<SetStateAction<IMarketplaceFilters>>;
+}) => {
   const states = useMemo(() => getAllStates(), []);
   const counties = useMemo(() => {
-    const countiesList = filters.states.map((state) => getCounties(state));
+    const countiesList = filters.states?.map((state) => getCounties(state)) || [];
     return uniqBy(countiesList.flat(), "value");
   }, [filters.states]);
 
   return (
     <div className="grid w-full grid-cols-4 gap-3">
       <MultiSelect
-        selectedOptions={filters.states}
-        onChange={(states) => setFilters({ ...filters, states, counties: [] })}
+        selectedOptions={filters.states || []}
+        onChange={(states) => setFilters({ ...filters, states: states.length === 0 ? null : [], counties: [] })}
         disabled={disabled}
         initialOptions={states}
         placeholder="States"
       />
       <MultiSelect
-        selectedOptions={filters.counties}
-        onChange={(counties) => setFilters({ ...filters, counties })}
+        selectedOptions={filters.counties || []}
+        onChange={(counties) => setFilters({ ...filters, counties: counties.length === 0 ? null : counties })}
         initialOptions={counties}
-        disabled={filters.states.length === 0 || disabled}
+        disabled={filters.states?.length === 0 || disabled}
         placeholder="Counties"
       />
       <MinMaxDesktopFilters
         disabled={disabled}
-        onChange={(acreage) => setFilters({ ...filters, acreage })}
-        selectedValue={filters.acreage}
+        onChange={(acreage) => setFilters({ ...filters, acreageMin: acreage.min, acreageMax: acreage.max })}
+        selectedValue={{ min: filters.acreageMin, max: filters.acreageMax }}
         options={acreagesFilters}
         placeHolder="Acreage"
         getOptionLabel={(item) => getAcreageLabel(item.min, item.max)}
@@ -52,8 +50,8 @@ const MarketplaceDesktopFilters = ({ disabled }: { disabled?: boolean }) => {
       <MinMaxDesktopFilters
         disabled={disabled}
         options={priceFilters}
-        onChange={(voltValue) => setFilters({ ...filters, voltValue })}
-        selectedValue={filters.voltValue}
+        onChange={(voltValue) => setFilters({ ...filters, voltValueMin: voltValue.min, voltValueMax: voltValue.max })}
+        selectedValue={{ min: filters.voltValueMin, max: filters.voltValueMax }}
         placeHolder="VOLT Value"
         getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
       />
