@@ -18,8 +18,9 @@ const ValueLandCalculatedPrice = async () => {
           <div className="space-y-2">
             <h1 className="text-lg font-semibold">The average price for similar sized property in your area</h1>
             <h2 className="text-grey-800 text-sm">
-              {user? "This VOLT search will be saved in your account under “MY Recent Searches" : "To view, save, or export sales data used in this calculation, you must sign in or create an account with us."}
-              
+              {user
+                ? "This VOLT search will be saved in your account under “MY Recent Searches"
+                : "To view, save, or export sales data used in this calculation, you must sign in or create an account with us."}
             </h2>
           </div>
           <SaveCalculationData user={user} />
