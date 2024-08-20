@@ -14,6 +14,7 @@ export interface ISubscription {
   activeTo: Date;
   currency: string;
   status: IStripeStatuses;
+  cancelAtPeriodEnd?: boolean;
 }
 
 export type IStripePaymentMethods = Array<{

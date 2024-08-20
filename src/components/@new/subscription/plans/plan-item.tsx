@@ -42,6 +42,9 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
 };
 
 const checkIsActive = (subscription: SubscriptionType, userActiveSubscription?: ISubscription) => {
+  if(userActiveSubscription?.cancelAtPeriodEnd) {
+    return false
+  }
   if (subscription === SubscriptionType.Trial) {
     return userActiveSubscription?.status === "trialing";
   }

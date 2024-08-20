@@ -8,7 +8,7 @@ const PlanList = async () => {
   const user = await getUserAction();
   const userSubscriptions = await getUserSubscriptions();
   const userActiveSubscription = userSubscriptions.data?.find((el) => el.status === "active" || el.status === "trialing");
-
+  
   const showPlan = (plan: SubscriptionType) => {
     if (plan !== SubscriptionType.Trial) {
       return true;
