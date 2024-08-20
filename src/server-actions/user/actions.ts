@@ -13,7 +13,7 @@ import { z } from "zod";
 import { DeletionAccountReason, IDecodedAccessToken, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
-export const setAuthToken = (token: string) => {
+export const setAuthToken = (token: string, remember?: boolean) => {
   const decodedToken = jwtDecode(token) as { exp: number };
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
   // set jwt token in cookie
@@ -22,7 +22,7 @@ export const setAuthToken = (token: string) => {
     value: token,
     httpOnly: true,
     secure: true,
-    maxAge: maxAgeInSeconds,
+    ...(remember && { maxAge: maxAgeInSeconds }),
   });
   revalidatePath("/");
 };
@@ -45,7 +45,11 @@ export const refreshToken = async (): Promise<ResponseModel<string | null>> => {
   }
 };
 
-export const signInUserAction = async (prevState: any, formData: FormData): Promise<ResponseModel<ISignInResponse | null>> => {
+export const signInUserAction = async (
+  prevState: any,
+  formData: FormData,
+  remember?: boolean
+): Promise<ResponseModel<ISignInResponse | null>> => {
   const values = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -64,7 +68,7 @@ export const signInUserAction = async (prevState: any, formData: FormData): Prom
       body: JSON.stringify(validations.data),
       cache: "no-cache",
     });
-    setAuthToken(data.access_token);
+    setAuthToken(data.access_token, remember);
     return { data, errorMessage: null };
   } catch (error) {
     return {

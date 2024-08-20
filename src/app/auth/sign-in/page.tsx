@@ -22,9 +22,10 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
   const ref = useRef<HTMLButtonElement | null>(null);
   const params = new URLSearchParams(searchParams);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   const signIn = async (prevState: any, formData: FormData) => {
-    const request = await signInUserAction(prevState, formData);
+    const request = await signInUserAction(prevState, formData, remember);
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
@@ -60,7 +61,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
           }
         />
         <div className="flex justify-between gap-4">
-          <CheckBox label="Remember me" name="sign-in-remember" />
+          <CheckBox checked={remember} onChange={() => setRemember(!remember)} label="Remember me" name="sign-in-remember" />
           <ForgotPasswordButton user={null} />
         </div>
         <SubmitButton ref={ref} />
