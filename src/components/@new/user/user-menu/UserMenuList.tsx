@@ -62,7 +62,7 @@ const list = [
     path: routes.user.listings.fullUrl,
   },
   {
-    label: "My Followed Listings",
+    label: "My Saved Properties",
     icon: BookOpen,
     path: routes.user.followedProperties.fullUrl,
   },
