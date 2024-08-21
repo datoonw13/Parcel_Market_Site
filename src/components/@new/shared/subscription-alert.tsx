@@ -14,7 +14,7 @@ const SubscriptionAlert = ({ user }: { user: IDecodedAccessToken | null }) =>
         <span>
           If you want to activate new plan click on{" "}
           <Link href={routes.user.subscription.fullUrl}>
-            <span className="cursor-pointer">Choose Plan button</span>
+            <span className="cursor-pointer underline">Choose Plan button</span>
           </Link>
           , or check the information on your profile section
         </span>
