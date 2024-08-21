@@ -19,7 +19,7 @@ import SendOfferButton from "./send-offer-button";
 const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number; goBack: () => void }) => {
   const {
     handleSubmit,
-    formState: { isSubmitted, errors, isSubmitting },
+    formState: { isSubmitted, errors },
     setValue,
     watch,
     getValues,
@@ -46,7 +46,6 @@ const CreateOffer = ({ sellingPropertyId, goBack }: { sellingPropertyId: number;
             />
             <OfferClosingPeriodField
               error={!!errors.closingPeriodDays}
-              value={watch("closingPeriodDays")}
               onChange={(value) => setValue("closingPeriodDays", value, { shouldValidate: isSubmitted })}
             />
             <OfferClosingCostsField

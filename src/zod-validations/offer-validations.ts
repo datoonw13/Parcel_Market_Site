@@ -4,7 +4,7 @@ export const offerValidation = z.object({
   price: z.number().min(1).max(999999999),
   earnestMoney: z.number().min(1).max(100).nullable(),
   inspectionPeriodDays: z.number().min(1).nullable(),
-  closingPeriodDays: z.union([z.literal(15), z.literal(30), z.literal(45)]),
+  closingPeriodDays: z.number().min(1),
   closingCosts: z.string().min(1),
   contigencies: z.array(z.string().min(1)).min(1).nullable(),
   offerActiveForDays: z.union([
