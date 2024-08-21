@@ -5,7 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import SignInGoogle from "./sign-in-google";
 
 const GoogleAuthProvider = () => (
-  <GoogleOAuthProvider clientId="428513511195-dcmr74bq5f6sitpidje63os8kq58ktpe.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId="1044615132913-47b2qev9mdhs25jspgblbqfmg7ndugpd.apps.googleusercontent.com">
     <SignInGoogle />
   </GoogleOAuthProvider>
 );
