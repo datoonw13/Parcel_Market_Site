@@ -138,8 +138,10 @@ export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
   const userString = cookies().get("jwt")?.value;
   if (userString) {
     try {
-      const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed } = jwtDecode(userString!) as IDecodedAccessToken;
-      const user = { id, sub, firstName, lastName, email, role, planSelected, isSubscribed };
+      const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed, isGoogleUser } = jwtDecode(
+        userString!
+      ) as IDecodedAccessToken;
+      const user = { id, sub, firstName, lastName, email, role, planSelected, isSubscribed, isGoogleUser };
       return { ...user };
     } catch (error) {
       return null;

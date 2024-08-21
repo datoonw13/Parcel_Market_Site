@@ -46,6 +46,7 @@ export interface IDecodedAccessToken {
   id: number;
   planSelected?: boolean;
   isSubscribed?: boolean;
+  isGoogleUser?: boolean;
 }
 
 export interface ISignInResponse {
