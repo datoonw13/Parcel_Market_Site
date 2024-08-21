@@ -3,6 +3,7 @@
 import { FC } from "react";
 import ReactPaginate from "react-paginate";
 import clsx from "clsx";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowIconLeft1, ArrowIconRight1 } from "../icons/ArrowIcons";
 
 interface TablePaginationProps {
@@ -10,11 +11,15 @@ interface TablePaginationProps {
   totalCount: number;
   className?: string;
   currentPage?: number;
-  onChange: (page: number) => void;
 }
-const TablePagination: FC<TablePaginationProps> = ({ rowsPerPage, totalCount, className, currentPage, onChange }) => {
+const TablePagination: FC<TablePaginationProps> = ({ rowsPerPage, totalCount, className, currentPage }) => {
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const pathname = usePathname();
+  const router = useRouter();
   const handlePageClick = (event: any) => {
-    onChange(Number(event.selected));
+    params.set("page", (Number(event.selected) + 1).toString());
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (

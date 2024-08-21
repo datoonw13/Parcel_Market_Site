@@ -1,18 +1,36 @@
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { SellingPropertyDetails } from "@/types/property";
+import { z } from "zod";
+import { marketplaceFiltersValidations } from "@/zod-validations/filters-validations";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "./tags";
 
+const transformFilters = <T extends {}>(data: T) => {
+  const filters = Object.keys(data).reduce((acc, cur) => {
+    const key = cur as keyof typeof data;
+    if (data[key]) {
+      return {
+        ...acc,
+        [key]: data[key],
+      };
+    }
+    return { ...acc };
+  }, {});
+  return filters;
+};
+
 export const getMarketplaceListAction = async (
   pageSize: number,
-  params?: {
-    [key: string]: string;
-  }
+  filters: Partial<z.infer<typeof marketplaceFiltersValidations>>
 ): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ sellingProperties: SellingPropertyDetails[] } & IPagination>(
-      `selling-properties/?${new URLSearchParams({ ...params, pageSize: pageSize.toString(), sellerType: "sale" }).toString()}`,
+      `selling-properties/?${new URLSearchParams({
+        ...transformFilters(filters),
+        pageSize: pageSize.toString(),
+        sellerType: "sale",
+      }).toString()}`,
       {
         next: { tags: [marketplaceTag] },
       }

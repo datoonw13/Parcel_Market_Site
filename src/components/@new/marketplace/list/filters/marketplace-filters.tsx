@@ -12,19 +12,18 @@ import MarketplaceDesktopFilters from "./marketplace-desktop-filters";
 import MarketplaceMobileFilters from "./marketplace-mobile-filters";
 
 interface MarketPlaceFiltersProps {
-  filters: IMarketplaceFilters;
-  setFilters: Dispatch<SetStateAction<IMarketplaceFilters>>;
+  selectedFilters: IMarketplaceFilters;
+  onChange: <T extends keyof IMarketplaceFilters>(data: { [key in T]: IMarketplaceFilters[T] }) => void;
   totalCount: number;
   user: IDecodedAccessToken | null;
-  initialFilters: IMarketplaceFilters;
 }
-const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, filters, setFilters, initialFilters }) => {
+const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, selectedFilters, onChange }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const handleSearch = (value: string) => {
     timerRef.current && window.clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
-      setFilters((prev) => ({ ...initialFilters, search: value || null }));
+      onChange({ search: value || null });
     }, 300);
   };
 
@@ -49,19 +48,19 @@ const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, fil
       <div className="mb-6 md:mb-8 lg:mb-10">
         <div className="flex justify-between items-center gap-5 lg:gap-32 xl:gap-60">
           <div className="flex lg:hidden">
-            <MarketplaceMobileFilters disabled={!user?.isSubscribed} filters={filters} setFilters={setFilters} />
+            {/* <MarketplaceMobileFilters disabled={!user?.isSubscribed} filters={filters} setFilters={setFilters} /> */}
           </div>
           <div className="hidden lg:flex">
-            <MarketplaceDesktopFilters filters={filters} setFilters={setFilters} disabled={!user?.isSubscribed} />
+            <MarketplaceDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
           </div>
           <div className="flex items-center gap-3 justify-end min-w-max">
             <p className="text-grey-600 text-xs">{totalCount} Properties</p>
-            <Sort
+            {/* <Sort
               value={filters.sortBy}
               onChange={(sortBy: any) => setFilters({ ...filters, sortBy })}
               disabled={!user?.isSubscribed}
               options={SortEnum}
-            />
+            /> */}
           </div>
         </div>
       </div>
