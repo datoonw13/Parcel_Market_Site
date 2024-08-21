@@ -186,6 +186,7 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
               {step === ForgotPasswordSteps.NEW_PASSWORD && (
                 <div className="space-y-4">
                   <TextField
+                    type={showNewPassword ? "text" : "password"}
                     placeholder="New password"
                     value={values.newPassword}
                     onChange={(newPassword) => setValues({ ...values, newPassword })}
@@ -196,6 +197,7 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
                     }
                   />
                   <TextField
+                    type={showRepeatNewPassword ? "text" : "password"}
                     placeholder="Re-type new password"
                     value={values.repeatNewPassword}
                     onChange={(repeatNewPassword) => setValues({ ...values, repeatNewPassword })}
