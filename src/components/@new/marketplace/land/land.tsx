@@ -69,9 +69,15 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
                 <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
                   {data.frontNavigable ? "Water Front" : "No Water Front"}
                 </div>
-                <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
-                  {data?.cover?.join(";")}
-                </div>
+                {data.cover &&
+                  data.cover.map((cover) => (
+                    <div
+                      key={cover}
+                      className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200"
+                    >
+                      {`${cover} cover type`}
+                    </div>
+                  ))}
                 <div className="font-medium text-xs text-primary-main py-1 px-4 rounded-3xl bg-primary-main-100 border border-primary-main-200">
                   {data.wet}
                 </div>
