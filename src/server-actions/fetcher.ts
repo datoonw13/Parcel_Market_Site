@@ -13,8 +13,6 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     },
   });
 
-  console.log(url);
-
   const response = (await request.json()) as {
     data: any;
     errors: string[];

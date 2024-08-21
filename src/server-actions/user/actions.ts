@@ -78,17 +78,14 @@ export const signInUserAction = async (
   }
 };
 
-const delay = (rejectPromise?: boolean) => new Promise((resolve, reject) => setTimeout(rejectPromise ? reject : resolve, 1500));
-export const googleSignInUserAction = async (access_token: string): Promise<ResponseModel<ISignInResponse | null>> => {
+export const googleSignInUserAction = async (token: string): Promise<ResponseModel<ISignInResponse | null>> => {
   try {
-    // const data = await fetcher<ISignInResponse>("user/google/auth", {
-    //   method: "POST",
-    //   body: JSON.stringify({ access_token }),
-    //   cache: "no-cache",
-    // });
-    // setAuthToken(data.access_token);
-    await delay(true);
-    return { data: null, errorMessage: null };
+    const data = await fetcher<ISignInResponse>("user/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    });
+    setAuthToken(data.access_token);
+    return { data, errorMessage: null };
   } catch (error) {
     return {
       errorMessage: (error as ErrorResponse)?.message || "some",
@@ -97,15 +94,13 @@ export const googleSignInUserAction = async (access_token: string): Promise<Resp
   }
 };
 
-export const googleSignUpUserAction = async (data: IUserSignUp, access_token: string): Promise<ResponseModel<ISignInResponse | null>> => {
+export const googleSignUpUserAction = async (payload: IUserSignUp, token: string): Promise<ResponseModel<ISignInResponse | null>> => {
   try {
-    // const data = await fetcher<ISignInResponse>("user/google/register", {
-    //   method: "POST",
-    //   body: JSON.stringify({ access_token, ...data }),
-    //   cache: "no-cache",
-    // });
-    // setAuthToken(data.access_token);
-    await delay(true);
+    const data = await fetcher<ISignInResponse>("user/register", {
+      method: "POST",
+      body: JSON.stringify({ token, ...payload }),
+    });
+    setAuthToken(data.access_token);
     return { data: null, errorMessage: null };
   } catch (error) {
     return {
