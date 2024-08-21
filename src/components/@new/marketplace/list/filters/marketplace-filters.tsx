@@ -2,7 +2,7 @@
 
 import { SortEnum } from "@/types/common";
 import { IDecodedAccessToken } from "@/types/auth";
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import TextField from "@/components/@new/shared/forms/text-field";
 import { IoSearchOutline } from "react-icons/io5";
 import { cn } from "@/helpers/common";
@@ -48,19 +48,19 @@ const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, sel
       <div className="mb-6 md:mb-8 lg:mb-10">
         <div className="flex justify-between items-center gap-5 lg:gap-32 xl:gap-60">
           <div className="flex lg:hidden">
-            {/* <MarketplaceMobileFilters disabled={!user?.isSubscribed} filters={filters} setFilters={setFilters} /> */}
+            <MarketplaceMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} />
           </div>
           <div className="hidden lg:flex">
             <MarketplaceDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
           </div>
           <div className="flex items-center gap-3 justify-end min-w-max">
             <p className="text-grey-600 text-xs">{totalCount} Properties</p>
-            {/* <Sort
-              value={filters.sortBy}
-              onChange={(sortBy: any) => setFilters({ ...filters, sortBy })}
+            <Sort
+              value={selectedFilters.sortBy}
+              onChange={(sortBy: any) => onChange({'sortBy': sortBy})}
               disabled={!user?.isSubscribed}
               options={SortEnum}
-            /> */}
+            />
           </div>
         </div>
       </div>

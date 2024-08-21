@@ -1,4 +1,4 @@
-import { SortBy } from "@/types/lands";
+import { SortEnum } from "@/types/common";
 import { z } from "zod";
 
 export const marketplaceFiltersValidations = z.object({
@@ -10,5 +10,5 @@ export const marketplaceFiltersValidations = z.object({
   voltValueMin: z.number({ coerce: true }).nullable().optional(),
   voltValueMax: z.number({ coerce: true }).nullable().optional(),
   page: z.number({ coerce: true }).min(1),
-  sortBy: z.nativeEnum(SortBy).nullable().optional(),
+  sortBy: z.nativeEnum(SortEnum).nullable().optional(),
 });

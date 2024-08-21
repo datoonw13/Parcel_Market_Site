@@ -10,29 +10,29 @@ import { IMarketplaceFilters } from "@/types/lands";
 import { uniqBy } from "lodash";
 
 interface MarketplaceMobileFiltersProps {
-  filters: IMarketplaceFilters;
-  setFilters: Dispatch<SetStateAction<IMarketplaceFilters>>;
   disabled?: boolean;
+  selectedFilters: IMarketplaceFilters;
+  onChange: <T extends keyof IMarketplaceFilters>(data: { [key in T]: IMarketplaceFilters[T] }) => void;
 }
-const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled, filters, setFilters }) => {
+const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled, selectedFilters, onChange }) => {
   const [localFilters, setLocalFilters] = useState<IMarketplaceFilters | null>(null);
   const [open, setOpen] = useState<"states" | "counties" | "acreage" | "voltValue" | null>(null);
   const states = useMemo(() => getAllStates(), []);
   const counties = useMemo(() => {
-    const countiesList = filters.states?.map((state) => getCounties(state)) || [];
+    const countiesList = selectedFilters.states?.map((state) => getCounties(state)) || [];
     return uniqBy(countiesList.flat(), "value");
-  }, [filters.states]);
+  }, [selectedFilters.states]);
 
   return (
     <MobileFiltersDrawer
-      onOpen={() => setLocalFilters(filters)}
+      onOpen={() => setLocalFilters(selectedFilters)}
       onClose={() => {
-        setLocalFilters(filters);
+        setLocalFilters(selectedFilters);
         setOpen(null);
       }}
       onOK={() => {
         if (localFilters) {
-          setFilters(localFilters);
+          onChange(localFilters)
           setOpen(null);
         }
       }}
