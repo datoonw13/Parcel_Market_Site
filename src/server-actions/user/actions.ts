@@ -101,7 +101,7 @@ export const googleSignUpUserAction = async (payload: IUserSignUp, token: string
       body: JSON.stringify({ token, ...payload }),
     });
     setAuthToken(data.access_token);
-    return { data: null, errorMessage: null };
+    return { data, errorMessage: null };
   } catch (error) {
     return {
       errorMessage: (error as ErrorResponse)?.message || "some",

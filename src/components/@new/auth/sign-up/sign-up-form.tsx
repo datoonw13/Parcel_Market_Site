@@ -10,7 +10,7 @@ import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/actions";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import Button from "../../shared/forms/Button";
 import TextField from "../../shared/forms/text-field";
@@ -24,7 +24,9 @@ interface SignUpProps {
 }
 
 const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const access_token = searchParams.get("access_token");
   const firstName = searchParams.get("firstName");
   const lastName = searchParams.get("lastName");
@@ -59,9 +61,19 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
 
   const onSubmit = handleSubmit(async (data) => {
     if (isGoogleUser) {
-      const { errorMessage } = await googleSignUpUserAction(data, access_token);
+      const { data: requestData, errorMessage } = await googleSignUpUserAction(data, access_token);
       if (errorMessage) {
         notify({ title: errorMessage }, { variant: "error" });
+      } else {
+        if (params.get("from")) {
+          const fromUrl = params.get("from");
+          params.delete("from");
+          params.set("from", routes.auth.signIn.fullUrl);
+          const newLocation = `${fromUrl}?${params.toString()}`;
+          router.replace(newLocation);
+          return;
+        }
+        router.replace(requestData?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     } else {
       const request = await signUpUserAction(data);
