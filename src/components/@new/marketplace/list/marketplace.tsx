@@ -20,7 +20,7 @@ import TablePagination from "../../shared/table-pagination";
 import DataNotFound from "../../shared/DataNotFound";
 import LandListItem from "../../lands/land-list-item/land-list-item";
 
-interface MarketplaceListProps {
+interface MarketplaceProps {
   user: IDecodedAccessToken | null;
   initialData: ({ list: SellingPropertyDetails[] } & IPagination) | null;
   pageSize: number;
@@ -38,8 +38,8 @@ const initialFilters = {
   voltValueMax: null,
 };
 
-const MarketplaceList: FC<MarketplaceListProps> = ({ user, initialData, pageSize }) => {
-  const [data, setData] = useState<MarketplaceListProps["initialData"]>(null);
+const Marketplace: FC<MarketplaceProps> = ({ user, initialData, pageSize }) => {
+  const [data, setData] = useState<MarketplaceProps["initialData"]>(null);
   const isMounted = useRef(false);
   const [filters, setFilters] = useState<IMarketplaceFilters>(initialFilters);
 
@@ -169,4 +169,4 @@ const MarketplaceList: FC<MarketplaceListProps> = ({ user, initialData, pageSize
   );
 };
 
-export default MarketplaceList;
+export default Marketplace;
