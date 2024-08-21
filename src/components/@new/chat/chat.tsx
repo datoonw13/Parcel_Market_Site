@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 export default function Chat() {
   return (
     <div className="h-full">
-      <Session appId="tH8dYGgp" userId={'sample_user_alice'}  >
+      <Session appId="tH8dYGgp" userId="sample_user_alice">
         <Inbox className="h-full" />
       </Session>
     </div>

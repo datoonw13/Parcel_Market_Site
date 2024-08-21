@@ -9,6 +9,6 @@ export const marketplaceFiltersValidations = z.object({
   acreageMax: z.number({ coerce: true }).nullable().optional(),
   voltValueMin: z.number({ coerce: true }).nullable().optional(),
   voltValueMax: z.number({ coerce: true }).nullable().optional(),
-  page: z.number({ coerce: true }).min(1),
+  page: z.number({ coerce: true }).optional(),
   sortBy: z.nativeEnum(SortEnum).nullable().optional(),
 });

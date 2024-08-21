@@ -32,7 +32,7 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
       }}
       onOK={() => {
         if (localFilters) {
-          onChange(localFilters)
+          onChange(localFilters);
           setOpen(null);
         }
       }}

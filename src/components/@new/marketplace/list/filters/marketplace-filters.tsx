@@ -57,7 +57,7 @@ const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, sel
             <p className="text-grey-600 text-xs">{totalCount} Properties</p>
             <Sort
               value={selectedFilters.sortBy}
-              onChange={(sortBy: any) => onChange({'sortBy': sortBy})}
+              onChange={(sortBy: any) => onChange({ sortBy })}
               disabled={!user?.isSubscribed}
               options={SortEnum}
             />

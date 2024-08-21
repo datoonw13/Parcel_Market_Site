@@ -15,13 +15,14 @@ import TablePagination from "../../shared/table-pagination";
 const MarketplaceList = async ({
   pageSize,
   totalCount,
-  filters,
+  searchParams,
 }: {
   pageSize: number;
   totalCount: number;
-  filters: z.infer<typeof marketplaceFiltersValidations>;
+  searchParams: z.infer<typeof marketplaceFiltersValidations>;
 }) => {
-  const { data } = await getMarketplaceListAction(pageSize, filters);
+  const filters = await marketplaceFiltersValidations.safeParseAsync(searchParams);
+  const { data } = await getMarketplaceListAction(pageSize, filters.data!);
   const user = await getUserAction();
 
   return (
@@ -81,7 +82,7 @@ const MarketplaceList = async ({
           <TablePagination
             rowsPerPage={pageSize}
             totalCount={data?.pagination.totalCount}
-            currentPage={filters.page ? Number(filters.page) - 1 : 0}
+            currentPage={filters.data?.page ? Number(filters.data?.page) - 1 : 0}
           />
         )}
         {totalCount === 0 && <DataNotFound message="There is no land added yet..." />}
