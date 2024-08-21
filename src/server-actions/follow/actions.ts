@@ -2,8 +2,7 @@
 
 import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
-import { revalidatePath, revalidateTag } from "next/cache";
-import routes from "@/helpers/routes";
+import { revalidateTag } from "next/cache";
 import { SellingPropertyDetails } from "@/types/property";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "../marketplace/tags";
