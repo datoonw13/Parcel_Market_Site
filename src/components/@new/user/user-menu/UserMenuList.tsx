@@ -42,6 +42,11 @@ const list = [
     path: routes.user.profile.fullUrl,
   },
   {
+    label: "My Messages",
+    icon: EnvelopeIcon,
+    path: routes.user.messages.fullUrl,
+  },
+  {
     label: "Notifications",
     icon: TbBellRinging,
     path: routes.user.notifications.fullUrl,
@@ -50,11 +55,6 @@ const list = [
     label: "My Subscription",
     icon: BellOutline,
     path: routes.user.subscription.fullUrl,
-  },
-  {
-    label: "My Messages",
-    icon: EnvelopeIcon,
-    path: "/",
   },
   {
     label: "My Listings",

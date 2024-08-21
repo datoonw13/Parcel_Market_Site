@@ -43,6 +43,11 @@ const routes = {
       fullUrl: "/user/notifications",
       protected: true,
     },
+    messages: {
+      url: "messages",
+      fullUrl: "/user/messages",
+      protected: true,
+    },
     profile: {
       url: "profile",
       fullUrl: "/user/profile",
