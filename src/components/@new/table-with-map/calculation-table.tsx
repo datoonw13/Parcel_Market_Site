@@ -46,16 +46,16 @@ const LandPriceCalculationTable = ({
   onSelect,
   onMouseEnter,
   onMouseLeave,
-  selectedItem,
-  hoveredItem,
+  selectedItemId,
+  hoveredItemId,
   isUserSubscriptionTrial,
 }: {
   data: Array<PropertyModel>;
-  onSelect: (value: LatLngTuple) => void;
-  onMouseEnter: (value: LatLngTuple) => void;
-  onMouseLeave: (value: LatLngTuple) => void;
-  selectedItem: string | null;
-  hoveredItem: string | null;
+  onSelect: (id: string) => void;
+  onMouseEnter: (id: string) => void;
+  onMouseLeave: (id: string) => void;
+  selectedItemId: string | null;
+  hoveredItemId: string | null;
   isUserSubscriptionTrial: boolean;
 }) => {
   const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "acreage", dir: "desc" });
@@ -150,12 +150,12 @@ const LandPriceCalculationTable = ({
                 key={item.latitude + item.longitude}
                 className={clsx(
                   "transition-all duration-100 cursor-pointer",
-                  selectedItem === JSON.stringify([Number(item.latitude), Number(item.longitude)]) && "bg-primary-main-100",
-                  hoveredItem === JSON.stringify([Number(item.latitude), Number(item.longitude)]) && "bg-primary-main-50"
+                  selectedItemId === item.id && "bg-primary-main-100",
+                  hoveredItemId === item.id && "bg-primary-main-50"
                 )}
-                onClick={() => onSelect([Number(item.latitude), Number(item.longitude)])}
-                onMouseEnter={() => onMouseEnter([Number(item.latitude), Number(item.longitude)])}
-                onMouseLeave={() => onMouseLeave([Number(item.latitude), Number(item.longitude)])}
+                onClick={() => onSelect(item.id)}
+                onMouseEnter={() => onMouseEnter(item.id)}
+                onMouseLeave={() => onMouseLeave(item.id)}
               >
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
                   {itemI + 1}

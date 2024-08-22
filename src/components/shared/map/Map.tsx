@@ -29,6 +29,7 @@ interface IProps {
   popupClose?: (id: string) => void;
   onMarkerClick?: (id: string) => void;
   disableZoom?: boolean;
+  highlightItemId?: string | null;
 }
 
 const markerDefault = new Icon({
@@ -41,8 +42,8 @@ const markerActive = new Icon({
   iconSize: [36, 48],
 });
 
-const getMarkerIcon = (mapItem: IProps["properties"][0]) => {
-  if (mapItem.markerType === "active") {
+const getMarkerIcon = (mapItem: IProps["properties"][0], highlightItemId?: string | null) => {
+  if (mapItem.markerType === "active" || highlightItemId === mapItem.id) {
     return markerActive;
   }
   return markerDefault;
@@ -59,10 +60,9 @@ const Map = ({
   popupOpen,
   onMarkerClick,
   disableZoom,
+  highlightItemId,
 }: IProps) => {
   const centerToItem = properties.find((el) => el.center);
-  console.log(centerToItem, 22222);
-
   const centerToAllProperties = getCenter(properties.map((el) => ({ latitude: el.latitude, longitude: el.longitude }))) || {
     latitude: 0,
     longitude: 0,
@@ -109,7 +109,7 @@ const Map = ({
                   setMarkerRef(mapItem.id, ref);
                 }
               }}
-              icon={getMarkerIcon(mapItem)}
+              icon={getMarkerIcon(mapItem, highlightItemId)}
               position={[mapItem.latitude, mapItem.longitude]}
             >
               {mapItem?.popup && <Popup>{mapItem.popup}</Popup>}

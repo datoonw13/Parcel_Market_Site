@@ -16,13 +16,14 @@ interface PropertyModel {
   acreage: number;
 }
 interface CalculationMapProps {
-  properties: Array<PropertyModel & { lastSalePrice: number }>;
+  properties: Array<PropertyModel & { lastSalePrice: number; lastSaleDate: string }>;
   sellingProperty: PropertyModel & { salePrice: number; coordinates: string; owner: string };
   setMarkerRef: (id: string, ref: Marker) => void;
   markerMouseEnter: (id: string) => void;
   markerMouseLeave: (id: string) => void;
   popupOpen: (id: string) => void;
   popupClose: (id: string) => void;
+  highlightItemId?: string | null;
 }
 
 const CalculationMap: FC<CalculationMapProps> = ({
@@ -33,6 +34,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
   popupOpen,
   properties,
   sellingProperty,
+  highlightItemId,
 }) => {
   // const usedForPriceCalculation = data
   //   .filter((el) => el.parcelNumber !== "03-0429-004-01-09")
@@ -98,7 +100,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
       markerType: "active" as const,
       center: true,
       popup: (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 space-y-2">
           <p className="!p-0 !m-0">
             Owner: <b>{sellingProperty.owner}</b>
           </p>
@@ -108,12 +110,50 @@ const CalculationMap: FC<CalculationMapProps> = ({
           <p className="!p-0 !m-0">
             Price Per Acreage: <b>{numFormatter.format(sellingProperty.salePrice / sellingProperty.acreage)}</b>
           </p>
+          {mainLandSaleHistory.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <p className="!p-0 !m-0 !font-semibold">Sales History:</p>
+              {mainLandSaleHistory.map((history) => (
+                <div key={JSON.stringify(history)} className="!mb-1">
+                  <p className="!p-0 !m-0">
+                    Sale Date: <b>{history.lastSaleDate}</b>
+                  </p>
+                  <p className="!p-0 !m-0">
+                    Sale Price Per Acre: <b>{numFormatter.format(history.lastSalePrice / history.acreage)}</b>
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ),
     },
-    ...properties,
+    ...properties
+      .filter((property) =>
+        mainLandSaleHistory.find(
+          (saleHistory) => formatParcelNumber(saleHistory.parcelNumber) !== formatParcelNumber(property.parcelNumber)
+        )
+      )
+      .map((el) => ({
+        ...el,
+        popup: (
+          <div className="flex flex-col gap-1">
+            <p className="!p-0 !m-0">
+              Parcel Number: <b>{el.parcelNumber}</b>
+            </p>
+            <p className="!p-0 !m-0">
+              Acreage: <b>{el.acreage}</b>
+            </p>
+            <p className="!p-0 !m-0">
+              Last Sale Date: <b>{el.lastSaleDate}</b>
+            </p>
+            <p className="!p-0 !m-0">
+              Last Sale Price Per Acre: <b>{numFormatter.format(el.lastSalePrice / el.acreage)}</b>
+            </p>
+          </div>
+        ),
+      })),
   ];
-  console.log(mainLandSaleHistory);
 
   return (
     <div className="bg-primary-main-100 h-52 sm:h-60 md:h-96 lg:h-[448px] rounded-2xl [&>div]:rounded-2xl">
@@ -125,6 +165,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
         setMarkerRef={setMarkerRef}
         zoom={10}
         properties={mapItems}
+        highlightItemId={highlightItemId}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import moment from "moment";
 import { getAllStates, getCounties } from "@/helpers/states";
 import clsx from "clsx";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
+import { uuid } from "short-uuid";
 import { LocationIcon1 } from "../../icons/LocationIcons";
 import { EyeIcon1 } from "../../icons/EyeIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
@@ -105,8 +106,8 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
               salePrice: data.salePrice,
             }}
             isUserSubscriptionTrial={isUserSubscriptionTrial}
-            properties={data.usedForPriceCalculations.map((el) => ({
-              id: `property-${el.id}`,
+            properties={data.usedForPriceCalculations.map((el, elI) => ({
+              id: `property-${uuid()}`,
               acreage: Number(el.arcage),
               latitude: Number(el.latitude),
               longitude: Number(el.longitude),

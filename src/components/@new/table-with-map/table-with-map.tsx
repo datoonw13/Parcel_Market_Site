@@ -2,6 +2,7 @@
 
 import { FC, useRef, useState } from "react";
 import { Marker } from "leaflet";
+import { formatParcelNumber } from "@/helpers/common";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
@@ -19,53 +20,53 @@ interface TableWithMapProps {
 }
 
 const TableWithMap: FC<TableWithMapProps> = ({ isUserSubscriptionTrial, properties, sellingProperty }) => {
-  const markerRefs = useRef<{ [key: string]: Marker }>();
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const markerRefs = useRef<{ [id: string]: Marker }>();
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
       <CalculationMap
         sellingProperty={sellingProperty}
         properties={properties}
+        highlightItemId={hoveredItemId || selectedItemId}
         setMarkerRef={(key, ref) => {
           markerRefs.current = { ...markerRefs.current, [key]: ref };
         }}
-        markerMouseEnter={(value) => {
-          const key = JSON.stringify(value);
-          setHoveredItem(key);
+        markerMouseEnter={(id) => {
+          setHoveredItemId(id);
         }}
-        markerMouseLeave={(value) => {
-          setHoveredItem(null);
+        markerMouseLeave={() => {
+          setHoveredItemId(null);
         }}
-        popupOpen={(value) => {
-          const key = JSON.stringify(value);
-          setSelectedItem(key);
+        popupOpen={(id) => {
+          setSelectedItemId(id);
           if (markerRefs.current) {
-            markerRefs.current?.[key]?.openPopup();
+            markerRefs.current?.[id]?.openPopup();
           }
         }}
         popupClose={() => {
-          setSelectedItem(null);
+          setSelectedItemId(null);
         }}
       />
       <LandPriceCalculationTable
         data={properties}
-        onMouseEnter={(value) => {
-          const key = JSON.stringify(value);
-          setHoveredItem(key);
+        onMouseEnter={(id) => {
+          setHoveredItemId(id);
         }}
-        onMouseLeave={(value) => {
-          setHoveredItem(null);
+        onMouseLeave={() => {
+          setHoveredItemId(null);
         }}
         isUserSubscriptionTrial={isUserSubscriptionTrial}
-        selectedItem={selectedItem}
-        hoveredItem={hoveredItem}
-        onSelect={(value) => {
-          const key = JSON.stringify(value);
-          setSelectedItem(key);
+        selectedItemId={selectedItemId}
+        hoveredItemId={hoveredItemId}
+        onSelect={(id) => {
+          const property = properties.find((el) => el.id === id);
+          const isSellingLandHistory =
+            property && formatParcelNumber(property.parcelNumber) === formatParcelNumber(sellingProperty.parcelNumber);
+          setSelectedItemId(id);
           if (markerRefs.current) {
-            markerRefs.current?.[key]?.openPopup();
+            markerRefs.current?.[isSellingLandHistory ? sellingProperty.id : id]?.openPopup();
           }
         }}
       />
