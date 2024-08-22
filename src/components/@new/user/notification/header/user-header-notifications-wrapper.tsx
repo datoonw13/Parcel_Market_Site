@@ -3,7 +3,7 @@ import UserHeaderNotifications from "./user-header-notifications";
 
 const UserHeaderNotificationWrapper = async () => {
   const { data, errorMessage } = await getNotificationsAction({ page: "1", pageSize: "6" });
-  return <UserHeaderNotifications data={data?.list || null} />;
+  return <UserHeaderNotifications data={{ list: data?.list || null, unread: data?.pagination.totalCount || 0 }} />;
 };
 
 export default UserHeaderNotificationWrapper;

@@ -18,13 +18,13 @@ const EventSourceListener = ({ jwt, userId }: { jwt: string; userId: number }) =
     eventSource.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data) as { statusCode: number; message: string; data: INotification };
-        let newNotifications = notifications.data ? [...notifications.data] : [];
-        if (notifications?.data?.length === 6) {
+        let newNotifications = notifications.list ? [...notifications.list] : [];
+        if (notifications?.list?.length === 6) {
           newNotifications = newNotifications.slice(1);
         }
         newNotifications.push(data.data);
         setNotifications((prev) => ({
-          data: newNotifications,
+          list: newNotifications,
           unread: prev.unread + 1,
         }));
         revalidateTag(notificationsTag);

@@ -2,9 +2,9 @@ import { INotification } from "@/types/notifications";
 import { atom } from "jotai";
 
 export const notificationsAtom = atom<{
-  data: INotification[] | null;
+  list: INotification[] | null;
   unread: number;
 }>({
-  data: null,
+  list: null,
   unread: 0,
 });
