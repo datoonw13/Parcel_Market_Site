@@ -109,7 +109,9 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
                   setValueLandData((prev) => ({
                     ...prev,
                     mapInteraction: {
-                      hoveredLand: isSellingProperty ? valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "" : el.id,
+                      hoveredLand: isSellingProperty
+                        ? formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
+                        : formatParcelNumber(el.id),
                     },
                   }));
                 }}

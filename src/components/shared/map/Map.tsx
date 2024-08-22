@@ -12,7 +12,6 @@ import { getCenter } from "geolib";
 interface IProps {
   zoom: number;
   properties: Array<{
-    id: string;
     latitude: number;
     longitude: number;
     center?: boolean;
@@ -22,14 +21,14 @@ interface IProps {
     popup?: ReactElement;
   }>;
   setMapRef?: (ref: LeafletMap) => void;
-  setMarkerRef?: (id: string, ref: LeafletMaker) => void;
-  markerMouseEnter?: (id: string) => void;
-  markerMouseLeave?: (id: string) => void;
-  popupOpen?: (id: string) => void;
-  popupClose?: (id: string) => void;
-  onMarkerClick?: (id: string) => void;
+  setMarkerRef?: (parcelNumber: string, ref: LeafletMaker) => void;
+  markerMouseEnter?: (parcelNumber: string) => void;
+  markerMouseLeave?: (parcelNumber: string) => void;
+  popupOpen?: (parcelNumber: string) => void;
+  popupClose?: (parcelNumber: string) => void;
+  onMarkerClick?: (parcelNumber: string) => void;
   disableZoom?: boolean;
-  highlightItemId?: string | null;
+  highlightItemParcelNumber?: string | null;
 }
 
 const markerDefault = new Icon({
@@ -42,8 +41,8 @@ const markerActive = new Icon({
   iconSize: [36, 48],
 });
 
-const getMarkerIcon = (mapItem: IProps["properties"][0], highlightItemId?: string | null) => {
-  if (mapItem.markerType === "active" || highlightItemId === mapItem.id) {
+const getMarkerIcon = (mapItem: IProps["properties"][0], highlightItemParcelNumber?: string | null) => {
+  if (mapItem.markerType === "active" || highlightItemParcelNumber === mapItem.parcelNumber) {
     return markerActive;
   }
   return markerDefault;
@@ -60,7 +59,7 @@ const Map = ({
   popupOpen,
   onMarkerClick,
   disableZoom,
-  highlightItemId,
+  highlightItemParcelNumber,
 }: IProps) => {
   const centerToItem = properties.find((el) => el.center);
   const centerToAllProperties = getCenter(properties.map((el) => ({ latitude: el.latitude, longitude: el.longitude }))) || {
@@ -98,18 +97,18 @@ const Map = ({
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
             <Marker
               eventHandlers={{
-                mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.id),
-                mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.id),
-                popupopen: () => popupOpen && popupOpen(mapItem.id),
-                popupclose: () => popupClose && popupClose(mapItem.id),
-                click: () => onMarkerClick && onMarkerClick(mapItem.id),
+                mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.parcelNumber),
+                mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.parcelNumber),
+                popupopen: () => popupOpen && popupOpen(mapItem.parcelNumber),
+                popupclose: () => popupClose && popupClose(mapItem.parcelNumber),
+                click: () => onMarkerClick && onMarkerClick(mapItem.parcelNumber),
               }}
               ref={(ref) => {
                 if (setMarkerRef && ref) {
-                  setMarkerRef(mapItem.id, ref);
+                  setMarkerRef(mapItem.parcelNumber, ref);
                 }
               }}
-              icon={getMarkerIcon(mapItem, highlightItemId)}
+              icon={getMarkerIcon(mapItem, highlightItemParcelNumber)}
               position={[mapItem.latitude, mapItem.longitude]}
             >
               {mapItem?.popup && <Popup>{mapItem.popup}</Popup>}

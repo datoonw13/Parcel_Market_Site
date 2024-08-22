@@ -70,7 +70,6 @@ const LandListItem: FC<LandListItemProps> = ({
             disableZoom={disableZoom}
             properties={[
               {
-                id: map.id,
                 latitude: map.latitude,
                 longitude: map.longitude,
                 center: true,

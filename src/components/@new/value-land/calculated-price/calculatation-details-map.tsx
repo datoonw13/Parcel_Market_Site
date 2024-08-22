@@ -22,6 +22,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  console.log(valueLandData.mapInteraction.hoveredLand);
 
   const mainLandSaleHistory = valueLandData.calculatedPrice?.properties.filter(
     (property) =>
@@ -31,7 +32,6 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
 
   const mapItems = [
     {
-      id: valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || uuid(),
       parcelNumber: valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "",
       latitude: Number(valueLandData.selectedLand?.properties.fields.lat),
       longitude: Number(valueLandData.selectedLand?.properties.fields.lon),
@@ -81,10 +81,10 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
       )
       .map((el) => ({
         ...el,
-        id: el?.parselId || uuid(),
+        id: formatParcelNumber(el?.parselId || uuid()),
         latitude: Number(el.latitude),
         longitude: Number(el.longitude),
-        parcelNumber: el?.parselId || uuid(),
+        parcelNumber: formatParcelNumber(el?.parselId || uuid()),
         ...(user &&
           user.isSubscribed && {
             popup: (
@@ -152,13 +152,13 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
           cancelLabel="Close"
         />
         <Map
-          setMarkerRef={(id, ref) => {
-            markerRefs.current = { ...markerRefs.current, [id]: ref };
+          setMarkerRef={(parcelNumber, ref) => {
+            markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
           }}
           zoom={10}
           onMarkerClick={() => (!user || !user.isSubscribed) && setOpenWarningModal(true)}
-          markerMouseEnter={(id) => {
-            setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: id } }));
+          markerMouseEnter={(parcelNumber) => {
+            setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: parcelNumber } }));
           }}
           markerMouseLeave={() => {
             setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));

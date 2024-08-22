@@ -7,7 +7,6 @@ import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
 interface PropertyModel {
-  id: string;
   latitude: number;
   longitude: number;
   parcelNumber: string;
@@ -21,52 +20,52 @@ interface TableWithMapProps {
 
 const TableWithMap: FC<TableWithMapProps> = ({ isUserSubscriptionTrial, properties, sellingProperty }) => {
   const markerRefs = useRef<{ [id: string]: Marker }>();
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
+  const [selectedItemParcelNumber, setSelectedItemParcelNumber] = useState<string | null>(null);
+  const [hoveredItemParcelNumber, setHoveredItemParcelNumber] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
       <CalculationMap
         sellingProperty={sellingProperty}
         properties={properties}
-        highlightItemId={hoveredItemId || selectedItemId}
+        highlightItemParcelNumber={hoveredItemParcelNumber || selectedItemParcelNumber}
         setMarkerRef={(key, ref) => {
           markerRefs.current = { ...markerRefs.current, [key]: ref };
         }}
         markerMouseEnter={(id) => {
-          setHoveredItemId(id);
+          setHoveredItemParcelNumber(id);
         }}
         markerMouseLeave={() => {
-          setHoveredItemId(null);
+          setHoveredItemParcelNumber(null);
         }}
         popupOpen={(id) => {
-          setSelectedItemId(id);
+          setSelectedItemParcelNumber(id);
           if (markerRefs.current) {
             markerRefs.current?.[id]?.openPopup();
           }
         }}
         popupClose={() => {
-          setSelectedItemId(null);
+          setSelectedItemParcelNumber(null);
         }}
       />
       <LandPriceCalculationTable
         data={properties}
         onMouseEnter={(id) => {
-          setHoveredItemId(id);
+          setHoveredItemParcelNumber(id);
         }}
         onMouseLeave={() => {
-          setHoveredItemId(null);
+          setHoveredItemParcelNumber(null);
         }}
         isUserSubscriptionTrial={isUserSubscriptionTrial}
-        selectedItemId={selectedItemId}
-        hoveredItemId={hoveredItemId}
-        onSelect={(id) => {
-          const property = properties.find((el) => el.id === id);
+        selectedItemParcelNumber={selectedItemParcelNumber}
+        hoveredItemParcelNumber={hoveredItemParcelNumber}
+        onSelect={(parcelNumber) => {
+          const property = properties.find((el) => formatParcelNumber(el.parcelNumber) === formatParcelNumber(parcelNumber));
           const isSellingLandHistory =
             property && formatParcelNumber(property.parcelNumber) === formatParcelNumber(sellingProperty.parcelNumber);
-          setSelectedItemId(id);
+          setSelectedItemParcelNumber(parcelNumber);
           if (markerRefs.current) {
-            markerRefs.current?.[isSellingLandHistory ? sellingProperty.id : id]?.openPopup();
+            markerRefs.current?.[isSellingLandHistory ? sellingProperty.parcelNumber : parcelNumber]?.openPopup();
           }
         }}
       />

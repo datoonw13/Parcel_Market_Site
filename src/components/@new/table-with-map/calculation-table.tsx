@@ -10,7 +10,7 @@ import Image from "next/image";
 import { LatLngTuple } from "leaflet";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { numFormatter } from "@/helpers/common";
+import { formatParcelNumber, numFormatter } from "@/helpers/common";
 import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
@@ -30,7 +30,6 @@ const HEADER_ROWS = [
 ];
 
 interface PropertyModel {
-  id: string;
   latitude: number;
   longitude: number;
   parcelNumber: string;
@@ -46,16 +45,16 @@ const LandPriceCalculationTable = ({
   onSelect,
   onMouseEnter,
   onMouseLeave,
-  selectedItemId,
-  hoveredItemId,
+  selectedItemParcelNumber,
+  hoveredItemParcelNumber,
   isUserSubscriptionTrial,
 }: {
   data: Array<PropertyModel>;
   onSelect: (id: string) => void;
   onMouseEnter: (id: string) => void;
   onMouseLeave: (id: string) => void;
-  selectedItemId: string | null;
-  hoveredItemId: string | null;
+  selectedItemParcelNumber: string | null;
+  hoveredItemParcelNumber: string | null;
   isUserSubscriptionTrial: boolean;
 }) => {
   const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "acreage", dir: "desc" });
@@ -150,12 +149,12 @@ const LandPriceCalculationTable = ({
                 key={item.latitude + item.longitude}
                 className={clsx(
                   "transition-all duration-100 cursor-pointer",
-                  selectedItemId === item.id && "bg-primary-main-100",
-                  hoveredItemId === item.id && "bg-primary-main-50"
+                  formatParcelNumber(selectedItemParcelNumber || "") === formatParcelNumber(item.parcelNumber) && "bg-primary-main-100",
+                  formatParcelNumber(hoveredItemParcelNumber || "") === formatParcelNumber(item.parcelNumber) && "bg-primary-main-50"
                 )}
-                onClick={() => onSelect(item.id)}
-                onMouseEnter={() => onMouseEnter(item.id)}
-                onMouseLeave={() => onMouseLeave(item.id)}
+                onClick={() => onSelect(item.parcelNumber)}
+                onMouseEnter={() => onMouseEnter(item.parcelNumber)}
+                onMouseLeave={() => onMouseLeave(item.parcelNumber)}
               >
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
                   {itemI + 1}

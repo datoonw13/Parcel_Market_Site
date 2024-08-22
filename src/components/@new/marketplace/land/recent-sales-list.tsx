@@ -2,7 +2,6 @@ import { FC } from "react";
 import TableWithMap from "../../table-with-map/table-with-map";
 
 interface PropertyModel {
-  id: string;
   latitude: number;
   longitude: number;
   parcelNumber: string;

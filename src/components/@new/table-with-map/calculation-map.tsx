@@ -8,7 +8,6 @@ import { FC } from "react";
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 interface PropertyModel {
-  id: string;
   latitude: number;
   longitude: number;
   parcelNumber: string;
@@ -17,12 +16,12 @@ interface PropertyModel {
 interface CalculationMapProps {
   properties: Array<PropertyModel & { lastSalePrice: number; lastSaleDate: string }>;
   sellingProperty: PropertyModel & { salePrice: number; coordinates: string; owner: string };
-  setMarkerRef: (id: string, ref: Marker) => void;
-  markerMouseEnter: (id: string) => void;
-  markerMouseLeave: (id: string) => void;
-  popupOpen: (id: string) => void;
-  popupClose: (id: string) => void;
-  highlightItemId?: string | null;
+  setMarkerRef: (parcelNumber: string, ref: Marker) => void;
+  markerMouseEnter: (parcelNumber: string) => void;
+  markerMouseLeave: (parcelNumber: string) => void;
+  popupOpen: (parcelNumber: string) => void;
+  popupClose: (parcelNumber: string) => void;
+  highlightItemParcelNumber?: string | null;
 }
 
 const CalculationMap: FC<CalculationMapProps> = ({
@@ -33,7 +32,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
   popupOpen,
   properties,
   sellingProperty,
-  highlightItemId,
+  highlightItemParcelNumber,
 }) => {
   const mainLandSaleHistory = properties.filter(
     (property) => formatParcelNumber(property.parcelNumber) === formatParcelNumber(sellingProperty.parcelNumber)
@@ -41,7 +40,6 @@ const CalculationMap: FC<CalculationMapProps> = ({
 
   const mapItems = [
     {
-      id: sellingProperty.id,
       parcelNumber: sellingProperty.parcelNumber,
       latitude: Number(sellingProperty.latitude),
       longitude: Number(sellingProperty.longitude),
@@ -116,7 +114,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
         setMarkerRef={setMarkerRef}
         zoom={10}
         properties={mapItems}
-        highlightItemId={highlightItemId}
+        highlightItemParcelNumber={highlightItemParcelNumber}
       />
     </div>
   );
