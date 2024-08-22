@@ -19,7 +19,10 @@ const MarketplaceDesktopFilters = ({
 }) => {
   const states = useMemo(() => getAllStates(), []);
   const counties = useMemo(() => {
-    const countiesList = selectedFilters.states?.map((state) => getCounties(state)) || [];
+    const countiesList =
+      selectedFilters.states?.map((state) =>
+        getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))
+      ) || [];
     return uniqBy(countiesList.flat(), "value");
   }, [selectedFilters.states]);
 
@@ -39,7 +42,9 @@ const MarketplaceDesktopFilters = ({
       />
       <MultiSelect
         selectedOptions={selectedFilters.counties || []}
-        onChange={(newCounties) => onChange({ counties: newCounties.length === 0 ? null : newCounties })}
+        onChange={(newCounties) => {
+          onChange({ counties: newCounties.length === 0 ? null : newCounties });
+        }}
         initialOptions={counties}
         disabled={!selectedFilters.states || selectedFilters.states?.length === 0 || disabled}
         placeholder="Counties"

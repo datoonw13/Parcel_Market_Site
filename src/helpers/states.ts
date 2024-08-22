@@ -29,6 +29,7 @@ export const getCounties = (stateValue: string | null) => {
   const formattedCounties = counties.map((el) => ({
     label: el,
     value: el
+      .replaceAll(",", "")
       .split(" ")
       .map((x) => x.toLocaleLowerCase())
       .filter((el) => el !== "county")
