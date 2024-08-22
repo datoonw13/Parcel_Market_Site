@@ -11,6 +11,7 @@ import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
 import LandFollowButton from "../land-follow-button";
 import { CameraIcon1 } from "../../icons/CameraIcons";
+import DiscountBox from "../../icons/discount-box";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -105,9 +106,16 @@ const LandListItem: FC<LandListItemProps> = ({
       </ul>
     </div>
     <div className="px-6 border-t border-grey-100 py-3 mt-4 flex items-center justify-between">
-      <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
-        <CalendarIcon1 /> Available till: <span className="text-black">{data.availableTill}</span>
-      </p>
+      <div>
+        <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
+          <CalendarIcon1 className="size-3" /> Available till: <span className="text-black">{data.availableTill}</span>
+        </p>
+        {!Number.isNaN(data?.receivedOffers) && (
+          <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
+            <DiscountBox className="size-4" /> Received Offers: <span className="text-black">{data.receivedOffers}</span>
+          </p>
+        )}
+      </div>
       <Link
         className={clsx(disableDetail && "pointer-events-none cursor-not-allowed")}
         href={disableDetail ? "/" : `${routes.marketplace.fullUrl}/${sellingItemId}`}
