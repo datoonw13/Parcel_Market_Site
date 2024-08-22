@@ -1,7 +1,7 @@
 "use client";
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import { numFormatter } from "@/helpers/common";
+import { formatParcelNumber, numFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { useAtom } from "jotai";
 import { LatLngTuple, Marker } from "leaflet";
@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
+import { uuid } from "short-uuid";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import { InfoIcon2 } from "../../icons/InfoIcons";
 
@@ -21,6 +22,90 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [openWarningModal, setOpenWarningModal] = useState(false);
+
+  const mainLandSaleHistory = valueLandData.calculatedPrice?.properties.filter(
+    (property) =>
+      formatParcelNumber(property.parcelNumber) ===
+      formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
+  );
+
+  const mapItems = [
+    {
+      id: uuid(),
+      parcelNumber: valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "",
+      latitude: Number(valueLandData.selectedLand?.properties.fields.lat),
+      longitude: Number(valueLandData.selectedLand?.properties.fields.lon),
+      polygon: valueLandData.selectedLand?.geometry.coordinates,
+      markerType: "active" as const,
+      center: true,
+      popup: (
+        <div className="flex flex-col gap-1 space-y-2">
+          <p className="!p-0 !m-0">
+            Owner: <b>{valueLandData.selectedLand?.properties.fields.owner}</b>
+          </p>
+          <p className="!p-0 !m-0">
+            Acreage: <b>{valueLandData.selectedLand?.properties.fields.ll_gisacre}</b>
+          </p>
+          <p className="!p-0 !m-0">
+            Price Per Acreage:{" "}
+            <b>
+              {valueLandData.calculatedPrice &&
+                numFormatter.format(valueLandData.calculatedPrice.price / Number(valueLandData.selectedLand?.properties.fields.ll_gisacre))}
+            </b>
+          </p>
+          {mainLandSaleHistory && mainLandSaleHistory?.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <p className="!p-0 !m-0 !font-semibold">Sales History:</p>
+              {mainLandSaleHistory.map((history) => (
+                <div key={JSON.stringify(history)} className="!mb-1">
+                  <p className="!p-0 !m-0">
+                    Sale Date: <b>{history.lastSalesDate}</b>
+                  </p>
+                  <p className="!p-0 !m-0">
+                    Sale Price Per Acre: <b>{numFormatter.format(Number(history.lastSalesPrice) / Number(history.arcage))}</b>
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    ...(valueLandData.calculatedPrice?.properties || [])
+      .filter((property) =>
+        mainLandSaleHistory && mainLandSaleHistory.length > 0
+          ? mainLandSaleHistory.find(
+              (saleHistory) => formatParcelNumber(saleHistory.parcelNumber) !== formatParcelNumber(property.parcelNumber)
+            )
+          : true
+      )
+      .map((el) => ({
+        ...el,
+        id: uuid(),
+        latitude: Number(el.latitude),
+        longitude: Number(el.longitude),
+        parcelNumber: el.parcelNumber || "",
+        ...(user &&
+          user.isSubscribed && {
+            popup: (
+              <div className="flex flex-col gap-1">
+                <p className="!p-0 !m-0">
+                  Parcel Number: <b>{el.parcelNumber}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Acreage: <b>{el.arcage}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Date: <b>{el.lastSalesDate}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Price Per Acre: <b>{numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage))}</b>
+                </p>
+              </div>
+            ),
+          }),
+      })),
+  ];
 
   useEffect(() => {
     if (valueLandData.mapInteraction.hoveredLand && markerRefs.current) {
@@ -67,75 +152,18 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
           cancelLabel="Close"
         />
         <Map
-          setMarkerRef={(key, ref) => {
-            markerRefs.current = { ...markerRefs.current, [key]: ref };
+          setMarkerRef={(id, ref) => {
+            markerRefs.current = { ...markerRefs.current, [id]: ref };
           }}
-          geolibInputCoordinates={[
-            [Number(valueLandData.selectedLand.properties.fields.lat), Number(valueLandData.selectedLand.properties.fields.lon)],
-          ]}
           zoom={10}
           onMarkerClick={() => (!user || !user.isSubscribed) && setOpenWarningModal(true)}
-          markerMouseEnter={(value) => {
-            setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: JSON.stringify(value) } }));
+          markerMouseEnter={(id) => {
+            setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: id } }));
           }}
           markerMouseLeave={() => {
             setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));
           }}
-          data={[
-            {
-              centerCoordinate: [
-                Number(valueLandData.selectedLand.properties.fields.lat),
-                Number(valueLandData.selectedLand.properties.fields.lon),
-              ],
-              active: true,
-              parcelNumber: valueLandData.selectedLand.properties.fields.parcelnumb,
-              polygon: valueLandData.selectedLand.geometry.coordinates,
-              showMarker: true,
-              popup: {
-                owner: {
-                  label: "Owner",
-                  value: valueLandData.selectedLand.properties.fields.owner,
-                },
-                parcelNumber: {
-                  label: "Parcel Number",
-                  value: valueLandData.selectedLand.properties.fields.parcelnumb,
-                },
-                acreage: {
-                  label: "Acreage",
-                  value: valueLandData.selectedLand.properties.fields.ll_gisacre.toFixed(2),
-                },
-                showSelectButton: false,
-              },
-            },
-            ...valueLandData.calculatedPrice.properties.map((el) => ({
-              centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
-              parcelNumber: el.parselId,
-              active: valueLandData.mapInteraction.hoveredLand === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
-              showMarker: true,
-              ...(user &&
-                user.isSubscribed && {
-                  popup: {
-                    parcelNumber: {
-                      label: "Parcel Number",
-                      value: el.parselId,
-                    },
-                    acreage: {
-                      label: "Acreage",
-                      value: Number(el.arcage).toFixed(2),
-                    },
-                    lastSaleDate: {
-                      label: "Last Sale Date",
-                      value: el.lastSalesDate,
-                    },
-                    lastSalePrice: {
-                      label: "Last Sale Price",
-                      value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
-                    },
-                    showSelectButton: false,
-                  },
-                }),
-            })),
-          ]}
+          properties={mapItems}
         />
       </>
     )
