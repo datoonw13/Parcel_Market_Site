@@ -5,8 +5,8 @@ import { atom } from "jotai";
 import { z } from "zod";
 
 export const valueLandAtom = atom<{
-  lands: null | (IMap[0] & { id: string })[];
-  selectedLand: null | (IMap[0] & { id: string });
+  lands: null | IMap[0][];
+  selectedLand: null | IMap[0];
   calculatedPrice: PropertyPriceCalculationRes | null;
   sellOptions: any | null;
   sellerType: PropertySellReq["sellerType"] | null;

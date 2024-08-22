@@ -16,6 +16,7 @@ import { Nullable } from "@/types/common";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { PropertyPriceCalculationReq } from "@/types/property";
 import { uuid } from "short-uuid";
+import { formatParcelNumber } from "@/helpers/common";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 import CalculationTermsModal from "./calculation-terms/terms-modal";
@@ -83,17 +84,19 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
             <div className="rounded-t-2xl [&>div]:rounded-t-2xl h-60 min-h-60 md:h-[220px] md:min-h-[220px]">
               {valueLand.lands && valueLand.lands.length > 0 && (
                 <Map
-                  setMarkerRef={(id, ref) => {
-                    markerRefs.current = { ...markerRefs.current, [id]: ref };
+                  setMarkerRef={(parcelNumber, ref) => {
+                    markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
                   }}
-                  markerMouseEnter={(id) => {
-                    setHoveredItem(id);
+                  markerMouseEnter={(parcelNumber) => {
+                    setHoveredItem(formatParcelNumber(parcelNumber));
                   }}
                   markerMouseLeave={(value) => {
                     setHoveredItem(null);
                   }}
-                  popupOpen={(id) => {
-                    const selectedLand = valueLand.lands?.find((el) => el.id === id);
+                  popupOpen={(parcelNumber) => {
+                    const selectedLand = valueLand.lands?.find(
+                      (el) => formatParcelNumber(el.properties.fields.parcelnumb_no_formatting || "") === formatParcelNumber(parcelNumber)
+                    );
                     if (selectedLand) {
                       setValueLand((prev) => ({ ...prev, selectedLand }));
                     }
@@ -102,7 +105,6 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
                     // setValueLand((prev) => ({ ...prev, selectedLand: null }));
                   }}
                   properties={valueLand.lands.map((el) => ({
-                    id: el.id,
                     parcelNumber: el.properties.fields.parcelnumb_no_formatting || "",
                     latitude: Number(el.properties.fields.lat),
                     longitude: Number(el.properties.fields.lon),
