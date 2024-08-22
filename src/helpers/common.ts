@@ -23,3 +23,5 @@ export const maskEmail = (email: string) =>
   `${email.split("@")[0][0]}****${email.split("@")[0][email.split("@")[0].length - 1]}@${email.split("@")[1]}`;
 
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
+
+export const formatParcelNumber = (parcelNumber: string) => parcelNumber.replace(/[^a-zA-Z0-9]/g, "") 

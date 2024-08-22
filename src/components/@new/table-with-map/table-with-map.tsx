@@ -1,35 +1,24 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Map, Marker } from "leaflet";
-import { UsedForPriceCalculationItem } from "@/types/property";
+import { FC, useRef, useState } from "react";
+import { Marker } from "leaflet";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
-const TableWithMap = ({
-  data,
-  isUserSubscriptionTrial,
-  mainLandData,
-}: {
-  data: NonNullable<
-    Array<
-      Pick<
-        UsedForPriceCalculationItem,
-        "arcage" | "county" | "latitude" | "longitude" | "parcelNumber" | "lastSalesDate" | "lastSalesPrice"
-      >
-    >
-  >;
+interface PropertyModel {
+  id: string;
+  latitude: number;
+  longitude: number;
+  parcelNumber: string;
+  acreage: number;
+}
+interface TableWithMapProps {
+  properties: Array<PropertyModel & { lastSalePrice: number; lastSaleDate: string; state: string; county: string }>;
   isUserSubscriptionTrial: boolean;
-  mainLandData?: {
-    coordinates: string;
-    owner: string;
-    parcelNumber: string;
-    acreage: string;
-    latitude: number;
-    longitude: number;
-    salePrice: number;
-  };
-}) => {
+  sellingProperty: PropertyModel & { salePrice: number; coordinates: string; owner: string };
+}
+
+const TableWithMap: FC<TableWithMapProps> = ({ isUserSubscriptionTrial, properties, sellingProperty }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -37,15 +26,8 @@ const TableWithMap = ({
   return (
     <div className="space-y-6">
       <CalculationMap
-        mainLandData={mainLandData}
-        data={[
-          ...data.map((el) => ({
-            ...el,
-            active:
-              hoveredItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]) ||
-              selectedItem === JSON.stringify([Number(el.latitude), Number(el.longitude)]),
-          })),
-        ]}
+        sellingProperty={sellingProperty}
+        properties={properties}
         setMarkerRef={(key, ref) => {
           markerRefs.current = { ...markerRefs.current, [key]: ref };
         }}
@@ -68,7 +50,7 @@ const TableWithMap = ({
         }}
       />
       <LandPriceCalculationTable
-        data={data}
+        data={properties}
         onMouseEnter={(value) => {
           const key = JSON.stringify(value);
           setHoveredItem(key);

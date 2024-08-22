@@ -94,17 +94,28 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
         </div>
         {data.usedForPriceCalculations && (
           <RecentSalesList
-            mainLandData={{
-              acreage: data.acrage.toString(),
+            sellingProperty={{
+              id: `selling-property-${data.id}`,
+              acreage: data.acrage,
               coordinates: data.coordinates,
-              latitude: Number(data.lat || 1),
-              longitude: Number(data.lon || 1),
+              latitude: Number(data.lat),
+              longitude: Number(data.lon),
               owner: data.owner,
               parcelNumber: data.parcelNumber,
               salePrice: data.salePrice,
             }}
             isUserSubscriptionTrial={isUserSubscriptionTrial}
-            data={data.usedForPriceCalculations}
+            properties={data.usedForPriceCalculations.map((el) => ({
+              id: `property-${el.id}`,
+              acreage: Number(el.arcage),
+              latitude: Number(el.latitude),
+              longitude: Number(el.longitude),
+              parcelNumber: el.parcelNumber,
+              lastSalePrice: Number(el.lastSalesPrice),
+              county: el.county || "",
+              state: el.state || "",
+              lastSaleDate: el.lastSalesDate,
+            }))}
           />
         )}
       </div>

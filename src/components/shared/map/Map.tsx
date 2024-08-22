@@ -4,37 +4,30 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import { Button } from "@mui/material";
-import { LatLngTuple, Icon, DivIcon, Map as LeafletMap, Marker as LeafletMaker } from "leaflet";
-import { Fragment, ReactElement } from "react";
+import { Icon, Map as LeafletMap, Marker as LeafletMaker, LatLngExpression } from "leaflet";
+import { Fragment, ReactElement, ReactNode } from "react";
 import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
 import { getCenter } from "geolib";
-import ReactDOMServer from "react-dom/server";
 
 interface IProps {
-  geolibInputCoordinates: Array<LatLngTuple>;
   zoom: number;
-  data: Array<{
-    active?: boolean;
-    centerCoordinate: LatLngTuple;
+  properties: Array<{
+    id: string;
+    latitude: number;
+    longitude: number;
+    center?: boolean;
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
-    showMarker?: boolean;
-    markerColor?: "default" | "active" | "custom";
-    customMarkerIcon?: ReactElement;
-    popup?: {
-      showSelectButton: boolean;
-    } & Record<Exclude<string, "showSelectButton">, { label: string; value: string } | boolean>;
+    markerType?: "default" | "active";
+    popup?: ReactElement;
   }>;
-  selectedParcelNumber?: string | null;
-  onSelect?: (parcelNumber: string) => void;
-  onDiscard?: (parcelNumber: string) => void;
   setMapRef?: (ref: LeafletMap) => void;
-  setMarkerRef?: (key: string, ref: LeafletMaker) => void;
-  markerMouseEnter?: (value: LatLngTuple) => void;
-  markerMouseLeave?: (value: LatLngTuple) => void;
-  popupOpen?: (value: LatLngTuple) => void;
-  popupClose?: (value: LatLngTuple) => void;
-  onMarkerClick?: (value: LatLngTuple) => void;
+  setMarkerRef?: (id: string, ref: LeafletMaker) => void;
+  markerMouseEnter?: (id: string) => void;
+  markerMouseLeave?: (id: string) => void;
+  popupOpen?: (id: string) => void;
+  popupClose?: (id: string) => void;
+  onMarkerClick?: (id: string) => void;
   disableZoom?: boolean;
 }
 
@@ -48,23 +41,16 @@ const markerActive = new Icon({
   iconSize: [36, 48],
 });
 
-const getMarkerIcon = (mapItem: IProps["data"][0], active?: boolean) => {
-  if (active) {
-    return markerActive;
-  }
-  if (mapItem.markerColor === "active") {
+const getMarkerIcon = (mapItem: IProps["properties"][0]) => {
+  if (mapItem.markerType === "active") {
     return markerActive;
   }
   return markerDefault;
 };
 
 const Map = ({
-  geolibInputCoordinates,
-  data,
+  properties,
   zoom,
-  selectedParcelNumber,
-  onSelect,
-  onDiscard,
   setMapRef,
   setMarkerRef,
   markerMouseEnter,
@@ -74,24 +60,29 @@ const Map = ({
   onMarkerClick,
   disableZoom,
 }: IProps) => {
-  const mapCenter = getCenter(geolibInputCoordinates.map((el) => ({ latitude: el[0], lon: el[1] })));
+  const centerToItem = properties.find((el) => el.center);
+  console.log(centerToItem, 22222);
 
-  const generateCustomIcon = (customMarkerIcon?: ReactElement) => {
-    if (!customMarkerIcon) {
-      return undefined;
+  const centerToAllProperties = getCenter(properties.map((el) => ({ latitude: el.latitude, longitude: el.longitude }))) || {
+    latitude: 0,
+    longitude: 0,
+  };
+
+  const getMapCenter = (): LatLngExpression => {
+    if (centerToItem) {
+      return [centerToItem.latitude, centerToItem.longitude];
     }
-    const iconHTML = ReactDOMServer.renderToString(customMarkerIcon);
-    const icon = new DivIcon({
-      html: iconHTML,
-    });
-    return icon;
+    if (centerToAllProperties) {
+      return [centerToAllProperties.latitude, centerToAllProperties.longitude];
+    }
+    return [0, 0];
   };
 
   return (
     <MapContainer
       zoomControl={!disableZoom}
       zoom={zoom}
-      center={mapCenter ? [mapCenter.latitude, mapCenter.longitude] : [0, 0]}
+      center={getMapCenter()}
       scrollWheelZoom={!disableZoom}
       style={{ height: "100%", width: "100%", zIndex: 0 }}
       ref={(mapRef) => {
@@ -102,61 +93,27 @@ const Map = ({
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <FeatureGroup pathOptions={{ color: "#F44D61", fillColor: "#F44D61", fillOpacity: 0.2, weight: 1 }}>
-        {data?.map((mapItem) => (
+        {properties.map((mapItem) => (
           <Fragment key={mapItem.parcelNumber}>
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
-            {mapItem.showMarker && (
-              <Marker
-                eventHandlers={{
-                  mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.centerCoordinate),
-                  mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.centerCoordinate),
-                  popupopen: () => popupOpen && popupOpen(mapItem.centerCoordinate),
-                  popupclose: () => popupClose && popupClose(mapItem.centerCoordinate),
-                  click: () => onMarkerClick && onMarkerClick(mapItem.centerCoordinate),
-                }}
-                ref={(ref) => {
-                  if (setMarkerRef && ref) {
-                    setMarkerRef(JSON.stringify(mapItem.centerCoordinate), ref);
-                  }
-                }}
-                icon={
-                  mapItem.markerColor === "custom" ? generateCustomIcon(mapItem.customMarkerIcon) : getMarkerIcon(mapItem, mapItem.active)
+            <Marker
+              eventHandlers={{
+                mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.id),
+                mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.id),
+                popupopen: () => popupOpen && popupOpen(mapItem.id),
+                popupclose: () => popupClose && popupClose(mapItem.id),
+                click: () => onMarkerClick && onMarkerClick(mapItem.id),
+              }}
+              ref={(ref) => {
+                if (setMarkerRef && ref) {
+                  setMarkerRef(mapItem.id, ref);
                 }
-                position={mapItem.centerCoordinate}
-              >
-                {mapItem.popup && (
-                  <Popup>
-                    <div className="flex flex-col gap-1">
-                      {Object.keys(mapItem.popup)
-                        .filter((el) => el !== "showSelectButton")
-                        .map((key) => (
-                          <div key={key}>
-                            {(mapItem.popup as any)[key as any]?.label}: <b>{(mapItem.popup as any)[key as any]?.value}</b>
-                          </div>
-                        ))}
-                    </div>
-                    {mapItem.popup.showSelectButton && (
-                      <Button
-                        color={selectedParcelNumber === mapItem.parcelNumber ? "error" : "primary"}
-                        variant="contained"
-                        size="small"
-                        sx={{ p: 1, my: 2, ml: "auto", display: "flex" }}
-                        onClick={() => {
-                          if (selectedParcelNumber === mapItem.parcelNumber && onDiscard) {
-                            onDiscard(mapItem.parcelNumber);
-                          }
-                          if (selectedParcelNumber !== mapItem.parcelNumber && onSelect) {
-                            onSelect(mapItem.parcelNumber);
-                          }
-                        }}
-                      >
-                        {selectedParcelNumber === mapItem.parcelNumber ? "Discard" : "Select"}
-                      </Button>
-                    )}
-                  </Popup>
-                )}
-              </Marker>
-            )}
+              }}
+              icon={getMarkerIcon(mapItem)}
+              position={[mapItem.latitude, mapItem.longitude]}
+            >
+              {mapItem?.popup && <Popup>{mapItem.popup}</Popup>}
+            </Marker>
           </Fragment>
         ))}
       </FeatureGroup>

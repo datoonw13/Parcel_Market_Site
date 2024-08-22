@@ -23,11 +23,23 @@ import Popper from "../shared/Popper";
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
   { label: "County", key: "county" as const },
-  { label: "Acreage", key: "arcage" as const },
-  { label: "Sold Price", key: "lastSalesPrice" as const },
+  { label: "Acreage", key: "acreage" as const },
+  { label: "Sold Price", key: "lastSalePrice" as const },
   { label: "Price Per Acre", key: "pricePerAcre" as const },
-  { label: "Last Sale Date", key: "lastSalesDate" as const },
+  { label: "Last Sale Date", key: "lastSaleDate" as const },
 ];
+
+interface PropertyModel {
+  id: string;
+  latitude: number;
+  longitude: number;
+  parcelNumber: string;
+  acreage: number;
+  lastSalePrice: number;
+  lastSaleDate: string;
+  state: string;
+  county: string;
+}
 
 const LandPriceCalculationTable = ({
   data,
@@ -38,14 +50,7 @@ const LandPriceCalculationTable = ({
   hoveredItem,
   isUserSubscriptionTrial,
 }: {
-  data: NonNullable<
-    Array<
-      Pick<
-        UsedForPriceCalculationItem,
-        "arcage" | "county" | "latitude" | "longitude" | "parcelNumber" | "lastSalesDate" | "lastSalesPrice"
-      >
-    >
-  >;
+  data: Array<PropertyModel>;
   onSelect: (value: LatLngTuple) => void;
   onMouseEnter: (value: LatLngTuple) => void;
   onMouseLeave: (value: LatLngTuple) => void;
@@ -53,11 +58,11 @@ const LandPriceCalculationTable = ({
   hoveredItem: string | null;
   isUserSubscriptionTrial: boolean;
 }) => {
-  const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "arcage", dir: "desc" });
+  const [sort, setSort] = useState<{ key: typeof HEADER_ROWS[0]["key"]; dir: "asc" | "desc" }>({ key: "acreage", dir: "desc" });
   const formattedData = data.map((el) => ({
     ...el,
     county: el.county ?? "",
-    pricePerAcre: Number((Number(el.lastSalesPrice) / Number(el.arcage)).toFixed(2)),
+    pricePerAcre: Number((Number(el.lastSalePrice) / Number(el.acreage)).toFixed(2)),
   }));
 
   const sortedData = orderBy(formattedData, [sort.key], [sort.dir]);
@@ -71,23 +76,24 @@ const LandPriceCalculationTable = ({
       sortedData.map((el) => ({
         parcelNumber: el.parcelNumber,
         county: el.county,
-        arcage: el.arcage,
-        lastSalesPrice: numFormatter.format(Number(el.lastSalesPrice)),
+        acreage: el.acreage,
+        lastSalePrice: numFormatter.format(Number(el.lastSalePrice)),
         pricePerAcre: numFormatter.format(el.pricePerAcre),
-        lastSalesDate: el.lastSalesDate,
+        lastSaleDate: el.lastSaleDate,
       }))
     );
     const maxLengthData = {
       parcelNumber: [...sortedData].sort((a, b) => b.parcelNumber.length - a.parcelNumber.length)[0].parcelNumber.length,
       county: [...sortedData].sort((a, b) => b.county.length - a.county.length)[0].county.length,
-      arcage: [...sortedData].sort((a, b) => b.arcage.toString().length - a.arcage.toString().length)[0].arcage.length,
-      lastSalesPrice: [...sortedData].sort((a, b) => b.lastSalesPrice!.toString().length - a.lastSalesPrice!.toString().length)[0]
-        .lastSalesPrice!.length,
+      acreage: [...sortedData].sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0].acreage.toString().length,
+      lastSalePrice: [...sortedData]
+        .sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0]
+        .lastSalePrice!.toString().length,
       pricePerAcre: [...sortedData]
         .sort((a, b) => b.pricePerAcre.toString().length - a.pricePerAcre.toString().length)[0]
         .pricePerAcre.toString().length,
-      lastSalesDate: [...sortedData].sort((a, b) => b.lastSalesDate!.toString().length - a.lastSalesDate!.toString().length)[0]
-        .lastSalesDate!.length,
+      lastSaleDate: [...sortedData].sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0].lastSaleDate!
+        .length,
     };
 
     const wscols = Object.values(maxLengthData).map((el) => ({ wch: el + 10 }));
@@ -161,16 +167,16 @@ const LandPriceCalculationTable = ({
                   {item.county ?? "--"}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {item.arcage}
+                  {item.acreage}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {item.lastSalesPrice}
+                  {numFormatter.format(item.lastSalePrice)}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {item.pricePerAcre}
+                  {numFormatter.format(item.pricePerAcre)}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {moment(item.lastSalesDate).format("DD-MM-YYYY")}
+                  {moment(item.lastSaleDate).format("DD-MM-YYYY")}
                 </td>
               </tr>
             ))}
