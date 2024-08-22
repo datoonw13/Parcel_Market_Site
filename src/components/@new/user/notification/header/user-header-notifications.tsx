@@ -1,7 +1,7 @@
 "use client";
 
 import { INotification } from "@/types/notifications";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { notificationsAtom } from "@/atoms/notifications-atom";
 import Link from "next/link";
@@ -12,9 +12,13 @@ import Button from "../../../shared/forms/Button";
 import DataNotFound from "../../../shared/DataNotFound";
 import UserHeaderNotificationButton from "./user-header-notification-button";
 
-const UserHeaderNotifications = ({ data }: { data: INotification[] | null }) => {
+const UserHeaderNotifications = ({ data, unreadNotifications }: { data: INotification[] | null; unreadNotifications?: number }) => {
   const [notifications, setNotifications] = useAtom(notificationsAtom);
-  const unreadNotifications = notifications?.filter((notification) => !notification.isRead).length;
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    setUnreadCount(unreadNotifications || 0);
+  }, [unreadNotifications]);
 
   useEffect(() => {
     setNotifications(data);
@@ -27,7 +31,7 @@ const UserHeaderNotifications = ({ data }: { data: INotification[] | null }) => 
         <UserHeaderNotificationButton
           onClick={(e) => setReferenceElement(referenceElement ? null : e.currentTarget)}
           active={!!referenceElement}
-          unreadMessages={unreadNotifications}
+          unreadMessages={unreadCount}
         />
       )}
       renderContent={(setReferenceElement) => (
@@ -41,6 +45,7 @@ const UserHeaderNotifications = ({ data }: { data: INotification[] | null }) => 
                     onClick={() => {
                       if (!notification.isRead) {
                         setNotifications(notifications.map((el) => (el.id === notification.id ? { ...el, isRead: true } : el)));
+                        setUnreadCount(unreadCount - 1);
                       }
                       setReferenceElement(null);
                     }}

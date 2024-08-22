@@ -9,16 +9,19 @@ import { notificationsTag } from "./tags";
 
 export const getNotificationsAction = async (params: {
   [key: string]: string;
-}): Promise<ResponseModel<({ list: INotification[] } & IPagination) | null>> => {
+}): Promise<ResponseModel<({ list: INotification[] } & { pagination: IPagination["pagination"] & { unreadCount: number } }) | null>> => {
   try {
     const searchParams = new URLSearchParams(params);
-    const data = await fetcher<({ data: INotification[] } & IPagination) | null>(`notifications?${searchParams.toString()}`, {
-      method: "GET",
-      next: {
-        tags: [notificationsTag],
-      },
-      cache: "no-cache",
-    });
+    const data = await fetcher<({ data: INotification[] } & { pagination: IPagination["pagination"] & { unreadCount: number } }) | null>(
+      `notifications?${searchParams.toString()}`,
+      {
+        method: "GET",
+        next: {
+          tags: [notificationsTag],
+        },
+        cache: "no-cache",
+      }
+    );
 
     return {
       errorMessage: null,
