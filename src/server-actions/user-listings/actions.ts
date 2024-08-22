@@ -11,10 +11,10 @@ import { fetcher } from "../fetcher";
 
 export const getUserListingAction = async (params: {
   [key: string]: string;
-}): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
+}): Promise<ResponseModel<({ list: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination) | null>> => {
   try {
-    const request = await fetcher<{ data: SellingPropertyDetails[] } & IPagination>(
-      `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize: "4" })}`,
+    const request = await fetcher<{ data: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination>(
+      `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize: "6" })}`,
       {
         next: { tags: [userListingsTag] },
       }

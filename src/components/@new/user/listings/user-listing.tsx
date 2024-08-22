@@ -32,6 +32,7 @@ const UserListing = async ({ searchParams }: { searchParams: { [key: string]: st
                   followedListingId={land.followedListingId}
                   view="vertical"
                   data={{
+                    receivedOffers: land?.offers.length,
                     availableTill: land.availableTill,
                     state: state?.label || "",
                     county: county || "",

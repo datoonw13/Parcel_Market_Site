@@ -42,6 +42,7 @@ export interface LandListItemProps {
     state: string;
     county: string;
     availableTill: string;
+    receivedOffers?: number;
     options: {
       [key: string]: {
         icon: ReactNode;
