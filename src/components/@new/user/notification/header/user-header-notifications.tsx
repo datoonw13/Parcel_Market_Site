@@ -52,7 +52,7 @@ const UserHeaderNotifications = ({ data }: { data: { list: INotification[] | nul
                   />
                 </div>
               ))}
-              <Link href={routes.user.notifications.fullUrl}>
+              <Link onClick={() => setReferenceElement(null)} href={routes.user.notifications.fullUrl}>
                 <Button variant="secondary" className="!text-primary-main !text-sm !outline-none">
                   View All notifications
                 </Button>
