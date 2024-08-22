@@ -25,13 +25,13 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
 
   const mainLandSaleHistory = valueLandData.calculatedPrice?.properties.filter(
     (property) =>
-      formatParcelNumber(property.parcelNumber) ===
+      formatParcelNumber(property?.parselId || "") ===
       formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
   );
 
   const mapItems = [
     {
-      id: uuid(),
+      id: valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || uuid(),
       parcelNumber: valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "",
       latitude: Number(valueLandData.selectedLand?.properties.fields.lat),
       longitude: Number(valueLandData.selectedLand?.properties.fields.lon),
@@ -75,16 +75,16 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
       .filter((property) =>
         mainLandSaleHistory && mainLandSaleHistory.length > 0
           ? mainLandSaleHistory.find(
-              (saleHistory) => formatParcelNumber(saleHistory.parcelNumber) !== formatParcelNumber(property.parcelNumber)
+              (saleHistory) => formatParcelNumber(saleHistory?.parselId || "") !== formatParcelNumber(property.parselId)
             )
           : true
       )
       .map((el) => ({
         ...el,
-        id: uuid(),
+        id: el?.parselId || uuid(),
         latitude: Number(el.latitude),
         longitude: Number(el.longitude),
-        parcelNumber: el.parcelNumber || "",
+        parcelNumber: el?.parselId || uuid(),
         ...(user &&
           user.isSubscribed && {
             popup: (
@@ -109,10 +109,10 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
 
   useEffect(() => {
     if (valueLandData.mapInteraction.hoveredLand && markerRefs.current) {
-      markerRefs.current[valueLandData.mapInteraction.hoveredLand].openPopup();
+      markerRefs.current?.[valueLandData.mapInteraction.hoveredLand]?.openPopup();
     } else if (markerRefs.current) {
       Object.keys(markerRefs.current).forEach((key) => {
-        markerRefs.current?.[key as keyof typeof markerRefs.current].closePopup();
+        markerRefs.current?.[key as keyof typeof markerRefs.current]?.closePopup();
       });
     }
   }, [valueLandData.mapInteraction.hoveredLand]);

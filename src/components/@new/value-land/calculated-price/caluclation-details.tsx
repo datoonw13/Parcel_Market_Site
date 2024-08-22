@@ -1,6 +1,6 @@
 "use client";
 
-import { numFormatter } from "@/helpers/common";
+import { formatParcelNumber, numFormatter } from "@/helpers/common";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import clsx from "clsx";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IDecodedAccessToken } from "@/types/auth";
+import { uuid } from "short-uuid";
 import { LocationIcon2 } from "../../icons/LocationIcons";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import { InfoIcon2 } from "../../icons/InfoIcons";
@@ -36,7 +37,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
 
   const data = valueLandData.calculatedPrice.properties.map((el) => ({
     value: el.price / Number(el.arcage),
-    stringifiedCoordinates: JSON.stringify([Number(el.latitude), Number(el.longitude)]),
+    id: el?.parselId || uuid(),
   }));
 
   const s = maxPricePerAcre - minPricePerAcre;
@@ -44,7 +45,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
   const formattedData = data.map((el) => ({
     value: el,
     percent: ((el.value - minPricePerAcre) / s) * 100,
-    stringifiedCoordinates: el.stringifiedCoordinates,
+    id: el.id,
   }));
 
   return (
@@ -102,7 +103,15 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
                   }
                 }}
                 onMouseEnter={() => {
-                  setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: el.stringifiedCoordinates } }));
+                  const isSellingProperty =
+                    formatParcelNumber(el.id) ===
+                    formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "");
+                  setValueLandData((prev) => ({
+                    ...prev,
+                    mapInteraction: {
+                      hoveredLand: isSellingProperty ? valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "" : el.id,
+                    },
+                  }));
                 }}
                 onMouseLeave={() => {
                   setValueLandData((prev) => ({ ...prev, mapInteraction: { hoveredLand: null } }));
@@ -110,7 +119,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
               >
                 <LocationIcon2
                   className={clsx(
-                    valueLandData.mapInteraction.hoveredLand === el.stringifiedCoordinates
+                    formatParcelNumber(valueLandData.mapInteraction.hoveredLand || "") === formatParcelNumber(el.id)
                       ? "!w-6 min-w-6 !h-8 min-h-8 [&>path:first-child]:!fill-[#F44D61]"
                       : "!w-5 min-w-5 !h-6 min-h-6 "
                   )}

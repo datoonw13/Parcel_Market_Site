@@ -15,11 +15,12 @@ import { ISignInResponse } from "@/types/auth";
 import { Nullable } from "@/types/common";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { PropertyPriceCalculationReq } from "@/types/property";
-import Button from "../shared/forms/Button";
+import { uuid } from "short-uuid";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 import CalculationTermsModal from "./calculation-terms/terms-modal";
 import CalculationTerms from "./calculation-terms/terms";
+import Button from "../shared/forms/Button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -82,20 +83,17 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
             <div className="rounded-t-2xl [&>div]:rounded-t-2xl h-60 min-h-60 md:h-[220px] md:min-h-[220px]">
               {valueLand.lands && valueLand.lands.length > 0 && (
                 <Map
-                  setMarkerRef={(key, ref) => {
-                    markerRefs.current = { ...markerRefs.current, [key]: ref };
+                  setMarkerRef={(id, ref) => {
+                    markerRefs.current = { ...markerRefs.current, [id]: ref };
                   }}
-                  markerMouseEnter={(value) => {
-                    const key = JSON.stringify(value);
-                    setHoveredItem(key);
+                  markerMouseEnter={(id) => {
+                    setHoveredItem(id);
                   }}
                   markerMouseLeave={(value) => {
                     setHoveredItem(null);
                   }}
-                  popupOpen={(value) => {
-                    const selectedLand = valueLand.lands?.find(
-                      (el) => Number(el.properties.fields.lat) === value[0] && Number(el.properties.fields.lon) === value[1]
-                    );
+                  popupOpen={(id) => {
+                    const selectedLand = valueLand.lands?.find((el) => el.id === id);
                     if (selectedLand) {
                       setValueLand((prev) => ({ ...prev, selectedLand }));
                     }
@@ -103,45 +101,65 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
                   popupClose={() => {
                     // setValueLand((prev) => ({ ...prev, selectedLand: null }));
                   }}
-                  data={valueLand.lands.map((el) => ({
-                    active:
-                      hoveredItem === JSON.stringify([Number(el.properties.fields.lat), Number(el.properties.fields.lon)]) ||
-                      JSON.stringify([
-                        Number(valueLand.selectedLand?.properties.fields.lat),
-                        Number(valueLand.selectedLand?.properties.fields.lon),
-                      ]) === JSON.stringify([Number(el.properties.fields.lat), Number(el.properties.fields.lon)]),
-                    centerCoordinate: [Number(el.properties.fields.lat), Number(el.properties.fields.lon)],
+                  properties={valueLand.lands.map((el) => ({
+                    id: el.id,
+                    parcelNumber: el.properties.fields.parcelnumb_no_formatting || "",
+                    latitude: Number(el.properties.fields.lat),
+                    longitude: Number(el.properties.fields.lon),
                     polygon: el.geometry.coordinates,
-                    owner: el.properties.fields.owner,
-                    parcelNumber: el.properties.fields.parcelnumb,
-                    showMarker: true,
-                    markerColor: "default",
-                    popup: {
-                      owner: {
-                        label: "Owner",
-                        value: el.properties.fields.owner,
-                      },
-                      parcelNumber: {
-                        label: "Parcel Number",
-                        value: el.properties.fields.parcelnumb,
-                      },
-                      acreage: {
-                        label: "Acreages",
-                        value: el.properties.fields.ll_gisacre.toFixed(2),
-                      },
-                      showSelectButton: !!(valueLand.lands && valueLand.lands.length > 1),
-                    },
+                    markerType:
+                      valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
+                        ? "active"
+                        : ("default" as const),
+                    center: true,
+                    popup: (
+                      <div className="flex flex-col gap-1 space-y-2">
+                        <p className="!p-0 !m-0">
+                          Owner: <b>{el.properties.fields.owner}</b>
+                        </p>
+                        <p className="!p-0 !m-0">
+                          Parcel Number: <b>{el.properties.fields.parcelnumb_no_formatting}</b>
+                        </p>
+                        <p className="!p-0 !m-0">
+                          Acreage: <b>{el.properties.fields.ll_gisacre}</b>
+                        </p>
+                        <Button
+                          className="!py-2 !px-6 ml-auto flex mt-4"
+                          color={
+                            valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting ===
+                            el.properties.fields.parcelnumb_no_formatting
+                              ? "error"
+                              : "default"
+                          }
+                          onClick={() => {
+                            if (
+                              valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting ===
+                              el.properties.fields.parcelnumb_no_formatting
+                            ) {
+                              setValueLand((prev) => ({ ...prev, selectedLand: null }));
+                            } else {
+                              setValueLand((prev) => ({ ...prev, selectedLand: el }));
+                            }
+                          }}
+                        >
+                          {valueLand.selectedLand?.properties.fields.parcelnumb_no_formatting ===
+                          el.properties.fields.parcelnumb_no_formatting
+                            ? "Discard"
+                            : "Select"}
+                        </Button>
+                      </div>
+                    ),
                   }))}
-                  selectedParcelNumber={valueLand.selectedLand?.properties.fields.parcelnumb || ""}
-                  onSelect={(parcelNumber) => {
-                    const item = valueLand.lands?.find((el) => el.properties.fields.parcelnumb === parcelNumber);
-                    if (item) {
-                      setValueLand((prev) => ({ ...prev, selectedLand: item }));
-                    }
-                  }}
-                  onDiscard={() => setValueLand((prev) => ({ ...prev, selectedLand: null }))}
+                  // selectedParcelNumber={valueLand.selectedLand?.properties.fields.parcelnumb || ""}
+                  // onSelect={(parcelNumber) => {
+                  //   const item = valueLand.lands?.find((el) => el.properties.fields.parcelnumb === parcelNumber);
+                  //   if (item) {
+                  //     setValueLand((prev) => ({ ...prev, selectedLand: item }));
+                  //   }
+                  // }}
+                  // onDiscard={() => setValueLand((prev) => ({ ...prev, selectedLand: null }))}
                   zoom={5}
-                  geolibInputCoordinates={valueLand.lands.map((el) => [Number(el.properties.fields.lat), Number(el.properties.fields.lon)])}
+                  // geolibInputCoordinates={valueLand.lands.map((el) => [Number(el.properties.fields.lat), Number(el.properties.fields.lon)])}
                 />
               )}
             </div>
