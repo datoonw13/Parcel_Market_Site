@@ -1,8 +1,7 @@
 "use client";
 
 import { formatParcelNumber, numFormatter } from "@/helpers/common";
-import { SellingPropertyDetails, UsedForPriceCalculationItem } from "@/types/property";
-import { LatLngTuple, Marker } from "leaflet";
+import { Marker } from "leaflet";
 import dynamic from "next/dynamic";
 import { FC } from "react";
 
@@ -36,56 +35,6 @@ const CalculationMap: FC<CalculationMapProps> = ({
   sellingProperty,
   highlightItemId,
 }) => {
-  // const usedForPriceCalculation = data
-  //   .filter((el) => el.parcelNumber !== "03-0429-004-01-09")
-  //   .map((el) => ({
-  //     centerCoordinate: [Number(el.latitude), Number(el.longitude)] as LatLngTuple,
-  //     parcelNumber: el.parcelNumber,
-  //     showMarker: true,
-  //     active: el.active,
-  //     popup: {
-  //       parcelNumber: {
-  //         label: "Parcel Number",
-  //         value: el.parcelNumber,
-  //       },
-  //       acreage: {
-  //         label: "Acreage",
-  //         value: el.arcage,
-  //       },
-  //       lastSaleDate: {
-  //         label: "Last Sale Date",
-  //         value: el.lastSalesDate!,
-  //       },
-  //       lastSalePrice: {
-  //         label: "Last Sale Price",
-  //         value: numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage)),
-  //       },
-  //       showSelectButton: false,
-  //     },
-  //   }));
-
-  // const mainLand = {
-  //   centerCoordinate: [Number(mainLandData?.latitude || 0), Number(mainLandData?.longitude) || 0] as LatLngTuple,
-  //   parcelNumber: mainLandData?.parcelNumber || "",
-  //   showMarker: true,
-  //   active: true,
-  //   polygon: mainLandData ? JSON.parse(mainLandData.coordinates) : [],
-  //   popup: {
-  //     owner: {
-  //       label: "Owner",
-  //       value: mainLandData?.owner || "",
-  //     },
-  //     acreage: {
-  //       label: "Acreage",
-  //       value: mainLandData?.acreage || "",
-  //     },
-  //     pricePerAcreage: {
-  //       label: "Price Per Acreage",
-  //       value: mainLandData ? numFormatter.format(mainLandData.salePrice / Number(mainLandData.acreage)) : "",
-  //     },
-  //   },
-  // } as any;
-
   const mainLandSaleHistory = properties.filter(
     (property) => formatParcelNumber(property.parcelNumber) === formatParcelNumber(sellingProperty.parcelNumber)
   );
@@ -130,9 +79,11 @@ const CalculationMap: FC<CalculationMapProps> = ({
     },
     ...properties
       .filter((property) =>
-        mainLandSaleHistory.find(
-          (saleHistory) => formatParcelNumber(saleHistory.parcelNumber) !== formatParcelNumber(property.parcelNumber)
-        )
+        mainLandSaleHistory.length > 0
+          ? mainLandSaleHistory.find(
+              (saleHistory) => formatParcelNumber(saleHistory.parcelNumber) !== formatParcelNumber(property.parcelNumber)
+            )
+          : true
       )
       .map((el) => ({
         ...el,
