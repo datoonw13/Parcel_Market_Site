@@ -60,8 +60,11 @@ export interface LandListItemProps {
   followedListingId?: number;
   disableDetail?: boolean;
   map?: {
+    id: string;
+    latitude: number;
+    longitude: number;
+    parcelNumber: string;
     canView?: boolean;
-    mainLandCoordinate?: LatLngTuple;
   };
   disableZoom?: boolean;
 }

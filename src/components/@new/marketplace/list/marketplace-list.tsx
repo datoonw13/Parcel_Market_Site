@@ -44,7 +44,10 @@ const MarketplaceList = async ({
                 followedListingId={land.followedListingId}
                 map={{
                   canView: user?.isSubscribed,
-                  mainLandCoordinate: [Number(land.lat), Number(land.lon)],
+                  id: land.id.toString(),
+                  latitude: Number(land.lat),
+                  longitude: Number(land.lon),
+                  parcelNumber: land.parcelNumber
                 }}
                 data={{
                   availableTill: land.availableTill,

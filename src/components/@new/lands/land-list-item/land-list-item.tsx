@@ -68,16 +68,17 @@ const LandListItem: FC<LandListItemProps> = ({
         {map && map.canView && (
           <Map
             disableZoom={disableZoom}
-            data={[
+            properties={[
               {
-                centerCoordinate: map.mainLandCoordinate as any,
-                parcelNumber: Math.random().toString(),
-                showMarker: true,
-                markerColor: "default",
+                id: map.id,
+                latitude: map.latitude,
+                longitude: map.longitude,
+                center: true,
+                markerType: "default",
+                parcelNumber: map.parcelNumber,
               },
             ]}
             zoom={5}
-            geolibInputCoordinates={[map.mainLandCoordinate] as any}
           />
         )}
         {map && !map.canView && (
@@ -110,7 +111,7 @@ const LandListItem: FC<LandListItemProps> = ({
         <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
           <CalendarIcon1 className="size-3" /> Available till: <span className="text-black">{data.availableTill}</span>
         </p>
-        {!Number.isNaN(data?.receivedOffers) && (
+        {!Number.isNaN(Number(data?.receivedOffers)) && (
           <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
             <DiscountBox className="size-4" /> Received Offers: <span className="text-black">{data.receivedOffers}</span>
           </p>
@@ -125,5 +126,4 @@ const LandListItem: FC<LandListItemProps> = ({
     </div>
   </div>
 );
-
 export default LandListItem;
