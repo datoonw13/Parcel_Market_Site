@@ -3,6 +3,7 @@ import { getStateValue } from "@/helpers/states";
 import moment from "moment";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import { AuthedUserSearches } from "@/types/auth";
+import { uuid } from "short-uuid";
 import TableWithMap from "../../table-with-map/table-with-map";
 
 const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
@@ -59,17 +60,9 @@ const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
         </li>
       </ul>
       <TableWithMap
-        data={data.assessments.map((el) => ({
-          arcage: el.arcage,
-          county: el.county,
-          latitude: el.latitude,
-          longitude: el.longitude,
-          parcelNumber: el.parselId,
-          lastSalesDate: el.lastSalesDate,
-          lastSalesPrice: el.lastSalesPrice,
-        }))}
-        mainLandData={{
-          acreage: data.acrage.toString(),
+        sellingProperty={{
+          id: `selling-property-${data.id}`,
+          acreage: Number(data.acrage),
           coordinates: data.coordinates,
           latitude: Number(data.lat || 1),
           longitude: Number(data.lon || 1),
@@ -78,6 +71,17 @@ const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
           salePrice: Number(data.price),
         }}
         isUserSubscriptionTrial={isUserSubscriptionTrial}
+        properties={data.assessments.map((el) => ({
+          acreage: Number(el.arcage),
+          county: el.county || "",
+          id: `properties-${uuid()}`,
+          lastSaleDate: el.lastSalesDate,
+          lastSalePrice: Number(el.lastSalesPrice),
+          latitude: Number(el.latitude),
+          longitude: Number(el.longitude),
+          parcelNumber: el.parcelNumber,
+          state: el.state || "",
+        }))}
       />
     </div>
   );

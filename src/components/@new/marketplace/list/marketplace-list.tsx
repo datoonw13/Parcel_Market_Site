@@ -47,7 +47,7 @@ const MarketplaceList = async ({
                   id: land.id.toString(),
                   latitude: Number(land.lat),
                   longitude: Number(land.lon),
-                  parcelNumber: land.parcelNumber
+                  parcelNumber: land.parcelNumber,
                 }}
                 data={{
                   availableTill: land.availableTill,
