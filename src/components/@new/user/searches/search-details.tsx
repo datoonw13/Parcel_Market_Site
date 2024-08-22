@@ -9,7 +9,6 @@ import TableWithMap from "../../table-with-map/table-with-map";
 const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
   const userSubscription = await getUserSubscriptions();
   const isUserSubscriptionTrial = !!userSubscription.data?.find((el) => el.status === "trialing");
-
   return (
     <div className="space-y-3 pb-6">
       <ul className="list-disc marker:primary-main-400 px-4 grid grid-cols-1 md:grid-cols-2 xl:md:grid-cols-3 gap-y-3 gap-x-10 py-3">
@@ -61,7 +60,6 @@ const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
       </ul>
       <TableWithMap
         sellingProperty={{
-          id: `selling-property-${data.id}`,
           acreage: Number(data.acrage),
           coordinates: data.coordinates,
           latitude: Number(data.lat || 1),
@@ -79,7 +77,7 @@ const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
           lastSalePrice: Number(el.lastSalesPrice),
           latitude: Number(el.latitude),
           longitude: Number(el.longitude),
-          parcelNumber: el.parcelNumber,
+          parcelNumber: el.parselId || uuid(),
           state: el.state || "",
         }))}
       />
