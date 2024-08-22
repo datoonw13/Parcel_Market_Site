@@ -18,10 +18,15 @@ const EventSourceListener = ({ jwt, userId }: { jwt: string; userId: number }) =
     eventSource.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data) as { statusCode: number; message: string; data: INotification };
-        if (notifications?.length === 6) {
-          const newNotifications = notifications?.length === 6 ? notifications.slice(1) : [...notifications];
-          setNotifications([data.data, ...newNotifications]);
+        let newNotifications = notifications.data ? [...notifications.data] : [];
+        if (notifications?.data?.length === 6) {
+          newNotifications = newNotifications.slice(1);
         }
+        newNotifications.push(data.data);
+        setNotifications((prev) => ({
+          data: newNotifications,
+          unread: prev.unread + 1,
+        }));
         revalidateTag(notificationsTag);
         revalidatePath(routes.user.offers.received.fullUrl);
         revalidatePath(routes.user.offers.sent.fullUrl);
