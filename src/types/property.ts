@@ -11,6 +11,7 @@ export interface PropertyPriceCalculationReq {
     state: string;
     county: string;
     coordinates: string;
+    locality: string;
   };
   queryParams: {
     lat: string;
@@ -93,5 +94,5 @@ export interface SellingPropertyDetails extends PropertySellReq, Omit<AboutPrope
   user_id?: number;
   followedListingId?: number;
   offerId?: string;
-  city: string;
+  property: { locality: string };
 }

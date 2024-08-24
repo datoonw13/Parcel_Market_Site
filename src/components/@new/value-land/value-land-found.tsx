@@ -15,7 +15,6 @@ import { ISignInResponse } from "@/types/auth";
 import { Nullable } from "@/types/common";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { PropertyPriceCalculationReq } from "@/types/property";
-import { uuid } from "short-uuid";
 import { formatParcelNumber } from "@/helpers/common";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
@@ -47,6 +46,7 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
         propertyType:
           valueLand.selectedLand.properties.fields?.zoning_description || valueLand.selectedLand.properties.fields.usedesc || "",
         coordinates: JSON.stringify(valueLand.selectedLand.geometry.coordinates),
+        locality: valueLand.selectedLand.properties.fields.city,
       },
       queryParams: {
         acre: valueLand.selectedLand.properties.fields.ll_gisacre.toString(),

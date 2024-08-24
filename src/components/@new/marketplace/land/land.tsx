@@ -5,7 +5,6 @@ import moment from "moment";
 import { getAllStates, getCounties } from "@/helpers/states";
 import clsx from "clsx";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
-import { uuid } from "short-uuid";
 import { LocationIcon1 } from "../../icons/LocationIcons";
 import { EyeIcon1 } from "../../icons/EyeIcons";
 import { CalendarIcon1 } from "../../icons/CalendarIcons";
@@ -34,7 +33,12 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
             <div className="flex items-center gap-1.5">
               <LocationIcon1 color="primary-main" className="!w-3 !h-3.5" />
               <p className="text-xs text-grey-600">
-                {state}; {county}; {data.city || "Some City"}
+                {state}; {county};{" "}
+                <span className="capitalize">
+                  {data.property?.locality.split("-").length > 1
+                    ? data.property?.locality.split("-").splice(1).join(" ")
+                    : data.property?.locality}
+                </span>
               </p>
             </div>
             <div className="flex gap-3">
