@@ -24,7 +24,6 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
   const state = getAllStates().find((state) => state.value === data.state.toLocaleLowerCase())?.label;
   const county = getCounties(data.state.toLocaleLowerCase() || null).find((el) => el.value === data.county)?.label;
 
-  console.log(data, 22);
   return (
     <>
       <div>

@@ -22,7 +22,6 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [openWarningModal, setOpenWarningModal] = useState(false);
-  console.log(valueLandData.mapInteraction.hoveredLand);
 
   const mainLandSaleHistory = valueLandData.calculatedPrice?.properties.filter(
     (property) =>
