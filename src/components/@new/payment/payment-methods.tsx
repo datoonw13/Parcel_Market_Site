@@ -9,6 +9,7 @@ import routes from "@/helpers/routes";
 import RadioButton from "../shared/forms/RadioButton";
 import Stripe from "./stripe/stripe";
 import Button from "../shared/forms/Button";
+import useNotification from "@/hooks/useNotification";
 
 const getPlanDetails = (plan: SubscriptionType) => {
   switch (plan) {
@@ -42,7 +43,7 @@ const PaymentMethods = ({
   const params = new URLSearchParams(searchParams);
   const [paymentMethod, setPaymentMethod] = useState<string | null>("stripe");
   const hasUserActiveSubscription = userSubscriptions?.find((el) => el.status === "active");
-
+  const {notify} = useNotification()
   const [updatePending, setUpdatePending] = useState(false);
 
   const handleUpdate = async () => {
@@ -52,6 +53,9 @@ const PaymentMethods = ({
       setUpdatePending(false);
       if (!errorMessage) {
         router.push(`${routes.user.subscription.fullUrl}?success=true`);
+      }
+      else {
+        notify({title: 'Subscription Update', description: errorMessage}, {variant: 'error'})
       }
     }
   };

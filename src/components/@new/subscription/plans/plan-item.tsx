@@ -139,7 +139,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
           }}
           className="w-full"
           loading={resumePending}
-          variant={isActive ? "secondary" : "primary"}
+          variant={isActive && !userActiveSubscription?.cancelAtPeriodEnd ? "secondary" : "primary"}
         >
           {getButtonLabel()}
         </Button>
