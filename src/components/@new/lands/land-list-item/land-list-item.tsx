@@ -50,6 +50,7 @@ const LandListItem: FC<LandListItemProps> = ({
         </Link>
         <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">
           <LocationIcon1 /> {data.state}; {data.county}
+          <span className="capitalize ml-1">{data.city}</span>
         </h2>
       </div>
 

@@ -24,6 +24,7 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
   const state = getAllStates().find((state) => state.value === data.state.toLocaleLowerCase())?.label;
   const county = getCounties(data.state.toLocaleLowerCase() || null).find((el) => el.value === data.county)?.label;
 
+  console.log(data, 22);
   return (
     <>
       <div>
@@ -35,9 +36,7 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
               <p className="text-xs text-grey-600">
                 {state}; {county};{" "}
                 <span className="capitalize">
-                  {data.property?.locality.split("-").length > 1
-                    ? data.property?.locality.split("-").splice(1).join(" ")
-                    : data.property?.locality}
+                  {data?.locality?.split("-").length > 1 ? data?.locality.split("-").splice(1).join(" ") : data?.locality}
                 </span>
               </p>
             </div>

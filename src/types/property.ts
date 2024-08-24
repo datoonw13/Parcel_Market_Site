@@ -94,5 +94,5 @@ export interface SellingPropertyDetails extends PropertySellReq, Omit<AboutPrope
   user_id?: number;
   followedListingId?: number;
   offerId?: string;
-  property: { locality: string };
+  locality: string;
 }
