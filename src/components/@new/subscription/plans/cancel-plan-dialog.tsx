@@ -4,6 +4,7 @@ import { DeletionAccountReason } from "@/types/auth";
 import { FC, useState } from "react";
 import { cancelSubscriptionAction } from "@/server-actions/subscription/actions";
 import { ISubscription } from "@/types/subscriptions";
+import { useRouter } from "next/navigation";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import RadioButton from "../../shared/forms/RadioButton";
 
@@ -13,12 +14,14 @@ interface CancelPlanDialogProps {
 }
 
 const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSubscription }) => {
+  const router = useRouter();
   const [reason, setReason] = useState<DeletionAccountReason | null>(null);
   const [cancelPending, setCancelPending] = useState(false);
 
   const cancelSubscription = async () => {
     setCancelPending(true);
     await cancelSubscriptionAction(userActiveSubscription.id, reason!);
+    router.push("?success=true");
     closeDialog();
   };
 

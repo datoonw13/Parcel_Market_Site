@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
+import { resumeSubscriptionAction } from "@/server-actions/subscription/actions";
 import { CheckIcon3 } from "../../icons/CheckIcons";
 import Button from "../../shared/forms/Button";
 import UpdatePlanDialog from "./update-plan-dialog";
@@ -42,9 +43,6 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
 };
 
 const checkIsActive = (subscription: SubscriptionType, userActiveSubscription?: ISubscription) => {
-  if (userActiveSubscription?.cancelAtPeriodEnd) {
-    return false;
-  }
   if (subscription === SubscriptionType.Trial) {
     return userActiveSubscription?.status === "trialing";
   }
@@ -62,6 +60,17 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
   const isActive = checkIsActive(type, userActiveSubscription);
   const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [resumePending, setResumePending] = useState(false);
+
+  const getButtonLabel = () => {
+    if (isActive && userActiveSubscription?.cancelAtPeriodEnd) {
+      return "Resume Subscription";
+    }
+    if (isActive) {
+      return "Cancel Subscription";
+    }
+    return "Subscribe";
+  };
 
   return (
     <>
@@ -110,11 +119,29 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
           </div>
         </div>
         <Button
-          onClick={isActive ? () => setOpenCancelModal(true) : () => setOpenUpgradeModal(true)}
+          onClick={async () => {
+            if (isActive && userActiveSubscription?.cancelAtPeriodEnd) {
+              setResumePending(true);
+              const req = await resumeSubscriptionAction(userActiveSubscription.id);
+              setResumePending(false);
+              if (!req.errorMessage) {
+                console.log("movidaaa");
+
+                router.push(`${routes.user.subscription.fullUrl}?success=true`);
+              }
+              return;
+            }
+            if (isActive) {
+              setOpenCancelModal(true);
+              return;
+            }
+            setOpenUpgradeModal(true);
+          }}
           className="w-full"
+          loading={resumePending}
           variant={isActive ? "secondary" : "primary"}
         >
-          {isActive ? "Cancel Subscription" : "Subscribe"}
+          {getButtonLabel()}
         </Button>
       </div>
     </>

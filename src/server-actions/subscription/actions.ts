@@ -58,7 +58,26 @@ export const cancelSubscriptionAction = async (
       body: JSON.stringify({ deleteReason, subscriptionId }),
     });
     revalidateTag(subscriptionTags.subscription);
-    await refreshToken();
+    return {
+      errorMessage: null,
+      data: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      errorMessage: errorData.message,
+      data: null,
+    };
+  }
+};
+
+export const resumeSubscriptionAction = async (subscriptionId: string): Promise<ResponseModel<null>> => {
+  try {
+    await fetcher<null>(`stripe/subscription/resume`, {
+      method: "POST",
+      body: JSON.stringify({ subscriptionId }),
+    });
+    revalidateTag(subscriptionTags.subscription);
     return {
       errorMessage: null,
       data: null,
