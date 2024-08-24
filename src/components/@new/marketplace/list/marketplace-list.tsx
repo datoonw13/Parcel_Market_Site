@@ -53,7 +53,7 @@ const MarketplaceList = async ({
                   availableTill: land.availableTill,
                   state: state?.label || "",
                   county: county || "",
-                  city: land.locality || "",
+                  locality: land.locality || "",
                   name: land.title,
                   options: {
                     owner: {

@@ -41,7 +41,7 @@ export interface LandListItemProps {
     name: string;
     state: string;
     county: string;
-    city: string;
+    locality?: string;
     availableTill: string;
     receivedOffers?: number;
     options: {
