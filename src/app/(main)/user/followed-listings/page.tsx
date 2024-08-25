@@ -1,37 +1,42 @@
-import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
-import { Suspense } from "react";
-import FollowedListings from "@/components/@new/user/followed-listings/followed-listings";
 import { getUserAction } from "@/server-actions/user/actions";
-import SubscribeError from "@/components/@new/shared/subscribe-error";
-import UserListingLoader from "@/components/@new/user/listings/user-listing-loader";
-import UserListingDesktopFilter from "@/components/@new/user/listings/user-listing-desktop-filters";
+import { Suspense } from "react";
+import { z } from "zod";
+import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
+import { redirect } from "next/navigation";
+import routes from "@/helpers/routes";
+import UserFollowedPropertiesListLoading from "@/components/@new/user/followed-properties/list-loading";
+import FollowedProperties from "@/components/@new/user/followed-properties/followed-properties";
+import { getUserFollowedListingAction } from "@/server-actions/follow/actions";
+import UserFollowedPropertiesList from "@/components/@new/user/followed-properties/list";
 
-const UserFollowedListingsPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+const PAGE_SIZE = 6;
+const UserFollowedPropertiesPage = async ({ searchParams }: { searchParams: any }) => {
   const user = await getUserAction();
+  const { data } = await getUserFollowedListingAction(PAGE_SIZE);
+  const totalItems = data?.pagination.totalCount || 0;
+  const selectedFilters: z.infer<typeof userPropertiesFiltersValidations> = {
+    states: searchParams?.states?.split(",") || null,
+    counties: searchParams.counties?.split(",") || null,
+    page: Number(searchParams?.page) || 1,
+    sortBy: (searchParams?.sortBy as any) || null,
+    voltPriceMin: Number(searchParams.voltPriceMin) || null,
+    voltPriceMax: Number(searchParams.voltPriceMax) || null,
+    acreageMin: Number(searchParams.acreageMin) || null,
+    acreageMax: Number(searchParams.acreageMax) || null,
+  };
+  const filters = await userPropertiesFiltersValidations.safeParseAsync(selectedFilters);
+
+  if (!filters.success) {
+    redirect(routes.user.properties.fullUrl);
+  }
+
   return (
-    <div className="w-full space-y-8">
-      <div className="flex justify-between flex-col sm:flex-row gap-6">
-        <UserProfileSectionHeader
-          title="My Saved Properties"
-          description="View and manage the properties you've bookmarked for future consideration."
-        />
-      </div>
-      {user?.isSubscribed ? (
-        <>
-          <Suspense>
-            <div className="hidden sm:block">
-              <UserListingDesktopFilter />
-            </div>
-          </Suspense>
-          <Suspense fallback={<UserListingLoader />} key={JSON.stringify(searchParams)}>
-            <FollowedListings searchParams={searchParams} />
-          </Suspense>
-        </>
-      ) : (
-        <SubscribeError />
-      )}
-    </div>
+    <FollowedProperties filters={filters.data} user={user} totalItems={totalItems}>
+      <Suspense key={JSON.stringify(filters.data)} fallback={<UserFollowedPropertiesListLoading />}>
+        <UserFollowedPropertiesList pageSize={PAGE_SIZE} totalItems={totalItems} filters={filters.data} />
+      </Suspense>
+    </FollowedProperties>
   );
 };
 
-export default UserFollowedListingsPage;
+export default UserFollowedPropertiesPage;

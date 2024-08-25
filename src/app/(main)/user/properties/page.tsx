@@ -1,13 +1,13 @@
 import { getUserAction } from "@/server-actions/user/actions";
 import Listings from "@/components/@new/user/properties/properties";
 import { getUserListingAction } from "@/server-actions/user-listings/actions";
-import UserPropertiesList from "@/components/@new/user/properties/properties-list";
 import { Suspense } from "react";
 import { z } from "zod";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 import { redirect } from "next/navigation";
 import routes from "@/helpers/routes";
 import UserPropertiesListLoading from "@/components/@new/user/properties/list-loading";
+import UserPropertiesList from "@/components/@new/user/properties/properties-list";
 
 const PAGE_SIZE = 6;
 const UserPropertiesPage = async ({ searchParams }: { searchParams: any }) => {

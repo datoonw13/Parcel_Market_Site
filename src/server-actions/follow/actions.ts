@@ -4,16 +4,21 @@ import { IPagination, ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { revalidateTag } from "next/cache";
 import { SellingPropertyDetails } from "@/types/property";
+import { z } from "zod";
+import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
+import { isNil, omitBy } from "lodash";
 import { fetcher } from "../fetcher";
 import { marketplaceTag } from "../marketplace/tags";
 import { followTag } from "./tags";
 
-export const getUserFollowedListingAction = async (params: {
-  [key: string]: string;
-}): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
+export const getUserFollowedListingAction = async (
+  pageSize: number,
+  params?: z.infer<typeof userPropertiesFiltersValidations>
+): Promise<ResponseModel<({ list: SellingPropertyDetails[] } & IPagination) | null>> => {
+  const filters = omitBy(params, isNil);
   try {
     const request = await fetcher<{ data: ({ sellingProperty: SellingPropertyDetails } & { followedListingId?: number })[] } & IPagination>(
-      `followed-listings?${new URLSearchParams({ ...params, pageSize: "6" })}`,
+      `followed-listings?${new URLSearchParams({ ...filters, pageSize: pageSize.toString() })}`,
       { next: { tags: [followTag] } }
     );
     return {
@@ -52,7 +57,7 @@ export const followLand = async (
   }
 };
 
-export const unFollowLands = async (
+export const unFollowLandsAction = async (
   followedListingId: number[]
 ): Promise<ResponseModel<{ userId: number; sellingPropertyId: number; id: number } | null>> => {
   try {

@@ -3,8 +3,8 @@
 import { FC } from "react";
 import { LandListItemProps } from "@/types/lands";
 import { useAtom } from "jotai";
-import LandListItem from "../../lands/land-list-item/land-list-item";
 import { userPropertiesAtom } from "@/atoms/user-properties-atom";
+import LandListItem from "../../lands/land-list-item/land-list-item";
 
 const UserPropertiesListItem: FC<LandListItemProps> = (params) => {
   const { sellingItemId } = params;

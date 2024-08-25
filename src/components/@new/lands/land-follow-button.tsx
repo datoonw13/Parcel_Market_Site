@@ -3,7 +3,7 @@
 "use client";
 
 import { useState } from "react";
-import { followLand, unFollowLands } from "@/server-actions/follow/actions";
+import { followLand, unFollowLandsAction } from "@/server-actions/follow/actions";
 import toast from "react-hot-toast";
 import { followedListingsAtom } from "@/atoms/followed-listings-atom";
 import { useAtom } from "jotai";
@@ -45,7 +45,7 @@ const LandFollowButton = ({
 
   const handleUnFollow = async () => {
     setPending(true);
-    const { data, errorMessage } = await unFollowLands([landId]);
+    const { data, errorMessage } = await unFollowLandsAction([landId]);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
