@@ -10,6 +10,8 @@ const UserListingItem: FC<LandListItemProps> = (params) => {
   const { sellingItemId } = params;
   const [userListingOption, setUserListingOption] = useAtom(userListingAtom);
 
+  console.log('aa');
+  
   return (
     <LandListItem
       {...params}
