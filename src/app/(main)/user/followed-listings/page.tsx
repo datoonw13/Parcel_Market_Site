@@ -8,6 +8,7 @@ import UserFollowedPropertiesListLoading from "@/components/@new/user/followed-p
 import FollowedProperties from "@/components/@new/user/followed-properties/followed-properties";
 import { getUserFollowedListingAction } from "@/server-actions/follow/actions";
 import UserFollowedPropertiesList from "@/components/@new/user/followed-properties/list";
+import UserFollowedPropertiesListWrapper from "@/components/@new/user/followed-properties/list-wrapper";
 
 const PAGE_SIZE = 6;
 const UserFollowedPropertiesPage = async ({ searchParams }: { searchParams: any }) => {
@@ -33,7 +34,7 @@ const UserFollowedPropertiesPage = async ({ searchParams }: { searchParams: any 
   return (
     <FollowedProperties filters={filters.data} user={user} totalItems={totalItems}>
       <Suspense key={JSON.stringify(filters.data)} fallback={<UserFollowedPropertiesListLoading />}>
-        <UserFollowedPropertiesList pageSize={PAGE_SIZE} totalItems={totalItems} filters={filters.data} />
+        <UserFollowedPropertiesListWrapper pageSize={PAGE_SIZE} totalItems={totalItems} filters={filters.data} />
       </Suspense>
     </FollowedProperties>
   );

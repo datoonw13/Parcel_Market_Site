@@ -8,11 +8,10 @@ import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 import { z } from "zod";
 import { useAtom } from "jotai";
-import { removeUserListingItemsAction } from "@/server-actions/user-listings/actions";
 import useNotification from "@/hooks/useNotification";
-import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
 import { userFollowedPropertiesAtom } from "@/atoms/user-followed-properties-atom";
 import { unFollowLandsAction } from "@/server-actions/follow/actions";
+import ResponsiveWarningModal from "@/components/@new/shared/modals/ResponsiveWarningModal";
 import UserFollowedPropertiesMobileFilters from "./mobile-filters";
 import UserFollowedPropertiesDesktopFilters from "./desktop-filters";
 
@@ -36,36 +35,58 @@ const UserFollowerPropertiesFilter: FC<UserFollowerPropertiesFilterProps> = ({ t
       const { errorMessage } = await unFollowLandsAction(userFollowedPropertiesOptions.removeItemsIds);
       if (errorMessage) {
         notify({ title: errorMessage }, { variant: "error" });
-        setPending(false);
       } else {
         setOpenRemoveModal(false);
-        setUserFollowedPropertiesOptions({ selecting: false, removeItemsIds: null });
+        setUserFollowedPropertiesOptions((prev) => {
+          const listKey = prev.list && Object.keys(prev.list)[0];
+          const listItems =
+            listKey &&
+            prev?.list?.[listKey].map((el) => ({
+              ...el,
+              followedListingId: prev.removeItemsIds?.includes(el?.id || -1) ? undefined : el.followedListingId,
+            }));
+
+          return {
+            ...prev,
+            selecting: false,
+            removeItemsIds: null,
+            list:
+              listKey && listItems
+                ? {
+                    listKey: listItems,
+                  }
+                : null,
+          };
+        });
       }
+      setPending(false);
     }
   };
 
   useEffect(
     () => () => {
-      setUserFollowedPropertiesOptions({ selecting: false, removeItemsIds: null });
+      setUserFollowedPropertiesOptions({ selecting: false, removeItemsIds: null, list: null });
     },
     [setUserFollowedPropertiesOptions]
   );
 
   return (
     <>
-      <ResponsiveRemoveModal
+      <ResponsiveWarningModal
+        variant="error"
         open={openRemoveModal}
-        pending={pending}
-        handleClose={() => {
+        okPending={pending}
+        closeModal={() => {
           setOpenRemoveModal(false);
         }}
-        onReject={() => {
+        onCancel={() => {
           setUserFollowedPropertiesOptions((prev) => ({ ...prev, selecting: false, selectedLandIds: null }));
           setOpenRemoveModal(false);
         }}
         title="Unfollow Selected Properties?"
-        desc="Are you sure you want to unfollow properties you selected?"
-        onOk={onRemove}
+        description="Are you sure you want to unfollow properties you selected?"
+        onOK={onRemove}
+        okLabel="Unfollow"
       />
       <div className="hidden lg:flex">
         <UserFollowedPropertiesDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
@@ -79,6 +100,12 @@ const UserFollowerPropertiesFilter: FC<UserFollowerPropertiesFilterProps> = ({ t
           onClick={() => setUserFollowedPropertiesOptions((prev) => ({ ...prev, selecting: !prev.selecting, selectedLandIds: null }))}
           total={userFollowedPropertiesOptions.removeItemsIds?.length}
           onRemove={() => setOpenRemoveModal(true)}
+          allSelected={
+            !!(
+              userFollowedPropertiesOptions.list &&
+              Object.values(userFollowedPropertiesOptions.list).flat().length === userFollowedPropertiesOptions.removeItemsIds?.length
+            )
+          }
         />
         <div className="flex">
           <div className="flex items-center gap-3 justify-end min-w-max">

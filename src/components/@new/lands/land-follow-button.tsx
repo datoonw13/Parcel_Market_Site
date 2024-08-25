@@ -45,7 +45,7 @@ const LandFollowButton = ({
 
   const handleUnFollow = async () => {
     setPending(true);
-    const { data, errorMessage } = await unFollowLandsAction([landId]);
+    const { errorMessage } = await unFollowLandsAction([landId]);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
