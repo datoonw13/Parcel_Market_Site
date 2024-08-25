@@ -60,7 +60,7 @@ const ValueLendTerms = ({ closeRootModal }: { closeRootModal: () => void }) => {
 
   const closeModal = () => {
     if (openModal === "success") {
-      router.push(routes.user.listings.fullUrl);
+      router.push(routes.user.properties.fullUrl);
     } else {
       setOpenModal(null);
       if (error === "Posting already exists") {

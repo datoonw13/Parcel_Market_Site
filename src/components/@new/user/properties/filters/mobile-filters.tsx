@@ -8,15 +8,20 @@ import RadioButton from "@/components/@new/shared/forms/RadioButton";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { IMarketplaceFilters } from "@/types/lands";
 import { uniqBy } from "lodash";
+import { z } from "zod";
+import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 
-interface MarketplaceMobileFiltersProps {
+type Filters = z.infer<typeof userPropertiesFiltersValidations>
+
+
+interface UserPropertiesMobileFiltersProps {
   disabled?: boolean;
-  selectedFilters: IMarketplaceFilters;
-  onChange: <T extends keyof IMarketplaceFilters>(data: { [key in T]: IMarketplaceFilters[T] }) => void;
+  selectedFilters: Filters;
+  onChange: <T extends keyof Filters>(data: { [key in T]: Filters[T] }) => void;
 }
-const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled, selectedFilters, onChange }) => {
-  const [localFilters, setLocalFilters] = useState<IMarketplaceFilters | null>(null);
-  const [open, setOpen] = useState<"states" | "counties" | "acreage" | "voltValue" | null>(null);
+const UserPropertiesMobileFilters: FC<UserPropertiesMobileFiltersProps> = ({ disabled, selectedFilters, onChange }) => {
+  const [localFilters, setLocalFilters] = useState<Filters | null>(null);
+  const [open, setOpen] = useState<"states" | "counties" | "acreage" | "voltPrice" | null>(null);
   const states = useMemo(() => getAllStates(), []);
   const counties = useMemo(() => {
     const countiesList = selectedFilters.states?.map((state) => getCounties(state)) || [];
@@ -98,9 +103,9 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
         />
       </MobileFilterItem>
       <MobileFilterItem
-        open={open === "voltValue"}
-        toggleFilter={() => setOpen(open === "voltValue" ? null : "voltValue")}
-        filterName="VOLT Value"
+        open={open === "voltPrice"}
+        toggleFilter={() => setOpen(open === "voltPrice" ? null : "voltPrice")}
+        filterName="VOLT Price"
       >
         <MinMaxMobileFilter
           options={priceFilters}
@@ -117,4 +122,4 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
   );
 };
 
-export default MarketplaceMobileFilters;
+export default UserPropertiesMobileFilters;

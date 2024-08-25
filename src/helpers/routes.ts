@@ -53,9 +53,9 @@ const routes = {
       fullUrl: "/user/profile",
       protected: true,
     },
-    listings: {
-      url: "listings",
-      fullUrl: "/user/listings",
+    properties: {
+      url: "properties",
+      fullUrl: "/user/properties",
       protected: true,
     },
     followedProperties: {

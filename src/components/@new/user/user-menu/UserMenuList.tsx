@@ -59,7 +59,7 @@ const list = [
   {
     label: "My Listings",
     icon: BookOpen,
-    path: routes.user.listings.fullUrl,
+    path: routes.user.properties.fullUrl,
   },
   {
     label: "My Received Offers",

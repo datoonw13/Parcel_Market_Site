@@ -9,12 +9,13 @@ import { SellingPropertyDetails } from "@/types/property";
 import { userListingsTag } from "./tags";
 import { fetcher } from "../fetcher";
 
-export const getUserListingAction = async (params: {
-  [key: string]: string;
-}): Promise<ResponseModel<({ list: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination) | null>> => {
+export const getUserListingAction = async (
+  pageSize: number,
+  params?: any
+): Promise<ResponseModel<({ list: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination) | null>> => {
   try {
     const request = await fetcher<{ data: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination>(
-      `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize: "6" })}`,
+      `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize })}`,
       {
         next: { tags: [userListingsTag] },
       }
@@ -38,6 +39,7 @@ export const removeUserListingItemsAction = async (ids: number[]): Promise<Respo
       method: "DELETE",
       body: JSON.stringify({ ids }),
     });
+    revalidateTag(userListingsTag);
     return {
       errorMessage: null,
       data: null,

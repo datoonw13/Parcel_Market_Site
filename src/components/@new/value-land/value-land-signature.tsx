@@ -29,7 +29,7 @@ const ValueLandSignature = () => {
         toast.error(errorMessage);
         setPending(false);
       } else {
-        router.push(routes.user.listings.fullUrl);
+        router.push(routes.user.properties.fullUrl);
       }
     }
   };

@@ -8,13 +8,13 @@ import { useAtom } from "jotai";
 import { followedListingsAtom } from "@/atoms/followed-listings-atom";
 import { SellingPropertyDetails } from "@/types/property";
 import DataNotFound from "../../shared/DataNotFound";
-import UserListingHeader from "../listings/user-listing-header";
-import UserListingItem from "../listings/user-listing-item";
+import UserListingHeader from "../properties/user-listing-header";
+import UserListingItem from "../properties/user-listing-item";
 import { UserIcon2 } from "../../icons/UserIcons";
 import { IdIcon1 } from "../../icons/IdIcons";
 import { ResizeIcon1 } from "../../icons/ResizeIcons";
 import { MoneyIcon1 } from "../../icons/MoneyIcons";
-import UserListingPagination from "../listings/user-listing-pagination";
+import UserListingPagination from "../properties/user-listing-pagination";
 
 interface FollowedListingsWrapperProps {
   data:
