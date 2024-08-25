@@ -1,40 +1,33 @@
 "use client";
 
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { IoAddOutline } from "react-icons/io5";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { z } from "zod";
+import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 import UserProfileSectionHeader from "../UserProfileSectionHeader";
 import Button from "../../shared/forms/Button";
 import SubscribeError from "../../shared/subscribe-error";
 import UserPropertiesFilters from "./filters/filters";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { z } from "zod";
-import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 
 interface PropertiesProps {
   user: IDecodedAccessToken | null;
   totalItems: number;
+  children: ReactNode;
+  filters: z.infer<typeof userPropertiesFiltersValidations>;
 }
-const Properties: FC<PropertiesProps> = ({ user, totalItems }) => {
-  const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
-  const router = useRouter()
-  const pathname = usePathname()
+const Properties: FC<PropertiesProps> = ({ user, totalItems, children, filters }) => {
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const selectedFilters: z.infer<typeof userPropertiesFiltersValidations> = {
-    states: searchParams.get("states")?.split(",") || null,
-    counties: searchParams.get("counties")?.split(",") || null,
-    page: Number(searchParams.get("page")) || 1,
-    sortBy: (searchParams.get("sortBy") as any) || null,
-    voltPriceMin: Number(searchParams.get("voltPriceMin")) || null,
-    voltPriceMax: Number(searchParams.get("voltPriceMax")) || null,
-    acreageMin: Number(searchParams.get("acreageMin")) || null,
-    acreageMax: Number(searchParams.get("acreageMax")) || null,
-  };
-
-  const onChange = <T extends keyof z.infer<typeof userPropertiesFiltersValidations>>(data: { [key in T]: z.infer<typeof userPropertiesFiltersValidations>[T] }) => {
+  const onChange = <T extends keyof z.infer<typeof userPropertiesFiltersValidations>>(data: {
+    [key in T]: z.infer<typeof userPropertiesFiltersValidations>[T];
+  }) => {
     Object.keys(data).forEach((key) => {
       const value = data[key as T];
       if (value) {
@@ -62,10 +55,9 @@ const Properties: FC<PropertiesProps> = ({ user, totalItems }) => {
           </Link>
         )}
       </div>
-      <UserPropertiesFilters onChange={onChange} selectedFilters={selectedFilters} totalItems={totalItems} user={user} />
-      {user?.isSubscribed ? <>asas</> : <SubscribeError />}
+      <UserPropertiesFilters onChange={onChange} selectedFilters={filters} totalItems={totalItems} user={user} />
+      {user?.isSubscribed ? <>{children}</> : <SubscribeError />}
     </div>
   );
-  
-}
+};
 export default Properties;

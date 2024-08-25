@@ -2,24 +2,20 @@
 
 import { SortEnum } from "@/types/common";
 import { IDecodedAccessToken } from "@/types/auth";
-import { FC, useEffect, useRef, useState } from "react";
-import TextField from "@/components/@new/shared/forms/text-field";
-import { IoSearchOutline } from "react-icons/io5";
-import { cn } from "@/helpers/common";
-import { IMarketplaceFilters } from "@/types/lands";
+import { FC, useEffect, useState } from "react";
 import Sort from "@/components/@new/filters/sort";
 import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
-import MarketplaceDesktopFilters from "./desktop-filters";
-import MarketplaceMobileFilters from "./mobile-filters";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 import { z } from "zod";
 import { useAtom } from "jotai";
-import { userListingAtom } from "@/atoms/user-listing-atom";
 import { removeUserListingItemsAction } from "@/server-actions/user-listings/actions";
 import useNotification from "@/hooks/useNotification";
+import ResponsiveRemoveModal from "@/components/@new/shared/modals/ResponsiveRemoveModal";
+import { userPropertiesAtom } from "@/atoms/user-properties-atom";
+import MarketplaceMobileFilters from "./mobile-filters";
+import MarketplaceDesktopFilters from "./desktop-filters";
 
-
-type Filters = z.infer<typeof userPropertiesFiltersValidations>
+type Filters = z.infer<typeof userPropertiesFiltersValidations>;
 
 interface UserPropertiesFiltersProps {
   selectedFilters: Filters;
@@ -28,28 +24,49 @@ interface UserPropertiesFiltersProps {
   user: IDecodedAccessToken | null;
 }
 const UserPropertiesFilters: FC<UserPropertiesFiltersProps> = ({ totalItems, user, selectedFilters, onChange }) => {
-  const {notify} = useNotification()
-  const [userListingOption, setUserListingOption] = useAtom(userListingAtom);
+  const { notify } = useNotification();
+  const [userPropertiesOptions, setUserPropertiesOptions] = useAtom(userPropertiesAtom);
   const [openRemoveModal, setOpenRemoveModal] = useState(false);
   const [pending, setPending] = useState(false);
 
-
   const onRemove = async () => {
-    if (userListingOption.selectedLandIds) {
+    if (userPropertiesOptions.removeItemsIds) {
       setPending(true);
-      const { errorMessage } = await removeUserListingItemsAction(userListingOption.selectedLandIds)
+      const { errorMessage } = await removeUserListingItemsAction(userPropertiesOptions.removeItemsIds);
+
       if (errorMessage) {
-        notify({title: errorMessage}, {variant: 'error'})
+        notify({ title: errorMessage }, { variant: "error" });
         setPending(false);
       } else {
         setOpenRemoveModal(false);
-        setUserListingOption((prev) => ({ ...prev, selecting: false, selectedLandIds: null }));
+        setUserPropertiesOptions({ selecting: false, removeItemsIds: null });
       }
     }
   };
 
+  useEffect(
+    () => () => {
+      setUserPropertiesOptions({ selecting: false, removeItemsIds: null });
+    },
+    []
+  );
+
   return (
     <>
+      <ResponsiveRemoveModal
+        open={openRemoveModal}
+        pending={pending}
+        handleClose={() => {
+          setOpenRemoveModal(false);
+        }}
+        onReject={() => {
+          setUserPropertiesOptions((prev) => ({ ...prev, selecting: false, selectedLandIds: null }));
+          setOpenRemoveModal(false);
+        }}
+        title="Delete Selected Listings?"
+        desc="Are you sure you want to delete listings you selected?"
+        onOk={onRemove}
+      />
       <div className="hidden lg:flex">
         <MarketplaceDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
       </div>
@@ -58,9 +75,9 @@ const UserPropertiesFilters: FC<UserPropertiesFiltersProps> = ({ totalItems, use
           <MarketplaceMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} />
         </div>
         <SelectButton
-          selecting={userListingOption.selecting}
-          onClick={() => setUserListingOption((prev) => ({ ...prev, selecting: !prev.selecting, selectedLandIds: null }))}
-          total={userListingOption.selectedLandIds?.length}
+          selecting={userPropertiesOptions.selecting}
+          onClick={() => setUserPropertiesOptions((prev) => ({ ...prev, selecting: !prev.selecting, selectedLandIds: null }))}
+          total={userPropertiesOptions.removeItemsIds?.length}
           onRemove={() => setOpenRemoveModal(true)}
         />
         <div className="flex">

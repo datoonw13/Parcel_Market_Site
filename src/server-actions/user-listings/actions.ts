@@ -6,16 +6,20 @@ import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { SellingPropertyDetails } from "@/types/property";
+import { isNil, omitBy } from "lodash";
+import { z } from "zod";
+import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 import { userListingsTag } from "./tags";
 import { fetcher } from "../fetcher";
 
 export const getUserListingAction = async (
   pageSize: number,
-  params?: any
+  params?: z.infer<typeof userPropertiesFiltersValidations>
 ): Promise<ResponseModel<({ list: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination) | null>> => {
+  const filters = omitBy(params, isNil);
   try {
     const request = await fetcher<{ data: (SellingPropertyDetails & { offers: { id: number }[] })[] } & IPagination>(
-      `selling-properties/user/properties?${new URLSearchParams({ ...params, pageSize })}`,
+      `selling-properties/user/properties?${new URLSearchParams({ ...filters, pageSize: pageSize.toString() })}`,
       {
         next: { tags: [userListingsTag] },
       }

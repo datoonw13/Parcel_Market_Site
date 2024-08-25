@@ -5,13 +5,11 @@ import MultiSelect from "@/components/@new/filters/desktop/multi-select";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { uniqBy } from "lodash";
 import { acreagesFilters, getAcreageLabel, getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
-import { IMarketplaceFilters } from "@/types/lands";
 import MinMaxDesktopFilters from "@/components/@new/filters/desktop/min-max-filter";
 import { z } from "zod";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 
-type Filters = z.infer<typeof userPropertiesFiltersValidations>
-
+type Filters = z.infer<typeof userPropertiesFiltersValidations>;
 
 const UserPropertiesDesktopFilters = ({
   disabled,

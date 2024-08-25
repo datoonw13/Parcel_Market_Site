@@ -11,8 +11,7 @@ import { uniqBy } from "lodash";
 import { z } from "zod";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 
-type Filters = z.infer<typeof userPropertiesFiltersValidations>
-
+type Filters = z.infer<typeof userPropertiesFiltersValidations>;
 
 interface UserPropertiesMobileFiltersProps {
   disabled?: boolean;

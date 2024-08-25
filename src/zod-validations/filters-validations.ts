@@ -13,10 +13,9 @@ export const marketplaceFiltersValidations = z.object({
   sortBy: z.nativeEnum(SortEnum).nullable().optional(),
 });
 
-
 export const userPropertiesFiltersValidations = z.object({
-  states: z.array(z.string()).nullable().nullable(),
-  counties: z.array(z.string()).nullable().nullable(),
+  states: z.array(z.string()).nullable(),
+  counties: z.array(z.string()).nullable(),
   acreageMin: z.number({ coerce: true }).nullable(),
   acreageMax: z.number({ coerce: true }).nullable(),
   voltPriceMin: z.number({ coerce: true }).nullable(),

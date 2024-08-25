@@ -22,7 +22,7 @@ const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: IDecoded
     setOpen(!open);
     const parentEl = document.getElementById(rootId);
     if (!open && rootEl.current && parentEl) {
-      const headerHeight = parentEl.getBoundingClientRect().top + parentEl.getBoundingClientRect().bottom - 1
+      const headerHeight = parentEl.getBoundingClientRect().top + parentEl.getBoundingClientRect().bottom - 1;
       rootEl.current.style.transform = `translateY(${headerHeight}px)`;
       rootEl.current.style.height = `calc(100vh - ${headerHeight}px)`;
     }
