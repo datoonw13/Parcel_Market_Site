@@ -34,7 +34,6 @@ const UserPropertiesList = async ({
                 className="max-w-2xl m-auto"
                 key={land.id}
                 sellingItemId={land.id}
-                followedListingId={land.followedListingId}
                 view="vertical"
                 data={{
                   receivedOffers: land?.offers.length,
