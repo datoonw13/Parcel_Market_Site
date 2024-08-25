@@ -6,13 +6,14 @@ import { Autoplay, EffectFade } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { Autocomplete, Box, Button, Container, Paper, TextField, Typography, alpha } from "@mui/material";
+import { Box, Button, Container, Paper, TextField, Typography, alpha } from "@mui/material";
 import { useState } from "react";
 import { Swiper as SwiperType } from "swiper/types";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import AutoCompleteListboxComponent from "../shared/AutoCompleteListboxComponent";
+import AutoComplete from "../@new/shared/forms/AutoComplete";
 
 const HomeMain = () => {
   const router = useRouter();
@@ -94,29 +95,34 @@ const HomeMain = () => {
                 mt: 3,
               }}
             >
-              <Autocomplete
-                sx={{ maxWidth: { xs: "100%" }, width: "100%" }}
-                fullWidth
-                renderInput={(params) => <TextField {...params} label="State" InputProps={{ ...params.InputProps }} />}
-                ListboxComponent={AutoCompleteListboxComponent}
+              <AutoComplete
                 options={getAllStates({ filterBlackList: true })}
-                value={getStateValue(state)}
-                onChange={(_, newValue) => {
-                  setState(newValue?.value || null);
+                getOptionLabel={(item) => item.label}
+                getOptionKey={(item) => item.value}
+                onChange={(item) => {
+                  setState(item?.value || null);
                   setCounty(null);
                 }}
+                placeholder="State"
+                value={getStateValue(state)}
+                onFilter={(searchValue, items) =>
+                  items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+                }
+                getSelectedOption={(item) => item.value === state}
               />
-              <Autocomplete
-                sx={{ maxWidth: { xs: "100%" }, width: "100%" }}
-                fullWidth
-                renderInput={(params) => <TextField {...params} label="County" InputProps={{ ...params.InputProps }} />}
-                ListboxComponent={AutoCompleteListboxComponent}
+              <AutoComplete
                 options={getCounties(state)}
-                value={getCountyValue(county, state)}
-                disabled={!state}
-                onChange={(_, newValue) => {
-                  setCounty(newValue?.value || null);
+                getOptionLabel={(item) => item.label}
+                getOptionKey={(item) => item.value}
+                onChange={(item) => {
+                  setCounty(item?.value || null);
                 }}
+                placeholder="County"
+                value={getCountyValue(county, state)}
+                onFilter={(searchValue, items) =>
+                  items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+                }
+                getSelectedOption={(item) => item.value === state}
               />
               <Button variant="contained" sx={{ width: { xs: "100%", sm: "fit-content" } }} disabled={!state || !county} onClick={onStart}>
                 Get Started

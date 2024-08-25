@@ -90,7 +90,7 @@ const AutoComplete = <T extends Array<{}>>({
       if (filteredOptions.length === 1) {
         const newValue = (filteredOptions[0] as any)?.value || filteredOptions[0];
         const currentValue = (value as any)?.value || value;
-        if (newValue && currentValue && JSON.stringify(newValue) !== JSON.stringify(currentValue)) {
+        if (newValue && JSON.stringify(newValue) !== JSON.stringify(currentValue)) {
           handleSelect(filteredOptions[0], setReferenceElement);
         }
       }
