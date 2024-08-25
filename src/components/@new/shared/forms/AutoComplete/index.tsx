@@ -3,7 +3,7 @@
 "use client";
 
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
-import { Dispatch, ReactElement, SetStateAction, useRef, useState } from "react";
+import { Dispatch, ReactElement, SetStateAction, useEffect, useRef, useState } from "react";
 import { ArrowIconDown1, ArrowIconUp1 } from "@/components/@new/icons/ArrowIcons";
 import clsx from "clsx";
 import { Clear } from "@mui/icons-material";
@@ -84,9 +84,17 @@ const AutoComplete = <T extends Array<{}>>({
     return "";
   };
 
-  const getOptions = () => {
+  const getOptions = (setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => {
     if (searchValue && onFilter && isSearching.current) {
-      return onFilter(searchValue, options);
+      const filteredOptions = onFilter(searchValue, options);
+      if (filteredOptions.length === 1) {
+        const newValue = (filteredOptions[0] as any)?.value || filteredOptions[0];
+        const currentValue = (value as any)?.value || value;
+        if (newValue && currentValue && JSON.stringify(newValue) !== JSON.stringify(currentValue)) {
+          handleSelect(filteredOptions[0], setReferenceElement);
+        }
+      }
+      return filteredOptions;
     }
     return options;
   };
@@ -158,10 +166,10 @@ const AutoComplete = <T extends Array<{}>>({
             renderContent(setReferenceElement, options)
           ) : (
             <AutoCompleteListBox>
-              {getOptions().length === 0 && (
+              {getOptions(setReferenceElement).length === 0 && (
                 <div className="py-4 px-4 cursor-pointer font-medium text-xs text-center">Data not found...</div>
               )}
-              {getOptions().map((item) => (
+              {getOptions(setReferenceElement).map((item) => (
                 <AutoCompleteListItem
                   className={clsx(contentClassName, "w-full")}
                   id={getOptionKey(item)}
