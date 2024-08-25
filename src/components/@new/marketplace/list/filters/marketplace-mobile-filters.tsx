@@ -104,12 +104,12 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
       >
         <MinMaxMobileFilter
           options={priceFilters}
-          onChange={(acreage) => {
+          onChange={(voltValue) => {
             if (localFilters) {
-              setLocalFilters({ ...localFilters, acreageMin: acreage.min, acreageMax: acreage.max });
+              setLocalFilters({ ...localFilters, voltValueMin: voltValue.min, voltValueMax: voltValue.max });
             }
           }}
-          value={{ min: localFilters?.acreageMin || null, max: localFilters?.acreageMax || null }}
+          value={{ min: localFilters?.voltValueMin || null, max: localFilters?.voltValueMax || null }}
           renderLabel={getMinMaxFilterLabel}
         />
       </MobileFilterItem>

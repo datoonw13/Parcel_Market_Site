@@ -109,12 +109,12 @@ const UserPropertiesMobileFilters: FC<UserPropertiesMobileFiltersProps> = ({ dis
       >
         <MinMaxMobileFilter
           options={priceFilters}
-          onChange={(acreage) => {
+          onChange={(voltPrice) => {
             if (localFilters) {
-              setLocalFilters({ ...localFilters, acreageMin: acreage.min, acreageMax: acreage.max });
+              setLocalFilters({ ...localFilters, voltPriceMin: voltPrice.min, voltPriceMax: voltPrice.max });
             }
           }}
-          value={{ min: localFilters?.acreageMin || null, max: localFilters?.acreageMax || null }}
+          value={{ min: localFilters?.voltPriceMin || null, max: localFilters?.voltPriceMax || null }}
           renderLabel={getMinMaxFilterLabel}
         />
       </MobileFilterItem>
