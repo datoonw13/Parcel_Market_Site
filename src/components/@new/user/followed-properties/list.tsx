@@ -99,7 +99,9 @@ const UserFollowedPropertiesList = ({
             currentPage={filters.page ? Number(filters.page) - 1 : 0}
           />
         )}
-        {totalItems === 0 && list?.length === 0 && <DataNotFound message="You have not saved any properties yet..." />}
+        {totalItems === 0 && list?.length === 0 && (
+          <DataNotFound message="You have not saved any properties yet. Go to the Marketplace to save and follow listings.." />
+        )}
         {totalItems > 0 && list && list.length === 0 && <DataNotFound message="Saved properties not found..." />}
       </div>
     </div>
