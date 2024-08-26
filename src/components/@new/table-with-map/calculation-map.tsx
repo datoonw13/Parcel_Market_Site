@@ -63,10 +63,10 @@ const CalculationMap: FC<CalculationMapProps> = ({
               {mainLandSaleHistory.map((history) => (
                 <div key={JSON.stringify(history)} className="!mb-1">
                   <p className="!p-0 !m-0">
-                    Sale Date: <b>{history.lastSaleDate}</b>
+                    Last Sale Date: <b>{history.lastSaleDate}</b>
                   </p>
                   <p className="!p-0 !m-0">
-                    Sale Price Per Acre: <b>{numFormatter.format(history.lastSalePrice / history.acreage)}</b>
+                    Last Sale Price Per Acre: <b>{numFormatter.format(history.lastSalePrice / history.acreage)}</b>
                   </p>
                 </div>
               ))}

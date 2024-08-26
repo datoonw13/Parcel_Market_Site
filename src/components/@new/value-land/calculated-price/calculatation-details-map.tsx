@@ -58,10 +58,10 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
               {mainLandSaleHistory.map((history) => (
                 <div key={JSON.stringify(history)} className="!mb-1">
                   <p className="!p-0 !m-0">
-                    Sale Date: <b>{history.lastSalesDate}</b>
+                    Last Sale Date: <b>{history.lastSalesDate}</b>
                   </p>
                   <p className="!p-0 !m-0">
-                    Sale Price Per Acre: <b>{numFormatter.format(Number(history.lastSalesPrice) / Number(history.arcage))}</b>
+                    Last Sale Price Per Acre: <b>{numFormatter.format(Number(history.lastSalesPrice) / Number(history.arcage))}</b>
                   </p>
                 </div>
               ))}
