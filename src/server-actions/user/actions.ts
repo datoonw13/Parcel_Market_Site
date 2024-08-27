@@ -170,6 +170,25 @@ export const getUserFullDetailsAction = async (): Promise<ResponseModel<IUser | 
   }
 };
 
+export const getUserChatInfo = async (
+  id: number
+): Promise<ResponseModel<{ id: number; firstName: string; lastName: string; email: string } | null>> => {
+  try {
+    const user = await fetcher<{ id: number; firstName: string; lastName: string; email: string }>(`user/info/${id}`, {
+      cache: "no-cache",
+    });
+    return {
+      data: user,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      errorMessage: "User not found",
+    };
+  }
+};
+
 export const activateUserAccountAction = async (token?: string): Promise<ResponseModel<null>> => {
   if (!token) {
     redirect(`/${routes.home.url}`);

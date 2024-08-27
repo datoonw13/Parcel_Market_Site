@@ -3,9 +3,10 @@
 import { ErrorResponse } from "@/helpers/error-response";
 import { cookies } from "next/headers";
 
+// https://api.parcelmarket.com
 // eslint-disable-next-line no-undef
 export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T> => {
-  const request = await fetch(`https://api.parcelmarket.com/api/${url}`, {
+  const request = await fetch(`http://localhost:4000/api/${url}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",

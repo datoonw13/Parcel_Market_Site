@@ -1,51 +1,54 @@
-// Marks the file as a Next.js Client Component, so that it will only be rendered on the client,
-// as the TalkJS JavaScript SDK, which the React SDK uses, can only run in the browser.
-// See https://nextjs.org/docs/app/building-your-application/rendering/client-components
-
 "use client";
 
-import { useCallback } from "react";
+import { FC, useCallback } from "react";
 import Talk from "talkjs";
 import { Session, Inbox } from "@talkjs/react";
+import { IDecodedAccessToken } from "@/types/auth";
 
-function Chat() {
+interface ChatProps {
+  me: IDecodedAccessToken;
+  other: { id: number; firstName: string; lastName: string; email: string } | null;
+}
+
+const Chat: FC<ChatProps> = ({ me, other }) => {
   const syncUser = useCallback(
     () =>
       new Talk.User({
-        id: "nina",
-        name: "Nina",
-        email: "nina@example.com",
-        photoUrl: "https://talkjs.com/new-web/avatar-7.jpg",
-        welcomeMessage: "Hi!",
+        id: me.id,
+        name: `${me.firstName} ${me.lastName}`,
+        email: me.email,
       }),
-    []
+    [me.email, me.firstName, me.id, me.lastName]
   );
 
-  const syncConversation = useCallback((session: { getOrCreateConversation: (arg0: string) => any; me: any }) => {
-    // JavaScript SDK code here
-    const conversation = session.getOrCreateConversation("xts");
+  const syncConversation = useCallback(
+    (session: { getOrCreateConversation: (arg0: string) => any; me: any }) => {
+      const otherUser = other
+        ? new Talk.User({
+            id: other.id,
+            name: `${other.firstName} ${other.lastName}`,
+            email: other.email,
+          })
+        : null;
 
-    const other = new Talk.User({
-      id: "te22stt",
-      name: "tes22t",
-      email: "testttt22t@example.com",
-      photoUrl: "https://talkjs.com/new-web/avatar-8.jpg",
-      welcomeMessage: "Hey, how can I help?",
-    });
-    conversation.setParticipant(session.me);
-    conversation.setParticipant(other);
+      const chatId = otherUser ? Talk.oneOnOneId(session.me, otherUser) : me.id.toString();
+      const conversation = session.getOrCreateConversation(chatId);
 
-    return conversation;
-  }, []);
+      conversation.setParticipant(session.me);
+      if (otherUser) {
+        conversation.setParticipant(otherUser);
+      }
+
+      return conversation;
+    },
+    [me.id, other]
+  );
 
   return (
     <Session appId="pnzPvYB9" syncUser={syncUser}>
-      <Inbox
-        // syncConversation={syncConversation}
-        style={{ width: "100%", height: "500px" }}
-      />
+      <Inbox className="border border-grey-100 rounded-2xl" syncConversation={syncConversation} style={{ width: "100%", height: "100%" }} />
     </Session>
   );
-}
+};
 
 export default Chat;

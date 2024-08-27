@@ -1,6 +1,8 @@
 import { numFormatter } from "@/helpers/common";
 import { getUserAction } from "@/server-actions/user/actions";
 import { SellingPropertyDetails } from "@/types/property";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import LandFollowButton from "../../lands/land-follow-button";
 import Button from "../../shared/forms/Button";
 import MakeOfferButton from "./make-offer-button";
@@ -58,7 +60,9 @@ const LandDetails = async ({ data }: { data: SellingPropertyDetails }) => {
             <LandFollowButton landId={data.id} initialFollowedListingId={data.followedListingId} />
           </div>
           <div className="flex flex-col-reverse sm:flex-row gap-3">
-            <Button variant="secondary">Contact Seller</Button>
+            <Link href={`${routes.user.messages.fullUrl}?userId=${data.user_id}`}>
+              <Button variant="secondary">Contact Seller</Button>
+            </Link>
             {!data.offerId && <MakeOfferButton sellingPropertyId={data.id} />}
           </div>
         </div>
