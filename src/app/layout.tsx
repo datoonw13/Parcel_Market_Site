@@ -11,8 +11,10 @@ import theme from "@/theme";
 import NextTopLoader from "nextjs-toploader";
 import { Provider } from "jotai";
 import "simplebar-react/dist/simplebar.min.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getUserAction } from "@/server-actions/user/actions";
+import ChatSession from "@/components/@new/chat/chat-session";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,11 +35,13 @@ export const metadata: Metadata = {
   description: "Value, buy, and sell vacant land",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const user = await getUserAction();
+
   return (
     <>
       <html lang="en">
@@ -55,7 +59,7 @@ export default function RootLayout({
             <Provider>
               <ThemeProvider theme={theme}>
                 <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-                {children}
+                <ChatSession user={user}>{children}</ChatSession>
               </ThemeProvider>
             </Provider>
           </AppRouterCacheProvider>
