@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { followedListingsAtom } from "@/atoms/followed-listings-atom";
 import { useAtom } from "jotai";
 import clsx from "clsx";
-import { BookmarkIcon1, BookmarkIcon2 } from "../icons/BookMarkIcons";
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import Button from "../shared/forms/Button";
 import Popper from "../shared/Popper";
 
@@ -75,10 +75,20 @@ const LandFollowButton = ({
           onClick={followedListingId ? handleUnFollow : handleFollow}
           loading={pending}
         >
-          {onlyIcon ? followedListingId ? <BookmarkIcon2 color="primary-main" /> : <BookmarkIcon1 color="primary-main" /> : null}
+          {onlyIcon ? (
+            followedListingId ? (
+              <IoBookmark className="text-primary-main size-5" />
+            ) : (
+              <IoBookmarkOutline className="text-primary-main size-5" />
+            )
+          ) : null}
           {!onlyIcon && (
             <div className="flex items-center gap-2">
-              {followedListingId ? <BookmarkIcon2 color="primary-main" /> : <BookmarkIcon1 color="primary-main" />}
+              {followedListingId ? (
+                <IoBookmark className="text-primary-main size-5" />
+              ) : (
+                <IoBookmarkOutline className="text-primary-main size-5" />
+              )}
               {followedListingId ? "Unsave" : "Save Property"}
             </div>
           )}

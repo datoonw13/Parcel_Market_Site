@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { LandListItemProps } from "@/types/lands";
-import { LocationIcon1 } from "../../icons/LocationIcons";
-import { CalendarIcon1 } from "../../icons/CalendarIcons";
+import { BiCalendar } from "react-icons/bi";
+import { CiLocationOn } from "react-icons/ci";
 import Button from "../../shared/forms/Button";
 import classes from "./styles.module.css";
 import LandFollowButton from "../land-follow-button";
@@ -49,7 +49,7 @@ const LandListItem: FC<LandListItemProps> = ({
           </h1>
         </Link>
         <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">
-          <LocationIcon1 /> {data.state}; {data.county}
+          <CiLocationOn className="size-[18px] text-primary-main" /> {data.state}; {data.county}
           {data.locality && <span className="capitalize ml-1">{data.locality}</span>}
         </h2>
       </div>
@@ -109,7 +109,7 @@ const LandListItem: FC<LandListItemProps> = ({
     <div className="px-6 border-t border-grey-100 py-3 mt-4 flex items-center justify-between">
       <div>
         <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">
-          <CalendarIcon1 className="size-3" /> Available till: <span className="text-black">{data.availableTill}</span>
+          <BiCalendar className="size-4" /> Available till: <span className="text-black">{data.availableTill}</span>
         </p>
         {!Number.isNaN(Number(data?.receivedOffers)) && (
           <p className="flex gap-1.5 items-center text-xs font-medium text-grey-600">

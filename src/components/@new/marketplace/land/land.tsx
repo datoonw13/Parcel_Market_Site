@@ -5,9 +5,9 @@ import moment from "moment";
 import { getAllStates, getCounties } from "@/helpers/states";
 import clsx from "clsx";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
-import { LocationIcon1 } from "../../icons/LocationIcons";
+import { CiLocationOn } from "react-icons/ci";
+import { BiCalendar } from "react-icons/bi";
 import { EyeIcon1 } from "../../icons/EyeIcons";
-import { CalendarIcon1 } from "../../icons/CalendarIcons";
 import LandDetails from "./details";
 import RecentSalesList from "./recent-sales-list";
 
@@ -31,7 +31,7 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
           <h1 className="font-semibold text-lg md:text-xl lg:text-2xl">{data.title}</h1>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-1.5">
-              <LocationIcon1 color="primary-main" className="!w-3 !h-3.5" />
+              <CiLocationOn className="size-4 text-primary-main" />
               <p className="text-xs text-grey-600">
                 {state}; {county};{" "}
                 <span className="capitalize">
@@ -47,7 +47,8 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
                 </p>
               </div>
               <div className="flex items-center gap-1.5">
-                <CalendarIcon1 className="!w-3.5 !h-3.5" />
+                {/* <CalendarIcon1 className="!w-3.5 !h-3.5" /> */}
+                <BiCalendar className="size-4 text-grey-600" />
                 <p className="text-grey-600 text-xs font-medium">
                   Available till: <span className="text-black">{moment(data.availableTill, "YYYY-MM-DD").format("DD MMM")}</span>
                 </p>

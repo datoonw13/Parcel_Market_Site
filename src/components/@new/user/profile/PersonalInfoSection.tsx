@@ -12,8 +12,8 @@ import { getAllStates } from "@/helpers/states";
 import { updateUserInfoAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import useNotification from "@/hooks/useNotification";
+import { CiEdit } from "react-icons/ci";
 import TextField from "../../shared/forms/text-field";
-import { EditIcon2 } from "../../icons/EditIcons";
 import Button from "../../shared/forms/Button";
 import UserProfileSection from "./UserProfileSection";
 import AutoComplete from "../../shared/forms/AutoComplete";
@@ -60,7 +60,7 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
       notify({ title: errorMessage }, { variant: "error" });
       toast.error(errorMessage);
     } else {
-      notify({ title: "Information Has been updated", description: "Your Information has been successfully Updated." });
+      notify({ title: "Personal Information", description: "Your Information has been successfully Updated." });
       setEditMode(false);
     }
   });
@@ -79,7 +79,7 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
             editMode ? "opacity-0 pointer-events-none" : "opacity-1",
             "!outline-none !text-primary-main [&>svg>*]:!fill-primary-main !p-0"
           )}
-          startIcon={EditIcon2}
+          startIcon={CiEdit}
           onClick={() => setEditMode(true)}
         >
           Edit
