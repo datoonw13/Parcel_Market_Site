@@ -14,7 +14,6 @@ import moment from "moment";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import { sentOffersAtom } from "@/atoms/sent-offers-atom";
-import { useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -28,7 +27,6 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const [sentOffersOptions, setSentOffersOption] = useAtom(sentOffersAtom);
-  const [selectedOffer, setSelectedOffer] = useState<OfferModel | null>(null);
 
   const state = getAllStates().find((el) => el.value === data.sellingProperty.state.toLocaleLowerCase());
   const county =
@@ -54,7 +52,6 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
     } else {
       params.set("offerId", data.id.toString());
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
-      // setSelectedOffer(data);
     }
   };
 
@@ -128,9 +125,11 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
           </div>
         </div>
         <div className="py-4 px-6 flex gap-3 border-t border-grey-100">
-          <Button className="w-full" variant="secondary">
-            Contact Seller
-          </Button>
+          <Link className="w-full" href={`${routes.user.messages.fullUrl}?userId=${data.offerGivenTo?.id}`}>
+            <Button className="w-full" variant="secondary">
+              Contact Seller
+            </Button>
+          </Link>
           <Button className="w-full" onClick={openDetail}>
             Details
           </Button>
