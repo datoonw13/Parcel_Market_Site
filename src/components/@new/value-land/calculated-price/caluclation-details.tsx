@@ -28,10 +28,10 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
     .sort((a, b) => Number(a.price) / Number(a.arcage) - Number(b.price) / Number(b.arcage));
   const minPricePerAcre = pins[0].pricePerAcreage;
   const maxPricePerAcre = pins[pins.length - 1].pricePerAcreage;
-  const xAxisMiddlePoint = {
-    value: (minPricePerAcre + maxPricePerAcre) / 2,
-    percent: 50,
-  };
+  // const xAxisMiddlePoint = {
+  //   value: (minPricePerAcre + maxPricePerAcre) / 2,
+  //   percent: 50,
+  // };
   const averagePrice = {
     value: pins.reduce((acc, cur) => acc + cur.pricePerAcreage, 0) / pins.length,
     percent:
@@ -89,7 +89,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
             before:content-[''] before:absolute before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 
           before:bg-primary-main before:rounded-full before:left-1/2 before:-translate-x-1/2`}
             />
-            <div
+            {/* <div
               className={`
             left-[50%] -translate-x-1/2
             w-5 h-5 rounded-full bg-white
@@ -98,7 +98,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
             after:border-2 after:border-primary-main after:rounded-full after:left-1/2 after:-translate-x-1/2
             before:content-[''] before:absolute before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 
           before:bg-primary-main before:rounded-full before:left-1/2 before:-translate-x-1/2`}
-            />
+            /> */}
             {pinsWithPercent.map((el) => (
               <div
                 key={el.pricePerAcreage.toString()}
@@ -151,10 +151,10 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
             <span className="md:hidden">Average: </span>
             <span className="text-black font-medium">{numFormatter.format(Number(averagePrice.value))}</span>
           </p>
-          <p className={cn(`text-xs text-grey-600 md:absolute md:left-1/2 md:-translate-x-1/2`)}>
+          {/* <p className={cn(`text-xs text-grey-600 md:absolute md:left-1/2 md:-translate-x-1/2`)}>
             <span className="md:hidden">Mid point: </span>
             <span className={cn(`text-black font-medium`)}>{numFormatter.format(Number(xAxisMiddlePoint.value))}</span>
-          </p>
+          </p> */}
           <p className="text-xs text-grey-600 md:absolute md:right-0 md:top-0">
             <span className="md:hidden">Maximum</span> Per Acre:{" "}
             <span className="text-black font-medium">{numFormatter.format(maxPricePerAcre)}</span>
