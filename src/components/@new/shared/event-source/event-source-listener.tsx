@@ -24,6 +24,7 @@ const EventSourceListener = ({ jwt, userId }: { jwt: string; userId: number }) =
         }
         newNotifications.push(data.data);
         setNotifications((prev) => ({
+          ...prev,
           list: newNotifications,
           unread: prev.unread + 1,
         }));

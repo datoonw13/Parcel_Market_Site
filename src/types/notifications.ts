@@ -23,7 +23,6 @@ export interface INotificationBase {
 
 export interface INewMessageNotification extends INotificationBase {
   type: NotificationType.NewMessage;
-  userChatId: string;
 }
 
 export interface INewOfferReceivedNotification extends INotificationBase {
