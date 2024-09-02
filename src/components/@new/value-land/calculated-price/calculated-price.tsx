@@ -32,7 +32,7 @@ const ValueLandCalculatedPrice = async () => {
               <CalculationDetailsMap user={user} />
             </div>
           </div>
-          <SubmitLand />
+          <SubmitLand user={user} />
         </div>
       </div>
     </>
