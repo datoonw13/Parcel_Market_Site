@@ -48,9 +48,11 @@ export const getMarketplaceListAction = async (
   }
 };
 
-export const getLendDetailsAction = async (landId: string): Promise<ResponseModel<SellingPropertyDetails | null>> => {
+export const getLendDetailsAction = async (
+  landId: string
+): Promise<ResponseModel<(SellingPropertyDetails & { property?: { locality?: string } }) | null>> => {
   try {
-    const request = await fetcher<SellingPropertyDetails>(`selling-properties/${landId}`, {
+    const request = await fetcher<SellingPropertyDetails & { property?: { locality?: string } }>(`selling-properties/${landId}`, {
       next: { tags: [marketplaceTag] },
     });
 

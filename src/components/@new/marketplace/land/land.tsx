@@ -35,7 +35,9 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
               <p className="text-xs text-grey-600">
                 {state}; {county};{" "}
                 <span className="capitalize">
-                  {data?.locality?.split("-").length > 1 ? data?.locality.split("-").splice(1).join(" ") : data?.locality}
+                  {data?.property?.locality && data.property.locality?.split("-").length > 1
+                    ? data.property.locality.split("-").splice(1).join(" ")
+                    : data?.locality}
                 </span>
               </p>
             </div>
