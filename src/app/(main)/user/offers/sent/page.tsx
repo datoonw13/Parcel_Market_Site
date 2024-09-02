@@ -5,11 +5,13 @@ import SentOfferDetailsWrapper from "@/components/@new/user/offers/sent/sent-off
 import SentOffers from "@/components/@new/user/offers/sent/sent-offers";
 import SentOffersDesktopFilter from "@/components/@new/user/offers/sent/sent-offers-desktop-filters";
 import SentOffersLoading from "@/components/@new/user/offers/sent/sent-offers-loading";
+import { getSentOffersAction } from "@/server-actions/offer/actions";
 import { getUserAction } from "@/server-actions/user/actions";
 import { Suspense } from "react";
 
 const SentOffersPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const user = await getUserAction();
+  const { data } = await getSentOffersAction({ pageSize: "1" });
   const { offerId, ...params } = searchParams;
 
   return (
@@ -32,7 +34,7 @@ const SentOffersPage = async ({ searchParams }: { searchParams: { [key: string]:
             </div>
           </Suspense>
           <Suspense fallback={<SentOffersLoading />} key={JSON.stringify(params)}>
-            <SentOffers searchParams={params} />
+            <SentOffers searchParams={params} totalCount={data?.pagination.totalCount || 0} />
           </Suspense>
         </>
       ) : (

@@ -6,22 +6,22 @@ import SentOfferItem from "./sent-offer-item";
 
 const PAGE_SIZE = 6;
 
-const SentOffers = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+const SentOffers = async ({ searchParams, totalCount }: { searchParams: { [key: string]: string }; totalCount: number }) => {
   const { data } = await getSentOffersAction({ ...searchParams, pageSize: PAGE_SIZE.toString() });
 
   return (
     <div className="space-y-8 md:space-y-6">
-      {!data || data.pagination.totalCount === 0 ? (
+      {!data || totalCount === 0 ? (
         <DataNotFound message="No sent offers" />
       ) : (
         <>
-          <SentOffersHeader totalCount={data.pagination.totalCount} />
+          <SentOffersHeader totalCount={totalCount} />
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {data.list.map((offer) => (
               <SentOfferItem data={offer} key={offer.id} />
             ))}
           </div>
-          <SentOffersPagination totalCount={data.pagination.totalCount} pageSize={PAGE_SIZE} />
+          <SentOffersPagination totalCount={totalCount} pageSize={PAGE_SIZE} />
         </>
       )}
     </div>
