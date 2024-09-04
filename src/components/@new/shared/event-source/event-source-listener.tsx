@@ -18,6 +18,7 @@ const EventSourceListener = ({ jwt, userId }: { jwt: string; userId: number }) =
     eventSource.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data) as { statusCode: number; message: string; data: INotification };
+
         let newNotifications = notifications.list ? [...notifications.list] : [];
         if (notifications?.list?.length === 6) {
           newNotifications = newNotifications.slice(1);

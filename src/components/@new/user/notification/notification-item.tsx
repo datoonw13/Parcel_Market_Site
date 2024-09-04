@@ -24,6 +24,8 @@ const getIcon = <T extends keyof INotificationEnum>(data: INotificationEnum[T]) 
       return data.status === OfferStatusEnum.accepted ? <IoCheckmarkOutline className="size-4" /> : <MdClose className="size-4" />;
     case NotificationType.ReceivedOfferExpiring:
       return <LuAlarmClock className="size-4" />;
+    case NotificationType.ReceivedOfferCanceled:
+      return <MdClose className="size-4" />;
     case NotificationType.SentOfferExpiring:
       return <LuAlarmClock className="size-4" />;
     case NotificationType.SubscriptionExpired:
