@@ -9,9 +9,11 @@ import { getSentOffersAction } from "@/server-actions/offer/actions";
 import { getUserAction } from "@/server-actions/user/actions";
 import { Suspense } from "react";
 
+const PAGE_SIZE = 6;
+
 const SentOffersPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const user = await getUserAction();
-  const { data } = await getSentOffersAction({ pageSize: "1" });
+  const { data } = await getSentOffersAction(6);
   const { offerId, ...params } = searchParams;
 
   return (
@@ -34,7 +36,7 @@ const SentOffersPage = async ({ searchParams }: { searchParams: { [key: string]:
             </div>
           </Suspense>
           <Suspense fallback={<SentOffersLoading />} key={JSON.stringify(params)}>
-            <SentOffers searchParams={params} totalCount={data?.pagination.totalCount || 0} />
+            <SentOffers pageSize={PAGE_SIZE} searchParams={params} totalCount={data?.pagination.totalCount || 0} />
           </Suspense>
         </>
       ) : (

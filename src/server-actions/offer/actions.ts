@@ -152,13 +152,16 @@ export const getReceivedOffersParcelNumbersAction = async (): Promise<ResponseMo
 };
 
 //
-export const getSentOffersAction = async (params: {
-  [key: string]: string;
-}): Promise<ResponseModel<({ list: OfferModel[] } & IPagination) | null>> => {
+export const getSentOffersAction = async (
+  pageSize: number,
+  params?: {
+    [key: string]: string;
+  }
+): Promise<ResponseModel<({ list: OfferModel[] } & IPagination) | null>> => {
   try {
     const user = await getUserAction();
     const request = await fetcher<{ data: OfferModel[] } & IPagination>(
-      `offers/sent?${new URLSearchParams({ ...params, pageSize: "4" })}`,
+      `offers/sent?${new URLSearchParams({ ...params, pageSize: pageSize.toString() })}`,
       {
         next: { tags: [offerTag] },
       }

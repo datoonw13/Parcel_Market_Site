@@ -4,10 +4,16 @@ import SentOffersHeader from "./sent-offers-header";
 import SentOffersPagination from "./sent-offers-pagination";
 import SentOfferItem from "./sent-offer-item";
 
-const PAGE_SIZE = 6;
-
-const SentOffers = async ({ searchParams, totalCount }: { searchParams: { [key: string]: string }; totalCount: number }) => {
-  const { data } = await getSentOffersAction({ ...searchParams, pageSize: PAGE_SIZE.toString() });
+const SentOffers = async ({
+  pageSize,
+  searchParams,
+  totalCount,
+}: {
+  pageSize: number;
+  searchParams: { [key: string]: string };
+  totalCount: number;
+}) => {
+  const { data } = await getSentOffersAction(pageSize, { ...searchParams });
 
   return (
     <div className="space-y-8 md:space-y-6">
@@ -21,7 +27,7 @@ const SentOffers = async ({ searchParams, totalCount }: { searchParams: { [key: 
               <SentOfferItem data={offer} key={offer.id} />
             ))}
           </div>
-          <SentOffersPagination totalCount={totalCount} pageSize={PAGE_SIZE} />
+          <SentOffersPagination totalCount={totalCount} pageSize={pageSize} />
         </>
       )}
     </div>
