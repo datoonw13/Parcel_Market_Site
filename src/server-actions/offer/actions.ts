@@ -30,13 +30,11 @@ export const createOfferAction = async (data: MakeOfferModel & { sellingProperty
 
 export const getOfferAction = async (offerId: string): Promise<ResponseModel<OfferModel | null>> => {
   try {
-    const user = await getUserAction();
     const request = await fetcher<OfferModel>(`offers/details/${offerId}`, {
       next: { tags: [offerTag] },
     });
     const responseData = {
       ...request,
-      offerGivenBy: { firstName: user?.firstName ?? "", lastName: user?.lastName ?? "", id: user?.id ?? 0 },
     };
     return {
       errorMessage: null,

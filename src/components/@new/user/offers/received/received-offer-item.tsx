@@ -86,7 +86,13 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
         <OfferDetailSection data={data} rootClasses="mx-4 md:mx-8 mb-8" alertClasses="mt-3" />
         <Divider className="mb-4" />
         <div className="flex gap-3 px-4 md:px-8">
-          <Button className="w-full sm:w-fit !h-10 sm:!h-auto sm:mr-auto" variant="secondary">
+          <Button
+            onClick={() => {
+              router.push(`${routes.user.messages.fullUrl}?userId=${data?.offerGivenBy?.id}`);
+            }}
+            className="w-full sm:w-fit !h-10 sm:!h-auto sm:mr-auto"
+            variant="secondary"
+          >
             Contact Buyer
           </Button>
           <Button

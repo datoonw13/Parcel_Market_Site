@@ -52,7 +52,14 @@ const SentOfferDetails = ({
           <OfferDetail data={data} />
         </div>
         <div className={clsx("flex gap-3 border-t border-t-grey-100", actionClassName)}>
-          <Button variant="secondary">Contact Buyer</Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              router.push(`${routes.user.messages.fullUrl}?userId=${data?.offerGivenTo?.id}`);
+            }}
+          >
+            Contact Seller
+          </Button>
           {data.offerStatus === OfferStatusEnum.pending && (
             <Button color="error" className="ml-auto" onClick={() => setOpenCancelModal(true)}>
               Cancel Offer
