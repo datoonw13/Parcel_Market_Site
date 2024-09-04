@@ -8,9 +8,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { PropertySellReq } from "@/types/property";
 import { useState } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
+import { IoInformationCircleOutline } from "react-icons/io5";
 import Button from "../../shared/forms/Button";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
-import { InfoIcon2 } from "../../icons/InfoIcons";
 
 const SubmitLand = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
@@ -31,7 +31,7 @@ const SubmitLand = ({ user }: { user: IDecodedAccessToken | null }) => {
   return (
     <>
       <ResponsiveWarningModal
-        customIcon={<InfoIcon2 className="!w-4 !h-4" color="primary-main" />}
+        customIcon={<IoInformationCircleOutline className="min-w-6 min-h-6 w-6 h-6 text-primary-main" />}
         open={openWarningModal}
         variant="success"
         closeModal={() => setOpenWarningModal(false)}
@@ -40,13 +40,13 @@ const SubmitLand = ({ user }: { user: IDecodedAccessToken | null }) => {
           router.replace(`${!user?.isSubscribed ? routes.user.subscription.fullUrl : routes.auth.signIn.fullUrl}?${params.toString()}`);
         }}
         onCancel={() => setOpenWarningModal(false)}
-        title={!user?.isSubscribed ? "Subscribe" : "Log In"}
+        title={user ? "Subscribe" : "Log In"}
         description={
-          !user?.isSubscribed
+          user
             ? "Please subscribe to our website to continue submitting your property on our marketplace"
             : "Please log into your account to continue submitting your property on our marketplace"
         }
-        okLabel={!user?.isSubscribed ? "Subscribe" : "Log In"}
+        okLabel={user ? "Subscribe" : "Log In"}
         cancelLabel="Close"
       />
       <div className="space-y-4 md:space-y-6">
