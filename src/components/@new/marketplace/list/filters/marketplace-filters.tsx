@@ -35,7 +35,7 @@ const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, sel
         disabled={!user?.isSubscribed}
         onChange={handleSearch}
         className="max-w-96 [&>input]:rounded-3xl [&>input]:h-11 m-auto"
-        placeholder="Enter any keyword to search"
+        placeholder="Search by: parcel ID, owner, acreage, VOLT value"
         endIconClasses="!pr-1 !h-fit"
         endIcon={
           <div
