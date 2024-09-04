@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserAction } from "@/server-actions/user/actions";
 import ChatSession from "@/components/@new/chat/chat-session";
+import AuthSessionProvider from "@/components/shared/auth-session-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,7 +60,9 @@ export default async function RootLayout({
             <Provider>
               <ThemeProvider theme={theme}>
                 <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-                <ChatSession user={user}>{children}</ChatSession>
+                <AuthSessionProvider user={user}>
+                  <ChatSession user={user}>{children}</ChatSession>
+                </AuthSessionProvider>
               </ThemeProvider>
             </Provider>
           </AppRouterCacheProvider>
