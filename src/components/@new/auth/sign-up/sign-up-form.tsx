@@ -150,7 +150,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             label="Unit Number"
             value={watch("unitNumber")}
             error={!!errors.unitNumber}
-            required
           />
           <AutoComplete
             options={getAllStates()}

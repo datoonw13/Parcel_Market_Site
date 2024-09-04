@@ -22,7 +22,7 @@ export const userSignUpValidation = (isGoogleUser?: boolean) =>
       lastName: z.string().trim().min(1),
       email: emailSchema,
       streetName: z.string().trim().min(1),
-      unitNumber: z.string().trim().min(1),
+      unitNumber: z.string().trim(),
       city: z.string().trim().min(1),
       state: z.string().trim().min(1),
       postalCode: z.string().trim().min(1).max(5),
