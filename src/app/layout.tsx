@@ -17,6 +17,7 @@ import { getUserAction } from "@/server-actions/user/actions";
 import ChatSession from "@/components/@new/chat/chat-session";
 import AuthSessionProvider from "@/components/shared/auth-session-provider";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -47,7 +48,17 @@ export default async function RootLayout({
   return (
     <>
       <html lang="en">
+        <GoogleTagManager gtmId="GTM-P2BZG9G9" />
         <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
+          <noscript>
+            <iframe
+              src="https://www.googletagmanager.com/ns.html?id=GTM-P2BZG9G9"
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+              title="google-tag-manager"
+            />
+          </noscript>
           <NextTopLoader color="#0E8B40" showSpinner={false} />
           <ToastContainer
             hideProgressBar
