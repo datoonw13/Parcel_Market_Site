@@ -12,6 +12,7 @@ import routes from "@/helpers/routes";
 import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
+import { subscribeAction } from "@/server-actions/common-actions";
 import Button from "../../shared/forms/Button";
 import TextField from "../../shared/forms/text-field";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
@@ -76,6 +77,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
         router.replace(requestData?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     } else {
+      if (data.sendEmailTips) {
+        await subscribeAction(data.email);
+      }
       const request = await signUpUserAction(data);
       if (request?.errorMessage) {
         onFinish(request.errorMessage);

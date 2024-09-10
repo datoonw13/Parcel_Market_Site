@@ -1,12 +1,27 @@
 "use client";
 
 import routes from "@/helpers/routes";
+import { subscribeAction } from "@/server-actions/common-actions";
+import { emailSchema } from "@/zod-validations/auth-validations";
+import { LoadingButton } from "@mui/lab";
 import { Box, Button, Container, InputAdornment, Paper, TextField, Typography } from "@mui/material";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const SubscribeNow = () => {
+  const [subscribePending, setSubscribePending] = useState(false);
+  const [email, setEmail] = useState("");
   const pathname = usePathname();
+
+  const handleSubscribe = async () => {
+    const isValidEmail = !!emailSchema.safeParse(email).success;
+    if (isValidEmail) {
+      setSubscribePending(true);
+      await subscribeAction(email);
+      setSubscribePending(false);
+    }
+  };
   return (
     (pathname === routes.home.fullUrl || pathname === routes.aboutUs.fullUrl) && (
       <Box>
@@ -37,13 +52,15 @@ const SubscribeNow = () => {
             </Typography>
             <TextField
               variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Button sx={{ py: 1 }} variant="contained">
+                    <LoadingButton loading={subscribePending} sx={{ py: 1 }} variant="contained" onClick={handleSubscribe}>
                       Subscribe Now
-                    </Button>
+                    </LoadingButton>
                   </InputAdornment>
                 ),
                 sx: { outline: "0 !important", border: "0 !important" },
