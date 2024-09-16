@@ -40,7 +40,7 @@ const ResponsiveHeaderMenu = ({ rootId, user }: { rootId: string; user: IDecoded
     >
       <Box sx={{ gap: 4, alignItems: "center", "& > a": { fontWeight: 500 }, position: "relative", display: "flex" }}>
         <>
-          <IconButton ref={buttonRef} sx={{ p: { xs: 0, sm: 1 } }} onClick={toggleResponsiveMenu}>
+          <IconButton ref={buttonRef} sx={{ p: 0 }} disableRipple onClick={toggleResponsiveMenu}>
             <BurgerIcon />
           </IconButton>
 

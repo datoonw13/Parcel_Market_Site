@@ -3,13 +3,13 @@
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
-import { Button } from "@mui/material";
 import { Icon, Map as LeafletMap, Marker as LeafletMaker, LatLngExpression } from "leaflet";
 import { Fragment, ReactElement, ReactNode } from "react";
-import { FeatureGroup, LayerGroup, LayersControl, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
+import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
 import { getCenter } from "geolib";
 
 interface IProps {
+  dragging?: boolean;
   zoom: number;
   properties: Array<{
     latitude: number;
@@ -17,7 +17,7 @@ interface IProps {
     center?: boolean;
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
-    markerType?: "default" | "active";
+    markerType?: "default" | "active" | "none";
     popup?: ReactElement;
   }>;
   setMapRef?: (ref: LeafletMap) => void;
@@ -60,6 +60,7 @@ const Map = ({
   onMarkerClick,
   disableZoom,
   highlightItemParcelNumber,
+  dragging,
 }: IProps) => {
   const centerToItem = properties.find((el) => el.center);
   const centerToAllProperties = getCenter(properties.map((el) => ({ latitude: el.latitude, longitude: el.longitude }))) || {
@@ -81,6 +82,7 @@ const Map = ({
     <MapContainer
       zoomControl={!disableZoom}
       zoom={zoom}
+      dragging={dragging}
       center={getMapCenter()}
       scrollWheelZoom={!disableZoom}
       style={{ height: "100%", width: "100%", zIndex: 0 }}
@@ -130,24 +132,26 @@ const Map = ({
         {properties.map((mapItem) => (
           <Fragment key={mapItem.parcelNumber}>
             {mapItem.polygon && <Polygon stroke key={Math.random()} fillColor="blue" positions={mapItem.polygon} />}
-            <Marker
-              eventHandlers={{
-                mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.parcelNumber),
-                mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.parcelNumber),
-                popupopen: () => popupOpen && popupOpen(mapItem.parcelNumber),
-                popupclose: () => popupClose && popupClose(mapItem.parcelNumber),
-                click: () => onMarkerClick && onMarkerClick(mapItem.parcelNumber),
-              }}
-              ref={(ref) => {
-                if (setMarkerRef && ref) {
-                  setMarkerRef(mapItem.parcelNumber, ref);
-                }
-              }}
-              icon={getMarkerIcon(mapItem, highlightItemParcelNumber)}
-              position={[mapItem.latitude, mapItem.longitude]}
-            >
-              {mapItem?.popup && <Popup>{mapItem.popup}</Popup>}
-            </Marker>
+            {mapItem.markerType !== "none" && (
+              <Marker
+                eventHandlers={{
+                  mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.parcelNumber),
+                  mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.parcelNumber),
+                  popupopen: () => popupOpen && popupOpen(mapItem.parcelNumber),
+                  popupclose: () => popupClose && popupClose(mapItem.parcelNumber),
+                  click: () => onMarkerClick && onMarkerClick(mapItem.parcelNumber),
+                }}
+                ref={(ref) => {
+                  if (setMarkerRef && ref) {
+                    setMarkerRef(mapItem.parcelNumber, ref);
+                  }
+                }}
+                icon={getMarkerIcon(mapItem, highlightItemParcelNumber)}
+                position={[mapItem.latitude, mapItem.longitude]}
+              >
+                {mapItem?.popup && <Popup>{mapItem.popup}</Popup>}
+              </Marker>
+            )}
           </Fragment>
         ))}
       </FeatureGroup>
