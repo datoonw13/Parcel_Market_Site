@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { MouseEvent, ReactElement, forwardRef, useLayoutEffect, useRef } from "react";
-import { NumericFormat } from "react-number-format";
+import { NumericFormat, useNumericFormat } from "react-number-format";
 import { cn } from "@/helpers/common";
 import classes from "./textfield.module.css";
 

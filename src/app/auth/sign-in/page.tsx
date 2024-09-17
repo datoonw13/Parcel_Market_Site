@@ -12,10 +12,9 @@ import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { signInUserAction } from "@/server-actions/user/actions";
 import { useRouter } from "next/navigation";
-import TextField from "@/components/@new/shared/forms/text-field";
-import SignInGoogle from "@/components/@new/auth/sign-in/sign-in-google";
 import GoogleAuthProvider from "@/components/@new/auth/sign-in/google-auth-provider";
 import ForgotPasswordButton from "@/components/@new/user/profile/modals/forgot-password/forgot-password-button";
+import { TextInput } from "@/components/ui/input";
 
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
@@ -49,8 +48,8 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>
       <form className="flex flex-col gap-4 w-full" action={formAction}>
-        <TextField label="Email" name="email" />
-        <TextField
+        <TextInput label="Email" name="email" />
+        <TextInput
           label="Password"
           type={passwordVisible ? "text" : "password"}
           name="password"

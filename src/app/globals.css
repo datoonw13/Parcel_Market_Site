@@ -17,10 +17,6 @@
   }
 }
 
-body {
- 
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -86,7 +82,7 @@ body {
   border: 0;
 }
 
-.simplebar-content-wrapper {
+/* .simplebar-content-wrapper {
   @apply rounded-xl !grid
 }
 
@@ -100,4 +96,10 @@ body {
 
 .selected {
   @apply before:outline before:outline-4 before:-outline-offset-[6px] before:outline-white before:bg-primary-main before:border-primary-main after:bg-black-200
+} */
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
 }

@@ -13,8 +13,8 @@ import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/
 import { useRouter, useSearchParams } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import { subscribeAction } from "@/server-actions/common-actions";
+import { NumberInput, TextInput } from "@/components/ui/input";
 import Button from "../../shared/forms/Button";
-import TextField from "../../shared/forms/text-field";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 import GoogleAuthProvider from "../sign-in/google-auth-provider";
 
@@ -107,10 +107,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col gap-4">
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
-            onChange={(value) => {
-              if (/^[a-zA-Z]+$/.test(value) || value === "") {
-                setValue("firstName", value, { shouldValidate: isSubmitted });
+          <TextInput
+            onChange={(e) => {
+              if (/^[a-zA-Z]+$/.test(e.target.value) || e.target.value === "") {
+                setValue("firstName", e.target.value, { shouldValidate: isSubmitted });
               }
             }}
             required
@@ -119,10 +119,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             value={watch("firstName")}
             error={!!errors.firstName}
           />
-          <TextField
-            onChange={(value) => {
-              if (/^[a-zA-Z]+$/.test(value) || value === "") {
-                setValue("lastName", value, { shouldValidate: isSubmitted });
+          <TextInput
+            onChange={(e) => {
+              if (/^[a-zA-Z]+$/.test(e.target.value) || e.target.value === "") {
+                setValue("lastName", e.target.value, { shouldValidate: isSubmitted });
               }
             }}
             required
@@ -131,8 +131,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             value={watch("lastName")}
             error={!!errors.lastName}
           />
-          <TextField
-            onChange={(value) => setValue("email", value, { shouldValidate: isSubmitted })}
+          <TextInput
+            onChange={(e) => setValue("email", e.target.value, { shouldValidate: isSubmitted })}
             required
             className="w-full"
             label="Email Address"
@@ -140,16 +140,16 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             value={watch("email")}
             error={!!errors.email}
           />
-          <TextField
-            onChange={(value) => setValue("streetName", value, { shouldValidate: isSubmitted })}
+          <TextInput
+            onChange={(e) => setValue("streetName", e.target.value, { shouldValidate: isSubmitted })}
             required
             className="w-full"
             label="Address"
             value={watch("streetName")}
             error={!!errors.streetName}
           />
-          <TextField
-            onChange={(value) => setValue("unitNumber", value, { shouldValidate: isSubmitted })}
+          <TextInput
+            onChange={(e) => setValue("unitNumber", e.target.value, { shouldValidate: isSubmitted })}
             className="w-full"
             label="Unit Number"
             value={watch("unitNumber")}
@@ -171,37 +171,36 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             getSelectedOption={(item) => item.value === watch("state")}
             error={!!errors.state}
           />
-          <TextField
+          <TextInput
             required
             className="w-full row-start-6 sm:row-start-auto"
             label="City"
-            onChange={(value) => {
-              if (/^[a-zA-Z]+$/.test(value) || value === "") {
-                setValue("city", value, { shouldValidate: isSubmitted });
+            onChange={(e) => {
+              if (/^[a-zA-Z]+$/.test(e.target.value) || e.target.value === "") {
+                setValue("city", e.target.value, { shouldValidate: isSubmitted });
               }
             }}
             value={watch("city")}
             error={!!errors.city}
           />
-          <TextField
+          <NumberInput
             required
             className="w-full"
             label="Postal Code"
-            onChange={(value) => setValue("postalCode", value, { shouldValidate: isSubmitted })}
+            onValueChange={(e) => setValue("postalCode", e.value, { shouldValidate: isSubmitted })}
             value={watch("postalCode")}
-            type="number"
             error={!!errors.postalCode}
-            disableThousandsSeparator
+            thousandSeparator={false}
             decimalScale={0}
           />
           {!isGoogleUser && (
             <>
               <div className="space-y-1">
-                <TextField
+                <TextInput
                   className="w-full"
                   label="Password"
                   value={watch("password") || ""}
-                  onChange={(value) => setValue("password", value, { shouldValidate: isSubmitted })}
+                  onChange={(e) => setValue("password", e.target.value, { shouldValidate: isSubmitted })}
                   type={visiblePassword ? "text" : "password"}
                   endIcon={
                     <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
@@ -213,9 +212,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
                 {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
               </div>
               <div className="space-y-1">
-                <TextField
+                <TextInput
                   value={watch("repeatPassword") || ""}
-                  onChange={(value) => setValue("repeatPassword", value, { shouldValidate: isSubmitted })}
+                  onChange={(e) => setValue("repeatPassword", e.target.value, { shouldValidate: isSubmitted })}
                   className="w-full"
                   label="Retype Password"
                   type={visibleRepeatPassword ? "text" : "password"}

@@ -1,4 +1,4 @@
-.root {
+/* .root {
     @apply w-full flex items-center relative h-[52px]
 }
 .root > * {
@@ -44,7 +44,6 @@
     @apply font-medium text-xs absolute px-3  top-[50%] translate-y-[-50%]
 }
 
-/* secondary */
 .label-secondary {
     @apply font-medium text-xs absolute top-[50%] translate-y-[-50%] left-2 px-1.5;
 }
@@ -66,4 +65,4 @@
     height: 100%;
     @apply left-0 px-1
 }
-
+ */

@@ -3,14 +3,14 @@
 "use client";
 
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
-import { Dispatch, ReactElement, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, ReactElement, SetStateAction, useRef, useState } from "react";
 import { ArrowIconDown1, ArrowIconUp1 } from "@/components/@new/icons/ArrowIcons";
 import clsx from "clsx";
 import { Clear } from "@mui/icons-material";
+import { TextInput } from "@/components/ui/input";
 import Popper from "../../Popper";
 import AutoCompleteListBox from "./AutoCompleteListBox";
 import AutoCompleteListItem from "./AutoCompleteListItem";
-import TextField from "../text-field";
 
 interface AutoCompleteProps<T extends Array<{}>> {
   options: T;
@@ -64,7 +64,7 @@ const AutoComplete = <T extends Array<{}>>({
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
-  const ref = useRef();
+  const ref = useRef<any>();
 
   const handleSelect = (item: typeof options[0], setReferenceElement: Dispatch<SetStateAction<HTMLElement | null>>) => {
     onChange(item);
@@ -118,13 +118,13 @@ const AutoComplete = <T extends Array<{}>>({
           }
         }}
         renderButton={(setReferenceElement, referenceElement) => (
-          <TextField
+          <TextInput
             ref={ref}
             readOnly={readOnly}
             error={error}
             required={required}
-            onChange={(value) => {
-              setSearchValue(value);
+            onChange={(e) => {
+              setSearchValue(e.target.value);
               if (!referenceElement) {
                 setReferenceElement(ref.current as any);
               }

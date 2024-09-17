@@ -1,4 +1,4 @@
-.content {
+/* .content {
    @apply overflow-hidden flex flex-col border border-grey-100 md:border-none md:shadow-4 rounded-2xl h-full mx-5 sm:mx-7 md:mx-10 lg:mx-14 xl:mx-16;
    
 }
@@ -10,4 +10,4 @@
 .action {
     @apply border-t border-t-grey-100 py-4 flex flex-col sm:flex-row sm:justify-end !mt-auto gap-3;
     @apply content-space-x
-}
+} */

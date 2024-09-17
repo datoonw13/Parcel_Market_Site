@@ -13,11 +13,11 @@ import { useSetAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import classes from "@/app/value-land/(main)/styles.module.css";
 import clsx from "clsx";
+import { TextInput } from "@/components/ui/input";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
 import AutoComplete from "../shared/forms/AutoComplete";
-import TextField from "../shared/forms/text-field";
 import Alert from "../shared/Alert";
 import ValueLandStepper from "./value-land-stepper";
 
@@ -150,32 +150,32 @@ const ValueLandDetails = () => {
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4">
                 {watch("type") === "parcelNumber" && (
-                  <TextField
+                  <TextInput
                     label="Enter parcel ID"
                     value={watch("parcelNumber") || ""}
-                    onChange={(value) => setValue("parcelNumber", value, { shouldValidate: isSubmitted })}
+                    onChange={(e) => setValue("parcelNumber", e.target.value, { shouldValidate: isSubmitted })}
                     error={!!errors.parcelNumber}
                   />
                 )}
                 {watch("type") === "entityName" && (
-                  <TextField
+                  <TextInput
                     label="Enter name of the entity"
                     value={watch("entityName") || ""}
-                    onChange={(value) => setValue("entityName", value, { shouldValidate: isSubmitted })}
+                    onChange={(e) => setValue("entityName", e.target.value, { shouldValidate: isSubmitted })}
                     error={!!errors.entityName}
                   />
                 )}
                 {watch("type") === "fullName" && (
                   <>
-                    <TextField
+                    <TextInput
                       label="First name"
-                      onChange={(value) => setValue("firstName", value, { shouldValidate: isSubmitted })}
+                      onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted })}
                       value={watch("firstName")}
                       error={!!errors.firstName}
                     />
-                    <TextField
+                    <TextInput
                       label="Last name"
-                      onChange={(value) => setValue("lastName", value, { shouldValidate: isSubmitted })}
+                      onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted })}
                       value={watch("lastName")}
                       error={!!errors.lastName}
                     />

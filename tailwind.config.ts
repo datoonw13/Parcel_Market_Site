@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 export const colors = {
   backdrop: "rgba(22, 28, 36, 0.4)",
@@ -75,9 +76,9 @@ export const colors = {
 };
 
 const config: Config = {
+  darkMode: ["class"],
   content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
-    colors,
     screens: {
       xs: "0px",
       sm: "640px",
@@ -92,27 +93,34 @@ const config: Config = {
         bricolage: ["var(--font-bricolage)"],
       },
       boxShadow: {
-        1: "0px 8px 24px 0px rgba(0, 0, 0, 0.08)",
-        2: "6px 10px 16px 0px rgba(0, 0, 0, 0.12)",
-        3: "0px -8px 20px 0px #00000014",
-        4: "0px 0px 30px 0px rgba(0, 0, 0, 0.08)",
+        "1": "0px 8px 24px 0px rgba(0, 0, 0, 0.08)",
+        "2": "6px 10px 16px 0px rgba(0, 0, 0, 0.12)",
+        "3": "0px -8px 20px 0px #00000014",
+        "4": "0px 0px 30px 0px rgba(0, 0, 0, 0.08)",
       },
       fontSize: {
-        xss: ["0.625rem", "14px"], // 14px => 10px
-        xs: ["0.75rem", "22px"], // 22px => 12px
-        sm: ["0.875rem", "24px"], // 24px => 14px
-        base: ["1rem", "28px"], // 28px => 16px
-        lg: ["1.125rem", "28px"], // 28px => 18px
-        "2xl": ["1.5rem", "32px"], // 32px => 24px
-        "3xl": ["1.75rem", "40px"], // 40px => 28px
-        "4xl": ["2rem", "48px"], // 48px => 32px
-        "5xl": ["2.25rem", "48px"], // 48px => 36px
-        "6xl": ["3rem", "48px"], // 64px => 48px
-        "7xl": ["4rem", "80px"], // 64px => 48px
-        "8xl": ["6rem", "112px"], // 64px => 48px
+        xss: ["0.625rem", "14px"],
+        xs: ["0.75rem", "22px"],
+        sm: ["0.875rem", "24px"],
+        base: ["1rem", "28px"],
+        lg: ["1.125rem", "28px"],
+        "2xl": ["1.5rem", "32px"],
+        "3xl": ["1.75rem", "40px"],
+        "4xl": ["2rem", "48px"],
+        "5xl": ["2.25rem", "48px"],
+        "6xl": ["3rem", "48px"],
+        "7xl": ["4rem", "80px"],
+        "8xl": ["6rem", "112px"],
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      colors,
     },
   },
   safelist: [{ pattern: /([a-zA-Z]+)-./ }],
+  plugins: [animate],
 };
 export default config;
