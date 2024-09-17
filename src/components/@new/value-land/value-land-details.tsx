@@ -14,10 +14,11 @@ import { valueLandAtom } from "@/atoms/value-land-atom";
 import classes from "@/app/value-land/(main)/styles.module.css";
 import clsx from "clsx";
 import { TextInput } from "@/components/ui/input";
+import { AutoComplete } from "@/components/ui/autocomplete";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
-import AutoComplete from "../shared/forms/AutoComplete";
+// import AutoComplete from "../shared/forms/AutoComplete";
 import Alert from "../shared/Alert";
 import ValueLandStepper from "./value-land-stepper";
 
@@ -184,6 +185,18 @@ const ValueLandDetails = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full">
                 <AutoComplete
+                  options={getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest)}
+                  emptyMessage="No results."
+                  placeholder="Find something"
+                  isLoading={false}
+                  onValueChange={(item) => {
+                    setValue("state", item?.value || "", { shouldValidate: isSubmitted });
+                    setValue("county", "", { shouldValidate: isSubmitted });
+                  }}
+                  value={getStateValue(watch("state"))}
+                  // disabled={false}
+                />
+                {/* <AutoComplete
                   rootClassName="w-full"
                   options={getAllStates({ filterBlackList: true })}
                   getOptionLabel={(item) => item.label}
@@ -199,8 +212,8 @@ const ValueLandDetails = () => {
                   }
                   getSelectedOption={(item) => item.value === watch("state")}
                   error={!!errors.state}
-                />
-                <AutoComplete
+                /> */}
+                {/* <AutoComplete
                   rootClassName="w-full"
                   options={getCounties(watch("state"))}
                   getOptionLabel={(item) => item.label}
@@ -216,7 +229,7 @@ const ValueLandDetails = () => {
                   }
                   getSelectedOption={(item) => item.value === watch("county")}
                   error={!!errors.county}
-                />
+                /> */}
               </div>
             </div>
             {showError && (

@@ -42,7 +42,8 @@ export const getStateValue = (stateValue: string | null) => {
   if (!stateValue) {
     return null;
   }
-  return getAllStates().find((el) => el.value === stateValue.toLocaleLowerCase()) || null;
+  const result = getAllStates().find((el) => el.value === stateValue.toLocaleLowerCase());
+  return result ? { label: result.label, value: result.value } : null;
 };
 
 export const getCountyValue = (countyValue: string | null, stateValue: string | null) => {
