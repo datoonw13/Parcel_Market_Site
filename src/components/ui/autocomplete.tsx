@@ -129,7 +129,7 @@ export const AutoComplete = ({
           disabled={disabled}
           error={error}
           endIcon={
-            <div className="grid gap-1 h-full items-center lg:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
+            <div className="grid gap-1 h-full items-center grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
               {value && (
                 <Button onClick={() => handleSelectOption(null)} size="icon" className="h-full w-full px-1 !bg-transparent">
                   <IoClose className="size-4 text-grey-800" />

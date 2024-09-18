@@ -9,16 +9,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { useMemo } from "react";
+import { IDecodedAccessToken } from "@/types/auth";
 import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
 import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { AutoComplete } from "../ui/autocomplete";
+import { Alert } from "../ui/alert";
 
 type VoltSearchModel = z.infer<typeof voltSearchSchema>;
 
-const PropertySearchDetails = () => {
+const PropertySearchDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -34,6 +36,10 @@ const PropertySearchDetails = () => {
   const selectedState = watch("state");
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
   const counties = useMemo(() => getCounties(selectedState), [selectedState]);
+
+  const showUnauthorizedUserError = !user && watch("searchType") !== "parcelNumber";
+  const showMaximumLimitReachedError = false;
+  const disableSearch = showMaximumLimitReachedError || showUnauthorizedUserError;
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
     setValue("searchType", type, { shouldValidate: isSubmitted });
@@ -107,6 +113,7 @@ const PropertySearchDetails = () => {
             onChange={(e) => setValue("parcelNumber", e.target.value, { shouldValidate: isSubmitted })}
             error={!!errors.parcelNumber}
             label="Enter Parcel ID"
+            disabled={disableSearch}
           />
         )}
         {watch("searchType") === "fullName" && (
@@ -117,6 +124,7 @@ const PropertySearchDetails = () => {
               error={!!errors.firstName}
               rootClassName="w-full"
               label="Name"
+              disabled={disableSearch}
             />
             <TextInput
               value={watch("lastName") || ""}
@@ -124,6 +132,7 @@ const PropertySearchDetails = () => {
               error={!!errors.lastName}
               rootClassName="w-full"
               label="Surname"
+              disabled={disableSearch}
             />
           </div>
         )}
@@ -133,6 +142,7 @@ const PropertySearchDetails = () => {
             onChange={(e) => setValue("entityName", e.target.value, { shouldValidate: isSubmitted })}
             error={!!errors.entityName}
             label="Enter name of the entity"
+            disabled={disableSearch}
           />
         )}
         <div className="flex flex-col sm:flex-row gap-3 w-full">
@@ -146,6 +156,7 @@ const PropertySearchDetails = () => {
               setValue("county", "", { shouldValidate: isSubmitted });
             }}
             value={getStateValue(watch("state"))}
+            disabled={disableSearch}
           />
           <AutoComplete
             options={counties}
@@ -155,11 +166,11 @@ const PropertySearchDetails = () => {
               setValue("county", item?.value || "", { shouldValidate: isSubmitted });
             }}
             value={getCountyValue(watch("county"), watch("state"))}
-            disabled={!watch("state")}
+            disabled={!watch("state") || disableSearch}
             error={!!errors.county}
           />
         </div>
-        <Button loading={isSubmitting} onClick={onSubmit} className="mt-1">
+        <Button disabled={disableSearch} loading={isSubmitting} onClick={onSubmit} className="mt-1">
           Search
         </Button>
       </div>
@@ -172,6 +183,20 @@ const PropertySearchDetails = () => {
           </Link>
         </p>
       </div>
+      {showUnauthorizedUserError && (
+        <Alert
+          variant="warning"
+          title="Please authenticate"
+          description="You cannot search for desired land by first and last name without authorization."
+        />
+      )}
+      {showMaximumLimitReachedError && (
+        <Alert
+          variant="warning"
+          title="You have reached your daily limit"
+          description="If you want to increase the daily limit, Please contact support for help."
+        />
+      )}
     </div>
   );
 };
