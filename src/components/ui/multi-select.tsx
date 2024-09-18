@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
 
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
 import { Badge } from "./badge";
+import { IoClose } from "react-icons/io5";
 
 type Framework = Record<"value" | "label", string>;
 
@@ -98,7 +98,7 @@ export function FancyMultiSelect() {
                 }}
                 onClick={() => handleUnselect(framework)}
               >
-                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                <IoClose className="h-3 w-3 text-muted-foreground hover:text-foreground" />
               </button>
             </Badge>
           ))}

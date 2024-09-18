@@ -1,7 +1,8 @@
+import { FC } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
-import { FC, Suspense } from "react";
 import dynamic from "next/dynamic";
 import VoltHeader from "./volt-header";
+import PropertySearchDetails from "./property-search-details";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -13,6 +14,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => (
   <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_406px)_1fr] xl:grid-cols-[minmax(0,_490px)_1fr] h-screen">
     <div className="">
       <VoltHeader user={user} />
+      <PropertySearchDetails />
     </div>
     <div className="hidden lg:flex">
       <Map

@@ -1,11 +1,11 @@
 "use client";
 
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { Circle } from "lucide-react";
 
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
 import { cn } from "../../lib/utils";
 import { Label } from "./label";
+import { FaRegCircle } from "react-icons/fa6";
 
 interface RadioGroupItemProps extends ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
   label?: string;
@@ -33,7 +33,7 @@ const RadioGroupItem = forwardRef<ElementRef<typeof RadioGroupPrimitive.Item>, R
       id={props.value}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle className="h-2 w-2 fill-current text-current" />
+        <FaRegCircle className="h-2 w-2 fill-current text-current" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
     {props.label && (

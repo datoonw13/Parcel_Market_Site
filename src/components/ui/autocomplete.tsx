@@ -5,7 +5,7 @@ import { useState, useRef, useCallback } from "react";
 import type { KeyboardEvent } from "react";
 
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { ScrollArea } from "./scroll-area";
 import { Skeleton } from "./skeleton";
 
@@ -105,7 +105,7 @@ export const AutoComplete = ({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           disabled={disabled}
-          endIcon={isOpen ? <ChevronUp className="size-4 text-grey-800" /> : <ChevronDown className="size-4 text-grey-800" />}
+          endIcon={isOpen ? <IoChevronUp className="size-4 text-grey-800" /> : <IoChevronDown className="size-4 text-grey-800" />}
         />
       </div>
       <div className="relative mt-1">

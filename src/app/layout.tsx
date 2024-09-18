@@ -23,6 +23,7 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
 });
 
 const bricolage = Bricolage_Grotesque({
@@ -30,7 +31,6 @@ const bricolage = Bricolage_Grotesque({
   weight: ["400", "500", "600", "700"],
   variable: "--font-bricolage",
   display: "swap",
-  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
