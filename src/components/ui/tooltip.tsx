@@ -32,7 +32,9 @@ const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent }) => (
       <TooltipPrimitive.Trigger asChild className="cursor-pointer">
         {renderButton}
       </TooltipPrimitive.Trigger>
-      <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">{renderContent}</TooltipContent>
+      <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">
+        {renderContent}
+      </TooltipContent>
     </TooltipPrimitive.Root>
   </TooltipPrimitive.Provider>
 );

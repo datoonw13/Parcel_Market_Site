@@ -3,9 +3,9 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
+import { FaRegCircle } from "react-icons/fa6";
 import { cn } from "../../lib/utils";
 import { Label } from "./label";
-import { FaRegCircle } from "react-icons/fa6";
 
 interface RadioGroupItemProps extends ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
   label?: string;

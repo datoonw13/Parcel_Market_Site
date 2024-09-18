@@ -24,11 +24,11 @@ declare module "@mui/material/Button" {
   }
 }
 
-const inter = Inter({
-  weight: ["300", "400", "500", "700", "800"],
-  subsets: ["latin"],
-  display: "swap",
-});
+// const inter = Inter({
+//   weight: ["300", "400", "500", "700", "800"],
+//   subsets: ["latin"],
+//   display: "swap",
+// });
 
 const { palette, spacing, breakpoints, shadows } = createTheme();
 
@@ -97,7 +97,7 @@ shadows[2] = "0px 12px 50px 0px rgba(0, 0, 0, 0.08)";
 
 const theme = createTheme({
   typography: {
-    fontFamily: inter.style.fontFamily,
+    // fontFamily: inter.style.fontFamily,
   },
   palette: customPalette,
   components: {

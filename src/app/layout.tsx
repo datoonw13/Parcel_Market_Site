@@ -21,16 +21,18 @@ import { GoogleTagManager } from "@next/third-parties/google";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  // weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  // weight: ["400", "500", "600", "700"],
   variable: "--font-bricolage",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
