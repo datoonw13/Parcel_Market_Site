@@ -9,7 +9,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { ScrollArea } from "./scroll-area";
 import { Skeleton } from "./skeleton";
 
-import { CommandGroup, CommandItem, CommandList, CommandInput } from "./command";
+import { CommandItem, CommandList } from "./command";
 import { TextInput } from "./input";
 
 export type Option = Record<"value" | "label", string> & Record<string, string>;
@@ -17,12 +17,11 @@ export type Option = Record<"value" | "label", string> & Record<string, string>;
 type AutoCompleteProps = {
   options: Option[];
   emptyMessage: string;
-  value?: Option | null;
+  value: Option | null;
   onValueChange?: (value: Option) => void;
   isLoading?: boolean;
   disabled?: boolean;
   placeholder?: string;
-  autoComplete?: boolean;
 };
 
 export const AutoComplete = ({
@@ -33,12 +32,10 @@ export const AutoComplete = ({
   onValueChange,
   disabled,
   isLoading = false,
-  autoComplete = true,
 }: AutoCompleteProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isOpen, setOpen] = useState(false);
-  const [selected, setSelected] = useState<Option>(value as Option);
   const [inputValue, setInputValue] = useState<string>(value?.label || "");
 
   const handleKeyDown = useCallback(
@@ -57,7 +54,6 @@ export const AutoComplete = ({
       if (event.key === "Enter" && input.value !== "") {
         const optionToSelect = options.find((option) => option.label === input.value);
         if (optionToSelect) {
-          setSelected(optionToSelect);
           onValueChange?.(optionToSelect);
         }
       }
@@ -71,14 +67,12 @@ export const AutoComplete = ({
 
   const handleBlur = useCallback(() => {
     setOpen(false);
-    setInputValue(selected?.label);
-  }, [selected]);
+    setInputValue(value?.label || "");
+  }, [value]);
 
   const handleSelectOption = useCallback(
     (selectedOption: Option) => {
       setInputValue(selectedOption.label);
-
-      setSelected(selectedOption);
       onValueChange?.(selectedOption);
 
       // This is a hack to prevent the input from being focused after the user selects an option
@@ -93,14 +87,12 @@ export const AutoComplete = ({
   const filterOptions = () => {
     if (inputValue) {
       const filteredOptions = options.filter((el) => el.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()));
-      // if (autoComplete && filteredOptions.length === 1) {
-      //   handleSelectOption(filteredOptions[0]);
-      //   setOpen(false);
-      // }
       return filteredOptions;
     }
     return options;
   };
+
+  const filteredOptions = filterOptions();
 
   return (
     <CommandPrimitive onKeyDown={handleKeyDown}>
@@ -119,11 +111,11 @@ export const AutoComplete = ({
       <div className="relative mt-1">
         <div
           className={cn(
-            "animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-xl bg-white outline-none shadow-1",
+            "animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-xl bg-white outline-none shadow-1 overflow-hidden",
             isOpen ? "block" : "hidden"
           )}
         >
-          <CommandList>
+          <CommandList className="overflow-hidden">
             {isLoading ? (
               <CommandPrimitive.Loading>
                 <div className="p-1">
@@ -131,28 +123,30 @@ export const AutoComplete = ({
                 </div>
               </CommandPrimitive.Loading>
             ) : null}
-            {filterOptions().length > 0 &&
-              !isLoading &&
-              filterOptions().map((option) => {
-                const isSelected = selected?.value === option.value;
-                return (
-                  <CommandItem
-                    key={option.value}
-                    value={option.label}
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                    }}
-                    onSelect={() => handleSelectOption(option)}
-                    className={cn(
-                      "py-2.5 px-4 cursor-pointer hover:!bg-primary-main-50 transition-all duration-100 font-medium text-xs",
-                      isSelected && "!bg-primary-main-100"
-                    )}
-                  >
-                    {option.label}
-                  </CommandItem>
-                );
-              })}
+            {filteredOptions.length > 0 && !isLoading && (
+              <ScrollArea className="flex max-h-72 flex-col overflow-y-auto">
+                {filteredOptions.map((option) => {
+                  const isSelected = value?.value === option.value;
+                  return (
+                    <CommandItem
+                      key={option.value}
+                      value={option.label}
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                      onSelect={() => handleSelectOption(option)}
+                      className={cn(
+                        "py-2.5 px-4 cursor-pointer hover:!bg-primary-main-50 transition-all duration-100 font-medium text-xs",
+                        isSelected && "!bg-primary-main-100"
+                      )}
+                    >
+                      {option.label}
+                    </CommandItem>
+                  );
+                })}
+              </ScrollArea>
+            )}
             {!isLoading ? (
               <CommandPrimitive.Empty className="select-none rounded-sm px-2 py-3 text-center text-sm">
                 {emptyMessage}

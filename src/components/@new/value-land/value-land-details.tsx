@@ -15,6 +15,8 @@ import classes from "@/app/value-land/(main)/styles.module.css";
 import clsx from "clsx";
 import { TextInput } from "@/components/ui/input";
 import { AutoComplete } from "@/components/ui/autocomplete";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import Button from "../shared/forms/Button";
 import RadioButton from "../shared/forms/RadioButton";
 import LabelWithInfo from "../shared/label-with-info";
@@ -184,7 +186,12 @@ const ValueLandDetails = () => {
                 )}
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <AutoComplete
+                <RadioGroup defaultValue="option-one">
+                  <RadioGroupItem value="option-one" label="Pirveli" />
+                  <RadioGroupItem value="option-two" label="Pirveli" />
+                </RadioGroup>
+
+                {/* <AutoComplete
                   options={getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest)}
                   emptyMessage="No results."
                   placeholder="Find something"
@@ -195,7 +202,7 @@ const ValueLandDetails = () => {
                   }}
                   value={getStateValue(watch("state"))}
                   // disabled={false}
-                />
+                /> */}
                 {/* <AutoComplete
                   rootClassName="w-full"
                   options={getAllStates({ filterBlackList: true })}
