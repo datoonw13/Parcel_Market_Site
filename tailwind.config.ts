@@ -120,7 +120,7 @@ const config: Config = {
       colors,
     },
   },
-  safelist: [{ pattern: /([a-zA-Z]+)-./ }],
+  // safelist: [{ pattern: /([a-zA-Z]+)-./ }],
   plugins: [animate],
 };
 export default config;

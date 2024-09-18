@@ -24,6 +24,7 @@ const styles = {
   [&:focus-within>.label]:top-0 [&:focus-within>.label]:pt-7 [&:focus-within>.label]:!text-xss [&:focus-within>.label]:!font-normal [&:focus-within>.label]:text-grey-600
   `,
   input: `
+  disabled:cursor-not-allowed
   autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] transition:background-color 9999s ease-in-out 0s
   font-medium text-xs w-full border-none outline-none h-full bg-transparent placeholder-grey-800
   [&:not(:placeholder-shown)+p]:top-0 [&:not(:placeholder-shown)+p]:pt-7 [&:not(:placeholder-shown)+p]:!text-xss [&:not(:placeholder-shown)+p]:!font-normal [&:not(:placeholder-shown)+p]:text-grey-600
@@ -47,7 +48,7 @@ const TextInput = forwardRef<HTMLInputElement, InputGeneralProps>(({ className, 
           placeholder={inputGeneralProps.placeholder || " "}
         />
         {showLabel && (
-          <p className={cn(styles.label, "label")}>
+          <p className={cn(styles.label, "label pointer-events-none")}>
             {label}
             {inputGeneralProps.required && <span className="text-error"> *</span>}
           </p>

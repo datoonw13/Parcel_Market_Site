@@ -28,9 +28,9 @@ interface TooltipProps {
 
 const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent }) => (
   <TooltipPrimitive.Provider delayDuration={300}>
-    <TooltipPrimitive.Root open>
+    <TooltipPrimitive.Root>
       <TooltipPrimitive.Trigger asChild className="cursor-pointer">
-        {renderButton}
+        <div>{renderButton}</div>
       </TooltipPrimitive.Trigger>
       <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">
         {renderContent}

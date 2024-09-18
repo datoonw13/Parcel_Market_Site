@@ -2,13 +2,13 @@
 
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
-import { FaRegCircle } from "react-icons/fa6";
+import { ComponentPropsWithoutRef, ElementRef, ReactElement, forwardRef } from "react";
+import { FaCircle } from "react-icons/fa";
 import { cn } from "../../lib/utils";
 import { Label } from "./label";
 
 interface RadioGroupItemProps extends ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
-  label?: string;
+  label?: ReactElement | string;
   labelClassName?: string;
 }
 
@@ -18,7 +18,7 @@ const RadioGroup = forwardRef<ElementRef<typeof RadioGroupPrimitive.Root>, Compo
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 const RadioGroupItem = forwardRef<ElementRef<typeof RadioGroupPrimitive.Item>, RadioGroupItemProps>(({ className, ...props }, ref) => (
-  <div className="flex items-center space-x-2">
+  <div className="flex items-center">
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
@@ -33,11 +33,11 @@ const RadioGroupItem = forwardRef<ElementRef<typeof RadioGroupPrimitive.Item>, R
       id={props.value}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <FaRegCircle className="h-2 w-2 fill-current text-current" />
+        <FaCircle className="h-2 w-2 fill-current text-current" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
     {props.label && (
-      <Label htmlFor={props.value} className={cn("", props.labelClassName)}>
+      <Label htmlFor={props.value} className={cn("pl-2", props.labelClassName)}>
         {props.label}
       </Label>
     )}

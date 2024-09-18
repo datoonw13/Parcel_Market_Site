@@ -1,16 +1,17 @@
 "use client";
 
 import { Command as CommandPrimitive } from "cmdk";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import type { KeyboardEvent } from "react";
 
 import { cn } from "@/lib/utils";
-import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { IoChevronDown, IoChevronUp, IoClose } from "react-icons/io5";
 import { ScrollArea } from "./scroll-area";
 import { Skeleton } from "./skeleton";
 
 import { CommandItem, CommandList } from "./command";
 import { TextInput } from "./input";
+import { Button } from "./button";
 
 export type Option = Record<"value" | "label", string> & Record<string, string>;
 
@@ -18,10 +19,11 @@ type AutoCompleteProps = {
   options: Option[];
   emptyMessage: string;
   value: Option | null;
-  onValueChange?: (value: Option) => void;
+  onValueChange?: (value: Option | null) => void;
   isLoading?: boolean;
   disabled?: boolean;
   placeholder?: string;
+  error?: boolean;
 };
 
 export const AutoComplete = ({
@@ -31,9 +33,11 @@ export const AutoComplete = ({
   value,
   onValueChange,
   disabled,
-  isLoading = false,
+  isLoading,
+  error,
 }: AutoCompleteProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState<string>(value?.label || "");
@@ -71,13 +75,16 @@ export const AutoComplete = ({
   }, [value]);
 
   const handleSelectOption = useCallback(
-    (selectedOption: Option) => {
-      setInputValue(selectedOption.label);
+    (selectedOption: Option | null) => {
+      setInputValue(selectedOption?.label || "");
       onValueChange?.(selectedOption);
 
       // This is a hack to prevent the input from being focused after the user selects an option
       // We can call this hack: "The next tick"
-      setTimeout(() => {
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current);
+      }
+      timerRef.current = setTimeout(() => {
         inputRef?.current?.blur();
       }, 0);
     },
@@ -94,8 +101,23 @@ export const AutoComplete = ({
 
   const filteredOptions = filterOptions();
 
+  useEffect(
+    () => () => {
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!isOpen && value?.label !== inputValue) {
+      setInputValue(value?.label || "");
+    }
+  }, [inputValue, isOpen, value?.label]);
+
   return (
-    <CommandPrimitive onKeyDown={handleKeyDown}>
+    <CommandPrimitive onKeyDown={handleKeyDown} className="w-full">
       <div>
         <TextInput
           ref={inputRef}
@@ -105,7 +127,20 @@ export const AutoComplete = ({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           disabled={disabled}
-          endIcon={isOpen ? <IoChevronUp className="size-4 text-grey-800" /> : <IoChevronDown className="size-4 text-grey-800" />}
+          error={error}
+          endIcon={
+            <div className="grid gap-1 h-full items-center lg:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
+              {value && (
+                <Button onClick={() => handleSelectOption(null)} size="icon" className="h-full w-full px-1 !bg-transparent">
+                  <IoClose className="size-4 text-grey-800" />
+                </Button>
+              )}
+              <Button size="icon" className="h-full w-full px-1 !bg-transparent">
+                {isOpen ? <IoChevronUp className="size-4 text-grey-800" /> : <IoChevronDown className="size-4 text-grey-800" />}
+              </Button>
+            </div>
+          }
+          rootClassName="w-full"
         />
       </div>
       <div className="relative mt-1">
