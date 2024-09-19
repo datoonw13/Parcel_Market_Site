@@ -6,7 +6,7 @@ const styles = {
   paddingT: "pt-4 md:pt-12 lg:pt-16",
   paddingB: "pb-4 md:pb-6",
   paddingX: "px-5 md:px-12 lg:px-16",
-  general: "flex justify-between items-center border-b border-b-grey-100 sm:border-b-0",
+  general: "flex justify-between items-center border-b border-b-grey-100 sm:border-b-0 sticky top-0",
 };
 
 const stringifiedStyles = Object.values(styles).join(" ");

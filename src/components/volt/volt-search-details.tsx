@@ -10,6 +10,7 @@ import { z } from "zod";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { useMemo } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
+import { cn } from "@/lib/utils";
 import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
@@ -20,7 +21,7 @@ import { Alert } from "../ui/alert";
 
 type VoltSearchModel = z.infer<typeof voltSearchSchema>;
 
-const PropertySearchDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
+const PropertySearchDetails = ({ user, className }: { user: IDecodedAccessToken | null; className?: string }) => {
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -53,7 +54,7 @@ const PropertySearchDetails = ({ user }: { user: IDecodedAccessToken | null }) =
   });
 
   return (
-    <div className="space-y-6">
+    <div className={cn("space-y-6", className)}>
       <h1 className="font-semibold text-lg">Let’s locate your property using some basic information</h1>
       <div className="space-y-2.5">
         <div className="flex items-center gap-2">
