@@ -3,7 +3,7 @@ import { IDecodedAccessToken } from "@/types/auth";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import VoltHeader from "./volt-header";
-import PropertySearchDetails from "./property-search-details";
+import VoltSearchDetails from "./volt-search-details";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -18,7 +18,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => (
         <VoltHeader user={user} />
         <div className="flex flex-col overflow-auto h-full">
           <div className="pt-6 md:pt-8 px-5 md:px-8 lg:px-11">
-            <PropertySearchDetails />
+            <VoltSearchDetails user={user} />
           </div>
         </div>
       </div>
