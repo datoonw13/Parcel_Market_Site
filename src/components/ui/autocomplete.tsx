@@ -37,8 +37,9 @@ export const AutoComplete = ({
   error,
 }: AutoCompleteProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputRootRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
-
   const [isOpen, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState<string>(value?.label || "");
 
@@ -101,6 +102,14 @@ export const AutoComplete = ({
 
   const filteredOptions = filterOptions();
 
+  const updateContainerOptions = () => {
+    if (inputRef.current && containerRef.current) {
+      const props = inputRootRef.current!.getBoundingClientRect();
+      containerRef.current.style.top = `${props.y + props.height + 2}px`;
+      containerRef.current.style.width = `${props.width}px`;
+    }
+  };
+
   useEffect(
     () => () => {
       if (timerRef.current) {
@@ -116,11 +125,23 @@ export const AutoComplete = ({
     }
   }, [inputValue, isOpen, value?.label]);
 
+  useEffect(() => {
+    updateContainerOptions();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateContainerOptions);
+    return () => {
+      window.removeEventListener("resize", updateContainerOptions);
+    };
+  }, []);
+
   return (
     <CommandPrimitive onKeyDown={handleKeyDown} className="w-full">
       <div>
         <TextInput
           ref={inputRef}
+          rootRef={inputRootRef}
           value={inputValue || ""}
           onChange={(e) => (isLoading ? undefined : setInputValue(e.target.value))}
           onBlur={handleBlur}
@@ -146,9 +167,10 @@ export const AutoComplete = ({
       <div className="relative mt-1">
         <div
           className={cn(
-            "animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-xl bg-white outline-none shadow-1 overflow-hidden",
+            "animate-in fade-in-0 zoom-in-95 fixed top-0 z-10 w-full rounded-xl bg-white outline-none shadow-1 overflow-hidden",
             isOpen ? "block" : "hidden"
           )}
+          ref={containerRef}
         >
           <CommandList className="overflow-hidden">
             {isLoading ? (

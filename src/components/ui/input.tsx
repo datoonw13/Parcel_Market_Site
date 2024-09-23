@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactElement, forwardRef } from "react";
+import { InputHTMLAttributes, LegacyRef, ReactElement, forwardRef } from "react";
 import { NumericFormat, NumericFormatProps } from "react-number-format";
 import { cn } from "../../lib/utils";
 
@@ -8,6 +8,7 @@ interface InputBaseProps {
   endIcon?: ReactElement | string;
   error?: boolean;
   rootClassName?: string;
+  rootRef?: LegacyRef<HTMLDivElement>;
 }
 
 export interface InputGeneralProps extends InputHTMLAttributes<HTMLInputElement>, InputBaseProps {}
@@ -33,10 +34,10 @@ const styles = {
 };
 
 const TextInput = forwardRef<HTMLInputElement, InputGeneralProps>(({ className, type, ...props }, ref) => {
-  const { label, startIcon, endIcon, error, rootClassName, ...inputGeneralProps } = { ...props };
+  const { label, startIcon, endIcon, error, rootClassName, rootRef, ...inputGeneralProps } = { ...props };
   const showLabel = label && !inputGeneralProps.placeholder;
   return (
-    <div className={cn(styles.root, rootClassName, error && styles.error)}>
+    <div ref={rootRef} className={cn(styles.root, rootClassName, error && styles.error)}>
       <div className={cn("flex items-center justify-center h-full start-icon pr-3", startIcon && "pl-3")}>{startIcon}</div>
       <div className={cn(styles.inputWrapper)}>
         <input
