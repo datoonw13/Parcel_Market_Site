@@ -79,7 +79,8 @@ const CalculationMap: FC<CalculationMapProps> = ({
       .filter((property) =>
         mainLandSaleHistory.length > 0
           ? mainLandSaleHistory.find(
-              (saleHistory) => removeParcelNumberFormatting(saleHistory.parcelNumber) !== removeParcelNumberFormatting(property.parcelNumber)
+              (saleHistory) =>
+                removeParcelNumberFormatting(saleHistory.parcelNumber) !== removeParcelNumberFormatting(property.parcelNumber)
             )
           : true
       )

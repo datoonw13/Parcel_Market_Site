@@ -13,7 +13,7 @@ interface VoltItemProps {
   selected?: boolean;
   onHover?: (parcelNumberNoFormatting: string) => void;
   onMouseLeave?: (parcelNumberNoFormatting: string) => void;
-  onSelect: (parcelNumberNoFormatting: string) => void;
+  onSelect?: (parcelNumberNoFormatting: string) => void;
   id: string;
   isHighlighted?: boolean;
 }
@@ -28,16 +28,16 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
     )}
     onMouseEnter={() => onHover && onHover(removeParcelNumberFormatting(data.parcelNumber))}
     onMouseLeave={() => onMouseLeave && onMouseLeave(removeParcelNumberFormatting(data.parcelNumber))}
-    onClick={() => onSelect(removeParcelNumberFormatting(data.parcelNumber))}
+    onClick={() => onSelect && onSelect(removeParcelNumberFormatting(data.parcelNumber))}
   >
     <div className="w-full flex justify-between items-center gap-6" id={id}>
       <div className="grid">
-        <p className="text-lg font-semibold truncate">{data.owner} წქდ ქწდ </p>
+        <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
         <p className="text-xs text-grey-600 font-medium">Business owner</p>
       </div>
       <div className="grid" style={{ maxWidth: 110 }}>
         <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
-        <p className="text-sm font-medium truncate">{data.parcelNumber} qwdqwd qwd qwd qwdqwdd q qwdqwdqdqd</p>
+        <p className="text-sm font-medium truncate">{data.parcelNumber}</p>
       </div>
     </div>
     <hr className="bg-gray-100" />

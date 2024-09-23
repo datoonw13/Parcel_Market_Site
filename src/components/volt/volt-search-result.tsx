@@ -26,16 +26,6 @@ interface VoltSearchResultProps {
   };
 }
 
-function isElementVisible(ele: HTMLElement) {
-  const rect = ele.getBoundingClientRect();
-  const containerRect = ele.closest("#volt-scroll>div")?.getBoundingClientRect();
-
-  if (!containerRect) {
-    return false;
-  }
-  return rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
-}
-
 const VoltSearchResult: FC<VoltSearchResultProps> = ({
   onSearchResultItemHover,
   onSearchResultItemMouseLeave,
@@ -45,26 +35,11 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const highlightItem = (parcelNumber: string) => {
-    const item = document.getElementById(parcelNumber);
-    if (item && ref.current) {
-      if (!isElementVisible(item)) {
-        item.scrollIntoView();
-      }
-    }
-  };
-
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollIntoView();
     }
   }, []);
-
-  useEffect(() => {
-    if (highlightedParcelNumber) {
-      highlightItem(highlightedParcelNumber);
-    }
-  }, [highlightedParcelNumber]);
 
   return (
     <div ref={ref} className="space-y-4">
@@ -75,7 +50,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
       <div className="flex flex-col gap-2">
         {values.searchResult?.map((item) => (
           <VoltItem
-            id={item.properties.fields.parcelnumb_no_formatting}
+            id={`search-result-${item.properties.fields.parcelnumb_no_formatting}`}
             key={item.properties.fields.parcelnumb}
             data={{
               acreage: Number(item.properties.fields.ll_gisacre),

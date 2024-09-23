@@ -13,6 +13,7 @@ import VoltSearch from "./volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltDesktopMap from "./volt-desktop-map";
 import { Button } from "../ui/button";
+import VoltCalculation from "./volt-calculation";
 
 const primaryLayout = `"details map" "footer map"`;
 const secondaryLayout = `"details map" "footer footer"`;
@@ -21,6 +22,19 @@ interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
   step: VoltSteps;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
+}
+
+function isElementVisible(parcelNumberNoFormatting: string, step: VoltSteps) {
+  const rect = document
+    .getElementById(`${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`)
+    ?.getBoundingClientRect();
+
+  const containerRect = document.querySelector("#volt-scroll>div")?.getBoundingClientRect();
+
+  if (!containerRect || !rect) {
+    return false;
+  }
+  return rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
 }
 
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
@@ -89,7 +103,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
           <ScrollArea className="" id="volt-scroll">
             <div className="overflow-hidden flex flex-col gap-8 px-5 lg:px-8 xl:px-11">
               <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
-              {step === VoltSteps.SEARCH && (
+              {step === VoltSteps.SEARCH_RESULTS && (
                 <VoltSearchResult
                   onSearchResultItemHover={(parcelNumberNoFormatting) => setHighlightedParcelNumber(parcelNumberNoFormatting)}
                   onSearchResultItemMouseLeave={() => {
@@ -100,7 +114,17 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
                   setValues={setValues}
                 />
               )}
-              {step === VoltSteps.CALCULATION && "pricee"}
+              {step === VoltSteps.CALCULATION && (
+                <VoltCalculation
+                  onSearchResultItemHover={(parcelNumberNoFormatting) => setHighlightedParcelNumber(parcelNumberNoFormatting)}
+                  onSearchResultItemMouseLeave={() => {
+                    // setHighlightedParcelNumber(null)
+                  }}
+                  highlightedParcelNumber={highlightedParcelNumber}
+                  values={values}
+                  setValues={setValues}
+                />
+              )}
             </div>
           </ScrollArea>
         </div>
@@ -111,6 +135,14 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
           highlightedParcelNumber={highlightedParcelNumber}
           onMarkerMouseEnter={(parcelNumberNoFormatting) => {
             setHighlightedParcelNumber(parcelNumberNoFormatting);
+            if (!isElementVisible(parcelNumberNoFormatting, step)) {
+              const item = document.getElementById(
+                `${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
+              );
+              if (item) {
+                item.scrollIntoView();
+              }
+            }
           }}
           values={values}
           setValues={setValues}
@@ -119,7 +151,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
           }}
         />
       </div>
-      <div className={cn("px-5 lg:px-8 xl:px-11 h-fit", step > 0 && "border-t border-t-grey-100")} style={{ gridArea: "footer" }}>
+      <div className={cn("px-5 lg:px-8 xl:px-11 h-fit mt-6", step > 0 && "border-t border-t-grey-100")} style={{ gridArea: "footer" }}>
         <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 mt-auto")}>
           {step === VoltSteps.SEARCH_RESULTS && (
             <div className="flex gap-3">
