@@ -1,17 +1,32 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { voltAtom } from "@/atoms/volt-atom";
-import { FC, useEffect, useRef } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel } from "@/types/volt";
+import { IMap } from "@/types/map";
 import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {
   onSearchResultItemHover?: (parcelNumberNoFormatting: string) => void;
   onSearchResultItemMouseLeave?: (parcelNumberNoFormatting: string) => void;
   highlightedParcelNumber: string | null;
+  setValues: Dispatch<
+    SetStateAction<{
+      searchDetails: VoltSearchModel | null;
+      searchResult: VoltSearchResultModel | null;
+      selectedItem: IMap[0] | null;
+      calculation: VoltPriceCalculationRes | null;
+    }>
+  >;
+  values: {
+    searchDetails: VoltSearchModel | null;
+    searchResult: VoltSearchResultModel | null;
+    selectedItem: IMap[0] | null;
+    calculation: VoltPriceCalculationRes | null;
+  };
 }
 
-function isElementVisible(ele: HTMLElement, container: HTMLElement) {
+function isElementVisible(ele: HTMLElement) {
   const rect = ele.getBoundingClientRect();
   const containerRect = ele.closest("#volt-scroll>div")?.getBoundingClientRect();
 
@@ -25,14 +40,15 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
   onSearchResultItemHover,
   onSearchResultItemMouseLeave,
   highlightedParcelNumber,
+  setValues,
+  values,
 }) => {
-  const [voltSlice, setVoltSlice] = useAtom(voltAtom);
   const ref = useRef<HTMLDivElement | null>(null);
 
   const highlightItem = (parcelNumber: string) => {
     const item = document.getElementById(parcelNumber);
     if (item && ref.current) {
-      if (!isElementVisible(item, ref.current)) {
+      if (!isElementVisible(item)) {
         item.scrollIntoView();
       }
     }
@@ -57,7 +73,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
         <h2 className="text-sm text-grey-800">Use the map or list below to select your property.</h2>
       </div>
       <div className="flex flex-col gap-2">
-        {voltSlice.searchResult?.map((item) => (
+        {values.searchResult?.map((item) => (
           <VoltItem
             id={item.properties.fields.parcelnumb_no_formatting}
             key={item.properties.fields.parcelnumb}
@@ -69,13 +85,11 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
             }}
             onHover={onSearchResultItemHover}
             onMouseLeave={onSearchResultItemMouseLeave}
-            selected={
-              item.properties.fields.parcelnumb_no_formatting === voltSlice.selectedItem?.properties.fields.parcelnumb_no_formatting
-            }
+            selected={item.properties.fields.parcelnumb_no_formatting === values.selectedItem?.properties.fields.parcelnumb_no_formatting}
             onSelect={(parcelNumber) => {
-              const item = voltSlice.searchResult?.find((el) => el.properties.fields.parcelnumb_no_formatting === parcelNumber);
+              const item = values.searchResult?.find((el) => el.properties.fields.parcelnumb_no_formatting === parcelNumber);
               if (item) {
-                setVoltSlice((prev) => ({ ...prev, selectedItem: item }));
+                setValues((prev) => ({ ...prev, selectedItem: item }));
               }
             }}
             isHighlighted={highlightedParcelNumber === item.properties.fields.parcelnumb_no_formatting}

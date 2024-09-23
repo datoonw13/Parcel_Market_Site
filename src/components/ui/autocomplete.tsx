@@ -127,7 +127,7 @@ export const AutoComplete = ({
 
   useEffect(() => {
     updateContainerOptions();
-  }, []);
+  }, [inputValue]);
 
   useEffect(() => {
     window.addEventListener("resize", updateContainerOptions);

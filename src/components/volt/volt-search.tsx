@@ -8,13 +8,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
-import { FC, useMemo, useState } from "react";
+import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
 import { getPropertiesAction } from "@/server-actions/volt/actions";
 import { useAtom } from "jotai";
-import { voltAtom } from "@/atoms/volt-atom";
-import { VoltSearchModel } from "@/types/volt";
+import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel } from "@/types/volt";
+import { IMap } from "@/types/map";
 import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
@@ -27,10 +27,23 @@ interface VoltSearchProps {
   user: IDecodedAccessToken | null;
   className?: string;
   onSuccess: () => void;
+  setValues: Dispatch<
+    SetStateAction<{
+      searchDetails: VoltSearchModel | null;
+      searchResult: VoltSearchResultModel | null;
+      selectedItem: IMap[0] | null;
+      calculation: VoltPriceCalculationRes | null;
+    }>
+  >;
+  values: {
+    searchDetails: VoltSearchModel | null;
+    searchResult: VoltSearchResultModel | null;
+    selectedItem: IMap[0] | null;
+    calculation: VoltPriceCalculationRes | null;
+  };
 }
 
-const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess }) => {
-  const [voltSlice, setVoltSlice] = useAtom(voltAtom);
+const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values }) => {
   const [showNotFoundAlert, setNotFoundAlert] = useState(false);
   const {
     handleSubmit,
@@ -64,7 +77,12 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess }) => {
     if (errorMessage) {
       setNotFoundAlert(true);
     } else {
-      setVoltSlice((prev) => ({ ...prev, searchDetails: { ...data }, searchResult: properties }));
+      setValues((prev) => ({
+        ...prev,
+        searchDetails: { ...data },
+        searchResult: properties,
+        selectedItem: properties?.length === 1 ? properties[0] : null,
+      }));
       onSuccess();
       if (showNotFoundAlert) {
         setNotFoundAlert(false);

@@ -1,11 +1,11 @@
 "use client";
 
-import { voltAtom } from "@/atoms/volt-atom";
-import { VoltSteps } from "@/types/volt";
+import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
 import { useAtom } from "jotai";
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { FC, useEffect, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
+import { IMap } from "@/types/map";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
@@ -15,10 +15,30 @@ interface VoltDesktopProps {
   highlightedParcelNumber: string | null;
   onMarkerMouseEnter: (parcelNumberNoFormatting: string) => void;
   onMarkerMouseLeave: (parcelNumberNoFormatting: string) => void;
+  setValues: Dispatch<
+    SetStateAction<{
+      searchDetails: VoltSearchModel | null;
+      searchResult: VoltSearchResultModel | null;
+      selectedItem: IMap[0] | null;
+      calculation: VoltPriceCalculationRes | null;
+    }>
+  >;
+  values: {
+    searchDetails: VoltSearchModel | null;
+    searchResult: VoltSearchResultModel | null;
+    selectedItem: IMap[0] | null;
+    calculation: VoltPriceCalculationRes | null;
+  };
 }
 
-const VoltDesktopMap: FC<VoltDesktopProps> = ({ step, highlightedParcelNumber, onMarkerMouseEnter, onMarkerMouseLeave }) => {
-  const [voltSlice, setVoltSlice] = useAtom(voltAtom);
+const VoltDesktopMap: FC<VoltDesktopProps> = ({
+  step,
+  highlightedParcelNumber,
+  onMarkerMouseEnter,
+  onMarkerMouseLeave,
+  setValues,
+  values,
+}) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
 
@@ -26,14 +46,14 @@ const VoltDesktopMap: FC<VoltDesktopProps> = ({ step, highlightedParcelNumber, o
     if (step === VoltSteps.SEARCH) {
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
-    if (step === VoltSteps.SEARCH_RESULTS && voltSlice.searchResult) {
-      return voltSlice.searchResult?.map((el) => ({
+    if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
+      return values.searchResult?.map((el) => ({
         parcelNumber: el.properties.fields.parcelnumb_no_formatting || "",
         latitude: Number(el.properties.fields.lat),
         longitude: Number(el.properties.fields.lon),
         polygon: el.geometry.coordinates,
         markerType:
-          voltSlice.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
+          values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
             ? ("active" as const)
             : ("default" as const),
         popup: (
@@ -50,16 +70,16 @@ const VoltDesktopMap: FC<VoltDesktopProps> = ({ step, highlightedParcelNumber, o
             <Button
               className="py-1 h-auto !px-6 ml-auto flex mt-4"
               onClick={() => {
-                setVoltSlice((prev) => ({
+                setValues((prev) => ({
                   ...prev,
                   selectedItem:
-                    voltSlice.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
+                    prev.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
                       ? null
                       : el,
                 }));
               }}
             >
-              {voltSlice.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
+              {values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
                 ? "Remove"
                 : "Select"}
             </Button>

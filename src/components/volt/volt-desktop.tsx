@@ -1,15 +1,18 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Logo from "@/icons/Logo";
 import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { VoltSteps } from "@/types/volt";
+import { VoltPriceCalculationReq, VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
+import { IMap } from "@/types/map";
+import useNotification from "@/hooks/useNotification";
+import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+import { PropertyPriceCalculationRes } from "@/types/property";
 import VoltSearch from "./volt-search";
-import VoltFooter from "./volt-footer";
 import VoltSearchResult from "./volt-search-result";
 import VoltDesktopMap from "./volt-desktop-map";
+import { Button } from "../ui/button";
 
 const primaryLayout = `"details map" "footer map"`;
 const secondaryLayout = `"details map" "footer footer"`;
@@ -21,7 +24,53 @@ interface VoltDesktopProps {
 }
 
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
+  const { notify } = useNotification();
+
+  const [calculationPending, setCalculationPending] = useState(false);
   const [highlightedParcelNumber, setHighlightedParcelNumber] = useState<string | null>(null);
+  const [values, setValues] = useState<{
+    searchDetails: VoltSearchModel | null;
+    searchResult: VoltSearchResultModel | null;
+    selectedItem: IMap[0] | null;
+    calculation: VoltPriceCalculationRes | null;
+  }>({
+    searchDetails: null,
+    searchResult: null,
+    selectedItem: null,
+    calculation: null,
+  });
+
+  const calculatePrice = async () => {
+    if (!values.selectedItem) {
+      return;
+    }
+    const reqData: VoltPriceCalculationReq = {
+      body: {
+        county: values.selectedItem?.properties.fields.county.toLocaleLowerCase(),
+        state: values.selectedItem?.properties.fields.state2.toLocaleLowerCase(),
+        parcelNumber: values.selectedItem?.properties.fields.parcelnumb,
+        owner: values.selectedItem.properties.fields.owner,
+        propertyType: values.selectedItem.properties.fields?.zoning_description || values.selectedItem.properties.fields.usedesc || "",
+        coordinates: JSON.stringify(values.selectedItem.geometry.coordinates),
+        locality: values.selectedItem.properties.fields.city,
+      },
+      queryParams: {
+        acre: values.selectedItem.properties.fields.ll_gisacre.toString(),
+        lat: values.selectedItem.properties.fields.lat,
+        lon: values.selectedItem.properties.fields.lon,
+      },
+    };
+    setCalculationPending(true);
+
+    const { errorMessage, data } = await calculateLandPriceAction(reqData);
+    if (errorMessage) {
+      notify({ title: "Error", description: errorMessage }, { variant: "error" });
+      setCalculationPending(false);
+    } else {
+      setStep(VoltSteps.CALCULATION);
+      setValues({ ...values, calculation: data });
+    }
+  };
 
   return (
     <div
@@ -39,18 +88,19 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
         <div className="overflow-hidden grid">
           <ScrollArea className="" id="volt-scroll">
             <div className="overflow-hidden flex flex-col gap-8 px-5 lg:px-8 xl:px-11">
-              {(step === VoltSteps.SEARCH || step === VoltSteps.SEARCH_RESULTS) && (
-                <VoltSearch user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
-              )}
-              {step === VoltSteps.SEARCH_RESULTS && (
+              <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
+              {step === VoltSteps.SEARCH && (
                 <VoltSearchResult
                   onSearchResultItemHover={(parcelNumberNoFormatting) => setHighlightedParcelNumber(parcelNumberNoFormatting)}
                   onSearchResultItemMouseLeave={() => {
                     // setHighlightedParcelNumber(null)
                   }}
                   highlightedParcelNumber={highlightedParcelNumber}
+                  values={values}
+                  setValues={setValues}
                 />
               )}
+              {step === VoltSteps.CALCULATION && "pricee"}
             </div>
           </ScrollArea>
         </div>
@@ -62,13 +112,36 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
           onMarkerMouseEnter={(parcelNumberNoFormatting) => {
             setHighlightedParcelNumber(parcelNumberNoFormatting);
           }}
+          values={values}
+          setValues={setValues}
           onMarkerMouseLeave={() => {
             // setHighlightedParcelNumber(null);
           }}
         />
       </div>
-      <div className="px-5 lg:px-8 xl:px-11 h-fit" style={{ gridArea: "footer" }}>
-        <VoltFooter />
+      <div className={cn("px-5 lg:px-8 xl:px-11 h-fit", step > 0 && "border-t border-t-grey-100")} style={{ gridArea: "footer" }}>
+        <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 mt-auto")}>
+          {step === VoltSteps.SEARCH_RESULTS && (
+            <div className="flex gap-3">
+              <Button className="w-full bg-grey-100 hover:bg-grey-200 text-black">Save Data</Button>
+              <Button loading={calculationPending} onClick={calculatePrice} disabled={!values.selectedItem} className="w-full">
+                Calculate Price
+              </Button>
+            </div>
+          )}
+          <div className="flex gap-3 items-center justify-center lg:justify-start">
+            <Link href="/">
+              <p className="text-sm text-gray-800">Privacy Policy</p>
+            </Link>
+            <div className="w-[1px] h-4 bg-gray-200" />
+            <Link href="/">
+              <p className="text-sm text-gray-800">Terms of use</p>
+            </Link>
+          </div>
+          <p className="text-xs font-medium text-grey-600 text-center lg:text-start">
+            ©{new Date().getFullYear()} Parcel Market. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
   );
