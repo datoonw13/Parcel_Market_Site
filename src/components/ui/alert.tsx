@@ -3,6 +3,8 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { HTMLAttributes, forwardRef } from "react";
 import { LuInfo } from "react-icons/lu";
+import { IoMdClose } from "react-icons/io";
+import { Button } from "./button";
 
 const alertVariants = cva(
   "relative w-full rounded-lg p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-neutral-950 dark:border-neutral-800 dark:[&>svg]:text-neutral-50",
@@ -35,8 +37,18 @@ const AlertDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPar
 ));
 AlertDescription.displayName = "AlertDescription";
 
-const Alert = ({ title, description, variant }: { title?: string; description?: string } & VariantProps<typeof alertVariants>) => (
-  <Wrapper variant={variant}>
+const Alert = ({
+  title,
+  description,
+  variant,
+  handleClose,
+}: { title?: string; description?: string; handleClose?: () => void } & VariantProps<typeof alertVariants>) => (
+  <Wrapper variant={variant} className="relative">
+    {handleClose && (
+      <div onClick={handleClose} className="!absolute right-[16px] top-5 cursor-pointer">
+        <IoMdClose className="" />
+      </div>
+    )}
     <LuInfo
       className={cn(
         "mt-[2px] size-5",

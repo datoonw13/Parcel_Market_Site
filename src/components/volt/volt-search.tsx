@@ -65,6 +65,10 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess }) => {
       setNotFoundAlert(true);
     } else {
       setVoltSlice((prev) => ({ ...prev, searchDetails: { ...data }, searchResult: properties }));
+      onSuccess();
+      if (showNotFoundAlert) {
+        setNotFoundAlert(false);
+      }
     }
   });
 
@@ -186,18 +190,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess }) => {
             error={!!errors.county}
           />
         </div>
-        <AutoComplete
-          options={states}
-          emptyMessage="No results."
-          placeholder="State"
-          error={!!errors.state}
-          onValueChange={(item) => {
-            setValue("state", item?.value || "", { shouldValidate: isSubmitted });
-            setValue("county", "", { shouldValidate: isSubmitted });
-          }}
-          value={getStateValue(watch("state"))}
-          disabled={disableSearch}
-        />
         <Button disabled={disableSearch} loading={isSubmitting} onClick={onSubmit} className="mt-1">
           Search
         </Button>
@@ -211,6 +203,14 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess }) => {
           </Link>
         </p>
       </div>
+      {showNotFoundAlert && (
+        <Alert
+          handleClose={() => setNotFoundAlert(false)}
+          variant="warning"
+          title="We could not find your property."
+          description="Please check your information and try again."
+        />
+      )}
       {showUnauthorizedUserError && (
         <Alert
           variant="warning"

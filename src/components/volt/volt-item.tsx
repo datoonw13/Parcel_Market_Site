@@ -1,5 +1,6 @@
-import { moneyFormatter } from "@/helpers/common";
+import { removeParcelNumberFormatting, moneyFormatter } from "@/helpers/common";
 import { cn } from "@/lib/utils";
+import { IMap } from "@/types/map";
 import React, { FC } from "react";
 
 interface VoltItemProps {
@@ -10,18 +11,33 @@ interface VoltItemProps {
     pricePerAcre: number | null;
   };
   selected?: boolean;
+  onHover?: (parcelNumberNoFormatting: string) => void;
+  onMouseLeave?: (parcelNumberNoFormatting: string) => void;
+  onSelect: (parcelNumberNoFormatting: string) => void;
+  id: string;
+  isHighlighted?: boolean;
 }
 
-const VoltItem: FC<VoltItemProps> = ({ data, selected }) => (
-  <div className={cn("p-5 rounded-2xl border border-gray-100 space-y-2 cursor-pointer", selected && "shadow-5 border-primary-main-400")}>
-    <div className="flex justify-between items-center gap-4">
-      <div>
-        <p className="text-lg font-semibold">{data.owner}</p>
+const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, onSelect, id, isHighlighted }) => (
+  <div
+    className={cn(
+      "p-5 rounded-2xl border border-gray-100 space-y-2 cursor-pointer",
+      selected && "shadow-5 !border-primary-main-400",
+      isHighlighted && "shadow-5 border-primary-main-100",
+      "hover:shadow-5 hover:border-primary-main-100"
+    )}
+    onMouseEnter={() => onHover && onHover(removeParcelNumberFormatting(data.parcelNumber))}
+    onMouseLeave={() => onMouseLeave && onMouseLeave(removeParcelNumberFormatting(data.parcelNumber))}
+    onClick={() => onSelect(removeParcelNumberFormatting(data.parcelNumber))}
+  >
+    <div className="w-full flex justify-between items-center gap-6" id={id}>
+      <div className="grid">
+        <p className="text-lg font-semibold truncate">{data.owner} წქდ ქწდ </p>
         <p className="text-xs text-grey-600 font-medium">Business owner</p>
       </div>
-      <div>
-        <p className="text-sm text-grey-600 font-medium">Parcel Number:</p>
-        <p className="text-sm font-medium">{data.parcelNumber}</p>
+      <div className="grid" style={{ maxWidth: 110 }}>
+        <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
+        <p className="text-sm font-medium truncate">{data.parcelNumber} qwdqwd qwd qwd qwdqwdd q qwdqwdqdqd</p>
       </div>
     </div>
     <hr className="bg-gray-100" />

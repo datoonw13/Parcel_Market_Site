@@ -15,7 +15,7 @@ import { ISignInResponse } from "@/types/auth";
 import { Nullable } from "@/types/common";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { PropertyPriceCalculationReq } from "@/types/property";
-import { formatParcelNumber } from "@/helpers/common";
+import { removeParcelNumberFormatting } from "@/helpers/common";
 import ValueLandStepper from "./value-land-stepper";
 import { LocationIcon1 } from "../icons/LocationIcons";
 import CalculationTermsModal from "./calculation-terms/terms-modal";
@@ -88,14 +88,16 @@ const ValueLandFound = ({ user }: { user: Nullable<ISignInResponse["payload"]> }
                     markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
                   }}
                   markerMouseEnter={(parcelNumber) => {
-                    setHoveredItem(formatParcelNumber(parcelNumber));
+                    setHoveredItem(removeParcelNumberFormatting(parcelNumber));
                   }}
                   markerMouseLeave={(value) => {
                     setHoveredItem(null);
                   }}
                   popupOpen={(parcelNumber) => {
                     const selectedLand = valueLand.lands?.find(
-                      (el) => formatParcelNumber(el.properties.fields.parcelnumb_no_formatting || "") === formatParcelNumber(parcelNumber)
+                      (el) =>
+                        removeParcelNumberFormatting(el.properties.fields.parcelnumb_no_formatting || "") ===
+                        removeParcelNumberFormatting(parcelNumber)
                     );
                     if (selectedLand) {
                       setValueLand((prev) => ({ ...prev, selectedLand }));

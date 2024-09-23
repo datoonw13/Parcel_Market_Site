@@ -2,7 +2,7 @@
 
 import { FC, useRef, useState } from "react";
 import { Marker } from "leaflet";
-import { formatParcelNumber } from "@/helpers/common";
+import { removeParcelNumberFormatting } from "@/helpers/common";
 import CalculationMap from "./calculation-map";
 import LandPriceCalculationTable from "./calculation-table";
 
@@ -60,9 +60,9 @@ const TableWithMap: FC<TableWithMapProps> = ({ isUserSubscriptionTrial, properti
         selectedItemParcelNumber={selectedItemParcelNumber}
         hoveredItemParcelNumber={hoveredItemParcelNumber}
         onSelect={(parcelNumber) => {
-          const property = properties.find((el) => formatParcelNumber(el.parcelNumber) === formatParcelNumber(parcelNumber));
+          const property = properties.find((el) => removeParcelNumberFormatting(el.parcelNumber) === removeParcelNumberFormatting(parcelNumber));
           const isSellingLandHistory =
-            property && formatParcelNumber(property.parcelNumber) === formatParcelNumber(sellingProperty.parcelNumber);
+            property && removeParcelNumberFormatting(property.parcelNumber) === removeParcelNumberFormatting(sellingProperty.parcelNumber);
           setSelectedItemParcelNumber(parcelNumber);
           if (markerRefs.current) {
             markerRefs.current?.[isSellingLandHistory ? sellingProperty.parcelNumber : parcelNumber]?.openPopup();

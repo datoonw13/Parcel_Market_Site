@@ -7,6 +7,7 @@ import { Icon, Map as LeafletMap, Marker as LeafletMaker, LatLngExpression } fro
 import { Fragment, ReactElement, ReactNode } from "react";
 import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
 import { getCenter } from "geolib";
+import { removeParcelNumberFormatting } from "@/helpers/common";
 
 interface IProps {
   dragging?: boolean;
@@ -17,16 +18,16 @@ interface IProps {
     center?: boolean;
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
-    markerType?: "default" | "active" | "none";
+    markerType?: "default" | "active" | "none" | "highlighted";
     popup?: ReactElement;
   }>;
   setMapRef?: (ref: LeafletMap) => void;
-  setMarkerRef?: (parcelNumber: string, ref: LeafletMaker) => void;
-  markerMouseEnter?: (parcelNumber: string) => void;
-  markerMouseLeave?: (parcelNumber: string) => void;
-  popupOpen?: (parcelNumber: string) => void;
-  popupClose?: (parcelNumber: string) => void;
-  onMarkerClick?: (parcelNumber: string) => void;
+  setMarkerRef?: (parcelNumberNoFormatting: string, ref: LeafletMaker) => void;
+  markerMouseEnter?: (parcelNumberNoFormatting: string) => void;
+  markerMouseLeave?: (parcelNumberNoFormatting: string) => void;
+  popupOpen?: (parcelNumberNoFormatting: string) => void;
+  popupClose?: (parcelNumberNoFormatting: string) => void;
+  onMarkerClick?: (parcelNumberNoFormatting: string) => void;
   disableZoom?: boolean;
   highlightItemParcelNumber?: string | null;
 }
@@ -36,14 +37,22 @@ const markerDefault = new Icon({
   iconSize: [28, 36],
 });
 
+const markerHighlighted = new Icon({
+  iconUrl: "/map-highlighted-icon.svg",
+  iconSize: [28, 36],
+});
+
 const markerActive = new Icon({
   iconUrl: "/map-active-icon.svg",
   iconSize: [36, 48],
 });
 
 const getMarkerIcon = (mapItem: IProps["properties"][0], highlightItemParcelNumber?: string | null) => {
-  if (mapItem.markerType === "active" || highlightItemParcelNumber === mapItem.parcelNumber) {
+  if (mapItem.markerType === "active") {
     return markerActive;
+  }
+  if (mapItem.markerType === "highlighted" || highlightItemParcelNumber === mapItem.parcelNumber) {
+    return markerHighlighted;
   }
   return markerDefault;
 };
@@ -80,6 +89,7 @@ const Map = ({
 
   return (
     <MapContainer
+      key={properties.map((el) => el.parcelNumber).join(";")}
       zoomControl={!disableZoom}
       zoom={zoom}
       dragging={dragging}
@@ -136,15 +146,25 @@ const Map = ({
             {mapItem.markerType !== "none" && (
               <Marker
                 eventHandlers={{
-                  mouseover: () => markerMouseEnter && markerMouseEnter(mapItem.parcelNumber),
-                  mouseout: () => markerMouseLeave && markerMouseLeave(mapItem.parcelNumber),
-                  popupopen: () => popupOpen && popupOpen(mapItem.parcelNumber),
-                  popupclose: () => popupClose && popupClose(mapItem.parcelNumber),
-                  click: () => onMarkerClick && onMarkerClick(mapItem.parcelNumber),
+                  mouseover: (e) => {
+                    if (mapItem.markerType !== "active") {
+                      e.target.setIcon(markerHighlighted);
+                    }
+                    markerMouseEnter && markerMouseEnter(removeParcelNumberFormatting(mapItem.parcelNumber));
+                  },
+                  mouseout: (e) => {
+                    if (mapItem.markerType !== "active") {
+                      e.target.setIcon(getMarkerIcon(mapItem));
+                    }
+                    markerMouseLeave && markerMouseLeave(removeParcelNumberFormatting(mapItem.parcelNumber));
+                  },
+                  popupopen: () => popupOpen && popupOpen(removeParcelNumberFormatting(mapItem.parcelNumber)),
+                  popupclose: () => popupClose && popupClose(removeParcelNumberFormatting(mapItem.parcelNumber)),
+                  click: () => onMarkerClick && onMarkerClick(removeParcelNumberFormatting(mapItem.parcelNumber)),
                 }}
                 ref={(ref) => {
                   if (setMarkerRef && ref) {
-                    setMarkerRef(mapItem.parcelNumber, ref);
+                    setMarkerRef(removeParcelNumberFormatting(mapItem.parcelNumber), ref);
                   }
                 }}
                 icon={getMarkerIcon(mapItem, highlightItemParcelNumber)}

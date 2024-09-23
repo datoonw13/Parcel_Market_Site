@@ -1,6 +1,6 @@
 "use client";
 
-import { formatParcelNumber, moneyFormatter } from "@/helpers/common";
+import { removeParcelNumberFormatting, moneyFormatter } from "@/helpers/common";
 import { Marker } from "leaflet";
 import dynamic from "next/dynamic";
 import { FC } from "react";
@@ -35,7 +35,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
   highlightItemParcelNumber,
 }) => {
   const mainLandSaleHistory = properties.filter(
-    (property) => formatParcelNumber(property.parcelNumber) === formatParcelNumber(sellingProperty.parcelNumber)
+    (property) => removeParcelNumberFormatting(property.parcelNumber) === removeParcelNumberFormatting(sellingProperty.parcelNumber)
   );
 
   const mapItems = [
@@ -79,7 +79,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
       .filter((property) =>
         mainLandSaleHistory.length > 0
           ? mainLandSaleHistory.find(
-              (saleHistory) => formatParcelNumber(saleHistory.parcelNumber) !== formatParcelNumber(property.parcelNumber)
+              (saleHistory) => removeParcelNumberFormatting(saleHistory.parcelNumber) !== removeParcelNumberFormatting(property.parcelNumber)
             )
           : true
       )

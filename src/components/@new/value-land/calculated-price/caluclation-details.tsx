@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, formatParcelNumber, moneyFormatter } from "@/helpers/common";
+import { cn, removeParcelNumberFormatting, moneyFormatter } from "@/helpers/common";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import clsx from "clsx";
@@ -111,14 +111,14 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
                 }}
                 onMouseEnter={() => {
                   const isSellingProperty =
-                    formatParcelNumber(el.parcelNumber) ===
-                    formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "");
+                    removeParcelNumberFormatting(el.parcelNumber) ===
+                    removeParcelNumberFormatting(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "");
                   setValueLandData((prev) => ({
                     ...prev,
                     mapInteraction: {
                       hoveredLand: isSellingProperty
-                        ? formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
-                        : formatParcelNumber(el.parcelNumber),
+                        ? removeParcelNumberFormatting(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
+                        : removeParcelNumberFormatting(el.parcelNumber),
                     },
                   }));
                 }}
@@ -128,7 +128,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
               >
                 <LocationIcon2
                   className={clsx(
-                    formatParcelNumber(valueLandData.mapInteraction.hoveredLand || "") === formatParcelNumber(el.parcelNumber)
+                    removeParcelNumberFormatting(valueLandData.mapInteraction.hoveredLand || "") === removeParcelNumberFormatting(el.parcelNumber)
                       ? "!w-6 min-w-6 !h-8 min-h-8 [&>path:first-child]:!fill-[#F44D61]"
                       : "!w-5 min-w-5 !h-6 min-h-6 "
                   )}

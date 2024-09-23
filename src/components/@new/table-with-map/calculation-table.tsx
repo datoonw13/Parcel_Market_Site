@@ -10,7 +10,7 @@ import Image from "next/image";
 import { LatLngTuple } from "leaflet";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { formatParcelNumber, moneyFormatter } from "@/helpers/common";
+import { removeParcelNumberFormatting, moneyFormatter } from "@/helpers/common";
 import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
@@ -149,8 +149,8 @@ const LandPriceCalculationTable = ({
                 key={item.latitude + item.longitude}
                 className={clsx(
                   "transition-all duration-100 cursor-pointer",
-                  formatParcelNumber(selectedItemParcelNumber || "") === formatParcelNumber(item.parcelNumber) && "bg-primary-main-100",
-                  formatParcelNumber(hoveredItemParcelNumber || "") === formatParcelNumber(item.parcelNumber) && "bg-primary-main-50"
+                  removeParcelNumberFormatting(selectedItemParcelNumber || "") === removeParcelNumberFormatting(item.parcelNumber) && "bg-primary-main-100",
+                  removeParcelNumberFormatting(hoveredItemParcelNumber || "") === removeParcelNumberFormatting(item.parcelNumber) && "bg-primary-main-50"
                 )}
                 onClick={() => onSelect(item.parcelNumber)}
                 onMouseEnter={() => onMouseEnter(item.parcelNumber)}

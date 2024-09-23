@@ -24,4 +24,4 @@ export const maskEmail = (email: string) =>
 
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
-export const formatParcelNumber = (parcelNumber: string) => parcelNumber.replace(/[^a-zA-Z0-9]/g, "");
+export const removeParcelNumberFormatting = (parcelNumber: string) => parcelNumber.replace(/[^a-zA-Z0-9]/g, "");

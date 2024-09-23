@@ -1,7 +1,7 @@
 "use client";
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import { formatParcelNumber, moneyFormatter } from "@/helpers/common";
+import { removeParcelNumberFormatting, moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { useAtom } from "jotai";
 import { LatLngTuple, Marker } from "leaflet";
@@ -25,8 +25,8 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
 
   const mainLandSaleHistory = valueLandData.calculatedPrice?.properties.filter(
     (property) =>
-      formatParcelNumber(property?.parselId || "") ===
-      formatParcelNumber(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
+      removeParcelNumberFormatting(property?.parselId || "") ===
+      removeParcelNumberFormatting(valueLandData.selectedLand?.properties.fields.parcelnumb_no_formatting || "")
   );
 
   const mapItems = [
@@ -74,16 +74,16 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
       .filter((property) =>
         mainLandSaleHistory && mainLandSaleHistory.length > 0
           ? mainLandSaleHistory.find(
-              (saleHistory) => formatParcelNumber(saleHistory?.parselId || "") !== formatParcelNumber(property.parselId)
+              (saleHistory) => removeParcelNumberFormatting(saleHistory?.parselId || "") !== removeParcelNumberFormatting(property.parselId)
             )
           : true
       )
       .map((el) => ({
         ...el,
-        id: formatParcelNumber(el?.parselId || uuid()),
+        id: removeParcelNumberFormatting(el?.parselId || uuid()),
         latitude: Number(el.latitude),
         longitude: Number(el.longitude),
-        parcelNumber: formatParcelNumber(el?.parselId || uuid()),
+        parcelNumber: removeParcelNumberFormatting(el?.parselId || uuid()),
         ...(user &&
           user.isSubscribed && {
             popup: (
