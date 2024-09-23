@@ -15,7 +15,7 @@ import { InfoIcon2 } from "../../icons/InfoIcons";
 const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const [openWarningModal, setOpenWarningModal] = useState(false);
 
@@ -128,7 +128,8 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
               >
                 <LocationIcon2
                   className={clsx(
-                    removeParcelNumberFormatting(valueLandData.mapInteraction.hoveredLand || "") === removeParcelNumberFormatting(el.parcelNumber)
+                    removeParcelNumberFormatting(valueLandData.mapInteraction.hoveredLand || "") ===
+                      removeParcelNumberFormatting(el.parcelNumber)
                       ? "!w-6 min-w-6 !h-8 min-h-8 [&>path:first-child]:!fill-[#F44D61]"
                       : "!w-5 min-w-5 !h-6 min-h-6 "
                   )}

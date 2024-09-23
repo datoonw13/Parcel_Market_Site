@@ -21,7 +21,7 @@ interface FollowedPropertiesProps {
 }
 const FollowedProperties: FC<FollowedPropertiesProps> = ({ user, totalItems, children, filters }) => {
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
   const pathname = usePathname();
 

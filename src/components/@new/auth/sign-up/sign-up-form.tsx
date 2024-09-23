@@ -27,7 +27,7 @@ interface SignUpProps {
 const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const access_token = searchParams.get("access_token");
   const firstName = searchParams.get("firstName");
   const lastName = searchParams.get("lastName");

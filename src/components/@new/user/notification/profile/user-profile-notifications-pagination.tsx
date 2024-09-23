@@ -10,7 +10,7 @@ const UserProfileNotificationsPagination = ({ totalCount }: { totalCount: number
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
+  const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const page = Number(params.get("page")) || 1;
 
   const handleChange = useCallback(

@@ -32,7 +32,7 @@ const OrderDetails = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
 
   return (
     <div className="border border-grey-100 rounded-2xl w-full bg-white h-fit">

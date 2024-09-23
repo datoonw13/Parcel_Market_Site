@@ -15,7 +15,7 @@ import { InfoIcon2 } from "../../icons/InfoIcons";
 const SaveCalculationData = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
+  const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const [valueLand, setValueLand] = useAtom(valueLandAtom);
   const [saveDataPending, setSaveDataPending] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);

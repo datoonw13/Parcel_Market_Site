@@ -149,8 +149,10 @@ const LandPriceCalculationTable = ({
                 key={item.latitude + item.longitude}
                 className={clsx(
                   "transition-all duration-100 cursor-pointer",
-                  removeParcelNumberFormatting(selectedItemParcelNumber || "") === removeParcelNumberFormatting(item.parcelNumber) && "bg-primary-main-100",
-                  removeParcelNumberFormatting(hoveredItemParcelNumber || "") === removeParcelNumberFormatting(item.parcelNumber) && "bg-primary-main-50"
+                  removeParcelNumberFormatting(selectedItemParcelNumber || "") === removeParcelNumberFormatting(item.parcelNumber) &&
+                    "bg-primary-main-100",
+                  removeParcelNumberFormatting(hoveredItemParcelNumber || "") === removeParcelNumberFormatting(item.parcelNumber) &&
+                    "bg-primary-main-50"
                 )}
                 onClick={() => onSelect(item.parcelNumber)}
                 onMouseEnter={() => onMouseEnter(item.parcelNumber)}

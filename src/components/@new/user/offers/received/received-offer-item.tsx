@@ -23,7 +23,7 @@ interface ReceivedOfferItemProps {
 const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const isSmallDevice = useMediaQuery(1024);
   const router = useRouter();
   const pathname = usePathname();

@@ -18,7 +18,7 @@ const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false })
 const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const [valueLandData, setValueLandData] = useAtom(valueLandAtom);
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const [openWarningModal, setOpenWarningModal] = useState(false);
@@ -49,7 +49,9 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
             Price Per Acreage:{" "}
             <b>
               {valueLandData.calculatedPrice &&
-                moneyFormatter.format(valueLandData.calculatedPrice.price / Number(valueLandData.selectedLand?.properties.fields.ll_gisacre))}
+                moneyFormatter.format(
+                  valueLandData.calculatedPrice.price / Number(valueLandData.selectedLand?.properties.fields.ll_gisacre)
+                )}
             </b>
           </p>
           {mainLandSaleHistory && mainLandSaleHistory?.length > 0 && (

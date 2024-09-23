@@ -40,7 +40,7 @@ const PaymentMethods = ({
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const [paymentMethod, setPaymentMethod] = useState<string | null>("stripe");
   const hasUserActiveSubscription = userSubscriptions?.find((el) => el.status === "active");
   const { notify } = useNotification();

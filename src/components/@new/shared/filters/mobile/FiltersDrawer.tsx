@@ -103,7 +103,7 @@ const FiltersDrawer: FC<FiltersDrawerProps> = ({ data, disabled }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
+  const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const [localFilters, setLocalFilters] = useState<{ [key: string]: string | number | null } | null>(null);
   const [openFilter, setOpenFilter] = useState<string | null>(null);
   const [open, setOpen] = useState(false);

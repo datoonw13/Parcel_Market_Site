@@ -25,7 +25,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const [sentOffersOptions, setSentOffersOption] = useAtom(sentOffersAtom);
 
   const state = getAllStates().find((el) => el.value === data.sellingProperty.state.toLocaleLowerCase());

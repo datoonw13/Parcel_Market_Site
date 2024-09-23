@@ -34,6 +34,7 @@ const UserFollowedPropertiesList = ({
 
   useEffect(() => {
     if (data?.list && userFollowedPropertiesOptions.list && stringifiedFilters !== Object.keys(userFollowedPropertiesOptions.list)[0]) {
+      // @ts-ignore
       setUserFollowedPropertiesOptions((prev) => ({ ...prev, list: { [stringifiedFilters]: data.list } || null }));
     }
   }, [data?.list, filters, setUserFollowedPropertiesOptions, stringifiedFilters, userFollowedPropertiesOptions.list]);

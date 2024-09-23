@@ -60,7 +60,9 @@ const TableWithMap: FC<TableWithMapProps> = ({ isUserSubscriptionTrial, properti
         selectedItemParcelNumber={selectedItemParcelNumber}
         hoveredItemParcelNumber={hoveredItemParcelNumber}
         onSelect={(parcelNumber) => {
-          const property = properties.find((el) => removeParcelNumberFormatting(el.parcelNumber) === removeParcelNumberFormatting(parcelNumber));
+          const property = properties.find(
+            (el) => removeParcelNumberFormatting(el.parcelNumber) === removeParcelNumberFormatting(parcelNumber)
+          );
           const isSellingLandHistory =
             property && removeParcelNumberFormatting(property.parcelNumber) === removeParcelNumberFormatting(sellingProperty.parcelNumber);
           setSelectedItemParcelNumber(parcelNumber);

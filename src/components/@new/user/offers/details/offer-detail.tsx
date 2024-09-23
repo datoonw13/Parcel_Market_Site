@@ -45,7 +45,8 @@ const OfferDetail = ({ data }: { data: OfferModel }) => (
         <div className="flex items-center gap-1.5">
           <MoneyIcon1 color="grey-600" />
           <p className="text-sm text-grey-600">
-            VOLT Value: <span className="font-medium ml-0.5 text-black">{moneyFormatter.format(Number(data.sellingProperty.salePrice))}</span>
+            VOLT Value:{" "}
+            <span className="font-medium ml-0.5 text-black">{moneyFormatter.format(Number(data.sellingProperty.salePrice))}</span>
           </p>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 const OfferDetailModal = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
 
   const closeModal = () => {

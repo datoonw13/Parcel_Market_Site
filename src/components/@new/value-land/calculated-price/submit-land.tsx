@@ -15,7 +15,7 @@ import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 const SubmitLand = ({ user }: { user: IDecodedAccessToken | null }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const setValueLandData = useSetAtom(valueLandAtom);
   const [openWarningModal, setOpenWarningModal] = useState(false);
 

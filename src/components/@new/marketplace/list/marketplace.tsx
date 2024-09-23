@@ -22,7 +22,7 @@ interface MarketplaceProps {
 
 const Marketplace: FC<MarketplaceProps> = ({ user, initialData, children, totalCount }) => {
   const searchPrams = useSearchParams();
-  const params = new URLSearchParams(searchPrams);
+  const params = new URLSearchParams(searchPrams.toString());
   const pathname = usePathname();
   const router = useRouter();
 

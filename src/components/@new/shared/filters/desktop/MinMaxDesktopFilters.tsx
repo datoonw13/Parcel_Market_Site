@@ -27,7 +27,7 @@ const MinMaxDesktopFilters: FC<MinMaxDesktopFiltersProps> = ({ options, placeHol
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const selectedValue = { min: Number(params.get(`${filterKey}Min`)) || null, max: Number(params.get(`${filterKey}Max`)) || null };
 
   const handleSelect = (newValue: { min: number | null; max: number | null }) => {

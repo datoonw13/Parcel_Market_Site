@@ -14,7 +14,7 @@ interface TablePaginationProps {
 }
 const TablePagination: FC<TablePaginationProps> = ({ rowsPerPage, totalCount, className, currentPage }) => {
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const pathname = usePathname();
   const router = useRouter();
   const handlePageClick = (event: any) => {

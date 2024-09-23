@@ -43,7 +43,7 @@ const Sort: FC<SortProps> = ({ options, disabled }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
   const selectedValue = params.get("sortBy");
   const [drawerTempValue, setDrawerTempValue] = useState<string | null>(null);
   const [openDrawer, setOpenDrawer] = useState(false);

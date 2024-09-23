@@ -30,7 +30,7 @@ const ValueLandDetails = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
 
   const setValueLandAtom = useSetAtom(valueLandAtom);
   const [showError, setShowError] = useState(false);

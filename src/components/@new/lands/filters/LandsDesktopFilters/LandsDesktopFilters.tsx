@@ -39,7 +39,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         getOptionKey={(item) => item.value}
         onChange={(item) => setFilters({ ...filters, state: item?.value || null, county: null })}
         placeholder="State"
-        value={getStateValue(filters.state)}
+        value={getStateValue(filters.state) as any}
         onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
         getSelectedOption={(item) => item.value === filters.state}
       />
