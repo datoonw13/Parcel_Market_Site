@@ -14,9 +14,10 @@ import VoltSearchResult from "./volt-search-result";
 import VoltDesktopMap from "./volt-desktop-map";
 import { Button } from "../ui/button";
 import VoltCalculation from "./volt-calculation";
+import VoltPriceCalculationAxis from "./volt-calculation-axis";
 
 const primaryLayout = `"details map" "footer map"`;
-const secondaryLayout = `"details map" "footer footer"`;
+const secondaryLayout = `"details map" "footer axis"`;
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -79,16 +80,17 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
     const { errorMessage, data } = await calculateLandPriceAction(reqData);
     if (errorMessage) {
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
-      setCalculationPending(false);
     } else {
       setStep(VoltSteps.CALCULATION);
       setValues({ ...values, calculation: data });
+      setHighlightedParcelNumber(null);
     }
+    setCalculationPending(false);
   };
 
   return (
     <div
-      style={{ gridTemplateAreas: primaryLayout }}
+      style={{ gridTemplateAreas: step === VoltSteps.CALCULATION ? secondaryLayout : primaryLayout }}
       className={cn(
         "hidden lg:grid h-full w-full grid-rows-[1fr_minmax(0,_max-content)] grid-cols-[350px_1fr] lg:grid-cols-[406px_1fr] xl:grid-cols-[490px_1fr]"
       )}
@@ -151,7 +153,14 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
           }}
         />
       </div>
-      <div className={cn("px-5 lg:px-8 xl:px-11 h-fit mt-6", step > 0 && "border-t border-t-grey-100")} style={{ gridArea: "footer" }}>
+      <div
+        className={cn(
+          "px-5 lg:px-8 xl:px-11 h-fit ",
+          step > 0 && "border-t border-t-grey-100",
+          step === VoltSteps.CALCULATION && "flex mt-auto h-full"
+        )}
+        style={{ gridArea: "footer" }}
+      >
         <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 mt-auto")}>
           {step === VoltSteps.SEARCH_RESULTS && (
             <div className="flex gap-3">
@@ -175,6 +184,30 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step }) => {
           </p>
         </div>
       </div>
+      {step === VoltSteps.CALCULATION && (
+        <div style={{ gridArea: "axis" }} className=" border-t border-t-grey-100 pt-4 md:pt-6 md:pb-8 px-6">
+          <VoltPriceCalculationAxis
+            data={
+              values.calculation?.properties.map((el) => ({
+                parcelNumber: el.parselId || "",
+                acreage: Number(Number(el.arcage).toFixed(2)),
+                price: el.price,
+                pricePerAcre: Number(el.price / Number(el.arcage)),
+              })) || []
+            }
+            highlightedParcelNumber={highlightedParcelNumber}
+            onPinHover={(parcelNumberNoFormatting) => {
+              setHighlightedParcelNumber(parcelNumberNoFormatting);
+              if (!isElementVisible(parcelNumberNoFormatting, step)) {
+                const item = document.getElementById(`calculation-${parcelNumberNoFormatting}`);
+                if (item) {
+                  item.scrollIntoView();
+                }
+              }
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

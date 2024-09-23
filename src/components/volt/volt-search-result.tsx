@@ -42,7 +42,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
   }, []);
 
   return (
-    <div ref={ref} className="space-y-4">
+    <div ref={ref} className="space-y-4 pb-6">
       <div className="space-y-1">
         <h1 className="font-semibold text-lg">Did we find your property?</h1>
         <h2 className="text-sm text-grey-800">Use the map or list below to select your property.</h2>
