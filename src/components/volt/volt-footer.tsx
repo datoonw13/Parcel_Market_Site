@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import React from "react";
 
-const VoltFooter = ({ className }: { className?: string }) => (
-  <div className={cn("shadow-4 sticky top-0 space-y-4 p-4 md:pt-6 md:pb-8 mt-auto", className)}>
+const VoltFooter = () => (
+  <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 mt-auto")}>
     <div className="flex gap-3 items-center justify-center lg:justify-start">
       <Link href="/">
         <p className="text-sm text-gray-800">Privacy Policy</p>

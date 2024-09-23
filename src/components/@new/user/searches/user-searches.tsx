@@ -1,6 +1,6 @@
 import React from "react";
 import { getUserSearches } from "@/server-actions/user-searches/actions";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import SearchAccordion from "./search-accordion";
 import SearchDetails from "./search-details";
@@ -29,7 +29,7 @@ const UserSearches = async ({ searchParams }: { searchParams: { [key: string]: s
               <SearchAccordion
                 title={`${getStateValue(item.state)?.label}/${getCountyValue(item.county, item.state)?.label}/${
                   item.acrage
-                }/${numFormatter.format(Number(item.price))}`}
+                }/${moneyFormatter.format(Number(item.price))}`}
                 id={item.id}
                 key={item.id}
               >

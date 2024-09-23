@@ -10,7 +10,7 @@ import Image from "next/image";
 import { LatLngTuple } from "leaflet";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { formatParcelNumber, numFormatter } from "@/helpers/common";
+import { formatParcelNumber, moneyFormatter } from "@/helpers/common";
 import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
@@ -76,8 +76,8 @@ const LandPriceCalculationTable = ({
         parcelNumber: el.parcelNumber,
         county: el.county,
         acreage: el.acreage,
-        lastSalePrice: numFormatter.format(Number(el.lastSalePrice)),
-        pricePerAcre: numFormatter.format(el.pricePerAcre),
+        lastSalePrice: moneyFormatter.format(Number(el.lastSalePrice)),
+        pricePerAcre: moneyFormatter.format(el.pricePerAcre),
         lastSaleDate: el.lastSaleDate,
       }))
     );
@@ -169,10 +169,10 @@ const LandPriceCalculationTable = ({
                   {item.acreage}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {numFormatter.format(item.lastSalePrice)}
+                  {moneyFormatter.format(item.lastSalePrice)}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
-                  {numFormatter.format(item.pricePerAcre)}
+                  {moneyFormatter.format(item.pricePerAcre)}
                 </td>
                 <td className="py-3 px-6 text-grey-800 text-xs" align="left">
                   {moment(item.lastSaleDate).format("DD-MM-YYYY")}

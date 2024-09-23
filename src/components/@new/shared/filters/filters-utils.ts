@@ -1,4 +1,4 @@
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 
 export const getMinMaxFilterLabel = (priceMin: number | null, priceMax: number | null) => {
   if (!priceMin && !priceMax) {
@@ -6,13 +6,13 @@ export const getMinMaxFilterLabel = (priceMin: number | null, priceMax: number |
   }
 
   if (typeof priceMax === "number" && (typeof priceMin !== "number" || priceMin === 0)) {
-    return `N/A - ${numFormatter.format(priceMax)}`;
+    return `N/A - ${moneyFormatter.format(priceMax)}`;
   }
   if ((typeof priceMax !== "number" || priceMax === 0) && typeof priceMin === "number") {
-    return `${numFormatter.format(priceMin)} +`;
+    return `${moneyFormatter.format(priceMin)} +`;
   }
   if (typeof priceMax === "number" && typeof priceMin === "number") {
-    return `${numFormatter.format(priceMin)} - ${numFormatter.format(priceMax)}`;
+    return `${moneyFormatter.format(priceMin)} - ${moneyFormatter.format(priceMax)}`;
   }
   return "";
 };

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const propertyAddressValidation = z.object({
+const propertyLocationSchema = z.object({
   state: z.string().min(1),
   county: z.string().min(1),
 });
@@ -66,4 +66,4 @@ export const aboutPropertySchema = z.object({
   agreement: z.literal<boolean>(true),
 });
 
-export const voltSearchSchema = z.intersection(propertyAddressValidation, propertyOwnerValidation);
+export const voltSearchSchema = z.intersection(propertyLocationSchema, propertyOwnerValidation);

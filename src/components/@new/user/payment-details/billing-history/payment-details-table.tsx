@@ -3,7 +3,7 @@
 import { CheckIcon4 } from "@/components/@new/icons/CheckIcons";
 import { ExportIcon1 } from "@/components/@new/icons/ExportIcons";
 import Button from "@/components/@new/shared/forms/Button";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { IStripeCharge } from "@/types/subscriptions";
 import clsx from "clsx";
@@ -87,7 +87,7 @@ const PaymentDetailsTable = ({ data }: { data: IStripeCharge[] }) => {
               ) : null}
               {(isSmallDevice && HEADER_ROWS.find((el) => el.key === "amount")?.responsive) || !isSmallDevice ? (
                 <td className={clsx("py-3 px-6 text-grey-800 text-xs")} align="left">
-                  {numFormatter.format(el.amount / 100)}
+                  {moneyFormatter.format(el.amount / 100)}
                 </td>
               ) : null}
               {(isSmallDevice && HEADER_ROWS.find((el) => el.key === "status")?.responsive) || !isSmallDevice ? (

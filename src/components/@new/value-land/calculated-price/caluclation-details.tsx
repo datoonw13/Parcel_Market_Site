@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, formatParcelNumber, numFormatter } from "@/helpers/common";
+import { cn, formatParcelNumber, moneyFormatter } from "@/helpers/common";
 import { useAtom } from "jotai";
 import { valueLandAtom } from "@/atoms/value-land-atom";
 import clsx from "clsx";
@@ -72,7 +72,7 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
       <div className="bg-primary-main-50 border border-primary-main-400 rounded-2xl px-4 sm:px-5 md:px-6 lg:px-8 py-6 md:py-8">
         <div>
           <h2 className="text-center font-medium text-sm text-grey-800">VOLT Value</h2>
-          <h1 className="text-center font-semibold text-3xl md:text-4xl">{numFormatter.format(voltValue)}</h1>
+          <h1 className="text-center font-semibold text-3xl md:text-4xl">{moneyFormatter.format(voltValue)}</h1>
         </div>
         <div className="flex flex-col md:flex-row gap-2 items-center mt-14">
           <p className="text-xs text-grey-600 hidden md:block">Min</p>
@@ -145,19 +145,19 @@ const CalculationDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
         <div className={cn("mt-6 md:mt-2 relative")}>
           <p className="text-xs text-grey-600 md:absolute md:left-0">
             <span className="md:hidden">Minimum</span> Per Acre:{" "}
-            <span className="text-black font-medium">{numFormatter.format(minPricePerAcre)}</span>
+            <span className="text-black font-medium">{moneyFormatter.format(minPricePerAcre)}</span>
           </p>
           <p style={{ left: `${averagePrice.percent}%` }} className={cn(`text-xs text-grey-600 md:absolute md:-translate-x-1/2`)}>
             <span className="md:hidden">Average: </span>
-            <span className="text-black font-medium">{numFormatter.format(Number(averagePrice.value))}</span>
+            <span className="text-black font-medium">{moneyFormatter.format(Number(averagePrice.value))}</span>
           </p>
           {/* <p className={cn(`text-xs text-grey-600 md:absolute md:left-1/2 md:-translate-x-1/2`)}>
             <span className="md:hidden">Mid point: </span>
-            <span className={cn(`text-black font-medium`)}>{numFormatter.format(Number(xAxisMiddlePoint.value))}</span>
+            <span className={cn(`text-black font-medium`)}>{moneyFormatter.format(Number(xAxisMiddlePoint.value))}</span>
           </p> */}
           <p className="text-xs text-grey-600 md:absolute md:right-0 md:top-0">
             <span className="md:hidden">Maximum</span> Per Acre:{" "}
-            <span className="text-black font-medium">{numFormatter.format(maxPricePerAcre)}</span>
+            <span className="text-black font-medium">{moneyFormatter.format(maxPricePerAcre)}</span>
           </p>
         </div>
       </div>

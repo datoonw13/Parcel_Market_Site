@@ -1,4 +1,4 @@
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { getUserAction } from "@/server-actions/user/actions";
 import { SellingPropertyDetails } from "@/types/property";
 import Link from "next/link";
@@ -12,7 +12,7 @@ const LandDetails = async ({ data }: { data: SellingPropertyDetails }) => {
 
   const getSaleRangePerAcre = () => {
     const totalSum = data.usedForPriceCalculations!.reduce((acc, cur) => acc + Number(cur.lastSalesPrice) / Number(cur.arcage), 0);
-    return numFormatter.format(totalSum / data.usedForPriceCalculations!.length);
+    return moneyFormatter.format(totalSum / data.usedForPriceCalculations!.length);
   };
 
   return (
@@ -36,11 +36,11 @@ const LandDetails = async ({ data }: { data: SellingPropertyDetails }) => {
               Property Type: <span className="text-black">{data.propertyType || "N/A"}</span>
             </p>
             <p className="text-grey-600">
-              VOLT Value: <span className="text-black">{numFormatter.format(data.salePrice)}</span>
+              VOLT Value: <span className="text-black">{moneyFormatter.format(data.salePrice)}</span>
             </p>
             <p className="text-grey-600">
               Volt Value Per Acre:{" "}
-              <span className="text-black">{numFormatter.format(Number((data.salePrice / data.acrage).toFixed(2)))}</span>
+              <span className="text-black">{moneyFormatter.format(Number((data.salePrice / data.acrage).toFixed(2)))}</span>
             </p>
           </div>
           <div className="space-y-1.5 md:space-y-3">
@@ -49,7 +49,7 @@ const LandDetails = async ({ data }: { data: SellingPropertyDetails }) => {
             </p>
             <p className="text-grey-600">
               Price For Improvements:{" "}
-              <span className="text-black">{data.improvmentsValue ? numFormatter.format(Number(data.improvmentsValue)) : "N/A"}</span>
+              <span className="text-black">{data.improvmentsValue ? moneyFormatter.format(Number(data.improvmentsValue)) : "N/A"}</span>
             </p>
           </div>
         </div>

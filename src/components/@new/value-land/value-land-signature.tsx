@@ -1,7 +1,7 @@
 "use client";
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import routes from "@/helpers/routes";
 import CheckboxCheckedIcon from "@/icons/CheckboxCheckedIcon";
 import CheckboxIcon from "@/icons/CheckboxIcon";
@@ -52,7 +52,7 @@ const ValueLandSignature = () => {
         <Box sx={{ bgcolor: "green.100", p: 3, borderRadius: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
           <Typography sx={{ fontWeight: 500, fontSize: 14, color: "grey.800" }}>Your Free Valuation</Typography>
           <Typography sx={{ fontSize: 36, fontWeight: 600, color: "primary.main" }}>
-            {values?.salePrice && numFormatter.format(values.sellerType === "sale" ? values.salePrice : (values.salePrice * 60) / 100)}
+            {values?.salePrice && moneyFormatter.format(values.sellerType === "sale" ? values.salePrice : (values.salePrice * 60) / 100)}
           </Typography>
         </Box>
         <Box sx={{ mt: 1.5, display: "flex", justifyContent: "space-between", flexWrap: "wrap", rowGap: 1, columnGap: 3 }}>

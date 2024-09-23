@@ -1,7 +1,7 @@
 "use client";
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import { formatParcelNumber, numFormatter } from "@/helpers/common";
+import { formatParcelNumber, moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { useAtom } from "jotai";
 import { LatLngTuple, Marker } from "leaflet";
@@ -49,7 +49,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
             Price Per Acreage:{" "}
             <b>
               {valueLandData.calculatedPrice &&
-                numFormatter.format(valueLandData.calculatedPrice.price / Number(valueLandData.selectedLand?.properties.fields.ll_gisacre))}
+                moneyFormatter.format(valueLandData.calculatedPrice.price / Number(valueLandData.selectedLand?.properties.fields.ll_gisacre))}
             </b>
           </p>
           {mainLandSaleHistory && mainLandSaleHistory?.length > 0 && (
@@ -61,7 +61,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
                     Last Sale Date: <b>{history.lastSalesDate}</b>
                   </p>
                   <p className="!p-0 !m-0">
-                    Last Sale Price Per Acre: <b>{numFormatter.format(Number(history.lastSalesPrice) / Number(history.arcage))}</b>
+                    Last Sale Price Per Acre: <b>{moneyFormatter.format(Number(history.lastSalesPrice) / Number(history.arcage))}</b>
                   </p>
                 </div>
               ))}
@@ -98,7 +98,7 @@ const CalculationDetailsMap = ({ user }: { user: IDecodedAccessToken | null }) =
                   Last Sale Date: <b>{el.lastSalesDate}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Price Per Acre: <b>{numFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage))}</b>
+                  Last Sale Price Per Acre: <b>{moneyFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage))}</b>
                 </p>
               </div>
             ),

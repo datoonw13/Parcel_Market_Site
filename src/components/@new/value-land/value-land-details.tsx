@@ -200,7 +200,7 @@ const ValueLandDetails = () => {
                     setValue("state", item?.value || "", { shouldValidate: isSubmitted });
                     setValue("county", "", { shouldValidate: isSubmitted });
                   }}
-                  value={getStateValue(watch("state"))}
+                  value={getStateValue(watch("state"))}selected
                   // disabled={false}
                 /> */}
                 {/* <AutoComplete

@@ -85,6 +85,7 @@ const Map = ({
       dragging={dragging}
       center={getMapCenter()}
       scrollWheelZoom={!disableZoom}
+      doubleClickZoom={!disableZoom}
       style={{ height: "100%", width: "100%", zIndex: 0 }}
       ref={(mapRef) => {
         if (mapRef) {

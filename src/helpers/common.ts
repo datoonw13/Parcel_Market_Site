@@ -1,7 +1,7 @@
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export const numFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+export const moneyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
 export const numericInput = (number: string) => {
   // You can modify the {0,2} to match your decimal preference {min, max}

@@ -1,4 +1,4 @@
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { IMarketplaceFilters } from "@/types/lands";
 
 export const acreagesFilters = [
@@ -69,13 +69,13 @@ export const getPriceLabel = (priceMin: number | null, priceMax: number | null) 
   }
 
   if (typeof priceMax === "number" && typeof priceMin !== "number") {
-    return `N/A - ${numFormatter.format(priceMax)}`;
+    return `N/A - ${moneyFormatter.format(priceMax)}`;
   }
   if (typeof priceMax !== "number" && typeof priceMin === "number") {
-    return `${numFormatter.format(priceMin)} +`;
+    return `${moneyFormatter.format(priceMin)} +`;
   }
   if (typeof priceMax === "number" && typeof priceMin === "number") {
-    return `${numFormatter.format(priceMin)} - ${numFormatter.format(priceMax)}`;
+    return `${moneyFormatter.format(priceMin)} - ${moneyFormatter.format(priceMax)}`;
   }
   return "";
 };

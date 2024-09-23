@@ -2,7 +2,7 @@
 
 import { CalendarIcon1 } from "@/components/@new/icons/CalendarIcons";
 import Alert from "@/components/@new/shared/Alert";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { OfferModel } from "@/types/offer";
 import clsx from "clsx";
 import moment from "moment";
@@ -26,11 +26,11 @@ const OfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, i
             Buyer: <span className="ml-1 text-black">{`${data?.offerGivenBy?.firstName} ${data?.offerGivenBy?.lastName}`}</span>
           </li>
           <li>
-            Offered Price: <span className="ml-1 text-black">{numFormatter.format(Number(data.price))}</span>
+            Offered Price: <span className="ml-1 text-black">{moneyFormatter.format(Number(data.price))}</span>
           </li>
           <li>
             Price per acre:{" "}
-            <span className="ml-1 text-black">{numFormatter.format(Number(Number(data.price) / data.sellingProperty.acrage))}</span>
+            <span className="ml-1 text-black">{moneyFormatter.format(Number(Number(data.price) / data.sellingProperty.acrage))}</span>
           </li>
         </ul>
       </div>

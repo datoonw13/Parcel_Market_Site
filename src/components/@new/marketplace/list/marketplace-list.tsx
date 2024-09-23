@@ -1,7 +1,7 @@
 import { getMarketplaceListAction } from "@/server-actions/marketplace/action";
 import { getAllStates } from "@/helpers/states";
 import { getUserAction } from "@/server-actions/user/actions";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { z } from "zod";
 import { marketplaceFiltersValidations } from "@/zod-validations/filters-validations";
 import LandListItem from "../../lands/land-list-item/land-list-item";
@@ -74,7 +74,7 @@ const MarketplaceList = async ({
                     voltValue: {
                       icon: <MoneyIcon1 className="w-4 h-4 fill-grey-600" />,
                       label: "VOLT value",
-                      value: numFormatter.format(Number(land.salePrice)).toString(),
+                      value: moneyFormatter.format(Number(land.salePrice)).toString(),
                     },
                   },
                 }}

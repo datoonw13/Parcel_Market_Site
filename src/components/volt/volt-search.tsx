@@ -8,9 +8,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
-import { useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
+import { getPropertiesAction } from "@/server-actions/volt/actions";
+import { useAtom } from "jotai";
+import { voltAtom } from "@/atoms/volt-atom";
+import { VoltSearchModel } from "@/types/volt";
 import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
@@ -19,9 +23,15 @@ import { Button } from "../ui/button";
 import { AutoComplete } from "../ui/autocomplete";
 import { Alert } from "../ui/alert";
 
-type VoltSearchModel = z.infer<typeof voltSearchSchema>;
+interface VoltSearchProps {
+  user: IDecodedAccessToken | null;
+  className?: string;
+  onSuccess: () => void;
+}
 
-const PropertySearchDetails = ({ user, className }: { user: IDecodedAccessToken | null; className?: string }) => {
+const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess }) => {
+  const [voltSlice, setVoltSlice] = useAtom(voltAtom);
+  const [showNotFoundAlert, setNotFoundAlert] = useState(false);
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -34,10 +44,10 @@ const PropertySearchDetails = ({ user, className }: { user: IDecodedAccessToken 
       searchType: "parcelNumber",
     },
   });
+
   const selectedState = watch("state");
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
   const counties = useMemo(() => getCounties(selectedState), [selectedState]);
-
   const showUnauthorizedUserError = !user && watch("searchType") !== "parcelNumber";
   const showMaximumLimitReachedError = false;
   const disableSearch = showMaximumLimitReachedError || showUnauthorizedUserError;
@@ -49,8 +59,13 @@ const PropertySearchDetails = ({ user, className }: { user: IDecodedAccessToken 
     }
   };
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    const { data: properties, errorMessage } = await getPropertiesAction(data);
+    if (errorMessage) {
+      setNotFoundAlert(true);
+    } else {
+      setVoltSlice((prev) => ({ ...prev, searchDetails: { ...data }, searchResult: properties }));
+    }
   });
 
   return (
@@ -67,7 +82,7 @@ const PropertySearchDetails = ({ user, className }: { user: IDecodedAccessToken 
         <RadioGroup
           onValueChange={(value) => onSearchTypeChange(value as VoltSearchModel["searchType"])}
           value={watch("searchType")}
-          className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] gap-x-4 gap-y-3"
+          className="grid  grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] gap-x-4 gap-y-3"
         >
           <RadioGroupItem
             value="parcelNumber"
@@ -201,4 +216,4 @@ const PropertySearchDetails = ({ user, className }: { user: IDecodedAccessToken 
     </div>
   );
 };
-export default PropertySearchDetails;
+export default VoltSearch;

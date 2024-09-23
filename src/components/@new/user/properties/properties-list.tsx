@@ -1,5 +1,5 @@
 import { getAllStates } from "@/helpers/states";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { z } from "zod";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
 import { getUserListingAction } from "@/server-actions/user-listings/actions";
@@ -60,7 +60,7 @@ const UserPropertiesList = async ({
                     voltValue: {
                       icon: <MoneyIcon1 className="w-4 h-4 fill-grey-600" />,
                       label: "VOLT value",
-                      value: numFormatter.format(Number(land.salePrice)),
+                      value: moneyFormatter.format(Number(land.salePrice)),
                     },
                   },
                 }}

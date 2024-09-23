@@ -9,7 +9,7 @@ import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { receivedOffersAtom } from "@/atoms/received-offers-atom";
 import { useAtom } from "jotai";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -79,7 +79,7 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
           <div className="flex justify-between sm:flex-col sm:justify-start items-center">
             <p className="text-xs font-medium sm:text-white sm:ml-auto sm:min-w-full sm:w-max">Offered Price</p>
             <p className="font-semibold text-primary-main sm:text-white sm:text-2xl sm:min-w-full sm:w-max">
-              {numFormatter.format(Number(data.price))}
+              {moneyFormatter.format(Number(data.price))}
             </p>
           </div>
         </div>

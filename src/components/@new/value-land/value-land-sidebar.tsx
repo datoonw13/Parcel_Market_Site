@@ -1,7 +1,7 @@
 "use client";
 
 import { valueLandAtom } from "@/atoms/value-land-atom";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import routes from "@/helpers/routes";
 import FbIcon from "@/icons/FbIcon";
 import TwitterIcon from "@/icons/TwitterIcon";

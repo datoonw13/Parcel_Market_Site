@@ -1,4 +1,4 @@
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { getStateValue } from "@/helpers/states";
 import moment from "moment";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
@@ -25,7 +25,7 @@ const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
         <li className="text-primary-main-400">
           <p className="truncate text-sm text-grey-600 font-medium">
             Price per acreage:{" "}
-            <span className="text-sm text-black font-medium">{numFormatter.format(Number(data.price) / Number(data.acrage))}</span>
+            <span className="text-sm text-black font-medium">{moneyFormatter.format(Number(data.price) / Number(data.acrage))}</span>
           </p>
         </li>
         <li className="text-primary-main-400">
@@ -54,7 +54,7 @@ const SearchDetails = async ({ data }: { data: AuthedUserSearches }) => {
         </li>
         <li className="text-primary-main-400">
           <p className="truncate text-sm text-grey-600 font-medium">
-            Volt Value: <span className="text-sm text-black font-medium">{numFormatter.format(Number(data.price))}</span>
+            Volt Value: <span className="text-sm text-black font-medium">{moneyFormatter.format(Number(data.price))}</span>
           </p>
         </li>
       </ul>

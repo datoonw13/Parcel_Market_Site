@@ -6,7 +6,7 @@ import { OfferModel } from "@/types/offer";
 import { IdIcon1 } from "@/components/@new/icons/IdIcons";
 import { ResizeIcon1 } from "@/components/@new/icons/ResizeIcons";
 import { MoneyIcon1 } from "@/components/@new/icons/MoneyIcons";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import SimpleBar from "simplebar-react";
 import OfferDetailMap from "./offer-detail-map";
 import OfferDetailSection from "./offer-detail-section";
@@ -25,7 +25,7 @@ const OfferDetail = ({ data }: { data: OfferModel }) => (
         </div>
         <div className="flex sm:flex-col justify-between items-center sm:items-end">
           <p className="text-xs font-medium">Offer Price</p>
-          <p className="font-semibold text-base sm:text-lg md:text-2xl text-primary-main">{numFormatter.format(Number(data.price))}</p>
+          <p className="font-semibold text-base sm:text-lg md:text-2xl text-primary-main">{moneyFormatter.format(Number(data.price))}</p>
         </div>
       </div>
       <OfferDetailMap data={data.sellingProperty} />
@@ -45,7 +45,7 @@ const OfferDetail = ({ data }: { data: OfferModel }) => (
         <div className="flex items-center gap-1.5">
           <MoneyIcon1 color="grey-600" />
           <p className="text-sm text-grey-600">
-            VOLT Value: <span className="font-medium ml-0.5 text-black">{numFormatter.format(Number(data.sellingProperty.salePrice))}</span>
+            VOLT Value: <span className="font-medium ml-0.5 text-black">{moneyFormatter.format(Number(data.sellingProperty.salePrice))}</span>
           </p>
         </div>
       </div>

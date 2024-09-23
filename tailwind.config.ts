@@ -97,6 +97,7 @@ const config: Config = {
         "2": "6px 10px 16px 0px rgba(0, 0, 0, 0.12)",
         "3": "0px -8px 20px 0px #00000014",
         "4": "0px 0px 30px 0px rgba(0, 0, 0, 0.08)",
+        "5": "0px 4px 20px 0px rgba(0, 0, 0, 0.08)",
       },
       fontSize: {
         xss: ["0.625rem", "14px"],

@@ -7,7 +7,7 @@ import { MoneyIcon1 } from "@/components/@new/icons/MoneyIcons";
 import { ResizeIcon1 } from "@/components/@new/icons/ResizeIcons";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
-import { numFormatter } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
 import { OfferModel } from "@/types/offer";
 import moment from "moment";
@@ -94,7 +94,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
                   <MoneyIcon1 color="grey-600" />
                   <p className="text-sm text-grey-600">
                     VOLT Value:{" "}
-                    <span className="text-sm text-black font-medium">{numFormatter.format(Number(data.sellingProperty.salePrice))}</span>
+                    <span className="text-sm text-black font-medium">{moneyFormatter.format(Number(data.sellingProperty.salePrice))}</span>
                   </p>
                 </div>
               </div>
@@ -102,12 +102,12 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
               <div className="space-y-3">
                 <p className="font-semibold text-sm">Offered Price</p>
                 <p className="text-sm text-grey-600">
-                  Offered Price: <span className="text-sm text-black font-medium">{numFormatter.format(Number(data.price))}</span>
+                  Offered Price: <span className="text-sm text-black font-medium">{moneyFormatter.format(Number(data.price))}</span>
                 </p>
                 <p className="text-sm text-grey-600">
                   Offered price per acre:{" "}
                   <span className="text-sm text-black font-medium">
-                    {numFormatter.format(Number(data.price) / Number(data.sellingProperty.acrage))}
+                    {moneyFormatter.format(Number(data.price) / Number(data.sellingProperty.acrage))}
                   </span>
                 </p>
               </div>
