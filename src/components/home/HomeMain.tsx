@@ -104,7 +104,7 @@ const HomeMain = () => {
                   setCounty(null);
                 }}
                 placeholder="State"
-                value={getStateValue(state)}
+                value={getStateValue(state) as any}
                 onFilter={(searchValue, items) =>
                   items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
                 }
