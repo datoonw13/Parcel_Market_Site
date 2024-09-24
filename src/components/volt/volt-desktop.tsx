@@ -117,7 +117,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
             </Link>
           </div>
           <div className="overflow-hidden grid">
-            <ScrollArea className="" id="volt-scroll">
+            <ScrollArea className="pb-6" id="volt-scroll">
               <div className="overflow-hidden flex flex-col gap-8 px-5 lg:px-8 xl:px-11">
                 <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
                 {step === VoltSteps.SEARCH_RESULTS && (
@@ -140,6 +140,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                     highlightedParcelNumber={highlightedParcelNumber}
                     values={values}
                     setValues={setValues}
+                    user={user}
                   />
                 )}
               </div>
@@ -195,9 +196,9 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                     Calculate Price
                   </Button>
                 )}
-                {step === VoltSteps.CALCULATION && (
+                {step === VoltSteps.CALCULATION && !user && (
                   <Button
-                    className="w-full bg-grey-100 hover:bg-grey-200 text-black"
+                    className="w-full"
                     onClick={() => {
                       router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
                       sessionStorage.setItem("volt", JSON.stringify({ step, values }));
