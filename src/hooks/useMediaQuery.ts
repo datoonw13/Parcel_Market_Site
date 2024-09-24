@@ -3,15 +3,22 @@
 import { useCallback, useEffect, useState } from "react";
 
 const useMediaQuery = (width: number) => {
+  const [mounted, setMounted] = useState(false);
   const [targetReached, setTargetReached] = useState(false);
 
-  const updateTarget = useCallback((e: any) => {
-    if (e.matches) {
-      setTargetReached(true);
-    } else {
-      setTargetReached(false);
-    }
-  }, []);
+  const updateTarget = useCallback(
+    (e: any) => {
+      if (!mounted) {
+        return;
+      }
+      if (e.matches) {
+        setTargetReached(true);
+      } else {
+        setTargetReached(false);
+      }
+    },
+    [mounted]
+  );
 
   useEffect(() => {
     const media = window.matchMedia(`(max-width: ${width}px)`);
@@ -32,7 +39,11 @@ const useMediaQuery = (width: number) => {
     return () => media.removeListener(updateTarget);
   }, [updateTarget, width]);
 
-  return targetReached;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return { detecting: !mounted, targetReached };
 };
 
 export default useMediaQuery;
