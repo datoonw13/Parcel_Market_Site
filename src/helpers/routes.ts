@@ -139,6 +139,11 @@ const routes = {
     protected: true,
     fullUrl: "/user-subscription",
   },
+  volt: {
+    url: "volt",
+    protected: false,
+    fullUrl: "/volt",
+  },
 };
 
 export const getAllRoutes = (

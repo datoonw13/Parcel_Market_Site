@@ -11,7 +11,7 @@ import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 const SignInGoogle = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
+  const params = new URLSearchParams(searchParams);
   const [loading, setLoading] = useState(false);
   const login = useGoogleLogin({
     onSuccess: async (data) => {
@@ -23,11 +23,9 @@ const SignInGoogle = () => {
           `${routes.auth.signUp.fullUrl}?access_token=${data.access_token}&firstName=${googleCredentials.given_name}&lastName=${googleCredentials.family_name}&email=${googleCredentials.email}`
         );
       } else {
-        if (params.get("from")) {
-          const fromUrl = params.get("from");
-          params.delete("from");
-          params.set("from", routes.auth.signIn.fullUrl);
-          const newLocation = `${fromUrl}?${params.toString()}`;
+        if (params.get("redirect_uri") && params.get("redirect_uri") === routes.volt.fullUrl) {
+          const redirectUri = params.get("from");
+          const newLocation = `${redirectUri}?resume=true`;
           router.replace(newLocation);
           return;
         }

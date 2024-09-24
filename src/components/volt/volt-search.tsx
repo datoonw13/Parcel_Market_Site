@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
-import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
 import { getPropertiesAction } from "@/server-actions/volt/actions";
@@ -51,6 +51,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
     setValue,
     watch,
     trigger,
+    reset,
   } = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
@@ -89,6 +90,12 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
       }
     }
   });
+
+  useEffect(() => {
+    if (values.searchDetails) {
+      reset({ ...values.searchDetails });
+    }
+  }, [reset, values.searchDetails]);
 
   return (
     <div className={cn("space-y-6", className)}>

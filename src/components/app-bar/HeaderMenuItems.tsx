@@ -42,7 +42,7 @@ const HeaderMenuItems = async () => {
             </Button>
           </Link>
         )}
-        <Link href={routes.valueLand.fullUrl}>
+        <Link href="/volt?resume=true">
           <Button sx={{ textTransform: "none" }} variant="contained">
             Get Land Values
           </Button>

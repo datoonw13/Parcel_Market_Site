@@ -19,7 +19,7 @@ import { TextInput } from "@/components/ui/input";
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
   const ref = useRef<HTMLButtonElement | null>(null);
-  const params = new URLSearchParams(searchParams.toString());
+  const params = new URLSearchParams(searchParams);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
 
@@ -28,11 +28,9 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
-      if (params.get("from")) {
-        const fromUrl = params.get("from");
-        params.delete("from");
-        params.set("from", routes.auth.signIn.fullUrl);
-        const newLocation = `${fromUrl}?${params.toString()}`;
+      if (params.get("redirect_uri") && params.get("redirect_uri") === routes.volt.fullUrl) {
+        const redirectUri = params.get("redirect_uri");
+        const newLocation = `${redirectUri}?resume=true`;
         router.replace(newLocation);
         return;
       }

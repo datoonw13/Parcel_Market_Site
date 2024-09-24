@@ -8,6 +8,8 @@ import { VoltPriceCalculationReq, VoltPriceCalculationRes, VoltSearchModel, Volt
 import { IMap } from "@/types/map";
 import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+import { useRouter } from "next/navigation";
+import routes from "@/helpers/routes";
 import VoltSearch from "./volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltDesktopMap from "./volt-desktop-map";
@@ -54,6 +56,7 @@ function isElementVisible(parcelNumberNoFormatting: string, step: VoltSteps) {
 
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values }) => {
   const { notify } = useNotification();
+  const router = useRouter();
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
   const [calculationPending, setCalculationPending] = useState(false);
   const [highlightedParcelNumber, setHighlightedParcelNumber] = useState<string | null>(null);
@@ -167,44 +170,58 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
         </div>
         <div
           className={cn(
-            "px-5 lg:px-8 xl:px-11 h-fit ",
+            "px-5 lg:px-8 xl:px-11 h-fit flex",
             step > 0 && "border-t border-t-grey-100",
-            step === VoltSteps.CALCULATION && "flex mt-auto h-full"
+            step === VoltSteps.CALCULATION && "h-full"
           )}
           style={{ gridArea: "footer" }}
         >
-          <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 mt-auto")}>
-            {step === VoltSteps.SEARCH_RESULTS && (
+          <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 w-full flex flex-col justify-between")}>
+            {step > VoltSteps.SEARCH && (
               <div className="flex gap-3">
-                <Button className="w-full bg-grey-100 hover:bg-grey-200 text-black">Save Data</Button>
-                <Button
-                  loading={calculationPending}
-                  onClick={() => {
-                    if (user) {
-                      calculatePrice();
-                    } else {
-                      setShowCalculationTerms(true);
-                    }
-                  }}
-                  disabled={!values.selectedItem}
-                  className="w-full"
-                >
-                  Calculate Price
-                </Button>
+                {step === VoltSteps.SEARCH_RESULTS && (
+                  <Button
+                    loading={calculationPending}
+                    onClick={() => {
+                      if (user) {
+                        calculatePrice();
+                      } else {
+                        setShowCalculationTerms(true);
+                      }
+                    }}
+                    disabled={!values.selectedItem}
+                    className="w-full"
+                  >
+                    Calculate Price
+                  </Button>
+                )}
+                {step === VoltSteps.CALCULATION && (
+                  <Button
+                    className="w-full bg-grey-100 hover:bg-grey-200 text-black"
+                    onClick={() => {
+                      router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
+                      sessionStorage.setItem("volt", JSON.stringify({ step, values }));
+                    }}
+                  >
+                    Save Data
+                  </Button>
+                )}
               </div>
             )}
-            <div className="flex gap-3 items-center justify-center lg:justify-start">
-              <Link href="/">
-                <p className="text-sm text-gray-800">Privacy Policy</p>
-              </Link>
-              <div className="w-[1px] h-4 bg-gray-200" />
-              <Link href="/">
-                <p className="text-sm text-gray-800">Terms of use</p>
-              </Link>
+            <div>
+              <div className="flex gap-3 items-center justify-center lg:justify-start">
+                <Link href="/">
+                  <p className="text-sm text-gray-800">Privacy Policy</p>
+                </Link>
+                <div className="w-[1px] h-4 bg-gray-200" />
+                <Link href="/">
+                  <p className="text-sm text-gray-800">Terms of use</p>
+                </Link>
+              </div>
+              <p className="text-xs font-medium text-grey-600 text-center lg:text-start">
+                ©{new Date().getFullYear()} Parcel Market. All rights reserved.
+              </p>
             </div>
-            <p className="text-xs font-medium text-grey-600 text-center lg:text-start">
-              ©{new Date().getFullYear()} Parcel Market. All rights reserved.
-            </p>
           </div>
         </div>
         {step === VoltSteps.CALCULATION && (
