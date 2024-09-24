@@ -6,6 +6,8 @@ import { IDecodedAccessToken } from "@/types/auth";
 import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
 import { IMap } from "@/types/map";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { LuLoader2 } from "react-icons/lu";
+import { saveSearchDataAction } from "@/server-actions/volt/actions";
 import VoltDesktop from "./volt-desktop";
 import VoltMobile from "./volt-mobile";
 
@@ -33,6 +35,8 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
     selectedItem: IMap[0] | null;
     calculation: VoltPriceCalculationRes | null;
   }>(initialValues);
+  const [dataSaved, setDataSaved] = useState(false);
+  const [dataSaving, setDataSaving] = useState(false);
 
   const resumeVoltFlow = useCallback(() => {
     const dataFromSessionStorage = sessionStorage.getItem("volt");
@@ -51,12 +55,35 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
     }
   }, [pathname, router, searchParams]);
 
+  const handleCalculationDataSave = useCallback(async () => {
+    setDataSaving(true);
+    const { errorMessage } = await saveSearchDataAction(values.calculation!.id);
+    if (errorMessage) {
+      setValues(initialValues);
+      setStep(VoltSteps.CALCULATION);
+    } else {
+      setDataSaved(true);
+    }
+    setDataSaving(false);
+  }, [values.calculation]);
+
   useEffect(() => {
     resumeVoltFlow();
   }, [resumeVoltFlow]);
 
+  useEffect(() => {
+    if (user && step === VoltSteps.CALCULATION && !dataSaved) {
+      handleCalculationDataSave();
+    }
+  }, [step, dataSaved, user, handleCalculationDataSave]);
+
   return (
-    <div className="h-screen">
+    <div className="h-screen relative">
+      {dataSaving && (
+        <div className="absolute h-full w-full flex justify-center items-center z-20 bg-black-200">
+          <LuLoader2 className="animate-spin size-9 text-primary-main-200" />
+        </div>
+      )}
       {!isSmallDevice && <VoltDesktop values={values} setValues={setValues} user={user} step={step} setStep={setStep} />}
       {isSmallDevice && <VoltMobile />}
     </div>

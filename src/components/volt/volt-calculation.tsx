@@ -41,7 +41,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
 
   return (
     <>
-      <div ref={ref} className="space-y-4">
+      <div ref={ref} className="space-y-4 ">
         <div className="space-y-1">
           <h1 className="font-semibold text-lg">Subject Parcel</h1>
           <h2 className="text-sm text-grey-800">This is the parcel of land that you searched.</h2>
@@ -64,7 +64,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
           )}
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 pb-6">
         <div className="space-y-1">
           <h1 className="font-semibold text-lg">Recent Sales</h1>
           <h2 className="text-sm text-grey-800">
