@@ -77,7 +77,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
           )}
         </div>
       </div>
-      {user && (
+      {user && user.isSubscribed && (
         <div className="space-y-4">
           <div className="space-y-1">
             <h1 className="font-semibold text-lg">Recent Sales</h1>
@@ -109,23 +109,31 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
           </div>
         </div>
       )}
-      {!user && (
+      {(!user || !user.isSubscribed) && (
         <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">
           <div className="relative size-16 ">
             <Image src={NoAuthorizationSvg} alt="" fill className="w-full h-full" />
           </div>
           <div>
-            <p className="text-center font-semibold">Information not available</p>
-            <p className="text-center text-grey-800 text-sm">If you want to see all land information, please verify</p>
+            <p className="text-center font-semibold">
+              {!user?.isSubscribed ? "You do not have an active subscription" : "Information not available"}
+            </p>
+            <p className="text-center text-grey-800 text-sm">
+              {!user?.isSubscribed
+                ? "If you want to see information about land, please subscribe to our service"
+                : "If you want to see all land information, please authorize"}
+            </p>
           </div>
           <Button
             variant="secondary"
             onClick={() => {
-              router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
+              router.push(
+                `${!user?.isSubscribed ? routes.user.subscription.fullUrl : routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`
+              );
               sessionStorage.setItem("volt", JSON.stringify({ step: VoltSteps.CALCULATION, values }));
             }}
           >
-            Sign In
+            {!user?.isSubscribed ? "Subscribe" : "Sign In"}
           </Button>
         </div>
       )}

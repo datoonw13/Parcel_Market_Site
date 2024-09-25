@@ -61,9 +61,8 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
     if (errorMessage) {
       setValues(initialValues);
       setStep(VoltSteps.CALCULATION);
-    } else {
-      setDataSaved(true);
     }
+    setDataSaved(true);
     setDataSaving(false);
   }, [values.calculation]);
 

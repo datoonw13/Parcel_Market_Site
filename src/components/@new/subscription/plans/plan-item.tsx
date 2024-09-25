@@ -4,7 +4,7 @@ import React, { FC, useState } from "react";
 import moment from "moment";
 import clsx from "clsx";
 import { ISubscription, SubscriptionType } from "@/types/subscriptions";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { resumeSubscriptionAction } from "@/server-actions/subscription/actions";
 import { CheckIcon3 } from "../../icons/CheckIcons";
@@ -55,6 +55,8 @@ const checkIsActive = (subscription: SubscriptionType, userActiveSubscription?: 
 
 const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const { period, price, title, periodDesc } = subscriptionDetail(type);
   const isActive = checkIsActive(type, userActiveSubscription);
@@ -78,7 +80,8 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
         <UpdatePlanDialog
           closeDialog={() => setOpenUpgradeModal(false)}
           onSubmit={() => {
-            router.push(`${routes.checkout.fullUrl}?plan=${type}`);
+            params.set("plan", type);
+            router.push(`${routes.checkout.fullUrl}?${params.toString()}`);
           }}
           pending={false}
           subscription={type}
@@ -125,8 +128,6 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
               const req = await resumeSubscriptionAction(userActiveSubscription.id);
               setResumePending(false);
               if (!req.errorMessage) {
-                console.log("movidaaa");
-
                 router.push(`${routes.user.subscription.fullUrl}?success=true`);
               }
               return;

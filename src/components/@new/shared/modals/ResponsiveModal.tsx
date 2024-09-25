@@ -14,7 +14,7 @@ interface ResponsiveModalProps {
 }
 
 const ResponsiveModal: FC<ResponsiveModalProps> = ({ open, handleClose, content, responsiveContent, desktopModalContentClasses }) => {
-  const isSmallDevice = useMediaQuery(768);
+  const { targetReached: isSmallDevice } = useMediaQuery(768);
 
   return (
     <>
