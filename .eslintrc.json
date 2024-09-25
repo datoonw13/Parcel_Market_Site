@@ -51,6 +51,7 @@
     "react/require-default-props": 0,
     "jsx-a11y/mouse-events-have-key-events": 0,
     "jsx-a11y/control-has-associated-label": 0,
-    "jsx-a11y/heading-has-content": 0
+    "jsx-a11y/heading-has-content": 0,
+    "react/destructuring-assignment": 0
   }
 }

@@ -10,13 +10,24 @@ import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
+import { removeParcelNumberFormatting } from "@/helpers/common";
 import VoltSearch from "./volt-search";
 import VoltSearchResult from "./volt-search-result";
-import VoltDesktopMap from "./volt-desktop-map";
+import VoltMap from "./volt-map";
 import { Button } from "../ui/button";
 import VoltCalculation from "./volt-calculation";
 import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/dialogs/alert-dialog";
 
 const primaryLayout = `"details map" "footer footer"`;
 
@@ -38,6 +49,7 @@ interface VoltDesktopProps {
     selectedItem: IMap[0] | null;
     calculation: VoltPriceCalculationRes | null;
   };
+  setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
 
 function isElementVisible(parcelNumberNoFormatting: string, step: VoltSteps) {
@@ -53,7 +65,7 @@ function isElementVisible(parcelNumberNoFormatting: string, step: VoltSteps) {
   return rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
 }
 
-const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values }) => {
+const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values, setOpenPropertyDetailWarningModal }) => {
   const { notify } = useNotification();
   const router = useRouter();
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
@@ -176,8 +188,10 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
           </div>
         </div>
         <div className="bg-primary-main-100 " style={{ gridArea: "map" }}>
-          <VoltDesktopMap
+          <VoltMap
             step={step}
+            user={user}
+            setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
             highlightedParcelNumber={highlightedParcelNumber}
             onMarkerMouseEnter={(parcelNumberNoFormatting) => {
               setHighlightedParcelNumber(parcelNumberNoFormatting);
@@ -202,12 +216,17 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
           {step === VoltSteps.CALCULATION && (
             <div style={{ gridArea: "axis" }}>
               <VoltPriceCalculationAxis
+                voltValue={values.calculation?.price || 0}
+                user={user}
+                setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
                 data={
                   values.calculation?.properties.map((el) => ({
                     parcelNumber: el.parselId || "",
                     acreage: Number(Number(el.arcage).toFixed(2)),
                     price: el.price,
                     pricePerAcre: Number(el.price / Number(el.arcage)),
+                    isMainLand:
+                      removeParcelNumberFormatting(el.parselId) === values.selectedItem?.properties.fields.parcelnumb_no_formatting,
                   })) || []
                 }
                 highlightedParcelNumber={highlightedParcelNumber}

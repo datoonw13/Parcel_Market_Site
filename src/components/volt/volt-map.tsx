@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
 import { IMap } from "@/types/map";
 import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
+import { IDecodedAccessToken } from "@/types/auth";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
@@ -30,15 +31,19 @@ interface VoltDesktopProps {
     selectedItem: IMap[0] | null;
     calculation: VoltPriceCalculationRes | null;
   };
+  user: IDecodedAccessToken | null;
+  setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const VoltDesktopMap: FC<VoltDesktopProps> = ({
+const VoltMap: FC<VoltDesktopProps> = ({
   step,
   highlightedParcelNumber,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   setValues,
   values,
+  user,
+  setOpenPropertyDetailWarningModal,
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
@@ -133,24 +138,26 @@ const VoltDesktopMap: FC<VoltDesktopProps> = ({
         parcelNumber: el.parselId || "",
         latitude: Number(el.latitude),
         longitude: Number(el.longitude),
-        // polygon: "",
         markerType: "default" as const,
-        popup: (
-          <div className="flex flex-col gap-1 space-y-2">
-            <p className="!p-0 !m-0">
-              Parcel Number: <b>{el.parselId}</b>
-            </p>
-            <p className="!p-0 !m-0">
-              Acreage: <b>{Number(el.arcage).toFixed(2)}</b>
-            </p>
-            <p className="!p-0 !m-0">
-              Last Sale Date: <b>{el.lastSalesDate}</b>
-            </p>
-            <p className="!p-0 !m-0">
-              Last Sale Price Per Acre: <b>{moneyFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage))}</b>
-            </p>
-          </div>
-        ),
+        ...(user &&
+          user.isSubscribed && {
+            popup: (
+              <div className="flex flex-col gap-1 space-y-2">
+                <p className="!p-0 !m-0">
+                  Parcel Number: <b>{el.parselId}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Acreage: <b>{Number(el.arcage).toFixed(2)}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Date: <b>{el.lastSalesDate}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Price Per Acre: <b>{moneyFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage))}</b>
+                </p>
+              </div>
+            ),
+          }),
       }));
 
       if (mainLandSaleHistory.length > 0) {
@@ -187,6 +194,14 @@ const VoltDesktopMap: FC<VoltDesktopProps> = ({
       }}
       markerMouseEnter={onMarkerMouseEnter}
       markerMouseLeave={onMarkerMouseLeave}
+      onMarkerClick={(parcelNumberNoFormatting) => {
+        if (
+          (!user || !user.isSubscribed) &&
+          parcelNumberNoFormatting !== removeParcelNumberFormatting(values.selectedItem?.properties.fields.parcelnumb || "")
+        ) {
+          setOpenPropertyDetailWarningModal(true);
+        }
+      }}
       setMapRef={(ref) => {
         mapRef.current = ref;
       }}
@@ -194,4 +209,4 @@ const VoltDesktopMap: FC<VoltDesktopProps> = ({
   );
 };
 
-export default VoltDesktopMap;
+export default VoltMap;

@@ -10,6 +10,7 @@ import { LuLoader2 } from "react-icons/lu";
 import { saveSearchDataAction } from "@/server-actions/volt/actions";
 import VoltDesktop from "./volt-desktop";
 import VoltMobile from "./volt-mobile";
+import PropertyDetailWarningModal from "./property-detail-warning-modal";
 
 interface VoltWrapperProps {
   user: IDecodedAccessToken | null;
@@ -37,6 +38,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
   }>(initialValues);
   const [dataSaved, setDataSaved] = useState(false);
   const [dataSaving, setDataSaving] = useState(false);
+  const [openPropertyDetailWarningModal, setOpenPropertyDetailWarningModal] = useState(false);
 
   const resumeVoltFlow = useCallback(() => {
     const dataFromSessionStorage = sessionStorage.getItem("volt");
@@ -77,15 +79,32 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
   }, [step, dataSaved, user, handleCalculationDataSave]);
 
   return (
-    <div className="h-screen relative">
-      {dataSaving && (
-        <div className="absolute h-full w-full flex justify-center items-center z-20 bg-black-200">
-          <LuLoader2 className="animate-spin size-9 text-primary-main-200" />
-        </div>
-      )}
-      {!isSmallDevice && <VoltDesktop values={values} setValues={setValues} user={user} step={step} setStep={setStep} />}
-      {isSmallDevice && <VoltMobile />}
-    </div>
+    <>
+      <PropertyDetailWarningModal
+        closeModal={() => setOpenPropertyDetailWarningModal(false)}
+        open={openPropertyDetailWarningModal}
+        user={user}
+        onOK={() => sessionStorage.setItem("volt", JSON.stringify({ step, values }))}
+      />
+      <div className="h-screen relative">
+        {dataSaving && (
+          <div className="absolute h-full w-full flex justify-center items-center z-20 bg-black-200">
+            <LuLoader2 className="animate-spin size-9 text-primary-main-200" />
+          </div>
+        )}
+        {!isSmallDevice && (
+          <VoltDesktop
+            setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
+            values={values}
+            setValues={setValues}
+            user={user}
+            step={step}
+            setStep={setStep}
+          />
+        )}
+        {isSmallDevice && <VoltMobile />}
+      </div>
+    </>
   );
 };
 

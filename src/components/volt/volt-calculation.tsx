@@ -67,7 +67,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                 acreage: Number(values.selectedItem.properties.fields.ll_gisacre),
                 owner: values.selectedItem.properties.fields.owner,
                 parcelNumber: values.selectedItem.properties.fields.parcelnumb_no_formatting,
-                pricePerAcre: null,
+                pricePerAcre: values.calculation ? values.calculation?.price / values.calculation?.acrage : null,
                 state: getStateValue(values.selectedItem.properties.fields.state2)?.label || "",
                 county: capitalize(values.selectedItem.properties.fields.county),
               }}
@@ -116,10 +116,10 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
           </div>
           <div>
             <p className="text-center font-semibold">
-              {!user?.isSubscribed ? "You do not have an active subscription" : "Information not available"}
+              {user && !user?.isSubscribed ? "You do not have an active subscription" : "Information not available"}
             </p>
             <p className="text-center text-grey-800 text-sm">
-              {!user?.isSubscribed
+              {user && !user?.isSubscribed
                 ? "If you want to see information about land, please subscribe to our service"
                 : "If you want to see all land information, please authorize"}
             </p>
@@ -128,12 +128,14 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
             variant="secondary"
             onClick={() => {
               router.push(
-                `${!user?.isSubscribed ? routes.user.subscription.fullUrl : routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`
+                `${user && !user?.isSubscribed ? routes.user.subscription.fullUrl : routes.auth.signIn.fullUrl}?redirect_uri=${
+                  routes.volt.fullUrl
+                }`
               );
               sessionStorage.setItem("volt", JSON.stringify({ step: VoltSteps.CALCULATION, values }));
             }}
           >
-            {!user?.isSubscribed ? "Subscribe" : "Sign In"}
+            {user && !user?.isSubscribed ? "Subscribe" : "Sign In"}
           </Button>
         </div>
       )}
