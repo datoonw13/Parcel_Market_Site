@@ -36,7 +36,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
 
   const resumeVoltFlow = useCallback(() => {
     const dataFromSessionStorage = sessionStorage.getItem("volt");
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as any);
     if (params.get("resume") && dataFromSessionStorage) {
       try {
         const { values: data, step }: { step: VoltSteps; values: typeof values } = JSON.parse(sessionStorage.getItem("volt") || "");

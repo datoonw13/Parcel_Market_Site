@@ -56,7 +56,7 @@ const checkIsActive = (subscription: SubscriptionType, userActiveSubscription?: 
 const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams as any);
 
   const { period, price, title, periodDesc } = subscriptionDetail(type);
   const isActive = checkIsActive(type, userActiveSubscription);

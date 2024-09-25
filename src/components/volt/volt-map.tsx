@@ -59,22 +59,24 @@ const VoltMap: FC<VoltDesktopProps> = ({
             <p className="!p-0 !m-0">
               Acreage: <b>{el.properties.fields.ll_gisacre.toFixed(2)}</b>
             </p>
-            <Button
-              className="py-1 h-auto !px-6 ml-auto flex mt-4"
-              onClick={() => {
-                setValues((prev) => ({
-                  ...prev,
-                  selectedItem:
-                    prev.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
-                      ? null
-                      : el,
-                }));
-              }}
-            >
-              {values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
-                ? "Remove"
-                : "Select"}
-            </Button>
+            {values.searchResult && values.searchResult?.length > 1 && (
+              <Button
+                className="py-1 h-auto !px-6 ml-auto flex mt-4"
+                onClick={() => {
+                  setValues((prev) => ({
+                    ...prev,
+                    selectedItem:
+                      prev.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
+                        ? null
+                        : el,
+                  }));
+                }}
+              >
+                {values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
+                  ? "Remove"
+                  : "Select"}
+              </Button>
+            )}
           </div>
         ),
       }));

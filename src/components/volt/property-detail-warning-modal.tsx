@@ -16,7 +16,7 @@ interface PropertyDetailWarningModalProps {
 const PropertyDetailWarningModal: FC<PropertyDetailWarningModalProps> = ({ user, open, closeModal, onOK }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams as any);
   return (
     <ResponsiveDialog
       mediaQuery="lg"

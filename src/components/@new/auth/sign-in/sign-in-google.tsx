@@ -11,7 +11,7 @@ import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 const SignInGoogle = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams as any);
   const [loading, setLoading] = useState(false);
   const login = useGoogleLogin({
     onSuccess: async (data) => {
