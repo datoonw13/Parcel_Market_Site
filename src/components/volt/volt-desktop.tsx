@@ -18,8 +18,7 @@ import VoltCalculation from "./volt-calculation";
 import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
 
-const primaryLayout = `"details map" "footer map"`;
-const secondaryLayout = `"details map" "footer axis"`;
+const primaryLayout = `"details map" "footer footer"`;
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -105,7 +104,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
         closeModal={() => setShowCalculationTerms(false)}
       />
       <div
-        style={{ gridTemplateAreas: step === VoltSteps.CALCULATION ? secondaryLayout : primaryLayout }}
+        style={{ gridTemplateAreas: primaryLayout }}
         className={cn(
           "hidden lg:grid h-full w-full grid-rows-[1fr_minmax(0,_max-content)] grid-cols-[350px_1fr] lg:grid-cols-[490px_1fr] xl:grid-cols-[490px_1fr]"
         )}
@@ -145,9 +144,38 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 )}
               </div>
             </ScrollArea>
+            <div className="px-5 lg:px-8 xl:px-11 pb-4">
+              {step === VoltSteps.SEARCH_RESULTS && (
+                <Button
+                  loading={calculationPending}
+                  onClick={() => {
+                    if (user) {
+                      calculatePrice();
+                    } else {
+                      setShowCalculationTerms(true);
+                    }
+                  }}
+                  disabled={!values.selectedItem}
+                  className="w-full"
+                >
+                  Calculate Price
+                </Button>
+              )}
+              {step === VoltSteps.CALCULATION && !user && (
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
+                    sessionStorage.setItem("volt", JSON.stringify({ step, values }));
+                  }}
+                >
+                  Save Data
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        <div className="bg-primary-main-100" style={{ gridArea: "map" }}>
+        <div className="bg-primary-main-100 " style={{ gridArea: "map" }}>
           <VoltDesktopMap
             step={step}
             highlightedParcelNumber={highlightedParcelNumber}
@@ -169,86 +197,47 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
             }}
           />
         </div>
-        <div
-          className={cn(
-            "px-5 lg:px-8 xl:px-11 h-fit flex",
-            step > 0 && "border-t border-t-grey-100",
-            step === VoltSteps.CALCULATION && "h-full"
-          )}
-          style={{ gridArea: "footer" }}
-        >
-          <div className={cn("space-y-4 pt-4 md:pt-6 md:pb-8 w-full flex flex-col justify-between")}>
-            {step > VoltSteps.SEARCH && (
-              <div className="flex gap-3">
-                {step === VoltSteps.SEARCH_RESULTS && (
-                  <Button
-                    loading={calculationPending}
-                    onClick={() => {
-                      if (user) {
-                        calculatePrice();
-                      } else {
-                        setShowCalculationTerms(true);
-                      }
-                    }}
-                    disabled={!values.selectedItem}
-                    className="w-full"
-                  >
-                    Calculate Price
-                  </Button>
-                )}
-                {step === VoltSteps.CALCULATION && !user && (
-                  <Button
-                    className="w-full"
-                    onClick={() => {
-                      router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
-                      sessionStorage.setItem("volt", JSON.stringify({ step, values }));
-                    }}
-                  >
-                    Save Data
-                  </Button>
-                )}
-              </div>
-            )}
-            <div>
-              <div className="flex gap-3 items-center justify-center lg:justify-start">
-                <Link href="/">
-                  <p className="text-sm text-gray-800">Privacy Policy</p>
-                </Link>
-                <div className="w-[1px] h-4 bg-gray-200" />
-                <Link href="/">
-                  <p className="text-sm text-gray-800">Terms of use</p>
-                </Link>
-              </div>
-              <p className="text-xs font-medium text-grey-600 text-center lg:text-start">
-                ©{new Date().getFullYear()} Parcel Market. All rights reserved.
-              </p>
+
+        <div className="px-5 lg:px-8 xl:px-11 py-4 border-t border-t-grey-100 space-y-6" style={{ gridArea: "footer" }}>
+          {step === VoltSteps.CALCULATION && (
+            <div style={{ gridArea: "axis" }}>
+              <VoltPriceCalculationAxis
+                data={
+                  values.calculation?.properties.map((el) => ({
+                    parcelNumber: el.parselId || "",
+                    acreage: Number(Number(el.arcage).toFixed(2)),
+                    price: el.price,
+                    pricePerAcre: Number(el.price / Number(el.arcage)),
+                  })) || []
+                }
+                highlightedParcelNumber={highlightedParcelNumber}
+                onPinHover={(parcelNumberNoFormatting) => {
+                  setHighlightedParcelNumber(parcelNumberNoFormatting);
+                  if (!isElementVisible(parcelNumberNoFormatting, step)) {
+                    const item = document.getElementById(`calculation-${parcelNumberNoFormatting}`);
+                    if (item) {
+                      item.scrollIntoView();
+                    }
+                  }
+                }}
+              />
             </div>
+          )}
+          <div className="flex items-center justify-between">
+            <div className="flex gap-3 items-center justify-center lg:justify-start">
+              <Link href="/">
+                <p className="text-sm text-gray-800">Privacy Policy</p>
+              </Link>
+              <div className="w-[1px] h-4 bg-gray-200" />
+              <Link href="/">
+                <p className="text-sm text-gray-800">Terms of use</p>
+              </Link>
+            </div>
+            <p className="text-xs font-medium text-grey-600 text-center lg:text-start">
+              ©{new Date().getFullYear()} Parcel Market. All rights reserved.
+            </p>
           </div>
         </div>
-        {step === VoltSteps.CALCULATION && (
-          <div style={{ gridArea: "axis" }} className=" border-t border-t-grey-100 pt-4 md:pt-6 md:pb-8 px-6">
-            <VoltPriceCalculationAxis
-              data={
-                values.calculation?.properties.map((el) => ({
-                  parcelNumber: el.parselId || "",
-                  acreage: Number(Number(el.arcage).toFixed(2)),
-                  price: el.price,
-                  pricePerAcre: Number(el.price / Number(el.arcage)),
-                })) || []
-              }
-              highlightedParcelNumber={highlightedParcelNumber}
-              onPinHover={(parcelNumberNoFormatting) => {
-                setHighlightedParcelNumber(parcelNumberNoFormatting);
-                if (!isElementVisible(parcelNumberNoFormatting, step)) {
-                  const item = document.getElementById(`calculation-${parcelNumberNoFormatting}`);
-                  if (item) {
-                    item.scrollIntoView();
-                  }
-                }
-              }}
-            />
-          </div>
-        )}
       </div>
     </>
   );

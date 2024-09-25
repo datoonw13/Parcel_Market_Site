@@ -32,15 +32,15 @@ const VoltPriceCalculationAxis = ({
     Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
 
   return (
-    <div className="border border-primary-main-400 rounded-2xl px-4 py-6 xl:p-6 lg:p-8 flex flex-col xl:flex-row gap-4 xl:gap-3 xl:gap-x-10">
+    <div className="border border-primary-main-400 rounded-2xl p-8 flex flex-row gap-4 gap-y-3 gap-x-10">
       <div
         className={`
-          flex flex-col xl:flex-row items-center gap-2 mt-4 w-full relative
-            xl:after:content-['Min_Price_Per_Acre'] after:absolute after:top-[40px] after:text-xs after:text-gray-600
-            xl:before:content-['Max_Price_Per_Acre'] before:absolute before:top-[40px] before:right-0 before:text-xs before:text-gray-600
+          flex flex-row items-center gap-2 mt-4 w-full relative
+            lg:after:content-['Min_Price_Per_Acre'] after:absolute after:top-[40px] after:text-xs after:text-gray-600
+            lg:before:content-['Max_Price_Per_Acre'] before:absolute before:top-[40px] before:right-0 before:text-xs before:text-gray-600
           `}
       >
-        <p className="text-xs text-gray-600 hidden xl:block">Min</p>
+        <p className="text-xs text-gray-600 hidden lg:block">Min</p>
         <div
           className={`position relative w-full 
         
@@ -65,7 +65,7 @@ const VoltPriceCalculationAxis = ({
           >
             <div
               className={`bg-white size-6  rounded-full flex items-center justify-center relative 
-               xl:after:content-['Average_Price_Per_Acre'] after:absolute after:top-[25px] after:text-xs after:text-gray-600 after:w-max
+               lg:after:content-['Average_Price_Per_Acre'] after:absolute after:top-[25px] after:text-xs after:text-gray-600 after:w-max
               `}
             >
               <div className="size-5 border-2 rounded-full border-primary-main" />
@@ -79,28 +79,28 @@ const VoltPriceCalculationAxis = ({
               key={property.parcelNumber}
               style={{ left: `calc(${getItemXAxisPositionInPercent(property.pricePerAcre)}% - 0px)` }}
               className={cn(
-                `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] size-5 xl:size-6 -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
+                `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] size-5 lg:size-6 -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
                 highlightedParcelNumber === removeParcelNumberFormatting(property.parcelNumber) && "scale-150 text-[#FF2F48] "
               )}
             />
           ))}
         </div>
-        <p className="text-xs text-gray-600 hidden xl:block">Max</p>
-        <div className="flex justify-between w-full xl:hidden">
+        <p className="text-xs text-gray-600 hidden lg:block">Max</p>
+        <div className="flex justify-between w-full lg:hidden">
           <p className="text-xs text-gray-600">Min</p>
           <p className="text-xs text-gray-600">Max</p>
         </div>
       </div>
 
-      <div className="py-3 xl:py-0 border-t border-t-gray-200 xl:border-y-0 flex gap-4">
+      <div className="py-3 lg:py-0 border-t border-t-gray-200 lg:border-y-0 flex gap-4">
         <div className="space-y-1">
-          <p className="xl:hidden text-xs font-medium text-gray-600">
+          <p className="lg:hidden text-xs font-medium text-gray-600">
             Min Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(20000)}</span>
           </p>
-          <p className="xl:hidden text-xs font-medium text-gray-600">
+          <p className="lg:hidden text-xs font-medium text-gray-600">
             Average Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(20000)}</span>
           </p>
-          <p className="xl:hidden text-xs font-medium text-gray-600">
+          <p className="lg:hidden text-xs font-medium text-gray-600">
             Max Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(20000)}</span>
           </p>
         </div>
