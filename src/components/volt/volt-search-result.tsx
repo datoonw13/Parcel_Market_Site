@@ -1,9 +1,7 @@
 "use client";
 
-import { useAtom } from "jotai";
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel } from "@/types/volt";
-import { IMap } from "@/types/map";
+import { VoltWrapperValuesModel } from "@/types/volt";
 import { getStateValue } from "@/helpers/states";
 import { capitalize } from "lodash";
 import VoltItem from "./volt-item";
@@ -12,20 +10,8 @@ interface VoltSearchResultProps {
   onSearchResultItemHover?: (parcelNumberNoFormatting: string) => void;
   onSearchResultItemMouseLeave?: (parcelNumberNoFormatting: string) => void;
   highlightedParcelNumber: string | null;
-  setValues: Dispatch<
-    SetStateAction<{
-      searchDetails: VoltSearchModel | null;
-      searchResult: VoltSearchResultModel | null;
-      selectedItem: IMap[0] | null;
-      calculation: VoltPriceCalculationRes | null;
-    }>
-  >;
-  values: {
-    searchDetails: VoltSearchModel | null;
-    searchResult: VoltSearchResultModel | null;
-    selectedItem: IMap[0] | null;
-    calculation: VoltPriceCalculationRes | null;
-  };
+  setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
+  values: VoltWrapperValuesModel;
 }
 
 const VoltSearchResult: FC<VoltSearchResultProps> = ({

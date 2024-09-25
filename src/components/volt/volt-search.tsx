@@ -6,15 +6,12 @@ import { RadioGroup } from "@radix-ui/react-radio-group";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
 import { getPropertiesAction } from "@/server-actions/volt/actions";
-import { useAtom } from "jotai";
-import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel } from "@/types/volt";
-import { IMap } from "@/types/map";
+import { VoltSearchModel, VoltWrapperValuesModel } from "@/types/volt";
 import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
@@ -27,20 +24,8 @@ interface VoltSearchProps {
   user: IDecodedAccessToken | null;
   className?: string;
   onSuccess: () => void;
-  setValues: Dispatch<
-    SetStateAction<{
-      searchDetails: VoltSearchModel | null;
-      searchResult: VoltSearchResultModel | null;
-      selectedItem: IMap[0] | null;
-      calculation: VoltPriceCalculationRes | null;
-    }>
-  >;
-  values: {
-    searchDetails: VoltSearchModel | null;
-    searchResult: VoltSearchResultModel | null;
-    selectedItem: IMap[0] | null;
-    calculation: VoltPriceCalculationRes | null;
-  };
+  setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
+  values: VoltWrapperValuesModel;
 }
 
 const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values }) => {
@@ -111,7 +96,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
         <RadioGroup
           onValueChange={(value) => onSearchTypeChange(value as VoltSearchModel["searchType"])}
           value={watch("searchType")}
-          className="grid  grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] gap-x-4 gap-y-3"
+          className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] sm:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] lg:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] gap-x-4 gap-y-3"
         >
           <RadioGroupItem
             value="parcelNumber"

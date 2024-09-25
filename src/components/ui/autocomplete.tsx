@@ -136,6 +136,13 @@ export const AutoComplete = ({
     };
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("wheel", updateContainerOptions);
+    return () => {
+      window.removeEventListener("wheel", updateContainerOptions);
+    };
+  }, []);
+
   return (
     <CommandPrimitive onKeyDown={handleKeyDown} className="w-full">
       <div>

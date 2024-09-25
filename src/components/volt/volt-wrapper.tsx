@@ -3,8 +3,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { IDecodedAccessToken } from "@/types/auth";
-import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
-import { IMap } from "@/types/map";
+import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
 import { saveSearchDataAction } from "@/server-actions/volt/actions";
@@ -30,12 +29,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
 
   const { targetReached: isSmallDevice } = useMediaQuery(1024);
   const [step, setStep] = useState(VoltSteps.SEARCH);
-  const [values, setValues] = useState<{
-    searchDetails: VoltSearchModel | null;
-    searchResult: VoltSearchResultModel | null;
-    selectedItem: IMap[0] | null;
-    calculation: VoltPriceCalculationRes | null;
-  }>(initialValues);
+  const [values, setValues] = useState<VoltWrapperValuesModel>(initialValues);
   const [dataSaved, setDataSaved] = useState(false);
   const [dataSaving, setDataSaving] = useState(false);
   const [openPropertyDetailWarningModal, setOpenPropertyDetailWarningModal] = useState(false);
@@ -102,7 +96,16 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             setStep={setStep}
           />
         )}
-        {isSmallDevice && <VoltMobile />}
+        {isSmallDevice && (
+          <VoltMobile
+            user={user}
+            setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
+            values={values}
+            setValues={setValues}
+            step={step}
+            setStep={setStep}
+          />
+        )}
       </div>
     </>
   );

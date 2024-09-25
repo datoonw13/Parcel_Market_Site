@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { VoltPriceCalculationReq, VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
-import { IMap } from "@/types/map";
+import { VoltPriceCalculationReq, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import { useRouter } from "next/navigation";
@@ -18,16 +17,7 @@ import { Button } from "../ui/button";
 import VoltCalculation from "./volt-calculation";
 import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "../ui/dialogs/alert-dialog";
+import VoltFooter from "./volt-footer";
 
 const primaryLayout = `"details map" "footer footer"`;
 
@@ -35,20 +25,8 @@ interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
   step: VoltSteps;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
-  setValues: Dispatch<
-    SetStateAction<{
-      searchDetails: VoltSearchModel | null;
-      searchResult: VoltSearchResultModel | null;
-      selectedItem: IMap[0] | null;
-      calculation: VoltPriceCalculationRes | null;
-    }>
-  >;
-  values: {
-    searchDetails: VoltSearchModel | null;
-    searchResult: VoltSearchResultModel | null;
-    selectedItem: IMap[0] | null;
-    calculation: VoltPriceCalculationRes | null;
-  };
+  setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
+  values: VoltWrapperValuesModel;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -242,20 +220,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
               />
             </div>
           )}
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3 items-center justify-center lg:justify-start">
-              <Link href="/">
-                <p className="text-sm text-gray-800">Privacy Policy</p>
-              </Link>
-              <div className="w-[1px] h-4 bg-gray-200" />
-              <Link href="/">
-                <p className="text-sm text-gray-800">Terms of use</p>
-              </Link>
-            </div>
-            <p className="text-xs font-medium text-grey-600 text-center lg:text-start">
-              ©{new Date().getFullYear()} Parcel Market. All rights reserved.
-            </p>
-          </div>
+          <VoltFooter />
         </div>
       </div>
     </>

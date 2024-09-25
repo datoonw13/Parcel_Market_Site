@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import ResponsiveDialog from "../ui/dialogs/responsive-alert-dialog";
 

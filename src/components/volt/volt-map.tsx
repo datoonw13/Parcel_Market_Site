@@ -1,11 +1,9 @@
 "use client";
 
-import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
-import { useAtom } from "jotai";
+import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
-import { IMap } from "@/types/map";
+import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Button } from "../ui/button";
@@ -17,20 +15,8 @@ interface VoltDesktopProps {
   highlightedParcelNumber: string | null;
   onMarkerMouseEnter: (parcelNumberNoFormatting: string) => void;
   onMarkerMouseLeave: (parcelNumberNoFormatting: string) => void;
-  setValues: Dispatch<
-    SetStateAction<{
-      searchDetails: VoltSearchModel | null;
-      searchResult: VoltSearchResultModel | null;
-      selectedItem: IMap[0] | null;
-      calculation: VoltPriceCalculationRes | null;
-    }>
-  >;
-  values: {
-    searchDetails: VoltSearchModel | null;
-    searchResult: VoltSearchResultModel | null;
-    selectedItem: IMap[0] | null;
-    calculation: VoltPriceCalculationRes | null;
-  };
+  setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
+  values: VoltWrapperValuesModel;
   user: IDecodedAccessToken | null;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }

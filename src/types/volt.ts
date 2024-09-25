@@ -73,3 +73,10 @@ export interface VoltPriceCalculationRes {
   id: number;
   dateCreated: Date;
 }
+
+export interface VoltWrapperValuesModel {
+  searchDetails: VoltSearchModel | null;
+  searchResult: VoltSearchResultModel | null;
+  selectedItem: IMap[0] | null;
+  calculation: VoltPriceCalculationRes | null;
+}
