@@ -107,7 +107,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
       <div
         style={{ gridTemplateAreas: step === VoltSteps.CALCULATION ? secondaryLayout : primaryLayout }}
         className={cn(
-          "hidden lg:grid h-full w-full grid-rows-[1fr_minmax(0,_max-content)] grid-cols-[350px_1fr] lg:grid-cols-[406px_1fr] xl:grid-cols-[490px_1fr]"
+          "hidden lg:grid h-full w-full grid-rows-[1fr_minmax(0,_max-content)] grid-cols-[350px_1fr] lg:grid-cols-[490px_1fr] xl:grid-cols-[490px_1fr]"
         )}
       >
         <div className="h-full grid grid-rows-[minmax(0,_max-content)_1fr] overflow-hidden" style={{ gridArea: "details" }}>

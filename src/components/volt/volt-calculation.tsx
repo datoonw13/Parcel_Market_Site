@@ -6,6 +6,8 @@ import Image from "next/image";
 import { IDecodedAccessToken } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
+import { capitalize } from "lodash";
+import { getStateValue } from "@/helpers/states";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
@@ -66,6 +68,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                 owner: values.selectedItem.properties.fields.owner,
                 parcelNumber: values.selectedItem.properties.fields.parcelnumb_no_formatting,
                 pricePerAcre: null,
+                state: getStateValue(values.selectedItem.properties.fields.state2)?.label || "",
+                county: capitalize(values.selectedItem.properties.fields.county),
               }}
               selected
               isHighlighted={highlightedParcelNumber === values.selectedItem.properties.fields.parcelnumb_no_formatting}
@@ -94,6 +98,10 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                   owner: item.owner || "",
                   parcelNumber: item.parselId,
                   pricePerAcre: Number(item.lastSalesPrice) / Number(item.arcage),
+                  state: item.state || "",
+                  county: item.county?.replace("County", "") || "",
+                  lastSaleDate: item.lastSalesDate,
+                  lastSalePrice: Number(item.lastSalesPrice),
                 }}
                 isHighlighted={highlightedParcelNumber === removeParcelNumberFormatting(item.parselId)}
               />

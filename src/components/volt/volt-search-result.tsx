@@ -4,6 +4,8 @@ import { useAtom } from "jotai";
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel } from "@/types/volt";
 import { IMap } from "@/types/map";
+import { getStateValue } from "@/helpers/states";
+import { capitalize } from "lodash";
 import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {
@@ -57,6 +59,8 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
               owner: item.properties.fields.owner,
               parcelNumber: item.properties.fields.parcelnumb_no_formatting,
               pricePerAcre: null,
+              state: getStateValue(item.properties.fields.state2)?.label || "",
+              county: capitalize(item.properties.fields.county),
             }}
             onHover={onSearchResultItemHover}
             onMouseLeave={onSearchResultItemMouseLeave}

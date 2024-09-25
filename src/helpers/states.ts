@@ -50,7 +50,8 @@ export const getCountyValue = (countyValue: string | null, stateValue: string | 
   if (!countyValue || !stateValue) {
     return null;
   }
-  return getCounties(stateValue).find(({ value }) => value.toLocaleLowerCase() === countyValue.toLocaleLowerCase()) || null;
+
+  return getCounties(stateValue).find(({ value }) => value.toLocaleLowerCase().includes(countyValue.toLocaleLowerCase())) || null;
 };
 
 export const getCitiesByState = (stateValue: string | null) =>
