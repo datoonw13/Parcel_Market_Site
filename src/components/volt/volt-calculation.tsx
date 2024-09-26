@@ -77,15 +77,15 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
           )}
         </div>
       </div>
-      {user && user.isSubscribed && (
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h1 className="font-semibold text-lg">Recent Sales</h1>
-            <h2 className="text-sm text-grey-800">
-              These are vacant land parcels that have sold in the past two years, within 10 miles of the subject parcel and are of similar
-              acreage.
-            </h2>
-          </div>
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <h1 className="font-semibold text-lg">Recent Sales</h1>
+          <h2 className="text-sm text-grey-800">
+            These are vacant land parcels that have sold in the past two years, within 10 miles of the subject parcel and are of similar
+            acreage.
+          </h2>
+        </div>
+        {user && user.isSubscribed && (
           <div className="flex flex-col gap-2">
             {values.calculation?.properties.map((item) => (
               <VoltItem
@@ -107,8 +107,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
               />
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
       {(!user || !user.isSubscribed) && (
         <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">
           <div className="relative size-16 ">
