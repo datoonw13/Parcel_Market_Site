@@ -12,7 +12,7 @@ import { Button } from "../button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog";
 
 interface ResponsiveAlertDialogProps {
-  mediaQuery?: keyof typeof breakPoints;
+  mediaQuery?: keyof typeof breakPoints | null;
   open: boolean;
   closeModal: () => void;
   title: string;
@@ -71,21 +71,21 @@ const DrawerWrapper: FC<ResponsiveAlertDialogProps> = (props) => (
 
 const DialogWrapper: FC<ResponsiveAlertDialogProps> = (props) => (
   <Dialog open={props.open} onOpenChange={(open) => !open && props.closeModal}>
-    <DialogContent className={cn("max-w-md gap-6")} closeModal={props.closeModal}>
+    <DialogContent className={cn("rounded-xl max-w-[90vw] sm:max-w-md gap-6 p-4 z-[9999]")} closeModal={props.closeModal}>
       <Content {...props} />
     </DialogContent>
   </Dialog>
 );
 
 const ResponsiveAlertDialog: FC<ResponsiveAlertDialogProps> = (props) => {
-  const mediaQuery = props.mediaQuery || "md";
-  const { detecting, targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints[mediaQuery]));
+  const mediaQuery = props.mediaQuery === null ? null : props.mediaQuery || "md";
+  const { detecting, targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints[mediaQuery || "lg"]));
 
   return (
     !detecting && (
       <>
-        {isSmallDevice && <DrawerWrapper {...{ ...props, mediaQuery }} />}
-        {!isSmallDevice && <DialogWrapper {...{ ...props, mediaQuery }} />}
+        {isSmallDevice && props.mediaQuery !== null && <DrawerWrapper {...{ ...props, mediaQuery }} />}
+        {(!isSmallDevice || props.mediaQuery === null) && <DialogWrapper {...{ ...props, mediaQuery }} />}
       </>
     )
   );

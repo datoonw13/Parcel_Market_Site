@@ -10,14 +10,15 @@ import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import { removeParcelNumberFormatting } from "@/helpers/common";
-import VoltSearch from "./volt-search";
-import VoltSearchResult from "./volt-search-result";
-import VoltMap from "./volt-map";
-import { Button } from "../ui/button";
-import VoltCalculation from "./volt-calculation";
-import VoltPriceCalculationAxis from "./volt-calculation-axis";
-import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
-import VoltFooter from "./volt-footer";
+import VoltSearch from "../volt-search";
+import VoltSearchResult from "../volt-search-result";
+import VoltMap from "../volt-map";
+import { Button } from "../../ui/button";
+import VoltCalculation from "../volt-calculation";
+import VoltPriceCalculationAxis from "../volt-calculation-axis";
+import CalculationTermsDialog from "../calculation-terms/calculation-terms-dialog";
+import VoltFooter from "../volt-footer";
+import VoltDesktopHeader from "./volt-desktop-header";
 
 const primaryLayout = `"details map" "footer footer"`;
 
@@ -100,17 +101,14 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
         )}
       >
         <div className="h-full grid grid-rows-[minmax(0,_max-content)_1fr] overflow-hidden" style={{ gridArea: "details" }}>
-          <div className="px-14 xl:px-16 pt-14 xl:pt-16 pb-14">
-            <Link href="/">
-              <Logo className="w-[141px] h-10" />
-            </Link>
-          </div>
+          <VoltDesktopHeader />
           <div className="overflow-hidden grid">
             <ScrollArea className="pb-6" id="volt-scroll">
               <div className="overflow-hidden flex flex-col gap-8 px-5 lg:px-8 xl:px-11">
                 <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
                 {step === VoltSteps.SEARCH_RESULTS && (
                   <VoltSearchResult
+                    className="pb-6"
                     onSearchResultItemHover={(parcelNumberNoFormatting) => setHighlightedParcelNumber(parcelNumberNoFormatting)}
                     onSearchResultItemMouseLeave={() => {
                       // setHighlightedParcelNumber(null)

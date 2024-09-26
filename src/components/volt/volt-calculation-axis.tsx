@@ -41,10 +41,10 @@ const VoltPriceCalculationAxis = ({
 
   return (
     <>
-      <div className="border border-primary-main-400 rounded-2xl p-8 flex flex-row gap-4 gap-y-3 gap-x-10">
+      <div className="border border-primary-main-400 rounded-2xl px-4 py-5 lg:p-8 flex flex-col lg:flex-row gap-4 gap-y-3 gap-x-10">
         <div
           className={`
-          flex flex-row items-center gap-2 mt-4 w-full relative
+          flex flex-col lg:flex-row items-center gap-2 mt-4 w-full relative
             lg:after:content-['Min_Price_Per_Acre'] after:absolute after:top-[40px] after:text-xs after:text-gray-600
             lg:before:content-['Max_Price_Per_Acre'] before:absolute before:top-[40px] before:right-0 before:text-xs before:text-gray-600
           `}

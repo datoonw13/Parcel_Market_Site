@@ -19,7 +19,7 @@ const PropertyDetailWarningModal: FC<PropertyDetailWarningModalProps> = ({ user,
   const params = new URLSearchParams(searchParams as any);
   return (
     <ResponsiveDialog
-      mediaQuery="lg"
+      mediaQuery={null}
       open={open}
       closeModal={closeModal}
       okButton={{
