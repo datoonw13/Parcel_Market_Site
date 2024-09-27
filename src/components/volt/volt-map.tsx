@@ -4,10 +4,11 @@ import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
-import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
-import { IMapItem } from "@/types/map";
+import { IPropertyBaseInfo } from "@/types/property";
+import moment from "moment";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
@@ -39,34 +40,34 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
-      const getIcon = (el: IMapItem) => {
-        if (values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting) {
+      const getIcon = (el: IPropertyBaseInfo) => {
+        if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
           return "active" as const;
         }
         if (
-          mapInteraction.hoveredParcelNumber === el.properties.fields.parcelnumb_no_formatting ||
-          mapInteraction.openPopperParcelNumber === el.properties.fields.parcelnumb_no_formatting
+          mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
+          mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
         ) {
           return "highlighted" as const;
         }
         return "default" as const;
       };
       return values.searchResult?.map((el) => ({
-        parcelNumber: el.properties.fields.parcelnumb_no_formatting || "",
-        latitude: Number(el.properties.fields.lat),
-        longitude: Number(el.properties.fields.lon),
-        polygon: el.geometry.coordinates,
+        parcelNumber: el.parcelNumberNoFormatting || "",
+        latitude: el.lat,
+        longitude: el.lon,
+        polygon: el.polygon,
         markerType: getIcon(el),
         popup: (
           <div className="flex flex-col gap-1 space-y-2">
             <p className="!p-0 !m-0">
-              Owner: <b>{el.properties.fields.owner}</b>
+              Owner: <b>{el.owner}</b>
             </p>
             <p className="!p-0 !m-0">
-              Parcel Number: <b>{el.properties.fields.parcelnumb_no_formatting}</b>
+              Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
             </p>
             <p className="!p-0 !m-0">
-              Acreage: <b>{el.properties.fields.ll_gisacre.toFixed(2)}</b>
+              Acreage: <b>{el.acreage.toFixed(2)}</b>
             </p>
             {values.searchResult && values.searchResult?.length > 1 && (
               <Button
@@ -74,16 +75,11 @@ const VoltMap: FC<VoltDesktopProps> = ({
                 onClick={() => {
                   setValues((prev) => ({
                     ...prev,
-                    selectedItem:
-                      prev.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
-                        ? null
-                        : el,
+                    selectedItem: prev.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting ? null : el,
                   }));
                 }}
               >
-                {values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
-                  ? "Remove"
-                  : "Select"}
+                {values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting ? "Remove" : "Select"}
               </Button>
             )}
           </div>
@@ -91,15 +87,16 @@ const VoltMap: FC<VoltDesktopProps> = ({
       }));
     }
     if (step === VoltSteps.CALCULATION && values.calculation) {
-      const mainLandSaleHistory = values.calculation.properties.filter(
-        (el) => removeParcelNumberFormatting(el.parselId) === removeParcelNumberFormatting(values.calculation?.parcelNumber || "")
+      const mainLandSaleHistory = values.calculation.propertiesUsedForCalculation.filter(
+        (el) => el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting
       );
 
       const mainProperty = {
-        parcelNumber: values.calculation.parcelNumber || "",
+        parcelNumber: values.selectedItem?.parcelNumber || "",
+        parcelNumberNoFormatting: values.selectedItem?.parcelNumberNoFormatting || "",
         latitude: Number(values.calculation.lat),
         longitude: Number(values.calculation.lon),
-        polygon: JSON.parse(values.calculation.coordinates) as any,
+        polygon: values.calculation.polygon,
         markerType: "active" as const,
         center: true,
         popup: (
@@ -108,10 +105,10 @@ const VoltMap: FC<VoltDesktopProps> = ({
               Owner: <b>{values.calculation.owner}</b>
             </p>
             <p className="!p-0 !m-0">
-              Acreage: <b>{Number(values.calculation.acrage).toFixed(2)}</b>
+              Acreage: <b>{Number(values.calculation.acreage).toFixed(2)}</b>
             </p>
             <p className="!p-0 !m-0">
-              Price Per Acre: <b>{moneyFormatter.format(Number(values.calculation.price) / Number(values.calculation.acrage))}</b>
+              Price Per Acre: <b>{moneyFormatter.format(values.calculation.pricePerAcreage)}</b>
             </p>
             {mainLandSaleHistory.length > 0 && (
               <div className="flex flex-col gap-1">
@@ -119,10 +116,10 @@ const VoltMap: FC<VoltDesktopProps> = ({
                 {mainLandSaleHistory.map((history) => (
                   <div key={JSON.stringify(history)} className="!mb-1">
                     <p className="!p-0 !m-0">
-                      Last Sale Date: <b>{history.lastSalesDate}</b>
+                      Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
                     </p>
                     <p className="!p-0 !m-0">
-                      Last Sale Price Per Acre: <b>{moneyFormatter.format(Number(history.lastSalesPrice) / Number(history.arcage))}</b>
+                      Last Sale Price Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
                     </p>
                   </div>
                 ))}
@@ -131,13 +128,15 @@ const VoltMap: FC<VoltDesktopProps> = ({
           </div>
         ),
       };
-      let properties = values.calculation.properties?.map((el) => ({
-        parcelNumber: el.parselId || "",
-        latitude: Number(el.latitude),
-        longitude: Number(el.longitude),
+
+      let properties = values.calculation.propertiesUsedForCalculation?.map((el) => ({
+        parcelNumber: el.parcelNumberNoFormatting,
+        parcelNumberNoFormatting: el.parcelNumberNoFormatting,
+        latitude: el.lat,
+        longitude: el.lon,
         markerType:
-          mapInteraction.hoveredParcelNumber === removeParcelNumberFormatting(el.parselId) ||
-          mapInteraction.openPopperParcelNumber === removeParcelNumberFormatting(el.parselId)
+          mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
+          mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
             ? ("highlighted" as const)
             : ("default" as const),
         ...(user &&
@@ -145,16 +144,16 @@ const VoltMap: FC<VoltDesktopProps> = ({
             popup: (
               <div className="flex flex-col gap-1 space-y-2">
                 <p className="!p-0 !m-0">
-                  Parcel Number: <b>{el.parselId}</b>
+                  Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Acreage: <b>{Number(el.arcage).toFixed(2)}</b>
+                  Acreage: <b>{el.acreage.toFixed(2)}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Date: <b>{el.lastSalesDate}</b>
+                  Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Price Per Acre: <b>{moneyFormatter.format(Number(el.lastSalesPrice) / Number(el.arcage))}</b>
+                  Last Sale Price Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
                 </p>
               </div>
             ),
@@ -163,8 +162,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
 
       if (mainLandSaleHistory.length > 0) {
         properties = properties.filter(
-          (el) =>
-            !mainLandSaleHistory.find((x) => removeParcelNumberFormatting(el.parcelNumber) === removeParcelNumberFormatting(x.parselId))
+          (el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting)
         );
       }
 
@@ -179,14 +177,15 @@ const VoltMap: FC<VoltDesktopProps> = ({
     user,
     values.calculation,
     values.searchResult,
-    values.selectedItem?.properties.fields.parcelnumb_no_formatting,
+    values.selectedItem?.parcelNumber,
+    values.selectedItem?.parcelNumberNoFormatting,
   ]);
 
   const canViewDetails = (parcelNumberNoFormatting: string) => {
     if (
       (user && user.isSubscribed) ||
       step !== VoltSteps.CALCULATION ||
-      parcelNumberNoFormatting === values.selectedItem?.properties.fields.parcelnumb_no_formatting
+      parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting
     ) {
       return true;
     }

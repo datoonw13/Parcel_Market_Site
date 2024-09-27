@@ -1,7 +1,18 @@
 import { voltSearchSchema } from "@/zod-validations/volt";
 import { z } from "zod";
+import { PolygonProps } from "react-leaflet";
 import { IMap } from "./map";
-import { UsedForPriceCalculationItem } from "./property";
+import {
+  IMainPropertyBaseInfo,
+  IPropertyBaseInfo,
+  IPropertyOwner,
+  IPropertyPolygon,
+  IPropertyPricePerAcre,
+  IPropertySaleHistory,
+  IPropertyType,
+  IPropertyUsedForCalculation,
+  UsedForPriceCalculationItem,
+} from "./property";
 
 export type VoltSearchModel = z.infer<typeof voltSearchSchema>;
 
@@ -13,7 +24,7 @@ export enum VoltSteps {
 
 export type VoltSearchResultModel = IMap;
 
-export interface VoltPriceCalculationReq {
+export interface IVoltPriceCalculationReqParams {
   body: {
     owner?: string;
     parcelNumber: string;
@@ -30,53 +41,20 @@ export interface VoltPriceCalculationReq {
   };
 }
 
-export interface VoltPriceCalculationRes {
-  propertyId: number;
-  properties: {
-    owner: string | null;
-    parselId: string;
-    propertyType: string;
-    arcage: string;
-    price: number;
-    isValid: boolean;
-    lastSalesPrice: string;
-    lastSalesDate: string;
-    address: string;
-    isMedianValid: boolean;
-    latitude: string;
-    longitude: string;
-    id?: number;
-    state?: string;
-    county?: string;
-    parcelNumber: string;
-  }[];
-  range: {
-    min: number;
-    max: number;
-  };
-  owner: string;
-  state: string;
-  county: string;
-  propertyType: string;
-  parcelNumber: string;
-  coordinates: string;
-  price: number;
-  price_sum: number;
-  median_middle_price: number;
-  acrage: number;
-  lastsalesprice: number;
-  lastsalesdate: string;
-  user_id: number;
-  lat: string;
-  lon: string;
-  city: string | null;
-  id: number;
-  dateCreated: Date;
+export interface PropertyUsedForCalculation extends IPropertyBaseInfo, IPropertySaleHistory, IPropertyPricePerAcre {
+  isMedianValid: boolean;
+  isValid: boolean;
 }
+
+export type IVoltPriceCalculationRes = IMainPropertyBaseInfo &
+  IPropertyPricePerAcre & {
+    propertiesUsedForCalculation: IPropertyUsedForCalculation[];
+    price: number;
+  };
 
 export interface VoltWrapperValuesModel {
   searchDetails: VoltSearchModel | null;
-  searchResult: VoltSearchResultModel | null;
-  selectedItem: IMap[0] | null;
-  calculation: VoltPriceCalculationRes | null;
+  searchResult: IMainPropertyBaseInfo[] | null;
+  selectedItem: IMainPropertyBaseInfo | null;
+  calculation: IVoltPriceCalculationRes | null;
 }

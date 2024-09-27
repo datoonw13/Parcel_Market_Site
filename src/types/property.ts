@@ -1,4 +1,5 @@
 import { aboutLandSchema } from "@/zod-validations/value-land-validations";
+import { PolygonProps } from "react-leaflet";
 import { z } from "zod";
 
 export type AboutProperty = z.infer<typeof aboutLandSchema>;
@@ -96,3 +97,56 @@ export interface SellingPropertyDetails extends PropertySellReq, Omit<AboutPrope
   offerId?: string;
   locality: string;
 }
+
+/// //////
+
+export interface IPropertyPolygon {
+  polygon: PolygonProps["positions"];
+}
+
+export interface IPropertyOwner {
+  owner: string;
+}
+
+export interface IPropertySaleHistory {
+  lastSalePrice: number;
+  lastSaleDate: Date;
+}
+
+export interface IPropertyPricePerAcre {
+  pricePerAcreage: number;
+}
+
+export interface IPropertyType {
+  propertyType: string;
+}
+
+export interface IPropertyCalculationOptions {
+  isValid: boolean;
+  isMedianValid: boolean;
+}
+
+export type IPropertyBaseInfo = {
+  id: string;
+  parcelNumber: string;
+  parcelNumberNoFormatting: string;
+  lat: number;
+  lon: number;
+  acreage: number;
+  county: {
+    value: string;
+    label: string;
+  };
+  state: {
+    value: string;
+    label: string;
+  };
+  city: string;
+};
+
+export interface IPropertyUsedForCalculation
+  extends IPropertyBaseInfo,
+    IPropertySaleHistory,
+    IPropertyCalculationOptions,
+    IPropertyPricePerAcre {}
+export interface IMainPropertyBaseInfo extends IPropertyBaseInfo, IPropertyOwner, IPropertyPolygon, IPropertyType {}

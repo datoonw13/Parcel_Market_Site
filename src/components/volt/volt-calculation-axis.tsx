@@ -22,7 +22,7 @@ const VoltPriceCalculationAxis = ({
 }: {
   data: {
     pricePerAcre: number;
-    parcelNumber: string;
+    parcelNumberNoFormatting: string;
     acreage: number;
     price: number;
     isMainLand: boolean;
@@ -85,7 +85,7 @@ const VoltPriceCalculationAxis = ({
                 onMouseEnter={() => {
                   setMpaInteraction((prevData) => ({
                     ...prevData,
-                    hoveredParcelNumber: removeParcelNumberFormatting(property.parcelNumber),
+                    hoveredParcelNumber: property.parcelNumberNoFormatting,
                     zoom: true,
                   }));
                 }}
@@ -102,16 +102,16 @@ const VoltPriceCalculationAxis = ({
                   } else {
                     setMpaInteraction((prevData) => ({
                       ...prevData,
-                      openPopperParcelNumber: removeParcelNumberFormatting(property.parcelNumber),
+                      openPopperParcelNumber: property.parcelNumberNoFormatting,
                     }));
                   }
                 }}
-                key={property.parcelNumber}
+                key={property.parcelNumberNoFormatting}
                 style={{ left: `calc(${getItemXAxisPositionInPercent(property.pricePerAcre)}% - 0px)` }}
                 className={cn(
                   `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] size-5 lg:size-6 -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
-                  (mapInteraction.hoveredParcelNumber === removeParcelNumberFormatting(property.parcelNumber) ||
-                    mapInteraction.openPopperParcelNumber === removeParcelNumberFormatting(property.parcelNumber)) &&
+                  (mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting ||
+                    mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting) &&
                     "scale-150 text-[#FF2F48] "
                 )}
               />
@@ -127,13 +127,13 @@ const VoltPriceCalculationAxis = ({
         <div className="py-3 lg:py-0 border-t border-t-gray-200 lg:border-y-0 flex gap-4">
           <div className="space-y-1">
             <p className="lg:hidden text-xs font-medium text-gray-600">
-              Min Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(20000)}</span>
+              Min Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(minPricePerAcre)}</span>
             </p>
             <p className="lg:hidden text-xs font-medium text-gray-600">
-              Average Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(20000)}</span>
+              Average Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(averagePricePerAcre)}</span>
             </p>
             <p className="lg:hidden text-xs font-medium text-gray-600">
-              Max Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(20000)}</span>
+              Max Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(maxPricePerAcre)}</span>
             </p>
           </div>
           <div className="ml-auto">

@@ -2,23 +2,18 @@ import { removeParcelNumberFormatting, moneyFormatter } from "@/helpers/common";
 import { getAllStates } from "@/helpers/states";
 import { cn } from "@/lib/utils";
 import { IMap } from "@/types/map";
+import { IPropertyBaseInfo, IPropertyOwner, IPropertyPricePerAcre, IPropertySaleHistory } from "@/types/property";
+import moment from "moment";
 import React, { FC } from "react";
 
+type VoltItemData = IPropertyBaseInfo & Partial<IPropertySaleHistory> & Partial<IPropertyOwner> & Partial<IPropertyPricePerAcre>;
+
 interface VoltItemProps {
-  data: {
-    owner: string;
-    parcelNumber: string;
-    acreage: number;
-    pricePerAcre?: number | null;
-    state: string;
-    county: string;
-    lastSalePrice?: number;
-    lastSaleDate?: string;
-  };
+  data: VoltItemData;
   selected?: boolean;
-  onHover?: (parcelNumberNoFormatting: string) => void;
-  onMouseLeave?: (parcelNumberNoFormatting: string) => void;
-  onSelect?: (parcelNumberNoFormatting: string) => void;
+  onHover?: (property: VoltItemData) => void;
+  onMouseLeave?: (property: VoltItemData) => void;
+  onSelect?: (property: VoltItemData) => void;
   id: string;
   isHighlighted?: boolean;
 }
@@ -31,20 +26,20 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
       isHighlighted && "shadow-5 border-primary-main-100",
       "hover:shadow-5 hover:border-primary-main-100"
     )}
-    onMouseEnter={() => onHover && onHover(removeParcelNumberFormatting(data.parcelNumber))}
-    onMouseLeave={() => onMouseLeave && onMouseLeave(removeParcelNumberFormatting(data.parcelNumber))}
-    onClick={() => onSelect && onSelect(removeParcelNumberFormatting(data.parcelNumber))}
+    onMouseEnter={() => onHover && onHover(data)}
+    onMouseLeave={() => onMouseLeave && onMouseLeave(data)}
+    onClick={() => onSelect && onSelect(data)}
   >
     <div className="w-full flex justify-between items-center gap-6" id={id}>
       <div className="grid">
         <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
         <p className="text-xs text-grey-600 font-medium">
-          {data.state}/{data.county}
+          {data.state.label}/{data.county.label}
         </p>
       </div>
       <div className="grid" style={{ maxWidth: 110 }}>
         <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
-        <p className="text-sm font-medium truncate">{data.parcelNumber}</p>
+        <p className="text-sm font-medium truncate">{data.parcelNumberNoFormatting}</p>
       </div>
     </div>
     <hr className="bg-gray-100" />
@@ -63,14 +58,14 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
         )}
       </div>
       <div className="space-y-1">
-        {data.pricePerAcre && (
+        {data.pricePerAcreage && (
           <p className="text-xs text-grey-600">
-            Per acre Price: <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcre)}</span>
+            Per acre Price: <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
           </p>
         )}
         {data.lastSaleDate && (
           <p className="text-xs text-grey-600">
-            Last Sale Date: <span className="text-black font-medium">{data.lastSaleDate}</span>
+            Last Sale Date: <span className="text-black font-medium">{moment(data.lastSaleDate).format("MM/DD/YYYY")}</span>
           </p>
         )}
       </div>

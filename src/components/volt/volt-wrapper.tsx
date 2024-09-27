@@ -52,8 +52,11 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
   }, [pathname, router, searchParams]);
 
   const handleCalculationDataSave = useCallback(async () => {
+    if (!values.calculation) {
+      return;
+    }
     setDataSaving(true);
-    const { errorMessage } = await saveSearchDataAction(values.calculation!.id);
+    const { errorMessage } = await saveSearchDataAction(Number(values.calculation.id));
     if (errorMessage) {
       setValues(initialValues);
       setStep(VoltSteps.CALCULATION);

@@ -3,7 +3,7 @@ import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import { IDecodedAccessToken } from "@/types/auth";
-import { VoltPriceCalculationReq, VoltPriceCalculationRes, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { IVoltPriceCalculationReqParams, IVoltPriceCalculationRes, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { useRouter } from "next/navigation";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import CalculationTermsDialog from "../calculation-terms/calculation-terms-dialog";
@@ -12,7 +12,7 @@ interface VoltDesktopAdditionalButtonsProps {
   user: IDecodedAccessToken | null;
   step: VoltSteps;
   values: VoltWrapperValuesModel;
-  onSucceed: (data: VoltPriceCalculationRes | null) => void;
+  onSucceed: (data: IVoltPriceCalculationRes | null) => void;
 }
 const VoltDesktopAdditionalButtons: FC<VoltDesktopAdditionalButtonsProps> = ({ step, values, user, onSucceed }) => {
   const router = useRouter();
@@ -24,20 +24,20 @@ const VoltDesktopAdditionalButtons: FC<VoltDesktopAdditionalButtonsProps> = ({ s
     if (!values.selectedItem) {
       return;
     }
-    const reqData: VoltPriceCalculationReq = {
+    const reqData: IVoltPriceCalculationReqParams = {
       body: {
-        county: values.selectedItem?.properties.fields.county.toLocaleLowerCase(),
-        state: values.selectedItem?.properties.fields.state2.toLocaleLowerCase(),
-        parcelNumber: values.selectedItem?.properties.fields.parcelnumb,
-        owner: values.selectedItem.properties.fields.owner,
-        propertyType: values.selectedItem.properties.fields?.zoning_description || values.selectedItem.properties.fields.usedesc || "",
-        coordinates: JSON.stringify(values.selectedItem.geometry.coordinates),
-        locality: values.selectedItem.properties.fields.city,
+        county: values.selectedItem?.county.value,
+        state: values.selectedItem?.state.value,
+        parcelNumber: values.selectedItem?.parcelNumberNoFormatting,
+        owner: values.selectedItem.owner,
+        propertyType: values.selectedItem.propertyType || "",
+        coordinates: JSON.stringify(values.selectedItem.polygon),
+        locality: values.selectedItem.city,
       },
       queryParams: {
-        acre: values.selectedItem.properties.fields.ll_gisacre.toString(),
-        lat: values.selectedItem.properties.fields.lat,
-        lon: values.selectedItem.properties.fields.lon,
+        acre: values.selectedItem.acreage.toString(),
+        lat: values.selectedItem.lat.toString(),
+        lon: values.selectedItem.lon.toString(),
       },
     };
     setCalculationPending(true);

@@ -1,25 +1,16 @@
-import { IMap } from "@/types/map";
-import { VoltPriceCalculationRes, VoltSearchModel, VoltSearchResultModel, VoltSteps } from "@/types/volt";
+import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import React, { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-import { removeParcelNumberFormatting } from "@/helpers/common";
 import Image from "next/image";
 import { IDecodedAccessToken } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
-import { capitalize } from "lodash";
-import { getStateValue } from "@/helpers/states";
 import { MapInteractionModel } from "@/types/common";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
 
 interface VoltCalculationProps {
-  values: {
-    searchDetails: VoltSearchModel | null;
-    searchResult: VoltSearchResultModel | null;
-    selectedItem: IMap[0] | null;
-    calculation: VoltPriceCalculationRes | null;
-  };
+  values: VoltWrapperValuesModel;
   user: IDecodedAccessToken | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
@@ -45,10 +36,10 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         <div className="flex flex-col gap-2">
           {values.selectedItem && (
             <VoltItem
-              onHover={(parcelNumberNoFormatting) => {
+              onHover={(property) => {
                 setMpaInteraction((prevData) => ({
                   ...prevData,
-                  hoveredParcelNumber: removeParcelNumberFormatting(parcelNumberNoFormatting),
+                  hoveredParcelNumber: property.parcelNumberNoFormatting,
                   zoom: true,
                 }));
               }}
@@ -59,26 +50,22 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                   zoom: false,
                 }));
               }}
-              onSelect={(parcelNumberNoFormatting) => {
+              onSelect={(property) => {
                 setMpaInteraction((prevData) => ({
                   ...prevData,
-                  openPopperParcelNumber: parcelNumberNoFormatting,
+                  openPopperParcelNumber: property.parcelNumberNoFormatting,
                   zoom: false,
                 }));
               }}
-              id={`calculation-${values.selectedItem.properties.fields.parcelnumb}`}
+              id={`calculation-${values.selectedItem.id}`}
               data={{
-                acreage: Number(values.selectedItem.properties.fields.ll_gisacre),
-                owner: values.selectedItem.properties.fields.owner,
-                parcelNumber: values.selectedItem.properties.fields.parcelnumb_no_formatting,
-                pricePerAcre: values.calculation ? values.calculation?.price / values.calculation?.acrage : null,
-                state: getStateValue(values.selectedItem.properties.fields.state2)?.label || "",
-                county: capitalize(values.selectedItem.properties.fields.county),
+                ...values.selectedItem,
+                pricePerAcreage: values.calculation?.pricePerAcreage || undefined,
               }}
               selected
               isHighlighted={
-                mapInteraction.hoveredParcelNumber === values.selectedItem.properties.fields.parcelnumb_no_formatting ||
-                mapInteraction.openPopperParcelNumber === values.selectedItem.properties.fields.parcelnumb_no_formatting
+                mapInteraction.hoveredParcelNumber === values.selectedItem.parcelNumberNoFormatting ||
+                mapInteraction.openPopperParcelNumber === values.selectedItem.parcelNumberNoFormatting
               }
             />
           )}
@@ -94,13 +81,13 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         </div>
         {user && user.isSubscribed && (
           <div className="flex flex-col gap-2">
-            {values.calculation?.properties.map((item) => (
+            {values.calculation?.propertiesUsedForCalculation.map((property) => (
               <VoltItem
-                id={`calculation-${removeParcelNumberFormatting(item.parselId)}`}
-                onHover={(parcelNumberNoFormatting) => {
+                id={`calculation-${property.id}`}
+                onHover={(property) => {
                   setMpaInteraction((prevData) => ({
                     ...prevData,
-                    hoveredParcelNumber: removeParcelNumberFormatting(parcelNumberNoFormatting),
+                    hoveredParcelNumber: property.parcelNumberNoFormatting,
                     zoom: true,
                   }));
                 }}
@@ -111,27 +98,20 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                     zoom: false,
                   }));
                 }}
-                onSelect={(parcelNumberNoFormatting) => {
+                onSelect={(property) => {
                   setMpaInteraction((prevData) => ({
                     ...prevData,
-                    openPopperParcelNumber: parcelNumberNoFormatting,
+                    openPopperParcelNumber: property.parcelNumberNoFormatting,
                     zoom: false,
                   }));
                 }}
-                key={item.parselId}
+                key={property.id}
                 data={{
-                  acreage: Number(item.arcage),
-                  owner: item.owner || "",
-                  parcelNumber: item.parselId,
-                  pricePerAcre: Number(item.lastSalesPrice) / Number(item.arcage),
-                  state: item.state || "",
-                  county: item.county?.replace("County", "") || "",
-                  lastSaleDate: item.lastSalesDate,
-                  lastSalePrice: Number(item.lastSalesPrice),
+                  ...property,
                 }}
                 isHighlighted={
-                  mapInteraction.hoveredParcelNumber === removeParcelNumberFormatting(item.parselId) ||
-                  mapInteraction.openPopperParcelNumber === removeParcelNumberFormatting(item.parselId)
+                  mapInteraction.hoveredParcelNumber === property.parcelNumber ||
+                  mapInteraction.openPopperParcelNumber === property.parcelNumber
                 }
               />
             ))}

@@ -1,7 +1,6 @@
-import { VoltPriceCalculationRes, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { IVoltPriceCalculationRes, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
-import { removeParcelNumberFormatting } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import { MapInteractionModel } from "@/types/common";
 import VoltPriceCalculationAxis from "../volt-calculation-axis";
@@ -14,7 +13,7 @@ interface VoltDesktopFooterProps {
   user: IDecodedAccessToken | null;
   openPropertyDetailViewWarnig: () => void;
   values: VoltWrapperValuesModel;
-  onCalculationSucceed: (data: VoltPriceCalculationRes | null) => void;
+  onCalculationSucceed: (data: IVoltPriceCalculationRes | null) => void;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }
@@ -44,12 +43,12 @@ const VoltDesktopFooter: FC<VoltDesktopFooterProps> = ({
           setMpaInteraction={setMpaInteraction}
           setOpenPropertyDetailWarningModal={openPropertyDetailViewWarnig}
           data={
-            values.calculation?.properties.map((el) => ({
-              parcelNumber: el.parselId || "",
-              acreage: Number(Number(el.arcage).toFixed(2)),
-              price: el.price,
-              pricePerAcre: Number(el.price / Number(el.arcage)),
-              isMainLand: removeParcelNumberFormatting(el.parselId) === values.selectedItem?.properties.fields.parcelnumb_no_formatting,
+            values.calculation?.propertiesUsedForCalculation.map((el) => ({
+              parcelNumberNoFormatting: el.parcelNumberNoFormatting,
+              acreage: el.acreage,
+              price: el.lastSalePrice,
+              pricePerAcre: el.pricePerAcreage,
+              isMainLand: el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting,
             })) || []
           }
         />
