@@ -1,24 +1,15 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Logo from "@/icons/Logo";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { cn, isElementVisible } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { VoltPriceCalculationReq, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import useNotification from "@/hooks/useNotification";
-import { calculateLandPriceAction } from "@/server-actions/volt/actions";
-import { useRouter } from "next/navigation";
-import routes from "@/helpers/routes";
-import { removeParcelNumberFormatting } from "@/helpers/common";
+import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import VoltSearch from "../volt-search";
 import VoltSearchResult from "../volt-search-result";
 import VoltMap from "../volt-map";
-import { Button } from "../../ui/button";
 import VoltCalculation from "../volt-calculation";
-import VoltPriceCalculationAxis from "../volt-calculation-axis";
-import CalculationTermsDialog from "../calculation-terms/calculation-terms-dialog";
-import VoltFooter from "../volt-footer";
 import VoltDesktopHeader from "./volt-desktop-header";
+import VoltDesktopAdditionalButtons from "./volt-desktop-additional-buttons";
+import VoltDesktopFooter from "./volt-desktop-footer";
 
 const primaryLayout = `"details map" "footer footer"`;
 
@@ -31,69 +22,11 @@ interface VoltDesktopProps {
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
 
-function isElementVisible(parcelNumberNoFormatting: string, step: VoltSteps) {
-  const rect = document
-    .getElementById(`${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`)
-    ?.getBoundingClientRect();
-
-  const containerRect = document.querySelector("#volt-scroll>div")?.getBoundingClientRect();
-
-  if (!containerRect || !rect) {
-    return false;
-  }
-  return rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
-}
-
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values, setOpenPropertyDetailWarningModal }) => {
-  const { notify } = useNotification();
-  const router = useRouter();
-  const [showCalculationTerms, setShowCalculationTerms] = useState(false);
-  const [calculationPending, setCalculationPending] = useState(false);
   const [highlightedParcelNumber, setHighlightedParcelNumber] = useState<string | null>(null);
-
-  const calculatePrice = async () => {
-    if (!values.selectedItem) {
-      return;
-    }
-    const reqData: VoltPriceCalculationReq = {
-      body: {
-        county: values.selectedItem?.properties.fields.county.toLocaleLowerCase(),
-        state: values.selectedItem?.properties.fields.state2.toLocaleLowerCase(),
-        parcelNumber: values.selectedItem?.properties.fields.parcelnumb,
-        owner: values.selectedItem.properties.fields.owner,
-        propertyType: values.selectedItem.properties.fields?.zoning_description || values.selectedItem.properties.fields.usedesc || "",
-        coordinates: JSON.stringify(values.selectedItem.geometry.coordinates),
-        locality: values.selectedItem.properties.fields.city,
-      },
-      queryParams: {
-        acre: values.selectedItem.properties.fields.ll_gisacre.toString(),
-        lat: values.selectedItem.properties.fields.lat,
-        lon: values.selectedItem.properties.fields.lon,
-      },
-    };
-    setCalculationPending(true);
-
-    const { errorMessage, data } = await calculateLandPriceAction(reqData);
-    if (errorMessage) {
-      notify({ title: "Error", description: errorMessage }, { variant: "error" });
-    } else {
-      setStep(VoltSteps.CALCULATION);
-      setValues({ ...values, calculation: data });
-      setHighlightedParcelNumber(null);
-    }
-    setCalculationPending(false);
-  };
 
   return (
     <>
-      <CalculationTermsDialog
-        onAccept={() => {
-          setShowCalculationTerms(false);
-          calculatePrice();
-        }}
-        open={showCalculationTerms}
-        closeModal={() => setShowCalculationTerms(false)}
-      />
       <div
         style={{ gridTemplateAreas: primaryLayout }}
         className={cn(
@@ -132,38 +65,21 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 )}
               </div>
             </ScrollArea>
-            <div className="px-5 lg:px-8 xl:px-11 pb-4">
-              {step === VoltSteps.SEARCH_RESULTS && (
-                <Button
-                  loading={calculationPending}
-                  onClick={() => {
-                    if (user) {
-                      calculatePrice();
-                    } else {
-                      setShowCalculationTerms(true);
-                    }
-                  }}
-                  disabled={!values.selectedItem}
-                  className="w-full"
-                >
-                  Calculate Price
-                </Button>
-              )}
-              {step === VoltSteps.CALCULATION && !user && (
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
-                    sessionStorage.setItem("volt", JSON.stringify({ step, values }));
-                  }}
-                >
-                  Save Data
-                </Button>
-              )}
+            <div className="px-5 lg:px-8 xl:px-11 pb-4 xl:hidden">
+              <VoltDesktopAdditionalButtons
+                user={user}
+                step={step}
+                values={values}
+                onSucceed={(data) => {
+                  setStep(VoltSteps.CALCULATION);
+                  setValues({ ...values, calculation: data });
+                  setHighlightedParcelNumber(null);
+                }}
+              />
             </div>
           </div>
         </div>
-        <div className="bg-primary-main-100 " style={{ gridArea: "map" }}>
+        <div className="bg-primary-main-100" style={{ gridArea: "map" }}>
           <VoltMap
             step={step}
             user={user}
@@ -171,7 +87,12 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
             highlightedParcelNumber={highlightedParcelNumber}
             onMarkerMouseEnter={(parcelNumberNoFormatting) => {
               setHighlightedParcelNumber(parcelNumberNoFormatting);
-              if (!isElementVisible(parcelNumberNoFormatting, step)) {
+              if (
+                !isElementVisible(
+                  parcelNumberNoFormatting,
+                  ` ${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
+                )
+              ) {
                 const item = document.getElementById(
                   `${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
                 );
@@ -187,39 +108,20 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
             }}
           />
         </div>
-
-        <div className="px-5 lg:px-8 xl:px-11 py-4 border-t border-t-grey-100 space-y-6" style={{ gridArea: "footer" }}>
-          {step === VoltSteps.CALCULATION && (
-            <div style={{ gridArea: "axis" }}>
-              <VoltPriceCalculationAxis
-                voltValue={values.calculation?.price || 0}
-                user={user}
-                setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-                data={
-                  values.calculation?.properties.map((el) => ({
-                    parcelNumber: el.parselId || "",
-                    acreage: Number(Number(el.arcage).toFixed(2)),
-                    price: el.price,
-                    pricePerAcre: Number(el.price / Number(el.arcage)),
-                    isMainLand:
-                      removeParcelNumberFormatting(el.parselId) === values.selectedItem?.properties.fields.parcelnumb_no_formatting,
-                  })) || []
-                }
-                highlightedParcelNumber={highlightedParcelNumber}
-                onPinHover={(parcelNumberNoFormatting) => {
-                  setHighlightedParcelNumber(parcelNumberNoFormatting);
-                  if (!isElementVisible(parcelNumberNoFormatting, step)) {
-                    const item = document.getElementById(`calculation-${parcelNumberNoFormatting}`);
-                    if (item) {
-                      item.scrollIntoView();
-                    }
-                  }
-                }}
-              />
-            </div>
-          )}
-          <VoltFooter />
-        </div>
+        <VoltDesktopFooter
+          openPropertyDetailViewWarnig={() => setOpenPropertyDetailWarningModal(true)}
+          step={step}
+          user={user}
+          voltValue={values.calculation?.price || 0}
+          onCalculationSucceed={(data) => {
+            setStep(VoltSteps.CALCULATION);
+            setValues({ ...values, calculation: data });
+            setHighlightedParcelNumber(null);
+          }}
+          setHighlightedParcelNumber={setHighlightedParcelNumber}
+          highlightedParcelNumber={highlightedParcelNumber}
+          values={values}
+        />
       </div>
     </>
   );
