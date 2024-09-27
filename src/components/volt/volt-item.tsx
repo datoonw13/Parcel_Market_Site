@@ -48,19 +48,6 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
       </div>
     </div>
     <hr className="bg-gray-100" />
-    {/* <div className="flex justify-between items-center gap-4">
-      <p className="text-xs text-grey-600">
-        Acreage:{" "}
-        <span className="text-black font-medium">
-          {data.acreage.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-        </span>
-      </p>
-      {data.pricePerAcre && (
-        <p className="text-xs text-grey-600">
-          Per acre Price: <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcre)}</span>
-        </p>
-      )}
-    </div> */}
     <div className="flex gap-2 justify-between">
       <div className="space-y-1">
         <p className="text-xs text-grey-600">
@@ -88,18 +75,6 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
         )}
       </div>
     </div>
-    {/* <div className="flex justify-between items-center gap-4">
-      {data.lastSalePrice && (
-        <p className="text-xs text-grey-600">
-          Sold Price: <span className="text-black font-medium">{moneyFormatter.format(data.lastSalePrice)}</span>
-        </p>
-      )}
-      {data.lastSaleDate && (
-        <p className="text-xs text-grey-600">
-          Last Sale Date: <span className="text-black font-medium">{data.lastSaleDate}</span>
-        </p>
-      )}
-    </div> */}
   </div>
 );
 

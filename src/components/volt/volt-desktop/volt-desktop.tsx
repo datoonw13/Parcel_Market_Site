@@ -1,8 +1,9 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn, isElementVisible } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { MapInteractionModel } from "@/types/common";
 import VoltSearch from "../volt-search";
 import VoltSearchResult from "../volt-search-result";
 import VoltMap from "../volt-map";
@@ -23,7 +24,10 @@ interface VoltDesktopProps {
 }
 
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values, setOpenPropertyDetailWarningModal }) => {
-  const [highlightedParcelNumber, setHighlightedParcelNumber] = useState<string | null>(null);
+  const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
+    hoveredParcelNumber: null,
+    openPopperParcelNumber: null,
+  });
 
   return (
     <>
@@ -42,25 +46,20 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 {step === VoltSteps.SEARCH_RESULTS && (
                   <VoltSearchResult
                     className="pb-6"
-                    onSearchResultItemHover={(parcelNumberNoFormatting) => setHighlightedParcelNumber(parcelNumberNoFormatting)}
-                    onSearchResultItemMouseLeave={() => {
-                      // setHighlightedParcelNumber(null)
-                    }}
-                    highlightedParcelNumber={highlightedParcelNumber}
                     values={values}
                     setValues={setValues}
+                    mapInteraction={mapInteraction}
+                    setMpaInteraction={setMpaInteraction}
                   />
                 )}
                 {step === VoltSteps.CALCULATION && (
                   <VoltCalculation
-                    onSearchResultItemHover={(parcelNumberNoFormatting) => setHighlightedParcelNumber(parcelNumberNoFormatting)}
-                    onSearchResultItemMouseLeave={() => {
-                      // setHighlightedParcelNumber(null)
-                    }}
-                    highlightedParcelNumber={highlightedParcelNumber}
                     values={values}
                     setValues={setValues}
                     user={user}
+                    mapInteraction={mapInteraction}
+                    setMpaInteraction={setMpaInteraction}
+                    openPropertyDetailViewWarnig={() => setOpenPropertyDetailWarningModal(true)}
                   />
                 )}
               </div>
@@ -73,7 +72,11 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 onSucceed={(data) => {
                   setStep(VoltSteps.CALCULATION);
                   setValues({ ...values, calculation: data });
-                  setHighlightedParcelNumber(null);
+                  setMpaInteraction({
+                    hoveredParcelNumber: null,
+                    openPopperParcelNumber: null,
+                    zoom: false,
+                  });
                 }}
               />
             </div>
@@ -84,28 +87,10 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
             step={step}
             user={user}
             setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-            highlightedParcelNumber={highlightedParcelNumber}
-            onMarkerMouseEnter={(parcelNumberNoFormatting) => {
-              setHighlightedParcelNumber(parcelNumberNoFormatting);
-              if (
-                !isElementVisible(
-                  parcelNumberNoFormatting,
-                  ` ${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
-                )
-              ) {
-                const item = document.getElementById(
-                  `${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
-                );
-                if (item) {
-                  item.scrollIntoView();
-                }
-              }
-            }}
             values={values}
             setValues={setValues}
-            onMarkerMouseLeave={() => {
-              // setHighlightedParcelNumber(null);
-            }}
+            mapInteraction={mapInteraction}
+            setMpaInteraction={setMpaInteraction}
           />
         </div>
         <VoltDesktopFooter
@@ -116,11 +101,15 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
           onCalculationSucceed={(data) => {
             setStep(VoltSteps.CALCULATION);
             setValues({ ...values, calculation: data });
-            setHighlightedParcelNumber(null);
+            setMpaInteraction({
+              hoveredParcelNumber: null,
+              openPopperParcelNumber: null,
+              zoom: false,
+            });
           }}
-          setHighlightedParcelNumber={setHighlightedParcelNumber}
-          highlightedParcelNumber={highlightedParcelNumber}
           values={values}
+          mapInteraction={mapInteraction}
+          setMpaInteraction={setMpaInteraction}
         />
       </div>
     </>

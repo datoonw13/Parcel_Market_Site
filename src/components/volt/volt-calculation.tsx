@@ -8,6 +8,7 @@ import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 import { capitalize } from "lodash";
 import { getStateValue } from "@/helpers/states";
+import { MapInteractionModel } from "@/types/common";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
@@ -27,19 +28,19 @@ interface VoltCalculationProps {
     selectedItem: IMap[0] | null;
     calculation: VoltPriceCalculationRes | null;
   };
-  onSearchResultItemHover?: (parcelNumberNoFormatting: string) => void;
-  onSearchResultItemMouseLeave?: (parcelNumberNoFormatting: string) => void;
-  highlightedParcelNumber: string | null;
   user: IDecodedAccessToken | null;
+  mapInteraction: MapInteractionModel;
+  setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  openPropertyDetailViewWarnig: () => void;
 }
 
 const VoltCalculation: FC<VoltCalculationProps> = ({
   values,
   setValues,
-  highlightedParcelNumber,
-  onSearchResultItemHover,
-  onSearchResultItemMouseLeave,
   user,
+  mapInteraction,
+  setMpaInteraction,
+  openPropertyDetailViewWarnig,
 }) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -60,8 +61,27 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
         <div className="flex flex-col gap-2">
           {values.selectedItem && (
             <VoltItem
-              onHover={onSearchResultItemHover}
-              onMouseLeave={onSearchResultItemMouseLeave}
+              onHover={(parcelNumberNoFormatting) => {
+                setMpaInteraction((prevData) => ({
+                  ...prevData,
+                  hoveredParcelNumber: removeParcelNumberFormatting(parcelNumberNoFormatting),
+                  zoom: true,
+                }));
+              }}
+              onMouseLeave={() => {
+                setMpaInteraction((prevData) => ({
+                  ...prevData,
+                  hoveredParcelNumber: null,
+                  zoom: false,
+                }));
+              }}
+              onSelect={(parcelNumberNoFormatting) => {
+                setMpaInteraction((prevData) => ({
+                  ...prevData,
+                  openPopperParcelNumber: parcelNumberNoFormatting,
+                  zoom: false,
+                }));
+              }}
               id={`calculation-${values.selectedItem.properties.fields.parcelnumb}`}
               data={{
                 acreage: Number(values.selectedItem.properties.fields.ll_gisacre),
@@ -72,7 +92,10 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                 county: capitalize(values.selectedItem.properties.fields.county),
               }}
               selected
-              isHighlighted={highlightedParcelNumber === values.selectedItem.properties.fields.parcelnumb_no_formatting}
+              isHighlighted={
+                mapInteraction.hoveredParcelNumber === values.selectedItem.properties.fields.parcelnumb_no_formatting ||
+                mapInteraction.openPopperParcelNumber === values.selectedItem.properties.fields.parcelnumb_no_formatting
+              }
             />
           )}
         </div>
@@ -90,8 +113,31 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
             {values.calculation?.properties.map((item) => (
               <VoltItem
                 id={`calculation-${removeParcelNumberFormatting(item.parselId)}`}
-                onHover={onSearchResultItemHover}
-                onMouseLeave={onSearchResultItemMouseLeave}
+                onHover={(parcelNumberNoFormatting) => {
+                  setMpaInteraction((prevData) => ({
+                    ...prevData,
+                    hoveredParcelNumber: removeParcelNumberFormatting(parcelNumberNoFormatting),
+                    zoom: true,
+                  }));
+                }}
+                onMouseLeave={() => {
+                  setMpaInteraction((prevData) => ({
+                    ...prevData,
+                    hoveredParcelNumber: null,
+                    zoom: false,
+                  }));
+                }}
+                onSelect={(parcelNumberNoFormatting) => {
+                  if (user) {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      openPopperParcelNumber: parcelNumberNoFormatting,
+                      zoom: false,
+                    }));
+                  } else {
+                    openPropertyDetailViewWarnig();
+                  }
+                }}
                 key={item.parselId}
                 data={{
                   acreage: Number(item.arcage),
@@ -103,7 +149,10 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                   lastSaleDate: item.lastSalesDate,
                   lastSalePrice: Number(item.lastSalesPrice),
                 }}
-                isHighlighted={highlightedParcelNumber === removeParcelNumberFormatting(item.parselId)}
+                isHighlighted={
+                  mapInteraction.hoveredParcelNumber === removeParcelNumberFormatting(item.parselId) ||
+                  mapInteraction.openPopperParcelNumber === removeParcelNumberFormatting(item.parselId)
+                }
               />
             ))}
           </div>

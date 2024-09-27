@@ -3,51 +3,60 @@
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
 import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
+import { MapInteractionModel } from "@/types/common";
+import { IMapItem } from "@/types/map";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
 interface VoltDesktopProps {
   step: VoltSteps;
-  highlightedParcelNumber: string | null;
-  onMarkerMouseEnter: (parcelNumberNoFormatting: string) => void;
-  onMarkerMouseLeave: (parcelNumberNoFormatting: string) => void;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
   user: IDecodedAccessToken | null;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
+  mapInteraction: MapInteractionModel;
+  setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }
 
 const VoltMap: FC<VoltDesktopProps> = ({
   step,
-  highlightedParcelNumber,
-  onMarkerMouseEnter,
-  onMarkerMouseLeave,
   setValues,
   values,
   user,
   setOpenPropertyDetailWarningModal,
+  mapInteraction,
+  setMpaInteraction,
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
 
-  const mapData = () => {
+  const mapData = useMemo(() => {
     if (step === VoltSteps.SEARCH) {
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
+      const getIcon = (el: IMapItem) => {
+        if (values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting) {
+          return "active" as const;
+        }
+        if (
+          mapInteraction.hoveredParcelNumber === el.properties.fields.parcelnumb_no_formatting ||
+          mapInteraction.openPopperParcelNumber === el.properties.fields.parcelnumb_no_formatting
+        ) {
+          return "highlighted" as const;
+        }
+        return "default" as const;
+      };
       return values.searchResult?.map((el) => ({
         parcelNumber: el.properties.fields.parcelnumb_no_formatting || "",
         latitude: Number(el.properties.fields.lat),
         longitude: Number(el.properties.fields.lon),
         polygon: el.geometry.coordinates,
-        markerType:
-          values.selectedItem?.properties.fields.parcelnumb_no_formatting === el.properties.fields.parcelnumb_no_formatting
-            ? ("active" as const)
-            : ("default" as const),
+        markerType: getIcon(el),
         popup: (
           <div className="flex flex-col gap-1 space-y-2">
             <p className="!p-0 !m-0">
@@ -126,7 +135,11 @@ const VoltMap: FC<VoltDesktopProps> = ({
         parcelNumber: el.parselId || "",
         latitude: Number(el.latitude),
         longitude: Number(el.longitude),
-        markerType: "default" as const,
+        markerType:
+          mapInteraction.hoveredParcelNumber === removeParcelNumberFormatting(el.parselId) ||
+          mapInteraction.openPopperParcelNumber === removeParcelNumberFormatting(el.parselId)
+            ? ("highlighted" as const)
+            : ("default" as const),
         ...(user &&
           user.isSubscribed && {
             popup: (
@@ -158,30 +171,91 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [mainProperty, ...properties];
     }
     return [];
-  };
+  }, [
+    mapInteraction.hoveredParcelNumber,
+    mapInteraction.openPopperParcelNumber,
+    setValues,
+    step,
+    user,
+    values.calculation,
+    values.searchResult,
+    values.selectedItem?.properties.fields.parcelnumb_no_formatting,
+  ]);
+
+  const handleMapHoverInteraction = useCallback(() => {
+    if (mapRef.current) {
+      if (mapInteraction.hoveredParcelNumber) {
+        const currentItemMarker = markerRefs.current?.[mapInteraction.hoveredParcelNumber];
+        if (currentItemMarker) {
+          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
+          if (mapInteraction.zoom) {
+            mapRef.current.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+          }
+        }
+      }
+    }
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
+
+  const handleMapPopperInteraction = useCallback(() => {
+    if (mapRef.current) {
+      if (mapInteraction.openPopperParcelNumber) {
+        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
+        if (currentItemMarker) {
+          currentItemMarker.openPopup();
+          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
+          if (mapInteraction.zoom) {
+            mapRef.current.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+          }
+        }
+      }
+    }
+  }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
 
   useEffect(() => {
-    if (highlightedParcelNumber && mapRef.current) {
-      const itemRef = markerRefs.current?.[highlightedParcelNumber];
-      if (itemRef) {
-        itemRef.openPopup();
-      }
-    } else {
-    }
-  }, [highlightedParcelNumber]);
+    handleMapHoverInteraction();
+  }, [handleMapHoverInteraction, mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
+
+  useEffect(() => {
+    handleMapPopperInteraction();
+  }, [handleMapPopperInteraction, mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
 
   return (
     <Map
-      highlightItemParcelNumber={highlightedParcelNumber}
-      properties={mapData()}
+      properties={mapData}
       zoom={step === VoltSteps.SEARCH ? 5 : 8}
       dragging={step !== VoltSteps.SEARCH}
       disableZoom={step === VoltSteps.SEARCH}
       setMarkerRef={(parcelNumber, ref) => {
         markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
       }}
-      markerMouseEnter={onMarkerMouseEnter}
-      markerMouseLeave={onMarkerMouseLeave}
+      markerMouseEnter={(parcelNumberNoFormatting) => {
+        setMpaInteraction((prevData) => ({
+          ...prevData,
+          hoveredParcelNumber: parcelNumberNoFormatting,
+          zoom: false,
+        }));
+      }}
+      markerMouseLeave={() => {
+        setMpaInteraction((prevData) => ({
+          ...prevData,
+          hoveredParcelNumber: null,
+          zoom: false,
+        }));
+      }}
+      popupOpen={(parcelNumberNoFormatting) => {
+        setMpaInteraction((prevData) => ({
+          ...prevData,
+          openPopperParcelNumber: parcelNumberNoFormatting,
+          zoom: false,
+        }));
+      }}
+      popupClose={() => {
+        setMpaInteraction((prevData) => ({
+          ...prevData,
+          openPopperParcelNumber: null,
+          zoom: false,
+        }));
+      }}
       onMarkerClick={(parcelNumberNoFormatting) => {
         if (
           (!user || !user.isSubscribed) &&

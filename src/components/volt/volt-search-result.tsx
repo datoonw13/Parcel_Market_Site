@@ -5,26 +5,27 @@ import { VoltWrapperValuesModel } from "@/types/volt";
 import { getStateValue } from "@/helpers/states";
 import { capitalize } from "lodash";
 import { cn } from "@/lib/utils";
+import { MapInteractionModel } from "@/types/common";
+import { removeParcelNumberFormatting } from "@/helpers/common";
+import { IDecodedAccessToken } from "@/types/auth";
 import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {
-  onSearchResultItemHover?: (parcelNumberNoFormatting: string) => void;
-  onSearchResultItemMouseLeave?: (parcelNumberNoFormatting: string) => void;
-  highlightedParcelNumber: string | null;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
   showOnlyTitle?: boolean;
   className?: string;
+  mapInteraction: MapInteractionModel;
+  setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }
 
 const VoltSearchResult: FC<VoltSearchResultProps> = ({
-  onSearchResultItemHover,
-  onSearchResultItemMouseLeave,
-  highlightedParcelNumber,
   setValues,
   values,
   showOnlyTitle,
   className,
+  mapInteraction,
+  setMpaInteraction,
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -54,16 +55,36 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({
                 state: getStateValue(item.properties.fields.state2)?.label || "",
                 county: capitalize(item.properties.fields.county),
               }}
-              onHover={onSearchResultItemHover}
-              onMouseLeave={onSearchResultItemMouseLeave}
+              onHover={(parcelNumberNoFormatting) => {
+                setMpaInteraction((prevData) => ({
+                  ...prevData,
+                  hoveredParcelNumber: removeParcelNumberFormatting(parcelNumberNoFormatting),
+                  zoom: true,
+                }));
+              }}
+              onMouseLeave={() => {
+                setMpaInteraction((prevData) => ({
+                  ...prevData,
+                  hoveredParcelNumber: null,
+                  zoom: false,
+                }));
+              }}
               selected={item.properties.fields.parcelnumb_no_formatting === values.selectedItem?.properties.fields.parcelnumb_no_formatting}
-              onSelect={(parcelNumber) => {
-                const item = values.searchResult?.find((el) => el.properties.fields.parcelnumb_no_formatting === parcelNumber);
+              onSelect={(parcelNumberNoFormatting) => {
+                const item = values.searchResult?.find((el) => el.properties.fields.parcelnumb_no_formatting === parcelNumberNoFormatting);
                 if (item) {
                   setValues((prev) => ({ ...prev, selectedItem: item }));
                 }
+                setMpaInteraction((prevData) => ({
+                  ...prevData,
+                  openPopperParcelNumber: parcelNumberNoFormatting,
+                  zoom: true,
+                }));
               }}
-              isHighlighted={highlightedParcelNumber === item.properties.fields.parcelnumb_no_formatting}
+              isHighlighted={
+                mapInteraction.hoveredParcelNumber === item.properties.fields.parcelnumb_no_formatting ||
+                mapInteraction.openPopperParcelNumber === item.properties.fields.parcelnumb_no_formatting
+              }
             />
           ))}
         </div>

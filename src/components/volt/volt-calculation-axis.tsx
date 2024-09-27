@@ -1,6 +1,7 @@
 import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
+import { MapInteractionModel } from "@/types/common";
 import React, { Dispatch, SetStateAction } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 
@@ -13,11 +14,11 @@ const CalculatePrice = ({ price }: { price: number }) => (
 
 const VoltPriceCalculationAxis = ({
   data,
-  highlightedParcelNumber,
-  onPinHover,
   setOpenPropertyDetailWarningModal,
   user,
   voltValue,
+  mapInteraction,
+  setMpaInteraction,
 }: {
   data: {
     pricePerAcre: number;
@@ -26,11 +27,11 @@ const VoltPriceCalculationAxis = ({
     price: number;
     isMainLand: boolean;
   }[];
-  highlightedParcelNumber: string | null;
-  onPinHover?: (parcelNumberNoFormatting: string) => void;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
   user: IDecodedAccessToken | null;
   voltValue: number;
+  mapInteraction: MapInteractionModel;
+  setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }) => {
   const averagePricePerAcre = Number((data.reduce((acc, cur) => acc + cur.pricePerAcre, 0) / data.length).toFixed(2));
   const minPricePerAcre = Math.min(...data.map((el) => el.pricePerAcre));
@@ -55,9 +56,7 @@ const VoltPriceCalculationAxis = ({
         
           `}
           >
-            {/* Main thumb */}
             <div className="bg-primary-main-400 h-1.5 rounded-2xl" />
-            {/* Secondary thumb */}
             <div
               style={{
                 width:
@@ -67,7 +66,6 @@ const VoltPriceCalculationAxis = ({
               }}
               className="bg-primary-main h-1.5 rounded-2xl absolute top-0"
             />
-            {/* Thumb dot */}
             <div
               style={{ left: `calc(${getItemXAxisPositionInPercent(averagePricePerAcre)}%)` }}
               className="absolute top-[50%] -translate-y-[50%]"
@@ -84,18 +82,38 @@ const VoltPriceCalculationAxis = ({
             {/* Pins */}
             {data.map((property) => (
               <FaLocationDot
-                onMouseEnter={() => onPinHover && onPinHover(removeParcelNumberFormatting(property.parcelNumber))}
+                onMouseEnter={() => {
+                  setMpaInteraction((prevData) => ({
+                    ...prevData,
+                    hoveredParcelNumber: removeParcelNumberFormatting(property.parcelNumber),
+                    zoom: true,
+                  }));
+                }}
+                onMouseLeave={() => {
+                  setMpaInteraction((prevData) => ({
+                    ...prevData,
+                    hoveredParcelNumber: null,
+                    zoom: false,
+                  }));
+                }}
+                onClick={() => {
+                  if ((!user || !user.isSubscribed) && !property.isMainLand) {
+                    setOpenPropertyDetailWarningModal(true);
+                  } else {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      openPopperParcelNumber: removeParcelNumberFormatting(property.parcelNumber),
+                    }));
+                  }
+                }}
                 key={property.parcelNumber}
                 style={{ left: `calc(${getItemXAxisPositionInPercent(property.pricePerAcre)}% - 0px)` }}
                 className={cn(
                   `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] size-5 lg:size-6 -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
-                  highlightedParcelNumber === removeParcelNumberFormatting(property.parcelNumber) && "scale-150 text-[#FF2F48] "
+                  (mapInteraction.hoveredParcelNumber === removeParcelNumberFormatting(property.parcelNumber) ||
+                    mapInteraction.openPopperParcelNumber === removeParcelNumberFormatting(property.parcelNumber)) &&
+                    "scale-150 text-[#FF2F48] "
                 )}
-                onClick={() => {
-                  if ((!user || !user.isSubscribed) && !property.isMainLand) {
-                    setOpenPropertyDetailWarningModal(true);
-                  }
-                }}
               />
             ))}
           </div>

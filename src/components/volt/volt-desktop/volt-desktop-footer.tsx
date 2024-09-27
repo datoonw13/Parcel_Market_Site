@@ -2,7 +2,8 @@ import { VoltPriceCalculationRes, VoltSteps, VoltWrapperValuesModel } from "@/ty
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { removeParcelNumberFormatting } from "@/helpers/common";
-import { cn, isElementVisible } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { MapInteractionModel } from "@/types/common";
 import VoltPriceCalculationAxis from "../volt-calculation-axis";
 import VoltDesktopAdditionalButtons from "./volt-desktop-additional-buttons";
 import VoltFooter from "../volt-footer";
@@ -12,20 +13,20 @@ interface VoltDesktopFooterProps {
   voltValue: number;
   user: IDecodedAccessToken | null;
   openPropertyDetailViewWarnig: () => void;
-  highlightedParcelNumber: string | null;
-  setHighlightedParcelNumber: Dispatch<SetStateAction<string | null>>;
   values: VoltWrapperValuesModel;
   onCalculationSucceed: (data: VoltPriceCalculationRes | null) => void;
+  mapInteraction: MapInteractionModel;
+  setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }
 const VoltDesktopFooter: FC<VoltDesktopFooterProps> = ({
   step,
   voltValue,
   user,
   openPropertyDetailViewWarnig,
-  highlightedParcelNumber,
-  setHighlightedParcelNumber,
   values,
   onCalculationSucceed,
+  mapInteraction,
+  setMpaInteraction,
 }) => (
   <div
     className={cn(
@@ -39,6 +40,8 @@ const VoltDesktopFooter: FC<VoltDesktopFooterProps> = ({
         <VoltPriceCalculationAxis
           voltValue={voltValue}
           user={user}
+          mapInteraction={mapInteraction}
+          setMpaInteraction={setMpaInteraction}
           setOpenPropertyDetailWarningModal={openPropertyDetailViewWarnig}
           data={
             values.calculation?.properties.map((el) => ({
@@ -49,22 +52,6 @@ const VoltDesktopFooter: FC<VoltDesktopFooterProps> = ({
               isMainLand: removeParcelNumberFormatting(el.parselId) === values.selectedItem?.properties.fields.parcelnumb_no_formatting,
             })) || []
           }
-          highlightedParcelNumber={highlightedParcelNumber}
-          onPinHover={(parcelNumberNoFormatting) => {
-            setHighlightedParcelNumber(parcelNumberNoFormatting);
-
-            if (
-              !isElementVisible(
-                parcelNumberNoFormatting,
-                ` ${step === VoltSteps.CALCULATION ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
-              )
-            ) {
-              const item = document.getElementById(`calculation-${parcelNumberNoFormatting}`);
-              if (item) {
-                item.scrollIntoView();
-              }
-            }
-          }}
         />
       </div>
     )}

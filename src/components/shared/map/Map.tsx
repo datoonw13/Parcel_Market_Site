@@ -147,15 +147,15 @@ const Map = ({
               <Marker
                 eventHandlers={{
                   mouseover: (e) => {
-                    if (mapItem.markerType !== "active") {
-                      e.target.setIcon(markerHighlighted);
-                    }
+                    // if (mapItem.markerType !== "active") {
+                    //   e.target.setIcon(markerHighlighted);
+                    // }
                     markerMouseEnter && markerMouseEnter(removeParcelNumberFormatting(mapItem.parcelNumber));
                   },
                   mouseout: (e) => {
-                    if (mapItem.markerType !== "active") {
-                      e.target.setIcon(getMarkerIcon(mapItem));
-                    }
+                    // if (mapItem.markerType !== "active") {
+                    //   e.target.setIcon(getMarkerIcon(mapItem));
+                    // }
                     markerMouseLeave && markerMouseLeave(removeParcelNumberFormatting(mapItem.parcelNumber));
                   },
                   popupopen: () => popupOpen && popupOpen(removeParcelNumberFormatting(mapItem.parcelNumber)),
@@ -164,6 +164,7 @@ const Map = ({
                 }}
                 ref={(ref) => {
                   if (setMarkerRef && ref) {
+                    ref.getElement()?.setAttribute("data-active", mapItem.markerType === "active" ? "true" : "false");
                     setMarkerRef(removeParcelNumberFormatting(mapItem.parcelNumber), ref);
                   }
                 }}
