@@ -2,7 +2,7 @@ import { VoltPriceCalculationRes, VoltSteps, VoltWrapperValuesModel } from "@/ty
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { removeParcelNumberFormatting } from "@/helpers/common";
-import { isElementVisible } from "@/lib/utils";
+import { cn, isElementVisible } from "@/lib/utils";
 import VoltPriceCalculationAxis from "../volt-calculation-axis";
 import VoltDesktopAdditionalButtons from "./volt-desktop-additional-buttons";
 import VoltFooter from "../volt-footer";
@@ -28,7 +28,10 @@ const VoltDesktopFooter: FC<VoltDesktopFooterProps> = ({
   onCalculationSucceed,
 }) => (
   <div
-    className="px-5 lg:px-8 xl:px-0 xl:pl-0 py-4 border-t border-t-grey-100 space-y-6 flex flex-col xl:flex-row-reverse"
+    className={cn(
+      "px-5 lg:px-8 xl:px-0 xl:pl-0 py-4 border-t border-t-grey-100 space-y-6 flex flex-col xl:flex-row-reverse",
+      step !== VoltSteps.CALCULATION && "justify-end"
+    )}
     style={{ gridArea: "footer" }}
   >
     {step === VoltSteps.CALCULATION && (
@@ -65,11 +68,11 @@ const VoltDesktopFooter: FC<VoltDesktopFooterProps> = ({
         />
       </div>
     )}
-    <div className="xl:w-[490px] xl:min-w-[490px] flex flex-col xl:px-11 !m-0">
+    <div className="xl:w-[490px] xl:min-w-[490px] flex flex-col xl:px-11 !m-0 space-y-6">
       <div className="hidden xl:flex">
         <VoltDesktopAdditionalButtons user={user} step={step} values={values} onSucceed={onCalculationSucceed} />
       </div>
-      <VoltFooter className="w-full xl:flex-col xl:justify-end items-start h-full mt-6 xl:mt-0" />
+      <VoltFooter className="w-full xl:flex-col items-start h-full mt-6 xl:mt-0 xl:justify-end" />
     </div>
   </div>
 );
