@@ -99,7 +99,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             setStep={setStep}
           />
         )}
-        {isSmallDevice && (
+        {/* {isSmallDevice && (
           <VoltMobile
             user={user}
             setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
@@ -108,7 +108,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             step={step}
             setStep={setStep}
           />
-        )}
+        )} */}
       </div>
     </>
   );

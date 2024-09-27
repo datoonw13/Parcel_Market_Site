@@ -71,7 +71,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
           )}
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-3 lg:space-y-4">
         <div className="space-y-1">
           <h1 className="font-semibold text-lg">Recent Sales</h1>
           <h2 className="text-sm text-grey-800">
@@ -110,8 +110,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                   ...property,
                 }}
                 isHighlighted={
-                  mapInteraction.hoveredParcelNumber === property.parcelNumber ||
-                  mapInteraction.openPopperParcelNumber === property.parcelNumber
+                  mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting ||
+                  mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting
                 }
               />
             ))}

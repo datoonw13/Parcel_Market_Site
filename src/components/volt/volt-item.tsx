@@ -22,9 +22,9 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
   <div
     className={cn(
       "p-5 rounded-2xl border border-gray-100 space-y-2 cursor-pointer",
-      selected && "shadow-5 !border-primary-main-400",
-      isHighlighted && "shadow-5 border-primary-main-100",
-      "hover:shadow-5 hover:border-primary-main-100"
+      selected && "shadow-5 !border-primary-main-400 !bg-primary-main-50",
+      isHighlighted && "shadow-5 bg-grey-50 border-[#D5D3D3]",
+      "hover:bg-grey-50 hover:border-[#D5D3D3] hover:shadow-5"
     )}
     onMouseEnter={() => onHover && onHover(data)}
     onMouseLeave={() => onMouseLeave && onMouseLeave(data)}
