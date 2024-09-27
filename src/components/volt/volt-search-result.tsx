@@ -7,7 +7,6 @@ import { capitalize } from "lodash";
 import { cn } from "@/lib/utils";
 import { MapInteractionModel } from "@/types/common";
 import { removeParcelNumberFormatting } from "@/helpers/common";
-import { IDecodedAccessToken } from "@/types/auth";
 import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {

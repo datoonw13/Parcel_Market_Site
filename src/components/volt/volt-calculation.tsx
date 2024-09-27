@@ -14,14 +14,6 @@ import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
 
 interface VoltCalculationProps {
-  setValues: Dispatch<
-    SetStateAction<{
-      searchDetails: VoltSearchModel | null;
-      searchResult: VoltSearchResultModel | null;
-      selectedItem: IMap[0] | null;
-      calculation: VoltPriceCalculationRes | null;
-    }>
-  >;
   values: {
     searchDetails: VoltSearchModel | null;
     searchResult: VoltSearchResultModel | null;
@@ -31,17 +23,9 @@ interface VoltCalculationProps {
   user: IDecodedAccessToken | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
-  openPropertyDetailViewWarnig: () => void;
 }
 
-const VoltCalculation: FC<VoltCalculationProps> = ({
-  values,
-  setValues,
-  user,
-  mapInteraction,
-  setMpaInteraction,
-  openPropertyDetailViewWarnig,
-}) => {
+const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteraction, setMpaInteraction }) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -128,15 +112,11 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                   }));
                 }}
                 onSelect={(parcelNumberNoFormatting) => {
-                  if (user) {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      openPopperParcelNumber: parcelNumberNoFormatting,
-                      zoom: false,
-                    }));
-                  } else {
-                    openPropertyDetailViewWarnig();
-                  }
+                  setMpaInteraction((prevData) => ({
+                    ...prevData,
+                    openPopperParcelNumber: parcelNumberNoFormatting,
+                    zoom: false,
+                  }));
                 }}
                 key={item.parselId}
                 data={{

@@ -53,14 +53,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                   />
                 )}
                 {step === VoltSteps.CALCULATION && (
-                  <VoltCalculation
-                    values={values}
-                    setValues={setValues}
-                    user={user}
-                    mapInteraction={mapInteraction}
-                    setMpaInteraction={setMpaInteraction}
-                    openPropertyDetailViewWarnig={() => setOpenPropertyDetailWarningModal(true)}
-                  />
+                  <VoltCalculation values={values} user={user} mapInteraction={mapInteraction} setMpaInteraction={setMpaInteraction} />
                 )}
               </div>
             </ScrollArea>

@@ -182,6 +182,17 @@ const VoltMap: FC<VoltDesktopProps> = ({
     values.selectedItem?.properties.fields.parcelnumb_no_formatting,
   ]);
 
+  const canViewDetails = (parcelNumberNoFormatting: string) => {
+    if (
+      (user && user.isSubscribed) ||
+      step !== VoltSteps.CALCULATION ||
+      parcelNumberNoFormatting === values.selectedItem?.properties.fields.parcelnumb_no_formatting
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const handleMapHoverInteraction = useCallback(() => {
     if (mapRef.current) {
       if (mapInteraction.hoveredParcelNumber) {
@@ -257,10 +268,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }));
       }}
       onMarkerClick={(parcelNumberNoFormatting) => {
-        if (
-          (!user || !user.isSubscribed) &&
-          parcelNumberNoFormatting !== removeParcelNumberFormatting(values.selectedItem?.properties.fields.parcelnumb || "")
-        ) {
+        if (!canViewDetails(parcelNumberNoFormatting)) {
           setOpenPropertyDetailWarningModal(true);
         }
       }}

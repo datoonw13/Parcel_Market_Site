@@ -160,7 +160,7 @@ const Map = ({
                   },
                   popupopen: () => popupOpen && popupOpen(removeParcelNumberFormatting(mapItem.parcelNumber)),
                   popupclose: () => popupClose && popupClose(removeParcelNumberFormatting(mapItem.parcelNumber)),
-                  click: () => onMarkerClick && onMarkerClick(removeParcelNumberFormatting(mapItem.parcelNumber)),
+                  click: (e) => onMarkerClick && onMarkerClick(removeParcelNumberFormatting(mapItem.parcelNumber)),
                 }}
                 ref={(ref) => {
                   if (setMarkerRef && ref) {
