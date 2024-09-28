@@ -1,224 +1,340 @@
+// "use client";
+
+// import { Command as CommandPrimitive } from "cmdk";
+// import { useState, useRef, useCallback, useEffect } from "react";
+// import type { KeyboardEvent } from "react";
+
+// import { cn } from "@/lib/utils";
+// import { IoChevronDown, IoChevronUp, IoClose } from "react-icons/io5";
+// import { ScrollArea } from "./scroll-area";
+// import { Skeleton } from "./skeleton";
+
+// import { CommandItem, CommandList } from "./command";
+// import { TextInput } from "./input";
+// import { Button } from "./button";
+
+// export type Option = Record<"value" | "label", string> & Record<string, string>;
+
+// type AutoCompleteProps = {
+//   options: Option[];
+//   emptyMessage: string;
+//   value: Option | null;
+//   onValueChange?: (value: Option | null) => void;
+//   isLoading?: boolean;
+//   disabled?: boolean;
+//   placeholder?: string;
+//   error?: boolean;
+// };
+
+// export const AutoComplete = ({
+//   options,
+//   placeholder,
+//   emptyMessage,
+//   value,
+//   onValueChange,
+//   disabled,
+//   isLoading,
+//   error,
+// }: AutoCompleteProps) => {
+//   const inputRef = useRef<HTMLInputElement>(null);
+//   const inputRootRef = useRef<HTMLDivElement>(null);
+//   const containerRef = useRef<HTMLDivElement>(null);
+//   const timerRef = useRef<ReturnType<typeof setTimeout>>();
+//   const [isOpen, setOpen] = useState(false);
+//   const [inputValue, setInputValue] = useState<string>(value?.label || "");
+
+//   const handleKeyDown = useCallback(
+//     (event: KeyboardEvent<HTMLDivElement>) => {
+//       const input = inputRef.current;
+//       if (!input) {
+//         return;
+//       }
+
+//       // Keep the options displayed when the user is typing
+//       if (!isOpen) {
+//         setOpen(true);
+//       }
+
+//       // This is not a default behaviour of the <input /> field
+//       if (event.key === "Enter" && input.value !== "") {
+//         const optionToSelect = options.find((option) => option.label === input.value);
+//         if (optionToSelect) {
+//           onValueChange?.(optionToSelect);
+//         }
+//       }
+
+//       if (event.key === "Escape") {
+//         input.blur();
+//       }
+//     },
+//     [isOpen, options, onValueChange]
+//   );
+
+//   const handleBlur = useCallback(() => {
+//     setOpen(false);
+//     setInputValue(value?.label || "");
+//   }, [value]);
+
+//   const handleSelectOption = useCallback(
+//     (selectedOption: Option | null) => {
+//       setInputValue(selectedOption?.label || "");
+//       onValueChange?.(selectedOption);
+
+//       // This is a hack to prevent the input from being focused after the user selects an option
+//       // We can call this hack: "The next tick"
+//       if (timerRef.current) {
+//         window.clearTimeout(timerRef.current);
+//       }
+//       timerRef.current = setTimeout(() => {
+//         inputRef?.current?.blur();
+//       }, 0);
+//     },
+//     [onValueChange]
+//   );
+
+//   const filterOptions = () => {
+//     if (inputValue) {
+//       const filteredOptions = options.filter((el) => el.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()));
+//       return filteredOptions;
+//     }
+//     return options;
+//   };
+
+//   const filteredOptions = filterOptions();
+
+//   const updateContainerOptions = () => {
+//     if (inputRef.current && containerRef.current) {
+//       const props = inputRootRef.current!.getBoundingClientRect();
+//       containerRef.current.style.top = `${props.y + props.height + 2}px`;
+//       containerRef.current.style.width = `${props.width}px`;
+//     }
+//   };
+
+//   useEffect(
+//     () => () => {
+//       if (timerRef.current) {
+//         window.clearTimeout(timerRef.current);
+//       }
+//     },
+//     []
+//   );
+
+//   useEffect(() => {
+//     if (!isOpen && value?.label !== inputValue) {
+//       setInputValue(value?.label || "");
+//     }
+//   }, [inputValue, isOpen, value?.label]);
+
+//   useEffect(() => {
+//     updateContainerOptions();
+//   }, [inputValue]);
+
+//   useEffect(() => {
+//     window.addEventListener("resize", updateContainerOptions);
+//     return () => {
+//       window.removeEventListener("resize", updateContainerOptions);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     window.addEventListener("wheel", updateContainerOptions);
+//     return () => {
+//       window.removeEventListener("wheel", updateContainerOptions);
+//     };
+//   }, []);
+
+//   return (
+//     <CommandPrimitive onKeyDown={handleKeyDown} className="w-full">
+//       <div>
+//         <TextInput
+//           ref={inputRef}
+//           rootRef={inputRootRef}
+//           value={inputValue || ""}
+//           onChange={(e) => (isLoading ? undefined : setInputValue(e.target.value))}
+//           onBlur={handleBlur}
+//           onFocus={() => setOpen(true)}
+//           placeholder={placeholder}
+//           disabled={disabled}
+//           error={error}
+//           endIcon={
+//             <div className="grid gap-1 h-full items-center grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
+//               {value && (
+//                 <Button onClick={() => handleSelectOption(null)} size="icon" className="h-full w-full px-1 !bg-transparent">
+//                   <IoClose className="size-4 text-grey-800" />
+//                 </Button>
+//               )}
+//               <Button size="icon" className="h-full w-full px-1 !bg-transparent">
+//                 {isOpen ? <IoChevronUp className="size-4 text-grey-800" /> : <IoChevronDown className="size-4 text-grey-800" />}
+//               </Button>
+//             </div>
+//           }
+//           rootClassName="w-full"
+//         />
+//       </div>
+//       <div className="relative mt-1">
+//         <div
+//           className={cn(
+//             "animate-in fade-in-0 zoom-in-95 fixed top-0 z-10 w-full rounded-xl bg-white outline-none shadow-1 overflow-hidden",
+//             isOpen ? "block" : "hidden"
+//           )}
+//           ref={containerRef}
+//         >
+//           <CommandList className="overflow-hidden">
+//             {isLoading ? (
+//               <CommandPrimitive.Loading>
+//                 <div className="p-1">
+//                   <Skeleton className="h-8 w-full" />
+//                 </div>
+//               </CommandPrimitive.Loading>
+//             ) : null}
+//             {filteredOptions.length > 0 && !isLoading && (
+//               <ScrollArea className="flex max-h-72 flex-col overflow-y-auto">
+//                 {filteredOptions.map((option) => {
+//                   const isSelected = value?.value === option.value;
+//                   return (
+//                     <CommandItem
+//                       key={option.value}
+//                       value={option.label}
+//                       onMouseDown={(event) => {
+//                         event.preventDefault();
+//                         event.stopPropagation();
+//                       }}
+//                       onSelect={() => handleSelectOption(option)}
+//                       className={cn(
+//                         "py-2.5 px-4 cursor-pointer hover:!bg-primary-main-50 transition-all duration-100 font-medium text-xs",
+//                         isSelected && "!bg-primary-main-100"
+//                       )}
+//                     >
+//                       {option.label}
+//                     </CommandItem>
+//                   );
+//                 })}
+//               </ScrollArea>
+//             )}
+//             {!isLoading ? (
+//               <CommandPrimitive.Empty className="select-none rounded-sm px-2 py-3 text-center text-sm">
+//                 {emptyMessage}
+//               </CommandPrimitive.Empty>
+//             ) : null}
+//           </CommandList>
+//         </div>
+//       </div>
+//     </CommandPrimitive>
+//   );
+// };
+
 "use client";
 
-import { Command as CommandPrimitive } from "cmdk";
-import { useState, useRef, useCallback, useEffect } from "react";
-import type { KeyboardEvent } from "react";
+import React, { FC } from "react";
+import Select from "react-select";
+import { colors } from "../../../tailwind.config";
 
-import { cn } from "@/lib/utils";
-import { IoChevronDown, IoChevronUp, IoClose } from "react-icons/io5";
-import { ScrollArea } from "./scroll-area";
-import { Skeleton } from "./skeleton";
+const options = [
+  { value: "chocolate", label: "Chocolate" },
+  { value: "strawberry", label: "Strawberry" },
+  { value: "vanilla", label: "Vanilla" },
+];
 
-import { CommandItem, CommandList } from "./command";
-import { TextInput } from "./input";
-import { Button } from "./button";
+const getBorderColor = (error?: boolean, focused?: boolean) => {
+  if (error) {
+    return colors.error.DEFAULT;
+  }
+  if (focused) {
+    return colors.primary.main.DEFAULT;
+  }
+  return colors.grey[100];
+};
 
-export type Option = Record<"value" | "label", string> & Record<string, string>;
+interface IOption {
+  value: string;
+  label: string;
+}
 
-type AutoCompleteProps = {
-  options: Option[];
-  emptyMessage: string;
-  value: Option | null;
-  onValueChange?: (value: Option | null) => void;
-  isLoading?: boolean;
-  disabled?: boolean;
-  placeholder?: string;
+interface AutoCompleteProps {
   error?: boolean;
-};
+  placeholder?: string;
+  options: Array<IOption>;
+  value: IOption | null;
+  onValueChange?: (
+    value: {
+      value: string;
+      label: string;
+    } | null
+  ) => void;
+  disabled?: boolean;
+}
 
-export const AutoComplete = ({
-  options,
-  placeholder,
-  emptyMessage,
-  value,
-  onValueChange,
-  disabled,
-  isLoading,
-  error,
-}: AutoCompleteProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const inputRootRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  const [isOpen, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState<string>(value?.label || "");
+const AutoComplete: FC<AutoCompleteProps> = ({ error, options, value, placeholder, onValueChange, disabled }) => (
+  <Select
+    menuPosition="fixed"
+    options={options}
+    value={value}
+    tabSelectsValue
+    onChange={onValueChange}
+    placeholder={placeholder || ""}
+    isDisabled={!!disabled}
+    styles={{
+      container: (baseStyles, state) => ({
+        ...baseStyles,
+        width: "100%",
+      }),
+      control: (baseStyles, state) => ({
+        ...baseStyles,
+        borderColor: getBorderColor(error, state.isFocused),
+        borderRadius: 8,
+        height: 52,
+        boxShadow: "none",
+        "&:hover": {
+          borderColor: state.isFocused || error ? getBorderColor(error, state.isFocused) : colors.grey[200],
+        },
+        ...(state.isDisabled && { background: colors.grey[30], cursor: "not-allowed" }),
+      }),
+      singleValue: (baseStyles, state) => ({
+        ...baseStyles,
+        fontSize: 12,
+        color: "black",
+        fontWeight: 500,
+      }),
+      input: (baseStyles, state) => ({
+        ...baseStyles,
+        fontSize: 12,
+        color: "black",
+        fontWeight: 500,
+      }),
+      placeholder: (baseStyles, state) => ({
+        ...baseStyles,
+        fontSize: 12,
+        color: colors.grey[800],
+      }),
+      menu: (baseStyles) => ({
+        ...baseStyles,
+        borderRadius: 12,
+        boxShadow: "0px 8px 24px 0px rgba(0, 0, 0, 0.08)",
+      }),
+      menuList: (baseStyles) => ({
+        ...baseStyles,
+        padding: 0,
+        "&>div:first-child": {
+          borderTopLeftRadius: 12,
+          borderTopRightRadius: 12,
+        },
+        "&>div:last-child": {
+          borderBottomLeftRadius: 12,
+          borderBottomRightRadius: 12,
+        },
+      }),
+      option: (baseStyles, { isFocused, isSelected }) => ({
+        ...baseStyles,
+        fontSize: 12,
+        // eslint-disable-next-line no-nested-ternary
+        background: isFocused ? colors.primary.main[50] : isSelected ? colors.primary.main[100] : undefined,
+        color: "black",
+        "&:active": {
+          background: colors.primary.main[100],
+        },
+      }),
+    }}
+  />
+);
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLDivElement>) => {
-      const input = inputRef.current;
-      if (!input) {
-        return;
-      }
-
-      // Keep the options displayed when the user is typing
-      if (!isOpen) {
-        setOpen(true);
-      }
-
-      // This is not a default behaviour of the <input /> field
-      if (event.key === "Enter" && input.value !== "") {
-        const optionToSelect = options.find((option) => option.label === input.value);
-        if (optionToSelect) {
-          onValueChange?.(optionToSelect);
-        }
-      }
-
-      if (event.key === "Escape") {
-        input.blur();
-      }
-    },
-    [isOpen, options, onValueChange]
-  );
-
-  const handleBlur = useCallback(() => {
-    setOpen(false);
-    setInputValue(value?.label || "");
-  }, [value]);
-
-  const handleSelectOption = useCallback(
-    (selectedOption: Option | null) => {
-      setInputValue(selectedOption?.label || "");
-      onValueChange?.(selectedOption);
-
-      // This is a hack to prevent the input from being focused after the user selects an option
-      // We can call this hack: "The next tick"
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-      timerRef.current = setTimeout(() => {
-        inputRef?.current?.blur();
-      }, 0);
-    },
-    [onValueChange]
-  );
-
-  const filterOptions = () => {
-    if (inputValue) {
-      const filteredOptions = options.filter((el) => el.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()));
-      return filteredOptions;
-    }
-    return options;
-  };
-
-  const filteredOptions = filterOptions();
-
-  const updateContainerOptions = () => {
-    if (inputRef.current && containerRef.current) {
-      const props = inputRootRef.current!.getBoundingClientRect();
-      containerRef.current.style.top = `${props.y + props.height + 2}px`;
-      containerRef.current.style.width = `${props.width}px`;
-    }
-  };
-
-  useEffect(
-    () => () => {
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (!isOpen && value?.label !== inputValue) {
-      setInputValue(value?.label || "");
-    }
-  }, [inputValue, isOpen, value?.label]);
-
-  useEffect(() => {
-    updateContainerOptions();
-  }, [inputValue]);
-
-  useEffect(() => {
-    window.addEventListener("resize", updateContainerOptions);
-    return () => {
-      window.removeEventListener("resize", updateContainerOptions);
-    };
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("wheel", updateContainerOptions);
-    return () => {
-      window.removeEventListener("wheel", updateContainerOptions);
-    };
-  }, []);
-
-  return (
-    <CommandPrimitive onKeyDown={handleKeyDown} className="w-full">
-      <div>
-        <TextInput
-          ref={inputRef}
-          rootRef={inputRootRef}
-          value={inputValue || ""}
-          onChange={(e) => (isLoading ? undefined : setInputValue(e.target.value))}
-          onBlur={handleBlur}
-          onFocus={() => setOpen(true)}
-          placeholder={placeholder}
-          disabled={disabled}
-          error={error}
-          endIcon={
-            <div className="grid gap-1 h-full items-center grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
-              {value && (
-                <Button onClick={() => handleSelectOption(null)} size="icon" className="h-full w-full px-1 !bg-transparent">
-                  <IoClose className="size-4 text-grey-800" />
-                </Button>
-              )}
-              <Button size="icon" className="h-full w-full px-1 !bg-transparent">
-                {isOpen ? <IoChevronUp className="size-4 text-grey-800" /> : <IoChevronDown className="size-4 text-grey-800" />}
-              </Button>
-            </div>
-          }
-          rootClassName="w-full"
-        />
-      </div>
-      <div className="relative mt-1">
-        <div
-          className={cn(
-            "animate-in fade-in-0 zoom-in-95 fixed top-0 z-10 w-full rounded-xl bg-white outline-none shadow-1 overflow-hidden",
-            isOpen ? "block" : "hidden"
-          )}
-          ref={containerRef}
-        >
-          <CommandList className="overflow-hidden">
-            {isLoading ? (
-              <CommandPrimitive.Loading>
-                <div className="p-1">
-                  <Skeleton className="h-8 w-full" />
-                </div>
-              </CommandPrimitive.Loading>
-            ) : null}
-            {filteredOptions.length > 0 && !isLoading && (
-              <ScrollArea className="flex max-h-72 flex-col overflow-y-auto">
-                {filteredOptions.map((option) => {
-                  const isSelected = value?.value === option.value;
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      value={option.label}
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                      }}
-                      onSelect={() => handleSelectOption(option)}
-                      className={cn(
-                        "py-2.5 px-4 cursor-pointer hover:!bg-primary-main-50 transition-all duration-100 font-medium text-xs",
-                        isSelected && "!bg-primary-main-100"
-                      )}
-                    >
-                      {option.label}
-                    </CommandItem>
-                  );
-                })}
-              </ScrollArea>
-            )}
-            {!isLoading ? (
-              <CommandPrimitive.Empty className="select-none rounded-sm px-2 py-3 text-center text-sm">
-                {emptyMessage}
-              </CommandPrimitive.Empty>
-            ) : null}
-          </CommandList>
-        </div>
-      </div>
-    </CommandPrimitive>
-  );
-};
+export { AutoComplete };

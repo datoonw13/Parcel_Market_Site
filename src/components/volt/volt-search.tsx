@@ -178,7 +178,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
         <div className="flex flex-col sm:flex-row gap-3 w-full">
           <AutoComplete
             options={states}
-            emptyMessage="No results."
             placeholder="State"
             error={!!errors.state}
             onValueChange={(item) => {
@@ -190,7 +189,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           />
           <AutoComplete
             options={counties}
-            emptyMessage="No results."
             placeholder="County"
             onValueChange={(item) => {
               setValue("county", item?.value || "", { shouldValidate: isSubmitted });
