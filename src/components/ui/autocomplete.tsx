@@ -40,7 +40,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ error, options, value, placeholde
     <Select
       ref={selectRef}
       menuPosition="fixed"
-      menuPortalTarget={document.body}
+      // menuPortalTarget={document.body}
       options={options}
       value={value}
       // menuIsOpen
