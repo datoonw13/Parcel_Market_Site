@@ -110,8 +110,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
                   onMouseDown={(e) => e.preventDefault()}
                   onSelect={(currentValue) => {
                     onValueChange(currentValue);
-                    // setValue(currentValue === value ? "" : currentValue);
-                    setSearch(currentValue === selectedValue ? "" : options.find((option) => option.value === currentValue)?.label ?? "");
+                    setSearch(options.find((option) => option.value === currentValue)?.label || "");
                     setOpen(false);
                   }}
                   className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
