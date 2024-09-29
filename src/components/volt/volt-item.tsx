@@ -21,10 +21,10 @@ interface VoltItemProps {
 const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, onSelect, id, isHighlighted }) => (
   <div
     className={cn(
-      "p-5 rounded-2xl border border-gray-100 space-y-2 cursor-pointer",
-      selected && "shadow-5 !border-primary-main-400 !bg-primary-main-50",
-      isHighlighted && "shadow-5 bg-grey-50 border-[#D5D3D3]",
-      "hover:bg-grey-50 hover:border-[#D5D3D3] hover:shadow-5"
+      "p-5 rounded-2xl border border-[#D5D3D3] space-y-2 cursor-pointer transition-all duration-100",
+      selected && " !border-primary-main-400 !bg-primary-main-50",
+      isHighlighted && "bg-grey-50 border-[#D5D3D3]",
+      "hover:bg-grey-50 hover:border-[#D5D3D3]"
     )}
     onMouseEnter={() => onHover && onHover(data)}
     onMouseLeave={() => onMouseLeave && onMouseLeave(data)}
@@ -32,12 +32,22 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
     id={id}
   >
     <div className="w-full flex justify-between items-center gap-6">
-      <div className="grid">
-        <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
-        <p className="text-xs text-grey-600 font-medium">
-          {data.state.label}/{data.county.label}
-        </p>
-      </div>
+      {data.owner ? (
+        <div className="grid">
+          <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
+          <p className="text-xs text-grey-600 font-medium">
+            {data.state.label}/{data.county.label}
+          </p>
+        </div>
+      ) : (
+        <div className="grid">
+          <p className="text-xs text-grey-600 font-medium">State/County</p>
+          <p className="text-sm font-semibold">
+            {" "}
+            {data.state.label}/{data.county.label.replace("County", "")}
+          </p>
+        </div>
+      )}
       <div className="grid" style={{ maxWidth: 110 }}>
         <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
         <p className="text-sm font-medium truncate">{data.parcelNumberNoFormatting}</p>

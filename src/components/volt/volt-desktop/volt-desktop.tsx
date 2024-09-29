@@ -12,6 +12,8 @@ import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
+import { IoBookmarkOutline } from "react-icons/io5";
+import { Tooltip } from "@/components/ui/tooltip";
 import { breakPoints } from "../../../../tailwind.config";
 import VoltDesktopHeader from "./volt-desktop-header";
 import VoltFooter from "../volt-footer";
@@ -99,15 +101,36 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
         <tbody>
           <tr>
             <td rowSpan={isSmallDevice ? 1 : 2} className="">
-              <div className="h-full flex flex-col overflow-auto">
+              <div className="h-full flex flex-col overflow-auto relative">
                 <VoltDesktopHeader />
                 <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
                   <div
                     className={cn(
-                      "h-full flex flex-col px-8 xl:px-11 gap-12 ",
-                      step === VoltSteps.CALCULATION && !user && !isSmallDevice ? "" : "pb-6"
+                      "h-full flex flex-col px-8 xl:px-11 gap-12 relative",
+                      (step === VoltSteps.CALCULATION && !user && !isSmallDevice) || (step === VoltSteps.CALCULATION && isSmallDevice)
+                        ? ""
+                        : "pb-6"
                     )}
                   >
+                    {step === VoltSteps.CALCULATION && !user && isSmallDevice && (
+                      <div className="absolute w-fit h-full right-3 z-10">
+                        <Tooltip
+                          renderButton={
+                            <div
+                              onClick={() => {
+                                router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
+                                sessionStorage.setItem("volt", JSON.stringify({ step, values }));
+                              }}
+                              className="border border-grey-200 rounded-md flex items-center justify-center size-9 bg-white cursor-pointer"
+                            >
+                              <IoBookmarkOutline />
+                            </div>
+                          }
+                          renderContent="Save data"
+                          buttonClassName="sticky top-0"
+                        />
+                      </div>
+                    )}
                     <div className="overflow-auto flex flex-col gap-8">
                       <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
                       {step === VoltSteps.SEARCH_RESULTS && (

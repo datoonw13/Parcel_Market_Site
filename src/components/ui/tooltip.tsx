@@ -24,12 +24,13 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 interface TooltipProps {
   renderButton: ReactElement;
   renderContent: ReactElement | string;
+  buttonClassName?: string;
 }
 
-const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent }) => (
+const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName }) => (
   <TooltipPrimitive.Provider delayDuration={300}>
     <TooltipPrimitive.Root>
-      <TooltipPrimitive.Trigger asChild className="cursor-pointer">
+      <TooltipPrimitive.Trigger asChild className={cn("cursor-pointer", buttonClassName)}>
         <div>{renderButton}</div>
       </TooltipPrimitive.Trigger>
       <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">
