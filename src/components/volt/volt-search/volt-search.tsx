@@ -12,13 +12,14 @@ import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
 import { getPropertiesAction } from "@/server-actions/volt/actions";
 import { VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { voltSearchSchema } from "../../zod-validations/volt";
-import { Tooltip } from "../ui/tooltip";
-import { RadioGroupItem } from "../ui/radio-group";
-import { TextInput } from "../ui/input";
-import { Button } from "../ui/button";
-import { AutoComplete } from "../ui/autocomplete";
-import { Alert } from "../ui/alert";
+import { voltSearchSchema } from "../../../zod-validations/volt";
+import { Tooltip } from "../../ui/tooltip";
+import { RadioGroupItem } from "../../ui/radio-group";
+import { TextInput } from "../../ui/input";
+import { Button } from "../../ui/button";
+import { AutoComplete } from "../../ui/autocomplete";
+import { Alert } from "../../ui/alert";
+import VoltSearchAlerts from "./volt-search-alerts";
 
 interface VoltSearchProps {
   user: IDecodedAccessToken | null;
@@ -30,7 +31,7 @@ interface VoltSearchProps {
 }
 
 const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep }) => {
-  const [showNotFoundAlert, setNotFoundAlert] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -48,9 +49,8 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   const selectedState = watch("state");
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
   const counties = useMemo(() => getCounties(selectedState), [selectedState]);
-  const showUnauthorizedUserError = !user && watch("searchType") !== "parcelNumber";
-  const showMaximumLimitReachedError = false;
-  const disableSearch = showMaximumLimitReachedError || showUnauthorizedUserError;
+  const showUnauthorizedUserAlert = !user && watch("searchType") !== "parcelNumber";
+  const disableSearch = !!(showUnauthorizedUserAlert || error);
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
     setValue("searchType", type, { shouldValidate: isSubmitted });
@@ -63,7 +63,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
     setStep(VoltSteps.SEARCH);
     const { data: properties, errorMessage } = await getPropertiesAction(data);
     if (errorMessage) {
-      setNotFoundAlert(true);
+      setError(errorMessage);
     } else {
       setValues((prev) => ({
         ...prev,
@@ -72,8 +72,8 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
         selectedItem: properties?.length === 1 ? properties[0] : null,
       }));
       onSuccess();
-      if (showNotFoundAlert) {
-        setNotFoundAlert(false);
+      if (error) {
+        setError(null);
       }
     }
   });
@@ -213,28 +213,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           </Link>
         </p>
       </div>
-      {showNotFoundAlert && (
-        <Alert
-          handleClose={() => setNotFoundAlert(false)}
-          variant="warning"
-          title="We could not find your property."
-          description="Please check your information and try again."
-        />
-      )}
-      {showUnauthorizedUserError && (
-        <Alert
-          variant="warning"
-          title="Please authenticate"
-          description="You cannot search for desired land by first and last name without authorization."
-        />
-      )}
-      {showMaximumLimitReachedError && (
-        <Alert
-          variant="warning"
-          title="You have reached your daily limit"
-          description="If you want to increase the daily limit, Please contact support for help."
-        />
-      )}
+      <VoltSearchAlerts error={error} setError={setError} showUnauthorizedUserAlert={showUnauthorizedUserAlert} />
     </div>
   );
 };

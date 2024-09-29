@@ -23,9 +23,10 @@ interface VoltMobileDrawerProps {
   step: VoltSteps;
   user: IDecodedAccessToken | null;
   children: ReactNode;
+  renderButton: ReactNode;
 }
 
-const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({ step, user, children }) => {
+const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({ step, user, children, renderButton }) => {
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(640);
   const [snapPoints, setSnapPoints] = useState(snapPointsEnum.primary.sm);
   const [snap, setSnap] = useState<number | string | null>(snapPointsEnum.primary.sm[0]);
@@ -109,11 +110,7 @@ const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({ step, user, children }) =
           </div>
         </DrawerContent>
       </Drawer>
-      {(step === VoltSteps.SEARCH_RESULTS || (step === VoltSteps.CALCULATION && !user)) && (
-        <div id="button-wrapper" className="fixed bottom-0 p-4 pb-8 w-full bg-white z-[60] border-x">
-          <Button className="w-full">Some Button</Button>
-        </div>
-      )}
+      {renderButton}
     </div>
   );
 };

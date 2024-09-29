@@ -28,7 +28,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
   const router = useRouter();
 
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(1024);
-  const [step, setStep] = useState(VoltSteps.SEARCH_RESULTS);
+  const [step, setStep] = useState(VoltSteps.SEARCH);
   const [values, setValues] = useState<VoltWrapperValuesModel>(initialValues);
   const [dataSaved, setDataSaved] = useState(false);
   const [dataSaving, setDataSaving] = useState(false);

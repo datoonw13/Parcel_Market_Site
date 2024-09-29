@@ -18,7 +18,7 @@ import Link from "next/link";
 import Logo from "@/icons/Logo";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
-import VoltSearch from "./volt-search";
+import VoltSearch from "./volt-search/volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltCalculation from "./volt-calculation";
 import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
