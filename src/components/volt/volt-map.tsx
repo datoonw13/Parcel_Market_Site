@@ -40,6 +40,8 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
+      console.log(values.searchResult, 2);
+
       const getIcon = (el: IPropertyBaseInfo) => {
         if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
           return "active" as const;

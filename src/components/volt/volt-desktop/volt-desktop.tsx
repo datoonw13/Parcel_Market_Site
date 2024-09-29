@@ -132,7 +132,13 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                       </div>
                     )}
                     <div className="overflow-auto flex flex-col gap-8">
-                      <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
+                      <VoltSearch
+                        setStep={setStep}
+                        values={values}
+                        setValues={setValues}
+                        user={user}
+                        onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
+                      />
                       {step === VoltSteps.SEARCH_RESULTS && (
                         <VoltSearchResult
                           values={values}

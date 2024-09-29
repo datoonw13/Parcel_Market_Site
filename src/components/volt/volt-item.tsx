@@ -36,7 +36,7 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
         <div className="grid">
           <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
           <p className="text-xs text-grey-600 font-medium">
-            {data.state.label}/{data.county.label}
+            {data.state.label}/{data.county.label.replace("County", "")}
           </p>
         </div>
       ) : (

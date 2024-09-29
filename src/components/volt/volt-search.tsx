@@ -11,7 +11,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "reac
 import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
 import { getPropertiesAction } from "@/server-actions/volt/actions";
-import { VoltSearchModel, VoltWrapperValuesModel } from "@/types/volt";
+import { VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
@@ -26,9 +26,10 @@ interface VoltSearchProps {
   onSuccess: () => void;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
+  setStep: Dispatch<SetStateAction<VoltSteps>>;
 }
 
-const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values }) => {
+const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep }) => {
   const [showNotFoundAlert, setNotFoundAlert] = useState(false);
   const {
     handleSubmit,
@@ -59,6 +60,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   };
 
   const onSubmit = handleSubmit(async (data) => {
+    setStep(VoltSteps.SEARCH);
     const { data: properties, errorMessage } = await getPropertiesAction(data);
     if (errorMessage) {
       setNotFoundAlert(true);
