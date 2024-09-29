@@ -14,8 +14,9 @@ interface InputBaseProps {
 export interface InputGeneralProps extends InputHTMLAttributes<HTMLInputElement>, InputBaseProps {}
 
 const styles = {
-  error: "!border-error",
+  error: "!border-error ",
   root: `
+  [&:has(div>input:disabled)]:bg-grey-30
   transition-all transition-duration:100ms;
   h-[52px] relative grid grid-cols-[minmax(0,_max-content)_1fr_minmax(0,_max-content)]
   border border-grey-100 rounded-lg [&:hover:not(:focus-within)]:border-grey-200 focus-within:border-primary-main 

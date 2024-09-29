@@ -178,29 +178,26 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
         )}
         <div className="flex flex-col sm:flex-row gap-3 w-full">
           <AutoComplete
-            emptyMessage="wd"
-            value={null}
+            selectedValue={getStateValue(watch("state"))?.value || null}
             options={states}
             placeholder="State"
-
-            // error={!!errors.state}
-            // onValueChange={(item) => {
-            //   setValue("state", item?.value || "", { shouldValidate: isSubmitted });
-            //   setValue("county", "", { shouldValidate: isSubmitted });
-            // }}
-            // value={getStateValue(watch("state"))}
-            // disabled={disableSearch}
+            onValueChange={(value) => {
+              setValue("state", value || "", { shouldValidate: isSubmitted });
+              setValue("county", "", { shouldValidate: isSubmitted });
+            }}
+            disabled={disableSearch}
+            error={!!errors.state}
           />
-          {/* <AutoComplete
+          <AutoComplete
             options={counties}
             placeholder="County"
             onValueChange={(item) => {
-              setValue("county", item?.value || "", { shouldValidate: isSubmitted });
+              setValue("county", item || "", { shouldValidate: isSubmitted });
             }}
-            value={getCountyValue(watch("county"), watch("state"))}
+            selectedValue={getCountyValue(watch("county"), watch("state"))?.value || null}
             disabled={!watch("state") || disableSearch}
             error={!!errors.county}
-          /> */}
+          />
         </div>
         <Button disabled={disableSearch} loading={isSubmitting} onClick={onSubmit} className="mt-1">
           Search

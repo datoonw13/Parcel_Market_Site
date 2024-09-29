@@ -1,100 +1,129 @@
 "use client";
 
-import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Command as CommandPrimitive } from "cmdk";
 
 import { cn } from "@/lib/utils";
+import { FC, useEffect, useRef, useState } from "react";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "./command";
 import { TextInput as Input } from "./input";
 import { Popover, PopoverContent } from "./popover";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+export type Option = Record<"value" | "label", string> & Record<string, string>;
 
-const AutoComplete: React.FC<any> = () => {
-  const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState("");
-  const [value, setValue] = React.useState("");
+type AutoCompleteProps = {
+  options: Option[];
+  selectedValue?: string | null;
+  onValueChange: (value: string | null) => void;
+  isLoading?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  error?: boolean;
+};
+
+const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onValueChange, placeholder, selectedValue, error }) => {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [contentWidth, setContentWidth] = useState(0);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleResize = () => {
+    const inputRootEl = inputRef.current?.parentElement?.parentElement;
+    if (inputRootEl) {
+      setContentWidth(inputRootEl.getBoundingClientRect().width);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <div className="flex items-center">
-      <Popover open={open} onOpenChange={setOpen}>
-        <Command>
-          <PopoverPrimitive.Anchor asChild>
-            <CommandPrimitive.Input
-              asChild
-              value={search}
-              onValueChange={setSearch}
-              onKeyDown={(e) => setOpen(e.key !== "Escape")}
-              onMouseDown={() => setOpen((open) => !!search || !open)}
-              onFocus={() => setOpen(true)}
-              onBlur={(e) => {
-                if (!e.relatedTarget?.hasAttribute("cmdk-list")) {
-                  setSearch(value ? frameworks.find((framework) => framework.value === value)?.label ?? "" : "");
-                }
-              }}
-            >
-              <Input placeholder="Select framework..." className="w-[200px]" />
-            </CommandPrimitive.Input>
-          </PopoverPrimitive.Anchor>
-          {!open && <CommandList aria-hidden="true" className="hidden" />}
-          <PopoverContent
+    <Popover open={open} onOpenChange={setOpen}>
+      <Command
+        filter={(value, search) => {
+          const item = options.find((el) => el.value === value);
+          return item?.label.trim().toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()) ? 1 : 0;
+        }}
+      >
+        <PopoverPrimitive.Anchor asChild>
+          <CommandPrimitive.Input
             asChild
-            onOpenAutoFocus={(e) => e.preventDefault()}
-            onInteractOutside={(e) => {
-              if (e.target instanceof Element && e.target.hasAttribute("cmdk-input")) {
-                e.preventDefault();
+            value={search}
+            disabled={disabled}
+            className="w-full"
+            onValueChange={(search) => {
+              setSearch(search);
+
+              const filteredOptions = options.filter((item) =>
+                item?.label.trim().toLocaleLowerCase().includes(search.trim().toLocaleLowerCase())
+              );
+
+              if (filteredOptions.length === 1 && selectedValue !== filteredOptions[0].value) {
+                onValueChange(filteredOptions[0].value);
+                setSearch(filteredOptions[0].label);
+                setOpen(false);
               }
             }}
-            className="w-[--radix-popover-trigger-width] p-0"
+            onKeyDown={(e) => setOpen(e.key !== "Escape")}
+            onMouseDown={() => setOpen((open) => !!search || !open)}
+            onFocus={() => setOpen(true)}
+            onBlur={(e) => {
+              if (!e.relatedTarget?.hasAttribute("cmdk-list")) {
+                setSearch(
+                  selectedValue
+                    ? options.find((option) => option.value.toLocaleLowerCase() === selectedValue.toLocaleLowerCase())?.label ?? ""
+                    : ""
+                );
+                // setOpen(false);
+              }
+              setOpen(false);
+            }}
           >
-            <CommandList>
-              <CommandEmpty>No framework found.</CommandEmpty>
-              <CommandGroup>
-                {frameworks.map((framework) => (
-                  <CommandItem
-                    key={framework.value}
-                    value={framework.value}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : currentValue);
-                      setSearch(
-                        currentValue === value ? "" : frameworks.find((framework) => framework.value === currentValue)?.label ?? ""
-                      );
-                      setOpen(false);
-                    }}
-                  >
-                    {/* <Check className={cn("mr-2 h-4 w-4", value === framework.value ? "opacity-100" : "opacity-0")} /> */}
-                    {framework.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </PopoverContent>
-        </Command>
-      </Popover>
-    </div>
+            <Input error={error} rootClassName="w-full" ref={inputRef} placeholder={placeholder || ""} className="" />
+          </CommandPrimitive.Input>
+        </PopoverPrimitive.Anchor>
+        {!open && <CommandList aria-hidden="true" className="hidden" />}
+        <PopoverContent
+          asChild
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onInteractOutside={(e) => {
+            if (e.target instanceof Element && e.target.hasAttribute("cmdk-input")) {
+              e.preventDefault();
+            }
+          }}
+          style={{ width: contentWidth }}
+          className="min-w-[calc(--radix-popover-trigger-width)] p-0 border-0"
+        >
+          <CommandList className="">
+            <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>
+            <CommandGroup value={selectedValue || ""} className="bg-white border-0 shadow-0 outline-0 p-0 m-0">
+              {options.map((option) => (
+                <CommandItem
+                  key={option.value}
+                  value={option.value}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onSelect={(currentValue) => {
+                    onValueChange(currentValue);
+                    // setValue(currentValue === value ? "" : currentValue);
+                    setSearch(currentValue === selectedValue ? "" : options.find((option) => option.value === currentValue)?.label ?? "");
+                    setOpen(false);
+                  }}
+                  className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
+                >
+                  {option.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </PopoverContent>
+      </Command>
+    </Popover>
   );
 };
 
