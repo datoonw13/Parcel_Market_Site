@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 // eslint-disable-next-line camelcase
 import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
@@ -38,6 +38,11 @@ const bricolage = Bricolage_Grotesque({
 export const metadata: Metadata = {
   title: "Parcel Market",
   description: "Value, buy, and sell vacant land",
+};
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: "device-width",
 };
 
 export default async function RootLayout({
