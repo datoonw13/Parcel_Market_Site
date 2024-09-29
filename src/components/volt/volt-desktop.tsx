@@ -14,15 +14,16 @@ import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
-import { breakPoints } from "../../../../tailwind.config";
-import VoltDesktopHeader from "./volt-desktop-header";
-import VoltFooter from "../volt-footer";
-import VoltSearch from "../volt-search";
-import VoltSearchResult from "../volt-search-result";
-import VoltCalculation from "../volt-calculation";
-import CalculationTermsDialog from "../calculation-terms/calculation-terms-dialog";
-import VoltPriceCalculationAxis from "../volt-calculation-axis";
-import VoltMap from "../volt-map";
+import Link from "next/link";
+import Logo from "@/icons/Logo";
+import { breakPoints } from "../../../tailwind.config";
+import VoltFooter from "./volt-footer";
+import VoltSearch from "./volt-search";
+import VoltSearchResult from "./volt-search-result";
+import VoltCalculation from "./volt-calculation";
+import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
+import VoltPriceCalculationAxis from "./volt-calculation-axis";
+import VoltMap from "./volt-map";
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -102,7 +103,11 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
           <tr>
             <td rowSpan={isSmallDevice ? 1 : 2} className="">
               <div className="h-full flex flex-col overflow-auto relative">
-                <VoltDesktopHeader />
+                <div className="px-14 xl:px-16 pt-14 xl:pt-16 pb-14">
+                  <Link href="/">
+                    <Logo className="w-[141px] h-10" />
+                  </Link>
+                </div>
                 <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
                   <div
                     className={cn(
