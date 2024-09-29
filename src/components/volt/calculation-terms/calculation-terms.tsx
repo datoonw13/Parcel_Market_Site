@@ -2,7 +2,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import React from "react";
 
 const CalculationTerms = ({ onValueChange }: { onValueChange: (value: boolean) => void }) => (
-  <div className="space-y-6 bg-white h-full">
+  <div className="space-y-6 bg-white h-full" style={{ perspective: 1 }}>
     <p className="text-sm font-bold">Some information Before we calculate your price</p>
     <p className="text-sm text-grey-800">
       These terms and conditions (&quot;Terms&quot;) govern your use of the Land Marketplace (&quot;the Marketplace&quot;) provided by

@@ -33,8 +33,8 @@ const CalculationTermsDialog = ({ open, closeModal, onAccept }: { open?: boolean
             <span className="sr-only">Close</span>
           </Close>
         </DialogHeader>
-        <div className="grid gap-4 p-6  mx-6 border border-grey-100 rounded-2xl overflow-hidden">
-          <ScrollArea>
+        <div className="grid gap-4 p-6  mx-6 border border-grey-100 overflow-hidden">
+          <ScrollArea className="">
             <CalculationTerms onValueChange={(value) => setAgreed(value)} />
           </ScrollArea>
         </div>
