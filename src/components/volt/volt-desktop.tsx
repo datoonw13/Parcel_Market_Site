@@ -144,6 +144,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                         user={user}
                         onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
                       />
+
                       {step === VoltSteps.SEARCH_RESULTS && (
                         <VoltSearchResult
                           values={values}

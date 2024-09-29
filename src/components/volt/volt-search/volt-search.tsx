@@ -178,17 +178,20 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
         )}
         <div className="flex flex-col sm:flex-row gap-3 w-full">
           <AutoComplete
+            emptyMessage="wd"
+            value={null}
             options={states}
             placeholder="State"
-            error={!!errors.state}
-            onValueChange={(item) => {
-              setValue("state", item?.value || "", { shouldValidate: isSubmitted });
-              setValue("county", "", { shouldValidate: isSubmitted });
-            }}
-            value={getStateValue(watch("state"))}
-            disabled={disableSearch}
+
+            // error={!!errors.state}
+            // onValueChange={(item) => {
+            //   setValue("state", item?.value || "", { shouldValidate: isSubmitted });
+            //   setValue("county", "", { shouldValidate: isSubmitted });
+            // }}
+            // value={getStateValue(watch("state"))}
+            // disabled={disableSearch}
           />
-          <AutoComplete
+          {/* <AutoComplete
             options={counties}
             placeholder="County"
             onValueChange={(item) => {
@@ -197,7 +200,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
             value={getCountyValue(watch("county"), watch("state"))}
             disabled={!watch("state") || disableSearch}
             error={!!errors.county}
-          />
+          /> */}
         </div>
         <Button disabled={disableSearch} loading={isSubmitting} onClick={onSubmit} className="mt-1">
           Search
