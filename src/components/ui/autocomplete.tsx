@@ -40,8 +40,10 @@ const AutoComplete: FC<AutoCompleteProps> = ({ error, options, value, placeholde
     <Select
       ref={selectRef}
       menuPosition="fixed"
+      menuPortalTarget={document.body}
       options={options}
       value={value}
+      // menuIsOpen
       id="react-select"
       tabSelectsValue
       openMenuOnFocus
