@@ -27,8 +27,8 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { targetReached: isSmallDevice } = useMediaQuery(1024);
-  const [step, setStep] = useState(VoltSteps.SEARCH);
+  const { targetReached: isSmallDevice, detecting } = useMediaQuery(1024);
+  const [step, setStep] = useState(VoltSteps.SEARCH_RESULTS);
   const [values, setValues] = useState<VoltWrapperValuesModel>(initialValues);
   const [dataSaved, setDataSaved] = useState(false);
   const [dataSaving, setDataSaving] = useState(false);
@@ -89,7 +89,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             <LuLoader2 className="animate-spin size-9 text-primary-main-200" />
           </div>
         )}
-        {!isSmallDevice && (
+        {!isSmallDevice && !detecting && (
           <VoltDesktop
             setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
             values={values}
@@ -99,7 +99,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             setStep={setStep}
           />
         )}
-        {/* {isSmallDevice && (
+        {isSmallDevice && !detecting && (
           <VoltMobile
             user={user}
             setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
@@ -108,7 +108,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             step={step}
             setStep={setStep}
           />
-        )} */}
+        )}
       </div>
     </>
   );

@@ -1,74 +1,83 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerFooter, DrawerTitle } from "@/components/ui/dialogs/drawer";
-import { cn } from "@/lib/utils";
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { IDecodedAccessToken } from "@/types/auth";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/dialogs/drawer";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { removeParcelNumberFormatting } from "@/helpers/common";
-import VoltSearchResult from "../volt-search-result";
-import { breakPoints } from "../../../../tailwind.config";
-import VoltCalculation from "../volt-calculation";
-import VoltPriceCalculationAxis from "../volt-calculation-axis";
+import { cn } from "@/lib/utils";
+import { IDecodedAccessToken } from "@/types/auth";
+import { VoltSteps } from "@/types/volt";
+import { FC, ReactNode, useCallback, useEffect, useState } from "react";
+
+const snapPointsEnum = {
+  primary: {
+    sm: ["135px", 1],
+    lg: ["140px", 1],
+  },
+  secondary: {
+    sm: ["240px", 1],
+    lg: ["245px", 1],
+  },
+};
 
 interface VoltMobileDrawerProps {
   step: VoltSteps;
-  setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
-  values: VoltWrapperValuesModel;
   user: IDecodedAccessToken | null;
-  isButtonVisible?: boolean;
-  setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
+  children: ReactNode;
 }
 
-const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({
-  setValues,
-  step,
-  user,
-  values,
-  isButtonVisible,
-  setOpenPropertyDetailWarningModal,
-}) => {
-  const { targetReached: isXs, detecting } = useMediaQuery(parseFloat(breakPoints.sm));
-  const [drawerMaxHeight, setDrawerMaxHeight] = useState(0);
-  const [snapPoints, setSnapPoints] = useState(["230px", 1]);
-  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({ step, user, children }) => {
+  const { targetReached: isSmallDevice, detecting } = useMediaQuery(640);
+  const [snapPoints, setSnapPoints] = useState(snapPointsEnum.primary.sm);
+  const [snap, setSnap] = useState<number | string | null>(snapPointsEnum.primary.sm[0]);
+  const [drawerRef, setDrawerRef] = useState<HTMLDivElement | null>(null);
 
-  const handleDrawerMaxHeightChange = () => {
-    const voltMobleHeader = document.getElementById("volt-navbar");
-    if (voltMobleHeader) {
-      const { height } = voltMobleHeader.getBoundingClientRect();
-      setDrawerMaxHeight(window.innerHeight - height);
-    }
-  };
+  const onResize = useCallback(() => {
+    const navbarEl = document.getElementById("volt-navbar");
+    if (drawerRef && navbarEl) {
+      const { height } = navbarEl.getBoundingClientRect();
+      drawerRef.style.maxHeight = `calc(100vh - ${height - 1}px)`;
 
-  useEffect(() => {
-    handleDrawerMaxHeightChange();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("resize", handleDrawerMaxHeightChange);
-    return () => {
-      window.removeEventListener("resize", handleDrawerMaxHeightChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!detecting) {
-      if (isXs) {
-        setSnapPoints(["220px", 1]);
-        setSnap("220px");
+      if (step === VoltSteps.SEARCH_RESULTS || (step === VoltSteps.CALCULATION && !user)) {
+        drawerRef.style.paddingBottom = `${height + 16}px`;
+        setSnapPoints(isSmallDevice ? snapPointsEnum.secondary.sm : snapPointsEnum.secondary.lg);
+        setSnap(isSmallDevice ? snapPointsEnum.secondary.sm[0] : snapPointsEnum.secondary.lg[0]);
       } else {
-        setSnapPoints(["230px", 1]);
-        setSnap("230px");
+        drawerRef.style.paddingBottom = "16px";
+        setSnapPoints(isSmallDevice ? snapPointsEnum.primary.sm : snapPointsEnum.primary.lg);
+        setSnap(isSmallDevice ? snapPointsEnum.primary.sm[0] : snapPointsEnum.primary.lg[0]);
       }
     }
-  }, [isXs, detecting]);
+  }, [drawerRef, isSmallDevice, step, user]);
+
+  const resetDrawerScroll = useCallback(() => {
+    if (drawerRef) {
+      const drawerContentEl = drawerRef.querySelector("#drawer-content");
+      if (drawerContentEl) {
+        drawerContentEl.scrollTo(0, 0);
+      }
+    }
+  }, [drawerRef]);
+
+  useEffect(() => {
+    if (snap !== 1 && drawerRef) {
+      resetDrawerScroll();
+    }
+  }, [snap, drawerRef, resetDrawerScroll]);
+
+  useEffect(() => {
+    if (drawerRef) {
+      onResize();
+      window.addEventListener("resize", onResize);
+    } else {
+      window.removeEventListener("resize", onResize);
+    }
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, [drawerRef, onResize, step]);
 
   return (
-    <>
+    <div>
       <Drawer
         snapPoints={snapPoints}
         activeSnapPoint={snap}
@@ -85,72 +94,27 @@ const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({
         modal={false}
       >
         <DrawerContent
+          id="drawer"
+          ref={setDrawerRef}
           overlayClassName="mt-auto"
-          className={cn(`fixed flex flex-col bottom-0 left-0 right-0 h-full`, snap === 1 && "rounded-none")}
-          style={{ maxHeight: drawerMaxHeight }}
-          overlayStyle={{ maxHeight: drawerMaxHeight }}
+          className={cn(`fixed h-full flex flex-col bottom-0 left-0 right-0 `, snap === 1 && "rounded-none")}
         >
-          <DrawerTitle className="hidden" data-vaul-no-drag />
+          <DrawerTitle className="hidden" />
           <div
-            className={cn("px-4 py-2 flex w-full flex overflow-hidden", isButtonVisible && "pb-24")}
+            id="drawer-content"
+            className={cn("overflow-auto p-4", snap !== 1 && "overflow-hidden pointer-events-none")}
             {...(snap === 1 && { "data-vaul-no-drag": "" })}
           >
-            <ScrollArea className={cn("flex w-full", snap !== 1 && "pointer-events-none")}>
-              <div className="flex flex-col gap-6 overflow-hidden">
-                {step === VoltSteps.SEARCH_RESULTS && (
-                  <VoltSearchResult
-                    onSearchResultItemHover={(parcelNumberNoFormatting) => {}}
-                    onSearchResultItemMouseLeave={() => {}}
-                    highlightedParcelNumber=""
-                    values={values}
-                    setValues={setValues}
-                  />
-                )}
-                {step === VoltSteps.CALCULATION && (
-                  <>
-                    <VoltPriceCalculationAxis
-                      voltValue={values.calculation?.price || 0}
-                      user={user}
-                      setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-                      data={
-                        values.calculation?.properties.map((el) => ({
-                          parcelNumber: el.parselId || "",
-                          acreage: Number(Number(el.arcage).toFixed(2)),
-                          price: el.price,
-                          pricePerAcre: Number(el.price / Number(el.arcage)),
-                          isMainLand:
-                            removeParcelNumberFormatting(el.parselId) === values.selectedItem?.properties.fields.parcelnumb_no_formatting,
-                        })) || []
-                      }
-                      highlightedParcelNumber={null}
-                      onPinHover={(parcelNumberNoFormatting) => {
-                        // setHighlightedParcelNumber(parcelNumberNoFormatting);
-                        // if (!isElementVisible(parcelNumberNoFormatting, step)) {
-                        //   const item = document.getElementById(`calculation-${parcelNumberNoFormatting}`);
-                        //   if (item) {
-                        //     item.scrollIntoView();
-                        //   }
-                        // }
-                      }}
-                    />
-                    <VoltCalculation
-                      onSearchResultItemHover={(parcelNumberNoFormatting) => {}}
-                      onSearchResultItemMouseLeave={() => {
-                        // setHighlightedParcelNumber(null)
-                      }}
-                      highlightedParcelNumber={null}
-                      values={values}
-                      setValues={setValues}
-                      user={user}
-                    />
-                  </>
-                )}
-              </div>
-            </ScrollArea>
+            {children}
           </div>
         </DrawerContent>
       </Drawer>
-    </>
+      {(step === VoltSteps.SEARCH_RESULTS || (step === VoltSteps.CALCULATION && !user)) && (
+        <div id="button-wrapper" className="fixed bottom-0 p-4 pb-8 w-full bg-white z-[60] border-x">
+          <Button className="w-full">Some Button</Button>
+        </div>
+      )}
+    </div>
   );
 };
 

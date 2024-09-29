@@ -1,15 +1,16 @@
 "use client";
 
 import { IDecodedAccessToken } from "@/types/auth";
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { VoltPriceCalculationReq, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { DrawerFooter } from "@/components/ui/dialogs/drawer";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { Drawer, DrawerContent, DrawerFooter, DrawerTitle } from "@/components/ui/dialogs/drawer";
 import { Button } from "@/components/ui/button";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import VoltFooter from "../volt-footer";
 import { ScrollArea } from "../../ui/scroll-area";
 import VoltMobileHeader from "./volt-mobile-header";
@@ -26,148 +27,91 @@ interface VoltMobileProps {
   values: VoltWrapperValuesModel;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
+
+const drawerPx = 13;
+
+const snapPointsEnum = {
+  primary: {
+    sm: ["135px", 1],
+    lg: ["140px", 1],
+  },
+  secondary: {
+    sm: ["240px", 1],
+    lg: ["245px", 1],
+  },
+};
+
 const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningModal, setStep, setValues, step, values }) => {
   const router = useRouter();
   const { notify } = useNotification();
-  const [calculationPending, setCalculationPending] = useState(false);
-  const [showCalculationTerms, setShowCalculationTerms] = useState(false);
-  const [agreCalculationTerm, setAgreeCalculationTerm] = useState(!!user);
+  const [snapPoints, setSnapPoints] = useState(snapPointsEnum.primary.sm);
+  const [snap, setSnap] = useState<number | string | null>(snapPointsEnum.primary.sm[0]);
+  const [drawerRef, setDrawerRef] = useState<HTMLDivElement | null>(null);
+  const { targetReached: isSmallDevice, detecting } = useMediaQuery(640);
 
-  const isButtonVisible = step === VoltSteps.SEARCH_RESULTS || (step === VoltSteps.CALCULATION && !user);
+  const onResize = useCallback(() => {
+    const navbarEl = document.getElementById("volt-navbar");
+    if (drawerRef && navbarEl) {
+      const { height } = navbarEl.getBoundingClientRect();
+      drawerRef.style.maxHeight = `calc(100vh - ${height - 1}px)`;
 
-  const calculatePrice = async () => {
-    if (!values.selectedItem) {
-      return;
+      if (step === VoltSteps.SEARCH_RESULTS || (step === VoltSteps.CALCULATION && !user)) {
+        drawerRef.style.paddingBottom = `${height + 16}px`;
+        setSnapPoints(isSmallDevice ? snapPointsEnum.secondary.sm : snapPointsEnum.secondary.lg);
+        setSnap(isSmallDevice ? snapPointsEnum.secondary.sm[0] : snapPointsEnum.secondary.lg[0]);
+      } else {
+        drawerRef.style.paddingBottom = "16px";
+        setSnapPoints(isSmallDevice ? snapPointsEnum.primary.sm : snapPointsEnum.primary.lg);
+        setSnap(isSmallDevice ? snapPointsEnum.primary.sm[0] : snapPointsEnum.primary.lg[0]);
+      }
     }
-    const reqData: VoltPriceCalculationReq = {
-      body: {
-        county: values.selectedItem?.properties.fields.county.toLocaleLowerCase(),
-        state: values.selectedItem?.properties.fields.state2.toLocaleLowerCase(),
-        parcelNumber: values.selectedItem?.properties.fields.parcelnumb,
-        owner: values.selectedItem.properties.fields.owner,
-        propertyType: values.selectedItem.properties.fields?.zoning_description || values.selectedItem.properties.fields.usedesc || "",
-        coordinates: JSON.stringify(values.selectedItem.geometry.coordinates),
-        locality: values.selectedItem.properties.fields.city,
-      },
-      queryParams: {
-        acre: values.selectedItem.properties.fields.ll_gisacre.toString(),
-        lat: values.selectedItem.properties.fields.lat,
-        lon: values.selectedItem.properties.fields.lon,
-      },
-    };
-    setCalculationPending(true);
+  }, [drawerRef, isSmallDevice, step, user]);
 
-    const { errorMessage, data } = await calculateLandPriceAction(reqData);
-    if (errorMessage) {
-      notify({ title: "Error", description: errorMessage }, { variant: "error" });
+  const resetDrawerScroll = useCallback(() => {
+    if (drawerRef) {
+      const drawerContentEl = drawerRef.querySelector("#drawer-content");
+      if (drawerContentEl) {
+        drawerContentEl.scrollTo(0, 0);
+      }
+    }
+  }, [drawerRef]);
+
+  useEffect(() => {
+    if (snap !== 1 && drawerRef) {
+      resetDrawerScroll();
+    }
+  }, [snap, drawerRef, resetDrawerScroll]);
+
+  useEffect(() => {
+    if (drawerRef) {
+      onResize();
+      window.addEventListener("resize", onResize);
     } else {
-      setStep(VoltSteps.CALCULATION);
-      setValues({ ...values, calculation: data });
-      // setHighlightedParcelNumber(null);
+      window.removeEventListener("resize", onResize);
     }
-    setCalculationPending(false);
-  };
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, [drawerRef, onResize, step]);
 
   return (
     <>
       <div className="flex flex-col h-screen lg:hidden w-full">
         <VoltMobileHeader step={step} user={user} />
-        {showCalculationTerms && (
-          <div className="p-5 pb-36">
-            <CalculationTerms onValueChange={(val) => setAgreeCalculationTerm(val)} />
-            <div className="flex flex-col gap-3 fixed bottom-0 bg-white w-full left-0 px-5 py-4">
-              <Button variant="secondary">Cancel</Button>
-              <Button
-                disabled={!agreCalculationTerm}
-                onClick={() => {
-                  setShowCalculationTerms(false);
-                  calculatePrice();
-                }}
-              >
-                Agree
-              </Button>
-            </div>
-          </div>
+        {step === VoltSteps.SEARCH && (
+          <VoltSearch
+            setStep={setStep}
+            values={values}
+            setValues={setValues}
+            user={user}
+            onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
+          />
         )}
         {step > VoltSteps.SEARCH && (
-          <div className="bg-primary-main-100 w-full h-[calc(100vh-220px)]" style={{ gridArea: "map" }}>
-            <VoltMap
-              step={step}
-              user={user}
-              setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-              highlightedParcelNumber={null}
-              onMarkerMouseEnter={(parcelNumberNoFormatting) => {
-                // setHighlightedParcelNumber(parcelNumberNoFormatting);
-                // if (!isElementVisible(parcelNumberNoFormatting, step)) {
-                //   const item = document.getElementById(
-                //     `${step === VoltSteps.SEARCH_RESULTS ? "search-result-" : "calculation-"}${parcelNumberNoFormatting}`
-                //   );
-                //   if (item) {
-                //     item.scrollIntoView();
-                //   }
-                // }
-              }}
-              values={values}
-              setValues={setValues}
-              onMarkerMouseLeave={() => {
-                // setHighlightedParcelNumber(null);
-              }}
-            />
-          </div>
+          <VoltMobileDrawer step={step} user={user}>
+            qwd
+          </VoltMobileDrawer>
         )}
-        <div className={cn("overflow-hidden flex w-full", showCalculationTerms && "hidden")}>
-          <ScrollArea className="w-full px-5 py-6 max-w-xl mx-auto">
-            {step === VoltSteps.SEARCH && (
-              <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
-            )}
-            {step > VoltSteps.SEARCH && !showCalculationTerms && (
-              <>
-                <VoltMobileDrawer
-                  isButtonVisible={isButtonVisible}
-                  setValues={setValues}
-                  values={values}
-                  step={step}
-                  user={user}
-                  setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-                />
-                {isButtonVisible && (
-                  <div className="p-4 w-full bg-white border border-grey-100 border-b-0 mt-0 fixed bottom-0 left-0" style={{ zIndex: 100 }}>
-                    {step === VoltSteps.SEARCH_RESULTS && (
-                      <Button
-                        loading={calculationPending}
-                        onClick={() => {
-                          if (user) {
-                            calculatePrice();
-                          } else {
-                            setShowCalculationTerms(true);
-                          }
-                        }}
-                        disabled={!values.selectedItem}
-                        className="w-full"
-                      >
-                        Calculate Price
-                      </Button>
-                    )}
-                    {step === VoltSteps.CALCULATION && !user && (
-                      <Button
-                        className="w-full"
-                        onClick={() => {
-                          router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
-                          sessionStorage.setItem("volt", JSON.stringify({ step, values }));
-                        }}
-                      >
-                        Save Data
-                      </Button>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-          </ScrollArea>
-        </div>
-        <div className={cn("mt-auto py-4 border-t border-t-grey-100 px-5", showCalculationTerms && "hidden")}>
-          <VoltFooter className="flex-col gap-2" />
-        </div>
       </div>
     </>
   );
