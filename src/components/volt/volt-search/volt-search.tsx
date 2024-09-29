@@ -18,7 +18,6 @@ import { RadioGroupItem } from "../../ui/radio-group";
 import { TextInput } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { AutoComplete } from "../../ui/autocomplete";
-import { Alert } from "../../ui/alert";
 import VoltSearchAlerts from "./volt-search-alerts";
 
 interface VoltSearchProps {
