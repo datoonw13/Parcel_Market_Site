@@ -103,3 +103,10 @@
     --radius: 0.5rem;
   }
 }
+
+
+@media screen and (max-width: 599px) {
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
