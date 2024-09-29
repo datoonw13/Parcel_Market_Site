@@ -5,6 +5,7 @@ import { IDecodedAccessToken } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 import { MapInteractionModel } from "@/types/common";
+import { isElementVisible } from "@/lib/utils";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
@@ -25,6 +26,17 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
       ref.current.scrollIntoView();
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      (mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber) &&
+      !isElementVisible(`calculation-${mapInteraction.hoveredParcelNumber}`, "volt-scroll")
+    ) {
+      document
+        .getElementById(`calculation-${mapInteraction.hoveredParcelNumber}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber]);
 
   return (
     <>

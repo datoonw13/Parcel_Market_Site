@@ -29,8 +29,9 @@ const VoltItem: FC<VoltItemProps> = ({ data, selected, onHover, onMouseLeave, on
     onMouseEnter={() => onHover && onHover(data)}
     onMouseLeave={() => onMouseLeave && onMouseLeave(data)}
     onClick={() => onSelect && onSelect(data)}
+    id={id}
   >
-    <div className="w-full flex justify-between items-center gap-6" id={id}>
+    <div className="w-full flex justify-between items-center gap-6">
       <div className="grid">
         <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
         <p className="text-xs text-grey-600 font-medium">

@@ -2,7 +2,7 @@
 
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { VoltWrapperValuesModel } from "@/types/volt";
-import { cn } from "@/lib/utils";
+import { cn, isElementVisible } from "@/lib/utils";
 import { MapInteractionModel } from "@/types/common";
 import { removeParcelNumberFormatting } from "@/helpers/common";
 import VoltItem from "./volt-item";
@@ -23,6 +23,17 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ setValues, values, classN
       ref.current.scrollIntoView();
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      (mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber) &&
+      !isElementVisible(`search-result-${mapInteraction.hoveredParcelNumber}`, "volt-scroll")
+    ) {
+      document
+        .getElementById(`calculation-${mapInteraction.hoveredParcelNumber}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber]);
 
   return (
     <div ref={ref} className={cn("space-y-4", className)}>

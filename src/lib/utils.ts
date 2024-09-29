@@ -5,10 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function isElementVisible(parcelNumberNoFormatting: string, parentId: string) {
-  const rect = document.getElementById(`${parentId}`)?.getBoundingClientRect();
+export function isElementVisible(elementId: string, scrollId: string) {
+  const rect = document.getElementById(elementId)?.getBoundingClientRect();
 
-  const containerRect = document.querySelector("#volt-scroll>div")?.getBoundingClientRect();
+  const containerRect = document.querySelector(`#${scrollId}>div`)?.getBoundingClientRect();
 
   if (!containerRect || !rect) {
     return false;

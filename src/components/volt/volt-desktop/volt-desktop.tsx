@@ -1,25 +1,26 @@
 "use client";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { MapInteractionModel } from "@/types/common";
+import { IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { MapInteractionModel } from "@/types/common";
+import { useRouter } from "next/navigation";
+import useNotification from "@/hooks/useNotification";
+import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+import { Button } from "@/components/ui/button";
+import routes from "@/helpers/routes";
+import { cn } from "@/lib/utils";
+import { breakPoints } from "../../../../tailwind.config";
+import VoltDesktopHeader from "./volt-desktop-header";
+import VoltFooter from "../volt-footer";
 import VoltSearch from "../volt-search";
 import VoltSearchResult from "../volt-search-result";
-import VoltMap from "../volt-map";
 import VoltCalculation from "../volt-calculation";
-import VoltDesktopHeader from "./volt-desktop-header";
-import VoltDesktopAdditionalButtons from "./volt-desktop-additional-buttons";
-import VoltDesktopFooter from "./volt-desktop-footer";
-import { breakPoints } from "../../../../tailwind.config";
-import VoltFooter from "../volt-footer";
+import CalculationTermsDialog from "../calculation-terms/calculation-terms-dialog";
 import VoltPriceCalculationAxis from "../volt-calculation-axis";
-
-const primaryLayout = `"details map" "footer map"`;
-const secondaryLayout = `"details map" "footer footer"`;
+import VoltMap from "../volt-map";
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -36,130 +37,168 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     hoveredParcelNumber: null,
     openPopperParcelNumber: null,
   });
+  const router = useRouter();
+  const { notify } = useNotification();
+  const [calculationPending, setCalculationPending] = useState(false);
+  const [showCalculationTerms, setShowCalculationTerms] = useState(false);
+
+  const calculatePrice = async () => {
+    if (!values.selectedItem) {
+      return;
+    }
+    const reqData: IVoltPriceCalculationReqParams = {
+      body: {
+        county: values.selectedItem?.county.value,
+        state: values.selectedItem?.state.value,
+        parcelNumber: values.selectedItem?.parcelNumberNoFormatting,
+        owner: values.selectedItem.owner,
+        propertyType: values.selectedItem.propertyType || "",
+        coordinates: JSON.stringify(values.selectedItem.polygon),
+        locality: values.selectedItem.city,
+      },
+      queryParams: {
+        acre: values.selectedItem.acreage.toString(),
+        lat: values.selectedItem.lat.toString(),
+        lon: values.selectedItem.lon.toString(),
+      },
+    };
+    setCalculationPending(true);
+
+    const { errorMessage, data } = await calculateLandPriceAction(reqData);
+    if (errorMessage) {
+      notify({ title: "Error", description: errorMessage }, { variant: "error" });
+    } else {
+      setStep(VoltSteps.CALCULATION);
+      setValues({ ...values, calculation: data });
+      setMpaInteraction({
+        hoveredParcelNumber: null,
+        openPopperParcelNumber: null,
+        zoom: false,
+      });
+    }
+    setCalculationPending(false);
+  };
 
   return (
     <>
-      <div
-        style={{ gridTemplateAreas: step === VoltSteps.CALCULATION ? secondaryLayout : primaryLayout }}
-        className={cn(
-          "hidden lg:grid h-full w-full grid-rows-[1fr_minmax(0,_max-content)] grid-cols-[350px_1fr] lg:grid-cols-[490px_1fr] xl:grid-cols-[490px_1fr]"
-        )}
-      >
-        <div className="h-full grid grid-rows-[minmax(0,_max-content)_1fr] overflow-hidden" style={{ gridArea: "details" }}>
-          <VoltDesktopHeader />
-          <div className="overflow-hidden grid">
-            <ScrollArea className="pb-6" id="volt-scroll">
-              <div className="overflow-hidden flex flex-col gap-8 px-5 lg:px-8 xl:px-11">
-                <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
+      <CalculationTermsDialog
+        onAccept={() => {
+          setShowCalculationTerms(false);
+          calculatePrice();
+        }}
+        open={showCalculationTerms}
+        closeModal={() => setShowCalculationTerms(false)}
+      />
+      <table className="w-full h-screen">
+        <thead>
+          <tr>
+            <th className="max-w-[420px] w-[420px] xl:max-w-[490px] xl:w-[490px] m-0 p-0 border-0 h-0" />
+            <th className="m-0 p-0 border-0 h-0" />
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowSpan={isSmallDevice ? 1 : 2} className="">
+              <div className="h-full flex flex-col overflow-auto">
+                <VoltDesktopHeader />
+                <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
+                  <div
+                    className={cn(
+                      "h-full flex flex-col px-8 xl:px-11 gap-12 ",
+                      step === VoltSteps.CALCULATION && !user && !isSmallDevice ? "" : "pb-6"
+                    )}
+                  >
+                    <div className="overflow-auto flex flex-col gap-8">
+                      <VoltSearch values={values} setValues={setValues} user={user} onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)} />
+                      {step === VoltSteps.SEARCH_RESULTS && (
+                        <VoltSearchResult
+                          values={values}
+                          setValues={setValues}
+                          mapInteraction={mapInteraction}
+                          setMpaInteraction={setMpaInteraction}
+                        />
+                      )}
+                      {step === VoltSteps.CALCULATION && (
+                        <VoltCalculation
+                          values={values}
+                          user={user}
+                          mapInteraction={mapInteraction}
+                          setMpaInteraction={setMpaInteraction}
+                        />
+                      )}
+                    </div>
+                    <VoltFooter className="flex-col items-start mt-auto" />
+                  </div>
+                </ScrollArea>
                 {step === VoltSteps.SEARCH_RESULTS && (
-                  <VoltSearchResult
-                    className="pb-6"
-                    values={values}
-                    setValues={setValues}
-                    mapInteraction={mapInteraction}
-                    setMpaInteraction={setMpaInteraction}
-                  />
+                  <div className="bg-white px-8 xl:px-11 pt-6 pb-8 xl:pb-11 border-t border-t-grey-100">
+                    <Button
+                      loading={calculationPending}
+                      onClick={() => {
+                        if (user) {
+                          calculatePrice();
+                        } else {
+                          setShowCalculationTerms(true);
+                        }
+                      }}
+                      disabled={!values.selectedItem}
+                      className="w-full"
+                    >
+                      Calculate Price
+                    </Button>
+                  </div>
                 )}
-                {step === VoltSteps.CALCULATION && (
-                  <VoltCalculation values={values} user={user} mapInteraction={mapInteraction} setMpaInteraction={setMpaInteraction} />
+                {step === VoltSteps.CALCULATION && !user && !isSmallDevice && (
+                  <div className="bg-white px-8 xl:px-11 py-6 ">
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);
+                        sessionStorage.setItem("volt", JSON.stringify({ step, values }));
+                      }}
+                    >
+                      Save Data
+                    </Button>
+                  </div>
                 )}
               </div>
-            </ScrollArea>
-            <div className="px-5 lg:px-8 xl:px-11 pb-4 xl:hidden">
-              <VoltDesktopAdditionalButtons
-                user={user}
+            </td>
+            <td rowSpan={1} className="bg-primary-main-100">
+              <VoltMap
                 step={step}
-                values={values}
-                onSucceed={(data) => {
-                  setStep(VoltSteps.CALCULATION);
-                  setValues({ ...values, calculation: data });
-                  setMpaInteraction({
-                    hoveredParcelNumber: null,
-                    openPopperParcelNumber: null,
-                    zoom: false,
-                  });
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="bg-primary-main-100" style={{ gridArea: "map" }}>
-          <VoltMap
-            step={step}
-            user={user}
-            setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-            values={values}
-            setValues={setValues}
-            mapInteraction={mapInteraction}
-            setMpaInteraction={setMpaInteraction}
-          />
-        </div>
-        {/* <VoltDesktopFooter
-          openPropertyDetailViewWarnig={() => setOpenPropertyDetailWarningModal(true)}
-          step={step}
-          user={user}
-          voltValue={values.calculation?.price || 0}
-          onCalculationSucceed={(data) => {
-            setStep(VoltSteps.CALCULATION);
-            setValues({ ...values, calculation: data });
-            setMpaInteraction({
-              hoveredParcelNumber: null,
-              openPopperParcelNumber: null,
-              zoom: false,
-            });
-          }}
-          values={values}
-          mapInteraction={mapInteraction}
-          setMpaInteraction={setMpaInteraction}
-        /> */}
-        <div
-          className={cn(
-            "px-5 lg:px-8 xl:px-0 xl:pl-0 py-4 border-t border-t-grey-100 space-y-6 flex flex-col xl:flex-row-reverse",
-            step !== VoltSteps.CALCULATION && "justify-end"
-          )}
-          style={{ gridArea: "footer" }}
-        >
-          {step === VoltSteps.CALCULATION && (
-            <div style={{ gridArea: "axis" }} className="w-full xl:px-11">
-              <VoltPriceCalculationAxis
-                voltValue={values.calculation?.price || 0}
                 user={user}
+                setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
+                values={values}
+                setValues={setValues}
                 mapInteraction={mapInteraction}
                 setMpaInteraction={setMpaInteraction}
-                setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
-                data={
-                  values.calculation?.propertiesUsedForCalculation.map((el) => ({
-                    parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-                    acreage: el.acreage,
-                    price: el.lastSalePrice,
-                    pricePerAcre: el.pricePerAcreage,
-                    isMainLand: el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting,
-                  })) || []
-                }
               />
-            </div>
+            </td>
+          </tr>
+          {step === VoltSteps.CALCULATION && (
+            <tr>
+              <td className="h-0 py-6 px-4" colSpan={isSmallDevice ? 2 : 1}>
+                <VoltPriceCalculationAxis
+                  voltValue={values.calculation?.price || 0}
+                  user={user}
+                  mapInteraction={mapInteraction}
+                  setMpaInteraction={setMpaInteraction}
+                  setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
+                  data={
+                    values.calculation?.propertiesUsedForCalculation.map((el) => ({
+                      parcelNumberNoFormatting: el.parcelNumberNoFormatting,
+                      acreage: el.acreage,
+                      price: el.lastSalePrice,
+                      pricePerAcre: el.pricePerAcreage,
+                      isMainLand: el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting,
+                    })) || []
+                  }
+                />
+              </td>
+            </tr>
           )}
-          <div className="xl:w-[490px] xl:min-w-[490px] flex flex-col xl:px-11 !m-0 space-y-6">
-            <div className="hidden xl:flex">
-              <VoltDesktopAdditionalButtons
-                user={user}
-                step={step}
-                values={values}
-                onSucceed={(data) => {
-                  setStep(VoltSteps.CALCULATION);
-                  setValues({ ...values, calculation: data });
-                  setMpaInteraction({
-                    hoveredParcelNumber: null,
-                    openPopperParcelNumber: null,
-                    zoom: false,
-                  });
-                }}
-              />
-            </div>
-            <VoltFooter className="w-full xl:flex-col items-start h-full mt-6 xl:mt-0 xl:justify-end hidden xl:flex" />
-          </div>
-        </div>
-      </div>
+        </tbody>
+      </table>
     </>
   );
 };
