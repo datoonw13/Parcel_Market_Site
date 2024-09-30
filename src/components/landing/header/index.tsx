@@ -14,7 +14,7 @@ const LandingHeader = async () => {
           <Link href={routes.home.fullUrl}>
             <Logo className="w-[85px] h-5 sm:w-24 sm:h-8 md:w-32 md:h-8 lg:w-[140px] lg:h-10 " />
           </Link>
-          <HeaderMenu isAuthed={!!user} />
+          <HeaderMenu user={user} />
         </div>
       </PopoverAnchor>
     </Popover>

@@ -43,7 +43,7 @@ const HeaderNotifications = () => {
       <PopoverTrigger asChild>
         <div
           className={cn(
-            "size-10 rounded-full bg-grey-50 flex items-center justify-center cursor-pointer relative",
+            "border border-grey-100 size-10 rounded-full bg-grey-50 flex items-center justify-center cursor-pointer relative",
             "data-[state=open]:bg-grey-100",
             pending && "pointer-events-none opacity-50"
           )}

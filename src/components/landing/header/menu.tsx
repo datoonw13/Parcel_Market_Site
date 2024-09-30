@@ -13,14 +13,17 @@ import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { CiUser } from "react-icons/ci";
 import { PiBellLight, PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
+import { IDecodedAccessToken } from "@/types/auth";
+import { HiOutlineBell } from "react-icons/hi2";
 import { breakPoints } from "../../../../tailwind.config";
-import HeaderNotifications from "./notificattions/notifications";
+import HeaderNotifications from "./notifications";
+import UserMenu from "./user-menu";
 
 interface HeaderMenuProps {
-  isAuthed: boolean;
+  user: IDecodedAccessToken | null;
 }
 
-const HeaderMenu: FC<HeaderMenuProps> = ({ isAuthed }) => {
+const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
   const burgerIconRef = useRef<HTMLButtonElement>(null);
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
 
@@ -62,7 +65,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ isAuthed }) => {
                 </Link>
                 <div>
                   <p className="text-grey-600 text-xs py-4">Personal</p>
-                  {!isAuthed && (
+                  {!user && (
                     <Link href={routes.auth.signIn.fullUrl}>
                       <div className="flex items-center gap-1.5 cursor-pointer">
                         <IoIosLogIn color="primary-main" className="!fill-primary-main transition-all duration-0.1 size-5" />
@@ -70,7 +73,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ isAuthed }) => {
                       </div>
                     </Link>
                   )}
-                  {isAuthed && (
+                  {!!user && (
                     <>
                       <ul>
                         <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
@@ -80,9 +83,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ isAuthed }) => {
                           <PiBellRingingThin className="size-5" /> Notifications
                         </li>
                         <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
-                          <div className="border border-black p-0.5 rounded-full">
-                            <PiBellLight className="size-3" />
-                          </div>
+                          <HiOutlineBell className="size-5" />
                           My Subscription
                         </li>
                         <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
@@ -106,18 +107,19 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ isAuthed }) => {
         )}
         {!isSmallDevice && (
           <div className="flex gap-4 items-center">
-            {isAuthed && (
+            {!!user && (
               <>
                 <Link href={routes.user.searches.fullUrl} className="h-fit mr-4">
                   <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
                 </Link>
+                <HeaderNotifications />
+                <UserMenu user={user} />
               </>
             )}
-            <HeaderNotifications />
             <Link href={routes.volt.fullUrl}>
               <Button>Value of the land tool</Button>
             </Link>
-            {!isAuthed && (
+            {!user && (
               <Link href={routes.auth.signIn.fullUrl}>
                 <Button variant="secondary">Sign In</Button>
               </Link>
