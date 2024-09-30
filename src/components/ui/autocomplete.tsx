@@ -100,7 +100,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
             }
           }}
           style={{ width: contentWidth }}
-          className="min-w-[calc(--radix-popover-trigger-width)] p-0 border-0"
+          className="min-w-[calc(--radix-popover-trigger-width)] p-0 border-0 shadow-4 rounded-lg"
         >
           <CommandList className="">
             <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>

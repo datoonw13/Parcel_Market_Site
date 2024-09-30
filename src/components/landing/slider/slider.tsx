@@ -43,7 +43,7 @@ const LandingSlider = () => {
           <h1 className="text-white text-3xl sm:text-4xl md:text-6xl lg:text-[54px] font-bold text-center mx-auto !leading-tight">
             Save Time. Save Money. Make Money VOLT - Value of Land Tool
           </h1>
-          <div className="bg-white mt-6 md:mt-8 mb-4 rounded-xl p-4 grid md:grid-flow-col gap-3">
+          <div className="bg-white mt-6 md:mt-8 mb-4 rounded-xl p-4 grid md:grid-flow-col gap-3 max-w-3xl w-full mx-auto">
             <AutoComplete
               selectedValue={values.state}
               options={states}
