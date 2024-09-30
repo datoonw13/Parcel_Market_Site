@@ -25,7 +25,6 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [contentWidth, setContentWidth] = useState(0);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleResize = () => {
@@ -43,6 +42,10 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
     };
   }, []);
 
+  useEffect(() => {
+    setSearch(options.find((option) => option.value === selectedValue)?.label || "");
+  }, [options, selectedValue]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <Command
@@ -54,7 +57,6 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
         <PopoverPrimitive.Anchor asChild>
           <CommandPrimitive.Input
             asChild
-            value={search}
             disabled={disabled}
             className="w-full"
             onValueChange={(search) => {
@@ -85,7 +87,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
               setOpen(false);
             }}
           >
-            <Input error={error} rootClassName="w-full" ref={inputRef} placeholder={placeholder || ""} className="" />
+            <Input error={error} value={search} rootClassName="w-full" ref={inputRef} placeholder={placeholder || ""} className="" />
           </CommandPrimitive.Input>
         </PopoverPrimitive.Anchor>
         {!open && <CommandList aria-hidden="true" className="hidden" />}

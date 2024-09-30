@@ -8,10 +8,13 @@ import { AutoComplete } from "@/components/ui/autocomplete";
 import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import routes from "@/helpers/routes";
+import { useRouter } from "next/navigation";
 
 const images = ["/cover-1.png", "/cover-2.png", "/cover-3.png", "/cover-4.png"];
 
 const LandingSlider = () => {
+  const router = useRouter();
   const [values, setValues] = useState<{
     state: string | null;
     county: string | null;
@@ -42,23 +45,28 @@ const LandingSlider = () => {
           </h1>
           <div className="bg-white mt-6 md:mt-8 mb-4 rounded-xl p-4 grid md:grid-flow-col gap-3">
             <AutoComplete
-              // selectedValue={null}
-              options={[{ label: "wd", value: "q" }]}
+              selectedValue={values.state}
+              options={states}
               placeholder="State"
               onValueChange={(state) => {
                 setValues({ state, county: null });
               }}
             />
-            {/* <AutoComplete
+            <AutoComplete
               options={counties}
               placeholder="County"
               onValueChange={(county) => {
                 setValues({ ...values, county });
               }}
-              // selectedValue={getCountyValue(values.county, values.state)?.value || null}
+              selectedValue={getCountyValue(values.county, values.state)?.value || null}
               disabled={!values.state}
-            /> */}
-            <Button disabled={!values.county || !values.state}>Get Started</Button>
+            />
+            <Button
+              disabled={!values.county || !values.state}
+              onClick={() => router.push(`${routes.volt.fullUrl}?state=${values.state}&county=${values.county}`)}
+            >
+              Get Started
+            </Button>
           </div>
           <h2 className="sm:text-lg font-semibold text-center text-white row-end-3 md:row-end-4 mt-2">
             Calculate an average market value in seconds for free!

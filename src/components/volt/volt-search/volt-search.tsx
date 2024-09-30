@@ -12,6 +12,8 @@ import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
 import { getPropertiesAction } from "@/server-actions/volt/actions";
 import { VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { useRouter, useSearchParams } from "next/navigation";
+import routes from "@/helpers/routes";
 import { voltSearchSchema } from "../../../zod-validations/volt";
 import { Tooltip } from "../../ui/tooltip";
 import { RadioGroupItem } from "../../ui/radio-group";
@@ -30,6 +32,9 @@ interface VoltSearchProps {
 }
 
 const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep }) => {
+  const params = useSearchParams();
+  const router = useRouter();
+  const searchParams = useMemo(() => new URLSearchParams(params as any), [params]);
   const [error, setError] = useState<"limit" | "notFound" | null>(null);
   const {
     handleSubmit,
@@ -79,9 +84,23 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
 
   useEffect(() => {
     if (values.searchDetails) {
-      reset({ ...values.searchDetails });
+      reset({ ...values.searchDetails, searchType: "parcelNumber" });
     }
   }, [reset, values.searchDetails]);
+
+  useEffect(() => {
+    if (searchParams.get("state") && searchParams.get("county")) {
+      reset({
+        ...values.searchDetails,
+        searchType: "parcelNumber",
+        state: searchParams.get("state")!,
+        county: searchParams.get("county")!,
+      });
+      searchParams.delete("state");
+      searchParams.delete("county");
+      router.replace(`${routes.volt.fullUrl}?${searchParams.toString()}`);
+    }
+  }, [reset, router, searchParams, values.searchDetails]);
 
   return (
     <div className={cn("flex gap-6 flex-col-reverse lg:flex-col", className)}>
