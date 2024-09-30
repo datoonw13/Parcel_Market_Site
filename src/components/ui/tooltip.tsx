@@ -3,7 +3,7 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "@/lib/utils";
-import { ComponentPropsWithoutRef, ElementRef, FC, ReactElement, forwardRef } from "react";
+import { ComponentPropsWithoutRef, ElementRef, FC, ReactElement, forwardRef, useState } from "react";
 
 const TooltipContent = forwardRef<ElementRef<typeof TooltipPrimitive.Content>, ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>>(
   ({ className, sideOffset = 4, ...props }, ref) => (
@@ -27,17 +27,26 @@ interface TooltipProps {
   buttonClassName?: string;
 }
 
-const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName }) => (
-  <TooltipPrimitive.Provider delayDuration={300}>
-    <TooltipPrimitive.Root>
-      <TooltipPrimitive.Trigger asChild className={cn("cursor-pointer", buttonClassName)}>
-        <div>{renderButton}</div>
-      </TooltipPrimitive.Trigger>
-      <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">
-        {renderContent}
-      </TooltipContent>
-    </TooltipPrimitive.Root>
-  </TooltipPrimitive.Provider>
-);
+const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <TooltipPrimitive.Provider delayDuration={300}>
+      <TooltipPrimitive.Root open={open} onOpenChange={setOpen}>
+        <TooltipPrimitive.Trigger
+          onClick={(e) => {
+            setOpen(!open);
+          }}
+          asChild
+          className={cn("cursor-pointer", buttonClassName)}
+        >
+          <div>{renderButton}</div>
+        </TooltipPrimitive.Trigger>
+        <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">
+          {renderContent}
+        </TooltipContent>
+      </TooltipPrimitive.Root>
+    </TooltipPrimitive.Provider>
+  );
+};
 
 export { Tooltip };
