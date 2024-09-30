@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, ReactElement, forwardRef } from "react";
 import { LuInfo } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
 import { Button } from "./button";
@@ -42,7 +42,7 @@ const Alert = ({
   description,
   variant,
   handleClose,
-}: { title?: string; description?: string; handleClose?: () => void } & VariantProps<typeof alertVariants>) => (
+}: { title?: string; description?: string | ReactElement; handleClose?: () => void } & VariantProps<typeof alertVariants>) => (
   <Wrapper variant={variant} className="relative">
     {handleClose && (
       <div onClick={handleClose} className="!absolute right-[16px] top-5 cursor-pointer">

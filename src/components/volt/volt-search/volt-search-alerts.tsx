@@ -1,13 +1,12 @@
 "use client";
 
 import { Alert } from "@/components/ui/alert";
-import useMediaQuery from "@/hooks/useMediaQuery";
-import useNotification from "@/hooks/useNotification";
-import React, { Dispatch, FC, SetStateAction, useEffect } from "react";
+import Link from "next/link";
+import React, { Dispatch, FC, SetStateAction } from "react";
 
 interface VoltSearchAlertsProps {
-  error: string | null;
-  setError: Dispatch<SetStateAction<string | null>>;
+  error: "limit" | "notFound" | null;
+  setError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
   showUnauthorizedUserAlert: boolean;
 }
 
@@ -20,34 +19,35 @@ const errors = {
     title: "We could not find your property.",
     description: "Please check your information and try again.",
   },
+  limit: {
+    title: "You have reached your daily limit.",
+    description: (
+      <span>
+        If you want to increase the daily limit, Please contact{" "}
+        <Link href="/">
+          {" "}
+          <span className="underline text-warning">support</span>
+        </Link>{" "}
+        for help.
+      </span>
+    ),
+  },
 };
 
-const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError, showUnauthorizedUserAlert }) => {
-  const { notify } = useNotification();
-  const { targetReached: isSmallDevice, detecting } = useMediaQuery(768);
-
-  useEffect(() => {
-    if (isSmallDevice && error) {
-      notify(errors.notFound, { variant: "error" });
-      setError(null);
-    }
-  }, [error, isSmallDevice, notify, setError]);
-
-  return (
-    <div className="flex flex-col gap-6">
-      {showUnauthorizedUserAlert && (
-        <Alert variant="warning" title={errors.unauthorized.title} description={errors.unauthorized.description} />
-      )}
-      {!isSmallDevice && error && (
-        <Alert
-          handleClose={() => setError(null)}
-          variant="warning"
-          title={errors.notFound.title}
-          description={errors.notFound.description}
-        />
-      )}
-    </div>
-  );
-};
+const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError, showUnauthorizedUserAlert }) => (
+  <div className="flex flex-col gap-6">
+    {showUnauthorizedUserAlert && (
+      <Alert variant="warning" title={errors.unauthorized.title} description={errors.unauthorized.description} />
+    )}
+    {error && (
+      <Alert
+        handleClose={error === "notFound" ? () => setError(null) : undefined}
+        variant="warning"
+        title={errors[error].title}
+        description={errors[error].description}
+      />
+    )}
+  </div>
+);
 
 export default VoltSearchAlerts;
