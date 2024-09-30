@@ -121,6 +121,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       colors,
+      maxWidth: {
+        "8xl": "1536px",
+      },
     },
   },
   // safelist: [{ pattern: /([a-zA-Z]+)-./ }]
