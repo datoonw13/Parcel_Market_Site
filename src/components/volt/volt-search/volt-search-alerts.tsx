@@ -1,6 +1,7 @@
 "use client";
 
 import { Alert } from "@/components/ui/alert";
+import routes from "@/helpers/routes";
 import Link from "next/link";
 import React, { Dispatch, FC, SetStateAction } from "react";
 
@@ -13,7 +14,20 @@ interface VoltSearchAlertsProps {
 const errors = {
   unauthorized: {
     title: "Please authenticate",
-    description: "You cannot search for desired land by first and last name without authorization.",
+    description: (
+      <span>
+        You cannot search for desired land by first and last name without{" "}
+        <Link href={routes.auth.signIn.fullUrl}>
+          {" "}
+          <span className="underline text-warning">authorization</span>
+        </Link>{" "}
+        or
+        <Link href={routes.auth.signUp.fullUrl}>
+          {" "}
+          <span className="underline text-warning">log in</span>
+        </Link>{" "}
+      </span>
+    ),
   },
   notFound: {
     title: "We could not find your property.",
