@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import LandingQuestions from "@/components/landing/questions";
 import LandingSupport from "@/components/landing/support";
 import { getUserAction } from "@/server-actions/user/actions";
+import LandingUpdates from "@/components/landing/updates";
 
 const LandingSubscribe = dynamic(() => import("@/components/landing/subscribe"), { ssr: false });
 const PeopleFeedback = dynamic(() => import("@/components/landing/people-feedback"), { ssr: false });
@@ -23,6 +24,7 @@ const LandingPage = async () => {
       <PeopleFeedback />
       <LandingQuestions />
       <LandingSupport user={user} />
+      <LandingUpdates />
     </div>
   );
 };
