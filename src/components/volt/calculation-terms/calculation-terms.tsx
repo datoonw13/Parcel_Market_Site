@@ -26,8 +26,7 @@ const CalculationTerms = ({ onValueChange, className }: { onValueChange: (value:
       id="agree-calculation-terms"
       label={
         <p className="space-x-1 text-gray-600 text-xs font-medium">
-          Yes, I understand and agree to the Parcel Market <span className="text-primary-main underline">Terms of Service</span> and
-          <span className="text-primary-main underline">Privacy Policy</span>.
+          Yes, I understand and agree to the Parcel Market Terms of Service and Privacy Policy.
         </p>
       }
       onCheckedChange={(checked) => onValueChange(!!checked)}
