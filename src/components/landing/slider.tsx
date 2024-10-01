@@ -39,7 +39,7 @@ const LandingSlider = () => {
         </CarouselContent>
       </Carousel>
       <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center">
-        <div className="max-w-6xl mx-auto px-5 grid">
+        <div className="max-w-6xl mx-auto px-8 sm:px-10 md:px-20 lg:px-32 grid">
           <h1 className="text-white text-3xl sm:text-4xl md:text-6xl lg:text-[54px] font-bold text-center mx-auto !leading-tight">
             Save Time. Save Money. Make Money VOLT - Value of Land Tool
           </h1>
