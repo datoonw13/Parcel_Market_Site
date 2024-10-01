@@ -6,10 +6,10 @@ import Link from "next/link";
 import React from "react";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 
-const VoltMobileHeader = ({ step, user }: { step: VoltSteps; user: IDecodedAccessToken | null }) => (
+const VoltMobileHeader = ({ step, user, goBack }: { goBack: () => void; step: VoltSteps; user: IDecodedAccessToken | null }) => (
   <div className="w-full" id="volt-navbar">
     <div className="px-5 py-6 border-b border-b-grey-100 flex justify-between items-center">
-      {step !== VoltSteps.SEARCH && <MdOutlineKeyboardArrowLeft className="size-6" />}
+      {step !== VoltSteps.SEARCH && <MdOutlineKeyboardArrowLeft onClick={goBack} className="size-6" />}
       <Link href="/">
         <Logo className="w-[84px] h-6 sm:w-24 sm:h-8" />
       </Link>

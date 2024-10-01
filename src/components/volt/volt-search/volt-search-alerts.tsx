@@ -17,12 +17,12 @@ const errors = {
     description: (
       <span>
         You cannot search for desired land by first and last name without{" "}
-        <Link href={routes.auth.signIn.fullUrl}>
+        <Link href={routes.auth.signUp.fullUrl}>
           {" "}
           <span className="underline text-warning">authorization</span>
         </Link>{" "}
         or
-        <Link href={routes.auth.signUp.fullUrl}>
+        <Link href={routes.auth.signIn.fullUrl}>
           {" "}
           <span className="underline text-warning">log in</span>
         </Link>{" "}

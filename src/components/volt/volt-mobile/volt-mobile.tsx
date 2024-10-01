@@ -96,7 +96,13 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
   return (
     <>
       <div className="flex flex-col h-screen lg:hidden w-full relative">
-        <VoltMobileHeader step={step} user={user} />
+        <VoltMobileHeader
+          step={step}
+          user={user}
+          goBack={() => {
+            setStep(VoltSteps.SEARCH);
+          }}
+        />
         {showCalculationTerms && (
           <div className="p-5 overflow-auto space-y-8">
             <CalculationTerms className="h-max" onValueChange={(val) => setAgreeTerm(val)} />
