@@ -4,8 +4,9 @@ const AboutVolt = () => (
   <div
     className={`
           mx-auto w-full
-          px-4 sm:px-5 md:px-7 lg:px-14 xl:px-24 2xl:px-[9vw]
+          px-4 sm:px-5 md:px-7 lg:px-14 xl:px-[9vw]
           space-y-6 md:space-y-8 lg:space-y-11
+          mt-16
           `}
   >
     <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto">

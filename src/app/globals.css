@@ -110,3 +110,10 @@
       font-size: 1.8vh;
    }
  }
+
+ .slick-list { margin: 0 -7px; & .slick-slide > div { padding: 0 10px; } }
+
+ .slick-track {
+  display: flex !important;
+  align-items: center;
+ }
