@@ -8,14 +8,14 @@ import HeaderMenu from "./menu";
 const LandingHeader = async () => {
   const user = await getUserAction();
   return (
-    <Popover>
+    <Popover modal>
       <PopoverAnchor>
         <div
           className={`
           py-3 sm:py-4 md:py-5 lg:py-6 xl:py-7 
           flex justify-between items-center
           mx-auto
-          px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[28] 2xl:px-[11vw]
+          px-5 sm:px-8 md:px-11 lg:px-16 xl:px-28 2xl:px-[11vw]
           `}
         >
           <Link href={routes.home.fullUrl}>
