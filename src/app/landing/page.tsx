@@ -3,6 +3,7 @@ import React from "react";
 import LandingSlider from "@/components/landing/slider";
 import AboutVolt from "@/components/landing/about-volt";
 import dynamic from "next/dynamic";
+import LandingQuestions from "@/components/landing/questions";
 
 const LandingSubscribe = dynamic(() => import("@/components/landing/subscribe"), { ssr: false });
 const PeopleFeedback = dynamic(() => import("@/components/landing/people-feedback"), { ssr: false });
@@ -16,6 +17,7 @@ const LandingPage = () => (
     </div>
     <LandingSubscribe />
     <PeopleFeedback />
+    <LandingQuestions />
   </div>
 );
 
