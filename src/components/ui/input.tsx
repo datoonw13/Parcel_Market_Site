@@ -13,6 +13,8 @@ interface InputBaseProps {
 
 export interface InputGeneralProps extends InputHTMLAttributes<HTMLInputElement>, InputBaseProps {}
 
+export interface TextAreaGeneralProps extends InputHTMLAttributes<HTMLTextAreaElement>, InputBaseProps {}
+
 const styles = {
   error: "!border-error ",
   root: `
@@ -70,4 +72,29 @@ const NumberInput = forwardRef<HTMLInputElement, InputGeneralProps & NumericForm
   />
 ));
 
-export { TextInput, NumberInput };
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaGeneralProps>(({ className, type, ...props }, ref) => {
+  const { label, startIcon, endIcon, error, rootClassName, rootRef, ...inputGeneralProps } = { ...props };
+  const showLabel = label && !inputGeneralProps.placeholder;
+  return (
+    <div ref={rootRef} className={cn(styles.root, rootClassName, error && styles.error)}>
+      <div className={cn("flex items-center justify-center h-full start-icon pr-3", startIcon && "pl-3")}>{startIcon}</div>
+      <div className={cn(styles.inputWrapper)}>
+        <textarea
+          ref={ref}
+          className={cn(styles.input, showLabel && "pt-3", className, "py-2 resize-none")}
+          {...inputGeneralProps}
+          placeholder={inputGeneralProps.placeholder || " "}
+        />
+        {showLabel && (
+          <p className={cn(styles.label, "label pointer-events-none")}>
+            {label}
+            {inputGeneralProps.required && <span className="text-error"> *</span>}
+          </p>
+        )}
+      </div>
+      <div className={cn("flex items-center justify-center h-full pr-3 end-icon", endIcon && "pl-3")}>{endIcon}</div>
+    </div>
+  );
+});
+
+export { TextInput, NumberInput, TextArea };

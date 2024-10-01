@@ -11,7 +11,7 @@ export const passwordSchema = z
 export const emailSchema = z.string().trim().email();
 
 export const userSignInValidation = z.object({
-  email: z.string().trim().min(1).email(),
+  email: emailSchema,
   password: z.string().trim().min(1),
 });
 
