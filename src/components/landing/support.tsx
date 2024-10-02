@@ -7,16 +7,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { IDecodedAccessToken } from "@/types/auth";
 import { useEffect } from "react";
+import { userFeedbackAction } from "@/server-actions/common-actions";
+import useNotification from "@/hooks/useNotification";
 import { Button } from "../ui/button";
 import { TextArea, TextInput } from "../ui/input";
 
 export const formSchema = z.object({
   email: emailSchema,
   name: z.string().trim().min(1),
-  description: z.string().trim().min(1),
+  comment: z.string().trim().min(1),
 });
 
 const LandingSupport = ({ user }: { user: IDecodedAccessToken | null }) => {
+  const { notify } = useNotification();
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting, isValid },
@@ -26,8 +29,11 @@ const LandingSupport = ({ user }: { user: IDecodedAccessToken | null }) => {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data, 22);
+  const onSubmit = handleSubmit(async (data) => {
+    const { errorMessage } = await userFeedbackAction(data);
+    if (!errorMessage) {
+      // notify({title: 'Feedback sent'})
+    }
   });
 
   useEffect(() => {
@@ -89,9 +95,9 @@ const LandingSupport = ({ user }: { user: IDecodedAccessToken | null }) => {
         </div>
         <div className="space-y-1">
           <p className="font-semibold text-sm">Description</p>
-          <TextArea placeholder="" className="" rootClassName="h-44" {...register("description")} />
+          <TextArea placeholder="" className="" rootClassName="h-44" {...register("comment")} />
         </div>
-        <Button className="!mt-6 w-full" onClick={onSubmit} disabled={!isValid}>
+        <Button className="!mt-6 w-full" onClick={onSubmit} loading={isSubmitting} disabled={!isValid}>
           Send
         </Button>
       </div>
