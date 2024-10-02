@@ -20,7 +20,7 @@ const LandingUpdates = () => {
   };
 
   return (
-    <div className="space-y-6 md:space-y-8 lg:space-y-11">
+    <div className="px-5 sm:px-8 md:px-11 space-y-6 md:space-y-8 lg:space-y-11">
       <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto">
         <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">Get the Latest Updates</h1>
         <h2 className="text-center font-light text-sm md:text-base">

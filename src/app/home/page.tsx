@@ -8,6 +8,7 @@ import LandingSupport from "@/components/landing/support";
 import { getUserAction } from "@/server-actions/user/actions";
 import LandingUpdates from "@/components/landing/updates";
 import LandingFooter from "@/components/landing/footer";
+import VoltCarousel from "@/components/landing/volt-carousel";
 
 const LandingSubscribe = dynamic(() => import("@/components/landing/subscribe"), { ssr: false });
 const PeopleFeedback = dynamic(() => import("@/components/landing/people-feedback"), { ssr: false });
@@ -21,6 +22,7 @@ const LandingPage = async () => {
         <LandingSlider />
         <AboutVolt />
       </div>
+      <VoltCarousel />
       <LandingSubscribe />
       <PeopleFeedback />
       <LandingQuestions />
