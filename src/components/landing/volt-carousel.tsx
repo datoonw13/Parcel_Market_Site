@@ -124,12 +124,12 @@ const VoltCarousel = () => {
               className={cn(`
                 shadow-4 
                 w-[45vw] min-w-[45vw] sm:w-[30vw] sm:min-w-[30vw] md:w-[25vw] md:min-w-[25vw] lg:w-[180px] lg:min-w-[180px] xl:w-[210px] xl:min-w-[210px] 
-                h-[70vw] sm:h-[55vw] md:h-[45vw] lg:h-[310px] 
+                h-[70vw] sm:h-[55vw] md:h-[45vw] lg:h-[380px] 
                 rounded-lg flex items-center justify-center relative cursor-pointer
                 `)}
               transition={{ delay: 0.05 }}
             >
-              <Image alt="" fill src={`/slide${el.id}.png`} className="w-full h-full max-w-nones max-h-none rounded-2xl" />
+              <Image alt="" fill src={`/slider${el.id}.png`} className="w-full h-full max-w-nones max-h-none rounded-2xl shadow-2" />
             </motion.div>
           ))}
         </div>
