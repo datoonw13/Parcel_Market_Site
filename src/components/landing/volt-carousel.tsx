@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Fragment, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import { Button } from "../ui/button";
 
 const slides = [
@@ -97,7 +99,11 @@ const VoltCarousel = () => {
             >
               <h1 className="text-grey-800 font-extrabold mb-1 text-sm">{el.title}</h1>
               <p className="font-light text-grey-800 text-xs mb-6">{el.desc}</p>
-              <Button className={cn(data[1].id !== el.id && "!bg-primary-main-100 text-primary-main", "h-8 text-xs")}>Try for free</Button>
+              <Link href={routes.volt.fullUrl}>
+                <Button className={cn(data[1].id !== el.id && "!bg-primary-main-100 text-primary-main", "h-8 text-xs")}>
+                  Try for free
+                </Button>
+              </Link>
             </div>
           ))}
       </div>

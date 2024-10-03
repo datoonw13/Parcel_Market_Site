@@ -1,12 +1,15 @@
 "use client";
 
-import { useRef } from "react";
 import Slider from "react-slick";
-import { FaArrowRightLong, FaCheck } from "react-icons/fa6";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { useRef } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { Button } from "../ui/button";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import Link from "next/link";
+import routes from "@/helpers/routes";
+import { GiCheckMark } from "react-icons/gi";
+import { Button } from "../ui/button";
 
 export default function Subscribe() {
   const { targetReached } = useMediaQuery(1024);
@@ -74,33 +77,39 @@ export default function Subscribe() {
             <h1 className="text-[44px] font-bold mb-7 md:mb-8">
               Free <span className="text-base font-normal">/ 7 Days</span>
             </h1>
-            <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
-              <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                Try for free <FaArrowRightLong />
-              </div>
-            </Button>
+            <Link href={routes.user.subscription.fullUrl}>
+              <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
+                <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
+                  Subscribe <FaArrowRightLong />
+                </div>
+              </Button>
+            </Link>
           </div>
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[270px]">
             <h2 className="font-medium text-base text-primary-main mb-4 uppercase">save 10% per month</h2>
             <h1 className="text-[44px] font-bold mb-7 md:mb-8">
               <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
             </h1>
-            <Button className="flex w-full [&>span]:w-full ">
-              <div className="flex items-center justify-between gap-2 w-full  font-semibold">
-                Try for free <FaArrowRightLong />
-              </div>
-            </Button>
+            <Link href={routes.user.subscription.fullUrl}>
+              <Button className="flex w-full [&>span]:w-full ">
+                <div className="flex items-center justify-between gap-2 w-full  font-semibold">
+                  Subscribe <FaArrowRightLong />
+                </div>
+              </Button>
+            </Link>
           </div>
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
             <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Per month</h2>
             <h1 className="text-[44px] font-bold mb-7 md:mb-8">
               <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
             </h1>
-            <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
-              <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                Subscribe <FaArrowRightLong />
-              </div>
-            </Button>
+            <Link href={routes.user.subscription.fullUrl}>
+              <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
+                <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
+                  Subscribe <FaArrowRightLong />
+                </div>
+              </Button>
+            </Link>
           </div>
         </Slider>
         <ul
@@ -114,7 +123,7 @@ export default function Subscribe() {
         >
           {list.map((item) => (
             <li key={item} className="text-sm md:text-base font-medium flex items-start gap-2 text-start">
-              <FaCheck className="mt-[4px] text-primary-main" /> {item}
+              <GiCheckMark className="mt-[4px] text-primary-main" /> {item}
             </li>
           ))}
         </ul>
