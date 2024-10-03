@@ -3,10 +3,12 @@
 import { subscribeAction } from "@/server-actions/common-actions";
 import { useState } from "react";
 import { emailSchema } from "@/zod-validations/auth-validations";
+import useNotification from "@/hooks/useNotification";
 import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 
 const LandingUpdates = () => {
+  const { notify } = useNotification();
   const [subscribePending, setSubscribePending] = useState(false);
   const [email, setEmail] = useState("");
   const isValidEmail = !!emailSchema.safeParse(email).success;
@@ -14,7 +16,10 @@ const LandingUpdates = () => {
   const handleSubscribe = async () => {
     if (isValidEmail) {
       setSubscribePending(true);
-      await subscribeAction(email);
+      const { errorMessage } = await subscribeAction(email);
+      if (!errorMessage) {
+        notify({ title: "Subscription successful", description: "You'll receive parcel market updates by email" });
+      }
       setSubscribePending(false);
     }
   };
