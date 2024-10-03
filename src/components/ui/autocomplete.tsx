@@ -104,7 +104,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
         >
           <CommandList className="">
             <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>
-            <CommandGroup value={selectedValue || ""} className="bg-white border-0 shadow-0 outline-0 p-0 m-0">
+            <CommandGroup value="" className="bg-white border-0 shadow-0 outline-0 p-0 m-0">
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
