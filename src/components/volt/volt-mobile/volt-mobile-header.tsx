@@ -1,4 +1,3 @@
-import ResponsiveHeaderMenu from "@/components/app-bar/ResponsiveHeaderMenu";
 import HeaderMenu from "@/components/landing/header/menu";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import Logo from "@/icons/Logo";
