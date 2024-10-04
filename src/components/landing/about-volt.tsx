@@ -1,4 +1,7 @@
+import Link from "next/link";
 import React from "react";
+import routes from "@/helpers/routes";
+import { Button } from "../ui/button";
 
 const AboutVolt = () => (
   <div
@@ -26,6 +29,9 @@ const AboutVolt = () => (
           data, VOLT is able to estimate an average value for similar sized properties in a market area. You can also use VOLT to search,
           save, and export county sale data.
         </h1>
+        <Link className="w-full" href={routes.volt.fullUrl}>
+          <Button className="mt-6 md:mt-8 w-full md:w-fit">Try for free</Button>
+        </Link>
       </div>
     </div>
   </div>
