@@ -80,7 +80,7 @@ export default function Subscribe() {
             <Link href={routes.user.subscription.fullUrl}>
               <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
                 <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                  Subscribe <FaArrowRightLong />
+                  Try For Free <FaArrowRightLong />
                 </div>
               </Button>
             </Link>
