@@ -60,6 +60,8 @@ const RecentSearchesMobileFilters = () => {
 
   const disableOkButton = voltPriceError || acreageError || JSON.stringify(values) === JSON.stringify(filters);
 
+  const totalFiltersSelected = filters ? Object.values(filters).filter(Boolean).length : 0;
+
   useEffect(() => {
     if (filters && !values) {
       setValues(filters);
@@ -279,12 +281,18 @@ const RecentSearchesMobileFilters = () => {
         </ResponsiveModal>
         <div className="2xl:hidden ml-auto">
           <Button
-            className={cn("p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl")}
+            className={cn(
+              "p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl relative",
+              totalFiltersSelected &&
+                `border-primary-main !bg-primary-main-100 text-primary-main 
+              after:content-[attr(after-dynamic-value)] after:absolute after:bg-error after:rounded-full after:text-white after:size-5 after:text-xs after:right-0 after:top-0 after:translate-x-1/2 after:-translate-y-1/2`
+            )}
+            after-dynamic-value={totalFiltersSelected}
             onClick={() => setOpen(true)}
           >
             <div className="flex gap-2 items-center">
               <TbFilter className="size-5" style={{ transform: "scale(-1, 1)" }} />
-              <span className="hidden md:block text-grey-600">Filter</span>
+              <span className={cn("hidden md:block text-grey-600", totalFiltersSelected && "text-primary-main")}>Filter</span>
             </div>
           </Button>
         </div>
