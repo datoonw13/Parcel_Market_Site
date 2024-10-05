@@ -8,6 +8,7 @@ interface InputBaseProps {
   endIcon?: ReactElement | string;
   error?: boolean;
   rootClassName?: string;
+  endIconClassName?: string;
   rootRef?: LegacyRef<HTMLDivElement>;
 }
 
@@ -37,7 +38,7 @@ const styles = {
 };
 
 const TextInput = forwardRef<HTMLInputElement, InputGeneralProps>(({ className, type, ...props }, ref) => {
-  const { label, startIcon, endIcon, error, rootClassName, rootRef, ...inputGeneralProps } = { ...props };
+  const { label, startIcon, endIcon, error, rootClassName, rootRef, endIconClassName, ...inputGeneralProps } = { ...props };
   const showLabel = label && !inputGeneralProps.placeholder;
   return (
     <div ref={rootRef} className={cn(styles.root, rootClassName, error && styles.error)}>
@@ -58,7 +59,7 @@ const TextInput = forwardRef<HTMLInputElement, InputGeneralProps>(({ className, 
           </p>
         )}
       </div>
-      <div className={cn("flex items-center justify-center h-full pr-3 end-icon", endIcon && "pl-3")}>{endIcon}</div>
+      <div className={cn("flex items-center justify-center h-full pr-3 end-icon", endIcon && "pl-3", endIconClassName)}>{endIcon}</div>
     </div>
   );
 });

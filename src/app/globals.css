@@ -117,3 +117,8 @@
   display: flex !important;
   align-items: center;
  }
+
+
+ div[data-radix-popper-content-wrapper] {
+  display: flex;
+ }

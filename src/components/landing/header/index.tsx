@@ -16,6 +16,7 @@ const LandingHeader = async () => {
           flex justify-between items-center
           mx-auto
           px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[11vw]
+          border-b border-b-grey-100
           `}
         >
           <Link href={routes.home.fullUrl}>

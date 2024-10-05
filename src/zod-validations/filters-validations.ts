@@ -23,3 +23,15 @@ export const userPropertiesFiltersValidations = z.object({
   page: z.number({ coerce: true }),
   sortBy: z.nativeEnum(SortEnum).nullable(),
 });
+
+export const userRecentSearchesValidations = z.object({
+  search: z.string().optional(),
+  state: z.string().optional(),
+  county: z.string().optional(),
+  acreageMin: z.number({ coerce: true }).optional(),
+  acreageMax: z.number({ coerce: true }).optional(),
+  voltPriceMin: z.number({ coerce: true }).optional(),
+  voltPriceMax: z.number({ coerce: true }).optional(),
+  page: z.number({ coerce: true }).optional(),
+  sortBy: z.nativeEnum(SortEnum).optional(),
+});

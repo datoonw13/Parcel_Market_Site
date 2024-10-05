@@ -3,24 +3,19 @@ import Divider from "@/components/@new/shared/Divider";
 import EventSourceWrapper from "@/components/@new/shared/event-source/event-source-wrapper";
 // import { AppBar } from "@/components/app-bar";
 import { Footer, MiniFooter } from "@/components/footer";
+import LandingFooter from "@/components/landing/footer";
+import LandingHeader from "@/components/landing/header";
 import SubscribeNow from "@/components/shared/SubscribeNow";
 import { ReactElement } from "react";
 
 const MainLayout = ({ children }: { children: ReactElement }) => (
-  <>
+  <div className="flex flex-col h-screen ">
     <EventSourceWrapper />
-    <div className="flex flex-col">
-      {/* <AppBar /> */}
-      {children}
-      <SubscribeNow />
-      <Footer />
-      <Container className="mt-6">
-        <Divider />
-        <div className="py-6">
-          <MiniFooter />
-        </div>
-      </Container>
+    <LandingHeader />
+    <div className="flex flex-col h-full justify-between gap-11 sm:gap-12 md:gap-16 lg:gap-22 xl:gap-28 2xl:gap-32">
+      <div>{children}</div>
+      <LandingFooter className="mt-auto " />
     </div>
-  </>
+  </div>
 );
 export default MainLayout;

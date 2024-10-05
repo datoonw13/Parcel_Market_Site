@@ -5,9 +5,11 @@ import { Command as CommandPrimitive } from "cmdk";
 
 import { cn } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
+import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "./command";
 import { TextInput as Input } from "./input";
 import { Popover, PopoverContent } from "./popover";
+import { ScrollArea } from "./scroll-area";
 
 export type Option = Record<"value" | "label", string> & Record<string, string>;
 
@@ -19,9 +21,19 @@ type AutoCompleteProps = {
   disabled?: boolean;
   placeholder?: string;
   error?: boolean;
+  inputRootClassName?: string;
 };
 
-const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onValueChange, placeholder, selectedValue, error }) => {
+const AutoComplete: FC<AutoCompleteProps> = ({
+  options,
+  disabled,
+  isLoading,
+  onValueChange,
+  placeholder,
+  selectedValue,
+  error,
+  inputRootClassName,
+}) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [contentWidth, setContentWidth] = useState(0);
@@ -54,7 +66,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
           return item?.label.trim().toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()) ? 1 : 0;
         }}
       >
-        <PopoverPrimitive.Anchor asChild>
+        <PopoverPrimitive.Anchor>
           <CommandPrimitive.Input
             asChild
             disabled={disabled}
@@ -87,7 +99,15 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
               setOpen(false);
             }}
           >
-            <Input error={error} value={search} rootClassName="w-full" ref={inputRef} placeholder={placeholder || ""} className="" />
+            <Input
+              endIcon={open ? <IoChevronUp /> : <IoChevronDown />}
+              error={error}
+              value={search}
+              rootClassName={cn("w-full", inputRootClassName)}
+              ref={inputRef}
+              placeholder={placeholder || ""}
+              className=""
+            />
           </CommandPrimitive.Input>
         </PopoverPrimitive.Anchor>
         {!open && <CommandList aria-hidden="true" className="hidden" />}
@@ -100,28 +120,30 @@ const AutoComplete: FC<AutoCompleteProps> = ({ options, disabled, isLoading, onV
             }
           }}
           style={{ width: contentWidth }}
-          className="min-w-[calc(--radix-popover-trigger-width)] p-0 border-0 shadow-4 rounded-lg"
+          className="min-w-[calc(--radix-popover-trigger-width)] p-0 border-0 shadow-4 rounded-lg overflow-hidden"
         >
-          <CommandList className="">
-            <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>
-            <CommandGroup value="" className="bg-white border-0 shadow-0 outline-0 p-0 m-0">
-              {options.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onSelect={(currentValue) => {
-                    onValueChange(currentValue);
-                    setSearch(options.find((option) => option.value === currentValue)?.label || "");
-                    setOpen(false);
-                  }}
-                  className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
-                >
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
+          <ScrollArea className="max-h-72">
+            <CommandList className="overflow-hidden ">
+              <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>
+              <CommandGroup value="" className="bg-white border-0 shadow-0 outline-0 p-0 m-0 overflow-hidden">
+                {options.map((option) => (
+                  <CommandItem
+                    key={option.value}
+                    value={option.value}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onSelect={(currentValue) => {
+                      onValueChange(currentValue);
+                      setSearch(options.find((option) => option.value === currentValue)?.label || "");
+                      setOpen(false);
+                    }}
+                    className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
+                  >
+                    {option.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </ScrollArea>
         </PopoverContent>
       </Command>
     </Popover>
