@@ -63,8 +63,8 @@ const RecentSearchesDesktopFilters = () => {
       <MinmaxDropdown
         placeholder="Acreage"
         selectedValue={{
-          min: filters?.acreageMin || null,
-          max: filters?.acreageMax || null,
+          min: typeof filters?.acreageMin === "number" || filters?.acreageMin === 0 ? filters.acreageMin : null,
+          max: typeof filters?.acreageMax === "number" || filters?.acreageMax === 0 ? filters.acreageMax : null,
         }}
         renderOption={(value) => {
           if (value?.min && !value?.max) {
@@ -126,30 +126,30 @@ const RecentSearchesDesktopFilters = () => {
         inputPrefix="$"
         placeholder="VOLT Price"
         selectedValue={{
-          min: filters?.voltPriceMin || null,
-          max: filters?.voltPriceMax || null,
+          min: typeof filters?.voltPriceMin === "number" || filters?.voltPriceMin === 0 ? filters.voltPriceMin : null,
+          max: typeof filters?.voltPriceMax === "number" || filters?.voltPriceMax === 0 ? filters.voltPriceMax : null,
         }}
         renderInputValue={(value) => {
           if (value?.min && value?.max) {
-            return `${value.min}$ - ${value.max}$`;
+            return `$${value.min} - $${value.max}`;
           }
           if (value?.min && !value?.max) {
-            return `${value.min}$ - N/A`;
+            return `$${value.min} - N/A`;
           }
           if (!value?.min && value?.max) {
-            return `${value.max}$ + N/A`;
+            return `$0 - $${value.max}`;
           }
           return "";
         }}
         renderOption={(value) => {
           if (value?.min && value?.max) {
-            return `${value.min}$ - ${value.max}$`;
+            return `$${value.min} - ${value.max}`;
           }
           if (value?.min && !value?.max) {
-            return `${value.min}$ - N/A`;
+            return `$${value.min} - N/A`;
           }
           if (!value?.min && value?.max) {
-            return `${value.max}$ + N/A`;
+            return `$0 - $${value.max}`;
           }
           return "";
         }}
@@ -167,7 +167,7 @@ const RecentSearchesDesktopFilters = () => {
         }}
         data={[
           {
-            min: 0,
+            min: null,
             max: 50000,
           },
           {

@@ -70,7 +70,7 @@ const DrawerWrapper: FC<ResponsiveAlertDialogProps> = (props) => (
 );
 
 const DialogWrapper: FC<ResponsiveAlertDialogProps> = (props) => (
-  <Dialog open={props.open} onOpenChange={(open) => !open && props.closeModal}>
+  <Dialog open={props.open} onOpenChange={(open) => !open && props.closeModal()}>
     <DialogContent className={cn("rounded-xl max-w-[90vw] sm:max-w-md gap-6 p-4 z-[9999]")} closeModal={props.closeModal}>
       <Content {...props} />
     </DialogContent>

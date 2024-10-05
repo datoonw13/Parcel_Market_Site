@@ -1,12 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
-import { TbFilter } from "react-icons/tb";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import RecentSearchesDesktopFilters from "./desktop";
+import RecentSearchesMobileFilters from "./mobile";
 
 const RecentSearchesFilters = () => {
   const router = useRouter();
@@ -49,19 +48,10 @@ const RecentSearchesFilters = () => {
           </div>
         }
         onChange={(e) => handleSearch(e.target.value)}
-        value={searchParams.get("search") || ""}
+        defaultValue={searchParams.get("search") || ""}
       />
-      <div className="2xl:hidden ml-auto">
-        <Button className="p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl">
-          <div className="flex gap-2 items-center">
-            <TbFilter className="size-5" style={{ transform: "scale(-1, 1)" }} />
-            <span className="hidden md:block text-grey-600">Filter</span>
-          </div>
-        </Button>
-      </div>
-      <Suspense>
-        <RecentSearchesDesktopFilters />
-      </Suspense>
+      <RecentSearchesMobileFilters />
+      <RecentSearchesDesktopFilters />
     </div>
   );
 };
