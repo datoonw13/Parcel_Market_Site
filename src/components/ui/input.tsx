@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, LegacyRef, ReactElement, forwardRef } from "react";
+import { InputHTMLAttributes, LegacyRef, ReactElement, forwardRef, useEffect, useRef } from "react";
 import { NumericFormat, NumericFormatProps } from "react-number-format";
 import { cn } from "../../lib/utils";
 
@@ -9,7 +9,6 @@ interface InputBaseProps {
   error?: boolean;
   rootClassName?: string;
   endIconClassName?: string;
-  rootRef?: LegacyRef<HTMLDivElement>;
 }
 
 export interface InputGeneralProps extends InputHTMLAttributes<HTMLInputElement>, InputBaseProps {}
@@ -37,17 +36,25 @@ const styles = {
   label: "text-grey-800 text-xs absolute top-1/2 left-0 transform -translate-y-1/2 transition-all transition-duration:100ms;",
 };
 
-const TextInput = forwardRef<HTMLInputElement, InputGeneralProps>(({ className, type, ...props }, ref) => {
-  const { label, startIcon, endIcon, error, rootClassName, rootRef, endIconClassName, ...inputGeneralProps } = { ...props };
+const TextInput = forwardRef<HTMLDivElement, InputGeneralProps>(({ className, type, ...props }, ref) => {
+  const { label, startIcon, endIcon, error, rootClassName, endIconClassName, ...inputGeneralProps } = { ...props };
   const showLabel = label && !inputGeneralProps.placeholder;
+  const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <div ref={rootRef} className={cn(styles.root, rootClassName, error && styles.error)}>
-      <div className={cn("flex items-center justify-center h-full start-icon pr-3", startIcon && "pl-3")}>{startIcon}</div>
+    <div ref={ref} className={cn(styles.root, rootClassName, error && styles.error)}>
+      <div
+        onClick={(e) => {
+          inputRef.current?.focus();
+        }}
+        className={cn("flex items-center justify-center h-full start-icon pr-3", startIcon && "pl-3")}
+      >
+        {startIcon}
+      </div>
       <div className={cn(styles.inputWrapper)}>
         <input
           type={type}
+          ref={inputRef}
           className={cn(styles.input, showLabel && "pt-3", className)}
-          ref={ref}
           autoComplete="new-password"
           {...inputGeneralProps}
           placeholder={inputGeneralProps.placeholder || " "}
@@ -59,29 +66,30 @@ const TextInput = forwardRef<HTMLInputElement, InputGeneralProps>(({ className, 
           </p>
         )}
       </div>
-      <div className={cn("flex items-center justify-center h-full pr-3 end-icon", endIcon && "pl-3", endIconClassName)}>{endIcon}</div>
+      <div
+        onClick={(e) => {
+          inputRef.current?.focus();
+        }}
+        className={cn("flex items-center justify-center h-full pr-3 end-icon", endIcon && "pl-3", endIconClassName)}
+      >
+        {endIcon}
+      </div>
     </div>
   );
 });
 
 const NumberInput = forwardRef<HTMLInputElement, InputGeneralProps & NumericFormatProps>(({ ...props }, ref) => (
-  <NumericFormat
-    customInput={TextInput}
-    {...props}
-    value={props.value ? props.value.toString() : undefined}
-    defaultValue={props.value ? props.value.toString() : undefined}
-  />
+  <NumericFormat {...props} customInput={TextInput} value={props.value} defaultValue={undefined} />
 ));
 
-const TextArea = forwardRef<HTMLTextAreaElement, TextAreaGeneralProps>(({ className, type, ...props }, ref) => {
-  const { label, startIcon, endIcon, error, rootClassName, rootRef, ...inputGeneralProps } = { ...props };
+const TextArea = forwardRef<HTMLDivElement, TextAreaGeneralProps>(({ className, type, ...props }, ref) => {
+  const { label, startIcon, endIcon, error, rootClassName, ...inputGeneralProps } = { ...props };
   const showLabel = label && !inputGeneralProps.placeholder;
   return (
-    <div ref={rootRef} className={cn(styles.root, rootClassName, error && styles.error)}>
+    <div ref={ref} className={cn(styles.root, rootClassName, error && styles.error)}>
       <div className={cn("flex items-center justify-center h-full start-icon pr-3", startIcon && "pl-3")}>{startIcon}</div>
       <div className={cn(styles.inputWrapper)}>
         <textarea
-          ref={ref}
           className={cn(styles.input, showLabel && "pt-3", className, "py-2 resize-none")}
           {...inputGeneralProps}
           placeholder={inputGeneralProps.placeholder || " "}

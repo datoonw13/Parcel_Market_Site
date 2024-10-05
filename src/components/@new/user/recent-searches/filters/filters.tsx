@@ -4,15 +4,24 @@ import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
 import { TbFilter } from "react-icons/tb";
-import RecentSearchesDesktopFilters from "./desktop";
+import { Suspense, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+
+const RecentSearchesDesktopFilters = dynamic(() => import("./desktop"), { ssr: false });
 
 const RecentSearchesFilters = () => {
-  const filters = {
-    state: "",
-    county: "",
-  };
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const handleSearch = () => {};
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(timerRef.current);
+    },
+    []
+  );
   return (
-    <div className="grid grid-cols-[minmax(auto,_324px)_minmax(0,_max-content)] gap-3 md:gap-16 w-full justify-between items-center">
+    <div className="grid grid-cols-[1fr_minmax(0,_max-content)] 2xl:grid-cols-[minmax(auto,_324px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
       <TextInput
         rootClassName="min-h-9 h-full rounded-3xl"
         className="text-grey-800 placeholder:text-grey-800 placeholder:text-xs text-xs font-medium"
@@ -24,12 +33,17 @@ const RecentSearchesFilters = () => {
           </div>
         }
       />
-      <div className="md:hidden ml-auto">
+      <div className="2xl:hidden ml-auto">
         <Button className="p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl">
-          <TbFilter className="size-5" style={{ transform: "scale(-1, 1)" }} />
+          <div className="flex gap-2 items-center">
+            <TbFilter className="size-5" style={{ transform: "scale(-1, 1)" }} />
+            <span className="hidden md:block text-grey-600">Filter</span>
+          </div>
         </Button>
       </div>
-      <RecentSearchesDesktopFilters />
+      <Suspense>
+        <RecentSearchesDesktopFilters />
+      </Suspense>
     </div>
   );
 };

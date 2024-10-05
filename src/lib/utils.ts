@@ -32,3 +32,25 @@ export const parseSearchParams = <T extends z.ZodTypeAny>(schema: T, searchParam
     return null;
   }
 };
+
+export const updateSearchParamsWithFilters = <T extends {}>(
+  data: Array<{
+    key: keyof T;
+    value?: T[keyof T] | null;
+    resetKey?: keyof T;
+  }>,
+  currentSearchParams: string
+) => {
+  const params = new URLSearchParams(currentSearchParams.toString());
+  data.forEach((item) => {
+    if (item.value) {
+      params.set(item.key.toString(), item.value.toString());
+    } else {
+      params.delete(item.key.toString());
+    }
+    if (item.resetKey) {
+      params.delete(item.resetKey.toString());
+    }
+  });
+  return params;
+};

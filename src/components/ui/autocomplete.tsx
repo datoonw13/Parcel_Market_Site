@@ -6,6 +6,7 @@ import { Command as CommandPrimitive } from "cmdk";
 import { cn } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { motion } from "framer-motion";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "./command";
 import { TextInput as Input } from "./input";
 import { Popover, PopoverContent } from "./popover";
@@ -86,7 +87,9 @@ const AutoComplete: FC<AutoCompleteProps> = ({
             }}
             onKeyDown={(e) => setOpen(e.key !== "Escape")}
             onMouseDown={() => setOpen((open) => !!search || !open)}
-            onFocus={() => setOpen(true)}
+            onFocus={(e) => {
+              setOpen(true);
+            }}
             onBlur={(e) => {
               if (!e.relatedTarget?.hasAttribute("cmdk-list")) {
                 setSearch(
@@ -94,7 +97,6 @@ const AutoComplete: FC<AutoCompleteProps> = ({
                     ? options.find((option) => option.value.toLocaleLowerCase() === selectedValue.toLocaleLowerCase())?.label ?? ""
                     : ""
                 );
-                // setOpen(false);
               }
               setOpen(false);
             }}
@@ -103,7 +105,12 @@ const AutoComplete: FC<AutoCompleteProps> = ({
               endIcon={open ? <IoChevronUp /> : <IoChevronDown />}
               error={error}
               value={search}
-              rootClassName={cn("w-full", inputRootClassName)}
+              rootClassName={cn(
+                "w-full",
+                inputRootClassName,
+                open && "[&>.end-icon]:!pointer-events-none",
+                open && "[&>.start-icon]:!pointer-events-none"
+              )}
               ref={inputRef}
               placeholder={placeholder || ""}
               className=""
@@ -122,28 +129,44 @@ const AutoComplete: FC<AutoCompleteProps> = ({
           style={{ width: contentWidth }}
           className="min-w-[calc(--radix-popover-trigger-width)] p-0 border-0 shadow-4 rounded-lg overflow-hidden"
         >
-          <ScrollArea className="max-h-72">
-            <CommandList className="overflow-hidden ">
-              <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>
-              <CommandGroup value="" className="bg-white border-0 shadow-0 outline-0 p-0 m-0 overflow-hidden">
-                {options.map((option) => (
-                  <CommandItem
-                    key={option.value}
-                    value={option.value}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onSelect={(currentValue) => {
-                      onValueChange(currentValue);
-                      setSearch(options.find((option) => option.value === currentValue)?.label || "");
-                      setOpen(false);
-                    }}
-                    className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
-                  >
-                    {option.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </ScrollArea>
+          <motion.div
+            key="content"
+            initial="collapsed"
+            animate="open"
+            className="overflow-hidden flex w-full"
+            variants={{
+              open: { opacity: 1 },
+              collapsed: { opacity: 0 },
+            }}
+            transition={{ duration: 0.1 }}
+            onAnimationStart={() => {
+              document.querySelector(`[data-value=${selectedValue}]`)?.scrollIntoView();
+            }}
+          >
+            <ScrollArea className="max-h-72 w-full">
+              <CommandList className="overflow-hidden">
+                <CommandEmpty className="bg-white p-4 text-sm">No results...</CommandEmpty>
+                <CommandGroup value="" className="bg-white border-0 shadow-0 outline-0 p-0 m-0 overflow-hidden">
+                  {options.map((option) => (
+                    <CommandItem
+                      id={option.value}
+                      key={option.value}
+                      value={option.value}
+                      onMouseDown={(e) => e.preventDefault()}
+                      onSelect={(currentValue) => {
+                        onValueChange(currentValue);
+                        setSearch(options.find((option) => option.value === currentValue)?.label || "");
+                        setOpen(false);
+                      }}
+                      className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
+                    >
+                      {option.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </ScrollArea>
+          </motion.div>
         </PopoverContent>
       </Command>
     </Popover>

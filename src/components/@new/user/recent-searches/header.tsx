@@ -1,5 +1,5 @@
-import RecentSearchesFilters from "@/app/(main)/user/recent-searches/filters/filters";
 import React from "react";
+import RecentSearchesFilters from "./filters/filters";
 
 const RecentSearchesHeader = () => (
   <div className="space-y-5 md:space-y-8">
