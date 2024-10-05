@@ -78,7 +78,7 @@ const RecentSearchesMobileFilters = () => {
           }}
         >
           <div className="bg-white md:shadow-4 h-[80vh] w-full overflow-y-auto overflow-x-hidden flex rounded-lg flex-col ">
-            <div className="flex justify-between gap-3 w-full items-center px-5 md:px-8 md:border-b md:border-b-grey-100 py-4 md:py-6">
+            <div className="flex justify-between gap-3 w-full items-center px-5 md:px-8 md:border-b md:border-b-grey-100 py-4 md:py-6 md:sticky md:top-0 md:bg-white">
               <h1 className="text-lg font-semibold">Filters</h1>
               <IoMdClose
                 className="text-grey-800 cursor-pointer p-2 size-8"
