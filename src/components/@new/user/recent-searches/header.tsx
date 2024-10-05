@@ -1,5 +1,6 @@
-import React from "react";
-import RecentSearchesFilters from "./filters/filters";
+import dynamic from "next/dynamic";
+
+const RecentSearchesFilters = dynamic(() => import("./filters/filters"), { ssr: false });
 
 const RecentSearchesHeader = () => (
   <div className="space-y-5 md:space-y-8">

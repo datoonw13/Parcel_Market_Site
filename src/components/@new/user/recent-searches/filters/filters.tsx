@@ -5,14 +5,29 @@ import { TextInput } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
 import { TbFilter } from "react-icons/tb";
 import { Suspense, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-
-const RecentSearchesDesktopFilters = dynamic(() => import("./desktop"), { ssr: false });
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import RecentSearchesDesktopFilters from "./desktop";
 
 const RecentSearchesFilters = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const handleSearch = () => {};
+  const handleSearch = (value: string) => {
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set("search", value);
+      } else {
+        params.delete("search");
+      }
+      router.push(`${pathname}?${params.toString()}`);
+    }, 300);
+  };
 
   useEffect(
     () => () => {
@@ -20,8 +35,9 @@ const RecentSearchesFilters = () => {
     },
     []
   );
+
   return (
-    <div className="grid grid-cols-[1fr_minmax(0,_max-content)] 2xl:grid-cols-[minmax(auto,_324px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
+    <div className="grid grid-cols-[1fr_minmax(0,_max-content)] 2xl:grid-cols-[minmax(auto,_280px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
       <TextInput
         rootClassName="min-h-9 h-full rounded-3xl"
         className="text-grey-800 placeholder:text-grey-800 placeholder:text-xs text-xs font-medium"
@@ -32,6 +48,8 @@ const RecentSearchesFilters = () => {
             <IoSearchOutline />
           </div>
         }
+        onChange={(e) => handleSearch(e.target.value)}
+        value={searchParams.get("search") || ""}
       />
       <div className="2xl:hidden ml-auto">
         <Button className="p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl">
