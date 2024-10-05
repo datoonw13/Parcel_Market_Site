@@ -29,166 +29,168 @@ const RecentSearchesDesktopFilters = () => {
   };
 
   return (
-    <div className="hidden 2xl:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
-      <AutoComplete
-        selectedValue={filters?.state || null}
-        options={states}
-        placeholder="State"
-        inputRootClassName="h-9 rounded-2xl"
-        onValueChange={(value) => {
-          changeFilter([
+    filters && (
+      <div className="hidden 2xl:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
+        <AutoComplete
+          selectedValue={filters?.state || null}
+          options={states}
+          placeholder="State"
+          inputRootClassName="h-9 rounded-2xl"
+          onValueChange={(value) => {
+            changeFilter([
+              {
+                key: "state",
+                value,
+                resetKey: "county",
+              },
+            ]);
+          }}
+        />
+        <AutoComplete
+          selectedValue={filters?.county || null}
+          options={counties}
+          placeholder="County"
+          inputRootClassName="h-9 rounded-2xl"
+          disabled={!filters?.state}
+          onValueChange={(value) => {
+            changeFilter([
+              {
+                key: "county",
+                value,
+              },
+            ]);
+          }}
+        />
+        <MinmaxDropdown
+          placeholder="Acreage"
+          selectedValue={{
+            min: filters.acreageMin === null ? null : filters.acreageMin,
+            max: filters.acreageMax === null ? null : filters.acreageMax,
+          }}
+          renderOption={(value) => {
+            if (value?.min && !value?.max) {
+              return `${value.min - 1}+ Acres`;
+            }
+            if (!value?.min && value?.max) {
+              return `${value.max - 1}+ Acres`;
+            }
+            return "";
+          }}
+          renderInputValue={(value) => {
+            if (value?.min && value?.max) {
+              return `${value.min - 1} - ${value.max} Acres`;
+            }
+            if (value?.min && !value?.max) {
+              return `${value.min - 1}+ Acres`;
+            }
+            if (!value?.min && value?.max) {
+              return `${value.max - 1}+ Acres`;
+            }
+            return "";
+          }}
+          onChange={(value) => {
+            changeFilter([
+              {
+                key: "acreageMin",
+                value: value.min,
+              },
+              {
+                key: "acreageMax",
+                value: value.max,
+              },
+            ]);
+          }}
+          data={[
             {
-              key: "state",
-              value,
-              resetKey: "county",
-            },
-          ]);
-        }}
-      />
-      <AutoComplete
-        selectedValue={filters?.county || null}
-        options={counties}
-        placeholder="County"
-        inputRootClassName="h-9 rounded-2xl"
-        disabled={!filters?.state}
-        onValueChange={(value) => {
-          changeFilter([
-            {
-              key: "county",
-              value,
-            },
-          ]);
-        }}
-      />
-      <MinmaxDropdown
-        placeholder="Acreage"
-        selectedValue={{
-          min: typeof filters?.acreageMin === "number" || filters?.acreageMin === 0 ? filters.acreageMin : null,
-          max: typeof filters?.acreageMax === "number" || filters?.acreageMax === 0 ? filters.acreageMax : null,
-        }}
-        renderOption={(value) => {
-          if (value?.min && !value?.max) {
-            return `${value.min - 1}+ Acres`;
-          }
-          if (!value?.min && value?.max) {
-            return `${value.max - 1}+ Acres`;
-          }
-          return "";
-        }}
-        renderInputValue={(value) => {
-          if (value?.min && value?.max) {
-            return `${value.min - 1} - ${value.max} Acres`;
-          }
-          if (value?.min && !value?.max) {
-            return `${value.min - 1}+ Acres`;
-          }
-          if (!value?.min && value?.max) {
-            return `${value.max - 1}+ Acres`;
-          }
-          return "";
-        }}
-        onChange={(value) => {
-          changeFilter([
-            {
-              key: "acreageMin",
-              value: value.min,
-            },
-            {
-              key: "acreageMax",
-              value: value.max,
-            },
-          ]);
-        }}
-        data={[
-          {
-            min: 1,
-            max: null,
-          },
-          {
-            min: 6,
-            max: null,
-          },
-          {
-            min: 11,
-            max: null,
-          },
-          {
-            min: 21,
-            max: null,
-          },
-          {
-            min: 51,
-            max: null,
-          },
-        ]}
-      />
-      <MinmaxDropdown
-        inputPrefix="$"
-        placeholder="VOLT Price"
-        selectedValue={{
-          min: typeof filters?.voltPriceMin === "number" || filters?.voltPriceMin === 0 ? filters.voltPriceMin : null,
-          max: typeof filters?.voltPriceMax === "number" || filters?.voltPriceMax === 0 ? filters.voltPriceMax : null,
-        }}
-        renderInputValue={(value) => {
-          if (value?.min && value?.max) {
-            return `$${value.min} - $${value.max}`;
-          }
-          if (value?.min && !value?.max) {
-            return `$${value.min} - N/A`;
-          }
-          if (!value?.min && value?.max) {
-            return `$0 - $${value.max}`;
-          }
-          return "";
-        }}
-        renderOption={(value) => {
-          if (value?.min && value?.max) {
-            return `$${value.min} - ${value.max}`;
-          }
-          if (value?.min && !value?.max) {
-            return `$${value.min} - N/A`;
-          }
-          if (!value?.min && value?.max) {
-            return `$0 - $${value.max}`;
-          }
-          return "";
-        }}
-        onChange={(value) => {
-          changeFilter([
-            {
-              key: "voltPriceMin",
-              value: value.min,
+              min: 1,
+              max: null,
             },
             {
-              key: "voltPriceMax",
-              value: value.max,
+              min: 6,
+              max: null,
             },
-          ]);
-        }}
-        data={[
-          {
-            min: null,
-            max: 50000,
-          },
-          {
-            min: 50000,
-            max: 100000,
-          },
-          {
-            min: 100000,
-            max: 200000,
-          },
-          {
-            min: 200000,
-            max: 500000,
-          },
-          {
-            min: 500000,
-            max: null,
-          },
-        ]}
-      />
-    </div>
+            {
+              min: 11,
+              max: null,
+            },
+            {
+              min: 21,
+              max: null,
+            },
+            {
+              min: 51,
+              max: null,
+            },
+          ]}
+        />
+        <MinmaxDropdown
+          inputPrefix="$"
+          placeholder="VOLT Price"
+          selectedValue={{
+            min: filters.voltPriceMin === null ? null : filters.voltPriceMin,
+            max: filters.voltPriceMax === null ? null : filters.voltPriceMax,
+          }}
+          renderInputValue={(value) => {
+            if (value?.min && value?.max) {
+              return `$${value.min} - $${value.max}`;
+            }
+            if (value?.min && !value?.max) {
+              return `$${value.min} - N/A`;
+            }
+            if (!value?.min && value?.max) {
+              return `$0 - $${value.max}`;
+            }
+            return "";
+          }}
+          renderOption={(value) => {
+            if (value?.min && value?.max) {
+              return `$${value.min} - ${value.max}`;
+            }
+            if (value?.min && !value?.max) {
+              return `$${value.min} - N/A`;
+            }
+            if (!value?.min && value?.max) {
+              return `$0 - $${value.max}`;
+            }
+            return "";
+          }}
+          onChange={(value) => {
+            changeFilter([
+              {
+                key: "voltPriceMin",
+                value: value.min,
+              },
+              {
+                key: "voltPriceMax",
+                value: value.max,
+              },
+            ]);
+          }}
+          data={[
+            {
+              min: null,
+              max: 50000,
+            },
+            {
+              min: 50000,
+              max: 100000,
+            },
+            {
+              min: 100000,
+              max: 200000,
+            },
+            {
+              min: 200000,
+              max: 500000,
+            },
+            {
+              min: 500000,
+              max: null,
+            },
+          ]}
+        />
+      </div>
+    )
   );
 };
 

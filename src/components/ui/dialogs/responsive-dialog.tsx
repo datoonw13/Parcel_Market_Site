@@ -25,7 +25,7 @@ const Content: FC<ResponsiveModalProps> = (props) => (
 );
 
 const DrawerWrapper: FC<ResponsiveModalProps> = (props) => (
-  <Drawer open={props.open} onOpenChange={(open) => !open && props.closeModal}>
+  <Drawer open={props.open} onOpenChange={(open) => !open && props.closeModal()}>
     <DrawerContent className={cn("")}>
       <Content {...props} />
     </DrawerContent>

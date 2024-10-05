@@ -44,7 +44,7 @@ export const updateSearchParamsWithFilters = <T extends {}>(
   const params = new URLSearchParams(currentSearchParams.toString());
   data.forEach((item) => {
     if (item.value) {
-      params.set(item.key.toString(), item.value.toString());
+      params.set(item.key.toString(), item.value!.toString());
     } else {
       params.delete(item.key.toString());
     }
