@@ -128,7 +128,7 @@ const RecentSearchesFilters = ({ totalItems }: { totalItems: number }) => {
             >
               {selectText()}
             </Button>
-            {userRecentSearchesOption.selectedIds.length > 0 && (
+            {userRecentSearchesOption.selecting && userRecentSearchesOption.selectedIds.length > 0 && (
               <div
                 onClick={() => setWarningModal(true)}
                 className="size-8 flex items-center justify-center rounded-full hover:bg-error-100 hover:text-error cursor-pointer"

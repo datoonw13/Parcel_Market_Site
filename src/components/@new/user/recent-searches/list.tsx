@@ -92,17 +92,19 @@ const UserRecentSearchesList = ({ pageSize, totalCount, data }: { pageSize: numb
                     }));
                   }
                 }}
-                className="px-5 lg:px-6 py-5 lg:py-3 text-start text-wrap grid grid-cols-[1fr_minmax(0,_max-content)] gap-3"
+                className="px-5 lg:px-6 py-5 lg:py-3 text-start grid grid-cols-[1fr_minmax(0,_max-content)] gap-3"
               >
-                <span className="truncate flex items-center gap-4">
+                <div className="grid grid-cols-[minmax(0,_max-content)_1fr] items-center gap-3">
                   {userRecentSearchesOption.selecting && (
                     <Checkbox
                       checked={!!userRecentSearchesOption.selectedIds?.includes(Number(search.id))}
                       onChange={(e) => e.stopPropagation()}
                     />
                   )}
-                  {search.state.label}/{search.county.label}/{search.acreage.toFixed(2)}/{moneyFormatter.format(search.price)}
-                </span>
+                  <span className="truncate inline-block">
+                    {search.state.label}/{search.county.label}/{search.acreage.toFixed(2)}/{moneyFormatter.format(search.price)}
+                  </span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="px-5 lg:px-6">Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>
             </AccordionItem>
