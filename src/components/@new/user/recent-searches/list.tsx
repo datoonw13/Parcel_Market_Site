@@ -80,6 +80,9 @@ const UserRecentSearchesList = ({ pageSize, totalCount, data }: { pageSize: numb
             >
               <AccordionTrigger
                 onClick={() => {
+                  if (!userRecentSearchesOption.selecting) {
+                    return;
+                  }
                   if (userRecentSearchesOption.selectedIds?.includes(Number(search.id))) {
                     setUserRecentSearchesOptions((prev) => ({
                       ...prev,
