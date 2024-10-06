@@ -18,7 +18,7 @@ const Pagination: FC<PaginationProps> = ({ rowsPerPage, totalCount, className, i
     onChange(Number(event.selected));
   };
 
-  return  Math.ceil(totalCount / rowsPerPage) < 2 ? null :  (
+  return Math.ceil(totalCount / rowsPerPage) < 2 ? null : (
     <>
       <ReactPaginate
         onPageChange={handlePageClick}

@@ -109,7 +109,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
           <div className="flex gap-4 items-center">
             {!!user && (
               <>
-                <Link href={routes.user.searches.fullUrl} className="h-fit mr-4">
+                <Link href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
                   <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
                 </Link>
                 <HeaderNotifications />

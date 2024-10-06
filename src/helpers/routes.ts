@@ -83,11 +83,6 @@ const routes = {
       fullUrl: "/user/subscription",
       protected: true,
     },
-    searches: {
-      url: "searches",
-      fullUrl: "/user/searches",
-      protected: true,
-    },
     recentSearches: {
       url: "recent-searches",
       fullUrl: "/user/recent-searches",

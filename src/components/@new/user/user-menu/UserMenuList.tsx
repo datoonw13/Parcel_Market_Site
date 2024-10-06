@@ -41,11 +41,11 @@ const list = [
     icon: HiOutlineUser,
     path: routes.user.profile.fullUrl,
   },
-  {
-    label: "My Messages",
-    icon: EnvelopeIcon,
-    path: routes.user.messages.fullUrl,
-  },
+  // {
+  //   label: "My Messages",
+  //   icon: EnvelopeIcon,
+  //   path: routes.user.messages.fullUrl,
+  // },
   {
     label: "Notifications",
     icon: TbBellRinging,
@@ -56,29 +56,29 @@ const list = [
     icon: BellOutline,
     path: routes.user.subscription.fullUrl,
   },
-  {
-    label: "My Listings",
-    icon: BookOpen,
-    path: routes.user.properties.fullUrl,
-  },
-  {
-    label: "My Received Offers",
-    icon: DiscountBox,
-    path: routes.user.offers.received.fullUrl,
-  },
-  {
-    label: "My Sent Offers",
-    icon: DiscountCircle,
-    path: routes.user.offers.sent.fullUrl,
-  },
-  {
-    label: "My Saved Properties",
-    icon: BookOpen,
-    path: routes.user.followedProperties.fullUrl,
-  },
+  // {
+  //   label: "My Listings",
+  //   icon: BookOpen,
+  //   path: routes.user.properties.fullUrl,
+  // },
+  // {
+  //   label: "My Received Offers",
+  //   icon: DiscountBox,
+  //   path: routes.user.offers.received.fullUrl,
+  // },
+  // {
+  //   label: "My Sent Offers",
+  //   icon: DiscountCircle,
+  //   path: routes.user.offers.sent.fullUrl,
+  // },
+  // {
+  //   label: "My Saved Properties",
+  //   icon: BookOpen,
+  //   path: routes.user.followedProperties.fullUrl,
+  // },
   {
     label: "My Recent Searches",
     icon: BsClockHistory,
-    path: routes.user.searches.fullUrl,
+    path: routes.user.recentSearches.fullUrl,
   },
 ];
