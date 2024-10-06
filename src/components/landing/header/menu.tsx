@@ -44,7 +44,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                   e.preventDefault();
                 }
               }}
-              className="outline-none w-screen relative -translate-y-1"
+              className="outline-none w-screen relative -translate-y-1 z-[9999]"
             >
               <motion.div
                 initial={{ opacity: 0 }}

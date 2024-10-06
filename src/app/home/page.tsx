@@ -18,7 +18,7 @@ const LandingPage = async () => {
   return (
     <div className="flex flex-col gap-11 sm:gap-12 md:gap-16 lg:gap-22 xl:gap-28 2xl:gap-32">
       <div>
-        <LandingHeader />
+        <LandingHeader user={user} />
         <LandingSlider />
         <AboutVolt />
       </div>

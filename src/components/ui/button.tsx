@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary-main text-white hover:bg-primary-main-hover disabled:bg-grey-100 disabled:text-black/40 disabled:pointer-events-none",
-        secondary: `disabled:bg-grey-50 rounded-lg outline outline-[1px] outline-grey-100 disabled:!outline-[2px] hover:text-black-400 disabled:pointer-events-none`,
+        secondary: `disabled:text-black/40 rounded-lg outline outline-[1px] outline-grey-100 disabled:bg-grey-100 disabled:border-0 disabled:!outline-0 hover:text-black-400 disabled:pointer-events-none`,
       },
       size: {
         default: "h-12 px-4 py-3",

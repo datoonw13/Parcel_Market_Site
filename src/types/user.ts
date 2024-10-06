@@ -4,4 +4,5 @@ export type IUserRecentSearches = IMainPropertyBaseInfo &
   IPropertyPricePerAcre & {
     propertiesUsedForCalculation: IPropertyUsedForCalculation[];
     price: number;
+    createdAt: Date;
   };

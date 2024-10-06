@@ -38,6 +38,7 @@ export const getUserSearches = async (
     const formattedData: IUserRecentSearches[] = request.data?.map((item) => ({
       id: item.id,
       parcelNumber: item.parcelNumber,
+      createdAt: item.dateCreated,
       parcelNumberNoFormatting: removeParcelNumberFormatting(item.parcelNumber),
       acreage: Number(item.acrage),
       county: {
@@ -74,7 +75,7 @@ export const getUserSearches = async (
         lastSalePrice: Number(property.lastSalesPrice),
         lat: Number(property.latitude),
         lon: Number(property.longitude),
-        parcelNumber: property.parcelNumber,
+        parcelNumber: property.parselId,
         parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
         pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
       })),
