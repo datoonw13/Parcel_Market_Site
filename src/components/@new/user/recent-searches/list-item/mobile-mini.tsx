@@ -37,7 +37,6 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
   const { acreage, county, owner, pricePerAcre, propertyType, searchDate, state, voltPrice, parcelNumberNoFormatting, lat, lon, polygon } =
     data;
 
-  // const mainLandSaleHistory = propertiesUsedForCalculation.filter((el) => el.parcelNumberNoFormatting === parcelNumberNoFormatting);
   const mainProperty = {
     parcelNumber: parcelNumberNoFormatting,
     parcelNumberNoFormatting,
@@ -46,34 +45,6 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
     polygon,
     markerType: "active" as const,
     center: true,
-    // popup: (
-    //   <div className="flex flex-col gap-1 space-y-2">
-    //     <p className="!p-0 !m-0">
-    //       Owner: <b>{owner}</b>
-    //     </p>
-    //     <p className="!p-0 !m-0">
-    //       Acreage: <b>{acreage.toFixed(2)}</b>
-    //     </p>
-    //     <p className="!p-0 !m-0">
-    //       Price Per Acre: <b>{moneyFormatter.format(pricePerAcre)}</b>
-    //     </p>
-    //     {mainLandSaleHistory.length > 0 && (
-    //       <div className="flex flex-col gap-1">
-    //         <p className="!p-0 !m-0 !font-semibold">Sales History:</p>
-    //         {mainLandSaleHistory.map((history) => (
-    //           <div key={JSON.stringify(history)} className="!mb-1">
-    //             <p className="!p-0 !m-0">
-    //               Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
-    //             </p>
-    //             <p className="!p-0 !m-0">
-    //               Last Sale Price Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
-    //             </p>
-    //           </div>
-    //         ))}
-    //       </div>
-    //     )}
-    //   </div>
-    // ),
   };
 
   const properties = propertiesUsedForCalculation?.map((el) => ({
@@ -82,25 +53,6 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
     latitude: el.lat,
     longitude: el.lon,
     markerType: "default" as const,
-    // ...(user &&
-    //   user.isSubscribed && {
-    //     popup: (
-    //       <div className="flex flex-col gap-1 space-y-2">
-    //         <p className="!p-0 !m-0">
-    //           Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
-    //         </p>
-    //         <p className="!p-0 !m-0">
-    //           Acreage: <b>{el.acreage.toFixed(2)}</b>
-    //         </p>
-    //         <p className="!p-0 !m-0">
-    //           Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
-    //         </p>
-    //         <p className="!p-0 !m-0">
-    //           Last Sale Price Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
-    //         </p>
-    //       </div>
-    //     ),
-    //   }),
   }));
 
   return (

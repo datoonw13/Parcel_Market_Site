@@ -183,7 +183,12 @@ const UserRecentSearchesList = ({
                     user={user}
                     onView={() => setMobileFullViewItem(search)}
                   />
-                  <RecentSearchesLitItemDesktop user={user} data={search} openSubscriptionWarning={() => setSubscriptionWarning(true)} />
+                  <RecentSearchesLitItemDesktop
+                    isUserSubscriptionTrial={isUserSubscriptionTrial}
+                    user={user}
+                    data={search}
+                    openSubscriptionWarning={() => setSubscriptionWarning(true)}
+                  />
                 </AccordionContent>
               </AccordionItem>
             ))}
