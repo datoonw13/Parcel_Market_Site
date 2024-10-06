@@ -39,10 +39,12 @@ const RecentSearchesLitItemMobileFull = ({
   data,
   user,
   isUserSubscriptionTrial,
+  openSubscriptionWarning,
 }: {
   data: IUserRecentSearches;
   user: IDecodedAccessToken | null;
   isUserSubscriptionTrial?: boolean;
+  openSubscriptionWarning: () => void;
 }) => {
   const router = useRouter();
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
@@ -277,7 +279,7 @@ const RecentSearchesLitItemMobileFull = ({
                   }}
                   onMarkerClick={(parcelNumberNoFormatting) => {
                     if (!canViewDetails(parcelNumberNoFormatting)) {
-                      // setOpenPropertyDetailWarningModal(true);
+                      openSubscriptionWarning();
                     }
                   }}
                   setMapRef={(ref) => {
@@ -292,7 +294,7 @@ const RecentSearchesLitItemMobileFull = ({
             user={user}
             mapInteraction={mapInteraction}
             setMpaInteraction={setMpaInteraction}
-            setOpenPropertyDetailWarningModal={() => {}}
+            setOpenPropertyDetailWarningModal={openSubscriptionWarning}
             data={
               data.propertiesUsedForCalculation.map((el) => ({
                 parcelNumberNoFormatting: el.parcelNumberNoFormatting,

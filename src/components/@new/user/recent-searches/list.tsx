@@ -10,6 +10,9 @@ import { userRecentSearchesAtom } from "@/atoms/pages-atom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
+import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
+import routes from "@/helpers/routes";
+import { useRouter } from "next/navigation";
 import RecentSearchesPagination from "./pagination";
 import RecentSearchesLitItemMobileMini from "./list-item/mobile-mini";
 import RecentSearchesLitItemDesktop from "./list-item/desktop";
@@ -28,6 +31,8 @@ const UserRecentSearchesList = ({
   user: IDecodedAccessToken | null;
   isUserSubscriptionTrial?: boolean;
 }) => {
+  const router = useRouter();
+  const [subscriptionWarning, setSubscriptionWarning] = useState(false);
   const [openItem, setOpenItem] = useState<string>("");
   const [userRecentSearchesOption, setUserRecentSearchesOptions] = useAtom(userRecentSearchesAtom);
   const [mobileFullViewItem, setMobileFullViewItem] = useState<IUserRecentSearches | null>(null);
@@ -52,11 +57,31 @@ const UserRecentSearchesList = ({
     }));
   }, [data.length, setUserRecentSearchesOptions, userRecentSearchesOption.selectedIds]);
 
-  console.log(mobileFullViewItem, 22);
   return (
     <>
+      <ResponsiveAlertDialog
+        mediaQuery={null}
+        open={subscriptionWarning}
+        closeModal={() => setSubscriptionWarning(false)}
+        okButton={{
+          show: true,
+          label: user && !user?.isSubscribed ? "Subscribe" : "Sign In",
+          onClick: () => {
+            setSubscriptionWarning(false);
+            router.push(routes.user.subscription.fullUrl);
+          },
+        }}
+        cancelButton={{ show: true, label: "Close", onClick: () => setSubscriptionWarning(false) }}
+        title={`"Subscribe" to See the information`}
+        description="You have not active subscription, if you want to see this information please subscribe"
+      />
       {mobileFullViewItem && (
-        <RecentSearchesLitItemMobileFull user={user} isUserSubscriptionTrial={isUserSubscriptionTrial} data={mobileFullViewItem} />
+        <RecentSearchesLitItemMobileFull
+          openSubscriptionWarning={() => setSubscriptionWarning(true)}
+          user={user}
+          isUserSubscriptionTrial={isUserSubscriptionTrial}
+          data={mobileFullViewItem}
+        />
       )}
       <div className="space-y-8 md:space-y-11">
         <div>
@@ -158,7 +183,7 @@ const UserRecentSearchesList = ({
                     user={user}
                     onView={() => setMobileFullViewItem(search)}
                   />
-                  <RecentSearchesLitItemDesktop />
+                  <RecentSearchesLitItemDesktop data={search} />
                 </AccordionContent>
               </AccordionItem>
             ))}
