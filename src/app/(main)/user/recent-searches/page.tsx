@@ -1,5 +1,5 @@
 import RecentSearchesHeader from "@/components/@new/user/recent-searches/header";
-import UserRecentSearchesList from "@/components/@new/user/recent-searches/list";
+import UserRecentSearchesListWrapper from "@/components/@new/user/recent-searches/list-wrapper";
 import UserRecentSearchesLoader from "@/components/@new/user/recent-searches/loader";
 import { getUserSearches } from "@/server-actions/user-searches/actions";
 import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
@@ -13,10 +13,14 @@ const RecentSearchesPage = async ({ searchParams }: { searchParams: Record<strin
 
   return (
     <div className="space-y-4 md:space-y-6">
-      <RecentSearchesHeader />
+      <RecentSearchesHeader totalItems={data.data?.pagination.totalCount || 0} />
       {filters.success && (
         <Suspense key={JSON.stringify(filters.data)} fallback={<UserRecentSearchesLoader />}>
-          <UserRecentSearchesList filters={filters.data} pageSize={ROWS_PER_PAGE} totalItems={data.data?.pagination.totalCount || 0} />
+          <UserRecentSearchesListWrapper
+            filters={filters.data}
+            pageSize={ROWS_PER_PAGE}
+            totalItems={data.data?.pagination.totalCount || 0}
+          />
         </Suspense>
       )}
     </div>
