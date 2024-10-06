@@ -24,7 +24,11 @@ const RecentSearchesDesktopFilters = () => {
       resetKey?: T;
     }>
   ) => {
-    const newSearchParams = updateSearchParamsWithFilters<z.infer<typeof userRecentSearchesValidations>>(data, searchParams.toString());
+    const resetPage = { key: "page" as const, value: 1 };
+    const newSearchParams = updateSearchParamsWithFilters<z.infer<typeof userRecentSearchesValidations>>(
+      [...data, resetPage],
+      searchParams.toString()
+    );
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
 

@@ -60,7 +60,12 @@ const RecentSearchesMobileFilters = () => {
 
   const disableOkButton = voltPriceError || acreageError || JSON.stringify(values) === JSON.stringify(filters);
 
-  const totalFiltersSelected = filters ? Object.values(filters).filter(Boolean).length : 0;
+  const totalFiltersSelected = filters
+    ? Object.keys(filters)
+        .filter((key) => filters[key as keyof typeof filters])
+        .filter((el) => el !== "search")
+        .filter((el) => el !== "page").length
+    : 0;
 
   useEffect(() => {
     if (filters && !values) {
@@ -268,7 +273,8 @@ const RecentSearchesMobileFilters = () => {
                       ) => [...acc, { key: cur[0], value: cur[1] }],
                       []
                     );
-                    const newSearchParams = updateSearchParamsWithFilters(data, searchParams.toString());
+                    const resetPage = { key: "page" as const, value: 1 };
+                    const newSearchParams = updateSearchParamsWithFilters([...data, resetPage], searchParams.toString());
                     router.push(`${pathname}?${newSearchParams.toString()}`);
                   } catch (error) {}
                   setOpen(false);

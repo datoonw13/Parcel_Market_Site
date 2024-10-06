@@ -100,7 +100,7 @@ export const calculateLandPriceAction = async (
 
     const formattedData: IVoltPriceCalculationRes = {
       id: request.id.toString(),
-      parcelNumber: request.parcelnumb,
+      parcelNumber: request.parcelNumber,
       parcelNumberNoFormatting: removeParcelNumberFormatting(request.parcelNumber),
       acreage: Number(request.acrage),
       county: {

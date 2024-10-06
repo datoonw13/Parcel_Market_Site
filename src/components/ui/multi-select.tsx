@@ -75,8 +75,6 @@ export function FancyMultiSelect() {
 
   const selectables = FRAMEWORKS.filter((framework) => !selected.includes(framework));
 
-  console.log(selectables, selected, inputValue);
-
   return (
     <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
       <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">

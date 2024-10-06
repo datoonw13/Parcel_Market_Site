@@ -60,11 +60,11 @@ export const userRecentSearchesValidations = z.object({
     .optional()
     .nullable()
     .transform((x) => x || null),
-  // page: z
-  //   .number({ coerce: true })
-  //   .optional()
-  //   .nullable()
-  //   .transform((x) => x || null),
+  page: z
+    .number({ coerce: true })
+    .optional()
+    .nullable()
+    .transform((x) => x || null),
   sortBy: z
     .nativeEnum(SortEnum)
     .optional()
