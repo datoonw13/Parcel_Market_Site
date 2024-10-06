@@ -56,7 +56,7 @@ const UserRecentSearchesList = ({ pageSize, totalCount, data }: { pageSize: numb
                   } else {
                     setUserRecentSearchesOptions((prev) => ({
                       ...prev,
-                      selectedIds: data.map((el) => el.id),
+                      selectedIds: data.map((el) => Number(el.id)),
                     }));
                   }
                 }}
@@ -80,15 +80,15 @@ const UserRecentSearchesList = ({ pageSize, totalCount, data }: { pageSize: numb
             >
               <AccordionTrigger
                 onClick={() => {
-                  if (userRecentSearchesOption.selectedIds?.includes(search.id)) {
+                  if (userRecentSearchesOption.selectedIds?.includes(Number(search.id))) {
                     setUserRecentSearchesOptions((prev) => ({
                       ...prev,
-                      selectedIds: prev.selectedIds?.filter((el) => el !== search.id) || null,
+                      selectedIds: prev.selectedIds?.filter((el) => el !== Number(search.id)) || null,
                     }));
                   } else {
                     setUserRecentSearchesOptions((prev) => ({
                       ...prev,
-                      selectedIds: [...(prev.selectedIds || []), search.id],
+                      selectedIds: [...(prev.selectedIds || []), Number(search.id)],
                     }));
                   }
                 }}
@@ -96,7 +96,10 @@ const UserRecentSearchesList = ({ pageSize, totalCount, data }: { pageSize: numb
               >
                 <span className="truncate flex items-center gap-4">
                   {userRecentSearchesOption.selecting && (
-                    <Checkbox checked={!!userRecentSearchesOption.selectedIds?.includes(search.id)} onChange={(e) => e.stopPropagation()} />
+                    <Checkbox
+                      checked={!!userRecentSearchesOption.selectedIds?.includes(Number(search.id))}
+                      onChange={(e) => e.stopPropagation()}
+                    />
                   )}
                   {search.state.label}/{search.county.label}/{search.acreage.toFixed(2)}/{moneyFormatter.format(search.price)}
                 </span>

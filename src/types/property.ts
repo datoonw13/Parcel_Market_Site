@@ -127,7 +127,7 @@ export interface IPropertyCalculationOptions {
 }
 
 export type IPropertyBaseInfo = {
-  id: string;
+  id: string | number;
   parcelNumber: string;
   parcelNumberNoFormatting: string;
   lat: number;

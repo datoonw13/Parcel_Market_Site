@@ -36,7 +36,7 @@ export const getUserSearches = async (
     });
 
     const formattedData: IUserRecentSearches[] = request.data?.map((item) => ({
-      id: item.id.toString(),
+      id: item.id,
       parcelNumber: item.parcelNumber,
       parcelNumberNoFormatting: removeParcelNumberFormatting(item.parcelNumber),
       acreage: Number(item.acrage),
