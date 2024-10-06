@@ -2,8 +2,10 @@ import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FaLocationDot } from "react-icons/fa6";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { breakPoints } from "../../../tailwind.config";
 
 const CalculatePrice = ({ price }: { price: number }) => (
   <div>
@@ -19,6 +21,7 @@ const VoltPriceCalculationAxis = ({
   voltValue,
   mapInteraction,
   setMpaInteraction,
+  responsiveBreakpoint = "md",
 }: {
   data: {
     pricePerAcre: number;
@@ -32,7 +35,9 @@ const VoltPriceCalculationAxis = ({
   voltValue: number;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  responsiveBreakpoint?: keyof typeof breakPoints;
 }) => {
+  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints[responsiveBreakpoint]));
   const averagePricePerAcre = Number((data.reduce((acc, cur) => acc + cur.pricePerAcre, 0) / data.length).toFixed(2));
   const minPricePerAcre = Math.min(...data.map((el) => el.pricePerAcre));
   const maxPricePerAcre = Math.max(...data.map((el) => el.pricePerAcre));
@@ -42,15 +47,23 @@ const VoltPriceCalculationAxis = ({
 
   return (
     <>
-      <div className="border border-primary-main-400 rounded-2xl px-4 py-5 lg:p-8 flex flex-col lg:flex-row gap-4 gap-y-3 gap-x-10">
+      <div
+        className={cn(
+          `border border-primary-main-400 rounded-2xl flex gap-4 gap-y-3 gap-x-10`,
+          isSmallDevice ? "px-4 py-5 flex-col" : "p-8 flex-row"
+        )}
+      >
         <div
-          className={`
-          flex flex-col lg:flex-row items-center gap-2 mt-4 w-full relative
-            lg:after:content-['Min_Price_Per_Acre'] after:absolute after:top-[40px] after:text-xs after:text-gray-600
-            lg:before:content-['Max_Price_Per_Acre'] before:absolute before:top-[40px] before:right-0 before:text-xs before:text-gray-600
-          `}
+          className={cn(
+            `
+            flex items-center gap-2 mt-4 w-full relative
+          `,
+            isSmallDevice
+              ? "flex-col"
+              : "flex-row after:content-['Min_Price_Per_Acre'] after:absolute after:top-[40px] after:text-xs after:text-gray-600  before:content-['Max_Price_Per_Acre'] before:absolute before:top-[40px] before:right-0 before:text-xs before:text-gray-600"
+          )}
         >
-          <p className="text-xs text-gray-600 hidden lg:block">Min</p>
+          <p className={cn(`text-xs text-gray-600`, isSmallDevice ? "hidden" : "block")}>Min</p>
           <div
             className={`position relative w-full 
         
@@ -71,9 +84,12 @@ const VoltPriceCalculationAxis = ({
               className="absolute top-[50%] -translate-y-[50%]"
             >
               <div
-                className={`bg-white size-6  rounded-full flex items-center justify-center relative 
-               lg:after:content-['Average_Price_Per_Acre'] after:absolute after:top-[25px] after:text-xs after:text-gray-600 after:w-max
-              `}
+                className={cn(
+                  `bg-white size-6  rounded-full flex items-center justify-center relative`,
+                  isSmallDevice
+                    ? ""
+                    : "after:content-['Average_Price_Per_Acre'] after:absolute after:top-[25px] after:text-xs after:text-gray-600 after:w-max"
+                )}
               >
                 <div className="size-5 border-2 rounded-full border-primary-main" />
                 <div className="size-3 bg-primary-main rounded-full absolute" />
@@ -109,30 +125,31 @@ const VoltPriceCalculationAxis = ({
                 key={property.parcelNumberNoFormatting}
                 style={{ left: `calc(${getItemXAxisPositionInPercent(property.pricePerAcre)}% - 0px)` }}
                 className={cn(
-                  `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] size-5 lg:size-6 -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
+                  `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
+                  isSmallDevice ? "size-5" : "size-6",
                   (mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting ||
                     mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting) &&
-                    "scale-150 text-[#FF2F48] "
+                    "scale-150 text-[#FF2F48]"
                 )}
               />
             ))}
           </div>
-          <p className="text-xs text-gray-600 hidden lg:block">Max</p>
-          <div className="flex justify-between w-full lg:hidden">
+          <p className={cn("text-xs text-gray-600 ", isSmallDevice ? "hidden" : "block")}>Max</p>
+          <div className={cn("flex justify-between w-full", isSmallDevice ? "" : "hidden")}>
             <p className="text-xs text-gray-600">Min</p>
             <p className="text-xs text-gray-600">Max</p>
           </div>
         </div>
 
-        <div className="py-3 lg:py-0 border-t border-t-gray-200 lg:border-y-0 flex gap-4">
+        <div className={cn("border-t border-t-gray-200 flex gap-4", isSmallDevice ? "py-3" : "py-0 border-y-0")}>
           <div className="space-y-1">
-            <p className="lg:hidden text-xs font-medium text-gray-600">
+            <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
               Min Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(minPricePerAcre)}</span>
             </p>
-            <p className="lg:hidden text-xs font-medium text-gray-600">
+            <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
               Average Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(averagePricePerAcre)}</span>
             </p>
-            <p className="lg:hidden text-xs font-medium text-gray-600">
+            <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
               Max Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(maxPricePerAcre)}</span>
             </p>
           </div>
