@@ -1,9 +1,9 @@
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import { LoadingIcon1 } from "@/components/@new/icons/LoadingIcons";
 import ResendButton from "@/components/@new/shared/ResendButton";
-import TextField from "@/components/@new/shared/forms/text-field";
 import ResponsiveModal from "@/components/@new/shared/modals/ResponsiveModal";
 import DialogActions from "@/components/@new/shared/modals/dialog/dialog-actions";
+import { TextInput } from "@/components/ui/input";
 import { cn, maskEmail } from "@/helpers/common";
 import useNotification from "@/hooks/useNotification";
 import { sendResetPasswordVerificationCodeAction, setResetPasswordNewPasswordAction } from "@/server-actions/user/actions";
@@ -167,11 +167,15 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
             </div>
             <div className="px-5 md:px-8">
               {step === ForgotPasswordSteps.EMAIL && (
-                <TextField placeholder="Enter Your Email" value={values.email} onChange={(email) => setValues({ ...values, email })} />
+                <TextInput
+                  placeholder="Enter Your Email"
+                  value={values.email}
+                  onChange={(e) => setValues({ ...values, email: e.target.value })}
+                />
               )}
               {step === ForgotPasswordSteps.VERIFICATION_CODE && (
                 <div className="space-y-4">
-                  <TextField placeholder="Code" value={values.code} onChange={(code) => setValues({ ...values, code })} />
+                  <TextInput placeholder="Code" value={values.code} onChange={(e) => setValues({ ...values, code: e.target.value })} />
                   <ResendButton
                     label="Send New Code"
                     handleResend={async () => {
@@ -185,22 +189,22 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
               )}
               {step === ForgotPasswordSteps.NEW_PASSWORD && (
                 <div className="space-y-4">
-                  <TextField
+                  <TextInput
                     type={showNewPassword ? "text" : "password"}
                     placeholder="New password"
                     value={values.newPassword}
-                    onChange={(newPassword) => setValues({ ...values, newPassword })}
+                    onChange={(e) => setValues({ ...values, newPassword: e.target.value })}
                     endIcon={
                       <div className="cursor-pointer" onClick={() => setShowNewPassword(!showNewPassword)}>
                         {showNewPassword ? <EyeIcon1 /> : <EyeIcon2 />}
                       </div>
                     }
                   />
-                  <TextField
+                  <TextInput
                     type={showRepeatNewPassword ? "text" : "password"}
                     placeholder="Re-type new password"
                     value={values.repeatNewPassword}
-                    onChange={(repeatNewPassword) => setValues({ ...values, repeatNewPassword })}
+                    onChange={(e) => setValues({ ...values, repeatNewPassword: e.target.value })}
                     endIcon={
                       <div className="cursor-pointer" onClick={() => setShowRepeatNewPassword(!showRepeatNewPassword)}>
                         {showRepeatNewPassword ? <EyeIcon1 /> : <EyeIcon2 />}

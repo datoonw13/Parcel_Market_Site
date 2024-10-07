@@ -8,15 +8,15 @@ import { updateUserInfoSchema } from "@/zod-validations/auth-validations";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getAllStates } from "@/helpers/states";
+import { getAllStates, getStateValue } from "@/helpers/states";
 import { updateUserInfoAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import useNotification from "@/hooks/useNotification";
 import { CiEdit } from "react-icons/ci";
-import TextField from "../../shared/forms/text-field";
+import { TextInput } from "@/components/ui/input";
 import Button from "../../shared/forms/Button";
 import UserProfileSection from "./UserProfileSection";
-import AutoComplete from "../../shared/forms/AutoComplete";
+import { AutoComplete } from "../../../ui/autocomplete";
 
 const PersonalInfoSection = ({ user }: { user: IUser }) => {
   const { notify } = useNotification();
@@ -107,71 +107,63 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:col-span-2 xl:col-span-1">
-          <TextField
+          <TextInput
             required
             value={watch("firstName") || ""}
             error={!!errors.firstName}
-            onChange={(firstName) => setValue("firstName", firstName, { shouldValidate: isSubmitted, shouldDirty: true })}
+            onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
             disabled={!editMode}
             label="First Name"
           />
-          <TextField
+          <TextInput
             required
             value={watch("lastName") || ""}
             error={!!errors.lastName}
-            onChange={(lastName) => setValue("lastName", lastName, { shouldValidate: isSubmitted, shouldDirty: true })}
+            onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
             disabled={!editMode}
             label="Last Name"
           />
         </div>
-        <TextField
+        <TextInput
           required
           value={watch("streetName") || ""}
           error={!!errors.streetName}
-          onChange={(streetName) => setValue("streetName", streetName, { shouldValidate: isSubmitted, shouldDirty: true })}
+          onChange={(e) => setValue("streetName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
           label="Address"
         />
-        <TextField
+        <TextInput
           value={watch("unitNumber") || ""}
           error={!!errors.unitNumber}
-          onChange={(unitNumber) => setValue("unitNumber", unitNumber, { shouldValidate: isSubmitted, shouldDirty: true })}
+          onChange={(e) => setValue("unitNumber", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
           label="Unit Number"
         />
-        <TextField
+        <TextInput
           required
           value={watch("city") || ""}
           error={!!errors.city}
-          onChange={(city) => setValue("city", city, { shouldValidate: isSubmitted, shouldDirty: true })}
+          onChange={(e) => setValue("city", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
           label="City"
         />
         <AutoComplete
-          disableClear
           disabled={!editMode}
-          options={getAllStates({ filterBlackList: false })}
-          getOptionLabel={(item) => item.label}
-          getOptionKey={(item) => item.value}
-          onChange={(item) => {
-            if (item?.value) {
-              setValue("state", item.value, { shouldValidate: isSubmitted, shouldDirty: true });
+          options={getAllStates({ filterBlackList: false }).map(({ counties, ...el }) => el)}
+          onValueChange={(item) => {
+            if (item) {
+              setValue("state", item, { shouldValidate: isSubmitted, shouldDirty: true });
             }
           }}
           placeholder="State"
-          value={getAllStates().find((el) => el.value === watch("state")) || null}
-          onFilter={(searchValue, items) =>
-            items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-          }
-          required
-          getSelectedOption={(item) => item.value === watch("state")}
+          selectedValue={getStateValue(watch("state"))?.value || null}
           error={!!errors.state}
         />
-        <TextField
+        <TextInput
           required
           value={watch("postalCode") || ""}
           error={!!errors.postalCode}
-          onChange={(postalCode) => setValue("postalCode", postalCode, { shouldValidate: isSubmitted, shouldDirty: true })}
+          onChange={(e) => setValue("postalCode", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
           label="Postal Code"
         />

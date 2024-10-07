@@ -5,11 +5,11 @@ import Button from "@/components/@new/shared/forms/Button";
 import { sendPasswordResetCodeAction } from "@/server-actions/user/actions";
 import { userPasswordResetValidations } from "@/zod-validations/auth-validations";
 import { useState } from "react";
-import TextField from "@/components/@new/shared/forms/text-field";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import useNotification from "@/hooks/useNotification";
+import { TextInput } from "@/components/ui/input";
 
 const CreateNewPassword = ({
   onNext,
@@ -53,7 +53,7 @@ const CreateNewPassword = ({
   return (
     <>
       <div className="space-y-4 mb-8">
-        <TextField
+        <TextInput
           placeholder="Current password"
           type={showPassword.current ? "text" : "password"}
           endIcon={
@@ -62,11 +62,11 @@ const CreateNewPassword = ({
             </div>
           }
           value={watch("oldPassword")}
-          onChange={(oldPassword) => setValue("oldPassword", oldPassword, { shouldValidate: isSubmitted })}
+          onChange={(e) => setValue("oldPassword", e.target.value, { shouldValidate: isSubmitted })}
           error={!!errors.oldPassword}
         />
         <div className="space-y-1">
-          <TextField
+          <TextInput
             placeholder="New password"
             type={showPassword.new ? "text" : "password"}
             endIcon={
@@ -75,13 +75,13 @@ const CreateNewPassword = ({
               </div>
             }
             value={watch("newPassword")}
-            onChange={(newPassword) => setValue("newPassword", newPassword, { shouldValidate: isSubmitted })}
+            onChange={(e) => setValue("newPassword", e.target.value, { shouldValidate: isSubmitted })}
             error={!!errors.newPassword}
           />
           {errors.newPassword && <p className="text-xss text-error font-medium">{errors.newPassword.message}</p>}
         </div>
         <div className="space-y-1">
-          <TextField
+          <TextInput
             placeholder="Re-type password"
             type={showPassword.repeatNew ? "text" : "password"}
             endIcon={
@@ -90,7 +90,7 @@ const CreateNewPassword = ({
               </div>
             }
             value={watch("repeatNewPassword")}
-            onChange={(repeatNewPassword) => setValue("repeatNewPassword", repeatNewPassword, { shouldValidate: isSubmitted })}
+            onChange={(e) => setValue("repeatNewPassword", e.target.value, { shouldValidate: isSubmitted })}
             error={!!errors.repeatNewPassword}
           />
           {errors.repeatNewPassword && <p className="text-xss text-error font-medium">{errors.repeatNewPassword.message}</p>}

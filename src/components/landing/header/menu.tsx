@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { CiUser } from "react-icons/ci";
-import { PiBellLight, PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
+import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
 import { IDecodedAccessToken } from "@/types/auth";
 import { HiOutlineBell } from "react-icons/hi2";
 import { breakPoints } from "../../../../tailwind.config";

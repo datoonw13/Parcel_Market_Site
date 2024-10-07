@@ -8,10 +8,11 @@ import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import { sendEmailResetCodeAction, setNewEmailAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import { emailSchema } from "@/zod-validations/auth-validations";
-import { cn, maskEmail } from "@/helpers/common";
+import { maskEmail } from "@/helpers/common";
 import ResendButton from "@/components/@new/shared/ResendButton";
 import TextField from "@/components/@new/shared/forms/text-field";
 import ForgotPasswordModal from "@/components/@new/user/profile/modals/forgot-password/forgot-password-modal";
+import { TextInput } from "@/components/ui/input";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });
@@ -114,7 +115,7 @@ const UpdateEmailModalContent: FC<
       <div className="flex justify-between flex-col h-full">
         {step === UpdateEmailSteps.PASSWORD && (
           <div className="space-y-4">
-            <TextField
+            <TextInput
               placeholder="Enter Your Password"
               type={showPassword ? "text" : "password"}
               endIcon={
@@ -123,7 +124,7 @@ const UpdateEmailModalContent: FC<
                 </div>
               }
               value={values.password}
-              onChange={(password) => setValues({ ...values, password })}
+              onChange={(e) => setValues({ ...values, password: e.target.value })}
             />
             <Button
               onClick={openForgotPasswordModal}

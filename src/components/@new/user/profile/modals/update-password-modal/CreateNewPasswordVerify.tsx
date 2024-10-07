@@ -4,9 +4,8 @@ import ResendButton from "@/components/@new/shared/ResendButton";
 import Button from "@/components/@new/shared/forms/Button";
 import { sendPasswordResetCodeAction, setNewPasswordAction } from "@/server-actions/user/actions";
 import { FC, useState } from "react";
-// import toast from "react-hot-toast";
-import TextField from "@/components/@new/shared/forms/text-field";
 import useNotification from "@/hooks/useNotification";
+import { TextInput } from "@/components/ui/input";
 
 interface CreateNewPasswordVerifyProps {
   passwords: { oldPassword: string; newPassword: string };
@@ -43,7 +42,7 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
   return (
     <div className="flex flex-col justify-between h-full mb-8">
       <div className="space-y-4">
-        <TextField placeholder="Code" value={code} onChange={(value) => setCode(value)} />
+        <TextInput placeholder="Code" value={code} onChange={(e) => setCode(e.target.value)} />
         <ResendButton
           handleResend={async () => {
             await handleResend();
