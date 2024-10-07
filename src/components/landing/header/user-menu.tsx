@@ -2,8 +2,12 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import routes from "@/helpers/routes";
+import { cn } from "@/lib/utils";
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { IDecodedAccessToken } from "@/types/auth";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { HiOutlineBell } from "react-icons/hi2";
@@ -11,6 +15,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
 
 const UserMenu = ({ user }: { user: IDecodedAccessToken }) => {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   return (
@@ -33,19 +38,18 @@ const UserMenu = ({ user }: { user: IDecodedAccessToken }) => {
           </div>
           <div className="bg-grey-30 rounded-xl w-full p-4">
             <ul>
-              <li className="flex gap-3 items-center text-xs hover:text-primary-main cursor-pointer py-1.5">
-                <CiUser className="size-4" /> My Profile
-              </li>
-              <li className="flex gap-3 items-center text-xs hover:text-primary-main cursor-pointer py-1.5">
-                <PiBellRingingThin className="size-4" /> Notifications
-              </li>
-              <li className="flex gap-3 items-center text-xs hover:text-primary-main cursor-pointer py-1.5">
-                <HiOutlineBell className="size-4" />
-                My Subscription
-              </li>
-              <li className="flex gap-3 items-center text-xs hover:text-primary-main cursor-pointer py-1.5">
-                <PiClockCountdown className="size-4" /> My Recent Searches
-              </li>
+              {list.map((item) => (
+                <Link href={item.path} key={item.path}>
+                  <li
+                    className={cn(
+                      "flex gap-3 items-center text-xs hover:text-primary-main cursor-pointer py-1.5",
+                      pathname === item.path && "text-primary-main"
+                    )}
+                  >
+                    <item.icon className="size-4" /> {item.label}
+                  </li>
+                </Link>
+              ))}
               <li
                 className="flex gap-3 items-center text-xs text-error cursor-pointer py-1.5"
                 onClick={async () => {
@@ -62,3 +66,26 @@ const UserMenu = ({ user }: { user: IDecodedAccessToken }) => {
   );
 };
 export default UserMenu;
+
+const list = [
+  {
+    label: "My Profile",
+    icon: CiUser,
+    path: routes.user.profile.fullUrl,
+  },
+  {
+    label: "Notifications",
+    icon: PiBellRingingThin,
+    path: routes.user.notifications.fullUrl,
+  },
+  {
+    label: "My Subscription",
+    icon: HiOutlineBell,
+    path: routes.user.subscription.fullUrl,
+  },
+  {
+    label: "My Recent Searches",
+    icon: PiClockCountdown,
+    path: routes.user.recentSearches.fullUrl,
+  },
+];
