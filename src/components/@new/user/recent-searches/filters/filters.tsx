@@ -14,6 +14,7 @@ import { removeUserSearches } from "@/server-actions/user-searches/actions";
 import useNotification from "@/hooks/useNotification";
 import RecentSearchesDesktopFilters from "./desktop";
 import RecentSearchesMobileFilters from "./mobile";
+import UserRecentSearchesSort from "./sort";
 
 const RecentSearchesFilters = ({ totalItems }: { totalItems: number }) => {
   const router = useRouter();
@@ -137,7 +138,10 @@ const RecentSearchesFilters = ({ totalItems }: { totalItems: number }) => {
               </div>
             )}
           </div>
-          <div>{!!totalItems && <p className="text-xs font-medium text-grey-600">{totalItems} Lands</p>}</div>
+          <div className="flex items-center gap-3">
+            {!!totalItems && <p className="text-xs font-medium text-grey-600">{totalItems} Lands</p>}
+            <UserRecentSearchesSort />
+          </div>
         </div>
       </div>
     </>

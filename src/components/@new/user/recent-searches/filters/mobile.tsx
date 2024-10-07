@@ -64,6 +64,7 @@ const RecentSearchesMobileFilters = () => {
     ? Object.keys(filters)
         .filter((key) => filters[key as keyof typeof filters])
         .filter((el) => el !== "search")
+        .filter((el) => el !== "sortBy")
         .filter((el) => el !== "page").length
     : 0;
 
@@ -77,6 +78,7 @@ const RecentSearchesMobileFilters = () => {
     values && (
       <>
         <ResponsiveModal
+          mediaQuery="lg"
           dialogContentClassName="max-w-2xl w-full"
           open={open}
           closeModal={() => {
@@ -245,9 +247,9 @@ const RecentSearchesMobileFilters = () => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            <div className="flex flex-col-reverse md:justify-end md:flex-row gap-3 w-full sticky bottom-0 bg-white mt-auto py-4 md:py-6 px-5 md:px-8">
+            <div className="flex flex-col-reverse  gap-3 w-full sticky bottom-0 bg-white mt-auto py-4 md:py-6 px-5 md:px-8">
               <Button
-                className="w-full md:w-fit"
+                className="w-full"
                 variant="secondary"
                 onClick={() => {
                   setOpen(false);
@@ -257,7 +259,7 @@ const RecentSearchesMobileFilters = () => {
                 Cancel
               </Button>
               <Button
-                className="w-full md:w-fit"
+                className="w-full"
                 disabled={disableOkButton}
                 onClick={() => {
                   try {
