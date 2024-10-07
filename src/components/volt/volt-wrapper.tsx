@@ -83,7 +83,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
         user={user}
         onOK={() => sessionStorage.setItem("volt", JSON.stringify({ step, values }))}
       />
-      <div className="h-screen relative">
+      <div className="h-dvh relative ">
         {dataSaving && (
           <div className="absolute h-full w-full flex justify-center items-center z-20 bg-black-200">
             <LuLoader2 className="animate-spin size-9 text-primary-main-200" />

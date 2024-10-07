@@ -95,7 +95,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
 
   return (
     <>
-      <div className="flex flex-col h-screen lg:hidden w-full relative">
+      <div className="flex flex-col h-full lg:hidden w-full relative">
         <VoltMobileHeader
           step={step}
           user={user}
@@ -145,7 +145,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
             )}
             {step > VoltSteps.SEARCH && (
               <>
-                <div className="w-full h-screen">
+                <div className="w-full h-full">
                   <VoltMap
                     step={step}
                     user={user}
