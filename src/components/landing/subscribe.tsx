@@ -18,7 +18,7 @@ export default function Subscribe() {
     className: "center",
     centerMode: targetReached,
     slidesToShow: 3,
-    infinite: targetReached,
+    infinite: false,
     swipe: false,
     responsive: [
       {
@@ -26,7 +26,7 @@ export default function Subscribe() {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          infinite: true,
+          infinite: false,
           dots: false,
           swipe: true,
         },
@@ -36,7 +36,7 @@ export default function Subscribe() {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          infinite: true,
+          infinite: false,
           swipe: true,
         },
       },
