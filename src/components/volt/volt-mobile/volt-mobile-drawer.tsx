@@ -36,7 +36,7 @@ const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({ step, user, children, ren
     const navbarEl = document.getElementById("volt-navbar");
     if (drawerRef && navbarEl) {
       const { height } = navbarEl.getBoundingClientRect();
-      drawerRef.style.maxHeight = `calc(100vh - ${height - 1}px)`;
+      drawerRef.style.maxHeight = `calc(100dvh - ${height - 1}px)`;
 
       if (step === VoltSteps.SEARCH_RESULTS || (step === VoltSteps.CALCULATION && !user)) {
         drawerRef.style.paddingBottom = `${height + 16}px`;
