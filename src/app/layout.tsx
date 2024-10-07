@@ -58,7 +58,7 @@ export default async function RootLayout({
     <>
       <html lang="en">
         <GoogleTagManager gtmId="GTM-P2BZG9G9" />
-        <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-screen")}>
+        <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-dvh")}>
           <noscript>
             <iframe
               src="https://www.googletagmanager.com/ns.html?id=GTM-P2BZG9G9"
