@@ -35,7 +35,7 @@ const settings = {
 
 const PeopleFeedback = () => (
   <div className="space-y-6 md:space-y-8 lg:space-y-11 pl-5 sm:pl-8 md:pl-11 lg:px-16 xl:px-[11vw]">
-    <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto hidden lg:block">
+    <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto">
       <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">What people say</h1>
     </div>
     <div>

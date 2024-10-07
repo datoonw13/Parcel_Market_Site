@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 
 const LandingQuestions = () => (
   <div className="space-y-6 md:space-y-8 lg:space-y-11 px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[11vw] ">
-    <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto hidden lg:block">
+    <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto">
       <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">Frequently asked questions</h1>
     </div>
     <Accordion type="single" collapsible className="w-full border border-grey-100 rounded-2xl p-6 md:p-9">
