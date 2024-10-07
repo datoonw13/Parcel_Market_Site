@@ -1,4 +1,4 @@
-/* .root {
+.root {
     @apply w-full flex items-center relative h-[52px]
 }
 .root > * {
@@ -65,4 +65,4 @@
     height: 100%;
     @apply left-0 px-1
 }
- */
+
