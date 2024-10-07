@@ -24,8 +24,8 @@ const slides = [
   {
     id: 3,
     content: "Third",
-    title: "Simple. Easy. Reliable",
-    desc: "Built for everyone. No complex UI or sifting through useless information. VOLT delivers reliable data and value information in seconds.",
+    title: "Save Valuable Time",
+    desc: "VOLT calculates the average of sold prices in less than 30 seconds so you can quickly understand a general market value regarding a specific property.",
   },
 ];
 
@@ -93,8 +93,8 @@ const VoltCarousel = () => {
               onClick={() => onClick(el.id)}
               style={{ transition: "all .2s ease-in-out" }}
               className={cn(
-                "cursor-pointer border border-grey-100 rounded-2xl p-4",
-                data[1].id === el.id && "scale-105 shadow-4 border-primary-main/20 bg-primary-main/10"
+                "cursor-pointer border border-grey-100 rounded-2xl p-4 opacity-70",
+                data[1].id === el.id && "scale-105 shadow-4 border-primary-main/20 bg-primary-main/10 opacity-100"
               )}
             >
               <h1 className="text-grey-800 font-extrabold mb-1 text-sm">{el.title}</h1>
