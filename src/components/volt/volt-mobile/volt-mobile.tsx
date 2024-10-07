@@ -132,7 +132,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
           </div>
         )}
         {!showCalculationTerms && (
-          <div className={cn("flex flex-col overflow-auto ")}>
+          <div className={cn("flex flex-col overflow-auto h-full")}>
             {step === VoltSteps.SEARCH && (
               <VoltSearch
                 className="p-5"
