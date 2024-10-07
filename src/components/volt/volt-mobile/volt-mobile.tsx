@@ -134,14 +134,17 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
         {!showCalculationTerms && (
           <div className={cn("flex flex-col overflow-auto h-full")}>
             {step === VoltSteps.SEARCH && (
-              <VoltSearch
-                className="p-5"
-                setStep={setStep}
-                values={values}
-                setValues={setValues}
-                user={user}
-                onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
-              />
+              <>
+                <VoltSearch
+                  className="p-5"
+                  setStep={setStep}
+                  values={values}
+                  setValues={setValues}
+                  user={user}
+                  onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
+                />
+                <VoltFooter className="flex-col py-6" />
+              </>
             )}
             {step > VoltSteps.SEARCH && (
               <>
@@ -224,6 +227,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                       <VoltCalculation values={values} user={user} mapInteraction={mapInteraction} setMpaInteraction={setMpaInteraction} />
                     </div>
                   )}
+                  <VoltFooter className="flex-col py-6 mt-auto" />
                 </VoltMobileDrawer>
               </>
             )}

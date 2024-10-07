@@ -103,7 +103,7 @@ const VoltMobileDrawer: FC<VoltMobileDrawerProps> = ({ step, user, children, ren
           <DrawerTitle className="hidden" />
           <div
             id="drawer-content"
-            className={cn("overflow-auto p-4", snap !== 1 && "overflow-hidden pointer-events-none")}
+            className={cn("overflow-auto p-4 flex-flex-col min-h-full", snap !== 1 && "overflow-hidden pointer-events-none")}
             {...(snap === 1 && { "data-vaul-no-drag": "" })}
           >
             {children}
