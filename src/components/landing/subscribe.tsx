@@ -26,7 +26,7 @@ export default function Subscribe() {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          infinite: false,
+          infinite: true,
           dots: false,
           swipe: true,
         },
