@@ -285,7 +285,7 @@ const RecentSearchesMobileFilters = () => {
             </div>
           </div>
         </ResponsiveModal>
-        <div className="2xl:hidden ml-auto">
+        <div className="lg:hidden ml-auto">
           <Button
             className={cn(
               "p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl relative",
@@ -298,7 +298,6 @@ const RecentSearchesMobileFilters = () => {
           >
             <div className="flex gap-2 items-center">
               <TbFilter className="size-5" style={{ transform: "scale(-1, 1)" }} />
-              <span className={cn("hidden md:block text-grey-600", totalFiltersSelected && "text-primary-main")}>Filter</span>
             </div>
           </Button>
         </div>

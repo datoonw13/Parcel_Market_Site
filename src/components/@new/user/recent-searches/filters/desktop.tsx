@@ -34,7 +34,7 @@ const RecentSearchesDesktopFilters = () => {
 
   return (
     filters && (
-      <div className="hidden 2xl:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
+      <div className="hidden lg:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
         <AutoComplete
           selectedValue={filters?.state || null}
           options={states}

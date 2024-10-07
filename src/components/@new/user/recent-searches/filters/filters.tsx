@@ -94,7 +94,7 @@ const RecentSearchesFilters = ({ totalItems }: { totalItems: number }) => {
         open={openWarningModal}
       />
       <div className="flex flex-col w-full gap-4 md:gap-7">
-        <div className="grid grid-cols-[1fr_minmax(0,_max-content)] 2xl:grid-cols-[minmax(auto,_280px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
+        <div className="grid grid-cols-[1fr_minmax(0,_max-content)] lg:grid-cols-1 2xl:grid-cols-[minmax(auto,_280px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
           <TextInput
             rootClassName="min-h-9 h-full rounded-3xl"
             className="text-grey-800 placeholder:text-grey-800 placeholder:text-xs text-xs font-medium"

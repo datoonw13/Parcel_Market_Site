@@ -9,13 +9,9 @@ import { BsClockHistory } from "react-icons/bs";
 import { LogoutIcon1 } from "../../icons/LogutIcons";
 import UserMenuListItem from "./UserMenuListItem";
 import BellOutline from "../../icons/bell-outline";
-import EnvelopeIcon from "../../icons/envelope-icon";
-import BookOpen from "../../icons/book-open";
-import DiscountBox from "../../icons/discount-box";
-import DiscountCircle from "../../icons/discount-circle";
 
 const UserMenuList = ({ listItemClasses, hideLogout, close }: { listItemClasses?: string; hideLogout?: boolean; close?: () => void }) => (
-  <ul className="flex flex-col gap-4 min-w-[306px]">
+  <ul className="flex flex-col gap-4  w-fit">
     {list.map((el) => (
       <UserMenuListItem listItemClasses={listItemClasses} label={el.label} path={el.path} icon={el.icon} onClick={close} key={el.label} />
     ))}
