@@ -46,23 +46,23 @@ const RecentSearchesFilters = () => {
 
   return (
     <>
-        <div className="grid grid-cols-[1fr_minmax(0,_max-content)] lg:grid-cols-1 2xl:grid-cols-[minmax(auto,_280px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
-          <TextInput
-            rootClassName="min-h-9 h-full rounded-3xl"
-            className="text-grey-800 placeholder:text-grey-800 placeholder:text-xs text-xs font-medium"
-            placeholder="Search by Parcel ID, or by owner "
-            endIconClassName="p-[1px]"
-            endIcon={
-              <div className="bg-primary-main h-full rounded-full text-white flex items-center justify-center cursor-pointer aspect-square">
-                <IoSearchOutline />
-              </div>
-            }
-            onChange={(e) => handleSearch(e.target.value)}
-            defaultValue={searchParams.get("search") || ""}
-          />
-          <RecentSearchesMobileFilters />
-          <RecentSearchesDesktopFilters />
-        </div>
+      <div className="grid grid-cols-[1fr_minmax(0,_max-content)] lg:grid-cols-1 2xl:grid-cols-[minmax(auto,_280px)_minmax(0,_max-content)] gap-3 2xl:gap-16 w-full justify-between items-center">
+        <TextInput
+          rootClassName="min-h-9 h-full rounded-3xl"
+          className="text-grey-800 placeholder:text-grey-800 placeholder:text-xs text-xs font-medium"
+          placeholder="Search by Parcel ID, or by owner "
+          endIconClassName="p-[1px]"
+          endIcon={
+            <div className="bg-primary-main h-full rounded-full text-white flex items-center justify-center cursor-pointer aspect-square">
+              <IoSearchOutline />
+            </div>
+          }
+          onChange={(e) => handleSearch(e.target.value)}
+          defaultValue={searchParams.get("search") || ""}
+        />
+        <RecentSearchesMobileFilters />
+        <RecentSearchesDesktopFilters />
+      </div>
     </>
   );
 };
