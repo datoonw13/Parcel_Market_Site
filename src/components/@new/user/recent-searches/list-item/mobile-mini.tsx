@@ -37,6 +37,8 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
   const { acreage, county, owner, pricePerAcre, propertyType, searchDate, state, voltPrice, parcelNumberNoFormatting, lat, lon, polygon } =
     data;
 
+  const mainLandSaleHistory = propertiesUsedForCalculation.filter((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+
   const mainProperty = {
     parcelNumber: parcelNumberNoFormatting,
     parcelNumberNoFormatting,
@@ -47,13 +49,17 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
     center: true,
   };
 
-  const properties = propertiesUsedForCalculation?.map((el) => ({
+  let properties = propertiesUsedForCalculation?.map((el) => ({
     parcelNumber: el.parcelNumberNoFormatting,
     parcelNumberNoFormatting: el.parcelNumberNoFormatting,
     latitude: el.lat,
     longitude: el.lon,
     markerType: "default" as const,
   }));
+
+  if (mainLandSaleHistory.length > 0) {
+    properties = properties.filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting));
+  }
 
   return (
     <div className="flex lg:hidden w-full flex-col gap-4">
