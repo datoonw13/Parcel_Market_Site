@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 
 const RecentSearchesFilters = dynamic(() => import("./filters/filters"), { ssr: false });
 
-const RecentSearchesHeader = ({ totalItems }: { totalItems: number }) => (
+const RecentSearchesHeader = () => (
   <div className="space-y-5 md:space-y-8">
     <div className="space-y-4">
       <h1 className="font-semibold text-2xl">Recent Searches</h1>
@@ -10,7 +10,7 @@ const RecentSearchesHeader = ({ totalItems }: { totalItems: number }) => (
         To calculate the price of your land, gather data on comparable properties, analyze their sale prices, adjust for differences.
       </h2>
     </div>
-    <RecentSearchesFilters totalItems={totalItems} />
+    <RecentSearchesFilters />
   </div>
 );
 

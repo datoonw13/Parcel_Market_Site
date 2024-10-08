@@ -8,15 +8,20 @@ import { IUserRecentSearches } from "@/types/user";
 import { useAtom } from "jotai";
 import { userRecentSearchesAtom } from "@/atoms/pages-atom";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
+import { cn, updateSearchParamsWithFilters } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
 import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
 import routes from "@/helpers/routes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { removeUserSearches } from "@/server-actions/user-searches/actions";
+import { SortEnum } from "@/types/common";
+import { z } from "zod";
+import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
 import RecentSearchesPagination from "./pagination";
 import RecentSearchesLitItemMobileMini from "./list-item/mobile-mini";
 import RecentSearchesLitItemDesktop from "./list-item/desktop";
 import RecentSearchesLitItemMobileFull from "./list-item/mobile-full";
+import UserSelectListItems from "../shared/select-list-items";
 
 const UserRecentSearchesList = ({
   pageSize,
@@ -32,6 +37,8 @@ const UserRecentSearchesList = ({
   isUserSubscriptionTrial?: boolean;
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [subscriptionWarning, setSubscriptionWarning] = useState(false);
   const [openItem, setOpenItem] = useState<string>("");
   const [userRecentSearchesOption, setUserRecentSearchesOptions] = useAtom(userRecentSearchesAtom);
@@ -81,6 +88,35 @@ const UserRecentSearchesList = ({
           user={user}
           isUserSubscriptionTrial={isUserSubscriptionTrial}
           data={mobileFullViewItem}
+        />
+      )}
+      {data.length > 0 && (
+        <UserSelectListItems
+          isAllSelected={userRecentSearchesOption.isAllSelected}
+          selecting={userRecentSearchesOption.selecting}
+          totalSelectedIds={userRecentSearchesOption.selectedIds.length}
+          totalItems={totalCount}
+          onSelectClick={() => {
+            setUserRecentSearchesOptions((prev) => ({
+              ...prev,
+              selecting: !prev.selecting,
+              selectedIds: prev.selecting ? [] : prev.selectedIds,
+            }));
+          }}
+          dialogTitle="Delete Selected Searches?"
+          dialogDescription="Are you sure you want to delete selected Searches?"
+          onRemove={() => removeUserSearches(userRecentSearchesOption.selectedIds)}
+          onRemoveSuccess={() => {
+            setUserRecentSearchesOptions({ isAllSelected: false, selectedIds: [], selecting: false });
+          }}
+          sortEnum={SortEnum}
+          sortChange={(value) => {
+            const newSearchParams = updateSearchParamsWithFilters<z.infer<typeof userRecentSearchesValidations>>(
+              [{ key: "sortBy", value }],
+              searchParams.toString()
+            );
+            router.push(`${pathname}?${newSearchParams.toString()}`);
+          }}
         />
       )}
       <div className="space-y-8 md:space-y-11">

@@ -13,7 +13,7 @@ const RecentSearchesPage = async ({ searchParams }: { searchParams: Record<strin
 
   return (
     <div className="space-y-4 md:space-y-6">
-      <RecentSearchesHeader totalItems={data.data?.pagination.totalCount || 0} />
+      <RecentSearchesHeader />
       {filters.success && (
         <Suspense key={JSON.stringify(filters.data)} fallback={<UserRecentSearchesLoader />}>
           <UserRecentSearchesListWrapper
