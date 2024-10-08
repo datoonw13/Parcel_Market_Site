@@ -18,14 +18,14 @@ const slides = [
   {
     id: 2,
     content: "Second",
-    title: "Simple. Easy. Reliable",
-    desc: "Built for everyone. No complex UI or sifting through useless information. VOLT delivers reliable data and value information in seconds.",
+    title: "Save Valuable Time",
+    desc: "VOLT calculates the average of sold prices in less than 30 seconds so you can quickly understand a general market value regarding a specific property.",
   },
   {
     id: 3,
     content: "Third",
-    title: "Save Valuable Time",
-    desc: "VOLT calculates the average of sold prices in less than 30 seconds so you can quickly understand a general market value regarding a specific property.",
+    title: "Simple. Easy. Reliable",
+    desc: "Built for everyone. No complex UI or sifting through useless information. VOLT delivers reliable data and value information in seconds.",
   },
 ];
 
