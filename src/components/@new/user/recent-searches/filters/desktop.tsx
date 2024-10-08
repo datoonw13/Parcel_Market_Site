@@ -36,6 +36,7 @@ const RecentSearchesDesktopFilters = () => {
     filters && (
       <div className="hidden lg:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
         <AutoComplete
+          clearable
           selectedValue={filters?.state || null}
           options={states}
           placeholder="State"
@@ -51,6 +52,7 @@ const RecentSearchesDesktopFilters = () => {
           }}
         />
         <AutoComplete
+          clearable
           selectedValue={filters?.county || null}
           options={counties}
           placeholder="County"

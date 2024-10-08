@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { FC, useEffect, useRef, useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { motion } from "framer-motion";
+import { IoMdClose } from "react-icons/io";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "./command";
 import { TextInput as Input } from "./input";
 import { Popover, PopoverContent } from "./popover";
@@ -23,6 +24,7 @@ type AutoCompleteProps = {
   placeholder?: string;
   error?: boolean;
   inputRootClassName?: string;
+  clearable?: boolean;
 };
 
 const AutoComplete: FC<AutoCompleteProps> = ({
@@ -34,6 +36,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
   selectedValue,
   error,
   inputRootClassName,
+  clearable,
 }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -102,7 +105,23 @@ const AutoComplete: FC<AutoCompleteProps> = ({
             }}
           >
             <Input
-              endIcon={open ? <IoChevronUp /> : <IoChevronDown />}
+              endIcon={
+                <>
+                  <div className="flex items-center">
+                    {clearable && selectedValue && (
+                      <IoMdClose
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onValueChange(null);
+                          setSearch("");
+                        }}
+                      />
+                    )}
+                    {open ? <IoChevronUp /> : <IoChevronDown />}
+                  </div>
+                </>
+              }
               error={error}
               value={search}
               rootClassName={cn(
