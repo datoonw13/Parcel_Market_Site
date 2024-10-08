@@ -14,6 +14,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import { subscribeAction } from "@/server-actions/common-actions";
 import { NumberInput, TextInput } from "@/components/ui/input";
+import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
+import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
 import Button from "../../shared/forms/Button";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 import GoogleAuthProvider from "../sign-in/google-auth-provider";
@@ -34,6 +36,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
   const email = searchParams.get("email");
   const isGoogleUser = access_token && firstName && lastName && email;
   const { notify } = useNotification();
+  const [openTermsDialog, setTermsDialog] = useState(false);
+  const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
   const {
@@ -97,6 +101,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
 
   return (
     <>
+      <TermsConditionsDialog open={openTermsDialog} closeModal={() => setTermsDialog(false)} />
+      <PrivacyPolicyDialog open={openPrivacyDialog} closeModal={() => setPrivacyDialog(false)} />
       <div>
         <h1 className="font-semibold text-2xl md:text-5xl text-center">Sign Up</h1>
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
@@ -242,13 +248,13 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           label={
             <p>
               Yes, I understand and agree to the Parcel Market
-              <Link href="/">
-                <span className="underline text-primary-main px-1">Terms of Service</span>
-              </Link>
+              <span onClick={() => setTermsDialog(true)} className="underline text-primary-main cursor-pointer px-1">
+                Terms of Service
+              </span>
               and
-              <Link href="/">
-                <span className="underline text-primary-main px-1">Privacy Policy.</span>
-              </Link>
+              <span onClick={() => setPrivacyDialog(true)} className="underline text-primary-main cursor-pointer px-1">
+                Privacy Policy.
+              </span>
             </p>
           }
           className="col-span-2"

@@ -1,10 +1,13 @@
 import React from "react";
+import { cn } from "@/lib/utils";
+import ResponsiveModal from "../ui/dialogs/responsive-dialog";
+import { ScrollArea } from "../ui/scroll-area";
 
-const PrivacyPolicy = () => (
+const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
   <div className="space-y-8">
     <div className="space-y-3">
-      <h1 className="font-extrabold text-3xl md:text-4xl xl:text-5xl">Privacy Policy</h1>
-      <h3 className="text-grey-800 text-sm md:text-base">Effective September 8, 2024</h3>
+      {!modal && <h1 className="font-extrabold text-3xl md:text-4xl xl:text-5xl">Privacy Policy</h1>}
+      <h3 className={cn("text-grey-800 text-sm ", !modal && "md:text-base")}>Effective September 8, 2024</h3>
       <p className="font-semibold text-grey-800 md:text-base !mt-6">
         Parcel Market LLC respects your privacy and is committed to protecting your personal information. This Privacy Policy outlines how
         we collect, use, and protect the information you provide when using our website.
@@ -12,8 +15,8 @@ const PrivacyPolicy = () => (
     </div>
 
     <div className="space-y-3 md:space-y-5">
-      <h1 className="font-extrabold text-xl md:text-2xl">Who are our users?</h1>
-      <p className="text-grey-800 text-sm md:text-base">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Who are our users?</h1>
+      <p className={cn("text-grey-800 text-sm ", !modal && "md:text-base")}>
         Our users are individuals seeking to estimate the value of vacant property in the United States. Vacant property is land that does
         not contain any residential structures. Whether you&apos;re a real estate agent, investor, property owner, or prospective purchaser,
         our website provides a convenient and accessible way to obtain property estimates using comparable sales figures. You must be 18
@@ -24,8 +27,8 @@ const PrivacyPolicy = () => (
     </div>
 
     <div className="space-y-3 md:space-y-5">
-      <h1 className="font-extrabold text-xl md:text-2xl">What information do we collect from our users?</h1>
-      <p className="text-grey-800 text-sm md:text-base flex flex-col">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>What information do we collect from our users?</h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
         <span className="pl-6 pb-2 relative before:content-['_'] before:size-1.5 before:rounded-full before:bg-grey-800 before:absolute before:block before:top-3 before:left-2">
           Our website does not use tracking technology such as cookies or pixels. We may collect your IP address, browser type, and device
           type to help us understand how users interact with our website and improve our services.
@@ -40,8 +43,8 @@ const PrivacyPolicy = () => (
       </p>
     </div>
     <div className="space-y-3 md:space-y-5">
-      <h1 className="font-extrabold text-xl md:text-2xl">How do we use your private information?</h1>
-      <p className="text-grey-800 text-sm md:text-base flex flex-col">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>How do we use your private information?</h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
         <span className="pl-6 pb-2 relative before:content-['_'] before:size-1.5 before:rounded-full before:bg-grey-800 before:absolute before:block before:top-3 before:left-2">
           We do not sell your private information. We use the personal information collected from users to carry out the essential functions
           of the website, improve our services, to communicate with you, and to comply with privacy regulations. We may share your personal
@@ -54,3 +57,17 @@ const PrivacyPolicy = () => (
 );
 
 export default PrivacyPolicy;
+
+export const PrivacyPolicyDialog = ({ open, closeModal }: { open: boolean; closeModal: () => void }) => (
+  <ResponsiveModal
+    drawerContentClassName="pb-6"
+    dialogContentClassName="max-w-[70vw]"
+    modalTitle="Privacy Policy"
+    open={open}
+    closeModal={closeModal}
+  >
+    <ScrollArea className="max-h-[80dvh] md:max-h-[70vh]">
+      <PrivacyPolicy modal />
+    </ScrollArea>
+  </ResponsiveModal>
+);

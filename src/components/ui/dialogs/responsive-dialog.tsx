@@ -15,8 +15,10 @@ interface ResponsiveModalProps {
   closeModal: () => void;
   children: ReactNode;
   dialogContentClassName?: string;
+  drawerContentClassName?: string;
+  modalTitle?: string;
 }
-const Content: FC<ResponsiveModalProps> = (props) => (
+const DrawerContentWrapper: FC<ResponsiveModalProps> = (props) => (
   <>
     <DialogHeader className="hidden" />
     <DialogTitle className="sr-only">TEST</DialogTitle>
@@ -24,22 +26,26 @@ const Content: FC<ResponsiveModalProps> = (props) => (
   </>
 );
 
+const DialogContentWrapper: FC<ResponsiveModalProps> = (props) => (
+  <>
+    <DialogHeader className="hidden" />
+    <DialogTitle className={cn(!props.modalTitle && "sr-only")}>{props.modalTitle || "TEST"}</DialogTitle>
+    {props.children}
+  </>
+);
+
 const DrawerWrapper: FC<ResponsiveModalProps> = (props) => (
   <Drawer open={props.open} onOpenChange={(open) => !open && props.closeModal()}>
-    <DrawerContent className={cn("")}>
-      <Content {...props} />
+    <DrawerContent className={cn("px-4", props.drawerContentClassName)}>
+      <DrawerContentWrapper {...props} />
     </DrawerContent>
   </Drawer>
 );
 
 const DialogWrapper: FC<ResponsiveModalProps> = (props) => (
   <Dialog open={props.open} onOpenChange={(open) => !open && props.closeModal()}>
-    <DialogContent
-      className={cn("p-0 bg-transparent border-0 shadow-none", props.dialogContentClassName)}
-      hideClose
-      closeModal={props.closeModal}
-    >
-      <Content {...props} />
+    <DialogContent className={cn("border-0 bg-white shadow-4", props.dialogContentClassName)} closeModal={props.closeModal}>
+      <DialogContentWrapper {...props} />
     </DialogContent>
   </Dialog>
 );

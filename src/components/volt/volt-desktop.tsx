@@ -21,9 +21,9 @@ import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search/volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltCalculation from "./volt-calculation";
-import CalculationTermsDialog from "./calculation-terms/calculation-terms-dialog";
 import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import VoltMap from "./volt-map";
+import { TermsConditionsDialog } from "../shared/terms-conditions";
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -84,13 +84,13 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
 
   return (
     <>
-      <CalculationTermsDialog
-        onAccept={() => {
-          setShowCalculationTerms(false);
-          calculatePrice();
-        }}
+      <TermsConditionsDialog
         open={showCalculationTerms}
         closeModal={() => setShowCalculationTerms(false)}
+        showAgree
+        onOk={() => {
+          calculatePrice();
+        }}
       />
       <table className="w-full h-screen">
         <thead>
