@@ -90,6 +90,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
         showAgree
         onOk={() => {
           calculatePrice();
+          setShowCalculationTerms(false);
         }}
       />
       <table className="w-full h-screen">
