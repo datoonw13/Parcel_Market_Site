@@ -24,8 +24,8 @@ export default function Subscribe() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: 1.5,
+          slidesToScroll: 1,
           infinite: false,
           dots: false,
           swipe: true,
