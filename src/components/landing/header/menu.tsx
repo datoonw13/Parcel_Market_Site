@@ -15,6 +15,7 @@ import { CiUser } from "react-icons/ci";
 import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
 import { IDecodedAccessToken } from "@/types/auth";
 import { HiOutlineBell } from "react-icons/hi2";
+import { usePathname } from "next/navigation";
 import { breakPoints } from "../../../../tailwind.config";
 import HeaderNotifications from "./notifications";
 import UserMenu from "./user-menu";
@@ -26,6 +27,7 @@ interface HeaderMenuProps {
 const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
   const burgerIconRef = useRef<HTMLButtonElement>(null);
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
+  const pathname = usePathname();
 
   return (
     !detecting && (
@@ -75,28 +77,33 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                   )}
                   {!!user && (
                     <>
-                      <ul>
-                        <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
-                          <CiUser className="size-5" /> My Profile
-                        </li>
-                        <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
-                          <PiBellRingingThin className="size-5" /> Notifications
-                        </li>
-                        <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
-                          <HiOutlineBell className="size-5" />
-                          My Subscription
-                        </li>
-                        <li className="flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5">
-                          <PiClockCountdown className="size-5" /> My Recent Searches
-                        </li>
-                        <li
-                          className="flex gap-3 items-center text-sm text-error cursor-pointer py-1.5"
-                          onClick={async () => {
-                            await logOutUserAction();
-                          }}
-                        >
-                          <IoIosLogOut className="size-5" /> Log Out
-                        </li>
+                      <ul className="flex flex-col">
+                        {list.map((el) => (
+                          <Link href={el.path} key={el.path}>
+                            <PopoverTrigger>
+                              <li
+                                onClick={() => {}}
+                                className={cn(
+                                  "flex gap-3 items-center text-sm hover:text-primary-main cursor-pointer py-1.5",
+                                  pathname === el.path && "text-primary-main"
+                                )}
+                              >
+                                <el.icon className="size-5" /> {el.label}
+                              </li>
+                            </PopoverTrigger>
+                          </Link>
+                        ))}
+
+                        <PopoverTrigger>
+                          <li
+                            className="flex gap-3 items-center text-sm text-error cursor-pointer py-1.5"
+                            onClick={async () => {
+                              await logOutUserAction();
+                            }}
+                          >
+                            <IoIosLogOut className="size-5" /> Log Out
+                          </li>
+                        </PopoverTrigger>
                       </ul>
                     </>
                   )}
@@ -132,3 +139,26 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
 };
 
 export default HeaderMenu;
+
+const list = [
+  {
+    label: "My Profile",
+    icon: CiUser,
+    path: routes.user.profile.fullUrl,
+  },
+  {
+    label: "Notifications",
+    icon: PiBellRingingThin,
+    path: routes.user.notifications.fullUrl,
+  },
+  {
+    label: "My Subscription",
+    icon: HiOutlineBell,
+    path: routes.user.subscription.fullUrl,
+  },
+  {
+    label: "My Recent Searches",
+    icon: PiClockCountdown,
+    path: routes.user.recentSearches.fullUrl,
+  },
+];
