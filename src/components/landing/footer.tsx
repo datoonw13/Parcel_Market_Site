@@ -1,5 +1,7 @@
+import routes from "@/helpers/routes";
 import Logo from "@/icons/Logo";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import React from "react";
 
 const LandingFooter = ({ className }: { className?: string }) => (
@@ -8,8 +10,12 @@ const LandingFooter = ({ className }: { className?: string }) => (
       <Logo className="w-[85px] h-6 sm:w-24 sm:h-8 md:w-32 md:h-8 lg:w-[140px] lg:h-10 " />
       <ul className="border-t border-t-grey-100 lg:border-t-0 lg:!mt-0 pt-8 lg:pt-0 grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap gap-3">
         <li className="cursor-pointer text-sm text-grey-800 ">About us</li>
-        <li className="cursor-pointer text-sm text-grey-800 ">Privacy Policy</li>
-        <li className="cursor-pointer text-sm text-grey-800 ">Terms of use</li>
+        <Link href={routes.privacyPolicy.fullUrl}>
+          <li className="cursor-pointer text-sm text-grey-800 ">Privacy Policy</li>
+        </Link>
+        <Link href={routes.termsConditions.fullUrl}>
+          <li className="cursor-pointer text-sm text-grey-800 ">Terms of use</li>
+        </Link>
         <li className="cursor-pointer text-sm text-grey-800 ">Pricing</li>
         <li className="cursor-pointer text-sm text-grey-800 ">My resent search</li>
         <li className="cursor-pointer text-sm text-grey-800 ">Value of the land tool</li>

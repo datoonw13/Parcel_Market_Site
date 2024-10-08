@@ -144,6 +144,16 @@ const routes = {
     protected: false,
     fullUrl: "/volt",
   },
+  privacyPolicy: {
+    url: "privacy-policy",
+    protected: false,
+    fullUrl: "/privacy-policy",
+  },
+  termsConditions: {
+    url: "terms-conditions",
+    protected: false,
+    fullUrl: "/terms-conditions",
+  },
 };
 
 export const getAllRoutes = (
