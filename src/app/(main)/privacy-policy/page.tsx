@@ -8,7 +8,7 @@ const PrivacyPolicyPage = () => (
       <li className="text-grey-800">What information do we collect from our users?</li>
       <li className="text-grey-800">How do we use your private information?</li>
     </ul>
-    <PrivacyPolicy />
+    <PrivacyPolicy modal={false} />
   </div>
 );
 

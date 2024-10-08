@@ -15,9 +15,9 @@ const TermsConditions = ({
   showAgree,
 }: {
   modal: boolean;
-  closeModal: () => void;
+  closeModal?: () => void;
   onOk?: () => void;
-  showAgree: boolean;
+  showAgree?: boolean;
 }) => {
   const [agree, setAgree] = useState(false);
 

@@ -7,7 +7,7 @@ const TermsConditionsPage = () => (
       <li className="text-grey-800">Acceptance of the Terms of Use</li>
       <li className="text-grey-800">Your use of the Company Website</li>
     </ul>
-    <TermsConditions />
+    <TermsConditions modal={false} />
   </div>
 );
 
