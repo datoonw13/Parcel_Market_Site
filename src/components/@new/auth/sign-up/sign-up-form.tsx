@@ -60,7 +60,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       unitNumber: "",
       registrationReasons,
       agreeTerm: false,
-      sendEmailTips: false,
+      subscribeToEmail: false,
     },
   });
 
@@ -81,9 +81,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
         router.replace(requestData?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     } else {
-      if (data.sendEmailTips) {
-        await subscribeAction(data.email);
-      }
       const request = await signUpUserAction(data);
       if (request?.errorMessage) {
         onFinish(request.errorMessage);
@@ -237,7 +234,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           )}
         </div>
         <CheckBox
-          onChange={() => setValue("sendEmailTips", !watch("sendEmailTips"))}
+          onChange={() => setValue("subscribeToEmail", !watch("subscribeToEmail"))}
           label="Send me emails with tips on how to find talent that fits my needs."
           className="col-span-2"
         />

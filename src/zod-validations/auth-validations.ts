@@ -31,7 +31,7 @@ export const userSignUpValidation = (isGoogleUser?: boolean) =>
       agreeTerm: z.boolean().refine((val) => val === true, {
         message: "Please read and accept the terms and conditions",
       }),
-      sendEmailTips: z.boolean(),
+      subscribeToEmail: z.boolean(),
       repeatPassword: isGoogleUser ? z.undefined() : z.string().trim().min(1, { message: "Password doesn’t match" }),
     })
     .refine((data) => data.password === data.repeatPassword, {
