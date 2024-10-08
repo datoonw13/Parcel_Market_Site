@@ -199,7 +199,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 )}
               </div>
             </td>
-            <td rowSpan={step === VoltSteps.CALCULATION ? 1 : 2} className="bg-primary-main-100">
+            <td rowSpan={1} className="bg-primary-main-100">
               <VoltMap
                 step={step}
                 user={user}
