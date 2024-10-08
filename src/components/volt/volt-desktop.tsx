@@ -102,8 +102,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
         </thead>
         <tbody>
           <tr>
-            <td rowSpan={isSmallDevice ? 1 : 2} className="">
-              <div className="h-full flex flex-col overflow-auto relative">
+            <td rowSpan={isSmallDevice ? 1 : 2} className="relative h-full">
+              <div className="h-full flex flex-col overflow-auto absolute top-0">
                 <div className="px-14 xl:px-16 pt-14 xl:pt-16 pb-14">
                   <Link href="/">
                     <Logo className="w-[141px] h-10" />
@@ -199,7 +199,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 )}
               </div>
             </td>
-            <td rowSpan={1} className="bg-primary-main-100">
+            <td rowSpan={1} className="bg-primary-main-100 h-full">
               <VoltMap
                 step={step}
                 user={user}
