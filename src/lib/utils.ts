@@ -27,8 +27,12 @@ export const parseSearchParams = <T extends z.ZodTypeAny>(schema: T, searchParam
         searchParamsObj[key] = params.get(key)!;
       }
     });
+    console.log("parsed", schema.parse(searchParamsObj));
+
     return schema.parse(searchParamsObj) as z.infer<T>;
   } catch (error) {
+    console.log(error, "aqaa errori");
+
     return null;
   }
 };
