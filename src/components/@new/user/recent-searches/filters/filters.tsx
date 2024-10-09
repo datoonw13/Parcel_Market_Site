@@ -9,6 +9,7 @@ import { userRecentSearchesAtom } from "@/atoms/pages-atom";
 import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
 import { removeUserSearches } from "@/server-actions/user-searches/actions";
 import useNotification from "@/hooks/useNotification";
+import { IoMdClose } from "react-icons/io";
 import RecentSearchesDesktopFilters from "./desktop";
 import RecentSearchesMobileFilters from "./mobile";
 
@@ -53,11 +54,31 @@ const RecentSearchesFilters = () => {
           placeholder="Search by Parcel ID, or by owner "
           endIconClassName="p-[1px]"
           endIcon={
-            <div className="bg-primary-main h-full rounded-full text-white flex items-center justify-center cursor-pointer aspect-square">
-              <IoSearchOutline />
-            </div>
+            <>
+              {searchParams.get("search") && (
+                <div
+                  className="pr-4 mr-4 border-r cursor-pointer"
+                  onClick={(e) => {
+                    const inputEl = e.currentTarget.parentElement?.parentElement?.querySelector("input");
+                    if (inputEl) {
+                      inputEl.value = "";
+                      const params = new URLSearchParams(searchParams.toString());
+                      params.delete("search");
+                      router.push(`${pathname}?${params.toString()}`);
+                    }
+                  }}
+                >
+                  <IoMdClose />
+                </div>
+              )}
+              <div className="bg-primary-main h-full rounded-full text-white flex items-center justify-center cursor-pointer aspect-square">
+                <IoSearchOutline />
+              </div>
+            </>
           }
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
           defaultValue={searchParams.get("search") || ""}
         />
         <RecentSearchesMobileFilters />
