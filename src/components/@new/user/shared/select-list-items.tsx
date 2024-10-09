@@ -24,7 +24,7 @@ const selectText = (selecting: boolean, isAllSelected: boolean, totalSelectedIds
       return "All Selected";
     }
 
-    return `${selecting && totalSelectedIds > 0 ? totalSelectedIds : ""} Select`;
+    return `${selecting && totalSelectedIds > 0 ? totalSelectedIds : ""} Selected`;
   }
   return "Select";
 };
@@ -130,8 +130,6 @@ const SortButton = forwardRef(({ selectedFilter, disabled }: { selectedFilter: s
 ));
 
 const Sort = ({ sortEnum, sortChange }: { sortEnum: Record<any, any>; sortChange: (value?: string | null) => void }) => {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.sm));
   const radioGroupRef = useRef<HTMLDivElement>(null);
