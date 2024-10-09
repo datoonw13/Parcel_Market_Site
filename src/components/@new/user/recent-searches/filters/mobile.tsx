@@ -74,7 +74,7 @@ const RecentSearchesMobileFilters = () => {
     }
   }, [filters, values]);
 
-  console.log(values, 22, "aqaa");
+  console.log(filters, "---------", values, 22, "aqaa");
 
   return (
     values && (
