@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 
-const images = ["/cover-1.png", "/cover-2.png", "/cover-3.png", "/cover-4.png"];
+// const images = ["/cover-1.png", "/cover-2.png", "/cover-3.png", "/cover-4.png"];
+const images = ["/bg1.jpg", "/bg2.jpg"];
 
 const LandingSlider = () => {
   const router = useRouter();
