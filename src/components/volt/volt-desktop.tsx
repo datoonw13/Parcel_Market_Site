@@ -72,7 +72,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
     } else {
       setStep(VoltSteps.CALCULATION);
-      setValues({ ...values, calculation: data });
+      setValues((prev) => ({ ...prev, calculation: data }));
       setMpaInteraction({
         hoveredParcelNumber: null,
         openPopperParcelNumber: null,

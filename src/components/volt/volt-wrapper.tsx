@@ -57,9 +57,10 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
     }
     setDataSaving(true);
     const { errorMessage } = await saveSearchDataAction(Number(values.calculation.id));
+
     if (errorMessage) {
       setValues(initialValues);
-      setStep(VoltSteps.CALCULATION);
+      setStep(VoltSteps.SEARCH);
     }
     setDataSaved(true);
     setDataSaving(false);
