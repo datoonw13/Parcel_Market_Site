@@ -74,8 +74,6 @@ const RecentSearchesMobileFilters = () => {
     }
   }, [filters, values]);
 
-  console.log(filters, "---------", values, 22, "aqaa", parseSearchParams(userRecentSearchesValidations, searchParams));
-
   return (
     values && (
       <>

@@ -22,17 +22,14 @@ export const parseSearchParams = <T extends z.ZodTypeAny>(schema: T, searchParam
   try {
     const params = new URLSearchParams(searchParams.toString());
     const searchParamsObj: Record<string, string> = {};
-    params.keys().forEach((key) => {
-      if (key && params.get(key)) {
-        searchParamsObj[key] = params.get(key)!;
+
+    Array.from(params).forEach(([key, value]) => {
+      if (key && value) {
+        searchParamsObj[key] = value;
       }
     });
-    console.log("parsed", schema.parse(searchParamsObj));
-
     return schema.parse(searchParamsObj) as z.infer<T>;
   } catch (error) {
-    console.log(error, "aqaa errori");
-
     return null;
   }
 };
