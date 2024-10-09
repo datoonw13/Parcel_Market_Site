@@ -5,20 +5,28 @@ import { IStripeCharge, IStripePaymentMethods, ISubscription, SubscriptionType }
 import { ResponseModel } from "@/types/common";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { DeletionAccountReason } from "@/types/auth";
+import { headers } from "next/headers";
+import routes from "@/helpers/routes";
 import { fetcher } from "../fetcher";
 import { refreshToken } from "../user/actions";
 import { subscriptionTags } from "./tags";
 
 export const getStripeSessionAction = async (subscriptionType: SubscriptionType): Promise<any | null> => {
   try {
+    const headersList = headers();
+    // read the custom x-url header
+    const domain = headersList.get("host") || "";
+    const fullUrl = headersList.get("referer") || "";
+
     const data = await fetcher<{ clientSecret: string }>(`stripe/create-checkout-session-subscription`, {
       method: "POST",
-      body: JSON.stringify({ subscriptionType }),
+      body: JSON.stringify({ subscriptionType, redirectUri: `${domain}/${routes.user.subscription.fullUrl}` }),
     });
 
     return data.clientSecret;
   } catch (error) {
     const errorData = error as ErrorResponse;
+
     return {
       errorMessage: errorData.message,
       data: null,
