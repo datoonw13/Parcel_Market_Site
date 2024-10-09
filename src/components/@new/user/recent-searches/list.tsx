@@ -17,6 +17,7 @@ import { removeUserSearches } from "@/server-actions/user-searches/actions";
 import { SortEnum } from "@/types/common";
 import { z } from "zod";
 import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import useNotification from "@/hooks/useNotification";
 import RecentSearchesPagination from "./pagination";
 import RecentSearchesLitItemMobileMini from "./list-item/mobile-mini";
 import RecentSearchesLitItemDesktop from "./list-item/desktop";
@@ -39,6 +40,7 @@ const UserRecentSearchesList = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const { notify } = useNotification();
   const [subscriptionWarning, setSubscriptionWarning] = useState(false);
   const [openItem, setOpenItem] = useState<string>("");
   const [userRecentSearchesOption, setUserRecentSearchesOptions] = useAtom(userRecentSearchesAtom);
@@ -108,6 +110,7 @@ const UserRecentSearchesList = ({
           onRemove={() => removeUserSearches(userRecentSearchesOption.selectedIds)}
           onRemoveSuccess={() => {
             setUserRecentSearchesOptions({ isAllSelected: false, selectedIds: [], selecting: false });
+            notify({ title: "Success!", description: "Your selected searches have been successfully deleted" });
           }}
           sortEnum={SortEnum}
           sortChange={(value) => {
