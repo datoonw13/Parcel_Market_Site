@@ -31,7 +31,6 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
     resolver: zodResolver(updateUserInfoSchema),
     defaultValues: {
       city: "",
-      email: "",
       firstName: "",
       lastName: "",
       postalCode: "",
@@ -44,7 +43,6 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
   const resetForm = useCallback(() => {
     reset({
       city: user.city,
-      email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       postalCode: user.postalCode,
@@ -52,7 +50,7 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
       streetName: user.streetName,
       unitNumber: user.unitNumber || "",
     });
-  }, [reset, user.city, user.email, user.firstName, user.lastName, user.postalCode, user.state, user.streetName, user.unitNumber]);
+  }, [reset, user.city, user.firstName, user.lastName, user.postalCode, user.state, user.streetName, user.unitNumber]);
 
   const onSubmit = handleSubmit(async (data) => {
     const { errorMessage } = await updateUserInfoAction(data);
