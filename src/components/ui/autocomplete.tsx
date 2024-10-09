@@ -127,8 +127,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
               rootClassName={cn(
                 "w-full",
                 inputRootClassName,
-                open && "[&>.end-icon]:!pointer-events-none",
-                open && "[&>.start-icon]:!pointer-events-none"
+                open && "[&>.end-icon]:!pointer-events-none [&>.start-icon]:!pointer-events-none"
               )}
               ref={inputRef}
               placeholder={placeholder || ""}

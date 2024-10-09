@@ -49,8 +49,7 @@ const MinmaxDropdown: FC<MinmaxDropdownProps> = ({
           endIcon={open ? <IoChevronUp /> : <IoChevronDown />}
           rootClassName={cn(
             "w-full h-9 rounded-2xl",
-            open && "[&>.end-icon]:!pointer-events-none",
-            open && "[&>.start-icon]:!pointer-events-none"
+            open && "[&>.end-icon]:!pointer-events-none [&>.start-icon]:!pointer-events-none !border-primary-main"
           )}
           placeholder={placeholder}
           readOnly
