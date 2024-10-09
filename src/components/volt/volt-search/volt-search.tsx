@@ -227,7 +227,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           <LuInfo className="size-6 text-gray-800" />
           <p className="font-medium text-sm text-gray-800">
             Your search information is automatically saved to your profile{" "}
-            <Link href="/" className="underline text-sm font-medium text-primary-main">
+            <Link href={routes.user.recentSearches.fullUrl} className="underline text-sm font-medium text-primary-main">
               My Recent Searches
             </Link>
           </p>
