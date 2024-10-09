@@ -144,7 +144,7 @@ const UserRecentSearchesList = ({
                       }));
                     }
                   }}
-                  className="px-5 lg:px-6 py-5 lg:py-3 text-start text-wrap grid grid-cols-[1fr_minmax(0,_max-content)] gap-3 [&>svg]:hidden"
+                  className="px-5 lg:px-6 py-5 lg:py-3 text-start text-wrap grid grid-cols-[1fr_minmax(0,_max-content)] gap-3 [&>svg]:hidden "
                 >
                   <span className="truncate flex items-center gap-4">
                     {userRecentSearchesOption.selecting && (
@@ -164,8 +164,9 @@ const UserRecentSearchesList = ({
                 border rounded-2xl 
                 lg:border-0 lg:border-b lg:!border-b-grey-100 lg:rounded-none 
                 data-[state=open]:border-[#9FD1B3] data-[state=open]:bg-primary-main-50
+                hover:border-[#9FD1B3] hover:bg-primary-main-50
                 lg:data-[state=open]:bg-transparent
-               
+                hover:!no-underline
                 `)}
               >
                 <AccordionTrigger
