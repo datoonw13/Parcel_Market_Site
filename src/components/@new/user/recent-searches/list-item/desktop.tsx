@@ -97,15 +97,6 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
     );
 
     const mainLandKml = `
-           <Style id="s_ylw-pushpin_hl">
-            <IconStyle>
-                <scale>1.3</scale>
-                <Icon>
-                    <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
-                </Icon>
-                <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
-            </IconStyle>
-        </Style>
     <Placemark>
       <name>
       </name>
@@ -131,8 +122,10 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
     `;
 
     const kmlContent: string[] = [mainLandKml];
-    data.propertiesUsedForCalculation.forEach((item) => {
-      const kmlItem = `
+    data.propertiesUsedForCalculation
+      .filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting))
+      .forEach((item) => {
+        const kmlItem = `
       <Placemark>
         <styleUrl>#mainLandPin</styleUrl>
         <name>
@@ -150,11 +143,10 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
         </Point>
       </Placemark>
       `;
-      kmlContent.push(kmlItem);
-    });
+        kmlContent.push(kmlItem);
+      });
 
-    const kml = `
-      <?xml version="1.0" encoding="utf-8"?>
+    const kml = `<?xml version="1.0" encoding="utf-8"?>
       <kml xmlns="http://www.opengis.net/kml/2.2">
         <Document>
          <Style id="mainLandPin">
@@ -171,7 +163,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
       </kml>
     `;
     const blob = new Blob([kml], { type: "text/plain" });
-    saveAs(blob, `${new Date()}.kml`);
+    saveAs(blob, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.kml`);
   };
 
   return (
