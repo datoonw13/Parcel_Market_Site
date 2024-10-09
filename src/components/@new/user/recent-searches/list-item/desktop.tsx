@@ -92,13 +92,85 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
   };
 
   const exportToKml = () => {
-    const points = data.propertiesUsedForCalculation.map((el) => ({ latitude: Number(el.lat), longitude: Number(el.lon) }));
-    // @ts-ignore
-    const geojsonObject = geo.parse(points, {
-      Point: ["latitude", "longitude"],
-      LineString: "line",
+    const mainLandSaleHistory = data.propertiesUsedForCalculation.filter(
+      (el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting
+    );
+
+    const mainLandKml = `
+           <Style id="s_ylw-pushpin_hl">
+            <IconStyle>
+                <scale>1.3</scale>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+                </Icon>
+                <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+            </IconStyle>
+        </Style>
+    <Placemark>
+      <name>
+      </name>
+       <description>
+      <![CDATA[
+        <p>Owner: <b>${data.owner}</b></p>
+        <p>Acreage: <b>${data.acreage.toFixed(2)}</b></p>
+        <p>Price Per Acre: <b>${moneyFormatter.format(data.pricePerAcreage)}</b></p>
+         ${mainLandSaleHistory.length > 0 ? "<br/>" : ""}
+         ${mainLandSaleHistory.length > 0 ? "<b>Sales History<b/>" : ""}
+        ${mainLandSaleHistory.map(
+          (el) => `<div>
+            <p>Last Sale Date: <b>${moment(el.lastSaleDate).format("MM-DD-YYYY")}</b></p>
+          <p>Price Per Acre: <b>${moneyFormatter.format(el.pricePerAcreage)}</b></p>
+          </div>`
+        )}
+      ]]>
+    </description>
+      <Point>
+        <coordinates>${data.lon},${data.lat},0</coordinates>
+      </Point>
+    </Placemark>
+    `;
+
+    const kmlContent: string[] = [mainLandKml];
+    data.propertiesUsedForCalculation.forEach((item) => {
+      const kmlItem = `
+      <Placemark>
+        <styleUrl>#mainLandPin</styleUrl>
+        <name>
+        </name>
+         <description>
+        <![CDATA[
+          <p>Parcel Number: <b>${item.parcelNumberNoFormatting}</b></p>
+          <p>Acreage: <b>${item.acreage.toFixed(2)}</b></p>
+          <p>Last Sale Date: <b>${moment(item.lastSaleDate).format("MM-DD-YYYY")}</b></p>
+          <p>Price Per Acre: <b>${moneyFormatter.format(item.pricePerAcreage)}</b></p>
+        ]]>
+      </description>
+        <Point>
+          <coordinates>${item.lon},${item.lat},0</coordinates>
+        </Point>
+      </Placemark>
+      `;
+      kmlContent.push(kmlItem);
     });
-    const blob = new Blob([tokml(geojsonObject)], { type: "text/plain" });
+
+    const kml = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <kml xmlns="http://www.opengis.net/kml/2.2">
+        <Document>
+         <Style id="mainLandPin">
+        <IconStyle>
+            <scale>1.3</scale>
+            <Icon>
+                <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
+            </Icon>
+            <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+    </Style>
+          ${kmlContent.join("")}
+        </Document>
+      </kml>
+    `;
+    const blob = new Blob([kml], { type: "text/plain" });
     saveAs(blob, `${new Date()}.kml`);
   };
 
