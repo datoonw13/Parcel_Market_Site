@@ -152,7 +152,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
               sessionStorage.setItem("volt", JSON.stringify({ step: VoltSteps.CALCULATION, values }));
             }}
           >
-            {user && !user?.isSubscribed ? "Subscribe" : "Sign In"}
+            Continue
           </Button>
         </div>
       )}
