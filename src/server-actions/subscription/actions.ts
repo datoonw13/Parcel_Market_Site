@@ -17,7 +17,6 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
     // read the custom x-url header
     const domain = headersList.get("host") || "";
     const fullUrl = headersList.get("referer") || "";
-    console.log(`${fullUrl.split("://")[0]}://${domain}${routes.user.subscription.fullUrl}`);
 
     const data = await fetcher<{ clientSecret: string }>(`stripe/create-checkout-session-subscription`, {
       method: "POST",
@@ -26,8 +25,6 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
 
     return data.clientSecret;
   } catch (error) {
-    console.log(error);
-
     const errorData = error as ErrorResponse;
 
     return {
