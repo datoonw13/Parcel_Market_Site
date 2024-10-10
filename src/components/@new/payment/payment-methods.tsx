@@ -10,6 +10,7 @@ import useNotification from "@/hooks/useNotification";
 import RadioButton from "../shared/forms/RadioButton";
 import Stripe from "./stripe/stripe";
 import Button from "../shared/forms/Button";
+import CardIcon from "../user/payment-details/card-icon";
 
 const getPlanDetails = (plan: SubscriptionType) => {
   switch (plan) {
@@ -110,15 +111,9 @@ const PaymentMethods = ({
                   <div className="flex items-center gap-3 md:gap-4">
                     <p>Credit/Debit Card</p>
                     <div className="flex items-center gap-4">
-                      <div className="relative w-8 h-2.5">
-                        <Image src="/visa.png" fill className="w-full h-full absolute" alt="" />
-                      </div>
-                      <div className="relative w-7 h-4">
-                        <Image src="/mastercard.png" fill className="w-full h-full absolute" alt="" />
-                      </div>
-                      <div className="relative w-6 h-5">
-                        <Image src="/amex.png" fill className="w-full h-full absolute" alt="" />
-                      </div>
+                      <CardIcon card="visa" />
+                      <CardIcon card="mastercard" />
+                      <CardIcon card="amex" />
                     </div>
                   </div>
                 }
