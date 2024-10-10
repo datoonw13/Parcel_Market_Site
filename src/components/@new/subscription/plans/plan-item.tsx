@@ -28,7 +28,7 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
       };
     case SubscriptionType.Annual:
       return {
-        title: "Yearly",
+        title: "Annually",
         price: "$215.00",
         period: "Per Year",
         periodDesc: "(Save 10% per month)",
