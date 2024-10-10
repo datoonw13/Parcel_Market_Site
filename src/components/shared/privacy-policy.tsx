@@ -33,13 +33,15 @@ const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
           Our website does not use tracking technology such as cookies or pixels. We may collect your IP address, browser type, and device
           type to help us understand how users interact with our website and improve our services.
         </span>
-        Third parties, like Google, may collect data regarding your use of our website. If you choose to create an account, we store your
-        name, date of birth, and country/state of origin to communicate with you, personalize your experience, and comply with legal
-        requirements. If you request an estimate, we collect the parcel number, mailing address, or name of the current property owner. If
-        you use the chat platform, the contents of your communications will be saved on our secure portal for a limited time period. We do
-        not actively monitor chat communications, but we encourage users to email us at customerservice@parcelmarket.com if another user
-        posts objectionable content to the chat. We are not a party to user negotiations, and we do not actively monitor user
-        communications.
+        <span>
+          Third parties, like Google, may collect data regarding your use of our website. If you choose to create an account, we store your
+          name, date of birth, and country/state of origin to communicate with you, personalize your experience, and comply with legal
+          requirements. If you request an estimate, we collect the parcel number, mailing address, or name of the current property owner. If
+          you use the chat platform, the contents of your communications will be saved on our secure portal for a limited time period. We do
+          not actively monitor chat communications, but we encourage users to email us at{" "}
+          <span className="font-semibold underline">customerservice@parcelmarket.com</span> if another user posts objectionable content to
+          the chat. We are not a party to user negotiations, and we do not actively monitor user communications.
+        </span>
       </p>
     </div>
     <div className="space-y-3 md:space-y-5">
