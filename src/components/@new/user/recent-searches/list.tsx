@@ -220,7 +220,6 @@ const UserRecentSearchesList = ({
                       lon: search.lon,
                     }}
                     propertiesUsedForCalculation={search.propertiesUsedForCalculation}
-                    user={user}
                     onView={() => setMobileFullViewItem(search)}
                   />
                   <RecentSearchesLitItemDesktop

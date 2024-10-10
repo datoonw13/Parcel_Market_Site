@@ -22,6 +22,7 @@ import geo from "geojson";
 import tokml from "@maphubs/tokml";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import RecentSearchesMap from "../map";
+import RecentSearchesMobileListItemMap from "./map";
 
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
@@ -259,6 +260,21 @@ const RecentSearchesLitItemMobileFull = ({
                 {data.propertiesUsedForCalculation.map((property) => (
                   <VoltItem
                     id={`calculation-${property.id}`}
+                    map={
+                      <RecentSearchesMobileListItemMap
+                        propertiesUsedForCalculation={data.propertiesUsedForCalculation.map(({ lat, lon, parcelNumberNoFormatting }) => ({
+                          latitude: lat,
+                          longitude: lon,
+                          parcelNumberNoFormatting,
+                        }))}
+                        sellingPropertyData={{
+                          latitude: data.lat,
+                          longitude: data.lon,
+                          parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+                        }}
+                        highlightParcelNumber={property.parcelNumberNoFormatting}
+                      />
+                    }
                     onHover={(property) => {
                       setMpaInteraction((prevData) => ({
                         ...prevData,
