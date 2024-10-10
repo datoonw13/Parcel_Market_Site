@@ -21,12 +21,12 @@ const UserRecentSearchesListWrapper = async ({
 
   const { data } = await getUserSearches({ ...filters, page: filters.page || 1, pageSize });
 
-  if (totalItems > 0 && data?.list.length === 0) {
-    return <NoResults errorMessage="No search results..." className="!mt-16" />;
+  if (totalItems === 0) {
+    return <NoResults errorMessage="No recent searches yet..." className="!mt-16" />;
   }
 
-  if (totalItems === 0) {
-    return <NoResults errorMessage="No results..." className="!mt-16" />;
+  if (totalItems > 0 && data?.list.length === 0) {
+    return <NoResults errorMessage="No search results..." className="!mt-16" />;
   }
 
   return (
