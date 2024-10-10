@@ -147,7 +147,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             onChange={(e) => setValue("streetName", e.target.value, { shouldValidate: isSubmitted })}
             required
             className="w-full"
-            label="Address"
+            label="Street Address"
             value={watch("streetName")}
             error={!!errors.streetName}
           />
