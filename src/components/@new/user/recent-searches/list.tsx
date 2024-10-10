@@ -218,9 +218,13 @@ const UserRecentSearchesList = ({
                       polygon: search.polygon,
                       lat: search.lat,
                       lon: search.lon,
+                      price: search.price,
+                      pricePerAcreage: search.pricePerAcreage,
                     }}
                     propertiesUsedForCalculation={search.propertiesUsedForCalculation}
                     onView={() => setMobileFullViewItem(search)}
+                    isOpen={openItem === search.id.toString()}
+                    canExport={!!(user?.isSubscribed && !isUserSubscriptionTrial)}
                   />
                   <RecentSearchesLitItemDesktop
                     isUserSubscriptionTrial={isUserSubscriptionTrial}

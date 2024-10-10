@@ -20,6 +20,7 @@ import * as XLSX from "xlsx";
 import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
+import { exportToExcel, exportToKml } from "@/lib/utils";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import RecentSearchesMap from "../map";
 import RecentSearchesMobileListItemMap from "./map";
@@ -50,122 +51,6 @@ const RecentSearchesLitItemMobileFull = ({
     openPopperParcelNumber: null,
   });
   const rootRef = useRef<HTMLDivElement>(null);
-
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(
-      data.propertiesUsedForCalculation.map((el) => ({
-        parcelNumber: el.parcelNumberNoFormatting,
-        county: el.county.label,
-        acreage: el.acreage,
-        lastSalePrice: moneyFormatter.format(Number(el.lastSalePrice)),
-        pricePerAcre: moneyFormatter.format(el.pricePerAcreage),
-        lastSaleDate: el.lastSaleDate,
-      }))
-    );
-    const maxLengthData = {
-      parcelNumber: [...data.propertiesUsedForCalculation].sort(
-        (a, b) => b.parcelNumberNoFormatting.length - a.parcelNumberNoFormatting.length
-      )[0].parcelNumberNoFormatting.length,
-      county: [...data.propertiesUsedForCalculation].sort((a, b) => b.county.label.length - a.county.label.length)[0].county.label.length,
-      acreage: [...data.propertiesUsedForCalculation]
-        .sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0]
-        .acreage.toString().length,
-      lastSalePrice: [...data.propertiesUsedForCalculation]
-        .sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0]
-        .lastSalePrice!.toString().length,
-      pricePerAcre: [...data.propertiesUsedForCalculation]
-        .sort((a, b) => b.pricePerAcreage.toString().length - a.pricePerAcreage.toString().length)[0]
-        .pricePerAcreage.toString().length,
-      lastSaleDate: [...data.propertiesUsedForCalculation]
-        .sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0]
-        .lastSaleDate!.toString().length,
-    };
-
-    const wscols = Object.values(maxLengthData).map((el) => ({ wch: el + 10 }));
-
-    ws["!cols"] = wscols;
-    XLSX.utils.sheet_add_aoa(ws, [HEADER_ROWS.map((el) => el.label)], { origin: "A1" });
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const res = new Blob([excelBuffer], { type: "xlsx" });
-    saveAs(res, `${new Date()}.xlsx`);
-  };
-
-  const exportToKml = () => {
-    const mainLandSaleHistory = data.propertiesUsedForCalculation.filter(
-      (el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting
-    );
-
-    const mainLandKml = `
-          
-    <Placemark>
-      <name>
-      </name>
-       <description>
-      <![CDATA[
-        <p>Owner: <b>${data.owner}</b></p>
-        <p>Acreage: <b>${data.acreage.toFixed(2)}</b></p>
-        <p>Price Per Acre: <b>${moneyFormatter.format(data.pricePerAcreage)}</b></p>
-         ${mainLandSaleHistory.length > 0 ? "<br/>" : ""}
-         ${mainLandSaleHistory.length > 0 ? "<b>Sales History<b/>" : ""}
-        ${mainLandSaleHistory.map(
-          (el) => `<div>
-            <p>Last Sale Date: <b>${moment(el.lastSaleDate).format("MM-DD-YYYY")}</b></p>
-          <p>Price Per Acre: <b>${moneyFormatter.format(el.pricePerAcreage)}</b></p>
-          </div>`
-        )}
-      ]]>
-    </description>
-      <Point>
-        <coordinates>${data.lon},${data.lat},0</coordinates>
-      </Point>
-    </Placemark>
-    `;
-
-    const kmlContent: string[] = [mainLandKml];
-    data.propertiesUsedForCalculation
-      .filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting))
-      .forEach((item) => {
-        const kmlItem = `
-      <Placemark>
-        <styleUrl>#mainLandPin</styleUrl>
-        <name>
-        </name>
-         <description>
-        <![CDATA[
-          <p>Parcel Number: <b>${item.parcelNumberNoFormatting}</b></p>
-          <p>Acreage: <b>${item.acreage.toFixed(2)}</b></p>
-          <p>Last Sale Date: <b>${moment(item.lastSaleDate).format("MM-DD-YYYY")}</b></p>
-          <p>Price Per Acre: <b>${moneyFormatter.format(item.pricePerAcreage)}</b></p>
-        ]]>
-      </description>
-        <Point>
-          <coordinates>${item.lon},${item.lat},0</coordinates>
-        </Point>
-      </Placemark>
-      `;
-        kmlContent.push(kmlItem);
-      });
-
-    const kml = `<?xml version="1.0" encoding="utf-8"?>
-      <kml xmlns="http://www.opengis.net/kml/2.2">
-        <Document>
-         <Style id="mainLandPin">
-        <IconStyle>
-            <scale>1.3</scale>
-            <Icon>
-                <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
-            </Icon>
-            <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
-        </IconStyle>
-    </Style>
-          ${kmlContent.join("")}
-        </Document>
-      </kml>
-    `;
-    const blob = new Blob([kml], { type: "text/plain" });
-    saveAs(blob, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.kml`);
-  };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -363,13 +248,41 @@ const RecentSearchesLitItemMobileFull = ({
               </>
             ) : (
               <>
-                <Button className="w-full" variant="secondary" onClick={exportToKml}>
+                <Button
+                  className="w-full"
+                  variant="secondary"
+                  onClick={() => {
+                    exportToKml(
+                      {
+                        acreage: data.acreage,
+                        county: data.county.label,
+                        lat: data.lat,
+                        lon: data.lon,
+                        owner: data.owner,
+                        parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+                        price: data.price,
+                        pricePerAcreage: data.pricePerAcreage,
+                        state: data.state.label,
+                      },
+                      data.propertiesUsedForCalculation.map(
+                        ({ acreage, lat, lon, lastSaleDate, parcelNumberNoFormatting, pricePerAcreage }) => ({
+                          acreage,
+                          lastSaleDate,
+                          lat,
+                          lon,
+                          parcelNumberNoFormatting,
+                          pricePerAcreage,
+                        })
+                      )
+                    );
+                  }}
+                >
                   <div className="flex flex-row items-center gap-3">
                     <IoEarthSharp className="size-4 text-info" />
                     Export Map
                   </div>
                 </Button>
-                <Button className="w-full" onClick={exportToExcel}>
+                <Button className="w-full" onClick={() => exportToExcel(data.propertiesUsedForCalculation)}>
                   <div className="flex flex-row items-center gap-3">
                     <IoCloudDownloadOutline className="size-4" />
                     Export Data
