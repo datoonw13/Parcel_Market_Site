@@ -129,7 +129,7 @@ const UserRecentSearchesList = ({
             collapsible
             value={openItem}
             onValueChange={(value) => !userRecentSearchesOption.selecting && setOpenItem(value)}
-            className="w-full lg:border lg:rounded-2xl space-y-3 lg:space-y-0 lg:[&>div:last-child]:border-b-0  [&>div:first-child>h3>button]:rounded-t-2xl"
+            className="w-full lg:border lg:rounded-2xl space-y-3 lg:space-y-0 lg:[&>div:last-child]:border-b-0 [&>div:first-child]:rounded-t-2xl [&>div:first-child>h3>button]:rounded-t-2xl"
           >
             {userRecentSearchesOption.selecting && (
               <AccordionItem value="select-all" className="border rounded-2xl lg:border-0 lg:border-b lg:rounded-none ">
