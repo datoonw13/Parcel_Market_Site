@@ -46,7 +46,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   } = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
-      searchType: "parcelNumber",
+      searchType: "fullName",
     },
   });
 
