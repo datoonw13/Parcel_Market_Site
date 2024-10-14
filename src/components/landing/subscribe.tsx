@@ -136,7 +136,7 @@ const list = [
   "Average land market values in seconds",
   "Conveniently Save Sales Data",
   "Sales Data Updated Weekly",
-  "VOLT quickly filters out unqualified sales",
+  "VOLT quickly filters out outlier sales",
   "Quickly Evaluate Land Deals in Seconds",
   "Save hours of research time",
   "Export Sales Data to KML or XML",
