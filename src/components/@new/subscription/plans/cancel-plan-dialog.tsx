@@ -6,6 +6,7 @@ import { cancelSubscriptionAction } from "@/server-actions/subscription/actions"
 import { ISubscription } from "@/types/subscriptions";
 import { useRouter } from "next/navigation";
 import moment from "moment";
+import useNotification from "@/hooks/useNotification";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import RadioButton from "../../shared/forms/RadioButton";
 
@@ -16,12 +17,14 @@ interface CancelPlanDialogProps {
 
 const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSubscription }) => {
   const router = useRouter();
+  const { notify } = useNotification();
   const [reason, setReason] = useState<DeletionAccountReason | null>(null);
   const [cancelPending, setCancelPending] = useState(false);
 
   const cancelSubscription = async () => {
     setCancelPending(true);
     await cancelSubscriptionAction(userActiveSubscription.id, reason!);
+    notify({ title: "Your plan has been canceled", description: "Plan has been successfully changed" }, { variant: "success" });
     router.push("?success=true");
     closeDialog();
   };
