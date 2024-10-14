@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { breakPoints } from "../../../tailwind.config";
+import { Tooltip } from "../ui/tooltip";
 
 const CalculatePrice = ({ price }: { price: number }) => (
   <div>
@@ -58,12 +59,16 @@ const VoltPriceCalculationAxis = ({
             `
             flex items-center gap-2 mt-4 w-full relative
           `,
-            isSmallDevice
-              ? "flex-col"
-              : "flex-row after:content-['Min_Price_Per_Acre'] after:absolute after:top-[40px] after:text-xs after:text-gray-600  before:content-['Max_Price_Per_Acre'] before:absolute before:top-[40px] before:right-0 before:text-xs before:text-gray-600"
+            isSmallDevice ? "flex-col" : ""
           )}
         >
           <p className={cn(`text-xs text-gray-600`, isSmallDevice ? "hidden" : "block")}>Min</p>
+          {!isSmallDevice && (
+            <Tooltip
+              renderButton={<p className="absolute left-0 translate-y-[54%] text-xs text-gray-600 font-medium">Low PPA</p>}
+              renderContent="Min Price Per Acre"
+            />
+          )}
           <div
             className={`position relative w-full 
         
@@ -83,18 +88,25 @@ const VoltPriceCalculationAxis = ({
               style={{ left: `calc(${getItemXAxisPositionInPercent(averagePricePerAcre)}%)` }}
               className="absolute top-[50%] -translate-y-[50%]"
             >
-              <div
-                className={cn(
-                  `bg-white size-6  rounded-full flex items-center justify-center relative`,
-                  isSmallDevice
-                    ? ""
-                    : "after:content-['Average_Price_Per_Acre'] after:absolute after:top-[25px] after:text-xs after:text-gray-600 after:w-max"
-                )}
-              >
+              <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
                 <div className="size-5 border-2 rounded-full border-primary-main" />
                 <div className="size-3 bg-primary-main rounded-full absolute" />
               </div>
             </div>
+
+            {!isSmallDevice && (
+              <Tooltip
+                renderButton={
+                  <p
+                    style={{ left: `calc(${getItemXAxisPositionInPercent(averagePricePerAcre)}% - 12px)` }}
+                    className="absolute translate-y-[50%] text-xs text-gray-600 font-medium"
+                  >
+                    AVG PPA
+                  </p>
+                }
+                renderContent="Average Price Per Acre"
+              />
+            )}
             {/* Pins */}
             {data.map((property) => (
               <FaLocationDot
@@ -135,6 +147,12 @@ const VoltPriceCalculationAxis = ({
             ))}
           </div>
           <p className={cn("text-xs text-gray-600 ", isSmallDevice ? "hidden" : "block")}>Max</p>
+          {!isSmallDevice && (
+            <Tooltip
+              renderButton={<p className="absolute right-0 translate-y-[54%] text-xs text-gray-600 font-medium">High PPA</p>}
+              renderContent="Max Price Per Acre"
+            />
+          )}
           <div className={cn("flex justify-between w-full", isSmallDevice ? "" : "hidden")}>
             <p className="text-xs text-gray-600">Min</p>
             <p className="text-xs text-gray-600">Max</p>
@@ -143,15 +161,30 @@ const VoltPriceCalculationAxis = ({
 
         <div className={cn("border-t border-t-gray-200 flex gap-4", isSmallDevice ? "py-3" : "py-0 border-y-0")}>
           <div className="space-y-1">
-            <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
-              Min Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(minPricePerAcre)}</span>
-            </p>
-            <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
-              Average Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(averagePricePerAcre)}</span>
-            </p>
-            <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
-              Max Price Per Acre: <span className="text-black font-semibold">{moneyFormatter.format(maxPricePerAcre)}</span>
-            </p>
+            <Tooltip
+              renderButton={
+                <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
+                  Low PPA: <span className="text-black font-semibold">{moneyFormatter.format(minPricePerAcre)}</span>
+                </p>
+              }
+              renderContent="Min Price Per Acre"
+            />
+            <Tooltip
+              renderButton={
+                <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
+                  AVG PPA: <span className="text-black font-semibold">{moneyFormatter.format(averagePricePerAcre)}</span>
+                </p>
+              }
+              renderContent="Average Price Per Acre"
+            />
+            <Tooltip
+              renderButton={
+                <p className={cn("text-xs font-medium text-gray-600", isSmallDevice ? "" : "hidden")}>
+                  High PPA: <span className="text-black font-semibold">{moneyFormatter.format(maxPricePerAcre)}</span>
+                </p>
+              }
+              renderContent="Max Price Per Acre"
+            />
           </div>
           <div className="ml-auto">
             <CalculatePrice price={voltValue} />
