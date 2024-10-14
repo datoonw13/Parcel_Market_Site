@@ -42,8 +42,11 @@ const LandingUpdates = () => {
           </Button>
         </div>
         <p className="font-extralight text-center">
-          We’ll never share your details with third parties. View our <Link href={routes.privacyPolicy.fullUrl}>Privacy Policy</Link> for
-          more info.
+          We’ll never share your details with third parties. View our{" "}
+          <Link href={routes.privacyPolicy.fullUrl} className="underline">
+            Privacy Policy
+          </Link>{" "}
+          for more info.
         </p>
       </div>
     </div>
