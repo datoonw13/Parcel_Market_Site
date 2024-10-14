@@ -9,10 +9,12 @@ import Button from "@/components/@new/shared/forms/Button";
 import { RemoveIcon1, RemoveIcon2 } from "@/components/@new/icons/RemoveIcons";
 import { addPaymentMethodAction, removePaymentMethodsAction } from "@/server-actions/subscription/actions";
 import ResponsiveWarningModal from "@/components/@new/shared/modals/ResponsiveWarningModal";
+import useNotification from "@/hooks/useNotification";
 import PaymentDetailsItem from "../payment-details-item";
 import CardIcon from "../card-icon";
 
 const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0] & { deleted: boolean })[] }) => {
+  const { notify } = useNotification();
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState<(IStripePaymentMethods[0] & { deleted: boolean })[]>([]);
   const [pending, setPending] = useState(false);
@@ -30,6 +32,7 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
     const removedCardIds = data.filter((el) => el.deleted).map((el) => el.id);
     if (removedCardIds.length > 0) {
       await removePaymentMethodsAction(removedCardIds);
+      notify({ description: "Plan has been successfully changed", title: "Your card has been deleted" });
     }
     setPending(false);
     setEdit(false);
