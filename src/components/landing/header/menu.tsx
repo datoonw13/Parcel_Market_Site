@@ -63,7 +63,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                 className="bg-white w-screen !outline-none p-5 border-t border-t-grey-100 flex flex-col rounded-b-xl"
               >
                 <Link href={routes.volt.fullUrl} className="text-sm hover:text-primary-main py-1.5 transition-all duration-100">
-                  Value of the land tool
+                  Value of land tool
                 </Link>
                 <div>
                   <p className="text-grey-600 text-xs py-4">Personal</p>

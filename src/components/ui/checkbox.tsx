@@ -10,7 +10,7 @@ const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & { label?: string | React.ReactNode; id?: string; labelClassName?: string }
 >(({ className, label, id, labelClassName, ...props }, ref) => (
-  <div className={cn("flex items-center space-x-2", className)}>
+  <div className={cn("flex items-center space-x-2 relative", className)}>
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
@@ -24,7 +24,13 @@ const Checkbox = React.forwardRef<
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
     {label && (
-      <label htmlFor={id} className={cn("leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70", labelClassName)}>
+      <label
+        htmlFor={id}
+        className={cn(
+          "leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 after:content-[''] after:cursor-pointer after:absolute after:w-full after:left-0 after:h-full after:top-0",
+          labelClassName
+        )}
+      >
         {label}
       </label>
     )}

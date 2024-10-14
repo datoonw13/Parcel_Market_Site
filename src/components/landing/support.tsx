@@ -65,8 +65,8 @@ const LandingSupport = ({ user }: { user: IDecodedAccessToken | null }) => {
             <div className="space-y-2">
               <p className="text-white font-bold text-xl md:text-2xl">Technical Support</p>
               <p className="text-white text-sm md:text-lg">
-                We are here to help you succeed. Making sure Parcel Market and VOLT works for you is important. Email us anytime and a tech
-                agent will reach out within 24 hours.
+                We are here to help you succeed. Making sure Parcel Market and VOLT works for you is important. Email us anytime and our
+                representative will reach out within 24 hours.
               </p>
             </div>
           </div>

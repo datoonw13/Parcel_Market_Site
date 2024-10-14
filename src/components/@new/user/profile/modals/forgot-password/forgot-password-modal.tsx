@@ -5,6 +5,7 @@ import ResponsiveModal from "@/components/@new/shared/modals/ResponsiveModal";
 import DialogActions from "@/components/@new/shared/modals/dialog/dialog-actions";
 import { TextInput } from "@/components/ui/input";
 import { cn, maskEmail } from "@/helpers/common";
+import useEnterClick from "@/hooks/useEnterClick";
 import useNotification from "@/hooks/useNotification";
 import { sendResetPasswordVerificationCodeAction, setResetPasswordNewPasswordAction } from "@/server-actions/user/actions";
 import { IDecodedAccessToken, IUser } from "@/types/auth";
@@ -101,6 +102,10 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
   }, [closeModal, values.email]);
 
   const onNext = async () => {
+    if (isNextButtonDisabled()) {
+      return;
+    }
+
     let error = "";
     if (step === ForgotPasswordSteps.EMAIL) {
       const { errorMessage } = await sendResetPasswordVerificationCode();
@@ -139,6 +144,8 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
     }
     return !passwordSchema.safeParse(values.newPassword).success || values.newPassword !== values.repeatNewPassword;
   };
+
+  useEnterClick(onNext);
 
   useEffect(() => {
     if (user && step === ForgotPasswordSteps.EMAIL && values.email) {

@@ -48,7 +48,7 @@ export default function Subscribe() {
       <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto hidden lg:block">
         <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">How Valuable is Your Time?</h1>
         <h2 className="text-center font-light text-sm md:text-base">
-          Subscribe for full access to VOLT and sales data and save hours of property research.
+          Save hours of property research. Subscribe for full access to VOLT and sales data.
         </h2>
       </div>
       <div
@@ -61,7 +61,7 @@ export default function Subscribe() {
       py-[52px] lg:pb-8
       `}
       >
-        <h1 className="font-extrabold text-2xl md:text-3xl lg:hidden text-center">How Would You like to Pay?</h1>
+        <h1 className="font-extrabold text-2xl md:text-3xl lg:hidden text-center">How Valuable is Your Time?</h1>
         <Slider
           onInit={() => {
             if (targetReached && sliderRef.current) {
@@ -136,7 +136,7 @@ const list = [
   "Average land market values in seconds",
   "Conveniently Save Sales Data",
   "Sales Data Updated Weekly",
-  "VOLT quickly filters out unqualified sales",
+  "VOLT quickly filters out outlier sales",
   "Quickly Evaluate Land Deals in Seconds",
   "Save hours of research time",
   "Export Sales Data to KML or XML",

@@ -18,7 +18,7 @@ const RadioGroup = forwardRef<ElementRef<typeof RadioGroupPrimitive.Root>, Compo
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 const RadioGroupItem = forwardRef<ElementRef<typeof RadioGroupPrimitive.Item>, RadioGroupItemProps>(({ className, ...props }, ref) => (
-  <div className="flex items-center">
+  <div className="flex items-center w-full">
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(

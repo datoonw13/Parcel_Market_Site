@@ -6,6 +6,8 @@ import { cancelSubscriptionAction } from "@/server-actions/subscription/actions"
 import { ISubscription } from "@/types/subscriptions";
 import { useRouter } from "next/navigation";
 import moment from "moment";
+import useNotification from "@/hooks/useNotification";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 import RadioButton from "../../shared/forms/RadioButton";
 
@@ -16,12 +18,14 @@ interface CancelPlanDialogProps {
 
 const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSubscription }) => {
   const router = useRouter();
+  const { notify } = useNotification();
   const [reason, setReason] = useState<DeletionAccountReason | null>(null);
   const [cancelPending, setCancelPending] = useState(false);
 
   const cancelSubscription = async () => {
     setCancelPending(true);
     await cancelSubscriptionAction(userActiveSubscription.id, reason!);
+    notify({ title: "Your plan has been canceled", description: "Plan has been successfully changed" }, { variant: "success" });
     router.push("?success=true");
     closeDialog();
   };
@@ -40,50 +44,18 @@ const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSu
             <span className="font-semibold text-black text-sm mx-1">{moment(userActiveSubscription.activeTo).format("MMMM D")}.</span>
             Please tell Us reason of cancelation.
           </p>
-          <div className="px-6 py-7 rounded-2xl border border-grey-100 space-y-4 mx-5">
-            <RadioButton
-              rootClassName="w-max"
-              name={DeletionAccountReason.SoldLand}
-              checked={DeletionAccountReason.SoldLand === reason}
-              onChange={() => setReason(DeletionAccountReason.SoldLand)}
-              label="Already sold on Parcel Marketplace"
-            />
-            <RadioButton
-              rootClassName="w-max"
-              name={DeletionAccountReason.SoldLandOutsideMarket}
-              checked={DeletionAccountReason.SoldLandOutsideMarket === reason}
-              onChange={() => setReason(DeletionAccountReason.SoldLandOutsideMarket)}
-              label="I have sold my land somewhere else"
-            />
-            <RadioButton
-              rootClassName="w-max"
-              name={DeletionAccountReason.NotUseful}
-              checked={DeletionAccountReason.NotUseful === reason}
-              onChange={() => setReason(DeletionAccountReason.NotUseful)}
-              label="I did not find Parcel Market useful"
-            />
-            <RadioButton
-              rootClassName="w-max"
-              name={DeletionAccountReason.NoDataAccess}
-              checked={DeletionAccountReason.NoDataAccess === reason}
-              onChange={() => setReason(DeletionAccountReason.NoDataAccess)}
-              label="I could not find the data I needed"
-            />
-            <RadioButton
-              rootClassName="w-max"
-              name={DeletionAccountReason.Complicated}
-              checked={DeletionAccountReason.Complicated === reason}
-              onChange={() => setReason(DeletionAccountReason.Complicated)}
-              label="Parcel Market is too complicated"
-            />
-            <RadioButton
-              rootClassName="w-max"
-              name={DeletionAccountReason.TooExpensive}
-              checked={DeletionAccountReason.TooExpensive === reason}
-              onChange={() => setReason(DeletionAccountReason.TooExpensive)}
-              label="I think the services are too expensive"
-            />
-          </div>
+          <RadioGroup
+            className="px-6 py-7 rounded-2xl border border-grey-100 !space-y-4 gap-0 mx-5"
+            value={reason || ""}
+            onValueChange={(value) => setReason(value as DeletionAccountReason)}
+          >
+            <RadioGroupItem value={DeletionAccountReason.SoldLand} label="Already sold on Parcel Marketplace" />
+            <RadioGroupItem value={DeletionAccountReason.SoldLandOutsideMarket} label="I have sold my land somewhere else" />
+            <RadioGroupItem value={DeletionAccountReason.NotUseful} label="I did not find Parcel Market useful" />
+            <RadioGroupItem value={DeletionAccountReason.NoDataAccess} label="I could not find the data I needed" />
+            <RadioGroupItem value={DeletionAccountReason.Complicated} label="Parcel Market is too complicated" />
+            <RadioGroupItem value={DeletionAccountReason.TooExpensive} label="I think the services are too expensive" />
+          </RadioGroup>
         </div>
       }
       contentClasses="!px-0 md:!px-5"

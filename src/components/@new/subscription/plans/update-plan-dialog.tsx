@@ -37,7 +37,7 @@ const UpdatePlanDialog: FC<UpdatePlanDialogProps> = ({ closeDialog, pending, onS
     hideIcon
     titleClasses="text-start"
     descriptionClasses="text-start"
-    contentClasses="border-b md:border-0 border-b-grey-100 mb-[40vh] md:mb-8 pb-4 md:pb-0"
+    contentClasses="border-b md:border-0 border-b-grey-100 mb-[5vh] md:mb-8 pb-4 md:pb-0"
     okLabel="Upgrade Subscription"
   />
 );

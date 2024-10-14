@@ -25,7 +25,7 @@ const slides = [
     id: 3,
     content: "Third",
     title: "Simple. Fast. Reliable",
-    desc: "Built for everyone. No complex UI or sifting through useless information. VOLT delivers reliable data and value information in seconds.",
+    desc: "Built for everyone. No complex UI or sifting through information you don’t need. VOLT delivers reliable data and value information in seconds.",
   },
 ];
 

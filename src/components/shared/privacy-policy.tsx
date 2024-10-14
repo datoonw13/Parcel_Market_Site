@@ -4,7 +4,7 @@ import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import { ScrollArea } from "../ui/scroll-area";
 
 const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
-  <div className="space-y-8">
+  <div className="space-y-8 py-4">
     <div className="space-y-3">
       {!modal && <h1 className="font-extrabold text-3xl md:text-4xl xl:text-5xl">Privacy Policy</h1>}
       <h3 className={cn("text-grey-800 text-sm ", !modal && "md:text-base")}>Effective September 8, 2024</h3>

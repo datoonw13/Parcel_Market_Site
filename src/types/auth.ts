@@ -21,13 +21,6 @@ export type IUserSignIn = z.infer<typeof userSignInValidation>;
 export type IUserSignUp = z.infer<ReturnType<typeof userSignUpValidation>>;
 export type IUser = Omit<z.infer<ReturnType<typeof userSignUpValidation>>, "agreeTerm" | "repeatPassword">;
 
-export enum IUserRegistrationReason {
-  SellLandQuickly = "sellLandQuickly",
-  LookingForLandDeal = "lookingForLandDeal",
-  ResearchingPropertyData = "researchingPropertyData",
-  RealEstateProfessional = "realEstateProfessional",
-}
-
 export enum DeletionAccountReason {
   SoldLand = "SoldLand",
   SoldLandOutsideMarket = "SoldLandOutsideMarket",
