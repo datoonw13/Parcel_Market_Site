@@ -93,7 +93,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
           setShowCalculationTerms(false);
         }}
       />
-      <table className="w-full h-screen">
+      <table className="w-full h-dvh">
         <thead>
           <tr>
             <th className="max-w-[420px] w-[420px] xl:max-w-[490px] xl:w-[490px] m-0 p-0 border-0 h-0" />
