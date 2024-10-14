@@ -48,8 +48,8 @@ const PaymentMethods = ({ initialData }: { initialData: (IStripePaymentMethods[0
         variant="error"
         open={!!removeItem}
         closeModal={() => setRemoveItem(null)}
-        description={`Delete **** **** **** ${removeItem?.last4} ?`}
-        title="Are you sure you want to delete this Card"
+        description={`**** **** **** ${removeItem?.last4}`}
+        title="Are you sure you want to delete this card"
         onOK={() => {
           const newData = data.map((item) => ({ ...item, deleted: item.id === removeItem?.id ? true : item.deleted }));
           setData([...newData]);
