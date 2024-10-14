@@ -9,6 +9,7 @@ import { IStripeCharge } from "@/types/subscriptions";
 import clsx from "clsx";
 import moment from "moment";
 import Link from "next/link";
+import { breakPoints } from "../../../../../../tailwind.config";
 
 const HEADER_ROWS = [
   { responsive: true, label: "Product", key: "product" as const },
@@ -39,7 +40,7 @@ const data = [
 ];
 
 const PaymentDetailsTable = ({ data }: { data: IStripeCharge[] }) => {
-  const isSmallDevice = useMediaQuery(1024);
+  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.lg));
 
   return (
     <div className="w-full border border-grey-100 rounded-2xl">
