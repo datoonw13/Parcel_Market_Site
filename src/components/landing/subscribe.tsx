@@ -48,7 +48,7 @@ export default function Subscribe() {
       <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto hidden lg:block">
         <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">How Valuable is Your Time?</h1>
         <h2 className="text-center font-light text-sm md:text-base">
-          Subscribe for full access to VOLT and sales data and save hours of property research.
+          Save hours of property research. Subscribe for full access to VOLT and sales data.
         </h2>
       </div>
       <div
