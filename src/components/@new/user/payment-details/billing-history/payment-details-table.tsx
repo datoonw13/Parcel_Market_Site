@@ -73,7 +73,7 @@ const PaymentDetailsTable = ({ data }: { data: IStripeCharge[] }) => {
             <tr key={el.id}>
               {(isSmallDevice && HEADER_ROWS.find((el) => el.key === "product")?.responsive) || !isSmallDevice ? (
                 <td className={clsx("py-3 px-6 text-grey-800 text-xs")} align="left">
-                  {el.amount === 2000 ? "Monthly Plan" : "Annually Plan"}
+                  {el.amount === 2000 ? "Monthly Plan" : "Annual Plan"}
                 </td>
               ) : null}
               {(isSmallDevice && HEADER_ROWS.find((el) => el.key === "reference")?.responsive) || !isSmallDevice ? (
