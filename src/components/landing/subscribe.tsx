@@ -61,7 +61,7 @@ export default function Subscribe() {
       py-[52px] lg:pb-8
       `}
       >
-        <h1 className="font-extrabold text-2xl md:text-3xl lg:hidden text-center">How Would You like to Pay?</h1>
+        <h1 className="font-extrabold text-2xl md:text-3xl lg:hidden text-center">How Valuable is Your Time?</h1>
         <Slider
           onInit={() => {
             if (targetReached && sliderRef.current) {
