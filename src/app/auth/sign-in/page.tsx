@@ -22,6 +22,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
   const params = new URLSearchParams(searchParams);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
+  const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
 
   const signIn = async (prevState: any, formData: FormData) => {
     const request = await signInUserAction(prevState, formData, remember);
@@ -40,12 +41,10 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
 
   const [state, formAction] = useFormState(signIn, null);
 
-  useEnterClick(ref?.current?.onclick);
-
   return (
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>
-      <form className="flex flex-col gap-4 w-full" action={formAction}>
+      <form className="flex flex-col gap-4 w-full" action={forgotPasswordModal ? () => {} : formAction}>
         <TextInput label="Email" name="email" />
         <TextInput
           label="Password"
@@ -59,7 +58,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
         />
         <div className="flex justify-between gap-4">
           <CheckBox checked={remember} onChange={() => setRemember(!remember)} label="Remember me" name="sign-in-remember" />
-          <ForgotPasswordButton user={null} />
+          <ForgotPasswordButton user={null} openModal={forgotPasswordModal} setOpenModal={setForgotPasswordModal} />
         </div>
         <SubmitButton ref={ref} />
       </form>

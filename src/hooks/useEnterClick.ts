@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from "react";
 
-const useEnterClick = (callback?: ((ev: any) => void | Promise<void>) | null) => {
+const useEnterClick = (callback?: ((ev: any) => void | Promise<void>) | null, disabled?: boolean) => {
   const handleEnterDown = useCallback(
     (ev: KeyboardEvent) => {
       if (ev.key === "Enter") {
@@ -13,15 +13,19 @@ const useEnterClick = (callback?: ((ev: any) => void | Promise<void>) | null) =>
   );
 
   useEffect(() => {
-    if (callback) {
-      window.addEventListener("keydown", handleEnterDown);
+    if (!disabled) {
+      if (callback) {
+        window.addEventListener("keydown", handleEnterDown);
+      } else {
+        window.removeEventListener("keydown", handleEnterDown);
+      }
     } else {
       window.removeEventListener("keydown", handleEnterDown);
     }
     return () => {
       window.removeEventListener("keydown", handleEnterDown);
     };
-  }, [handleEnterDown, callback]);
+  }, [handleEnterDown, callback, disabled]);
 
   return null;
 };
