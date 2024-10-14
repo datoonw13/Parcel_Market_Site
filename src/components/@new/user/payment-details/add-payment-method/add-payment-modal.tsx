@@ -4,6 +4,7 @@ import { Elements, CardElement, ElementsConsumer, AddressElement } from "@stripe
 import { addPaymentMethodAction } from "@/server-actions/subscription/actions";
 import toast from "react-hot-toast";
 import TextField from "@/components/@new/shared/forms/text-field";
+import useNotification from "@/hooks/useNotification";
 import { RemoveIcon2 } from "../../../icons/RemoveIcons";
 import Button from "../../../shared/forms/Button";
 import ResponsiveModal from "../../../shared/modals/ResponsiveModal";
@@ -18,6 +19,7 @@ const stripePromise = loadStripe(
   "pk_test_51PgJWHK4fDeIIHWZmno0otYwwjWcWtxZO7yK2agdk0YQN2aDssiyrXEyIjsfYRXPd0sq9PpVM5hUWCTBH9mM9XGs00WDDK27VM"
 );
 const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
+  const { notify } = useNotification();
   const [addPending, setAddPending] = useState(false);
   const [fullName, setFullName] = useState("");
 
@@ -38,7 +40,7 @@ const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
     if (paymentMethod) {
       const { errorMessage } = await addPaymentMethodAction(paymentMethod.id);
       if (!errorMessage) {
-        toast.success("Card added");
+        notify({ title: "Payment method has been added", description: "Plan has been successfully changed" });
         closeModal();
       }
     }
