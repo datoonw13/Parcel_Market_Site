@@ -17,7 +17,7 @@ const LandingFooter = ({ className }: { className?: string }) => (
           <li className="cursor-pointer text-sm text-grey-800 ">Terms of use</li>
         </Link>
         <li className="cursor-pointer text-sm text-grey-800 ">Pricing</li>
-        <li className="cursor-pointer text-sm text-grey-800 ">My resent search</li>
+        <li className="cursor-pointer text-sm text-grey-800 ">Recent</li>
         <li className="cursor-pointer text-sm text-grey-800 ">Value of the land tool</li>
         <li className="cursor-pointer text-sm text-grey-800 ">Investing</li>
       </ul>
