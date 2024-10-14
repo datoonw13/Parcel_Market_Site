@@ -1,8 +1,10 @@
 import { getUserPaymentMethods, getUserSubscriptions } from "@/server-actions/subscription/actions";
+import { getUserAction } from "@/server-actions/user/actions";
 import PaymentMethods from "./payment-methods";
 import OrderDetails from "./order-details";
 
 const Payment = async () => {
+  const user = await getUserAction();
   const userPaymentMethods = await getUserPaymentMethods();
   const userSubscription = await getUserSubscriptions();
 
@@ -14,7 +16,7 @@ const Payment = async () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] lg:gap-8 gap-6 w-full">
         <PaymentMethods userSubscriptions={userSubscription.data} userPaymentMethods={userPaymentMethods.data} />
-        <OrderDetails />
+        <OrderDetails user={user} />
       </div>
     </div>
   );

@@ -4,11 +4,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SubscriptionType } from "@/types/subscriptions";
 import { useState } from "react";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
+import { IDecodedAccessToken } from "@/types/auth";
+import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import Popper from "../shared/Popper";
 import { ArrowIconDown1, ArrowIconUp1 } from "../icons/ArrowIcons";
 import Divider from "../shared/Divider";
-import Button from "../shared/forms/Button";
-import { LockIcon1 } from "../icons/lock-icons";
 
 const getPlanDetails = (plan: SubscriptionType) => {
   switch (plan) {
@@ -30,7 +30,7 @@ const getPlanDetails = (plan: SubscriptionType) => {
   }
 };
 
-const OrderDetails = () => {
+const OrderDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -55,24 +55,26 @@ const OrderDetails = () => {
                   >
                     <p className="text-grey-800">{getPlanDetails(params.get("plan") as SubscriptionType).label} Subscription</p>
                     {!referenceElement ? (
-                      <ArrowIconDown1 className="!w-2.5 !h-3" color="grey-800" />
+                      <IoChevronDown className="size-4 text-grey-800" />
                     ) : (
-                      <ArrowIconUp1 className="!w-2.5 !h-3" color="grey-800" />
+                      <IoChevronUp className="size-4 text-grey-800" />
                     )}
                   </div>
                 )}
                 renderContent={(setReferenceElement) => (
                   <div className="z-10 rounded-xl bg-white shadow-1">
-                    <div
-                      className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
-                      onClick={() => {
-                        params.set("plan", SubscriptionType.Trial);
-                        router.replace(`${pathname}?${params.toString()}`);
-                        setReferenceElement(null);
-                      }}
-                    >
-                      Trial
-                    </div>
+                    {!user?.planSelected && (
+                      <div
+                        className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
+                        onClick={() => {
+                          params.set("plan", SubscriptionType.Trial);
+                          router.replace(`${pathname}?${params.toString()}`);
+                          setReferenceElement(null);
+                        }}
+                      >
+                        Trial
+                      </div>
+                    )}
                     <div
                       className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
                       onClick={() => {
