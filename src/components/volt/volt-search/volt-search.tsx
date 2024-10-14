@@ -38,7 +38,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   const [error, setError] = useState<"limit" | "notFound" | null>(null);
   const {
     handleSubmit,
-    formState: { isSubmitted, errors, isSubmitting },
+    formState: { isSubmitted, isSubmitting, isValid },
     setValue,
     watch,
     trigger,
@@ -57,7 +57,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   const disableSearch = !!(showUnauthorizedUserAlert || error === "limit");
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
-    setValue("searchType", type, { shouldValidate: isSubmitted });
+    setValue("searchType", type, { shouldValidate: true });
     if (isSubmitted) {
       trigger();
     }
@@ -161,8 +161,8 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           {watch("searchType") === "parcelNumber" && (
             <TextInput
               value={watch("parcelNumber") || ""}
-              onChange={(e) => setValue("parcelNumber", e.target.value, { shouldValidate: isSubmitted })}
-              error={!!errors.parcelNumber}
+              onChange={(e) => setValue("parcelNumber", e.target.value || undefined, { shouldValidate: true })}
+              // error={!!errors.parcelNumber}
               label="Enter Parcel ID"
               disabled={disableSearch}
             />
@@ -171,16 +171,16 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
             <div className="flex flex-col sm:flex-row gap-3 w-full">
               <TextInput
                 value={watch("firstName") || ""}
-                onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted })}
-                error={!!errors.firstName}
+                onChange={(e) => setValue("firstName", e.target.value || undefined, { shouldValidate: true })}
+                // error={!!errors.firstName}
                 rootClassName="w-full"
                 label="First Name"
                 disabled={disableSearch}
               />
               <TextInput
                 value={watch("lastName") || ""}
-                onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted })}
-                error={!!errors.lastName}
+                onChange={(e) => setValue("lastName", e.target.value || undefined, { shouldValidate: true })}
+                // error={!!errors.lastName}
                 rootClassName="w-full"
                 label="Last Name"
                 disabled={disableSearch}
@@ -190,8 +190,8 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           {watch("searchType") === "entityName" && (
             <TextInput
               value={watch("entityName") || ""}
-              onChange={(e) => setValue("entityName", e.target.value, { shouldValidate: isSubmitted })}
-              error={!!errors.entityName}
+              onChange={(e) => setValue("entityName", e.target.value || undefined, { shouldValidate: true })}
+              // error={!!errors.entityName}
               label="Enter name of the entity"
               disabled={disableSearch}
             />
@@ -202,24 +202,24 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
               options={states}
               placeholder="State"
               onValueChange={(value) => {
-                setValue("state", value || "", { shouldValidate: isSubmitted });
-                setValue("county", "", { shouldValidate: isSubmitted });
+                setValue("state", value || "", { shouldValidate: true });
+                setValue("county", "", { shouldValidate: true });
               }}
               disabled={disableSearch}
-              error={!!errors.state}
+              // error={!!errors.state}
             />
             <AutoComplete
               options={counties}
               placeholder="County"
               onValueChange={(item) => {
-                setValue("county", item || "", { shouldValidate: isSubmitted });
+                setValue("county", item || "", { shouldValidate: true });
               }}
               selectedValue={getCountyValue(watch("county"), watch("state"))?.value || null}
               disabled={!watch("state") || disableSearch}
-              error={!!errors.county}
+              // error={!!errors.county}
             />
           </div>
-          <Button disabled={disableSearch} loading={isSubmitting} onClick={onSubmit} className="mt-1">
+          <Button disabled={disableSearch || !isValid} loading={isSubmitting} onClick={onSubmit} className="mt-1">
             Search
           </Button>
         </div>
