@@ -4,6 +4,8 @@ import { subscribeAction } from "@/server-actions/common-actions";
 import { useState } from "react";
 import { emailSchema } from "@/zod-validations/auth-validations";
 import useNotification from "@/hooks/useNotification";
+import Link from "next/link";
+import routes from "@/helpers/routes";
 import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 
@@ -40,7 +42,8 @@ const LandingUpdates = () => {
           </Button>
         </div>
         <p className="font-extralight text-center">
-          We’ll never share your details with third parties. View our Privacy Policy for more info.
+          We’ll never share your details with third parties. View our <Link href={routes.privacyPolicy.fullUrl}>Privacy Policy</Link> for
+          more info.
         </p>
       </div>
     </div>
