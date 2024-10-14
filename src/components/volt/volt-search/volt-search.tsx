@@ -174,7 +174,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
                 onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted })}
                 error={!!errors.firstName}
                 rootClassName="w-full"
-                label="Name"
+                label="First Name"
                 disabled={disableSearch}
               />
               <TextInput
@@ -182,7 +182,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
                 onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted })}
                 error={!!errors.lastName}
                 rootClassName="w-full"
-                label="Surname"
+                label="Last Name"
                 disabled={disableSearch}
               />
             </div>
