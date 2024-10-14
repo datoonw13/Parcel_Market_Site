@@ -121,10 +121,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                 data={{
                   ...property,
                 }}
-                isHighlighted={
-                  mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting ||
-                  mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting
-                }
+                isHighlighted={mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting}
+                selected={mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting}
               />
             ))}
           </div>
