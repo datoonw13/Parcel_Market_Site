@@ -1,23 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
-import { IUserRegistrationReason, IUserSignUp } from "@/types/auth";
-import clsx from "clsx";
+import { IUserSignUp } from "@/types/auth";
 import Link from "next/link";
 import routes from "@/helpers/routes";
-import CheckBox from "../../shared/forms/CheckBox";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
+import { UnwrapArray } from "@/types/common";
 import Button from "../../shared/forms/Button";
 
 const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReasons"]) => void }) => {
   const [value, setValue] = useState<IUserSignUp["registrationReasons"]>([]);
 
-  const handleChange = (item: IUserRegistrationReason) => {
+  const handleChange = (item: UnwrapArray<IUserSignUp["registrationReasons"]>) => {
     if (value.includes(item)) {
       setValue(value.filter((el) => el !== item));
     } else {
       setValue([...value, item]);
     }
   };
+  console.log(value, 22);
 
   return (
     <>
@@ -26,50 +28,45 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         <h3 className="text-grey-800 mt-3 text-center text-xs md:text-base">First, tell us why are you here and select all that apply</h3>
       </div>
       <div className="flex flex-col max-w-fit w-full gap-3">
-        <CheckBox
-          className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
-          hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value.includes(IUserRegistrationReason.SellLandQuickly) && "bg-primary-main-100 border-primary-main-400"
+        <Checkbox
+          className={cn(
+            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            value.includes("LandOwner") && "bg-primary-main-100 border-primary-main-400"
           )}
-          label="I want to sell my land quickly"
-          checked={value.includes(IUserRegistrationReason.SellLandQuickly)}
-          onChange={() => handleChange(IUserRegistrationReason.SellLandQuickly)}
+          id="LandOwner"
+          label="I am a private landowner looking for values"
+          checked={value.includes("LandOwner")}
+          onClick={() => handleChange("LandOwner")}
         />
-        <CheckBox
-          className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
-            hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value.includes(IUserRegistrationReason.LookingForLandDeal) && "bg-primary-main-100 border-primary-main-400"
+        <Checkbox
+          className={cn(
+            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            value.includes("CertifiedAppraiser") && "bg-primary-main-100 border-primary-main-400"
           )}
-          label="I am looking for a land deal"
-          checked={value.includes(IUserRegistrationReason.LookingForLandDeal)}
-          onChange={() => handleChange(IUserRegistrationReason.LookingForLandDeal)}
+          id="CertifiedAppraiser"
+          label="I am a certified appraiser researching values"
+          checked={value.includes("CertifiedAppraiser")}
+          onClick={() => handleChange("CertifiedAppraiser")}
         />
-        <CheckBox
-          className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
-          hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value.includes(IUserRegistrationReason.ResearchingPropertyData) && "bg-primary-main-100 border-primary-main-400"
+        <Checkbox
+          className={cn(
+            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            value.includes("LicensedAgent") && "bg-primary-main-100 border-primary-main-400"
           )}
-          label="I am researching property data"
-          checked={value.includes(IUserRegistrationReason.ResearchingPropertyData)}
-          onChange={() => handleChange(IUserRegistrationReason.ResearchingPropertyData)}
+          id="LicensedAgent"
+          label="I am a licensed Real Estate Agent or Broker"
+          checked={value.includes("LicensedAgent")}
+          onClick={() => handleChange("LicensedAgent")}
         />
-        <CheckBox
-          className={clsx(
-            `!w-full p-6 sm:min-h-[76px] border border-grey-100 rounded-2xl 
-        hover:shadow-4 !text-black text-xs md:text-base checked:bg-primary-dark`,
-            value.includes(IUserRegistrationReason.RealEstateProfessional) && "bg-primary-main-100 border-primary-main-400"
+        <Checkbox
+          className={cn(
+            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            value.includes("LandInvestor") && "bg-primary-main-100 border-primary-main-400"
           )}
-          label={
-            <p className="flex gap-1">
-              I&apos;m a licensed or <span className="sm:hidden">RE</span>
-              <span className="hidden sm:block w-max">certified real estate</span> professional
-            </p>
-          }
-          checked={value.includes(IUserRegistrationReason.RealEstateProfessional)}
-          onChange={() => handleChange(IUserRegistrationReason.RealEstateProfessional)}
+          id="LandInvestor"
+          label="I am a land investor researching land values"
+          checked={value.includes("LandInvestor")}
+          onClick={() => handleChange("LandInvestor")}
         />
         <Button disabled={value.length === 0} className="w-full mt-5" onClick={() => value && onNext(value)}>
           Create Account

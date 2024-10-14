@@ -27,7 +27,7 @@ export const userSignUpValidation = (isGoogleUser?: boolean) =>
       state: z.string().trim().min(1),
       postalCode: z.string().trim().min(1).max(5),
       password: isGoogleUser ? z.undefined() : passwordSchema,
-      registrationReasons: z.array(z.enum(["sellLandQuickly", "lookingForLandDeal", "researchingPropertyData", "realEstateProfessional"])),
+      registrationReasons: z.array(z.enum(["LandOwner", "CertifiedAppraiser", "LicensedAgent", "LandInvestor"])),
       agreeTerm: z.boolean().refine((val) => val === true, {
         message: "Please read and accept the terms and conditions",
       }),

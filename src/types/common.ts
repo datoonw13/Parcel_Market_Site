@@ -34,3 +34,5 @@ export interface MapInteractionModel {
   openPopperParcelNumber: string | null;
   zoom?: boolean;
 }
+
+export type UnwrapArray<T> = T extends Array<infer R> ? R : never;
