@@ -132,7 +132,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                               <IoBookmarkOutline />
                             </div>
                           }
-                          renderContent="Save data"
+                          renderContent="View Sales Data"
                           buttonClassName="sticky top-0"
                         />
                       </div>
@@ -193,7 +193,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                         sessionStorage.setItem("volt", JSON.stringify({ step, values }));
                       }}
                     >
-                      Save Data
+                      View Sales Data
                     </Button>
                   </div>
                 )}
