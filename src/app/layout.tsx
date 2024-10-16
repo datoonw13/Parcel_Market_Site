@@ -16,8 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { getUserAction } from "@/server-actions/user/actions";
 import ChatSession from "@/components/@new/chat/chat-session";
 import AuthSessionProvider from "@/components/shared/auth-session-provider";
-import Script from "next/script";
 import { GoogleTagManager } from "@next/third-parties/google";
+import Chat from "@/components/shared/chat";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -87,8 +87,8 @@ export default async function RootLayout({
               </ThemeProvider>
             </Provider>
           </AppRouterCacheProvider>
+          <Chat />
         </body>
-        <Script strategy="lazyOnload" src="https://embed.tawk.to/66daa46a50c10f7a00a4a8d0/1i7314gmo" />
       </html>
     </>
   );
