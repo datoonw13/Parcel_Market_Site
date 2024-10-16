@@ -72,7 +72,6 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
               id={`calculation-${values.selectedItem.id}`}
               data={{
                 ...values.selectedItem,
-                pricePerAcreage: values.calculation?.pricePerAcreage || undefined,
               }}
               selected
               isHighlighted={
