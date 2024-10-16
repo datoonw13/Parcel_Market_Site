@@ -2,15 +2,22 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import ResponsiveModal from "@/components/ui/dialogs/responsive-dialog";
 import { MinmaxDropdownContent } from "@/components/ui/minmax-dropdown";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { getAllStates, getCounties } from "@/helpers/states";
 import { cn, parseSearchParams, updateSearchParamsWithFilters } from "@/lib/utils";
 import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { uniqBy } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { TbFilter } from "react-icons/tb";
 import { z } from "zod";
+
+const sortMultiSelectOptions = (options: { label: string; value: string }[], selectedValues: string[]) => {
+  const checkedOptions = options.filter((el) => selectedValues.find((x) => x === el.value));
+  const uncheckedOptions = options.filter((el) => !selectedValues.find((x) => x === el.value));
+  return [...checkedOptions, ...uncheckedOptions];
+};
 
 const RecentSearchesMobileFilters = () => {
   const searchParams = useSearchParams();
@@ -20,7 +27,13 @@ const RecentSearchesMobileFilters = () => {
   const [values, setValues] = useState<typeof filters>(null);
   const filters = useMemo(() => parseSearchParams(userRecentSearchesValidations, searchParams), [searchParams]);
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => (filters?.state ? getCounties(filters.state) : []), [filters?.state]);
+  const counties = useMemo(() => {
+    const countiesList =
+      values?.state
+        ?.split(";")
+        .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
+    return uniqBy(countiesList.flat(), "value");
+  }, [values?.state]);
 
   const changeLocalFilter = <T extends keyof z.infer<typeof userRecentSearchesValidations>>(
     data: Array<{
@@ -86,8 +99,8 @@ const RecentSearchesMobileFilters = () => {
             setValues(filters);
           }}
         >
-          <div className="bg-white md:shadow-4 h-[80vh] w-full overflow-y-auto overflow-x-hidden flex rounded-lg flex-col ">
-            <div className="flex justify-between gap-3 w-full items-center px-5 md:px-8 md:border-b md:border-b-grey-100 py-4 md:py-6 md:sticky md:top-0 md:bg-white">
+          <div className="bg-white lg:shadow-4 h-[80vh] w-full overflow-y-auto overflow-x-hidden flex rounded-lg flex-col ">
+            <div className="flex justify-between gap-3 w-full items-center px-5 lg:px-8 lg:border-b lg:border-b-grey-100 py-4 lg:py-6 lg:sticky lg:top-0 lg:bg-white">
               <h1 className="text-lg font-semibold">Filters</h1>
               <IoMdClose
                 className="text-grey-800 cursor-pointer p-2 size-8"
@@ -100,16 +113,26 @@ const RecentSearchesMobileFilters = () => {
             <Accordion type="single" collapsible className="w-full px-5 md:px-8">
               <AccordionItem value="states">
                 <AccordionTrigger>State</AccordionTrigger>
-                <AccordionContent>
-                  <RadioGroup
-                    onValueChange={(value) => changeLocalFilter([{ key: "state", value, resetKey: "county" }])}
-                    value={values?.state || ""}
-                    className=""
-                  >
-                    {states.map((state) => (
-                      <RadioGroupItem key={state.value} value={state.value} label={state.label} />
-                    ))}
-                  </RadioGroup>
+                <AccordionContent className="space-y-3">
+                  {sortMultiSelectOptions(states, filters?.state?.split(";") || []).map((state) => (
+                    <Checkbox
+                      id={state.value}
+                      key={state.value}
+                      value={state.value}
+                      label={state.label}
+                      checked={values.state ? values.state.split(";").includes(state.value) : false}
+                      onClick={(e) => {
+                        let newValues = values?.state?.split(";") || [];
+
+                        if (newValues.includes(state.value)) {
+                          newValues = newValues.filter((el) => el !== state.value);
+                        } else {
+                          newValues = [...newValues, state.value];
+                        }
+                        setValues({ ...values, state: newValues.join(";") });
+                      }}
+                    />
+                  ))}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem
@@ -118,16 +141,26 @@ const RecentSearchesMobileFilters = () => {
                 value="counties"
               >
                 <AccordionTrigger>Counties</AccordionTrigger>
-                <AccordionContent>
-                  <RadioGroup
-                    onValueChange={(value) => changeLocalFilter([{ key: "county", value }])}
-                    value={values?.county || ""}
-                    className=""
-                  >
-                    {counties.map((state) => (
-                      <RadioGroupItem key={state.value} value={state.value} label={state.label} />
-                    ))}
-                  </RadioGroup>
+                <AccordionContent className="space-y-3">
+                  {sortMultiSelectOptions(counties, filters?.county?.split(";") || []).map((county) => (
+                    <Checkbox
+                      id={county.value}
+                      key={county.value}
+                      value={county.value}
+                      label={county.label}
+                      checked={values.county ? values.county.split(";").includes(county.value) : false}
+                      onClick={(e) => {
+                        let newValues = values?.county?.split(";") || [];
+
+                        if (newValues.includes(county.value)) {
+                          newValues = newValues.filter((el) => el !== county.value);
+                        } else {
+                          newValues = [...newValues, county.value];
+                        }
+                        setValues({ ...values, county: newValues.join(";") });
+                      }}
+                    />
+                  ))}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="acreage">
