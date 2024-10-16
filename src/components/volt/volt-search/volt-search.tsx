@@ -53,8 +53,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   const selectedState = watch("state");
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
   const counties = useMemo(() => getCounties(selectedState), [selectedState]);
-  const showUnauthorizedUserAlert = !user && watch("searchType") !== "parcelNumber";
-  const disableSearch = !!(showUnauthorizedUserAlert || error === "limit");
+  const disableSearch = !!(error === "limit");
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
     setValue("searchType", type, { shouldValidate: true });
@@ -233,7 +232,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           </p>
         </div>
       </div>
-      <VoltSearchAlerts error={error} setError={setError} showUnauthorizedUserAlert={showUnauthorizedUserAlert} />
+      <VoltSearchAlerts error={error} setError={setError} />
     </div>
   );
 };

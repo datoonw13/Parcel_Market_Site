@@ -8,7 +8,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 interface VoltSearchAlertsProps {
   error: "limit" | "notFound" | null;
   setError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
-  showUnauthorizedUserAlert: boolean;
+  // showUnauthorizedUserAlert: boolean;
 }
 
 const errors = {
@@ -48,11 +48,11 @@ const errors = {
   },
 };
 
-const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError, showUnauthorizedUserAlert }) => (
+const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError }) => (
   <div className="flex flex-col gap-6">
-    {showUnauthorizedUserAlert && (
+    {/* {showUnauthorizedUserAlert && (
       <Alert variant="warning" title={errors.unauthorized.title} description={errors.unauthorized.description} />
-    )}
+    )} */}
     {error && (
       <Alert
         handleClose={error === "notFound" ? () => setError(null) : undefined}
