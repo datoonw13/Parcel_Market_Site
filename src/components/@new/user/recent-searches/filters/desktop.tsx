@@ -20,7 +20,7 @@ const RecentSearchesDesktopFilters = () => {
   const counties = useMemo(() => {
     const countiesList =
       filters?.state
-        ?.split(";")
+        ?.split(",")
         .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
     return uniqBy(countiesList.flat(), "value");
   }, [filters?.state]);
@@ -39,13 +39,14 @@ const RecentSearchesDesktopFilters = () => {
     );
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
+  console.log(filters);
 
   return (
     filters && (
       <div className="hidden lg:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
         <AutoCompleteMulti
           clearable
-          selectedValues={filters.state?.split(";") || []}
+          selectedValues={filters.state?.split(",") || []}
           options={states}
           placeholder="State"
           inputRootClassName="h-9 rounded-2xl"
@@ -53,7 +54,7 @@ const RecentSearchesDesktopFilters = () => {
             changeFilter([
               {
                 key: "state",
-                value: value.join(";"),
+                value: value.join(","),
                 resetKey: "county",
               },
             ]);
@@ -61,7 +62,7 @@ const RecentSearchesDesktopFilters = () => {
         />
         <AutoCompleteMulti
           clearable
-          selectedValues={filters.county?.split(";") || []}
+          selectedValues={filters.county?.split(",") || []}
           options={counties}
           placeholder="County"
           inputRootClassName="h-9 rounded-2xl"
@@ -70,7 +71,7 @@ const RecentSearchesDesktopFilters = () => {
             changeFilter([
               {
                 key: "county",
-                value: value.join(";"),
+                value: value.join(","),
               },
             ]);
           }}
