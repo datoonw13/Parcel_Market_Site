@@ -27,7 +27,7 @@ const HeaderNotifications = () => {
 
   const initialNotifications = useCallback(async () => {
     setPending(true);
-    const { data, errorMessage } = await getNotificationsAction({ page: "1", pageSize: "6" });
+    const { data, errorMessage } = await getNotificationsAction({ page: 1, pageSize: 6 });
     if (!errorMessage) {
       setNotifications((prev) => ({ ...prev, list: data?.list || [], unread: data?.pagination.unreadCount || 0 }));
     }
