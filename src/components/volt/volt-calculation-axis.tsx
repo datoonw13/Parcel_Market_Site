@@ -65,7 +65,11 @@ const VoltPriceCalculationAxis = ({
           <p className={cn(`text-xs text-gray-600`, isSmallDevice ? "hidden" : "block")}>Min</p>
           {!isSmallDevice && (
             <Tooltip
-              renderButton={<p className="absolute left-0 translate-y-[54%] text-xs text-gray-600 font-medium">Low PPA</p>}
+              renderButton={
+                <p className="absolute left-0 translate-y-[54%] text-xs text-gray-600 font-medium">
+                  Low PPA {`(${moneyFormatter.format(minPricePerAcre)})`}
+                </p>
+              }
               renderContent="Min Price Per Acre"
             />
           )}
@@ -101,7 +105,7 @@ const VoltPriceCalculationAxis = ({
                     style={{ left: `calc(${getItemXAxisPositionInPercent(averagePricePerAcre)}% - 12px)` }}
                     className="absolute translate-y-[50%] text-xs text-gray-600 font-medium"
                   >
-                    AVG PPA
+                    AVG PPA{` (${moneyFormatter.format(averagePricePerAcre)})`}
                   </p>
                 }
                 renderContent="Average Price Per Acre"
@@ -149,7 +153,11 @@ const VoltPriceCalculationAxis = ({
           <p className={cn("text-xs text-gray-600 ", isSmallDevice ? "hidden" : "block")}>Max</p>
           {!isSmallDevice && (
             <Tooltip
-              renderButton={<p className="absolute right-0 translate-y-[54%] text-xs text-gray-600 font-medium">High PPA</p>}
+              renderButton={
+                <p className="absolute right-0 translate-y-[54%] text-xs text-gray-600 font-medium">
+                  High PPA {` (${moneyFormatter.format(maxPricePerAcre)})`}
+                </p>
+              }
               renderContent="Max Price Per Acre"
             />
           )}
