@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const passwordSchema = z
-  .string()
+  .string({
+    message:
+      "Your password must contain a minimum of 8 characters and use at least one uppercase letter, number, and special character ( $, ^,  *, +, _ ).",
+  })
   .trim()
   .regex(
     /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/,
@@ -32,7 +35,9 @@ export const userSignUpValidation = (isGoogleUser?: boolean) =>
         message: "Please read and accept the terms and conditions",
       }),
       subscribeToEmail: z.boolean(),
-      repeatPassword: isGoogleUser ? z.undefined() : z.string().trim().min(1, { message: "Password doesn’t match" }),
+      repeatPassword: isGoogleUser
+        ? z.undefined()
+        : z.string({ message: "Password doesn’t match" }).trim().min(1, { message: "Password doesn’t match" }),
     })
     .refine((data) => data.password === data.repeatPassword, {
       message: "Password doesn’t match",
