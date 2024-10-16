@@ -107,7 +107,7 @@ const CreateNewPassword = ({
         <Button className="w-full" variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button className="w-full" onClick={onSubmit} loading={isSubmitting}>
+        <Button className="w-full" onClick={onSubmit} disabled={Object.values(watch()).some((el) => !el)} loading={isSubmitting}>
           Continue
         </Button>
       </div>
