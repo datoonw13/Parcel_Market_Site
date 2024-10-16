@@ -160,7 +160,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                                 sessionStorage.setItem("volt", JSON.stringify({ step, values }));
                               }}
                             >
-                              Save Data
+                              View Sales Data
                             </Button>
                           )}
                         </div>
