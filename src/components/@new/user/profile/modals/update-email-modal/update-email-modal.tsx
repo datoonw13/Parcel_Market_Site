@@ -44,7 +44,11 @@ const generateModalMeta = (step: UpdateEmailSteps, user: IUser, newEmail: string
     default:
       return {
         title: "Change Email",
-        description: `Your current email is ${user.email}`,
+        description: (
+          <span>
+            Your current email is <span className="font-medium text-black">{user.email}</span>
+          </span>
+        ),
       };
   }
 };

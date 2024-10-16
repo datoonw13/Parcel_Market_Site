@@ -6,7 +6,7 @@ interface ProfileModalContentWrapperProps {
   handleClose: () => void;
   children: ReactNode;
   title: string | ReactNode;
-  description: string;
+  description: string | ReactNode;
 }
 const ProfileModalContentWrapper: FC<ProfileModalContentWrapperProps> = ({ children, handleClose, description, title }) => (
   <div className="sm:bg-white md:shadow-4 sm:rounded-2xl min-h-[70vh] sm:min-h-fit pb-8 sm:pt-8 relative grid">
