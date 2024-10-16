@@ -120,6 +120,9 @@ const UserRecentSearchesList = ({
             );
             router.push(`${pathname}?${newSearchParams.toString()}`);
           }}
+          totalLabel="Lands"
+          label="Sort By"
+          selectedFilter={searchParams.get("sortBy")}
         />
       )}
       <div className="space-y-8 md:space-y-11">

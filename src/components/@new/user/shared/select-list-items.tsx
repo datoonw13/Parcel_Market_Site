@@ -41,6 +41,9 @@ interface UserSelectListItemProps {
   dialogDescription: string;
   sortEnum: Record<any, any>;
   sortChange: (value?: string | null) => void;
+  totalLabel: string;
+  label: string;
+  selectedFilter: string | null;
 }
 
 const UserSelectListItems = ({
@@ -55,6 +58,9 @@ const UserSelectListItems = ({
   dialogTitle,
   sortEnum,
   sortChange,
+  totalLabel,
+  label,
+  selectedFilter,
 }: UserSelectListItemProps) => {
   const { notify } = useNotification();
   const [openWarningModal, setWarningModal] = useState(false);
@@ -112,8 +118,12 @@ const UserSelectListItems = ({
           )}
         </div>
         <div className="flex items-center gap-3">
-          {!!totalItems && <p className="text-xs font-medium text-grey-600">{totalItems} Lands</p>}
-          <Sort sortEnum={sortEnum} sortChange={sortChange} />
+          {!!totalItems && (
+            <p className="text-xs font-medium text-grey-600">
+              {totalItems} {totalLabel}
+            </p>
+          )}
+          <Sort selectedFilter={selectedFilter} sortEnum={sortEnum} sortChange={sortChange} label={label} />
         </div>
       </div>
     </>
@@ -122,15 +132,29 @@ const UserSelectListItems = ({
 
 export default UserSelectListItems;
 
-const SortButton = forwardRef(({ selectedFilter, disabled }: { selectedFilter: string | null; disabled?: boolean }, ref: any) => (
-  <div ref={ref} className={cn("flex items-center gap-2 cursor-pointer", disabled && "pointer-events-none opacity-55 !cursor-not-allowed")}>
-    <p className="font-medium text-xs capitalize">{selectedFilter || "Sort by"}</p>
-    <HiArrowsUpDown className="size-3" />
-  </div>
-));
+const SortButton = forwardRef(
+  ({ selectedFilter, disabled, label }: { selectedFilter: string | null; disabled?: boolean; label: string }, ref: any) => (
+    <div
+      ref={ref}
+      className={cn("flex items-center gap-2 cursor-pointer", disabled && "pointer-events-none opacity-55 !cursor-not-allowed")}
+    >
+      <p className="font-medium text-xs capitalize">{selectedFilter || label}</p>
+      <HiArrowsUpDown className="size-3" />
+    </div>
+  )
+);
 
-const Sort = ({ sortEnum, sortChange }: { sortEnum: Record<any, any>; sortChange: (value?: string | null) => void }) => {
-  const searchParams = useSearchParams();
+const Sort = ({
+  sortEnum,
+  sortChange,
+  label,
+  selectedFilter,
+}: {
+  sortEnum: Record<any, any>;
+  sortChange: (value?: string | null) => void;
+  label: string;
+  selectedFilter: string | null;
+}) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.sm));
   const radioGroupRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -140,16 +164,16 @@ const Sort = ({ sortEnum, sortChange }: { sortEnum: Record<any, any>; sortChange
       {isSmallDevice && (
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger>
-            <SortButton selectedFilter={searchParams.get("sortBy")} />
+            <SortButton selectedFilter={selectedFilter} label={label} />
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
-              <DialogTitle className="border-b pb-4">Sort By</DialogTitle>
+              <DialogTitle className="border-b pb-4">{label}</DialogTitle>
             </DrawerHeader>
             <RadioGroup
               ref={radioGroupRef}
               onValueChange={(value) => {}}
-              defaultValue={searchParams.get("sortBy") || ""}
+              defaultValue={selectedFilter || ""}
               className="capitalize px-4 py-6"
             >
               {Object.values(sortEnum).map((sort) => (
@@ -166,7 +190,9 @@ const Sort = ({ sortEnum, sortChange }: { sortEnum: Record<any, any>; sortChange
               >
                 Apply
               </Button>
-              <Button variant="secondary">Reset</Button>
+              <Button variant="secondary" onClick={() => sortChange(null)}>
+                Reset
+              </Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
@@ -174,7 +200,7 @@ const Sort = ({ sortEnum, sortChange }: { sortEnum: Record<any, any>; sortChange
       {!isSmallDevice && (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger>
-            <SortButton selectedFilter={searchParams.get("sortBy")} />
+            <SortButton selectedFilter={selectedFilter} label={label} />
           </PopoverTrigger>
           <PopoverContent className="min-w-36 bg-white p-0 border-0 shadow-4 rounded-2xl !w-full !max-w-max">
             {Object.values(sortEnum).map((sort) => (
@@ -182,7 +208,7 @@ const Sort = ({ sortEnum, sortChange }: { sortEnum: Record<any, any>; sortChange
                 key={sort}
                 className={cn(
                   "py-2.5 px-4 cursor-pointer hover:bg-primary-main-50 transition-all duration-100 font-medium text-xs capitalize",
-                  searchParams.get("sortBy") === sort && "!bg-primary-main-100"
+                  selectedFilter === sort && "!bg-primary-main-100"
                 )}
                 onClick={() => {
                   sortChange(sort);

@@ -74,3 +74,9 @@ export type INotification =
   | IReceivedOfferCanceledNotification
   | ISentOfferExpiringNotification
   | SubscriptionExpiredNotification;
+
+export enum NotificationFilter {
+  ALL = "all",
+  READ = "read",
+  UNREAD = "unread",
+}

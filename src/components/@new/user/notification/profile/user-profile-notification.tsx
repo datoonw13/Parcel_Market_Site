@@ -1,14 +1,32 @@
 import { getNotificationsAction } from "@/server-actions/notifications/actions";
+import { z } from "zod";
+import { userNotificationsValidations } from "@/zod-validations/filters-validations";
+import NoResults from "@/components/ui/no-result";
 import UserProfileNotificationsWrapper from "./user-profile-notification-wrapper";
 
-const UserProfileNotifications = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
-  const { data } = await getNotificationsAction({ ...searchParams, pageSize: "10" });
+const UserProfileNotifications = async ({
+  filters,
+  pageSize,
+  totalItems,
+}: {
+  filters: z.infer<typeof userNotificationsValidations>;
+  pageSize: number;
+  totalItems: number;
+}) => {
+  const { data } = await getNotificationsAction({ ...filters, pageSize });
+
+  if (totalItems === 0) {
+    return <NoResults errorMessage="No notifications yet..." className="!mt-16" />;
+  }
+
+  if (totalItems > 0 && data?.list.length === 0) {
+    return <NoResults errorMessage="No search results..." className="!mt-16" />;
+  }
 
   return (
-    <div className="md:border md:border-grey-100 rounded-2xl pb-0">
-      <h1 className="font-medium py-2.5 md:py-6 md:px-8 md:border-b md:border-b-grey-100">All Notifications</h1>
-      <UserProfileNotificationsWrapper data={data} />
-    </div>
+    <>
+      <UserProfileNotificationsWrapper pageSize={pageSize} data={data} />
+    </>
   );
 };
 

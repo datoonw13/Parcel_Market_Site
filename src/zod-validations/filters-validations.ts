@@ -1,4 +1,5 @@
 import { SortEnum } from "@/types/common";
+import { NotificationFilter } from "@/types/notifications";
 import { z } from "zod";
 
 export const marketplaceFiltersValidations = z.object({
@@ -67,6 +68,19 @@ export const userRecentSearchesValidations = z.object({
     .transform((x) => x || null),
   sortBy: z
     .nativeEnum(SortEnum)
+    .optional()
+    .nullable()
+    .transform((x) => x || null),
+});
+
+export const userNotificationsValidations = z.object({
+  filter: z
+    .nativeEnum(NotificationFilter)
+    .optional()
+    .nullable()
+    .transform((x) => x || null),
+  page: z
+    .number({ coerce: true })
     .optional()
     .nullable()
     .transform((x) => x || null),
