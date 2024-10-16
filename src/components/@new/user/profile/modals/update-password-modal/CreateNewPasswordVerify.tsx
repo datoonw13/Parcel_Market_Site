@@ -54,7 +54,7 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
           Cancel
         </Button>
         <Button className="w-full" disabled={codeSending || !code} loading={passwordUpdating} onClick={onSubmit}>
-          Change Password
+          Continue
         </Button>
       </div>
     </div>
