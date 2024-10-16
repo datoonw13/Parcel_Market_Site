@@ -1,10 +1,12 @@
 "use client";
 
 import { AutoComplete } from "@/components/ui/autocomplete";
+import AutoCompleteMulti from "@/components/ui/autocomplete-multi";
 import MinmaxDropdown from "@/components/ui/minmax-dropdown";
-import { getAllStates, getCounties } from "@/helpers/states";
+import { getAllStates, getCounties, getStateValue } from "@/helpers/states";
 import { updateSearchParamsWithFilters, parseSearchParams } from "@/lib/utils";
 import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { uniqBy } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { z } from "zod";
@@ -15,7 +17,13 @@ const RecentSearchesDesktopFilters = () => {
   const searchParams = useSearchParams();
   const filters = useMemo(() => parseSearchParams(userRecentSearchesValidations, searchParams), [searchParams]);
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => (filters?.state ? getCounties(filters.state) : []), [filters?.state]);
+  const counties = useMemo(() => {
+    const countiesList =
+      filters?.state
+        ?.split(";")
+        .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
+    return uniqBy(countiesList.flat(), "value");
+  }, [filters?.state]);
 
   const changeFilter = <T extends keyof z.infer<typeof userRecentSearchesValidations>>(
     data: Array<{
@@ -35,9 +43,9 @@ const RecentSearchesDesktopFilters = () => {
   return (
     filters && (
       <div className="hidden lg:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
-        <AutoComplete
+        <AutoCompleteMulti
           clearable
-          selectedValue={filters?.state || null}
+          selectedValues={filters.state?.split(";") || []}
           options={states}
           placeholder="State"
           inputRootClassName="h-9 rounded-2xl"
@@ -45,15 +53,15 @@ const RecentSearchesDesktopFilters = () => {
             changeFilter([
               {
                 key: "state",
-                value,
+                value: value.join(";"),
                 resetKey: "county",
               },
             ]);
           }}
         />
-        <AutoComplete
+        <AutoCompleteMulti
           clearable
-          selectedValue={filters?.county || null}
+          selectedValues={filters.county?.split(";") || []}
           options={counties}
           placeholder="County"
           inputRootClassName="h-9 rounded-2xl"
@@ -62,7 +70,7 @@ const RecentSearchesDesktopFilters = () => {
             changeFilter([
               {
                 key: "county",
-                value,
+                value: value.join(";"),
               },
             ]);
           }}

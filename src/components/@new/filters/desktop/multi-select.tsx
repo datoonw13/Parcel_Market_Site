@@ -61,6 +61,8 @@ const MultiSelect: FC<MultiSelectProps> = ({ initialOptions, placeholder, disabl
     }
   }, [open, setSortedData]);
 
+  console.log(selectedOptions, 11);
+
   return (
     <Popper
       onAnimationStart={() => setOpen(true)}
