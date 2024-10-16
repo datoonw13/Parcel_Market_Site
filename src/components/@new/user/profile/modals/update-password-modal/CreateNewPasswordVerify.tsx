@@ -34,7 +34,7 @@ const CreateNewPasswordVerify: FC<CreateNewPasswordVerifyProps> = ({ passwords, 
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
       setPasswordUpdating(false);
     } else {
-      notify({ title: "Information Has been updated", description: "Your Information has been successfully Updated." });
+      notify({ title: "Password Changed!", description: "Your Password has been successfully changed!" });
       handleClose();
     }
   };
