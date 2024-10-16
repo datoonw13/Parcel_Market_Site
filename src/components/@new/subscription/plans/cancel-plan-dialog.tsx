@@ -49,12 +49,12 @@ const CancelPlanDialog: FC<CancelPlanDialogProps> = ({ closeDialog, userActiveSu
             value={reason || ""}
             onValueChange={(value) => setReason(value as DeletionAccountReason)}
           >
-            <RadioGroupItem value={DeletionAccountReason.SoldLand} label="Already sold on Parcel Marketplace" />
-            <RadioGroupItem value={DeletionAccountReason.SoldLandOutsideMarket} label="I have sold my land somewhere else" />
             <RadioGroupItem value={DeletionAccountReason.NotUseful} label="I did not find Parcel Market useful" />
             <RadioGroupItem value={DeletionAccountReason.NoDataAccess} label="I could not find the data I needed" />
             <RadioGroupItem value={DeletionAccountReason.Complicated} label="Parcel Market is too complicated" />
             <RadioGroupItem value={DeletionAccountReason.TooExpensive} label="I think the services are too expensive" />
+            {/* <RadioGroupItem value={DeletionAccountReason.SoldLand} label="Already sold on Parcel Marketplace" /> */}
+            {/* <RadioGroupItem value={DeletionAccountReason.SoldLandOutsideMarket} label="I have sold my land somewhere else" /> */}
           </RadioGroup>
         </div>
       }
