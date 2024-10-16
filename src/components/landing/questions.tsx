@@ -64,7 +64,20 @@ const list = [
   },
   {
     title: `How accurate is VOLT?`,
-    description: `Currently VOLT can only search and calculate for one specific parcel of vacant land at a time. However, our team is currently developing additional VOLT functionality where multi-parcel input will be enabled soon. If a property is made up of multiple parcels, we suggest locating a single, similar acreage parcel nearby the subject and running that parcel through VOLT for the VOLT Value.`,
+    description: `VOLT is extremely reliable and accurate in most areas. However, there are cases 
+where data can be skewed, and VOLT is unable to filter outlier sales. This occurs 
+most when large acreage transactions occur with multiple parcels and each 
+individual parcel is assigned the overall sale value. Our team and statisticians are 
+working to resolve this and make VOLT even more accurate. We will continue to 
+improve VOLT for these cases and others to improve accuracy.`,
+  },
+  {
+    title: `What if a property is made up of multiple parcels?`,
+    description: `Currently VOLT can only search and calculate for one specific parcel of vacant land
+at a time. However, our team is currently developing additional VOLT functionality 
+where multi-parcel input will be enabled soon. If a property is made up of multiple 
+parcels, we suggest locating a single, similar acreage parcel nearby the subject 
+and running that parcel through VOLT for the VOLT Value`,
   },
   {
     title: `What do I receive with a subscription to Parcel Market?`,
