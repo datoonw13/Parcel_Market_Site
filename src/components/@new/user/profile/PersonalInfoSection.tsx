@@ -58,7 +58,7 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
       notify({ title: errorMessage }, { variant: "error" });
       toast.error(errorMessage);
     } else {
-      notify({ title: "Personal Information", description: "Your Information has been successfully Updated." });
+      notify({ title: "Information has been updated", description: "Your Information has been successfully Updated." });
       setEditMode(false);
     }
   });
