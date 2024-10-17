@@ -149,6 +149,11 @@ const routes = {
     protected: false,
     fullUrl: "/privacy-policy",
   },
+  questions: {
+    url: "questions",
+    protected: false,
+    fullUrl: "/questions",
+  },
   termsConditions: {
     url: "terms-conditions",
     protected: false,

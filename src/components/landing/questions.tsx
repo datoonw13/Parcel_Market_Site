@@ -2,20 +2,43 @@ import React from "react";
 import Link from "next/link";
 import routes from "@/helpers/routes";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import { Button } from "../ui/button";
 
 const LandingQuestions = () => (
   <div className="space-y-6 md:space-y-8 lg:space-y-11 px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[11vw] ">
-    <div className="space-y-2 md:space-y-3 max-w-3xl mx-auto">
+    <div className="space-y-2 md:space-y-3 max-w-4xl mx-auto">
       <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">Frequently asked questions</h1>
+      <h2 className="text-center font-light text-sm md:text-base">
+        You can get answers to all questions. However, if you do not find the answers you want, you can contact us. Go to the internal FAQ
+        page and find out all the answers. We are sure that you will definitely find the answers you want here
+      </h2>
     </div>
-    <Accordion type="single" collapsible className="w-full border border-grey-100 rounded-2xl p-6 md:p-9">
+    <Accordion type="single" collapsible className="w-full space-y-3 md:space-y-4">
       {list.map((el, i) => (
-        <AccordionItem key={el.title} value={i.toString()}>
-          <AccordionTrigger>{el.title}</AccordionTrigger>
+        <AccordionItem className="bg-white border border-[#D5D3D3] rounded-2xl px-5 md:px-7 lg:px-10 " key={el.title} value={i.toString()}>
+          <AccordionTrigger className="text-start items-baseline">{el.title}</AccordionTrigger>
           <AccordionContent>{el.description}</AccordionContent>
         </AccordionItem>
       ))}
+      <AccordionItem className="bg-white border border-[#D5D3D3] rounded-2xl px-5 md:px-7 lg:px-10  relative" disabled value="no">
+        <AccordionTrigger className="text-start items-baseline">How much time can VOLT save?</AccordionTrigger>
+        <AccordionContent>
+          Our testers, who are real estate professionals in the land business, can research on average 10 vacant land parcels in the time it
+          would typically take to analyze 2, using traditional methods. This substantial time saving enhances productivity, allowing you to
+          explore more opportunities and make informed decisions much faster, leading to an increased deal flow and better understanding of
+          vacant land markets.
+        </AccordionContent>
+        <div
+          style={{
+            background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 5%, #fff 100%)",
+          }}
+          className="absolute w-full h-full rounded-2xl left-0 top-0"
+        />
+      </AccordionItem>
     </Accordion>
+    <Link href={routes.questions.fullUrl}>
+      <Button className="max-w-xs w-full mx-auto flex">See More</Button>
+    </Link>
   </div>
 );
 
@@ -45,58 +68,5 @@ const list = [
   {
     title: `Do I need to create an account and pay to use the VOLT?`,
     description: `The short answer is no! We want VOLT to be free for everyone’s benefit. Although data is very expensive, VOLT is designed for immediate use without requiring you to create an account or submit personal information, ensuring a seamless and hassle-free experience. However, to access, export, and/or analyze the sales data which VOLT uses to calculate the VOLT Value, you will need a subscription to Parcel Market. This is how we monetize Parcel Market and provide the best possible data and tool features for our users.`,
-  },
-  {
-    title: `How much time can VOLT save?`,
-    description: `Our testers, who are real estate professionals in the land business, can research on average 10 vacant land parcels in the time it would typically take to analyze 2, using traditional methods. This substantial time saving enhances productivity, allowing you to explore more opportunities and make informed decisions much faster, leading to an increased deal flow and better understanding of vacant land markets.`,
-  },
-  {
-    title: `Is VOLT available in all US states?`,
-    description: `Currently, VOLT covers 38 states and 2,267 counties. We are actively working to expand our coverage to all 50 U.S. states, aiming to provide comprehensive nationwide access.`,
-  },
-  {
-    title: `How often is the data used by VOLT updated?`,
-    description: `The data used by VOLT is updated weekly to ensure users have access to the most current and accurate market information. However, please understand that our data is county dependent - we provide what the county provides.`,
-  },
-  {
-    title: `Does VOLT work for every vacant land parcel?`,
-    description: `VOLT can only work where sufficient sales data exists. Because vacant land can be in rural areas, there are cases where VOLT will be unable to calculate an average sold price due to insufficient data, meaning not enough sales of similar sized properties have occurred over the past 2 years. You will receive an insufficient data pop-up notification if this is the case.`,
-  },
-  {
-    title: `How accurate is VOLT?`,
-    description: `VOLT is extremely reliable and accurate in most areas. However, there are cases 
-where data can be skewed, and VOLT is unable to filter outlier sales. This occurs 
-most when large acreage transactions occur with multiple parcels and each 
-individual parcel is assigned the overall sale value. Our team and statisticians are 
-working to resolve this and make VOLT even more accurate. We will continue to 
-improve VOLT for these cases and others to improve accuracy.`,
-  },
-  {
-    title: `What if a property is made up of multiple parcels?`,
-    description: `Currently VOLT can only search and calculate for one specific parcel of vacant land
-at a time. However, our team is currently developing additional VOLT functionality 
-where multi-parcel input will be enabled soon. If a property is made up of multiple 
-parcels, we suggest locating a single, similar acreage parcel nearby the subject 
-and running that parcel through VOLT for the VOLT Value`,
-  },
-  {
-    title: `What do I receive with a subscription to Parcel Market?`,
-    description: (
-      <span>
-        While obtaining the VOLT Value is completely free, the ability to save VOLT searches, view sales data, and export sales data require
-        a subscription to Parcel Market. We strive to make this as affordable as possible. You can try Parcel Market and VOLT with a{" "}
-        <Link href={routes.volt.fullUrl} className="underline">
-          FREE TRIAL.
-        </Link>
-      </span>
-    ),
-  },
-  {
-    title: `How can VOLT help real estate agents and brokers?`,
-    description: `Real estate agents and brokers can leverage VOLT's accurate and up-to-date data to gain valuable market insights and make informed decisions at lightning speeds. This helps handle potential client questions regarding values in unfamiliar markets faster, making VOLT users standout from others who need to “get back with you” after further research. Additionally, CMA’s can be more accurate as VOLT uses sales data outside of the MLS. Agents who handle land transactions have just found their new best friend. `,
-  },
-  {
-    title: `What should I do if I encounter issues using VOLT?`,
-    description: `If you experience any issues or have questions, please contact our customer support team at customerservice@parcelmarket.com. We are committed to providing you with the assistance you need in a timely manner.`,
   },
 ];
