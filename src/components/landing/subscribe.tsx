@@ -2,17 +2,19 @@
 
 import Slider from "react-slick";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import Link from "next/link";
 import routes from "@/helpers/routes";
 import { GiCheckMark } from "react-icons/gi";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 export default function Subscribe() {
   const { targetReached } = useMediaQuery(1024);
+  const [activeSlide, setActiveSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
   const settings = {
     className: "center",
@@ -62,56 +64,64 @@ export default function Subscribe() {
       `}
       >
         <h1 className="font-extrabold text-2xl md:text-3xl lg:hidden text-center">How Valuable is Your Time?</h1>
-        <Slider
-          onInit={() => {
-            if (targetReached && sliderRef.current) {
-              sliderRef.current?.slickGoTo(0);
-            }
-          }}
-          ref={sliderRef}
-          {...settings}
-          className="overflow-hidden lg:mx-10 xl:mx-20"
-        >
-          <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
-            <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Risk Free! No Payment Info Required</h2>
-            <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-              Free <span className="text-base font-normal">/ 14 Days</span>
-            </h1>
-            <Link href={routes.user.subscription.fullUrl}>
-              <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
-                <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                  Try For Free <FaArrowRightLong />
-                </div>
-              </Button>
-            </Link>
-          </div>
-          <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[270px]">
-            <h2 className="font-medium text-base text-primary-main mb-4 uppercase">save 10% per month</h2>
-            <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-              <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
-            </h1>
-            <Link href={routes.user.subscription.fullUrl}>
-              <Button className="flex w-full [&>span]:w-full ">
-                <div className="flex items-center justify-between gap-2 w-full  font-semibold">
-                  Subscribe <FaArrowRightLong />
-                </div>
-              </Button>
-            </Link>
-          </div>
-          <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
-            <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Per month</h2>
-            <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-              <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
-            </h1>
-            <Link href={routes.user.subscription.fullUrl}>
-              <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
-                <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                  Subscribe <FaArrowRightLong />
-                </div>
-              </Button>
-            </Link>
-          </div>
-        </Slider>
+        <div>
+          <Slider
+            onInit={() => {
+              if (targetReached && sliderRef.current) {
+                sliderRef.current?.slickGoTo(0);
+              }
+            }}
+            ref={sliderRef}
+            {...settings}
+            className="overflow-hidden lg:mx-10 xl:mx-20"
+            afterChange={(e) => setActiveSlide(Math.ceil(e))}
+          >
+            <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
+              <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Risk Free! No Payment Info Required</h2>
+              <h1 className="text-[44px] font-bold mb-7 md:mb-8">
+                Free <span className="text-base font-normal">/ 14 Days</span>
+              </h1>
+              <Link href={routes.user.subscription.fullUrl}>
+                <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
+                  <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
+                    Try For Free <FaArrowRightLong />
+                  </div>
+                </Button>
+              </Link>
+            </div>
+            <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[270px]">
+              <h2 className="font-medium text-base text-primary-main mb-4 uppercase">save 10% per month</h2>
+              <h1 className="text-[44px] font-bold mb-7 md:mb-8">
+                <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
+              </h1>
+              <Link href={routes.user.subscription.fullUrl}>
+                <Button className="flex w-full [&>span]:w-full ">
+                  <div className="flex items-center justify-between gap-2 w-full  font-semibold">
+                    Subscribe <FaArrowRightLong />
+                  </div>
+                </Button>
+              </Link>
+            </div>
+            <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
+              <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Per month</h2>
+              <h1 className="text-[44px] font-bold mb-7 md:mb-8">
+                <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
+              </h1>
+              <Link href={routes.user.subscription.fullUrl}>
+                <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
+                  <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
+                    Subscribe <FaArrowRightLong />
+                  </div>
+                </Button>
+              </Link>
+            </div>
+          </Slider>
+          <ul className="flex gap-2 mx-auto justify-center mt-3 lg:hidden">
+            <li className={cn("rounded-full size-2 bg-primary-main-100", activeSlide === 0 && "bg-primary-main")} />
+            <li className={cn("rounded-full size-2 bg-primary-main-100", activeSlide === 1 && "bg-primary-main")} />
+            <li className={cn("rounded-full size-2 bg-primary-main-100", activeSlide === 2 && "bg-primary-main")} />
+          </ul>
+        </div>
         <ul
           className={`
         border border-primary-main rounded-2xl 
