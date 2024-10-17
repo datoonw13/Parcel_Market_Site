@@ -7,12 +7,13 @@ import { MdClose } from "react-icons/md";
 import { TbMessageDots } from "react-icons/tb";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { LuAlarmClock } from "react-icons/lu";
-import { FiBellOff } from "react-icons/fi";
 import { cn } from "@/helpers/common";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import { markNotificationAsReadAction } from "@/server-actions/notifications/actions";
+import { BsClockHistory } from "react-icons/bs";
+import { GrUpdate } from "react-icons/gr";
 
 const getIcon = <T extends keyof INotificationEnum>(data: INotificationEnum[T]) => {
   switch (data.type) {
@@ -29,7 +30,9 @@ const getIcon = <T extends keyof INotificationEnum>(data: INotificationEnum[T]) 
     case NotificationType.SentOfferExpiring:
       return <LuAlarmClock className="size-4" />;
     case NotificationType.SubscriptionExpired:
-      return <FiBellOff className="size-4" />;
+      return <BsClockHistory className="size-4" />;
+    case NotificationType.SubscriptionUpdated:
+      return <GrUpdate className="size-4" />;
     default:
       return null;
   }
