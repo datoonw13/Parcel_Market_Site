@@ -16,7 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getUserAction } from "@/server-actions/user/actions";
 import ChatSession from "@/components/@new/chat/chat-session";
 import AuthSessionProvider from "@/components/shared/auth-session-provider";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import Chat from "@/components/shared/chat";
 
 const inter = Inter({
@@ -58,6 +58,7 @@ export default async function RootLayout({
     <>
       <html lang="en">
         <GoogleTagManager gtmId="GTM-P59N8LFM" />
+        <GoogleAnalytics gaId="G-SBBPRZKYR6" />
         <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-dvh")}>
           <noscript>
             <iframe
