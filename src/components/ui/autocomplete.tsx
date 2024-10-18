@@ -72,8 +72,6 @@ const AutoComplete: FC<AutoCompleteProps> = ({
     <Popover open={open} onOpenChange={setOpen}>
       <Command
         filter={(value, key) => {
-          console.log(key, 11);
-
           const item = options.find((el) => el.value === value);
           return item?.label.trim().toLocaleLowerCase().includes(key.trim().toLocaleLowerCase()) ? 1 : 0;
         }}
