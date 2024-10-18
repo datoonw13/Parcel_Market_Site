@@ -19,11 +19,11 @@ const RecentSearchesDesktopFilters = () => {
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
   const counties = useMemo(() => {
     const countiesList =
-      filters?.state
+      filters?.states
         ?.split(",")
         .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
     return uniqBy(countiesList.flat(), "value");
-  }, [filters?.state]);
+  }, [filters?.states]);
 
   const changeFilter = <T extends keyof z.infer<typeof userRecentSearchesValidations>>(
     data: Array<{
@@ -39,38 +39,37 @@ const RecentSearchesDesktopFilters = () => {
     );
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
-  console.log(filters);
 
   return (
     filters && (
       <div className="hidden lg:grid grid-cols-[1fr_1fr_1.1fr_1.1fr] items-center gap-3">
         <AutoCompleteMulti
           clearable
-          selectedValues={filters.state?.split(",") || []}
+          selectedValues={filters.states?.split(",") || []}
           options={states}
           placeholder="State"
           inputRootClassName="h-9 rounded-2xl"
           onValueChange={(value) => {
             changeFilter([
               {
-                key: "state",
+                key: "states",
                 value: value.join(","),
-                resetKey: "county",
+                resetKey: "counties",
               },
             ]);
           }}
         />
         <AutoCompleteMulti
           clearable
-          selectedValues={filters.county?.split(",") || []}
+          selectedValues={filters.counties?.split(",") || []}
           options={counties}
           placeholder="County"
           inputRootClassName="h-9 rounded-2xl"
-          disabled={!filters?.state}
+          disabled={!filters?.states}
           onValueChange={(value) => {
             changeFilter([
               {
-                key: "county",
+                key: "counties",
                 value: value.join(","),
               },
             ]);

@@ -31,12 +31,12 @@ export const userRecentSearchesValidations = z.object({
     .optional()
     .nullable()
     .transform((x) => x || null),
-  state: z
+  states: z
     .string()
     .optional()
     .nullable()
     .transform((x) => x || null),
-  county: z
+  counties: z
     .string()
     .optional()
     .nullable()

@@ -29,11 +29,11 @@ const RecentSearchesMobileFilters = () => {
   const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
   const counties = useMemo(() => {
     const countiesList =
-      values?.state
+      values?.states
         ?.split(",")
         .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
     return uniqBy(countiesList.flat(), "value");
-  }, [values?.state]);
+  }, [values?.states]);
 
   const changeLocalFilter = <T extends keyof z.infer<typeof userRecentSearchesValidations>>(
     data: Array<{
@@ -114,50 +114,50 @@ const RecentSearchesMobileFilters = () => {
               <AccordionItem value="states">
                 <AccordionTrigger>State</AccordionTrigger>
                 <AccordionContent className="space-y-3">
-                  {sortMultiSelectOptions(states, filters?.state?.split(",") || []).map((state) => (
+                  {sortMultiSelectOptions(states, filters?.states?.split(",") || []).map((state) => (
                     <Checkbox
                       id={state.value}
                       key={state.value}
                       value={state.value}
                       label={state.label}
-                      checked={values.state ? values.state.split(",").includes(state.value) : false}
+                      checked={values.states ? values.states.split(",").includes(state.value) : false}
                       onClick={(e) => {
-                        let newValues = values?.state?.split(",") || [];
+                        let newValues = values?.states?.split(",") || [];
 
                         if (newValues.includes(state.value)) {
                           newValues = newValues.filter((el) => el !== state.value);
                         } else {
                           newValues = [...newValues, state.value];
                         }
-                        setValues({ ...values, state: newValues.join(",") });
+                        setValues({ ...values, states: newValues.join(",") });
                       }}
                     />
                   ))}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem
-                disabled={!values?.state}
+                disabled={!values?.states}
                 className="data-[disabled]:opacity-60 data-[disabled]:cursor-not-allowed"
                 value="counties"
               >
                 <AccordionTrigger>Counties</AccordionTrigger>
                 <AccordionContent className="space-y-3">
-                  {sortMultiSelectOptions(counties, filters?.county?.split(",") || []).map((county) => (
+                  {sortMultiSelectOptions(counties, filters?.counties?.split(",") || []).map((county) => (
                     <Checkbox
                       id={county.value}
                       key={county.value}
                       value={county.value}
                       label={county.label}
-                      checked={values.county ? values.county.split(",").includes(county.value) : false}
+                      checked={values.counties ? values.counties.split(",").includes(county.value) : false}
                       onClick={(e) => {
-                        let newValues = values?.county?.split(",") || [];
+                        let newValues = values?.counties?.split(",") || [];
 
                         if (newValues.includes(county.value)) {
                           newValues = newValues.filter((el) => el !== county.value);
                         } else {
                           newValues = [...newValues, county.value];
                         }
-                        setValues({ ...values, county: newValues.join(",") });
+                        setValues({ ...values, counties: newValues.join(",") });
                       }}
                     />
                   ))}

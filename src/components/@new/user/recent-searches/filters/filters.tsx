@@ -2,13 +2,8 @@
 
 import { TextInput } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useAtom } from "jotai";
-import { userRecentSearchesAtom } from "@/atoms/pages-atom";
-import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
-import { removeUserSearches } from "@/server-actions/user-searches/actions";
-import useNotification from "@/hooks/useNotification";
 import { IoMdClose } from "react-icons/io";
 import RecentSearchesDesktopFilters from "./desktop";
 import RecentSearchesMobileFilters from "./mobile";
@@ -18,10 +13,6 @@ const RecentSearchesFilters = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  const [openWarningModal, setWarningModal] = useState(false);
-  const [removePending, setRemovePending] = useState(false);
-  const [userRecentSearchesOption, setUserRecentSearchesOptions] = useAtom(userRecentSearchesAtom);
-  const { notify } = useNotification();
 
   const handleSearch = (value: string) => {
     if (timerRef.current) {
