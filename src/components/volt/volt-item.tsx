@@ -67,7 +67,23 @@ const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeav
         <AccordionTrigger className="text-start [&>svg]:hidden py-0">
           <div className="w-full space-y-2 ">
             <div className="w-full flex justify-between items-center gap-6">
-              {data.owner ? (
+              <div className="w-full space-y-0.5">
+                <div className="flex justify-between items-center w-full">
+                  {data.owner ? (
+                    <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
+                  ) : (
+                    <p className="text-xs text-grey-600 font-medium">State/County</p>
+                  )}
+                  <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
+                </div>
+                <div className="flex justify-between items-baseline w-full">
+                  <p className={data.owner ? "text-xs text-grey-600 font-medium" : "text-sm font-semibold"}>
+                    {data.state.label}/{data?.county?.label?.replace("County", "")}
+                  </p>
+                  <p className="text-sm font-medium truncate">{data.parcelNumberNoFormatting}</p>
+                </div>
+              </div>
+              {/* {data.owner ? (
                 <div className="grid">
                   <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
                   <p className="text-xs text-grey-600 font-medium">
@@ -86,7 +102,7 @@ const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeav
               <div className="grid" style={{ maxWidth: 110 }}>
                 <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
                 <p className="text-sm font-medium truncate">{data.parcelNumberNoFormatting}</p>
-              </div>
+              </div> */}
             </div>
             <hr className="bg-gray-100" />
             <div className="flex gap-2 justify-between">
