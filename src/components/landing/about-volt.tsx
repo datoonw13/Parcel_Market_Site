@@ -27,7 +27,7 @@ const AboutVolt = () => (
         <h1 className="font-extralight text-sm md:text-base">
           VOLT is the first free, no obligation land value information tool to hit the web! By using proprietary algorithms and county sale
           data, VOLT is able to estimate an average value for similar sized properties in a market area. You can also use VOLT to search,
-          save, and export county sale data.
+          save, and export county sales data.
         </h1>
         <Link className="w-full" href={routes.volt.fullUrl}>
           <Button className="mt-6 md:mt-8 w-full md:w-fit">Try for free</Button>
