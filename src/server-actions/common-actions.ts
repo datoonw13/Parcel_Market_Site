@@ -22,7 +22,12 @@ export const subscribeAction = async (email: string): Promise<ResponseModel<null
   }
 };
 
-export const userFeedbackAction = async (data: { email: string; name: string; comment: string }): Promise<ResponseModel<null>> => {
+export const userFeedbackAction = async (data: {
+  email: string;
+  name: string;
+  comment: string;
+  type: "feedback" | "investing";
+}): Promise<ResponseModel<null>> => {
   try {
     await fetcher<null>("user/feedback", { method: "POST", body: JSON.stringify({ ...data }) });
     return {

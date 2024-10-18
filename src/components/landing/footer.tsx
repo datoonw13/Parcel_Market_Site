@@ -16,10 +16,18 @@ const LandingFooter = ({ className }: { className?: string }) => (
         <Link href={routes.termsConditions.fullUrl}>
           <li className="cursor-pointer text-sm text-grey-800 ">Terms of use</li>
         </Link>
-        <li className="cursor-pointer text-sm text-grey-800 ">Pricing</li>
-        <li className="cursor-pointer text-sm text-grey-800 ">My recent search</li>
-        <li className="cursor-pointer text-sm text-grey-800 ">Value of the land tool</li>
-        <li className="cursor-pointer text-sm text-grey-800 ">Investing</li>
+        <Link href="#pricing">
+          <li className="cursor-pointer text-sm text-grey-800 ">Pricing</li>
+        </Link>
+        <Link href={routes.user.recentSearches.fullUrl}>
+          <li className="cursor-pointer text-sm text-grey-800 ">My recent search</li>
+        </Link>
+        <Link href={routes.volt.fullUrl}>
+          <li className="cursor-pointer text-sm text-grey-800 ">Value of the land tool</li>
+        </Link>
+        <Link href={routes.investing.fullUrl}>
+          <li className="cursor-pointer text-sm text-grey-800 ">Investing</li>
+        </Link>
       </ul>
     </div>
 

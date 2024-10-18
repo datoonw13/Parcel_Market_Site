@@ -159,6 +159,11 @@ const routes = {
     protected: false,
     fullUrl: "/terms-conditions",
   },
+  investing: {
+    url: "investing",
+    protected: false,
+    fullUrl: "/investing",
+  },
 };
 
 export const getAllRoutes = (

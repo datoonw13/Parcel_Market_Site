@@ -30,7 +30,7 @@ const LandingSupport = ({ user }: { user: IDecodedAccessToken | null }) => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const { errorMessage } = await userFeedbackAction(data);
+    const { errorMessage } = await userFeedbackAction({ ...data, type: "feedback" });
     if (!errorMessage) {
       notify({ title: "Your feedback has been received!", description: "We appreciate your input and will review it shortly" });
     }
