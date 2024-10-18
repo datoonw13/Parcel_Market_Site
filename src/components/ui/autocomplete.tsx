@@ -58,16 +58,24 @@ const AutoComplete: FC<AutoCompleteProps> = ({
     };
   }, []);
 
+  // useEffect(() => {
+  //   setSearch(options.find((option) => option.value === selectedValue)?.label || "");
+  // }, [options, selectedValue]);
+
   useEffect(() => {
-    setSearch(options.find((option) => option.value === selectedValue)?.label || "");
-  }, [options, selectedValue]);
+    if (!open) {
+      setSearch("");
+    }
+  }, [open]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <Command
-        filter={(value, search) => {
+        filter={(value, key) => {
+          console.log(key, 11);
+
           const item = options.find((el) => el.value === value);
-          return item?.label.trim().toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()) ? 1 : 0;
+          return item?.label.trim().toLocaleLowerCase().includes(key.trim().toLocaleLowerCase()) ? 1 : 0;
         }}
       >
         <PopoverPrimitive.Anchor>
@@ -84,7 +92,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
 
               if (filteredOptions.length === 1 && selectedValue !== filteredOptions[0].value) {
                 onValueChange(filteredOptions[0].value);
-                setSearch(filteredOptions[0].label);
+                // setSearch(filteredOptions[0].label);
                 setOpen(false);
               }
             }}
@@ -95,14 +103,15 @@ const AutoComplete: FC<AutoCompleteProps> = ({
             }}
             onBlur={(e) => {
               if (!e.relatedTarget?.hasAttribute("cmdk-list")) {
-                setSearch(
-                  selectedValue
-                    ? options.find((option) => option.value.toLocaleLowerCase() === selectedValue.toLocaleLowerCase())?.label ?? ""
-                    : ""
-                );
+                // setSearch(
+                //   selectedValue
+                //     ? options.find((option) => option.value.toLocaleLowerCase() === selectedValue.toLocaleLowerCase())?.label ?? ""
+                //     : ""
+                // );
               }
               setOpen(false);
             }}
+            value={search || ""}
           >
             <Input
               endIcon={
@@ -114,7 +123,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
                         onClick={(e) => {
                           e.stopPropagation();
                           onValueChange(null);
-                          setSearch("");
+                          // setSearch("");
                         }}
                       />
                     )}
@@ -123,7 +132,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
                 </>
               }
               error={error}
-              value={search}
+              value={open ? search : options.find((el) => el.value === selectedValue)?.label || ""}
               rootClassName={cn(
                 "w-full",
                 inputRootClassName,
@@ -173,7 +182,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
                       onMouseDown={(e) => e.preventDefault()}
                       onSelect={(currentValue) => {
                         onValueChange(currentValue);
-                        setSearch(options.find((option) => option.value === currentValue)?.label || "");
+                        // setSearch(options.find((option) => option.value === currentValue)?.label || "");
                         setOpen(false);
                       }}
                       className={cn("text-xs", selectedValue === option.value ? "!bg-primary-main-100 " : "hover:!bg-primary-main-50")}
