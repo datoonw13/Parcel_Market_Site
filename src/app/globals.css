@@ -105,4 +105,7 @@
 
  div[data-radix-popper-content-wrapper] {
   display: flex;
+  z-index: 10 !important;
  }
+
+ 
