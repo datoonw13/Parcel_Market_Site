@@ -11,21 +11,21 @@ import { Button } from "../ui/button";
 const slides = [
   {
     id: 1,
-    content: "First",
-    title: "Understand Vacant Land Markets in Seconds not Hours",
-    desc: "Having an answer immediately can sometimes mean the difference between a client or land deal secured! Always be ready with VOLT.",
-  },
-  {
-    id: 2,
-    content: "Second",
+    content: "Fist",
     title: "Save Valuable Time",
     desc: "VOLT calculates the average of sold prices in less than 30 seconds so you can quickly understand a general market value regarding a specific property.",
   },
   {
-    id: 3,
-    content: "Third",
+    id: 2,
+    content: "Second",
     title: "Simple. Fast. Reliable",
     desc: "Built for everyone. No complex UI or sifting through information you don’t need. VOLT delivers reliable data and value information in seconds.",
+  },
+  {
+    id: 3,
+    content: "Third",
+    title: "Understand Vacant Land Markets in Seconds not Hours",
+    desc: "Having an answer immediately can sometimes mean the difference between a client or land deal secured! Always be ready with VOLT.",
   },
 ];
 
