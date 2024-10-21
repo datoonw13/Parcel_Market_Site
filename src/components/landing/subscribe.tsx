@@ -132,7 +132,7 @@ export default function Subscribe() {
         `}
         >
           {list.map((item) => (
-            <li key={item} className="text-sm md:text-base font-medium flex items-start gap-2 text-start">
+            <li key={item} className="text-sm md:text-base font-medium flex items-start gap-2 text-start ">
               <GiCheckMark className="mt-[4px] text-primary-main" /> {item}
             </li>
           ))}
@@ -144,12 +144,12 @@ export default function Subscribe() {
 
 const list = [
   "Average land market values in seconds",
-  "Conveniently Save Sales Data",
-  "Sales Data Updated Weekly",
+  "Conveniently save sales data",
+  "Sales data updated weekly",
   "VOLT quickly filters out outlier sales",
-  "Quickly Evaluate Land Deals in Seconds",
+  "Quickly evaluate land deals in seconds",
   "Save hours of research time",
-  "Export Sales Data to KML or XML",
-  "Data Direct from County Accessors",
+  "Export sales data to KML or XML",
+  "Data direct from county accessors",
   "Created for professionals, investors and landowners",
 ];
