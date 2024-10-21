@@ -178,11 +178,17 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
                   placeholder="Enter Your Email"
                   value={values.email}
                   onChange={(e) => setValues({ ...values, email: e.target.value })}
+                  id="forgot-password-email-input"
                 />
               )}
               {step === ForgotPasswordSteps.VERIFICATION_CODE && (
                 <div className="space-y-4">
-                  <TextInput placeholder="Code" value={values.code} onChange={(e) => setValues({ ...values, code: e.target.value })} />
+                  <TextInput
+                    id="forgot-password-code-input"
+                    placeholder="Code"
+                    value={values.code}
+                    onChange={(e) => setValues({ ...values, code: e.target.value })}
+                  />
                   <ResendButton
                     label="Send New Code"
                     handleResend={async () => {
@@ -197,6 +203,7 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
               {step === ForgotPasswordSteps.NEW_PASSWORD && (
                 <div className="space-y-4">
                   <TextInput
+                    id="forgot-password-new-password-input"
                     type={showNewPassword ? "text" : "password"}
                     placeholder="New password"
                     value={values.newPassword}
@@ -210,6 +217,7 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
                   <TextInput
                     type={showRepeatNewPassword ? "text" : "password"}
                     placeholder="Re-type new password"
+                    id="forgot-password-confirm-new-password-input"
                     value={values.repeatNewPassword}
                     onChange={(e) => setValues({ ...values, repeatNewPassword: e.target.value })}
                     endIcon={

@@ -45,7 +45,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
       <h1 className="font-semibold text-2xl md:text-5xl">Sign In</h1>
       <form className="flex flex-col gap-4 w-full" action={forgotPasswordModal ? () => {} : formAction}>
-        <TextInput label="Email" name="email" />
+        <TextInput label="Email" name="email" id="sign-in-email-input" />
         <TextInput
           label="Password"
           type={passwordVisible ? "text" : "password"}
@@ -55,6 +55,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
               {passwordVisible ? <EyeIcon1 /> : <EyeIcon2 />}
             </div>
           }
+          id="sign-in-password-input"
         />
         <div className="flex justify-between gap-4">
           <CheckBox checked={remember} onChange={() => setRemember(!remember)} label="Remember me" name="sign-in-remember" />
@@ -66,7 +67,7 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
       <GoogleAuthProvider />
       <p className="font-medium text-sm mt-auto">
         Don&apos;t have an account?{" "}
-        <Link href={`/${routes.auth.url}/${routes.auth.signUp.url}`}>
+        <Link id="sign-in-no-account-button" href={`/${routes.auth.url}/${routes.auth.signUp.url}`}>
           <span className="font-medium text-sm text-primary-main underline">Sign Up</span>
         </Link>
       </p>

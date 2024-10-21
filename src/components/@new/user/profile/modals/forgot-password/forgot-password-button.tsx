@@ -9,14 +9,21 @@ const ForgotPasswordButton = ({
   openModal,
   setOpenModal,
   user,
+  id,
 }: {
   openModal: boolean;
   setOpenModal: Dispatch<SetStateAction<boolean>>;
   user: IDecodedAccessToken | null;
+  id?: string;
 }) => (
   <>
     <ForgotPasswordModal open={openModal} closeModal={() => setOpenModal(false)} user={user} />
-    <Button onClick={() => setOpenModal(true)} variant="secondary" className="!outline-none !text-xs !font-medium !text-primary-main !p-0">
+    <Button
+      id={id}
+      onClick={() => setOpenModal(true)}
+      variant="secondary"
+      className="!outline-none !text-xs !font-medium !text-primary-main !p-0"
+    >
       Forgot Password?
     </Button>
   </>

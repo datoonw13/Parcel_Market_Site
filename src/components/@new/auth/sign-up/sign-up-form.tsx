@@ -121,6 +121,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             label="First Name"
             value={watch("firstName")}
             error={!!errors.firstName}
+            id="sign-up-firstname-input"
           />
           <TextInput
             onChange={(e) => {
@@ -133,6 +134,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             label="Last Name"
             value={watch("lastName")}
             error={!!errors.lastName}
+            id="sign-up-lastname-input"
           />
           <TextInput
             onChange={(e) => setValue("email", e.target.value, { shouldValidate: isSubmitted })}
@@ -142,6 +144,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             disabled={!!isGoogleUser}
             value={watch("email")}
             error={!!errors.email}
+            id="sign-up-email-input"
           />
           <TextInput
             onChange={(e) => setValue("streetName", e.target.value, { shouldValidate: isSubmitted })}
@@ -150,6 +153,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             label="Street Address"
             value={watch("streetName")}
             error={!!errors.streetName}
+            id="sign-up-streetName-input"
           />
           <TextInput
             onChange={(e) => setValue("unitNumber", e.target.value, { shouldValidate: isSubmitted })}
@@ -157,8 +161,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             label="Unit Number"
             value={watch("unitNumber")}
             error={!!errors.unitNumber}
+            id="sign-up-unitNumber-input"
           />
           <AutoComplete
+            id="sign-up-state-input"
             options={getAllStates()}
             getOptionLabel={(item) => item.label}
             getOptionKey={(item) => item.value}
@@ -185,6 +191,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             }}
             value={watch("city")}
             error={!!errors.city}
+            id="sign-up-city-input"
           />
           <NumberInput
             required
@@ -195,6 +202,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
             error={!!errors.postalCode}
             thousandSeparator={false}
             decimalScale={0}
+            id="sign-up-postalCode-input"
           />
           {!isGoogleUser && (
             <>
@@ -211,6 +219,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
                     </div>
                   }
                   error={!!errors.password}
+                  id="sign-up-password-input"
                 />
                 {errors.password && <p className="text-xss text-error font-medium">{errors.password.message}</p>}
               </div>
@@ -227,6 +236,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
                     </div>
                   }
                   error={!!errors.repeatPassword}
+                  id="sign-up-repeatPassword-input"
                 />
                 {errors.repeatPassword && <p className="text-xss text-error font-medium">{errors.repeatPassword.message}</p>}
               </div>
@@ -260,15 +270,21 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
         <p className="text-center font-medium text-sm">
           Already have an account?{" "}
-          <Link href={routes.auth.signIn.url}>
+          <Link id="sign-up-signin-redirect-button" href={routes.auth.signIn.url}>
             <span className="underline text-primary-main font-medium text-sm">Sign In</span>
           </Link>
         </p>
         <div className="flex gap-3 flex-col-reverse sm:flex-row w-full sm:w-fit items-center sm:items-end">
-          <Button className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={onBack}>
+          <Button id="sign-up-back-input" className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={onBack}>
             Back
           </Button>
-          <Button className="w-full max-w-96 sm:w-fit" onClick={onSubmit} loading={isSubmitting} disabled={!watch("agreeTerm")}>
+          <Button
+            id="sign-up-accept-input"
+            className="w-full max-w-96 sm:w-fit"
+            onClick={onSubmit}
+            loading={isSubmitting}
+            disabled={!watch("agreeTerm")}
+          >
             Create Account
           </Button>
         </div>

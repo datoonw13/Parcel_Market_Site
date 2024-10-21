@@ -71,6 +71,7 @@ interface ButtonProps {
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   onMouseEnter?: (e: MouseEvent<HTMLButtonElement>) => void;
   onMouseLeave?: (e: MouseEvent<HTMLButtonElement>) => void;
+  id?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -89,12 +90,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type = "button",
       onMouseEnter,
       onMouseLeave,
+      id,
     },
     ref
   ) => (
     <button
       // eslint-disable-next-line react/button-has-type
       type={type || "submit"}
+      id={id}
       ref={ref}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

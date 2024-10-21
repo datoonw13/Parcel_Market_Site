@@ -19,7 +19,6 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
       setValue([...value, item]);
     }
   };
-  console.log(value, 22);
 
   return (
     <>

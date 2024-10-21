@@ -52,6 +52,7 @@ const SignInGoogle = () => {
         login();
       }}
       disabled={loading}
+      id="google-auth-button"
     >
       <GoogleIcon1 />
       Continue with Google

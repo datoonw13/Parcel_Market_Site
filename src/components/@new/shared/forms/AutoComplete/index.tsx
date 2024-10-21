@@ -35,6 +35,7 @@ interface AutoCompleteProps<T extends Array<{}>> {
   disableSameWidth?: boolean;
   rootClassName?: string;
   disableClear?: boolean;
+  id?: string;
 }
 
 const AutoComplete = <T extends Array<{}>>({
@@ -60,6 +61,7 @@ const AutoComplete = <T extends Array<{}>>({
   disableSameWidth,
   rootClassName,
   disableClear,
+  id,
 }: AutoCompleteProps<T>) => {
   const [isOpen, setOpen] = useState(false);
   const isSearching = useRef(false);
@@ -120,6 +122,7 @@ const AutoComplete = <T extends Array<{}>>({
         renderButton={(setReferenceElement, referenceElement) => (
           <TextInput
             ref={ref}
+            id={id}
             readOnly={readOnly}
             error={error}
             required={required}
