@@ -41,8 +41,8 @@ const LandingSlider = () => {
       </Carousel>
       <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 md:px-20 lg:px-32 grid">
-          <h1 className="text-white text-2xl sm:text-4xl md:text-6xl lg:text-[54px] font-bold text-center mx-auto !leading-tight grid gap-x-3 grid-cols-[minmax(0,_max-content)_1fr] xl:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)]">
-            <span>Save Time.</span> <span>Save Money.</span> <span className="col-span-2 xl:col-span-1">Make Money</span>
+          <h1 className="text-white text-2xl sm:text-4xl md:text-6xl lg:text-[54px] font-bold text-center mx-auto !leading-tight grid gap-x-3 grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
+            <span>Save Time.</span> <span>Save Money.</span>
           </h1>
           <div className="bg-white mt-6 md:mt-8 mb-4 rounded-xl p-4 grid md:grid-flow-col gap-3 max-w-3xl w-full mx-auto">
             <AutoComplete
