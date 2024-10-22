@@ -1,74 +1,32 @@
-import { CheckIcon4 } from "../icons/CheckIcons";
+import { GiCheckMark } from "react-icons/gi";
 
 const SubscriptionHeader = () => (
   <div className="space-y-6">
     <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center">One Subscription. Full Access</h1>
-    <div className="border border-primary-main-400 rounded-2xl bg-primary-main-50 p-4 md:p-6 lg:8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-      <div className="space-y-3">
-        <h3 className="font-medium text-lg">Sale and Value Data</h3>
-        <ul className="space-y-3">
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            VOLT Tool
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Save Property Searches
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            View Sales in Map
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Export Sale Data to KML and XML
-          </li>
-        </ul>
-      </div>
-      <div className="space-y-3">
-        <h3 className="font-medium text-lg"> Parcel Marketplace</h3>
-        <ul className="space-y-3">
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Search and Post Wholesale Land Deals
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Make and Receive Offers
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Chat Directly with Investors and Landowners
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Save and Follow Listings
-          </li>
-        </ul>
-      </div>
-      <div className="space-y-3">
-        <h3 className="font-medium text-lg">Sale and Value Data</h3>
-        <ul className="space-y-3">
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Contact Experienced Land Professionals
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Local to Your area
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Parcel Market Vetted and Approved
-          </li>
-          <li className="grid grid-cols-[minmax(0,_max-content)_1fr] items-baseline gap-1.5">
-            <CheckIcon4 className="!h-3.5" color="primary-main" />
-            Brokers, Appraisers, and more...
-          </li>
-        </ul>
-      </div>
-    </div>
+    <ul
+      className={`
+    border border-primary-main-400 rounded-2xl bg-primary-main-50 p-4 md:p-6 
+        grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-y-4 gap-x-8 
+        `}
+    >
+      {list.map((item) => (
+        <li key={item} className="text-sm md:text-base font-medium flex items-start gap-2 text-start ">
+          <GiCheckMark className="mt-[4px] text-primary-main" /> {item}
+        </li>
+      ))}
+    </ul>
   </div>
 );
 
 export default SubscriptionHeader;
+const list = [
+  "Average land market values in seconds",
+  "Conveniently save sales data",
+  "Sales data updated weekly",
+  "VOLT quickly filters out outlier sales",
+  "Quickly evaluate land deals in seconds",
+  "Save hours of research time",
+  "Export sales data to KML or XML",
+  "Data direct from county accessors",
+  "Created for professionals, investors and landowners",
+];
