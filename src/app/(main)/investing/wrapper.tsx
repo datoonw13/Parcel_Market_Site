@@ -53,8 +53,8 @@ const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) =>
       <div className="z-10 relative space-y-3">
         <h1 className="font-extrabold text-5xl md:text-5xl lg:text-[44px]">Investing</h1>
         <h2 className="text-grey-800 text-lg md:text-xl lg:text-[22px]">
-          If you are interested in becoming a Parcel Market partner, leave us your contact information and we will contact you as soon as
-          possible. Thanks for your interest.
+          Interested in investing with Parcel Market? We are always eager to discuss new partnerships and ideas! Please reach out to us and
+          we will be in touch soon!
         </h2>
       </div>
 

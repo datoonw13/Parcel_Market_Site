@@ -180,7 +180,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                       disabled={!values.selectedItem}
                       className="w-full"
                     >
-                      Calculate Price
+                      GetValue
                     </Button>
                   </div>
                 )}

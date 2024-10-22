@@ -149,7 +149,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                               disabled={!values.selectedItem}
                               className="w-full"
                             >
-                              Calculate Price
+                              GetValue
                             </Button>
                           )}
                           {step === VoltSteps.CALCULATION && !user && (
