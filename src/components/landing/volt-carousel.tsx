@@ -107,7 +107,7 @@ const VoltCarousel = () => {
             </div>
           ))}
       </div>
-      <div className="h-full">
+      <div className="">
         <div
           className={`
             bg-[url('/carousel-bg.png')] bg-[length:100%_100%] bg-no-repeat
