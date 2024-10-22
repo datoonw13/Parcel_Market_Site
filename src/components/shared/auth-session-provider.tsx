@@ -2,10 +2,31 @@
 
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { IDecodedAccessToken } from "@/types/auth";
+import { ISubscription } from "@/types/subscriptions";
 import moment from "moment";
-import { ReactNode, useCallback, useEffect, useRef } from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useRef } from "react";
 
-const AuthSessionProvider = ({ children, user }: { children: ReactNode; user: IDecodedAccessToken | null }) => {
+const AuthContext = createContext<{
+  user: IDecodedAccessToken | null;
+  activeSubscription: ISubscription | null;
+  subscriptions: ISubscription[] | null;
+}>({
+  user: null,
+  activeSubscription: null,
+  subscriptions: null,
+});
+const useAuth = () => useContext(AuthContext);
+
+const AuthSessionProvider = ({
+  children,
+  user,
+  userSubscriptions,
+}: {
+  children: ReactNode;
+  user: IDecodedAccessToken | null;
+  userSubscriptions: ISubscription[] | null;
+}) => {
+  const activeSubscription = userSubscriptions?.find((el) => el.status === "active" || el.status === "trialing") || null;
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const setSessionTimer = useCallback(() => {
@@ -31,7 +52,9 @@ const AuthSessionProvider = ({ children, user }: { children: ReactNode; user: ID
     };
   }, [setSessionTimer, user]);
 
-  return children;
+  return <AuthContext.Provider value={{ user, activeSubscription, subscriptions: userSubscriptions }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthSessionProvider;
+
+export { useAuth };

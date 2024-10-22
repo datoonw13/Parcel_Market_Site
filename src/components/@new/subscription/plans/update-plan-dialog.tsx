@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { SubscriptionType } from "@/types/subscriptions";
+import { useAuth } from "@/components/shared/auth-session-provider";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 
 interface UpdatePlanDialogProps {
@@ -25,21 +26,25 @@ const planDescription = (subscription: SubscriptionType) => {
   }
 };
 
-const UpdatePlanDialog: FC<UpdatePlanDialogProps> = ({ closeDialog, pending, onSubmit, subscription }) => (
-  <ResponsiveWarningModal
-    open
-    closeModal={closeDialog}
-    description={planDescription(subscription)}
-    title="Upgrade Subscription plan"
-    onOK={onSubmit}
-    okPending={pending}
-    onCancel={closeDialog}
-    hideIcon
-    titleClasses="text-start"
-    descriptionClasses="text-start"
-    contentClasses="border-b md:border-0 border-b-grey-100 mb-[5vh] md:mb-8 pb-4 md:pb-0"
-    okLabel="Upgrade Subscription"
-  />
-);
+const UpdatePlanDialog: FC<UpdatePlanDialogProps> = ({ closeDialog, pending, onSubmit, subscription }) => {
+  const { subscriptions } = useAuth();
+
+  return (
+    <ResponsiveWarningModal
+      open
+      closeModal={closeDialog}
+      description={planDescription(subscription)}
+      title={subscriptions && subscriptions?.length > 1 ? "Upgrade Subscription plan" : "Get a New Subscription"}
+      onOK={onSubmit}
+      okPending={pending}
+      onCancel={closeDialog}
+      hideIcon
+      titleClasses="text-start"
+      descriptionClasses="text-start"
+      contentClasses="border-b md:border-0 border-b-grey-100 mb-[5vh] md:mb-8 pb-4 md:pb-0"
+      okLabel={subscriptions && subscriptions?.length > 1 ? "Upgrade Subscription" : "Get A Subscription"}
+    />
+  );
+};
 
 export default UpdatePlanDialog;

@@ -18,6 +18,7 @@ import ChatSession from "@/components/@new/chat/chat-session";
 import AuthSessionProvider from "@/components/shared/auth-session-provider";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import Chat from "@/components/shared/chat";
+import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const user = await getUserAction();
+  const userSubscriptions = user ? await getUserSubscriptions() : null;
 
   return (
     <>
@@ -82,7 +84,7 @@ export default async function RootLayout({
             <Provider>
               <ThemeProvider theme={theme}>
                 <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-                <AuthSessionProvider user={user}>
+                <AuthSessionProvider user={user} userSubscriptions={userSubscriptions?.data || null}>
                   <ChatSession user={user}>{children}</ChatSession>
                 </AuthSessionProvider>
               </ThemeProvider>
