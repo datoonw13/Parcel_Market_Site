@@ -7,7 +7,7 @@ export const passwordSchema = z
   })
   .trim()
   .regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[+*$^_])[A-Za-z\d+*$^_]{8,}$/,
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[+*$^_])[A-Za-z\d+*$^_].{8,}$/,
     "Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & special characters ($, ^, *, +, _)"
   );
 
