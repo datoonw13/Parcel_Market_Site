@@ -124,7 +124,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
               </>
             )}
             <Link href={routes.volt.fullUrl}>
-              <Button>Value of the land tool</Button>
+              <Button>VOLT</Button>
             </Link>
             {!user && (
               <Link href={routes.auth.signIn.fullUrl}>
