@@ -21,7 +21,7 @@ const UserMenu = ({ user }: { user: IDecodedAccessToken }) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Avatar className="group cursor-pointer">
+        <Avatar className="group cursor-pointer" id="header-user-icon">
           <AvatarFallback className=" border border-grey-100 bg-grey-30 hover:bg-grey-50 hover:border-primary-main-200 text-sm font-medium group-data-[state=open]:bg-primary-main-200">
             {`${user.firstName[0]}${user.lastName[0]}`}
           </AvatarFallback>

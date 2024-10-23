@@ -34,7 +34,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
       <div className="flex">
         {isSmallDevice && (
           <>
-            <PopoverTrigger ref={burgerIconRef}>
+            <PopoverTrigger ref={burgerIconRef} id="header-hamburger-icon">
               <RxHamburgerMenu className="size:4 sm:size-5 cursor-pointer" />
             </PopoverTrigger>
             <PopoverContent
@@ -116,18 +116,18 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
           <div className="flex gap-4 items-center">
             {!!user && (
               <>
-                <Link href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
+                <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
                   <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
                 </Link>
                 <HeaderNotifications />
                 <UserMenu user={user} />
               </>
             )}
-            <Link href={routes.volt.fullUrl}>
+            <Link id="header-volt-button" href={routes.volt.fullUrl}>
               <Button>VOLT</Button>
             </Link>
             {!user && (
-              <Link href={routes.auth.signIn.fullUrl}>
+              <Link id="header-auth-button" href={routes.auth.signIn.fullUrl}>
                 <Button variant="secondary">Sign In</Button>
               </Link>
             )}

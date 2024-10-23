@@ -18,7 +18,7 @@ const LandingHeader = ({ user }: { user: IDecodedAccessToken | null }) => (
           `}
         id="root-header"
       >
-        <Link href={routes.home.fullUrl}>
+        <Link href={routes.home.fullUrl} id="landing-header-logo">
           <Logo className="w-[85px] h-6 sm:w-24 sm:h-8 md:w-32 md:h-8 lg:w-[140px] lg:h-10 " />
         </Link>
         <HeaderMenu user={user} />

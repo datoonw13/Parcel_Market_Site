@@ -42,6 +42,7 @@ const HeaderNotifications = () => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <div
+          id="header-notification-icon"
           className={cn(
             "border border-grey-100 size-10 rounded-full bg-grey-50 flex items-center justify-center cursor-pointer relative",
             "data-[state=open]:bg-grey-100",
