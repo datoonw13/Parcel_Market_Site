@@ -16,11 +16,11 @@ const VoltFooter = ({ className }: { className?: string }) => {
       <PrivacyPolicyDialog open={openPrivacyDialog} closeModal={() => setPrivacyDialog(false)} />
       <div className={cn("flex items-center justify-between", className)}>
         <div className="flex gap-3 items-center justify-center lg:justify-start">
-          <p onClick={() => setTermsDialog(true)} className="text-sm text-gray-800">
+          <p onClick={() => setPrivacyDialog(true)} className="cursor-pointer text-sm text-gray-800">
             Privacy Policy
           </p>
           <div className="w-[1px] h-4 bg-gray-200" />
-          <p onClick={() => setPrivacyDialog(true)} className="text-sm text-gray-800">
+          <p onClick={() => setTermsDialog(true)} className="cursor-pointer text-sm text-gray-800">
             Terms of use
           </p>
         </div>
