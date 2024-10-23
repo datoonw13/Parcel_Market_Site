@@ -8,10 +8,6 @@ const LandingQuestions = () => (
   <div className=" flex flex-col gap-6 md:gap-8 lg:gap-11 px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[11vw] ">
     <div className="space-y-2 md:space-y-3 max-w-4xl mx-auto">
       <h1 className="text-center font-extrabold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">Frequently asked questions</h1>
-      <h2 className="text-center font-light text-sm md:text-base">
-        You can get answers to all questions. However, if you do not find the answers you want, you can contact us. Go to the internal FAQ
-        page and find out all the answers. We are sure that you will definitely find the answers you want here
-      </h2>
     </div>
     <Accordion type="single" collapsible className="w-full space-y-3 md:space-y-4">
       {list.map((el, i) => (
