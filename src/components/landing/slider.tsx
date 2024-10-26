@@ -41,8 +41,8 @@ const LandingSlider = () => {
       </Carousel>
       <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 md:px-20 lg:px-32 grid">
-          <h1 className="text-white text-2xl sm:text-4xl md:text-6xl lg:text-[54px] font-bold text-center mx-auto !leading-tight grid gap-x-3 grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
-            <span>Save Time.</span> <span>Save Money.</span>
+          <h1 className="text-white text-2xl sm:text-4xl md:text-5xl  font-bold text-center mx-auto !leading-tight grid gap-x-3 grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)]">
+            Get the average market value of land for free
           </h1>
           <div className="bg-white mt-6 md:mt-8 mb-4 rounded-xl p-4 grid md:grid-flow-col gap-3 max-w-3xl w-full mx-auto">
             <AutoComplete
@@ -70,7 +70,7 @@ const LandingSlider = () => {
             </Button>
           </div>
           <h2 className="sm:text-lg font-semibold text-center text-white row-end-3 md:row-end-4 mt-2">
-            Calculate an average market value in seconds for free!
+            Get comparable sales data in seconds
           </h2>
         </div>
       </div>
