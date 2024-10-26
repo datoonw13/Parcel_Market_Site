@@ -24,12 +24,14 @@ const LandingQuestions = () => (
           explore more opportunities and make informed decisions much faster, leading to an increased deal flow and better understanding of
           vacant land markets.
         </AccordionContent>
-        <div
-          style={{
-            background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 5%, #fff 100%)",
-          }}
-          className="absolute w-full h-full rounded-2xl left-0 top-0"
-        />
+        <Link href={routes.questions.fullUrl}>
+          <div
+            style={{
+              background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.7) 5%, #fff 100%)",
+            }}
+            className="absolute w-full h-full rounded-2xl left-0 top-0"
+          />
+        </Link>
       </AccordionItem>
     </Accordion>
     <Link href={routes.questions.fullUrl}>
