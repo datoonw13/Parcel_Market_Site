@@ -58,8 +58,7 @@ const NotificationItem = <T extends NotificationType>({
       markNotificationAsReadAction(data.id);
     }
     if (data.type === NotificationType.NewMessage) {
-      console.log("open chat");
-    } else if (data.type === NotificationType.SubscriptionExpired) {
+    } else if (data.type === NotificationType.SubscriptionExpired || data.type === NotificationType.SubscriptionUpdated) {
       router.push(routes.user.subscription.fullUrl);
     } else if (data.type === NotificationType.NewOfferReceived || data.type === NotificationType.ReceivedOfferExpiring) {
       router.push(`${routes.user.offers.received.fullUrl}?offerId=${data.offerId}`);
