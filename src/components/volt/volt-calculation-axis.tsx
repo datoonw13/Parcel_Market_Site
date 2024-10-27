@@ -62,7 +62,7 @@ const VoltPriceCalculationAxis = ({
             isSmallDevice ? "flex-col" : ""
           )}
         >
-          <p className={cn(`text-xs text-gray-600`, isSmallDevice ? "hidden" : "block")}>Min</p>
+          {/* <p className={cn(`text-xs text-gray-600`, isSmallDevice ? "hidden" : "block")}>Min</p> */}
           {!isSmallDevice && (
             <Tooltip
               renderButton={
@@ -150,7 +150,7 @@ const VoltPriceCalculationAxis = ({
               />
             ))}
           </div>
-          <p className={cn("text-xs text-gray-600 ", isSmallDevice ? "hidden" : "block")}>Max</p>
+          {/* <p className={cn("text-xs text-gray-600 ", isSmallDevice ? "hidden" : "block")}>Max</p> */}
           {!isSmallDevice && (
             <Tooltip
               renderButton={
