@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
-import { exportToExcel, exportToKml } from "@/lib/utils";
+import { cn, exportToExcel, exportToKml } from "@/lib/utils";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import RecentSearchesMap from "../map";
 
@@ -127,6 +127,11 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
             <TableBody>
               {data.propertiesUsedForCalculation.map((el) => (
                 <TableRow
+                  className={cn(
+                    mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting && "bg-grey-30",
+                    mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting && "bg-grey-50",
+                    `${mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting}`
+                  )}
                   key={el.id}
                   onMouseEnter={() => {
                     setMpaInteraction((prevData) => ({
