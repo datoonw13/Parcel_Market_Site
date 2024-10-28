@@ -15,7 +15,7 @@ const AboutUs = () => {
       {/* <Header /> */}
       <Container sx={{ py: { xs: 6, md: 8, lg: 10 }, display: "flex", flexDirection: "column", gap: 4.5 }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography sx={{ fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, textAlign: "center", fontWeight: 600 }}>About us</Typography>
+          {/* <Typography sx={{ fontSize: { xs: 24, sm: 28, md: 32, lg: 36 }, textAlign: "center", fontWeight: 600 }}>About us</Typography> */}
           <Typography sx={{ fontSize: 16, textAlign: "center", mt: { xs: 1.5, sm: 2, md: 3 }, fontWeight: { md: 500 } }}>
             Welcome to Parcel Market and thank You for being here. At Parcel Market, our goal is simple, to provide a FREE and convenient
             place to start when making decisions regarding vacant land.{" "}
