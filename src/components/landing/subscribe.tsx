@@ -76,44 +76,56 @@ export default function Subscribe() {
             className="overflow-hidden lg:mx-10 xl:mx-20"
             afterChange={(e) => setActiveSlide(Math.ceil(e))}
           >
-            <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
-              <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Risk Free! No Payment Info Required</h2>
-              <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-                Free <span className="text-base font-normal">/ 14 Days</span>
-              </h1>
-              <Link href={routes.user.subscription.fullUrl}>
-                <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
-                  <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                    Try For Free <FaArrowRightLong />
-                  </div>
-                </Button>
-              </Link>
+            <div className="h-[270px] group">
+              <div className="flex items-center h-full w-full">
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[90%] w-full group-hover:h-full transition-all duration-100">
+                  <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Risk Free! No Payment Info Required</h2>
+                  <h1 className="text-[44px] font-bold mb-7 md:mb-8">
+                    Free <span className="text-base font-normal">/ 14 Days</span>
+                  </h1>
+                  <Link href={routes.user.subscription.fullUrl}>
+                    <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
+                      <div className="flex items-center justify-between gap-2 w-full text-primary-main group-hover:text-white font-semibold">
+                        Try For Free <FaArrowRightLong />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[270px]">
-              <h2 className="font-medium text-base text-primary-main mb-4 uppercase">save 10% per month</h2>
-              <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-                <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
-              </h1>
-              <Link href={routes.user.subscription.fullUrl}>
-                <Button className="flex w-full [&>span]:w-full ">
-                  <div className="flex items-center justify-between gap-2 w-full  font-semibold">
-                    Subscribe <FaArrowRightLong />
-                  </div>
-                </Button>
-              </Link>
+            <div className="h-[270px] group">
+              <div className="flex items-center h-full w-full">
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full h-[90%] group-hover:h-full transition-all duration-100">
+                  <h2 className="font-medium text-base text-primary-main mb-4 uppercase">save 10% per month</h2>
+                  <h1 className="text-[44px] font-bold mb-7 md:mb-8">
+                    <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
+                  </h1>
+                  <Link href={routes.user.subscription.fullUrl}>
+                    <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
+                      <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold group-hover:text-white">
+                        Subscribe <FaArrowRightLong />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[256px]">
-              <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Per month</h2>
-              <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-                <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
-              </h1>
-              <Link href={routes.user.subscription.fullUrl}>
-                <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200">
-                  <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold">
-                    Subscribe <FaArrowRightLong />
-                  </div>
-                </Button>
-              </Link>
+            <div className="h-[270px] group">
+              <div className="flex items-center h-full w-full">
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full h-[90%] group-hover:h-full transition-all duration-100">
+                  <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Per month</h2>
+                  <h1 className="text-[44px] font-bold mb-7 md:mb-8">
+                    <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
+                  </h1>
+                  <Link href={routes.user.subscription.fullUrl}>
+                    <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
+                      <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold group-hover:text-white">
+                        Subscribe <FaArrowRightLong />
+                      </div>
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </Slider>
           <ul className="flex gap-2 mx-auto justify-center mt-3 lg:hidden">
