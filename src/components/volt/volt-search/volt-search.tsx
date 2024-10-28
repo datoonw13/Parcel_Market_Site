@@ -83,7 +83,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
 
   useEffect(() => {
     if (values.searchDetails) {
-      reset({ ...values.searchDetails, searchType: "parcelNumber" });
+      reset({ ...values.searchDetails });
     }
   }, [reset, values.searchDetails]);
 

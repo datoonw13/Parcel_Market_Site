@@ -199,13 +199,9 @@ const RecentSearchesLitItemMobileFull = ({
                   <Image src={NoAuthorizationSvg} alt="" fill className="w-full h-full" />
                 </div>
                 <div>
-                  <p className="text-center font-semibold">
-                    {user && !user?.isSubscribed ? "You do not have an active subscription" : "Information not available"}
-                  </p>
+                  <p className="text-center font-semibold">Please sign in or subscribe to see the sales data</p>
                   <p className="text-center text-grey-800 text-sm">
-                    {user && !user?.isSubscribed
-                      ? "If you want to see information about land, please subscribe to our service"
-                      : "If you want to see all land information, please authorize"}
+                    You will need to sign in or subscribe to view, analyze, or export sales data
                   </p>
                 </div>
                 <Button
