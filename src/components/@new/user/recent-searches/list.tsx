@@ -131,7 +131,12 @@ const UserRecentSearchesList = ({
             type="single"
             collapsible
             value={openItem}
-            onValueChange={(value) => !userRecentSearchesOption.selecting && setOpenItem(value)}
+            onValueChange={(value) => {
+              if (!userRecentSearchesOption.selecting) {
+                setOpenItem(value);
+                router.push(`#${value.toString()}`);
+              }
+            }}
             className="w-full lg:border lg:rounded-2xl space-y-3 lg:space-y-0 lg:[&>div:last-child]:border-b-0 [&>div:first-child]:rounded-t-2xl [&>div:first-child>h3>button]:rounded-t-2xl"
           >
             {userRecentSearchesOption.selecting && (
@@ -166,6 +171,7 @@ const UserRecentSearchesList = ({
               <AccordionItem
                 key={search.id}
                 value={search.id.toString()}
+                id={search.id.toString()}
                 className={cn(`
                 border rounded-2xl 
                 lg:border-0 lg:border-b lg:!border-b-grey-100 lg:rounded-none 
