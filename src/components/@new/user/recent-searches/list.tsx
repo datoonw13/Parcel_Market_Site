@@ -81,8 +81,8 @@ const UserRecentSearchesList = ({
           },
         }}
         cancelButton={{ show: true, label: "Close", onClick: () => setSubscriptionWarning(false) }}
-        title={`"Subscribe" to See the information`}
-        description="You have not active subscription, if you want to see this information please subscribe"
+        title="Please sign in or subscribe to see the sales data"
+        description="You will need to sign in or subscribe to view, analyze, or export sales data"
       />
       {mobileFullViewItem && (
         <RecentSearchesLitItemMobileFull
