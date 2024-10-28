@@ -20,7 +20,10 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
 
     const data = await fetcher<{ clientSecret: string }>(`stripe/create-checkout-session-subscription`, {
       method: "POST",
-      body: JSON.stringify({ subscriptionType, redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.user.subscription.fullUrl}` }),
+      body: JSON.stringify({
+        subscriptionType,
+        redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.user.subscription.fullUrl}?success=true`,
+      }),
     });
 
     return data.clientSecret;
