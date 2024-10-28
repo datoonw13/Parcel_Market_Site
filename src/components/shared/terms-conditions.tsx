@@ -60,7 +60,7 @@ const TermsConditions = ({
                     The Company has no liability for any content information submitted to, or posted on, the Website by third parties.
                   </li>
                   <li>
-                    he Company does not verify the completeness, accuracy, or legitimacy of any information submitted to, or posted on, the
+                    The Company does not verify the completeness, accuracy, or legitimacy of any information submitted to, or posted on, the
                     Website by third parties.
                   </li>
                   <li>
