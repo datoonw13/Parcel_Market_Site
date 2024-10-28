@@ -253,7 +253,7 @@ const TermsConditions = ({
               contemporaneous agreements.
             </p>
           </div>
-          <div id="12" className="space-y-3 md:space-y-5">
+          <div id="12" className="space-y-3 md:space-y-5 marker:">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Your Comments and Concerns </h1>
             <p className={cn("text-grey-800 text-sm space-y-3", !modal && "md:text-base")}>
               This website is operated by Parcel Market LLC. All notices of copyright infringement claims should be sent to
