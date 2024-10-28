@@ -199,7 +199,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         if (currentItemMarker) {
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
           }
         }
       }
@@ -214,7 +214,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
           currentItemMarker.openPopup();
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
           }
         }
       }
