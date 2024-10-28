@@ -13,8 +13,7 @@ const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
         we collect, use, and protect the information you provide when using our website.
       </p>
     </div>
-
-    <div className="space-y-3 md:space-y-5">
+    <div id="1" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Who are our users?</h1>
       <p className={cn("text-grey-800 text-sm ", !modal && "md:text-base")}>
         Our users are individuals seeking to estimate the value of vacant property in the United States. Vacant property is land that does
@@ -25,34 +24,73 @@ const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
         decisions without independently verifying the value by securing a professional appraisal.
       </p>
     </div>
-
-    <div className="space-y-3 md:space-y-5">
+    <div id="2" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>What information do we collect from our users?</h1>
       <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        <span className="pl-6 pb-2 relative before:content-['_'] before:size-1.5 before:rounded-full before:bg-grey-800 before:absolute before:block before:top-3 before:left-2">
-          Our website does not use tracking technology such as cookies or pixels. We may collect your IP address, browser type, and device
-          type to help us understand how users interact with our website and improve our services.
-        </span>
         <span>
-          Third parties, like Google, may collect data regarding your use of our website. If you choose to create an account, we store your
-          name, date of birth, and country/state of origin to communicate with you, personalize your experience, and comply with legal
-          requirements. If you request an estimate, we collect the parcel number, mailing address, or name of the current property owner. If
-          you use the chat platform, the contents of your communications will be saved on our secure portal for a limited time period. We do
-          not actively monitor chat communications, but we encourage users to email us at{" "}
-          <span className="font-semibold underline">customerservice@parcelmarket.com</span> if another user posts objectionable content to
-          the chat. We are not a party to user negotiations, and we do not actively monitor user communications.
+          Our website does not use tracking technology such as cookies or pixels. We may collect your IP address, browser type, and device
+          type to help us understand how users interact with our website and improve our services. Third parties, like Google, may collect
+          data regarding your use of our website. If you choose to create an account, we store your name, date of birth, and country/state
+          of origin to communicate with you, personalize your experience, and comply with legal requirements. If you request an estimate, we
+          collect the parcel number, mailing address, or name of the current property owner. If you use the chat platform, the contents of
+          your communications will be saved on our secure portal for a limited time period. We do not actively monitor chat communications,
+          but we encourage users to email us at <span className="font-semibold underline">customerservice@parcelmarket.com</span> if another
+          user posts objectionable content to the chat. We are not a party to user negotiations, and we do not actively monitor user
+          communications
         </span>
       </p>
     </div>
-    <div className="space-y-3 md:space-y-5">
+    <div id="3" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>How do we use your private information?</h1>
       <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        <span className="pl-6 pb-2 relative before:content-['_'] before:size-1.5 before:rounded-full before:bg-grey-800 before:absolute before:block before:top-3 before:left-2">
-          We do not sell your private information. We use the personal information collected from users to carry out the essential functions
-          of the website, improve our services, to communicate with you, and to comply with privacy regulations. We may share your personal
-          information with third-party service providers, such as payment processors and analytics tools, to help us operate the website. We
-          require these providers to maintain appropriate security measures to protect your data.
-        </span>
+        We do not sell your private information. We use the personal information collected from users to carry out the essential functions
+        of the website, improve our services, to communicate with you, and to comply with privacy regulations. We may share your personal
+        information with third-party service providers, such as payment processors and analytics tools, to help us operate the website. We
+        require these providers to maintain appropriate security measures to protect your data.
+      </p>
+    </div>
+    <div id="4" className="space-y-3 md:space-y-5">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Can I request my personal information be deleted?</h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+        Yes, users can request the Company permanently delete the personal information collected by the website by submitting an “opt out”
+        request to <span className="font-semibold underline">customerservice@parcelmarket.com</span>
+      </p>
+    </div>
+    <div id="5" className="space-y-3 md:space-y-5">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>How is my personal information stored?</h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+        We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, alteration, or
+        destruction. Personal information is stored on a secure platform accessible to Company employees, agents, and vendors, only.
+      </p>
+    </div>
+    <div id="6" className="space-y-3 md:space-y-5">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>What am I agreeing to by using the website and services?</h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+        By using this website, you agree to be bound by the Terms of Use and this Privacy Policy.
+      </p>
+    </div>
+    <div id="7" className="space-y-3 md:space-y-5">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>
+        Will I be notified if the website experiences a security breach?
+      </h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+        Yes, users will be notified within seventy-two hours of the Company learning of a security breach that could affect their personal
+        information.
+      </p>
+    </div>
+    <div id="8" className="space-y-3 md:space-y-5">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>
+        Will I be notified if the website’s Terms & Policies change?
+      </h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+        If you have set up a user account, we will notify you by email if our Terms of Use or our Privacy Policies change.
+      </p>
+    </div>
+    <div id="9" className="space-y-3 md:space-y-5">
+      <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Who can I contact with questions or concerns? </h1>
+      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+        Questions and concerns regarding our website and services can be forwarded to{" "}
+        <span className="font-semibold underline">customerservice@parcelmarket.com</span>
       </p>
     </div>
   </div>
