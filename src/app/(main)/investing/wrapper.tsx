@@ -57,7 +57,7 @@ const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) =>
       <Image src="/investing-mobile.png" alt="" className="md:hidden w-full h-full" fill />
       <div className="z-10 relative space-y-3">
         <h1 className="font-extrabold text-5xl md:text-5xl lg:text-[44px]">Investing</h1>
-        <h2 className="text-grey-800 text-lg md:text-xl lg:text-[22px]">
+        <h2 className="text-lg md:text-xl lg:text-[22px]">
           Interested in investing with Parcel Market? We are always eager to discuss new partnerships and ideas! Please reach out to us and
           we will be in touch soon!
         </h2>
