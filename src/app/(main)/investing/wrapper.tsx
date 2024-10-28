@@ -23,7 +23,7 @@ const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) =>
   const { notify } = useNotification();
   const {
     handleSubmit,
-    formState: { isSubmitted, errors, isSubmitting, isValid },
+    formState: { isSubmitting, isValid },
     reset,
     register,
   } = useForm<z.infer<typeof formSchema>>({
@@ -34,6 +34,11 @@ const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) =>
     const { errorMessage } = await userFeedbackAction({ ...data, type: "investing" });
     if (!errorMessage) {
       notify({ title: "Your investing has been received!", description: "We appreciate your input and will review it shortly" });
+      reset({
+        email: user?.email || "",
+        comment: "",
+        name: user ? `${user.firstName} ${user.lastName}` : "",
+      });
     }
   });
 
