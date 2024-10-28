@@ -7,9 +7,7 @@ import { getStripeSessionAction, revalidateAllPath } from "@/server-actions/subs
 import { useSearchParams } from "next/navigation";
 import { SubscriptionType } from "@/types/subscriptions";
 
-const stripePromise = loadStripe(
-  "pk_test_51PgJWHK4fDeIIHWZmno0otYwwjWcWtxZO7yK2agdk0YQN2aDssiyrXEyIjsfYRXPd0sq9PpVM5hUWCTBH9mM9XGs00WDDK27VM"
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "");
 
 const Stripe = () => {
   const searchParams = useSearchParams();
