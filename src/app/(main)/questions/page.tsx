@@ -20,7 +20,7 @@ const QuestionsPage = () => (
       </div>
       {list.map((el) => (
         <div key={el.id} id={el.id} className="space-y-3 md:space-y-5">
-          <h1 className={cn("font-extrabold text-xl", "md:text-2xl")}>{el.title}</h1>
+          <h1 className={cn("font-extrabold text-xl", "md:text-[22px]")}>{el.title}</h1>
           <p className={cn("text-grey-800 text-sm", "md:text-base")}>{el.description}</p>
         </div>
       ))}

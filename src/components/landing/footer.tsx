@@ -25,6 +25,9 @@ const LandingFooter = ({ className }: { className?: string }) => (
         <Link href={routes.volt.fullUrl}>
           <li className="cursor-pointer text-sm text-grey-800 ">Value of the land tool</li>
         </Link>
+        <Link href={routes.questions.fullUrl}>
+          <li className="cursor-pointer text-sm text-grey-800 ">FAQ</li>
+        </Link>
         <Link href={routes.investing.fullUrl}>
           <li className="cursor-pointer text-sm text-grey-800 ">Investing</li>
         </Link>
