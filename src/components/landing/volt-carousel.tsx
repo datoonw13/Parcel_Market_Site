@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Fragment, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import routes from "@/helpers/routes";
@@ -31,30 +31,48 @@ const slides = [
 
 const VoltCarousel = () => {
   const [data, setData] = useState(slides);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const onClick = (id: number) => {
-    const itemIndex = data.findIndex((el) => el.id === id);
-    const getItemPosition = () => {
-      if (itemIndex === 0) {
-        return "left";
+  const onClick = useCallback(
+    (id: number, reset?: boolean) => {
+      if (reset) {
+        window.clearTimeout(timerRef.current);
       }
-      if (itemIndex === 1) {
-        return "center";
+      const itemIndex = data.findIndex((el) => el.id === id);
+      const getItemPosition = () => {
+        if (itemIndex === 0) {
+          return "left";
+        }
+        if (itemIndex === 1) {
+          return "center";
+        }
+        return "right";
+      };
+
+      const position = getItemPosition();
+
+      if (position === "left") {
+        const [a, b, c] = data;
+        setData([c, a, b]);
       }
-      return "right";
-    };
+      if (position === "right") {
+        const [a, b, c] = data;
+        setData([b, c, a]);
+      }
+    },
+    [data]
+  );
 
-    const position = getItemPosition();
+  const startLoop = useCallback(() => {
+    window.clearInterval(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      onClick(data[2].id);
+    }, 20000);
+  }, [data, onClick]);
 
-    if (position === "left") {
-      const [a, b, c] = data;
-      setData([c, a, b]);
-    }
-    if (position === "right") {
-      const [a, b, c] = data;
-      setData([b, c, a]);
-    }
-  };
+  useEffect(() => {
+    startLoop();
+  }, [startLoop]);
 
   return (
     <div className="px-5 sm:px-9 md:px-12 lg:px-18 xl:px-[12vw] grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-[1fr_1.1fr] gap-x-12 xl:gap-x-14 items-center">
@@ -115,8 +133,8 @@ const VoltCarousel = () => {
             z-20
       flex items-center justify-center h-fit lg:h-full
       [&>div:nth-child(2)]:z-10 [&>div:nth-child(2):hover]:scale-[1.03]
-      [&>div:first-child:hover]:scale-[0.95] [&>div:first-child]:!opacity-60 [&>div:first-child]:scale-[0.85] [&>div:first-child]:-rotate-[10deg] [&>div:first-child]:translate-x-[70%] md:[&>div:first-child]:translate-x-[50%]
-      [&>div:last-child:hover]:scale-[0.95] [&>div:last-child]:!opacity-60 [&>div:last-child]:scale-[0.85] [&>div:last-child]:rotate-[10deg] [&>div:last-child]:-translate-x-[70%] md:[&>div:last-child]:-translate-x-[50%]
+      [&>div:first-child:hover]:scale-[0.95] [&>div:first-child]:relative [&>div:first-child]:after:absolute [&>div:first-child]:after:w-full [&>div:first-child]:after:h-full [&>div:first-child]:after:rounded-2xl [&>div:first-child]:after:bg-black/10 [&>div:first-child]:after:content-[''] [&>div:first-child]:!opacity-100 [&>div:first-child]:scale-[0.85] [&>div:first-child]:-rotate-[10deg] [&>div:first-child]:translate-x-[70%] md:[&>div:first-child]:translate-x-[50%]
+      [&>div:last-child]:relative [&>div:last-child]:after:absolute [&>div:last-child]:after:w-full [&>div:last-child]:after:h-full [&>div:last-child]:after:rounded-2xl [&>div:last-child]:after:bg-black/10 [&>div:last-child]:after:content-[''] [&>div:last-child:hover]:scale-[0.95] [&>div:last-child]:!opacity-100 [&>div:last-child]:scale-[0.85] [&>div:last-child]:rotate-[10deg] [&>div:last-child]:-translate-x-[70%] md:[&>div:last-child]:-translate-x-[50%]
     `}
         >
           {data.map((el) => (
@@ -125,9 +143,10 @@ const VoltCarousel = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => onClick(el.id)}
+              onClick={() => onClick(el.id, true)}
               key={el.id + data.map((el) => el.id).join()}
               className={cn(`
+                select-none
                 shadow-4 
                 w-[45vw] min-w-[45vw] sm:w-[30vw] sm:min-w-[30vw] md:w-[25vw] md:min-w-[25vw] lg:w-[180px] lg:min-w-[180px] xl:w-[210px] xl:min-w-[210px] 
                 h-[70vw] sm:h-[55vw] md:h-[45vw] lg:h-[380px] 
@@ -135,7 +154,13 @@ const VoltCarousel = () => {
                 `)}
               transition={{ delay: 0.05 }}
             >
-              <Image alt="" fill src={`/slider${el.id}.png`} className="w-full h-full max-w-nones max-h-none rounded-2xl shadow-2" />
+              <Image
+                priority
+                alt=""
+                fill
+                src={`/slider${el.id}.png`}
+                className="w-full h-full max-w-nones max-h-none rounded-2xl shadow-2"
+              />
             </motion.div>
           ))}
         </div>
@@ -144,7 +169,7 @@ const VoltCarousel = () => {
             .sort((a, b) => a.id - b.id)
             .map((el) => (
               <div
-                onClick={() => onClick(el.id)}
+                onClick={() => onClick(el.id, true)}
                 className={cn("size-3 rounded-full bg-primary-main-100 cursor-pointer", data[1].id === el.id && "bg-primary-main")}
                 key={el.id}
               />
