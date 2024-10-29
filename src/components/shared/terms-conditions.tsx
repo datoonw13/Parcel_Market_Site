@@ -1,7 +1,8 @@
 "use client";
 
-import React, { ReactNode, useState } from "react";
+import React, { Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { cn } from "@/lib/utils";
+import { InView } from "react-intersection-observer";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import { ScrollArea } from "../ui/scroll-area";
 import { Checkbox } from "../ui/checkbox";
@@ -13,11 +14,13 @@ const TermsConditions = ({
   closeModal,
   onOk,
   showAgree,
+  setView,
 }: {
   modal: boolean;
   closeModal?: () => void;
   onOk?: () => void;
   showAgree?: boolean;
+  setView?: Dispatch<SetStateAction<number>>;
 }) => {
   const [agree, setAgree] = useState(false);
 
@@ -91,6 +94,7 @@ const TermsConditions = ({
               </li>
             </ul>
           </div>
+
           <div id="3" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Changes to the Terms of Use</h1>
             <p className={cn("text-grey-800 text-sm", !modal && "md:text-base")}>
@@ -100,18 +104,19 @@ const TermsConditions = ({
               they are binding on you.
             </p>
           </div>
+
           <div id="4" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Accessing the Website and Account Security</h1>
             <p className={cn("text-grey-800 text-sm space-y-3", !modal && "md:text-base")}>
-              <p>
+              <span>
                 The Company reserves the right to delete this Website and cease its services. From time to time, we may restrict user
                 access, including registered users, to some parts of the Website or the entire Website. To access the Website, or some of
                 the resources it offers, you may be asked to provide certain registration details or other information. It is a condition of
                 your use of the Website that all the information you provide on the Website is correct, current, and complete. You agree
                 that all information you provide to our Website is governed by our posted Privacy Policy, and you consent to all actions we
                 take with respect to your information consistent with our Privacy Policy.
-              </p>
-              <p>
+              </span>
+              <span>
                 If you choose, or are provided with, a username, password, or any other piece of information as part of our security
                 procedures, you must treat such information as confidential, and you must not disclose it to any other person or entity. You
                 also acknowledge that your account is personal to you and agree not to share your username and password with anyone else.
@@ -121,18 +126,19 @@ const TermsConditions = ({
                 view or record your password or other personal information. We have the right to disable any username, password, or other
                 identifier, at any time, in our sole discretion, if, in our opinion, you have violated any provision of these Terms of Use
                 or the Privacy Policy.
-              </p>
+              </span>
             </p>
           </div>
+
           <div id="5" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Intellectual Property & Trademark Rights</h1>
             <p className={cn("text-grey-800 text-sm space-y-3", !modal && "md:text-base")}>
-              <p>
+              <span>
                 The Website and its entire contents, features, and functionality (including but not limited to all information, software,
                 text, displays, images, video, and audio, and the design, selection, and arrangement thereof) are owned by the Company, its
                 licensors, or other providers of such material and are protected by proprietary rights laws.
-              </p>
-              <p>
+              </span>
+              <span>
                 These Terms of Use permit you to use the Website for your personal, non-commercial use only. You must not reproduce,
                 distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit
                 any of the material on our Website, except as follows: (1) Your computer may temporarily store copies of such materials in
@@ -149,15 +155,16 @@ const TermsConditions = ({
                 made. No right, title, or interest in or to the Website or any content on the Website is transferred to you, and all rights
                 not expressly granted are reserved by the Company. Any use of the Website not expressly permitted by these Terms of Use is a
                 breach of these Terms of Use and may violate copyright, trademark, and other laws.
-              </p>
-              <p>
+              </span>
+              <span>
                 The Company name, the Company logo, and all related names, logos, product and service names, designs, and slogans are
                 trademarks of the Company or its affiliates or licensors. You must not use such marks without the prior written permission
                 of the Company. All other names, logos, product and service names, designs, and slogans on this Website are the trademarks
                 of their respective owners.
-              </p>
+              </span>
             </p>
           </div>
+
           <div id="6" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Prohibited Uses</h1>
             <p className={cn("text-grey-800 text-sm", !modal && "md:text-base")}>
@@ -169,6 +176,7 @@ const TermsConditions = ({
               introduce any viruses, logic bombs, or other material that is malicious or technologically harmful to the Website.
             </p>
           </div>
+
           <div id="7" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>
               User Contributions Monitoring and Enforcement; Termination
@@ -194,6 +202,7 @@ const TermsConditions = ({
               <span className="font-semibold underline">customerservice@parcelmarket.com</span>
             </p>
           </div>
+
           <div id="8" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Links from the Website</h1>
             <p className={cn("text-grey-800 text-sm", !modal && "md:text-base")}>
@@ -204,6 +213,7 @@ const TermsConditions = ({
               so entirely at your own risk and subject to the terms and conditions of use for such websites.
             </p>
           </div>
+
           <div id="9" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Geographic Restrictions</h1>
             <p className={cn("text-grey-800 text-sm", !modal && "md:text-base")}>
@@ -214,10 +224,11 @@ const TermsConditions = ({
               laws.
             </p>
           </div>
+
           <div id="10" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Disclaimer of Warranties and Limited Liability </h1>
             <p className={cn("text-grey-800 text-sm space-y-3", !modal && "md:text-base")}>
-              <p>
+              <span>
                 You understand that we cannot and do not guarantee or warrant that files available for downloading from the internet or the
                 Website will be free of viruses or other destructive code. You are responsible for implementing sufficient procedures and
                 checkpoints to satisfy your particular requirements for anti-virus protection and accuracy of data input and output, and for
@@ -225,16 +236,17 @@ const TermsConditions = ({
                 and services, is at your own risk. The Company makes no warranties, express or implied, regarding the completeness,
                 accuracy, security, reliability, quality, or availability of the information obtained through the Website. To the contrary,
                 the Company expressly disclaims all warranties of any kind.
-              </p>
-              <p>
+              </span>
+              <span>
                 In no event, shall the Company, or its affiliates or employees, be held liable for any damages, or under any legal theory,
                 arising out, or in connection with, your use of this Website. You agree to defend, indemnify, and hold harmless the Company,
                 its owners, affiliates and employees, from and against any claims, liabilities, damages, judgments, awards, losses, costs,
                 expenses, or fees (including reasonable attorneys&apos; fees) arising out of or relating to your violation of these Terms of
                 Use or your use of the Website.
-              </p>
+              </span>
             </p>
           </div>
+
           <div id="11" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Governing Law and Jurisdiction </h1>
             <p className={cn("text-grey-800 text-sm space-y-3", !modal && "md:text-base")}>
@@ -253,6 +265,7 @@ const TermsConditions = ({
               contemporaneous agreements.
             </p>
           </div>
+
           <div id="12" className="space-y-3 md:space-y-5">
             <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Your Comments and Concerns </h1>
             <p className={cn("text-grey-800 text-sm space-y-3", !modal && "md:text-base")}>
