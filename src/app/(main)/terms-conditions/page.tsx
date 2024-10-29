@@ -12,6 +12,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("1")?.scrollIntoView({ block: "start" });
+            setSelected(1);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 1 && "font-semibold")}
         >
@@ -21,6 +22,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("2")?.scrollIntoView({ block: "start" });
+            setSelected(2);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 2 && "font-semibold")}
         >
@@ -30,6 +32,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("3")?.scrollIntoView({ block: "start" });
+            setSelected(3);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 3 && "font-semibold")}
         >
@@ -39,6 +42,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("4")?.scrollIntoView({ block: "start" });
+            setSelected(4);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 4 && "font-semibold")}
         >
@@ -49,6 +53,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("5")?.scrollIntoView({ block: "start" });
+            setSelected(5);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 5 && "font-semibold")}
         >
@@ -58,6 +63,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("6")?.scrollIntoView({ block: "start" });
+            setSelected(6);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 6 && "font-semibold")}
         >
@@ -67,6 +73,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("7")?.scrollIntoView({ block: "start" });
+            setSelected(7);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 7 && "font-semibold")}
         >
@@ -76,6 +83,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("8")?.scrollIntoView({ block: "start" });
+            setSelected(8);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 8 && "font-semibold")}
         >
@@ -85,6 +93,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("9")?.scrollIntoView({ block: "start" });
+            setSelected(9);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 9 && "font-semibold")}
         >
@@ -93,7 +102,8 @@ const TermsConditionsPage = () => {
 
         <li
           onClick={() => {
-            document.getElementById("1")?.scrollIntoView({ block: "start" });
+            document.getElementById("10")?.scrollIntoView({ block: "start" });
+            setSelected(10);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 10 && "font-semibold")}
         >
@@ -103,6 +113,7 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("11")?.scrollIntoView({ block: "start" });
+            setSelected(11);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 11 && "font-semibold")}
         >
@@ -111,13 +122,14 @@ const TermsConditionsPage = () => {
         <li
           onClick={() => {
             document.getElementById("12")?.scrollIntoView({ block: "start" });
+            setSelected(12);
           }}
           className={cn("text-grey-800 cursor-pointer", selected === 12 && "font-semibold")}
         >
           Your Comments and Concerns
         </li>
       </ul>
-      <TermsConditions modal={false} setSelected={setSelected} />
+      <TermsConditions modal={false} />
     </div>
   );
 };
