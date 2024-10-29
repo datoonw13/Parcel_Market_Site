@@ -74,7 +74,7 @@ const UserRecentSearchesList = ({
         closeModal={() => setSubscriptionWarning(false)}
         okButton={{
           show: true,
-          label: user && !user?.isSubscribed ? "Subscribe" : "Sign In",
+          label: "Continue",
           onClick: () => {
             setSubscriptionWarning(false);
             router.push(routes.user.subscription.fullUrl);
