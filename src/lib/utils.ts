@@ -94,13 +94,13 @@ export const exportToKml = (
     <![CDATA[
       <p>Owner: <b>${mainLandData.owner}</b></p>
       <p>Acreage: <b>${mainLandData.acreage.toFixed(2)}</b></p>
-      <p>Price Per Acre: <b>${moneyFormatter.format(mainLandData.pricePerAcreage)}</b></p>
+      <p>VOLT Value Per Acre: <b>${moneyFormatter.format(mainLandData.pricePerAcreage)}</b></p>
        ${mainLandSaleHistory.length > 0 ? "<br/>" : ""}
        ${mainLandSaleHistory.length > 0 ? "<b>Sales History<b/>" : ""}
       ${mainLandSaleHistory.map(
         (el) => `<div>
           <p>Last Sale Date: <b>${moment(el.lastSaleDate).format("MM-DD-YYYY")}</b></p>
-        <p>Price Per Acre: <b>${moneyFormatter.format(el.pricePerAcreage)}</b></p>
+        <p>VOLT Value Per Acre: <b>${moneyFormatter.format(el.pricePerAcreage)}</b></p>
         </div>`
       )}
     ]]>
@@ -125,7 +125,7 @@ export const exportToKml = (
         <p>Parcel Number: <b>${item.parcelNumberNoFormatting}</b></p>
         <p>Acreage: <b>${item.acreage.toFixed(2)}</b></p>
         <p>Last Sale Date: <b>${moment(item.lastSaleDate).format("MM-DD-YYYY")}</b></p>
-        <p>Price Per Acre: <b>${moneyFormatter.format(item.pricePerAcreage)}</b></p>
+        <p>VOLT Value Per Acre: <b>${moneyFormatter.format(item.pricePerAcreage)}</b></p>
       ]]>
     </description>
       <Point>
@@ -165,7 +165,7 @@ export const exportToExcel = (propertiesUsedForCalculation: IPropertyUsedForCalc
     { label: "County", key: "county" as const },
     { label: "Acreage", key: "acreage" as const },
     { label: "Sold Price", key: "lastSalePrice" as const },
-    { label: "Price Per Acre", key: "pricePerAcre" as const },
+    { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
     { label: "Last Sale Date", key: "lastSaleDate" as const },
   ];
 

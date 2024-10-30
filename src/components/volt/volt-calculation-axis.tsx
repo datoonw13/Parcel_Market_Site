@@ -70,7 +70,7 @@ const VoltPriceCalculationAxis = ({
                   Low PPA {`(${moneyFormatter.format(minPricePerAcre)})`}
                 </p>
               }
-              renderContent="Min Price Per Acre"
+              renderContent="Min VOLT Value Per Acre"
             />
           )}
           <div
@@ -108,7 +108,7 @@ const VoltPriceCalculationAxis = ({
                     AVG PPA{` (${moneyFormatter.format(averagePricePerAcre)})`}
                   </p>
                 }
-                renderContent="Average Price Per Acre"
+                renderContent="Average VOLT Value Per Acre"
               />
             )}
             {/* Pins */}
@@ -158,7 +158,7 @@ const VoltPriceCalculationAxis = ({
                   High PPA {` (${moneyFormatter.format(maxPricePerAcre)})`}
                 </p>
               }
-              renderContent="Max Price Per Acre"
+              renderContent="Max VOLT Value Per Acre"
             />
           )}
           <div className={cn("flex justify-between w-full", isSmallDevice ? "" : "hidden")}>
@@ -175,7 +175,7 @@ const VoltPriceCalculationAxis = ({
                   Low PPA: <span className="text-black font-semibold">{moneyFormatter.format(minPricePerAcre)}</span>
                 </p>
               }
-              renderContent="Min Price Per Acre"
+              renderContent="Min VOLT Value Per Acre"
             />
             <Tooltip
               renderButton={
@@ -183,7 +183,7 @@ const VoltPriceCalculationAxis = ({
                   AVG PPA: <span className="text-black font-semibold">{moneyFormatter.format(averagePricePerAcre)}</span>
                 </p>
               }
-              renderContent="Average Price Per Acre"
+              renderContent="Average VOLT Value Per Acre"
             />
             <Tooltip
               renderButton={
@@ -191,7 +191,7 @@ const VoltPriceCalculationAxis = ({
                   High PPA: <span className="text-black font-semibold">{moneyFormatter.format(maxPricePerAcre)}</span>
                 </p>
               }
-              renderContent="Max Price Per Acre"
+              renderContent="Max VOLT Value Per Acre"
             />
           </div>
           <div className="ml-auto">

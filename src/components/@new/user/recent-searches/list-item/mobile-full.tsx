@@ -30,7 +30,7 @@ const HEADER_ROWS = [
   { label: "County", key: "county" as const },
   { label: "Acreage", key: "acreage" as const },
   { label: "Sold Price", key: "lastSalePrice" as const },
-  { label: "Price Per Acre", key: "pricePerAcre" as const },
+  { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
   { label: "Last Sale Date", key: "lastSaleDate" as const },
 ];
 

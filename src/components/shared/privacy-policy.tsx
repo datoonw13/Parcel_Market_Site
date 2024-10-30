@@ -1,17 +1,27 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { cn } from "@/lib/utils";
+import { SetStateAction } from "jotai";
+import { InView } from "react-intersection-observer";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import { ScrollArea } from "../ui/scroll-area";
 
-const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
+const PrivacyPolicy = ({ modal, setSelected }: { modal: boolean; setSelected?: Dispatch<SetStateAction<number>> }) => (
   <div className="space-y-8 py-4">
     <div className="space-y-3">
       {!modal && <h1 className="font-extrabold text-3xl md:text-4xl xl:text-5xl">Privacy Policy</h1>}
       <h3 className={cn("text-grey-800 text-sm ", !modal && "md:text-base")}>Effective September 8, 2024</h3>
-      <p className="font-semibold text-grey-800 md:text-base !mt-6">
-        Parcel Market LLC respects your privacy and is committed to protecting your personal information. This Privacy Policy outlines how
-        we collect, use, and protect the information you provide when using our website.
-      </p>
+      <InView
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(1);
+          }
+        }}
+      >
+        <p className="font-semibold text-grey-800 md:text-base !mt-6">
+          Parcel Market LLC respects your privacy and is committed to protecting your personal information. This Privacy Policy outlines how
+          we collect, use, and protect the information you provide when using our website.
+        </p>
+      </InView>
     </div>
     <div id="1" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Who are our users?</h1>
@@ -26,72 +36,144 @@ const PrivacyPolicy = ({ modal }: { modal: boolean }) => (
     </div>
     <div id="2" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>What information do we collect from our users?</h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        <span>
-          Our website does not use tracking technology such as cookies or pixels. We may collect your IP address, browser type, and device
-          type to help us understand how users interact with our website and improve our services. Third parties, like Google, may collect
-          data regarding your use of our website. If you choose to create an account, we store your name, date of birth, and country/state
-          of origin to communicate with you, personalize your experience, and comply with legal requirements. If you request an estimate, we
-          collect the parcel number, mailing address, or name of the current property owner. If you use the chat platform, the contents of
-          your communications will be saved on our secure portal for a limited time period. We do not actively monitor chat communications,
-          but we encourage users to email us at <span className="font-semibold underline">customerservice@parcelmarket.com</span> if another
-          user posts objectionable content to the chat. We are not a party to user negotiations, and we do not actively monitor user
-          communications
-        </span>
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(2);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          <span>
+            Our website does not use tracking technology such as cookies or pixels. We may collect your IP address, browser type, and device
+            type to help us understand how users interact with our website and improve our services. Third parties, like Google, may collect
+            data regarding your use of our website. If you choose to create an account, we store your name, date of birth, and country/state
+            of origin to communicate with you, personalize your experience, and comply with legal requirements. If you request an estimate,
+            we collect the parcel number, mailing address, or name of the current property owner. If you use the chat platform, the contents
+            of your communications will be saved on our secure portal for a limited time period. We do not actively monitor chat
+            communications, but we encourage users to email us at{" "}
+            <span className="font-semibold underline">customerservice@parcelmarket.com</span> if another user posts objectionable content to
+            the chat. We are not a party to user negotiations, and we do not actively monitor user communications
+          </span>
+        </p>
+      </InView>
     </div>
     <div id="3" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>How do we use your private information?</h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        We do not sell your private information. We use the personal information collected from users to carry out the essential functions
-        of the website, improve our services, to communicate with you, and to comply with privacy regulations. We may share your personal
-        information with third-party service providers, such as payment processors and analytics tools, to help us operate the website. We
-        require these providers to maintain appropriate security measures to protect your data.
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(3);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          We do not sell your private information. We use the personal information collected from users to carry out the essential functions
+          of the website, improve our services, to communicate with you, and to comply with privacy regulations. We may share your personal
+          information with third-party service providers, such as payment processors and analytics tools, to help us operate the website. We
+          require these providers to maintain appropriate security measures to protect your data.
+        </p>
+      </InView>
     </div>
     <div id="4" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Can I request my personal information be deleted?</h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        Yes, users can request the Company permanently delete the personal information collected by the website by submitting an “opt out”
-        request to <span className="font-semibold underline">customerservice@parcelmarket.com</span>
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(4);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          Yes, users can request the Company permanently delete the personal information collected by the website by submitting an “opt out”
+          request to <span className="font-semibold underline">customerservice@parcelmarket.com</span>
+        </p>
+      </InView>
     </div>
     <div id="5" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>How is my personal information stored?</h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, alteration, or
-        destruction. Personal information is stored on a secure platform accessible to Company employees, agents, and vendors, only.
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(5);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          We implement reasonable security measures to protect your personal information from unauthorized access, disclosure, alteration,
+          or destruction. Personal information is stored on a secure platform accessible to Company employees, agents, and vendors, only.
+        </p>
+      </InView>
     </div>
     <div id="6" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>What am I agreeing to by using the website and services?</h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        By using this website, you agree to be bound by the Terms of Use and this Privacy Policy.
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(6);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          By using this website, you agree to be bound by the Terms of Use and this Privacy Policy.
+        </p>
+      </InView>
     </div>
     <div id="7" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>
         Will I be notified if the website experiences a security breach?
       </h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        Yes, users will be notified within seventy-two hours of the Company learning of a security breach that could affect their personal
-        information.
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(7);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          Yes, users will be notified within seventy-two hours of the Company learning of a security breach that could affect their personal
+          information.
+        </p>
+      </InView>
     </div>
     <div id="8" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>
         Will I be notified if the website’s Terms & Policies change?
       </h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        If you have set up a user account, we will notify you by email if our Terms of Use or our Privacy Policies change.
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(8);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          If you have set up a user account, we will notify you by email if our Terms of Use or our Privacy Policies change.
+        </p>
+      </InView>
     </div>
     <div id="9" className="space-y-3 md:space-y-5">
       <h1 className={cn("font-extrabold text-xl", !modal && "md:text-2xl")}>Who can I contact with questions or concerns? </h1>
-      <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
-        Questions and concerns regarding our website and services can be forwarded to{" "}
-        <span className="font-semibold underline">customerservice@parcelmarket.com</span>
-      </p>
+      <InView
+        threshold={1}
+        onChange={(isInView) => {
+          if (setSelected && isInView) {
+            setSelected(9);
+          }
+        }}
+      >
+        <p className={cn("text-grey-800 text-sm flex flex-col", !modal && "md:text-base ")}>
+          Questions and concerns regarding our website and services can be forwarded to{" "}
+          <span className="font-semibold underline">customerservice@parcelmarket.com</span>
+        </p>
+      </InView>
     </div>
   </div>
 );

@@ -29,7 +29,7 @@ const OfferDetailSection: FC<OfferDetailSectionProps> = ({ data, alertClasses, i
             Offered Price: <span className="ml-1 text-black">{moneyFormatter.format(Number(data.price))}</span>
           </li>
           <li>
-            Price per acre:{" "}
+            VOLT Value Per Acre:{" "}
             <span className="ml-1 text-black">{moneyFormatter.format(Number(Number(data.price) / data.sellingProperty.acrage))}</span>
           </li>
         </ul>

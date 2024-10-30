@@ -70,7 +70,7 @@ const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeav
               <div className="w-full space-y-0.5">
                 <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] justify-between items-center w-full gap-6">
                   {data.owner ? (
-                    <p className="text-lg font-semibold truncate">{data.owner || "N/A"}aaaaaa</p>
+                    <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
                   ) : (
                     <p className="text-xs text-grey-600 font-medium">State/County</p>
                   )}

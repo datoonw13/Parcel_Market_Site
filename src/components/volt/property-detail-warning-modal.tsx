@@ -24,7 +24,7 @@ const PropertyDetailWarningModal: FC<PropertyDetailWarningModalProps> = ({ user,
       closeModal={closeModal}
       okButton={{
         show: true,
-        label: user && !user?.isSubscribed ? "Subscribe" : "Sign In",
+        label: "Continue",
         onClick: () => {
           closeModal();
           onOK();
@@ -37,12 +37,8 @@ const PropertyDetailWarningModal: FC<PropertyDetailWarningModalProps> = ({ user,
         },
       }}
       cancelButton={{ show: true, label: "Close", onClick: closeModal }}
-      title={`${user && !user?.isSubscribed ? "Subscribe" : "Log in"} to See the information`}
-      description={
-        user && !user?.isSubscribed
-          ? "You have not active subscription, if you want to see this information please subscribe"
-          : "Your are not logged in, if you want to see this information please log into your account"
-      }
+      title="Please sign in or subscribe to see the sales data"
+      description="You will need to sign in or subscribe to view, analyze, or export sales data"
     />
   );
 };

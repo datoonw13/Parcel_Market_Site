@@ -55,7 +55,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
             Acreage: <b>{sellingProperty.acreage}</b>
           </p>
           <p className="!p-0 !m-0">
-            Price Per Acreage: <b>{moneyFormatter.format(sellingProperty.salePrice / sellingProperty.acreage)}</b>
+            VOLT Value Per Acre: <b>{moneyFormatter.format(sellingProperty.salePrice / sellingProperty.acreage)}</b>
           </p>
           {mainLandSaleHistory.length > 0 && (
             <div className="flex flex-col gap-1">
@@ -66,7 +66,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
                     Last Sale Date: <b>{history.lastSaleDate}</b>
                   </p>
                   <p className="!p-0 !m-0">
-                    Last Sale Price Per Acre: <b>{moneyFormatter.format(history.lastSalePrice / history.acreage)}</b>
+                    Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(history.lastSalePrice / history.acreage)}</b>
                   </p>
                 </div>
               ))}
@@ -98,7 +98,7 @@ const CalculationMap: FC<CalculationMapProps> = ({
               Last Sale Date: <b>{el.lastSaleDate}</b>
             </p>
             <p className="!p-0 !m-0">
-              Last Sale Price Per Acre: <b>{moneyFormatter.format(el.lastSalePrice / el.acreage)}</b>
+              Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(el.lastSalePrice / el.acreage)}</b>
             </p>
           </div>
         ),

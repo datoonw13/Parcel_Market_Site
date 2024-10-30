@@ -33,7 +33,7 @@ const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) =>
   const onSubmit = handleSubmit(async (data) => {
     const { errorMessage } = await userFeedbackAction({ ...data, type: "investing" });
     if (!errorMessage) {
-      notify({ title: "Your investing has been received!", description: "We appreciate your input and will review it shortly" });
+      notify({ title: "We have received your inquiry!", description: "We appreciate your input and will review it shortly" });
       reset({
         email: user?.email || "",
         comment: "",
