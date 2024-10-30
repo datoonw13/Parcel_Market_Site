@@ -107,7 +107,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
             </div>
             {isActive && (
               <p className="text-end text-sm text-grey-600 font-medium">
-                Active Until {moment(userActiveSubscription!.activeTo).format("DD/MM/YYYY")}
+                Active Until {moment(userActiveSubscription!.activeTo).format("MM/DD/YYYY")}
               </p>
             )}
           </div>
