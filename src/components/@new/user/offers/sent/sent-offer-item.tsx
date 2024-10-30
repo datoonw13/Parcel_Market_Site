@@ -105,7 +105,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
                   Offered Price: <span className="text-sm text-black font-medium">{moneyFormatter.format(Number(data.price))}</span>
                 </p>
                 <p className="text-sm text-grey-600">
-                  Offered price per acre:{" "}
+                  Offered VOLT Value Per Acre:{" "}
                   <span className="text-sm text-black font-medium">
                     {moneyFormatter.format(Number(data.price) / Number(data.sellingProperty.acrage))}
                   </span>

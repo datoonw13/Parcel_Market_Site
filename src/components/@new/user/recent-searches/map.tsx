@@ -43,7 +43,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
           Acreage: <b>{data.acreage.toFixed(2)}</b>
         </p>
         <p className="!p-0 !m-0">
-          Price Per Acre: <b>{moneyFormatter.format(data.pricePerAcreage)}</b>
+          VOLT Value Per Acre: <b>{moneyFormatter.format(data.pricePerAcreage)}</b>
         </p>
         {mainLandSaleHistory.length > 0 && (
           <div className="flex flex-col gap-1">
@@ -54,7 +54,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
                   Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Price Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
+                  Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
                 </p>
               </div>
             ))}
@@ -88,7 +88,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
               Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
             </p>
             <p className="!p-0 !m-0">
-              Last Sale Price Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
+              Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
             </p>
           </div>
         ),

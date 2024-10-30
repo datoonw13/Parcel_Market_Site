@@ -52,7 +52,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
         </li>
         <li className="text-primary-main-400">
           <p className="truncate text-sm text-grey-600 font-medium">
-            Price per acreage: <span className="text-sm text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
+            VOLT Value Per Acre: <span className="text-sm text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
           </p>
         </li>
         <li className="text-primary-main-400">
@@ -120,7 +120,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
                 <TableHead className="text-black font-normal bg-grey-30">County</TableHead>
                 <TableHead className="text-black font-normal bg-grey-30">Acreage</TableHead>
                 <TableHead className="text-black font-normal bg-grey-30">Sold Price</TableHead>
-                <TableHead className="text-black font-normal bg-grey-30">Price per acre</TableHead>
+                <TableHead className="text-black font-normal bg-grey-30">VOLT Value Per Acre</TableHead>
                 <TableHead className="text-black font-normal bg-grey-30 rounded-tr-2xl">Last sale date</TableHead>
               </TableRow>
             </TableHeader>
