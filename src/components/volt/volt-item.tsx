@@ -122,7 +122,7 @@ const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeav
               <div className="space-y-1">
                 {data.pricePerAcreage && (
                   <p className="text-xs text-grey-600">
-                    Per acre Price: <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
+                    VOLT Value Per Acre: <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
                   </p>
                 )}
                 {data.lastSaleDate && (

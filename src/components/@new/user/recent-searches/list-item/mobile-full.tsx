@@ -86,7 +86,7 @@ const RecentSearchesLitItemMobileFull = ({
                   <p className="text-xs">{data.acreage.toFixed(2)}</p>
                 </li>
                 <li>
-                  <p className="text-xs text-grey-600">Per acre Price:</p>
+                  <p className="text-xs text-grey-600">VOLT Value Per Acre:</p>
                   <p className="text-xs">{moneyFormatter.format(data.pricePerAcreage)}</p>
                 </li>
                 <li>

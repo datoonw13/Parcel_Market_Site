@@ -146,7 +146,7 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
               <p className="text-xs">{acreage.toFixed(2)}</p>
             </li>
             <li>
-              <p className="text-xs text-grey-600">Per acre Price:</p>
+              <p className="text-xs text-grey-600">VOLT Value Per Acre:</p>
               <p className="text-xs">{moneyFormatter.format(pricePerAcre)}</p>
             </li>
             <li>
