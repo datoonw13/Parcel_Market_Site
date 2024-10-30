@@ -59,7 +59,7 @@ const NotificationItem = <T extends NotificationType>({
     }
     if (data.type === NotificationType.NewMessage) {
     } else if (data.type === NotificationType.SubscriptionExpired || data.type === NotificationType.SubscriptionUpdated) {
-      router.push(routes.user.subscription.fullUrl);
+      router.push(routes.user.notifications.fullUrl);
     } else if (data.type === NotificationType.NewOfferReceived || data.type === NotificationType.ReceivedOfferExpiring) {
       router.push(`${routes.user.offers.received.fullUrl}?offerId=${data.offerId}`);
     } else if (data.type === NotificationType.SentOfferExpiring || data.type === NotificationType.OfferStatusUpdate) {
