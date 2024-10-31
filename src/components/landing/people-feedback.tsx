@@ -65,14 +65,35 @@ const PeopleFeedback = () => (
 export default PeopleFeedback;
 
 const data = [
-  { userName: "Gaston.Russel30", bio: "Totam unde qui illo sed." },
-  { userName: "Geovany_Jenkins", bio: "Velit quis autem quo necessitatibus." },
-  { userName: "Roberta_Schamberger", bio: "Eum modi ex molestiae similique quidem." },
-  { userName: "Jaquelin.Hirthe", bio: "Non excepturi voluptatem quidem." },
-  { userName: "Gabriella61", bio: "Sunt et sunt id." },
-  { userName: "Esta97", bio: "Rerum aut libero ut perferendis dolores sint iste." },
-  { userName: "Eladio_Cummings42", bio: "Ab qui in totam temporibus fugit dicta." },
-  { userName: "Britney.Jenkins", bio: "Nostrum iusto molestias tempore modi et aut laborum." },
-  { userName: "Jerel_Strosin", bio: "Sit explicabo veritatis." },
-  { userName: "Erling_West67", bio: "Optio voluptatibus assumenda nihil dolor nisi incidunt similique quo corporis." },
+  {
+    userName: "Bradley B. - Land Investor",
+    bio: `Parcel Market is an invaluable tool, offering quick property comparisons and 
+accurate valuations, saving me time and providing reliable data to better serve my 
+clients.`,
+  },
+  {
+    userName: "Dustin G. – Land Investor",
+    bio: `Parcel Market has drastically cut my research time, allowing me to review 10 
+properties in the time it previously took to research just one.`,
+  },
+  {
+    userName: "Micheal D. – Real Estate Agent",
+    bio: `Parcel Market’s data saves me hours, letting me research multiple properties 
+faster and with confidence—an essential tool in my real estate work.`,
+  },
+  {
+    userName: "Justin D.- Real Estate Agent",
+    bio: `With Parcel Market, researching properties is faster and more efficient. Its 
+comprehensive data enables quick and reliable land evaluations.`,
+  },
+  {
+    userName: "Conor M. – Real Estate Agent",
+    bio: `Parcel Market has transformed my workflow. The platform’s ease and accuracy let 
+me complete thorough property research in a fraction of the time`,
+  },
+  {
+    userName: "Joey N. - Land Investor",
+    bio: `Parcel Market streamlines my research, providing fast, accurate property insights. 
+It’s a must-have tool for efficient land evaluation and decision-making`,
+  },
 ];
