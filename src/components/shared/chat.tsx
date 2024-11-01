@@ -49,7 +49,7 @@ const Chat = () => {
           style={{ background: `url(/chat-icon.svg)` }}
         />
       </Draggable>
-      <TawkMessengerReact propertyId="66daa46a50c10f7a00a4a8d0" widgetId="1i7314gmo" ref={tawkMessengerRef} />
+      <TawkMessengerReact propertyId="6716e2212480f5b4f59106ac" widgetId="1iaom6lak" ref={tawkMessengerRef} />
     </>
   );
 };
