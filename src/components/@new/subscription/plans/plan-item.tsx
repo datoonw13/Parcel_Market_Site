@@ -2,12 +2,11 @@
 
 import React, { FC, useState } from "react";
 import moment from "moment";
-import clsx from "clsx";
 import { ISubscription, SubscriptionType } from "@/types/subscriptions";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { resumeSubscriptionAction } from "@/server-actions/subscription/actions";
-import { CheckIcon3 } from "../../icons/CheckIcons";
+import { FaArrowRightLong } from "react-icons/fa6";
 import Button from "../../shared/forms/Button";
 import UpdatePlanDialog from "./update-plan-dialog";
 import CancelPlanDialog from "./cancel-plan-dialog";
@@ -24,20 +23,19 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
       return {
         title: "Monthly",
         price: "$20.00",
-        period: "Per Month",
+        desc: "per month",
       };
     case SubscriptionType.Annual:
       return {
         title: "Annual",
         price: "$215.00",
-        period: "Per Year",
-        periodDesc: "(Save 10% per month)",
+        desc: "save 10% per month",
       };
     default:
       return {
         title: "14 Days",
         price: "Free",
-        period: "14 Days",
+        desc: "Risk Free! No Payment Info Required",
       };
   }
 };
@@ -58,21 +56,11 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams as any);
 
-  const { period, price, title, periodDesc } = subscriptionDetail(type);
+  const { price, title, desc } = subscriptionDetail(type);
   const isActive = checkIsActive(type, userActiveSubscription);
   const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const [resumePending, setResumePending] = useState(false);
-
-  const getButtonLabel = () => {
-    if (isActive && userActiveSubscription?.cancelAtPeriodEnd) {
-      return "Resume Subscription";
-    }
-    if (isActive) {
-      return "Cancel Subscription";
-    }
-    return "Subscribe";
-  };
 
   return (
     <>
@@ -90,60 +78,64 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
       {openCancelModal && userActiveSubscription && (
         <CancelPlanDialog closeDialog={() => setOpenCancelModal(false)} userActiveSubscription={userActiveSubscription} />
       )}
-      <div
-        className={clsx(
-          "space-y-8 p-4 md:p-6 lg:8 border border-grey-100 rounded-2xl justify-between flex flex-col",
-          className,
-          isActive && "border-primary-main"
-        )}
-      >
-        <div className="space-y-4 ">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-primary-main text-lg font-semibold min-w-max">{title}</h2>
-              <div className="w-4 h-4 rounded-full bg-primary-main p-1">
-                <CheckIcon3 color="white" className="!w-2.5 !h-2" />
-              </div>
+      <div className="bg-white rounded-2xl p-8 shadow-4 flex flex-col">
+        <div className="gap-3 font-semibold text-sm text-primary-main min-h-14 flex items-start">
+          {isActive ? (
+            <div className="flex items-center gap-3">
+              <div className="h-3 w-3 rounded-full bg-success" />{" "}
+              <span className="uppercase">active until: {moment(userActiveSubscription!.activeTo).format("MM/DD/YYYY")}</span>{" "}
             </div>
-            {isActive && (
-              <p className="text-end text-sm text-grey-600 font-medium">
-                Active Until {moment(userActiveSubscription!.activeTo).format("MM/DD/YYYY")}
-              </p>
-            )}
-          </div>
-          <div className="space-y-1">
-            <h3 className="font-semibold text-lg">
-              {price}
-              {periodDesc && <span className="text-xs font-medium text-grey-800">{periodDesc}</span>}
-            </h3>
-            <p className="font-medium text-sm">
-              <span className="text-primary-main text-sm font-medium">{period}</span> {periodDesc}
-            </p>
-          </div>
+          ) : (
+            <span className="uppercase text-sm"> {desc}</span>
+          )}
         </div>
-        <Button
-          onClick={async () => {
-            if (isActive && userActiveSubscription?.cancelAtPeriodEnd) {
+        <div className="flex items-baseline gap-1 mt-2 mb-8">
+          <p className="text-5xl font-bold">{price}</p>
+          <p>/ {title}</p>
+        </div>
+        {isActive && userActiveSubscription?.cancelAtPeriodEnd && (
+          <Button
+            onClick={async () => {
               setResumePending(true);
               const req = await resumeSubscriptionAction(userActiveSubscription.id);
               setResumePending(false);
               if (!req.errorMessage) {
                 router.push(`${routes.user.subscription.fullUrl}?success=true`);
               }
-              return;
-            }
-            if (isActive) {
+            }}
+            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+            loading={resumePending}
+            variant="primary"
+          >
+            Resume subscription
+          </Button>
+        )}
+        {isActive && !userActiveSubscription?.cancelAtPeriodEnd && (
+          <Button
+            onClick={async () => {
               setOpenCancelModal(true);
-              return;
-            }
-            setOpenUpgradeModal(true);
-          }}
-          className="w-full"
-          loading={resumePending}
-          variant={isActive && !userActiveSubscription?.cancelAtPeriodEnd ? "secondary" : "primary"}
-        >
-          {getButtonLabel()}
-        </Button>
+            }}
+            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+            loading={resumePending}
+            variant="secondary"
+            endIcon={FaArrowRightLong}
+          >
+            Cancel subscription
+          </Button>
+        )}
+        {!isActive && (
+          <Button
+            onClick={async () => {
+              setOpenUpgradeModal(true);
+            }}
+            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+            loading={resumePending}
+            variant="primary"
+            endIcon={FaArrowRightLong}
+          >
+            {price === "Free" ? "Try for free" : "Subscribe"}
+          </Button>
+        )}
       </div>
     </>
   );
