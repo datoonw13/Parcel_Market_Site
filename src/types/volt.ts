@@ -5,13 +5,9 @@ import { IMap } from "./map";
 import {
   IMainPropertyBaseInfo,
   IPropertyBaseInfo,
-  IPropertyOwner,
-  IPropertyPolygon,
   IPropertyPricePerAcre,
   IPropertySaleHistory,
-  IPropertyType,
   IPropertyUsedForCalculation,
-  UsedForPriceCalculationItem,
 } from "./property";
 
 export type VoltSearchModel = z.infer<typeof voltSearchSchema>;
@@ -48,7 +44,7 @@ export interface PropertyUsedForCalculation extends IPropertyBaseInfo, IProperty
 
 export type IVoltPriceCalculationRes = IMainPropertyBaseInfo &
   IPropertyPricePerAcre & {
-    propertiesUsedForCalculation: IPropertyUsedForCalculation[];
+    propertiesUsedForCalculation: IPropertyUsedForCalculation[] | IPropertyUsedForCalculation[][];
     price: number;
   };
 

@@ -82,6 +82,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     setCalculationPending(false);
   };
 
+  console.log(mapInteraction);
   return (
     <>
       <TermsConditionsDialog
@@ -221,7 +222,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                   setMpaInteraction={setMpaInteraction}
                   setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
                   data={
-                    values.calculation?.propertiesUsedForCalculation.map((el) => ({
+                    values.calculation?.propertiesUsedForCalculation.flat().map((el) => ({
                       parcelNumberNoFormatting: el.parcelNumberNoFormatting,
                       acreage: el.acreage,
                       price: el.lastSalePrice,

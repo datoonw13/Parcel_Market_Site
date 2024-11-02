@@ -30,8 +30,8 @@ export enum SortEnum {
 export type Nullable<T> = T | null;
 
 export interface MapInteractionModel {
-  hoveredParcelNumber: string | null;
-  openPopperParcelNumber: string | null;
+  hoveredParcelNumber: string | string[] | null;
+  openPopperParcelNumber: string | string[] | null;
   zoom?: boolean;
 }
 

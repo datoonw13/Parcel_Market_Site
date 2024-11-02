@@ -82,7 +82,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       }
     } else {
       const request = await signUpUserAction(data);
-      console.log(request, request.errorMessage, 11);
       if (request?.errorMessage) {
         onFinish(request.errorMessage);
       } else {

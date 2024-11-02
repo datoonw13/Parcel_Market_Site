@@ -7,8 +7,9 @@ import { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef }
 import { moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
-import { IPropertyBaseInfo } from "@/types/property";
+import { IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
 import moment from "moment";
+import { getCenter } from "geolib";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
@@ -87,9 +88,9 @@ const VoltMap: FC<VoltDesktopProps> = ({
       }));
     }
     if (step === VoltSteps.CALCULATION && values.calculation) {
-      const mainLandSaleHistory = values.calculation.propertiesUsedForCalculation.filter(
-        (el) => el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting
-      );
+      const mainLandSaleHistory = values.calculation.propertiesUsedForCalculation
+        .flat()
+        .filter((el) => el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting);
 
       const mainProperty = {
         parcelNumber: values.selectedItem?.parcelNumber || "",
@@ -119,7 +120,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
                       Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
                     </p>
                     <p className="!p-0 !m-0">
-                      Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
+                      Last Sale Price Per Acreage: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
                     </p>
                   </div>
                 ))}
@@ -129,16 +130,21 @@ const VoltMap: FC<VoltDesktopProps> = ({
         ),
       };
 
-      let properties = values.calculation.propertiesUsedForCalculation?.map((el) => ({
+      const isActive = (parcelNumber: string) => {
+        if (Array.isArray(mapInteraction.hoveredParcelNumber) || Array.isArray(mapInteraction.openPopperParcelNumber)) {
+          return (
+            mapInteraction.hoveredParcelNumber?.includes(parcelNumber) || mapInteraction.openPopperParcelNumber?.includes(parcelNumber)
+          );
+        }
+        return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
+      };
+
+      let properties = values.calculation.propertiesUsedForCalculation?.flat().map((el) => ({
         parcelNumber: el.parcelNumberNoFormatting,
         parcelNumberNoFormatting: el.parcelNumberNoFormatting,
         latitude: el.lat,
         longitude: el.lon,
-        markerType:
-          mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
-          mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
-            ? ("highlighted" as const)
-            : ("default" as const),
+        markerType: isActive(el.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
         ...(user &&
           user.isSubscribed && {
             popup: (
@@ -153,7 +159,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
                   Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
+                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
                 </p>
               </div>
             ),
@@ -193,8 +199,32 @@ const VoltMap: FC<VoltDesktopProps> = ({
   };
 
   const handleMapHoverInteraction = useCallback(() => {
-    if (mapRef.current) {
-      if (mapInteraction.hoveredParcelNumber) {
+    if (mapRef.current && mapInteraction.hoveredParcelNumber) {
+      if (Array.isArray(mapInteraction.hoveredParcelNumber)) {
+        const properties = values.calculation?.propertiesUsedForCalculation.flat();
+        const items: IPropertyUsedForCalculation[] = [];
+        mapInteraction.hoveredParcelNumber.forEach((el) => {
+          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
+          if (item) {
+            items.push(item);
+          }
+        });
+        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
+          latitude: 0,
+          longitude: 0,
+        }) as any;
+        if (mapInteraction.zoom) {
+          mapRef.current?.fitBounds(
+            [
+              {
+                lat: centerCoordinate.latitude,
+                lng: centerCoordinate.longitude,
+              },
+            ] as any,
+            { maxZoom: 12 }
+          );
+        }
+      } else {
         const currentItemMarker = markerRefs.current?.[mapInteraction.hoveredParcelNumber];
         if (currentItemMarker) {
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
@@ -204,11 +234,11 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
       }
     }
-  }, [mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.zoom, values.calculation?.propertiesUsedForCalculation]);
 
   const handleMapPopperInteraction = useCallback(() => {
     if (mapRef.current) {
-      if (mapInteraction.openPopperParcelNumber) {
+      if (mapInteraction.openPopperParcelNumber && !Array.isArray(mapInteraction.openPopperParcelNumber)) {
         const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
         if (currentItemMarker) {
           currentItemMarker.openPopup();
@@ -218,8 +248,35 @@ const VoltMap: FC<VoltDesktopProps> = ({
           }
         }
       }
+
+      if (mapInteraction.openPopperParcelNumber && Array.isArray(mapInteraction.openPopperParcelNumber)) {
+        const properties = values.calculation?.propertiesUsedForCalculation.flat();
+        const items: IPropertyUsedForCalculation[] = [];
+        mapInteraction.openPopperParcelNumber.forEach((el) => {
+          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
+          if (item) {
+            items.push(item);
+          }
+        });
+        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
+          latitude: 0,
+          longitude: 0,
+        }) as any;
+        mapRef.current.closePopup();
+        if (mapInteraction.zoom) {
+          mapRef.current?.fitBounds(
+            [
+              {
+                lat: centerCoordinate.latitude,
+                lng: centerCoordinate.longitude,
+              },
+            ] as any,
+            { maxZoom: 12 }
+          );
+        }
+      }
     }
-  }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
+  }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom, values.calculation?.propertiesUsedForCalculation]);
 
   useEffect(() => {
     handleMapHoverInteraction();
@@ -259,10 +316,10 @@ const VoltMap: FC<VoltDesktopProps> = ({
           zoom: false,
         }));
       }}
-      popupClose={() => {
+      popupClose={(parcelNumberNoFormatting) => {
         setMpaInteraction((prevData) => ({
           ...prevData,
-          openPopperParcelNumber: null,
+          openPopperParcelNumber: parcelNumberNoFormatting === prevData.openPopperParcelNumber ? null : prevData.openPopperParcelNumber,
           zoom: false,
         }));
       }}

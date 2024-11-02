@@ -9,6 +9,7 @@ import { isElementVisible } from "@/lib/utils";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
+import VoltItemMulti from "./volt-item-multi";
 
 interface VoltCalculationProps {
   values: VoltWrapperValuesModel;
@@ -92,38 +93,76 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         </div>
         {user && user.isSubscribed && (
           <div className="flex flex-col gap-2">
-            {values.calculation?.propertiesUsedForCalculation.map((property) => (
-              <VoltItem
-                id={`calculation-${property.id}`}
-                onHover={(property) => {
-                  setMpaInteraction((prevData) => ({
-                    ...prevData,
-                    hoveredParcelNumber: property.parcelNumberNoFormatting,
-                    zoom: true,
-                  }));
-                }}
-                onMouseLeave={() => {
-                  setMpaInteraction((prevData) => ({
-                    ...prevData,
-                    hoveredParcelNumber: null,
-                    zoom: false,
-                  }));
-                }}
-                onSelect={(property) => {
-                  setMpaInteraction((prevData) => ({
-                    ...prevData,
-                    openPopperParcelNumber: property.parcelNumberNoFormatting,
-                    zoom: false,
-                  }));
-                }}
-                key={property.id}
-                data={{
-                  ...property,
-                }}
-                isHighlighted={mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting}
-                selected={mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting}
-              />
-            ))}
+            {values.calculation?.propertiesUsedForCalculation.map((property) =>
+              Array.isArray(property) ? (
+                <VoltItemMulti
+                  onHover={(data) => {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      hoveredParcelNumber: Array.isArray(data)
+                        ? data.map((el) => el.parcelNumberNoFormatting)
+                        : data.parcelNumberNoFormatting,
+                      zoom: true,
+                    }));
+                  }}
+                  onMouseLeave={() => {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      hoveredParcelNumber: null,
+                      zoom: false,
+                    }));
+                  }}
+                  onSelect={(data) => {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      openPopperParcelNumber: Array.isArray(data)
+                        ? data.map((el) => el.parcelNumberNoFormatting)
+                        : data.parcelNumberNoFormatting,
+                      zoom: Array.isArray(data),
+                    }));
+                  }}
+                  data={property}
+                  key={`calculation-${property.map((el) => el.id).join()}`}
+                  highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
+                  selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
+                  selected={
+                    JSON.stringify(mapInteraction.openPopperParcelNumber) ===
+                    JSON.stringify(property.map((el) => el.parcelNumberNoFormatting))
+                  }
+                />
+              ) : (
+                <VoltItem
+                  id={`calculation-${property.id}`}
+                  onHover={(property) => {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      hoveredParcelNumber: property.parcelNumberNoFormatting,
+                      zoom: true,
+                    }));
+                  }}
+                  onMouseLeave={() => {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      hoveredParcelNumber: null,
+                      zoom: false,
+                    }));
+                  }}
+                  onSelect={(property) => {
+                    setMpaInteraction((prevData) => ({
+                      ...prevData,
+                      openPopperParcelNumber: property.parcelNumberNoFormatting,
+                      zoom: false,
+                    }));
+                  }}
+                  key={property.id}
+                  data={{
+                    ...property,
+                  }}
+                  isHighlighted={mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting}
+                  selected={mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting}
+                />
+              )
+            )}
           </div>
         )}
       </div>

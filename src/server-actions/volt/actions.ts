@@ -119,28 +119,54 @@ export const calculateLandPriceAction = async (
       propertyType: request.propertyType,
       price: Number(request.price),
       pricePerAcreage: Number((Number(request.price) / Number(request.acrage)).toFixed(2)),
-      propertiesUsedForCalculation: request.properties.map((property: any) => ({
-        acreage: Number(property.arcage),
-        city: property.city,
-        county: {
-          value: property.county,
-          label: property.county,
-        },
-        state: {
-          value: property.state,
-          label: property.state,
-        },
-        id: removeParcelNumberFormatting(property.parselId),
-        isMedianValid: property.isMedianValid,
-        isValid: property.isValid,
-        lastSaleDate: moment(property.lastSalesDate, "YYYY-MM-DD").toDate(),
-        lastSalePrice: Number(property.lastSalesPrice),
-        lat: Number(property.latitude),
-        lon: Number(property.longitude),
-        parcelNumber: property.parcelNumber,
-        parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
-        pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
-      })),
+      propertiesUsedForCalculation: request.properties.map((property: any | any[]) => {
+        if (Array.isArray(property)) {
+          return property.map((childProperty) => ({
+            acreage: Number(childProperty.arcage),
+            city: childProperty.city,
+            county: {
+              value: childProperty.county,
+              label: childProperty.county,
+            },
+            state: {
+              value: childProperty.state,
+              label: childProperty.state,
+            },
+            id: removeParcelNumberFormatting(childProperty.parselId),
+            isMedianValid: childProperty.isMedianValid,
+            isValid: childProperty.isValid,
+            lastSaleDate: moment(childProperty.lastSalesDate, "YYYY-MM-DD").toDate(),
+            lastSalePrice: Number(childProperty.lastSalesPrice),
+            lat: Number(childProperty.latitude),
+            lon: Number(childProperty.longitude),
+            parcelNumber: childProperty.parcelNumber,
+            parcelNumberNoFormatting: removeParcelNumberFormatting(childProperty.parselId),
+            pricePerAcreage: Number((Number(childProperty.lastSalesPrice) / Number(childProperty.arcage)).toFixed(2)),
+          }));
+        }
+        return {
+          acreage: Number(property.arcage),
+          city: property.city,
+          county: {
+            value: property.county,
+            label: property.county,
+          },
+          state: {
+            value: property.state,
+            label: property.state,
+          },
+          id: removeParcelNumberFormatting(property.parselId),
+          isMedianValid: property.isMedianValid,
+          isValid: property.isValid,
+          lastSaleDate: moment(property.lastSalesDate, "YYYY-MM-DD").toDate(),
+          lastSalePrice: Number(property.lastSalesPrice),
+          lat: Number(property.latitude),
+          lon: Number(property.longitude),
+          parcelNumber: property.parcelNumber,
+          parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
+          pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
+        };
+      }),
     };
 
     revalidateTag(userSearchesTag);
