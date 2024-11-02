@@ -100,7 +100,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                     setMpaInteraction((prevData) => ({
                       ...prevData,
                       hoveredParcelNumber: Array.isArray(data)
-                        ? data.map((el) => el.parcelNumberNoFormatting)
+                        ? data.map((el) => el.parcelNumberNoFormatting).join("multiple")
                         : data.parcelNumberNoFormatting,
                       zoom: true,
                     }));
@@ -116,19 +116,16 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                     setMpaInteraction((prevData) => ({
                       ...prevData,
                       openPopperParcelNumber: Array.isArray(data)
-                        ? data.map((el) => el.parcelNumberNoFormatting)
+                        ? data.map((el) => el.parcelNumberNoFormatting).join("multiple")
                         : data.parcelNumberNoFormatting,
                       zoom: Array.isArray(data),
                     }));
                   }}
                   data={property}
-                  key={`calculation-${property.map((el) => el.id).join()}`}
+                  key={`calculation-${property.map((el) => el.id).join("multiple")}`}
                   highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
                   selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
-                  selected={
-                    JSON.stringify(mapInteraction.openPopperParcelNumber) ===
-                    JSON.stringify(property.map((el) => el.parcelNumberNoFormatting))
-                  }
+                  selected={mapInteraction.openPopperParcelNumber === property.map((el) => el.parcelNumberNoFormatting).join("multiple")}
                 />
               ) : (
                 <VoltItem

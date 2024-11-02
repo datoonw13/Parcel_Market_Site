@@ -82,7 +82,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     setCalculationPending(false);
   };
 
-  console.log(mapInteraction);
   return (
     <>
       <TermsConditionsDialog

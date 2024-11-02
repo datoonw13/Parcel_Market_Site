@@ -129,16 +129,15 @@ const VoltMap: FC<VoltDesktopProps> = ({
           </div>
         ),
       };
-
       const isActive = (parcelNumber: string) => {
-        if (Array.isArray(mapInteraction.hoveredParcelNumber) || Array.isArray(mapInteraction.openPopperParcelNumber)) {
+        if (mapInteraction.hoveredParcelNumber?.includes("multiple") || mapInteraction.openPopperParcelNumber?.includes("multiple")) {
           return (
-            mapInteraction.hoveredParcelNumber?.includes(parcelNumber) || mapInteraction.openPopperParcelNumber?.includes(parcelNumber)
+            mapInteraction.hoveredParcelNumber?.split("multiple")?.includes(parcelNumber) ||
+            mapInteraction.openPopperParcelNumber?.split("multiple").includes(parcelNumber)
           );
         }
         return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
       };
-
       let properties = values.calculation.propertiesUsedForCalculation?.flat().map((el) => ({
         parcelNumber: el.parcelNumberNoFormatting,
         parcelNumberNoFormatting: el.parcelNumberNoFormatting,
@@ -166,6 +165,27 @@ const VoltMap: FC<VoltDesktopProps> = ({
           }),
       }));
 
+      values.calculation.propertiesUsedForCalculation
+        .filter((el) => Array.isArray(el))
+        .forEach((item) => {
+          properties.push({
+            parcelNumber: item.map((el) => el.parcelNumberNoFormatting).join("multiple"),
+            parcelNumberNoFormatting: item.map((el) => el.parcelNumberNoFormatting).join("multiple"),
+            latitude: item[0].lat,
+            longitude: item[0].lon,
+            markerType: isActive(item.map((el) => el.parcelNumberNoFormatting).join("multiple"))
+              ? ("highlighted" as const)
+              : ("default" as const),
+            ...(user &&
+              user.isSubscribed && {
+                popup: (
+                  <div className="flex flex-col gap-1 space-y-2">
+                    <p className="!p-0 !m-0">ragacaaa</p>
+                  </div>
+                ),
+              }),
+          });
+        });
       if (mainLandSaleHistory.length > 0) {
         properties = properties.filter(
           (el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting)
@@ -274,6 +294,16 @@ const VoltMap: FC<VoltDesktopProps> = ({
             { maxZoom: 12 }
           );
         }
+
+        /// open popup
+        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber.join("")];
+        if (currentItemMarker) {
+          currentItemMarker.openPopup();
+          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
+          if (mapInteraction.zoom) {
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+          }
+        }
       }
     }
   }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom, values.calculation?.propertiesUsedForCalculation]);
@@ -316,10 +346,10 @@ const VoltMap: FC<VoltDesktopProps> = ({
           zoom: false,
         }));
       }}
-      popupClose={(parcelNumberNoFormatting) => {
+      popupClose={() => {
         setMpaInteraction((prevData) => ({
           ...prevData,
-          openPopperParcelNumber: parcelNumberNoFormatting === prevData.openPopperParcelNumber ? null : prevData.openPopperParcelNumber,
+          openPopperParcelNumber: null,
           zoom: false,
         }));
       }}
