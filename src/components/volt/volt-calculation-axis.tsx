@@ -62,7 +62,6 @@ const VoltPriceCalculationAxis = ({
             isSmallDevice ? "flex-col" : ""
           )}
         >
-          {/* <p className={cn(`text-xs text-gray-600`, isSmallDevice ? "hidden" : "block")}>Min</p> */}
           {!isSmallDevice && (
             <Tooltip
               renderButton={
@@ -143,14 +142,13 @@ const VoltPriceCalculationAxis = ({
                 className={cn(
                   `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
                   isSmallDevice ? "size-5" : "size-6",
-                  (mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting ||
-                    mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting) &&
+                  (mapInteraction.hoveredParcelNumber?.includes(property.parcelNumberNoFormatting) ||
+                    mapInteraction.openPopperParcelNumber?.includes(property.parcelNumberNoFormatting)) &&
                     "scale-150 text-[#FF2F48]"
                 )}
               />
             ))}
           </div>
-          {/* <p className={cn("text-xs text-gray-600 ", isSmallDevice ? "hidden" : "block")}>Max</p> */}
           {!isSmallDevice && (
             <Tooltip
               renderButton={
