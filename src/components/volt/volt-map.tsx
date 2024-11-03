@@ -173,9 +173,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
             parcelNumberNoFormatting: item.map((el) => el.parcelNumberNoFormatting).join("multiple"),
             latitude: item[0].lat,
             longitude: item[0].lon,
-            markerType: isActive(item.map((el) => el.parcelNumberNoFormatting).join("multiple"))
-              ? ("highlighted" as const)
-              : ("default" as const),
+            markerType: "invisible" as any,
             ...(user &&
               user.isSubscribed && {
                 popup: (

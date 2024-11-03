@@ -18,7 +18,7 @@ interface IProps {
     center?: boolean;
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
-    markerType?: "default" | "active" | "none" | "highlighted";
+    markerType?: "default" | "active" | "none" | "highlighted" | "invisible";
     popup?: ReactElement;
   }>;
   setMapRef?: (ref: LeafletMap) => void;
@@ -47,12 +47,20 @@ const markerActive = new Icon({
   iconSize: [36, 48],
 });
 
+const markerInvisible = new Icon({
+  iconUrl: "/map-active-icon.svg",
+  iconSize: [0, 0],
+});
+
 const getMarkerIcon = (mapItem: IProps["properties"][0], highlightItemParcelNumber?: string | null) => {
   if (mapItem.markerType === "active") {
     return markerActive;
   }
   if (mapItem.markerType === "highlighted" || highlightItemParcelNumber === mapItem.parcelNumber) {
     return markerHighlighted;
+  }
+  if (mapItem.markerType === "invisible") {
+    return markerInvisible;
   }
   return markerDefault;
 };
