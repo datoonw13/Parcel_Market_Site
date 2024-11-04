@@ -8,10 +8,10 @@ const propertyLocationSchema = z.object({
 export const propertyOwnerValidation = z
   .object({
     searchType: z.enum(["fullName", "entityName", "parcelNumber"]),
-    parcelNumber: z.string().optional(),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    entityName: z.string().optional(),
+    parcelNumber: z.string().trim().optional(),
+    firstName: z.string().trim().optional(),
+    lastName: z.string().trim().optional(),
+    entityName: z.string().trim().optional(),
   })
   .superRefine(({ parcelNumber, searchType, entityName, firstName, lastName }, context) => {
     if (searchType === "parcelNumber" && (!parcelNumber || (parcelNumber && parcelNumber.length < 2))) {
