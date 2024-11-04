@@ -2,8 +2,7 @@ import { z } from "zod";
 
 export const passwordSchema = z
   .string({
-    message:
-      "Your password must contain a minimum of 8 characters and use at least one uppercase letter, number, and special character ( $, ^,  *, +, _ ).",
+    message: "Your password must contain a minimum of 8 characters and use at least one uppercase letter, number, and ay special character",
   })
   .trim()
   .regex(
