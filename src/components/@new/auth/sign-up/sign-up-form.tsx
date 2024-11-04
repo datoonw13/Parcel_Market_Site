@@ -245,7 +245,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
         </div>
         <CheckBox
           onChange={() => setValue("subscribeToEmail", !watch("subscribeToEmail"))}
-          label="Send me emails with tips on how to find talent that fits my needs."
+          label="Click here to receive news and updates from Parcel Market."
           className="col-span-2"
         />
         <CheckBox
