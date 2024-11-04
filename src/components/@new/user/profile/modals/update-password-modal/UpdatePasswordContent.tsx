@@ -22,7 +22,7 @@ const UpdatePasswordContent: FC<UpdatePasswordContentProps> = ({ user, handleClo
       description={
         passwords
           ? `Enter the code we sent to ${currentUserEmail}`
-          : "Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & special characters ($, ^, *, +, _)"
+          : "Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & any special characters"
       }
       title={passwords ? "Check Your Email" : "Change Password"}
     >

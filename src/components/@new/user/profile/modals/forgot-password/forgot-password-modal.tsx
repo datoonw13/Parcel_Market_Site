@@ -35,7 +35,7 @@ const renderModalHeader = (step: ForgotPasswordSteps, email?: string) => {
     case ForgotPasswordSteps.NEW_PASSWORD:
       return {
         title: "Enter New Password",
-        description: `Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & special characters ($, ^, *, +, _)`,
+        description: `Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & any special characters`,
       };
     default:
       return {

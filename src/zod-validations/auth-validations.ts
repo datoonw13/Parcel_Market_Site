@@ -7,8 +7,9 @@ export const passwordSchema = z
   })
   .trim()
   .regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[+*$^_])[A-Za-z\d+*$^_].{7,}$/,
-    "Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & special characters ($, ^, *, +, _)"
+    // eslint-disable-next-line no-useless-escape
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!-\/:-@[-`{-~]).{8,}$/,
+    "Password should contain minimum 8 characters. Use at least one uppercase letter, numbers & any special characters"
   );
 
 export const emailSchema = z.string().trim().email();
