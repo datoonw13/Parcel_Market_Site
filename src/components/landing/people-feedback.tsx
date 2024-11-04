@@ -46,7 +46,7 @@ const PeopleFeedback = () => (
               <Avatar className="bg-grey-200 flex items-center justify-center size-14">
                 <AvatarFallback>
                   {el.userName[0]}
-                  {el.userName[el.userName.length - 1]}
+                  {el.userName.split(" ")[1][0]}
                 </AvatarFallback>
               </Avatar>
               <div>
