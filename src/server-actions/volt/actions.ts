@@ -121,28 +121,10 @@ export const calculateLandPriceAction = async (
       pricePerAcreage: Number((Number(request.price) / Number(request.acrage)).toFixed(2)),
       propertiesUsedForCalculation: request.properties.map((property: any | any[]) => {
         if (Array.isArray(property)) {
-          return property.map((childProperty) => ({
-            acreage: Number(childProperty.arcage),
-            city: childProperty.city,
-            county: {
-              value: childProperty.county,
-              label: childProperty.county,
-            },
-            state: {
-              value: childProperty.state,
-              label: childProperty.state,
-            },
-            id: removeParcelNumberFormatting(childProperty.parselId),
-            isMedianValid: childProperty.isMedianValid,
-            isValid: childProperty.isValid,
-            lastSaleDate: moment(childProperty.lastSalesDate, "YYYY-MM-DD").toDate(),
-            lastSalePrice: Number(childProperty.lastSalesPrice),
-            lat: Number(childProperty.latitude),
-            lon: Number(childProperty.longitude),
-            parcelNumber: childProperty.parcelNumber,
-            parcelNumberNoFormatting: removeParcelNumberFormatting(childProperty.parselId),
-            pricePerAcreage: Number((Number(childProperty.lastSalesPrice) / Number(childProperty.arcage)).toFixed(2)),
-          }));
+          return {
+            id: property.map((el) => el.parcelNumberNoFormatting).join("multiple"),
+            acreage: property.reduce((acc, cur) => cur.arcage + acc, 0),
+          };
         }
         return {
           acreage: Number(property.arcage),

@@ -149,4 +149,20 @@ export interface IPropertyUsedForCalculation
     IPropertySaleHistory,
     IPropertyCalculationOptions,
     IPropertyPricePerAcre {}
+
+export interface IBulkPropertiesUsedForCalculation {
+  id: string;
+  acreage: number;
+  price: number;
+  pricePerAcreage: number;
+  county: {
+    value: string;
+    label: string;
+  };
+  state: {
+    value: string;
+    label: string;
+  };
+  properties: IPropertyUsedForCalculation[];
+}
 export interface IMainPropertyBaseInfo extends IPropertyBaseInfo, IPropertyOwner, IPropertyPolygon, IPropertyType {}

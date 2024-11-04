@@ -3,6 +3,7 @@ import { z } from "zod";
 import { PolygonProps } from "react-leaflet";
 import { IMap } from "./map";
 import {
+  IBulkPropertiesUsedForCalculation,
   IMainPropertyBaseInfo,
   IPropertyBaseInfo,
   IPropertyPricePerAcre,
@@ -44,7 +45,7 @@ export interface PropertyUsedForCalculation extends IPropertyBaseInfo, IProperty
 
 export type IVoltPriceCalculationRes = IMainPropertyBaseInfo &
   IPropertyPricePerAcre & {
-    propertiesUsedForCalculation: IPropertyUsedForCalculation[] | IPropertyUsedForCalculation[][];
+    propertiesUsedForCalculation: IPropertyUsedForCalculation[] | IBulkPropertiesUsedForCalculation;
     price: number;
   };
 
