@@ -6,6 +6,7 @@ import {
   IPropertyPricePerAcre,
   IPropertySaleHistory,
 } from "@/types/property";
+import moment from "moment";
 import React, { FC } from "react";
 
 type VoltItemData = IPropertyBaseInfo & Partial<IPropertySaleHistory> & Partial<IPropertyOwner> & Partial<IPropertyPricePerAcre>;
@@ -47,7 +48,7 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
     <div className="space-y-3 px-5 py-4">
       <div className="flex justify-between gap-6 pb-3 border-b border-[#D5D3D3]">
         <h1 className="font-semibold">Sold in Bulk</h1>
-        <h2 className="font-medium text-xs text-grey-800">tarigii</h2>
+        <h2 className="font-medium text-xs text-grey-800">{moment(data.data.properties[0].lastSaleDate).format("MM/DD/YYYY")}</h2>
       </div>
       <ul className="grid grid-cols-2 gap-1">
         <li className="text-xs text-grey-600">
