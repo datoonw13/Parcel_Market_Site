@@ -322,7 +322,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
 
   const handleMapPopperInteraction = useCallback(() => {
     if (mapRef.current) {
-      if (mapInteraction.openPopperParcelNumber && !Array.isArray(mapInteraction.openPopperParcelNumber)) {
+      if (mapInteraction.openPopperParcelNumber && !mapInteraction.openPopperParcelNumber.includes("multiple")) {
         const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
         if (currentItemMarker) {
           currentItemMarker.openPopup();
@@ -333,42 +333,45 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
       }
 
-      // if (mapInteraction.openPopperParcelNumber && Array.isArray(mapInteraction.openPopperParcelNumber)) {
-      //   const properties = values.calculation?.propertiesUsedForCalculation.flat();
-      //   const items: IPropertyUsedForCalculation[] = [];
-      //   mapInteraction.openPopperParcelNumber.forEach((el) => {
-      //     const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
-      //     if (item) {
-      //       items.push(item);
-      //     }
-      //   });
-      //   const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
-      //     latitude: 0,
-      //     longitude: 0,
-      //   }) as any;
-      //   mapRef.current.closePopup();
-      //   if (mapInteraction.zoom) {
-      //     mapRef.current?.fitBounds(
-      //       [
-      //         {
-      //           lat: centerCoordinate.latitude,
-      //           lng: centerCoordinate.longitude,
-      //         },
-      //       ] as any,
-      //       { maxZoom: 14 }
-      //     );
-      //   }
+      if (mapInteraction.openPopperParcelNumber && mapInteraction.openPopperParcelNumber.includes("multiple")) {
+        const properties = values.calculation?.propertiesUsedForCalculation
+          .filter((el) => el.isBulked)
+          .map((el) => el.data.properties)
+          .flat();
+        const items: IPropertyUsedForCalculation["data"][] = [];
+        mapInteraction.openPopperParcelNumber.split("multiple").forEach((el) => {
+          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
+          if (item) {
+            items.push(item);
+          }
+        });
+        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
+          latitude: 0,
+          longitude: 0,
+        }) as any;
+        mapRef.current.closePopup();
+        if (mapInteraction.zoom) {
+          mapRef.current?.fitBounds(
+            [
+              {
+                lat: centerCoordinate.latitude,
+                lng: centerCoordinate.longitude,
+              },
+            ] as any,
+            { maxZoom: 14 }
+          );
+        }
 
-      //   /// open popup
-      //   const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber.join("")];
-      //   if (currentItemMarker) {
-      //     currentItemMarker.openPopup();
-      //     const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
-      //     if (mapInteraction.zoom) {
-      //       mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
-      //     }
-      //   }
-      // }
+        /// open popup
+        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
+        if (currentItemMarker) {
+          currentItemMarker.openPopup();
+          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
+          if (mapInteraction.zoom) {
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
+          }
+        }
+      }
     }
   }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom, values.calculation?.propertiesUsedForCalculation]);
 

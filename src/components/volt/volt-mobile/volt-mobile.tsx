@@ -2,7 +2,7 @@
 
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Button } from "@/components/ui/button";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
@@ -28,6 +28,42 @@ interface VoltMobileProps {
   values: VoltWrapperValuesModel;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
+
+const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
+  const result: Array<{
+    parcelNumberNoFormatting: string;
+    acreage: number;
+    price: number;
+    pricePerAcre: number;
+    isMainLand: boolean;
+  }> = [];
+
+  if (!data || !sellingLandParcelNumberNoFormatting) {
+    return [];
+  }
+
+  data.forEach((property) => {
+    if (property.isBulked) {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting.includes(sellingLandParcelNumberNoFormatting),
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.price,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    } else {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting === sellingLandParcelNumberNoFormatting,
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.lastSalePrice,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    }
+  });
+
+  return result;
+};
 
 const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningModal, setStep, setValues, step, values }) => {
   const router = useRouter();
@@ -184,15 +220,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                         mapInteraction={mapInteraction}
                         setMpaInteraction={setMpaInteraction}
                         setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
-                        data={
-                          values.calculation?.propertiesUsedForCalculation.flat().map((el) => ({
-                            parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-                            acreage: el.acreage,
-                            price: el.lastSalePrice,
-                            pricePerAcre: el.pricePerAcreage,
-                            isMainLand: el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting,
-                          })) || []
-                        }
+                        data={getAxisData(values.calculation?.propertiesUsedForCalculation, values.selectedItem?.parcelNumberNoFormatting)}
                       />
                       <VoltCalculation values={values} user={user} mapInteraction={mapInteraction} setMpaInteraction={setMpaInteraction} />
                     </div>
