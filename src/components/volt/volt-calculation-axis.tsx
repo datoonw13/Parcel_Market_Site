@@ -8,6 +8,21 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { breakPoints } from "../../../tailwind.config";
 import { Tooltip } from "../ui/tooltip";
 
+const isActive = (
+  openPopperParcelNumber: string | null,
+  hoveredParcelNumber: string | null,
+  targetParcelNumber: string,
+  data: VoltPriceCalculationAxisProps["data"]
+) => {
+  const parcelNumber =
+    data.find((el) => el.parcelNumberNoFormatting === targetParcelNumber) ||
+    data.find((el) => el.parcelNumberNoFormatting.split("multiple").includes(targetParcelNumber));
+  return (
+    (openPopperParcelNumber || hoveredParcelNumber) &&
+    parcelNumber?.parcelNumberNoFormatting.includes((openPopperParcelNumber || hoveredParcelNumber)!)
+  );
+};
+
 const CalculatePrice = ({ price }: { price: number }) => (
   <div>
     <h1 className="text-sm font-medium text-gray-800 w-max">VOLT Value</h1>
@@ -15,15 +30,7 @@ const CalculatePrice = ({ price }: { price: number }) => (
   </div>
 );
 
-const VoltPriceCalculationAxis = ({
-  data,
-  setOpenPropertyDetailWarningModal,
-  user,
-  voltValue,
-  mapInteraction,
-  setMpaInteraction,
-  responsiveBreakpoint = "md",
-}: {
+interface VoltPriceCalculationAxisProps {
   data: {
     pricePerAcre: number;
     parcelNumberNoFormatting: string;
@@ -37,7 +44,17 @@ const VoltPriceCalculationAxis = ({
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
   responsiveBreakpoint?: keyof typeof breakPoints;
-}) => {
+}
+
+const VoltPriceCalculationAxis = ({
+  data,
+  setOpenPropertyDetailWarningModal,
+  user,
+  voltValue,
+  mapInteraction,
+  setMpaInteraction,
+  responsiveBreakpoint = "md",
+}: VoltPriceCalculationAxisProps) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints[responsiveBreakpoint]));
   const averagePricePerAcre = Number((data.reduce((acc, cur) => acc + cur.pricePerAcre, 0) / data.length).toFixed(2));
   const minPricePerAcre = Math.min(...data.map((el) => el.pricePerAcre));
@@ -142,9 +159,12 @@ const VoltPriceCalculationAxis = ({
                 className={cn(
                   `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
                   isSmallDevice ? "size-5" : "size-6",
-                  (mapInteraction.hoveredParcelNumber?.includes(property.parcelNumberNoFormatting) ||
-                    mapInteraction.openPopperParcelNumber?.includes(property.parcelNumberNoFormatting)) &&
-                    "scale-150 text-[#FF2F48]"
+                  isActive(
+                    mapInteraction.openPopperParcelNumber,
+                    mapInteraction.hoveredParcelNumber,
+                    property.parcelNumberNoFormatting,
+                    data
+                  ) && "scale-150 text-[#FF2F48]"
                 )}
               />
             ))}

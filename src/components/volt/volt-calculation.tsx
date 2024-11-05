@@ -29,15 +29,24 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
   }, []);
 
   useEffect(() => {
-    if (
-      (mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber) &&
-      !isElementVisible(`calculation-${mapInteraction.hoveredParcelNumber}`, "volt-scroll")
-    ) {
-      document
-        .getElementById(`calculation-${mapInteraction.hoveredParcelNumber}`)
-        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber) {
+      const propertyId = values.calculation?.propertiesUsedForCalculation.find((el) => {
+        if (el.isBulked) {
+          return el.data.parcelNumberNoFormatting
+            .split("multiple")
+            .includes(mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber || "");
+        }
+        return (
+          el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber ||
+          el.data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
+        );
+      })?.data.parcelNumberNoFormatting;
+
+      if (propertyId && !isElementVisible(`calculation-${propertyId}`, "volt-scroll")) {
+        document.getElementById(`calculation-${propertyId}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     }
-  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber]);
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber, values.calculation?.propertiesUsedForCalculation]);
 
   return (
     <>

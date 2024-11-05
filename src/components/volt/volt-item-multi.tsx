@@ -9,15 +9,13 @@ import {
 import moment from "moment";
 import React, { FC } from "react";
 
-type VoltItemData = IPropertyBaseInfo & Partial<IPropertySaleHistory> & Partial<IPropertyOwner> & Partial<IPropertyPricePerAcre>;
-
 interface VoltItemMultiProps {
   data: IBulkPropertiesUsedForCalculation;
   onHover: (parcelNumberNoFormatting: string) => void;
   onMouseLeave: (parcelNumberNoFormatting: string) => void;
   onSelect: (parcelNumberNoFormatting: string) => void;
-  highlightedItemParcelNumber: string | string[] | null;
-  selectedItemParcelNumber: string | string[] | null;
+  highlightedItemParcelNumber: string | null;
+  selectedItemParcelNumber: string | null;
   selected?: boolean;
 }
 
@@ -33,9 +31,12 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
   <div
     className={cn(
       "rounded-2xl border border-[#D5D3D3] cursor-pointer transition-all duration-100",
-      // selected && "!border-primary-main-400 !bg-primary-main-50",
-      selectedItemParcelNumber === data.data.parcelNumberNoFormatting && "!border-primary-main-400 !bg-primary-main-50",
-      highlightedItemParcelNumber === data.data.parcelNumberNoFormatting && "bg-grey-50 border-[#D5D3D3]",
+      selectedItemParcelNumber &&
+        data.data.parcelNumberNoFormatting.includes(selectedItemParcelNumber) &&
+        "!border-primary-main-400 !bg-primary-main-50",
+      highlightedItemParcelNumber &&
+        data.data.parcelNumberNoFormatting.includes(highlightedItemParcelNumber) &&
+        "bg-grey-50 border-[#D5D3D3]",
       "hover:bg-grey-50 hover:border-[#D5D3D3]"
     )}
     onMouseEnter={() => onHover(data.data.parcelNumberNoFormatting)}
@@ -68,15 +69,7 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
     </div>
     <div className="p-3 grid grid-cols-3 gap-1 rounded-b-2xl bg-grey-100 h-full py-3">
       {data.data.properties.map((item, itemI) => (
-        <div
-          key={item.id + itemI.toString()}
-          id={`calculation-${item.parcelNumberNoFormatting}`}
-          className={cn(
-            "p-2 rounded-lg bg-white space-y-2 border border-transparent",
-            selectedItemParcelNumber === item.parcelNumberNoFormatting && "border !border-primary-main-400 !bg-primary-main-50",
-            highlightedItemParcelNumber === item.parcelNumberNoFormatting && "bg-grey-50 border-[#D5D3D3]"
-          )}
-        >
+        <div key={item.id + itemI.toString()} className={cn("p-2 rounded-lg bg-white space-y-2 border border-transparent")}>
           <p className="text-xs text-grey-600">
             Acreage: <span className="text-black font-medium">{item.acreage.toFixed(2)}</span>
           </p>

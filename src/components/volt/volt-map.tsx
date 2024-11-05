@@ -3,11 +3,11 @@
 import { IVoltPriceCalculation, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, ReactElement, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
+import { Dispatch, FC, ReactElement, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
 import { moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
-import { IBulkPropertiesUsedForCalculation, IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
+import { IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
 import moment from "moment";
 import { getCenter } from "geolib";
 import { Button } from "../ui/button";
@@ -231,9 +231,6 @@ const VoltMap: FC<VoltDesktopProps> = ({
                 popup: (
                   <div className="flex flex-col gap-1 space-y-2">
                     <h2 className="!font-semibold !mb-3 text-center">Bulk item</h2>
-                    {/* <p className="!p-0 !m-0">
-                      Parcel Number: <b>{item.data.parcelNumberNoFormatting}</b>
-                    </p> */}
                     <p className="!p-0 !m-0">
                       Acreage: <b>{item.data.acreage.toFixed(2)}</b>
                     </p>

@@ -160,49 +160,49 @@ export const exportToKml = (
 };
 
 export const exportToExcel = (propertiesUsedForCalculation: IPropertyUsedForCalculation[]) => {
-  const HEADER_ROWS = [
-    { label: "Parcel ID", key: "parcelNumber" as const },
-    { label: "County", key: "county" as const },
-    { label: "Acreage", key: "acreage" as const },
-    { label: "Sold Price", key: "lastSalePrice" as const },
-    { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
-    { label: "Last Sale Date", key: "lastSaleDate" as const },
-  ];
+  // const HEADER_ROWS = [
+  //   { label: "Parcel ID", key: "parcelNumber" as const },
+  //   { label: "County", key: "county" as const },
+  //   { label: "Acreage", key: "acreage" as const },
+  //   { label: "Sold Price", key: "lastSalePrice" as const },
+  //   { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
+  //   { label: "Last Sale Date", key: "lastSaleDate" as const },
+  // ];
 
-  const ws = XLSX.utils.json_to_sheet(
-    propertiesUsedForCalculation.map((el) => ({
-      parcelNumber: el.parcelNumberNoFormatting,
-      county: el.county.label,
-      acreage: el.acreage,
-      lastSalePrice: moneyFormatter.format(Number(el.lastSalePrice)),
-      pricePerAcre: moneyFormatter.format(el.pricePerAcreage),
-      lastSaleDate: el.lastSaleDate,
-    }))
-  );
-  const maxLengthData = {
-    parcelNumber: [...propertiesUsedForCalculation].sort((a, b) => b.parcelNumberNoFormatting.length - a.parcelNumberNoFormatting.length)[0]
-      .parcelNumberNoFormatting.length,
-    county: [...propertiesUsedForCalculation].sort((a, b) => b.county.label.length - a.county.label.length)[0].county.label.length,
-    acreage: [...propertiesUsedForCalculation]
-      .sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0]
-      .acreage.toString().length,
-    lastSalePrice: [...propertiesUsedForCalculation]
-      .sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0]
-      .lastSalePrice!.toString().length,
-    pricePerAcre: [...propertiesUsedForCalculation]
-      .sort((a, b) => b.pricePerAcreage.toString().length - a.pricePerAcreage.toString().length)[0]
-      .pricePerAcreage.toString().length,
-    lastSaleDate: [...propertiesUsedForCalculation]
-      .sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0]
-      .lastSaleDate!.toString().length,
-  };
+  // const ws = XLSX.utils.json_to_sheet(
+  //   propertiesUsedForCalculation.map((el) => ({
+  //     parcelNumber: el.parcelNumberNoFormatting,
+  //     county: el.county.label,
+  //     acreage: el.acreage,
+  //     lastSalePrice: moneyFormatter.format(Number(el.lastSalePrice)),
+  //     pricePerAcre: moneyFormatter.format(el.pricePerAcreage),
+  //     lastSaleDate: el.lastSaleDate,
+  //   }))
+  // );
+  // const maxLengthData = {
+  //   parcelNumber: [...propertiesUsedForCalculation].sort((a, b) => b.parcelNumberNoFormatting.length - a.parcelNumberNoFormatting.length)[0]
+  //     .parcelNumberNoFormatting.length,
+  //   county: [...propertiesUsedForCalculation].sort((a, b) => b.county.label.length - a.county.label.length)[0].county.label.length,
+  //   acreage: [...propertiesUsedForCalculation]
+  //     .sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0]
+  //     .acreage.toString().length,
+  //   lastSalePrice: [...propertiesUsedForCalculation]
+  //     .sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0]
+  //     .lastSalePrice!.toString().length,
+  //   pricePerAcre: [...propertiesUsedForCalculation]
+  //     .sort((a, b) => b.pricePerAcreage.toString().length - a.pricePerAcreage.toString().length)[0]
+  //     .pricePerAcreage.toString().length,
+  //   lastSaleDate: [...propertiesUsedForCalculation]
+  //     .sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0]
+  //     .lastSaleDate!.toString().length,
+  // };
 
-  const wscols = Object.values(maxLengthData).map((el) => ({ wch: el + 10 }));
+  // const wscols = Object.values(maxLengthData).map((el) => ({ wch: el + 10 }));
 
-  ws["!cols"] = wscols;
-  XLSX.utils.sheet_add_aoa(ws, [HEADER_ROWS.map((el) => el.label)], { origin: "A1" });
-  const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const res = new Blob([excelBuffer], { type: "xlsx" });
-  saveAs(res, `${new Date()}.xlsx`);
+  // ws["!cols"] = wscols;
+  // XLSX.utils.sheet_add_aoa(ws, [HEADER_ROWS.map((el) => el.label)], { origin: "A1" });
+  // const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+  // const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  // const res = new Blob([excelBuffer], { type: "xlsx" });
+  // saveAs(res, `${new Date()}.xlsx`);
 };
