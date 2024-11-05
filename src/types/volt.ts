@@ -43,9 +43,9 @@ export interface PropertyUsedForCalculation extends IPropertyBaseInfo, IProperty
   isValid: boolean;
 }
 
-export type IVoltPriceCalculationRes = IMainPropertyBaseInfo &
+export type IVoltPriceCalculation = IMainPropertyBaseInfo &
   IPropertyPricePerAcre & {
-    propertiesUsedForCalculation: IPropertyUsedForCalculation[] | IBulkPropertiesUsedForCalculation;
+    propertiesUsedForCalculation: Array<IPropertyUsedForCalculation | IBulkPropertiesUsedForCalculation>;
     price: number;
   };
 
@@ -53,5 +53,79 @@ export interface VoltWrapperValuesModel {
   searchDetails: VoltSearchModel | null;
   searchResult: IMainPropertyBaseInfo[] | null;
   selectedItem: IMainPropertyBaseInfo | null;
-  calculation: IVoltPriceCalculationRes | null;
+  calculation: IVoltPriceCalculation | null;
+}
+
+export interface IVoltPriceCalculationResponseProperty {
+  isBulked: false;
+  data: {
+    id: number;
+    owner: null;
+    parselId: string;
+    propertyType: string;
+    arcage: string;
+    price: string;
+    isValid: boolean;
+    isMedianValid: boolean;
+    address: string;
+    lastSalesPrice: string;
+    lastSalesDate: Date;
+    latitude: string;
+    longitude: string;
+    state: string;
+    county: string;
+    city?: string;
+  };
+}
+
+export interface IVoltPriceCalculationResponseBulkProperties {
+  isBulked: true;
+  data: {
+    acreage: number;
+    price: number;
+    pricePerAcreage: number;
+    state: string;
+    county: string;
+    parcelNumberNoFormatting: string;
+    properties: (IVoltPriceCalculationResponseProperty["data"] & { bulkGroupId: string })[];
+  };
+}
+
+export interface IVoltPriceCalculationResponse {
+  owner: string;
+  state: string;
+  county: string;
+  propertyType: string;
+  parcelNumber: string;
+  parcelNumberNoFormatting: string;
+  coordinates: string;
+  locality: string;
+  price: number;
+  price_sum: number;
+  median_middle_price: number;
+  acrage: string;
+  lastsalesprice: number;
+  lastsalesdate: Date;
+  user_id: number;
+  lat: string;
+  lon: string;
+  median: string;
+  medianLowerBound: string;
+  medianUpperBound: string;
+  averagePricePerAcreValidMedians: string;
+  legalDescription: null;
+  apiOwnerName: null;
+  lotSize: null;
+  salePrice: null;
+  saleYear: null;
+  city: null;
+  id: number;
+  accepted: boolean;
+  propertyId: number;
+  dateCreated: Date;
+  range: {
+    min: number;
+    max: number;
+  };
+  properties: Array<IVoltPriceCalculationResponseProperty | IVoltPriceCalculationResponseBulkProperties>;
 }

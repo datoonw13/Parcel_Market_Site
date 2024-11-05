@@ -1,20 +1,20 @@
 import { cn } from "@/lib/utils";
 import {
+  IBulkPropertiesUsedForCalculation,
   IPropertyBaseInfo,
   IPropertyOwner,
   IPropertyPricePerAcre,
   IPropertySaleHistory,
-  IPropertyUsedForCalculation,
 } from "@/types/property";
 import React, { FC } from "react";
 
 type VoltItemData = IPropertyBaseInfo & Partial<IPropertySaleHistory> & Partial<IPropertyOwner> & Partial<IPropertyPricePerAcre>;
 
 interface VoltItemMultiProps {
-  data: IPropertyUsedForCalculation[];
-  onHover: (id: VoltItemData | VoltItemData[]) => void;
-  onMouseLeave: (id: VoltItemData | VoltItemData[]) => void;
-  onSelect: (id: VoltItemData | VoltItemData[]) => void;
+  data: IBulkPropertiesUsedForCalculation;
+  onHover: (parcelNumberNoFormatting: string) => void;
+  onMouseLeave: (parcelNumberNoFormatting: string) => void;
+  onSelect: (parcelNumberNoFormatting: string) => void;
   highlightedItemParcelNumber: string | string[] | null;
   selectedItemParcelNumber: string | string[] | null;
   selected?: boolean;
@@ -32,54 +32,48 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
   <div
     className={cn(
       "rounded-2xl border border-[#D5D3D3] cursor-pointer transition-all duration-100",
-      selected && " !border-primary-main-400 !bg-primary-main-50",
+      // selected && "!border-primary-main-400 !bg-primary-main-50",
+      selectedItemParcelNumber === data.data.parcelNumberNoFormatting && "!border-primary-main-400 !bg-primary-main-50",
+      highlightedItemParcelNumber === data.data.parcelNumberNoFormatting && "bg-grey-50 border-[#D5D3D3]",
       "hover:bg-grey-50 hover:border-[#D5D3D3]"
     )}
+    onMouseEnter={() => onHover(data.data.parcelNumberNoFormatting)}
+    onMouseLeave={() => onMouseLeave(data.data.parcelNumberNoFormatting)}
+    onClick={() => {
+      onSelect(data.data.parcelNumberNoFormatting);
+    }}
+    id={`calculation-${data.data.parcelNumberNoFormatting}`}
   >
-    <div
-      onMouseEnter={() => onHover(data)}
-      onMouseLeave={() => onMouseLeave(data)}
-      onClick={() => {
-        onSelect(data);
-      }}
-      className="space-y-3 px-5 py-4"
-    >
+    <div className="space-y-3 px-5 py-4">
       <div className="flex justify-between gap-6 pb-3 border-b border-[#D5D3D3]">
         <h1 className="font-semibold">Sold in Bulk</h1>
-        <h2 className="font-medium text-xs text-grey-800">09/17/2024</h2>
+        <h2 className="font-medium text-xs text-grey-800">tarigii</h2>
       </div>
       <ul className="grid grid-cols-2 gap-1">
         <li className="text-xs text-grey-600">
-          State: <span className="text-black font-medium">State</span>
+          State: <span className="text-black font-medium">{data.data.state.label}</span>
         </li>
         <li className="text-xs text-grey-600">
-          Sold Price: <span className="text-black font-medium">Sold Price</span>
+          Sold Price: <span className="text-black font-medium">{data.data.price.toFixed(2)}</span>
         </li>
         <li className="text-xs text-grey-600">
-          Acreage: <span className="text-black font-medium">Acreage</span>
+          Acreage: <span className="text-black font-medium">{data.data.acreage.toFixed(2)}</span>
         </li>
 
         <li className="text-xs text-grey-600">
-          Per acre Price: <span className="text-black font-medium">Per acre Price</span>
+          Per acre Price: <span className="text-black font-medium">{data.data.pricePerAcreage.toFixed(2)}</span>
         </li>
       </ul>
     </div>
     <div className="p-3 grid grid-cols-3 gap-1 rounded-b-2xl bg-grey-100 h-full py-3">
-      {data.map((item, itemI) => (
+      {data.data.properties.map((item, itemI) => (
         <div
-          onMouseEnter={() => onHover(item)}
-          onMouseLeave={() => onMouseLeave(item)}
-          onClick={() => onSelect(item)}
           key={item.id + itemI.toString()}
-          id={`calculation-${item.id}`}
+          id={`calculation-${item.parcelNumberNoFormatting}`}
           className={cn(
-            "p-2 rounded-lg bg-white space-y-2 border border-transparent hover:bg-grey-50 hover:border-[#D5D3D3]",
-            !Array.isArray(selectedItemParcelNumber) &&
-              selectedItemParcelNumber === item.parcelNumberNoFormatting &&
-              "border !border-primary-main-400 !bg-primary-main-50",
-            !Array.isArray(highlightedItemParcelNumber) &&
-              highlightedItemParcelNumber === item.parcelNumberNoFormatting &&
-              "bg-grey-50 border-[#D5D3D3]"
+            "p-2 rounded-lg bg-white space-y-2 border border-transparent",
+            selectedItemParcelNumber === item.parcelNumberNoFormatting && "border !border-primary-main-400 !bg-primary-main-50",
+            highlightedItemParcelNumber === item.parcelNumberNoFormatting && "bg-grey-50 border-[#D5D3D3]"
           )}
         >
           <p className="text-xs text-grey-600">

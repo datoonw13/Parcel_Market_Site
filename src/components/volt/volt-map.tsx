@@ -1,13 +1,13 @@
 "use client";
 
-import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { IVoltPriceCalculation, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
+import { Dispatch, FC, ReactElement, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
 import { moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
-import { IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
+import { IBulkPropertiesUsedForCalculation, IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
 import moment from "moment";
 import { getCenter } from "geolib";
 import { Button } from "../ui/button";
@@ -88,9 +88,18 @@ const VoltMap: FC<VoltDesktopProps> = ({
       }));
     }
     if (step === VoltSteps.CALCULATION && values.calculation) {
-      const mainLandSaleHistory = values.calculation.propertiesUsedForCalculation
-        .flat()
-        .filter((el) => el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting);
+      const mainLandSaleHistory: IPropertyUsedForCalculation["data"][] = [];
+      values.calculation.propertiesUsedForCalculation.forEach((property) => {
+        if (property.isBulked) {
+          property.data.properties.forEach((el) => {
+            if (el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting) {
+              mainLandSaleHistory.push(el);
+            }
+          });
+        } else if (property.data.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting) {
+          mainLandSaleHistory.push(property.data);
+        }
+      });
 
       const mainProperty = {
         parcelNumber: values.selectedItem?.parcelNumber || "",
@@ -138,59 +147,112 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
         return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
       };
-      let properties = values.calculation.propertiesUsedForCalculation?.flat().map((el) => ({
-        parcelNumber: el.parcelNumberNoFormatting,
-        parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-        latitude: el.lat,
-        longitude: el.lon,
-        markerType: isActive(el.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
-        ...(user &&
-          user.isSubscribed && {
-            popup: (
-              <div className="flex flex-col gap-1 space-y-2">
-                <p className="!p-0 !m-0">
-                  Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
-                </p>
-                <p className="!p-0 !m-0">
-                  Acreage: <b>{el.acreage.toFixed(2)}</b>
-                </p>
-                <p className="!p-0 !m-0">
-                  Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
-                </p>
-                <p className="!p-0 !m-0">
-                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
-                </p>
-              </div>
-            ),
-          }),
-      }));
+
+      let mapItems: Array<{
+        parcelNumber: string;
+        parcelNumberNoFormatting: string;
+        latitude: number;
+        longitude: number;
+        markerType: "highlighted" | "default";
+        popup?: ReactElement;
+      }> = [];
+
+      values.calculation.propertiesUsedForCalculation.forEach((property) => {
+        if (property.isBulked) {
+          property.data.properties.forEach((el) => {
+            mapItems.push({
+              parcelNumber: el.parcelNumberNoFormatting,
+              parcelNumberNoFormatting: el.parcelNumberNoFormatting,
+              latitude: el.lat,
+              longitude: el.lon,
+              markerType: isActive(el.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
+              ...(user &&
+                user.isSubscribed && {
+                  popup: (
+                    <div className="flex flex-col gap-1 space-y-2">
+                      <p className="!p-0 !m-0">
+                        Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
+                      </p>
+                      <p className="!p-0 !m-0">
+                        Acreage: <b>{el.acreage.toFixed(2)}</b>
+                      </p>
+                      <p className="!p-0 !m-0">
+                        Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
+                      </p>
+                      <p className="!p-0 !m-0">
+                        Last Sale Price Per Acreage: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
+                      </p>
+                    </div>
+                  ),
+                }),
+            });
+          });
+        } else {
+          mapItems.push({
+            parcelNumber: property.data.parcelNumberNoFormatting,
+            parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+            latitude: property.data.lat,
+            longitude: property.data.lon,
+            markerType: isActive(property.data.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
+            ...(user &&
+              user.isSubscribed && {
+                popup: (
+                  <div className="flex flex-col gap-1 space-y-2">
+                    <p className="!p-0 !m-0">
+                      Parcel Number: <b>{property.data.parcelNumberNoFormatting}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Acreage: <b>{property.data.acreage.toFixed(2)}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Last Sale Price Per Acreage: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
+                    </p>
+                  </div>
+                ),
+              }),
+          });
+        }
+      });
 
       values.calculation.propertiesUsedForCalculation
-        .filter((el) => Array.isArray(el))
+        .filter((el) => el.isBulked)
         .forEach((item) => {
-          properties.push({
-            parcelNumber: item.map((el) => el.parcelNumberNoFormatting).join("multiple"),
-            parcelNumberNoFormatting: item.map((el) => el.parcelNumberNoFormatting).join("multiple"),
-            latitude: item[0].lat,
-            longitude: item[0].lon,
+          mapItems.push({
+            parcelNumber: item.data.parcelNumber,
+            parcelNumberNoFormatting: item.data.parcelNumberNoFormatting,
+            latitude: item.data.properties[0].lat,
+            longitude: item.data.properties[0].lon,
             markerType: "invisible" as any,
             ...(user &&
               user.isSubscribed && {
                 popup: (
                   <div className="flex flex-col gap-1 space-y-2">
-                    <p className="!p-0 !m-0">ragacaaa</p>
+                    <h2 className="!font-semibold !mb-3 text-center">Bulk item</h2>
+                    {/* <p className="!p-0 !m-0">
+                      Parcel Number: <b>{item.data.parcelNumberNoFormatting}</b>
+                    </p> */}
+                    <p className="!p-0 !m-0">
+                      Acreage: <b>{item.data.acreage.toFixed(2)}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Last Sale Date: <b>{moment(item.data.properties[0].lastSaleDate).format("MM-DD-YYYY")}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Last Sale Price Per Acreage: <b>{moneyFormatter.format(item.data.pricePerAcreage)}</b>
+                    </p>
                   </div>
                 ),
               }),
           });
         });
-      if (mainLandSaleHistory.length > 0) {
-        properties = properties.filter(
-          (el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting)
-        );
-      }
 
-      return [mainProperty, ...properties];
+      if (mainLandSaleHistory.length > 0) {
+        mapItems = mapItems.filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting));
+      }
+      return [mainProperty, ...mapItems];
     }
     return [];
   }, [
@@ -218,10 +280,14 @@ const VoltMap: FC<VoltDesktopProps> = ({
 
   const handleMapHoverInteraction = useCallback(() => {
     if (mapRef.current && mapInteraction.hoveredParcelNumber) {
-      if (Array.isArray(mapInteraction.hoveredParcelNumber)) {
-        const properties = values.calculation?.propertiesUsedForCalculation.flat();
-        const items: IPropertyUsedForCalculation[] = [];
-        mapInteraction.hoveredParcelNumber.forEach((el) => {
+      if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
+        const properties = values.calculation?.propertiesUsedForCalculation
+          .filter((el) => el.isBulked)
+          .map((el) => el.data.properties)
+          .flat();
+
+        const items: IPropertyUsedForCalculation["data"][] = [];
+        mapInteraction.hoveredParcelNumber.split("multiple").forEach((el) => {
           const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
           if (item) {
             items.push(item);
@@ -239,7 +305,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
                 lng: centerCoordinate.longitude,
               },
             ] as any,
-            { maxZoom: 12 }
+            { maxZoom: 14 }
           );
         }
       } else {
@@ -247,7 +313,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         if (currentItemMarker) {
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
           }
         }
       }
@@ -262,47 +328,47 @@ const VoltMap: FC<VoltDesktopProps> = ({
           currentItemMarker.openPopup();
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
           }
         }
       }
 
-      if (mapInteraction.openPopperParcelNumber && Array.isArray(mapInteraction.openPopperParcelNumber)) {
-        const properties = values.calculation?.propertiesUsedForCalculation.flat();
-        const items: IPropertyUsedForCalculation[] = [];
-        mapInteraction.openPopperParcelNumber.forEach((el) => {
-          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
-          if (item) {
-            items.push(item);
-          }
-        });
-        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
-          latitude: 0,
-          longitude: 0,
-        }) as any;
-        mapRef.current.closePopup();
-        if (mapInteraction.zoom) {
-          mapRef.current?.fitBounds(
-            [
-              {
-                lat: centerCoordinate.latitude,
-                lng: centerCoordinate.longitude,
-              },
-            ] as any,
-            { maxZoom: 12 }
-          );
-        }
+      // if (mapInteraction.openPopperParcelNumber && Array.isArray(mapInteraction.openPopperParcelNumber)) {
+      //   const properties = values.calculation?.propertiesUsedForCalculation.flat();
+      //   const items: IPropertyUsedForCalculation[] = [];
+      //   mapInteraction.openPopperParcelNumber.forEach((el) => {
+      //     const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
+      //     if (item) {
+      //       items.push(item);
+      //     }
+      //   });
+      //   const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
+      //     latitude: 0,
+      //     longitude: 0,
+      //   }) as any;
+      //   mapRef.current.closePopup();
+      //   if (mapInteraction.zoom) {
+      //     mapRef.current?.fitBounds(
+      //       [
+      //         {
+      //           lat: centerCoordinate.latitude,
+      //           lng: centerCoordinate.longitude,
+      //         },
+      //       ] as any,
+      //       { maxZoom: 14 }
+      //     );
+      //   }
 
-        /// open popup
-        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber.join("")];
-        if (currentItemMarker) {
-          currentItemMarker.openPopup();
-          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
-          if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
-          }
-        }
-      }
+      //   /// open popup
+      //   const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber.join("")];
+      //   if (currentItemMarker) {
+      //     currentItemMarker.openPopup();
+      //     const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
+      //     if (mapInteraction.zoom) {
+      //       mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
+      //     }
+      //   }
+      // }
     }
   }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom, values.calculation?.propertiesUsedForCalculation]);
 

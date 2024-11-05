@@ -94,14 +94,12 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         {user && user.isSubscribed && (
           <div className="flex flex-col gap-2">
             {values.calculation?.propertiesUsedForCalculation.map((property) =>
-              Array.isArray(property) ? (
+              property.isBulked ? (
                 <VoltItemMulti
-                  onHover={(data) => {
+                  onHover={(parcelNumberNoFormatting) => {
                     setMpaInteraction((prevData) => ({
                       ...prevData,
-                      hoveredParcelNumber: Array.isArray(data)
-                        ? data.map((el) => el.parcelNumberNoFormatting).join("multiple")
-                        : data.parcelNumberNoFormatting,
+                      hoveredParcelNumber: parcelNumberNoFormatting,
                       zoom: true,
                     }));
                   }}
@@ -112,24 +110,22 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                       zoom: false,
                     }));
                   }}
-                  onSelect={(data) => {
+                  onSelect={(parcelNumberNoFormatting) => {
                     setMpaInteraction((prevData) => ({
                       ...prevData,
-                      openPopperParcelNumber: Array.isArray(data)
-                        ? data.map((el) => el.parcelNumberNoFormatting).join("multiple")
-                        : data.parcelNumberNoFormatting,
-                      zoom: Array.isArray(data),
+                      openPopperParcelNumber: parcelNumberNoFormatting,
+                      zoom: parcelNumberNoFormatting.includes("multiple"),
                     }));
                   }}
                   data={property}
-                  key={`calculation-${property.map((el) => el.id).join("multiple")}`}
+                  key={`calculation-${property.data.id}`}
                   highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
                   selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
-                  selected={mapInteraction.openPopperParcelNumber === property.map((el) => el.parcelNumberNoFormatting).join("multiple")}
+                  selected={mapInteraction.openPopperParcelNumber === property.data.id}
                 />
               ) : (
                 <VoltItem
-                  id={`calculation-${property.id}`}
+                  id={`calculation-${property.data.id}`}
                   onHover={(property) => {
                     setMpaInteraction((prevData) => ({
                       ...prevData,
@@ -151,12 +147,12 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                       zoom: false,
                     }));
                   }}
-                  key={property.id}
+                  key={property.data.id}
                   data={{
-                    ...property,
+                    ...property.data,
                   }}
-                  isHighlighted={mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting}
-                  selected={mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting}
+                  isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
+                  selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
                 />
               )
             )}

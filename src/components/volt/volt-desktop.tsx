@@ -2,7 +2,7 @@
 
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapInteractionModel } from "@/types/common";
@@ -33,6 +33,42 @@ interface VoltDesktopProps {
   values: VoltWrapperValuesModel;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 }
+
+const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
+  const result: Array<{
+    parcelNumberNoFormatting: string;
+    acreage: number;
+    price: number;
+    pricePerAcre: number;
+    isMainLand: boolean;
+  }> = [];
+
+  if (!data || !sellingLandParcelNumberNoFormatting) {
+    return [];
+  }
+
+  data.forEach((property) => {
+    if (property.isBulked) {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting.includes(sellingLandParcelNumberNoFormatting),
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.price,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    } else {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting === sellingLandParcelNumberNoFormatting,
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.lastSalePrice,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    }
+  });
+
+  return result;
+};
 
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values, setOpenPropertyDetailWarningModal }) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
@@ -220,15 +256,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                   mapInteraction={mapInteraction}
                   setMpaInteraction={setMpaInteraction}
                   setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
-                  data={
-                    values.calculation?.propertiesUsedForCalculation.flat().map((el) => ({
-                      parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-                      acreage: el.acreage,
-                      price: el.lastSalePrice,
-                      pricePerAcre: el.pricePerAcreage,
-                      isMainLand: el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting,
-                    })) || []
-                  }
+                  data={getAxisData(values.calculation?.propertiesUsedForCalculation, values.selectedItem?.parcelNumberNoFormatting)}
                 />
               </td>
             </tr>

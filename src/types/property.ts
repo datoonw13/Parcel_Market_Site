@@ -144,25 +144,29 @@ export type IPropertyBaseInfo = {
   city: string;
 };
 
-export interface IPropertyUsedForCalculation
-  extends IPropertyBaseInfo,
-    IPropertySaleHistory,
-    IPropertyCalculationOptions,
-    IPropertyPricePerAcre {}
+export interface IPropertyUsedForCalculation {
+  isBulked: false;
+  data: IPropertyBaseInfo & IPropertySaleHistory & IPropertyCalculationOptions & IPropertyPricePerAcre;
+}
 
 export interface IBulkPropertiesUsedForCalculation {
-  id: string;
-  acreage: number;
-  price: number;
-  pricePerAcreage: number;
-  county: {
-    value: string;
-    label: string;
+  isBulked: true;
+  data: {
+    id: string;
+    parcelNumberNoFormatting: string;
+    parcelNumber: string;
+    acreage: number;
+    price: number;
+    pricePerAcreage: number;
+    county: {
+      value: string;
+      label: string;
+    };
+    state: {
+      value: string;
+      label: string;
+    };
+    properties: IPropertyUsedForCalculation["data"][];
   };
-  state: {
-    value: string;
-    label: string;
-  };
-  properties: IPropertyUsedForCalculation[];
 }
 export interface IMainPropertyBaseInfo extends IPropertyBaseInfo, IPropertyOwner, IPropertyPolygon, IPropertyType {}
