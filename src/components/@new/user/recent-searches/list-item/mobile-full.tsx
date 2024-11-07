@@ -21,6 +21,8 @@ import geo from "geojson";
 // @ts-ignore
 import tokml from "@maphubs/tokml";
 import { exportToExcel, exportToKml } from "@/lib/utils";
+import { IVoltPriceCalculation } from "@/types/volt";
+import VoltItemMulti from "@/components/volt/volt-item-multi";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import RecentSearchesMap from "../map";
 import RecentSearchesMobileListItemMap from "./map";
@@ -33,6 +35,42 @@ const HEADER_ROWS = [
   { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
   { label: "Last Sale Date", key: "lastSaleDate" as const },
 ];
+
+const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
+  const result: Array<{
+    parcelNumberNoFormatting: string;
+    acreage: number;
+    price: number;
+    pricePerAcre: number;
+    isMainLand: boolean;
+  }> = [];
+
+  if (!data || !sellingLandParcelNumberNoFormatting) {
+    return [];
+  }
+
+  data.forEach((property) => {
+    if (property.isBulked) {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting.includes(sellingLandParcelNumberNoFormatting),
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.price,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    } else {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting === sellingLandParcelNumberNoFormatting,
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.lastSalePrice,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    }
+  });
+
+  return result;
+};
 
 const RecentSearchesLitItemMobileFull = ({
   data,
@@ -59,6 +97,7 @@ const RecentSearchesLitItemMobileFull = ({
     };
   }, []);
 
+  console.log(getAxisData(data.propertiesUsedForCalculation), 11, data);
   return (
     <>
       <div ref={rootRef} className="bg-white fixed w-full h-screen overflow-auto z-10 top-0 !m-0 left-0">
@@ -125,15 +164,7 @@ const RecentSearchesLitItemMobileFull = ({
             mapInteraction={mapInteraction}
             setMpaInteraction={setMpaInteraction}
             setOpenPropertyDetailWarningModal={openSubscriptionWarning}
-            data={
-              data.propertiesUsedForCalculation.map((el) => ({
-                parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-                acreage: el.acreage,
-                price: el.lastSalePrice,
-                pricePerAcre: el.pricePerAcreage,
-                isMainLand: el.parcelNumberNoFormatting === data.parcelNumberNoFormatting,
-              })) || []
-            }
+            data={getAxisData(data.propertiesUsedForCalculation, data.parcelNumberNoFormatting)}
           />
           <div className="space-y-4">
             <div className="">
@@ -142,9 +173,76 @@ const RecentSearchesLitItemMobileFull = ({
             </div>
             {user && user.isSubscribed && (
               <div className="flex flex-col gap-2">
+                {data?.propertiesUsedForCalculation.map((property) =>
+                  property.isBulked ? (
+                    <VoltItemMulti
+                      onHover={(parcelNumberNoFormatting) => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          hoveredParcelNumber: parcelNumberNoFormatting,
+                          zoom: true,
+                        }));
+                      }}
+                      onMouseLeave={() => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          hoveredParcelNumber: null,
+                          zoom: false,
+                        }));
+                      }}
+                      onSelect={(parcelNumberNoFormatting) => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          openPopperParcelNumber: parcelNumberNoFormatting,
+                          zoom: parcelNumberNoFormatting.includes("multiple"),
+                        }));
+                      }}
+                      data={property}
+                      key={`calculation-${property.data.id}`}
+                      highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
+                      selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
+                      selected={mapInteraction.openPopperParcelNumber === property.data.id}
+                    />
+                  ) : (
+                    <VoltItem
+                      id={`calculation-${property.data.id}`}
+                      onHover={(property) => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          hoveredParcelNumber: property.parcelNumberNoFormatting,
+                          zoom: true,
+                        }));
+                      }}
+                      onMouseLeave={() => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          hoveredParcelNumber: null,
+                          zoom: false,
+                        }));
+                      }}
+                      onSelect={(property) => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          openPopperParcelNumber: property.parcelNumberNoFormatting,
+                          zoom: false,
+                        }));
+                      }}
+                      key={property.data.id}
+                      data={{
+                        ...property.data,
+                      }}
+                      isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
+                      selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
+                    />
+                  )
+                )}
+              </div>
+            )}
+            {/* {user && user.isSubscribed && (
+              <div className="flex flex-col gap-2">
                 {data.propertiesUsedForCalculation.map((property) => (
                   <VoltItem
-                    id={`calculation-${property.id}`}
+                    id={`calculation-${property.data.parcelNumberNoFormatting}`}
                     map={
                       <RecentSearchesMobileListItemMap
                         propertiesUsedForCalculation={data.propertiesUsedForCalculation.map(({ lat, lon, parcelNumberNoFormatting }) => ({
@@ -192,7 +290,7 @@ const RecentSearchesLitItemMobileFull = ({
                   />
                 ))}
               </div>
-            )}
+            )} */}
             {(!user || !user.isSubscribed) && (
               <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">
                 <div className="relative size-16 ">
@@ -215,7 +313,7 @@ const RecentSearchesLitItemMobileFull = ({
               </div>
             )}
           </div>
-          <div className="py-4 flex flex-row gap-3 border-t">
+          {/* <div className="py-4 flex flex-row gap-3 border-t">
             {isUserSubscriptionTrial || !user?.isSubscribed ? (
               <>
                 <Tooltip
@@ -286,7 +384,7 @@ const RecentSearchesLitItemMobileFull = ({
                 </Button>
               </>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </>
