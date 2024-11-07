@@ -1,3 +1,4 @@
+import { moneyFormatter } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import {
   IBulkPropertiesUsedForCalculation,
@@ -56,14 +57,14 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
           State: <span className="text-black font-medium">{data.data.state.label}</span>
         </li>
         <li className="text-xs text-grey-600">
-          Sold Price: <span className="text-black font-medium">{data.data.price.toFixed(2)}</span>
+          Sold Price: <span className="text-black font-medium">{moneyFormatter.format(data.data.price)}</span>
         </li>
         <li className="text-xs text-grey-600">
           Acreage: <span className="text-black font-medium">{data.data.acreage.toFixed(2)}</span>
         </li>
 
         <li className="text-xs text-grey-600">
-          Per acre Price: <span className="text-black font-medium">{data.data.pricePerAcreage.toFixed(2)}</span>
+          Per acre Price: <span className="text-black font-medium">{moneyFormatter.format(data.data.pricePerAcreage)}</span>
         </li>
       </ul>
     </div>

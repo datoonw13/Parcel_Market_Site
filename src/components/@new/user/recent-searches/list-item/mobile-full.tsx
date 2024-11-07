@@ -97,7 +97,6 @@ const RecentSearchesLitItemMobileFull = ({
     };
   }, []);
 
-  console.log(getAxisData(data.propertiesUsedForCalculation), 11, data);
   return (
     <>
       <div ref={rootRef} className="bg-white fixed w-full h-screen overflow-auto z-10 top-0 !m-0 left-0">
