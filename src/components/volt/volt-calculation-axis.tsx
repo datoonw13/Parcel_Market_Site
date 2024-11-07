@@ -17,10 +17,10 @@ const isActive = (
   const parcelNumber =
     data.find((el) => el.parcelNumberNoFormatting === targetParcelNumber) ||
     data.find((el) => el.parcelNumberNoFormatting.split("multiple").includes(targetParcelNumber));
-  return (
-    (openPopperParcelNumber || hoveredParcelNumber) &&
-    parcelNumber?.parcelNumberNoFormatting.includes((openPopperParcelNumber || hoveredParcelNumber)!)
-  );
+  return {
+    active: openPopperParcelNumber ? parcelNumber?.parcelNumberNoFormatting.includes(openPopperParcelNumber) : false,
+    highlighted: hoveredParcelNumber ? parcelNumber?.parcelNumberNoFormatting.includes(hoveredParcelNumber) : false,
+  };
 };
 
 const CalculatePrice = ({ price }: { price: number }) => (
@@ -164,7 +164,13 @@ const VoltPriceCalculationAxis = ({
                     mapInteraction.hoveredParcelNumber,
                     property.parcelNumberNoFormatting,
                     data
-                  ) && "scale-150 text-[#FF2F48]"
+                  ).active && "scale-150 text-[#FF2F48]",
+                  isActive(
+                    mapInteraction.openPopperParcelNumber,
+                    mapInteraction.hoveredParcelNumber,
+                    property.parcelNumberNoFormatting,
+                    data
+                  ).highlighted && "scale-150 text-[#FF2F48]"
                 )}
               />
             ))}

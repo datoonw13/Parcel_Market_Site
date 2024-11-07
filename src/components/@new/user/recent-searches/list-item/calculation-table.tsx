@@ -7,7 +7,7 @@ import { MapInteractionModel } from "@/types/common";
 import { IUserRecentSearches } from "@/types/user";
 import moment from "moment";
 import React, { Dispatch, FC, Fragment, SetStateAction, useEffect, useState } from "react";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
 interface RecentSearchesCalculationTableProps {
   data: IUserRecentSearches["propertiesUsedForCalculation"];
@@ -16,9 +16,20 @@ interface RecentSearchesCalculationTableProps {
 }
 
 const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = ({ data, mapInteraction, setMpaInteraction }) => {
-  //   const [open, setOpen] = useState("");
+  const checkParcel = (targetParcelNumber: string) => {
+    const item =
+      data?.find((el) => el.data.parcelNumberNoFormatting === targetParcelNumber) ||
+      data?.find((el) => el.data.parcelNumberNoFormatting.split("multiple").includes(targetParcelNumber));
+    return {
+      active: mapInteraction.openPopperParcelNumber
+        ? item?.data.parcelNumberNoFormatting.includes(mapInteraction.openPopperParcelNumber)
+        : false,
+      highlighted: mapInteraction.hoveredParcelNumber
+        ? item?.data.parcelNumberNoFormatting.includes(mapInteraction.hoveredParcelNumber)
+        : false,
+    };
+  };
 
-  useEffect(() => {}, [mapInteraction]);
   return (
     <Table className="">
       <TableHeader>
@@ -33,11 +44,12 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((el) =>
-          el.isBulked ? (
+        {data.map((el) => {
+          const { active, highlighted } = checkParcel(el.data.parcelNumberNoFormatting);
+          return (
             <Fragment key={el.data.parcelNumberNoFormatting}>
               <TableRow
-                className={cn(mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting && "!border-b-0 !bg-grey-50")}
+                className={cn(active && " !bg-grey-50", active && el.isBulked && "!border-b-0", highlighted && "bg-grey-30")}
                 onClick={() => {
                   setMpaInteraction((prev) => ({
                     ...prev,
@@ -49,6 +61,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                   setMpaInteraction((prev) => ({
                     ...prev,
                     hoveredParcelNumber: el.data.parcelNumberNoFormatting,
+                    zoom: true,
                   }));
                 }}
                 onMouseLeave={() => {
@@ -58,17 +71,30 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                   }));
                 }}
               >
-                <TableCell>Multiple parcels</TableCell>
+                <TableCell>{el.isBulked ? "Multiple parcels" : el.data.parcelNumberNoFormatting}</TableCell>
                 <TableCell>{el.data.county.label}</TableCell>
                 <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
-                <TableCell>{moneyFormatter.format(el.data.price)}</TableCell>
+                <TableCell>{moneyFormatter.format(el.isBulked ? el.data.price : el.data.lastSalePrice)}</TableCell>
                 <TableCell>{moneyFormatter.format(el.data.pricePerAcreage)}</TableCell>
-                <TableCell>{moment(el.data.properties[0].lastSaleDate).format("MM/DD/YYYY")}</TableCell>
                 <TableCell>
-                  <MdKeyboardArrowDown />
+                  {moment(el.isBulked ? el.data.properties[0].lastSaleDate : el.data.lastSalePrice).format("MM/DD/YYYY")}
+                </TableCell>
+                <TableCell>
+                  {el.isBulked ? (
+                    <>
+                      {mapInteraction.openPopperParcelNumber !== el.data.parcelNumberNoFormatting ? (
+                        <MdKeyboardArrowUp className="size-5" />
+                      ) : (
+                        <MdKeyboardArrowDown className="size-5" />
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </TableCell>
               </TableRow>
-              {mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting &&
+              {el.isBulked &&
+                mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting &&
                 el.data.properties.map((childEl) => (
                   <TableRow
                     className="!bg-primary-main-100 !border-b-transparent !border !border-primary-main-400"
@@ -84,45 +110,8 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                   </TableRow>
                 ))}
             </Fragment>
-          ) : (
-            <TableRow
-              key={el.data.parcelNumberNoFormatting}
-              className={cn(
-                mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting && "!bg-grey-50",
-                mapInteraction.hoveredParcelNumber === el.data.parcelNumberNoFormatting &&
-                  mapInteraction.openPopperParcelNumber !== el.data.parcelNumberNoFormatting &&
-                  "!bg-grey-30"
-              )}
-              onMouseEnter={() => {
-                setMpaInteraction((prev) => ({
-                  ...prev,
-                  hoveredParcelNumber: el.data.parcelNumberNoFormatting,
-                }));
-              }}
-              onMouseLeave={() => {
-                setMpaInteraction((prev) => ({
-                  ...prev,
-                  hoveredParcelNumber: null,
-                }));
-              }}
-              onClick={() => {
-                setMpaInteraction((prev) => ({
-                  ...prev,
-                  openPopperParcelNumber:
-                    mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting ? "" : el.data.parcelNumberNoFormatting,
-                }));
-              }}
-            >
-              <TableCell>{el.data.parcelNumberNoFormatting}</TableCell>
-              <TableCell>{el.data.county.label}</TableCell>
-              <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
-              <TableCell>{moneyFormatter.format(el.data.lastSalePrice)}</TableCell>
-              <TableCell>{moneyFormatter.format(el.data.pricePerAcreage)}</TableCell>
-              <TableCell>{moment(el.data.lastSaleDate).format("MM/DD/YYYY")}</TableCell>
-              <TableCell />
-            </TableRow>
-          )
-        )}
+          );
+        })}
       </TableBody>
     </Table>
   );
