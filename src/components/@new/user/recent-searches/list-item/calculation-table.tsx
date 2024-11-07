@@ -94,7 +94,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                 </TableCell>
               </TableRow>
               {el.isBulked &&
-                mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting &&
+                checkParcel(el.data.parcelNumber).active &&
                 el.data.properties.map((childEl) => (
                   <TableRow
                     className="!bg-primary-main-100 !border-b-transparent !border !border-primary-main-400"
