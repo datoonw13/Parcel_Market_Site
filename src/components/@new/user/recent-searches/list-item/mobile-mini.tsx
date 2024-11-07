@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { moneyFormatter } from "@/helpers/common";
-import { IPropertyPolygon, IPropertyUsedForCalculation } from "@/types/property";
+import { IBulkPropertiesUsedForCalculation, IPropertyPolygon, IPropertyUsedForCalculation } from "@/types/property";
 import moment from "moment";
 import React, { FC } from "react";
 import { Drawer, DrawerContent, DrawerFooter, DrawerHeader } from "@/components/ui/dialogs/drawer";
@@ -30,7 +30,7 @@ interface RecentSearchesLitItemMobileMiniProps {
     pricePerAcreage: number;
   };
   isOpen: boolean;
-  propertiesUsedForCalculation: IPropertyUsedForCalculation[];
+  propertiesUsedForCalculation: (IPropertyUsedForCalculation | IBulkPropertiesUsedForCalculation)[];
   onView: () => void;
   canExport: boolean;
 }
@@ -87,29 +87,29 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
                       className="w-full"
                       variant="secondary"
                       onClick={() => {
-                        exportToKml(
-                          {
-                            acreage: data.acreage,
-                            county: data.county,
-                            lat: data.lat,
-                            lon: data.lon,
-                            owner: data.owner,
-                            parcelNumberNoFormatting: data.parcelNumberNoFormatting,
-                            price: data.price,
-                            pricePerAcreage: data.pricePerAcreage,
-                            state: data.state,
-                          },
-                          propertiesUsedForCalculation.map(
-                            ({ acreage, lat, lon, lastSaleDate, parcelNumberNoFormatting, pricePerAcreage }) => ({
-                              acreage,
-                              lastSaleDate,
-                              lat,
-                              lon,
-                              parcelNumberNoFormatting,
-                              pricePerAcreage,
-                            })
-                          )
-                        );
+                        // exportToKml(
+                        //   {
+                        //     acreage: data.acreage,
+                        //     county: data.county,
+                        //     lat: data.lat,
+                        //     lon: data.lon,
+                        //     owner: data.owner,
+                        //     parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+                        //     price: data.price,
+                        //     pricePerAcreage: data.pricePerAcreage,
+                        //     state: data.state,
+                        //   },
+                        //   propertiesUsedForCalculation.map(
+                        //     ({ acreage, lat, lon, lastSaleDate, parcelNumberNoFormatting, pricePerAcreage }) => ({
+                        //       acreage,
+                        //       lastSaleDate,
+                        //       lat,
+                        //       lon,
+                        //       parcelNumberNoFormatting,
+                        //       pricePerAcreage,
+                        //     })
+                        //   )
+                        // );
                       }}
                     >
                       <div className="flex flex-row items-center gap-3">
@@ -117,7 +117,12 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
                         Export Map
                       </div>
                     </Button>
-                    <Button className="w-full" onClick={() => exportToExcel(propertiesUsedForCalculation)}>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        //  exportToExcel(propertiesUsedForCalculation)
+                      }}
+                    >
                       <div className="flex flex-row items-center gap-3">
                         <IoCloudDownloadOutline className="size-4" />
                         Export Data
@@ -170,11 +175,21 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
           </ul>
           <div style={{ aspectRatio: "2/1" }} className="bg-primary-main-100 w-full max-h-80 rounded-lg [&>div]:rounded-lg">
             <RecentSearchesMobileListItemMap
-              propertiesUsedForCalculation={propertiesUsedForCalculation.map(({ lat, lon, parcelNumberNoFormatting }) => ({
-                latitude: lat,
-                longitude: lon,
-                parcelNumberNoFormatting,
-              }))}
+              propertiesUsedForCalculation={propertiesUsedForCalculation
+                .map((el) =>
+                  el.isBulked
+                    ? el.data.properties.map((childEl) => ({
+                        latitude: childEl.lat,
+                        longitude: childEl.lon,
+                        parcelNumberNoFormatting: childEl.parcelNumberNoFormatting,
+                      }))
+                    : {
+                        latitude: el.data.lat,
+                        longitude: el.data.lon,
+                        parcelNumberNoFormatting: el.data.parcelNumberNoFormatting,
+                      }
+                )
+                .flat()}
               sellingPropertyData={{
                 latitude: data.lat,
                 longitude: data.lon,
