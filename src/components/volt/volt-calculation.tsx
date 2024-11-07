@@ -30,17 +30,16 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
 
   useEffect(() => {
     if (mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber) {
-      const propertyId = values.calculation?.propertiesUsedForCalculation.find((el) => {
-        if (el.isBulked) {
-          return el.data.parcelNumberNoFormatting
-            .split("multiple")
-            .includes(mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber || "");
-        }
-        return (
+      const propertyId = values.calculation?.propertiesUsedForCalculation.find(
+        (el) =>
+          // if (el.isBulked) {
+          //   return el.data.parcelNumberNoFormatting.includes(
+          //     mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber || ""
+          //   );
+          // }
           el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber ||
           el.data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
-        );
-      })?.data.parcelNumberNoFormatting;
+      )?.data.parcelNumberNoFormatting;
 
       if (propertyId && !isElementVisible(`calculation-${propertyId}`, "volt-scroll")) {
         document.getElementById(`calculation-${propertyId}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });

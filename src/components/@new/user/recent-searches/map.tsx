@@ -2,12 +2,14 @@
 
 import { Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef } from "react";
+import { Dispatch, FC, ReactElement, SetStateAction, useCallback, useEffect, useRef } from "react";
 import { moneyFormatter } from "@/helpers/common";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import moment from "moment";
 import { IUserRecentSearches } from "@/types/user";
+import { IPropertyUsedForCalculation } from "@/types/property";
+import { getCenter } from "geolib";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -23,12 +25,22 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
 
-  const mainLandSaleHistory = data.propertiesUsedForCalculation.filter(
-    (el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting
-  );
+  const mainLandSaleHistory: IPropertyUsedForCalculation["data"][] = [];
+  data.propertiesUsedForCalculation.forEach((property) => {
+    if (property.isBulked) {
+      property.data.properties.forEach((el) => {
+        if (el.parcelNumberNoFormatting === data.parcelNumberNoFormatting) {
+          mainLandSaleHistory.push(el);
+        }
+      });
+    } else if (property.data.parcelNumberNoFormatting === data.parcelNumberNoFormatting) {
+      mainLandSaleHistory.push(property.data);
+    }
+  });
+
   const mainProperty = {
-    parcelNumber: data.parcelNumberNoFormatting,
-    parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+    parcelNumber: data?.parcelNumber || "",
+    parcelNumberNoFormatting: data?.parcelNumberNoFormatting || "",
     latitude: data.lat,
     longitude: data.lon,
     polygon: data.polygon,
@@ -40,7 +52,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
           Owner: <b>{data.owner}</b>
         </p>
         <p className="!p-0 !m-0">
-          Acreage: <b>{data.acreage.toFixed(2)}</b>
+          Acreage: <b>{Number(data.acreage).toFixed(2)}</b>
         </p>
         <p className="!p-0 !m-0">
           VOLT Value Per Acre: <b>{moneyFormatter.format(data.pricePerAcreage)}</b>
@@ -54,7 +66,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
                   Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
+                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
                 </p>
               </div>
             ))}
@@ -64,39 +76,116 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
     ),
   };
 
-  let properties = data.propertiesUsedForCalculation?.map((el) => ({
-    parcelNumber: el.parcelNumberNoFormatting,
-    parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-    latitude: el.lat,
-    longitude: el.lon,
-    markerType:
-      mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
-      mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
-        ? ("highlighted" as const)
-        : ("default" as const),
-    ...(user &&
-      user.isSubscribed && {
-        popup: (
-          <div className="flex flex-col gap-1 space-y-2">
-            <p className="!p-0 !m-0">
-              Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
-            </p>
-            <p className="!p-0 !m-0">
-              Acreage: <b>{el.acreage.toFixed(2)}</b>
-            </p>
-            <p className="!p-0 !m-0">
-              Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
-            </p>
-            <p className="!p-0 !m-0">
-              Last Sale VOLT Value Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
-            </p>
-          </div>
-        ),
-      }),
-  }));
+  const isActive = (parcelNumber: string) => {
+    if (mapInteraction.hoveredParcelNumber?.includes("multiple") || mapInteraction.openPopperParcelNumber?.includes("multiple")) {
+      return (
+        mapInteraction.hoveredParcelNumber?.split("multiple")?.includes(parcelNumber) ||
+        mapInteraction.openPopperParcelNumber?.split("multiple").includes(parcelNumber)
+      );
+    }
+    return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
+  };
+
+  let mapItems: Array<{
+    parcelNumber: string;
+    parcelNumberNoFormatting: string;
+    latitude: number;
+    longitude: number;
+    markerType: "highlighted" | "default";
+    popup?: ReactElement;
+  }> = [];
+
+  data.propertiesUsedForCalculation.forEach((property) => {
+    if (property.isBulked) {
+      property.data.properties.forEach((el) => {
+        mapItems.push({
+          parcelNumber: el.parcelNumberNoFormatting,
+          parcelNumberNoFormatting: el.parcelNumberNoFormatting,
+          latitude: el.lat,
+          longitude: el.lon,
+          markerType: isActive(el.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
+          ...(user &&
+            user.isSubscribed && {
+              popup: (
+                <div className="flex flex-col gap-1 space-y-2">
+                  <p className="!p-0 !m-0">
+                    Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
+                  </p>
+                  <p className="!p-0 !m-0">
+                    Acreage: <b>{el.acreage.toFixed(2)}</b>
+                  </p>
+                  <p className="!p-0 !m-0">
+                    Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
+                  </p>
+                  <p className="!p-0 !m-0">
+                    Last Sale Price Per Acreage: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
+                  </p>
+                </div>
+              ),
+            }),
+        });
+      });
+    } else {
+      mapItems.push({
+        parcelNumber: property.data.parcelNumberNoFormatting,
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        latitude: property.data.lat,
+        longitude: property.data.lon,
+        markerType: isActive(property.data.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
+        ...(user &&
+          user.isSubscribed && {
+            popup: (
+              <div className="flex flex-col gap-1 space-y-2">
+                <p className="!p-0 !m-0">
+                  Parcel Number: <b>{property.data.parcelNumberNoFormatting}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Acreage: <b>{property.data.acreage.toFixed(2)}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
+                </p>
+              </div>
+            ),
+          }),
+      });
+    }
+  });
+
+  data.propertiesUsedForCalculation
+    .filter((el) => el.isBulked)
+    .forEach((item) => {
+      mapItems.push({
+        parcelNumber: item.data.parcelNumber,
+        parcelNumberNoFormatting: item.data.parcelNumberNoFormatting,
+        latitude: item.data.properties[0].lat,
+        longitude: item.data.properties[0].lon,
+        markerType: "invisible" as any,
+        ...(user &&
+          user.isSubscribed && {
+            popup: (
+              <div className="flex flex-col gap-1 space-y-2">
+                <h2 className="!font-semibold !mb-3 text-center">Bulk item</h2>
+                <p className="!p-0 !m-0">
+                  Acreage: <b>{item.data.acreage.toFixed(2)}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Date: <b>{moment(item.data.properties[0].lastSaleDate).format("MM-DD-YYYY")}</b>
+                </p>
+                <p className="!p-0 !m-0">
+                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(item.data.pricePerAcreage)}</b>
+                </p>
+              </div>
+            ),
+          }),
+      });
+    });
 
   if (mainLandSaleHistory.length > 0) {
-    properties = properties.filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting));
+    mapItems = mapItems.filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting));
   }
 
   const canViewDetails = (parcelNumberNoFormatting: string) => {
@@ -107,33 +196,101 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
   };
 
   const handleMapHoverInteraction = useCallback(() => {
-    if (mapRef.current) {
-      if (mapInteraction.hoveredParcelNumber) {
+    if (mapRef.current && mapInteraction.hoveredParcelNumber) {
+      if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
+        const properties = data?.propertiesUsedForCalculation
+          .filter((el) => el.isBulked)
+          .map((el) => el.data.properties)
+          .flat();
+
+        const items: IPropertyUsedForCalculation["data"][] = [];
+        mapInteraction.hoveredParcelNumber.split("multiple").forEach((el) => {
+          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
+          if (item) {
+            items.push(item);
+          }
+        });
+        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
+          latitude: 0,
+          longitude: 0,
+        }) as any;
+        if (mapInteraction.zoom) {
+          mapRef.current?.fitBounds(
+            [
+              {
+                lat: centerCoordinate.latitude,
+                lng: centerCoordinate.longitude,
+              },
+            ] as any,
+            { maxZoom: 14 }
+          );
+        }
+      } else {
         const currentItemMarker = markerRefs.current?.[mapInteraction.hoveredParcelNumber];
         if (currentItemMarker) {
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
           }
         }
       }
     }
-  }, [mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
+  }, [data?.propertiesUsedForCalculation, mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
 
   const handleMapPopperInteraction = useCallback(() => {
     if (mapRef.current) {
-      if (mapInteraction.openPopperParcelNumber) {
+      if (mapInteraction.openPopperParcelNumber && !mapInteraction.openPopperParcelNumber.includes("multiple")) {
         const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
         if (currentItemMarker) {
           currentItemMarker.openPopup();
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current.fitBounds(currentMarkerCoordinate, { maxZoom: 12 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
+          }
+        }
+      }
+
+      if (mapInteraction.openPopperParcelNumber && mapInteraction.openPopperParcelNumber.includes("multiple")) {
+        const properties = data?.propertiesUsedForCalculation
+          .filter((el) => el.isBulked)
+          .map((el) => el.data.properties)
+          .flat();
+        const items: IPropertyUsedForCalculation["data"][] = [];
+        mapInteraction.openPopperParcelNumber.split("multiple").forEach((el) => {
+          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
+          if (item) {
+            items.push(item);
+          }
+        });
+        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
+          latitude: 0,
+          longitude: 0,
+        }) as any;
+        mapRef.current.closePopup();
+        if (mapInteraction.zoom) {
+          mapRef.current?.fitBounds(
+            [
+              {
+                lat: centerCoordinate.latitude,
+                lng: centerCoordinate.longitude,
+              },
+            ] as any,
+            { maxZoom: 14 }
+          );
+        }
+
+        /// open popup
+        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
+        if (currentItemMarker) {
+          currentItemMarker.openPopup();
+          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
+          if (mapInteraction.zoom) {
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
           }
         }
       }
     }
-  }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
+  }, [data?.propertiesUsedForCalculation, mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
 
   useEffect(() => {
     handleMapHoverInteraction();
@@ -145,7 +302,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
 
   return (
     <Map
-      properties={[mainProperty, ...properties]}
+      properties={[mainProperty, ...mapItems]}
       zoom={8}
       dragging
       setMarkerRef={(parcelNumber, ref) => {

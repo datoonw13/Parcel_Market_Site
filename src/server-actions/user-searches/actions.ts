@@ -31,7 +31,7 @@ export const getUserSearches = async (
     }, {});
 
     const searchParams = new URLSearchParams(formattedFilters);
-    const request = await fetcher<{ data: Record<string, any>[] } & IPagination>(`properties?${searchParams}`, {
+    const request = await fetcher<{ data: any[] } & IPagination>(`properties?${searchParams}`, {
       next: { tags: [userSearchesTag] },
     });
 
@@ -57,28 +57,110 @@ export const getUserSearches = async (
       propertyType: item.propertyType,
       price: Number(item.price),
       pricePerAcreage: Number((Number(item.price) / Number(item.acrage)).toFixed(2)),
-      propertiesUsedForCalculation: item.assessments.map((property: any) => ({
-        acreage: Number(property.arcage),
-        city: property.city,
-        county: {
-          value: property.county,
-          label: property.county,
-        },
-        state: {
-          value: property.state,
-          label: property.state,
-        },
-        id: removeParcelNumberFormatting(property.parselId),
-        isMedianValid: property.isMedianValid,
-        isValid: property.isValid,
-        lastSaleDate: moment(property.lastSalesDate, "YYYY-MM-DD").toDate(),
-        lastSalePrice: Number(property.lastSalesPrice),
-        lat: Number(property.latitude),
-        lon: Number(property.longitude),
-        parcelNumber: property.parselId,
-        parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
-        pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
-      })),
+      propertiesUsedForCalculation: item.assessments.map((el: any) => {
+        if (el.isBulked) {
+          return {
+            isBulked: true,
+            data: {
+              id:
+                el.data.properties.length === 1
+                  ? `${removeParcelNumberFormatting(el.data.properties[0].parselId)}multiple`
+                  : el.data.properties.map((el: any) => removeParcelNumberFormatting(el.parselId)).join("multiple"),
+              parcelNumber:
+                el.data.properties.length === 1
+                  ? `${removeParcelNumberFormatting(el.data.properties[0].parselId)}multiple`
+                  : el.data.properties.map((el: any) => removeParcelNumberFormatting(el.parselId)).join("multiple"),
+              parcelNumberNoFormatting:
+                el.data.properties.length === 1
+                  ? `${removeParcelNumberFormatting(el.data.properties[0].parselId)}multiple`
+                  : el.data.properties.map((el: any) => removeParcelNumberFormatting(el.parselId)).join("multiple"),
+              acreage: el.data.properties.reduce((acc, cur) => acc + Number(cur.arcage), 0),
+              price: el.data.properties.reduce((acc, cur) => acc + Number(cur.lastSalesPrice), 0),
+              pricePerAcreage:
+                el.data.properties.reduce((acc, cur) => acc + Number(cur.lastSalesPrice), 0) /
+                el.data.properties.reduce((acc, cur) => acc + Number(cur.arcage), 0),
+              county: {
+                value: el.data.properties[0].county,
+                label: el.data.properties[0].county,
+              },
+              state: {
+                value: el.data.properties[0].state,
+                label: el.data.properties[0].state,
+              },
+              properties: el.data.properties.map((property: any) => ({
+                acreage: Number(property.arcage),
+                city: property.city || "",
+                county: {
+                  value: property.county,
+                  label: property.county,
+                },
+                state: {
+                  value: property.state,
+                  label: property.state,
+                },
+                id: removeParcelNumberFormatting(property.parselId),
+                isMedianValid: property.isMedianValid,
+                isValid: property.isValid,
+                lastSaleDate: property.lastSalesDate,
+                lastSalePrice: Number(property.lastSalesPrice),
+                lat: Number(property.latitude),
+                lon: Number(property.longitude),
+                parcelNumber: property.parselId,
+                parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
+                pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
+              })),
+            },
+          };
+        }
+        return {
+          isBulked: false,
+          data: {
+            acreage: Number(el.data.arcage),
+            city: el.data.city || "",
+            county: {
+              value: el.data.county,
+              label: el.data.county,
+            },
+            state: {
+              value: el.data.state,
+              label: el.data.state,
+            },
+            id: removeParcelNumberFormatting(el.data.parselId),
+            isMedianValid: el.data.isMedianValid,
+            isValid: el.data.isValid,
+            lastSaleDate: el.data.lastSalesDate,
+            lastSalePrice: Number(el.data.lastSalesPrice),
+            lat: Number(el.data.latitude),
+            lon: Number(el.data.longitude),
+            parcelNumber: el.data.parselId,
+            parcelNumberNoFormatting: removeParcelNumberFormatting(el.data.parselId),
+            pricePerAcreage: Number((Number(el.data.lastSalesPrice) / Number(el.data.arcage)).toFixed(2)),
+          },
+        };
+      }),
+
+      // propertiesUsedForCalculation: item.assessments.map((property: any) => ({
+      //   acreage: Number(property.arcage),
+      //   city: property.city,
+      //   county: {
+      //     value: property.county,
+      //     label: property.county,
+      //   },
+      //   state: {
+      //     value: property.state,
+      //     label: property.state,
+      //   },
+      //   id: removeParcelNumberFormatting(property.parselId),
+      //   isMedianValid: property.isMedianValid,
+      //   isValid: property.isValid,
+      //   lastSaleDate: moment(property.lastSalesDate, "YYYY-MM-DD").toDate(),
+      //   lastSalePrice: Number(property.lastSalesPrice),
+      //   lat: Number(property.latitude),
+      //   lon: Number(property.longitude),
+      //   parcelNumber: property.parselId,
+      //   parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
+      //   pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
+      // })),
     }));
     return {
       errorMessage: null,

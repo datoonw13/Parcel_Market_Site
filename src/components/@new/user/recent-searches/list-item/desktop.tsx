@@ -15,8 +15,10 @@ import routes from "@/helpers/routes";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn, exportToExcel, exportToKml } from "@/lib/utils";
+import { IVoltPriceCalculation } from "@/types/volt";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import RecentSearchesMap from "../map";
+import RecentSearchesCalculationTable from "./calculation-table";
 
 interface RecentSearchesLitItemDesktopProps {
   data: IUserRecentSearches;
@@ -24,6 +26,42 @@ interface RecentSearchesLitItemDesktopProps {
   openSubscriptionWarning: () => void;
   isUserSubscriptionTrial?: boolean;
 }
+
+const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
+  const result: Array<{
+    parcelNumberNoFormatting: string;
+    acreage: number;
+    price: number;
+    pricePerAcre: number;
+    isMainLand: boolean;
+  }> = [];
+
+  if (!data || !sellingLandParcelNumberNoFormatting) {
+    return [];
+  }
+
+  data.forEach((property) => {
+    if (property.isBulked) {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting.includes(sellingLandParcelNumberNoFormatting),
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.price,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    } else {
+      result.push({
+        acreage: property.data.acreage,
+        isMainLand: property.data.parcelNumberNoFormatting === sellingLandParcelNumberNoFormatting,
+        parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+        price: property.data.lastSalePrice,
+        pricePerAcre: property.data.pricePerAcreage,
+      });
+    }
+  });
+
+  return result;
+};
 
 const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
   data,
@@ -100,74 +138,16 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
         mapInteraction={mapInteraction}
         setMpaInteraction={setMpaInteraction}
         setOpenPropertyDetailWarningModal={openSubscriptionWarning}
-        data={
-          data.propertiesUsedForCalculation.map((el) => ({
-            parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-            acreage: el.acreage,
-            price: el.lastSalePrice,
-            pricePerAcre: el.pricePerAcreage,
-            isMainLand: el.parcelNumberNoFormatting === data.parcelNumberNoFormatting,
-          })) || []
-        }
+        data={getAxisData(data.propertiesUsedForCalculation, data.parcelNumberNoFormatting)}
       />
 
       {user && user.isSubscribed && (
         <div className="border rounded-2xl">
-          <Table className="">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-black font-normal bg-grey-30 rounded-tl-2xl">Parcel ID</TableHead>
-                <TableHead className="text-black font-normal bg-grey-30">County</TableHead>
-                <TableHead className="text-black font-normal bg-grey-30">Acreage</TableHead>
-                <TableHead className="text-black font-normal bg-grey-30">Sold Price</TableHead>
-                <TableHead className="text-black font-normal bg-grey-30">VOLT Value Per Acre</TableHead>
-                <TableHead className="text-black font-normal bg-grey-30 rounded-tr-2xl">Last sale date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.propertiesUsedForCalculation.map((el) => (
-                <TableRow
-                  className={cn(
-                    mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting && "bg-grey-30",
-                    mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting && "bg-grey-50",
-                    `${mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting}`
-                  )}
-                  key={el.id}
-                  onMouseEnter={() => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      hoveredParcelNumber: el.parcelNumberNoFormatting,
-                      zoom: true,
-                    }));
-                  }}
-                  onMouseLeave={() => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      hoveredParcelNumber: null,
-                      zoom: false,
-                    }));
-                  }}
-                  onClick={() => {
-                    if ((!user || !user.isSubscribed) && el.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
-                      openSubscriptionWarning();
-                    } else {
-                      setMpaInteraction((prevData) => ({
-                        ...prevData,
-                        openPopperParcelNumber: el.parcelNumberNoFormatting,
-                      }));
-                    }
-                  }}
-                >
-                  <TableCell>{el.parcelNumberNoFormatting}</TableCell>
-                  <TableCell>{el.county.label}</TableCell>
-                  <TableCell>{el.acreage.toFixed(2)}</TableCell>
-                  <TableCell>{moneyFormatter.format(el.lastSalePrice)}</TableCell>
-                  <TableCell>{moneyFormatter.format(el.pricePerAcreage)}</TableCell>
-                  <TableCell>{moment(el.lastSaleDate).format("MM/DD/YYYY")}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <RecentSearchesCalculationTable
+            data={data.propertiesUsedForCalculation}
+            mapInteraction={mapInteraction}
+            setMpaInteraction={setMpaInteraction}
+          />
         </div>
       )}
       {(!user || !user.isSubscribed) && (
@@ -192,7 +172,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
         </div>
       )}
 
-      <div className="flex flex-row gap-3 justify-end">
+      {/* <div className="flex flex-row gap-3 justify-end">
         {isUserSubscriptionTrial || !user?.isSubscribed ? (
           <>
             <Tooltip
@@ -263,7 +243,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
             </Button>
           </>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

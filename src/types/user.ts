@@ -1,8 +1,8 @@
-import { IMainPropertyBaseInfo, IPropertyPricePerAcre, IPropertyUsedForCalculation } from "./property";
+import { IBulkPropertiesUsedForCalculation, IMainPropertyBaseInfo, IPropertyPricePerAcre, IPropertyUsedForCalculation } from "./property";
 
 export type IUserRecentSearches = IMainPropertyBaseInfo &
   IPropertyPricePerAcre & {
-    propertiesUsedForCalculation: IPropertyUsedForCalculation[];
+    propertiesUsedForCalculation: (IPropertyUsedForCalculation | IBulkPropertiesUsedForCalculation)[];
     price: number;
     createdAt: Date;
   };
