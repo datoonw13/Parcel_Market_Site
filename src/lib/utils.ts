@@ -168,7 +168,6 @@ export const exportToExcel = (propertiesUsedForCalculation: IPropertyUsedForCalc
   //   { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
   //   { label: "Last Sale Date", key: "lastSaleDate" as const },
   // ];
-
   // const ws = XLSX.utils.json_to_sheet(
   //   propertiesUsedForCalculation.map((el) => ({
   //     parcelNumber: el.parcelNumberNoFormatting,
@@ -196,9 +195,7 @@ export const exportToExcel = (propertiesUsedForCalculation: IPropertyUsedForCalc
   //     .sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0]
   //     .lastSaleDate!.toString().length,
   // };
-
   // const wscols = Object.values(maxLengthData).map((el) => ({ wch: el + 10 }));
-
   // ws["!cols"] = wscols;
   // XLSX.utils.sheet_add_aoa(ws, [HEADER_ROWS.map((el) => el.label)], { origin: "A1" });
   // const wb = { Sheets: { data: ws }, SheetNames: ["data"] };

@@ -74,11 +74,11 @@ export const getUserSearches = async (
                 el.data.properties.length === 1
                   ? `${removeParcelNumberFormatting(el.data.properties[0].parselId)}multiple`
                   : el.data.properties.map((el: any) => removeParcelNumberFormatting(el.parselId)).join("multiple"),
-              acreage: el.data.properties.reduce((acc, cur) => acc + Number(cur.arcage), 0),
-              price: el.data.properties.reduce((acc, cur) => acc + Number(cur.lastSalesPrice), 0),
+              acreage: el.data.properties.reduce((acc: any, cur: any) => acc + Number(cur.arcage), 0),
+              price: el.data.properties.reduce((acc: any, cur: any) => acc + Number(cur.lastSalesPrice), 0),
               pricePerAcreage:
-                el.data.properties.reduce((acc, cur) => acc + Number(cur.lastSalesPrice), 0) /
-                el.data.properties.reduce((acc, cur) => acc + Number(cur.arcage), 0),
+                el.data.properties.reduce((acc: any, cur: any) => acc + Number(cur.lastSalesPrice), 0) /
+                el.data.properties.reduce((acc: any, cur: any) => acc + Number(cur.arcage), 0),
               county: {
                 value: el.data.properties[0].county,
                 label: el.data.properties[0].county,
