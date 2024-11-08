@@ -145,13 +145,13 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
               <p className="font-medium text-sm">#{parcelNumberNoFormatting}</p>
             </div>
           </div>
-          <ul className="grid grid-cols-3 gap-3">
+          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <li>
               <p className="text-xs text-grey-600">Acreage:</p>
               <p className="text-xs">{acreage.toFixed(2)}</p>
             </li>
             <li>
-              <p className="text-xs text-grey-600">VOLT Value Per Acre:</p>
+              <p className="text-xs text-grey-600">VOLT Value Per Acreage:</p>
               <p className="text-xs">{moneyFormatter.format(pricePerAcre)}</p>
             </li>
             <li>
