@@ -44,6 +44,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ setValues, values, classN
       <div className="flex flex-col gap-2">
         {values.searchResult?.map((item) => (
           <VoltItem
+            isSellingProperty
             id={`search-result-${item.id}`}
             key={item.id}
             data={item}
