@@ -98,7 +98,7 @@ html {
    }
  }
 
- .slick-list { margin: 0 -7px; & .slick-slide > div { padding: 0 10px; } }
+ .slick-list { margin: 0 -7px; & .slick-slide > div { padding: 0 10px; height: 100%; } }
 
  .slick-track {
   display: flex !important;
@@ -110,5 +110,3 @@ html {
   display: flex;
   z-index: 10 !important;
  }
-
- 
