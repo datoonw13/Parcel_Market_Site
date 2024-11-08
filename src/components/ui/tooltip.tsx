@@ -25,9 +25,10 @@ interface TooltipProps {
   renderButton: ReactElement;
   renderContent: ReactElement | string;
   buttonClassName?: string;
+  contentClasses?: string;
 }
 
-const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName }) => {
+const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses }) => {
   const [open, setOpen] = useState(false);
   return (
     <TooltipPrimitive.Provider delayDuration={300}>
@@ -41,7 +42,9 @@ const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassNam
         >
           <div>{renderButton}</div>
         </TooltipPrimitive.Trigger>
-        <TooltipContent className="bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium">
+        <TooltipContent
+          className={cn("bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium", contentClasses)}
+        >
           {renderContent}
         </TooltipContent>
       </TooltipPrimitive.Root>
