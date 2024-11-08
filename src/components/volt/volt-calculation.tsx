@@ -57,6 +57,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         <div className="flex flex-col gap-2">
           {values.selectedItem && (
             <VoltItem
+              isSellingProperty
               onHover={(property) => {
                 setMpaInteraction((prevData) => ({
                   ...prevData,
@@ -133,6 +134,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                 />
               ) : (
                 <VoltItem
+                  isSellingProperty={false}
                   id={`calculation-${property.data.id}`}
                   onHover={(property) => {
                     setMpaInteraction((prevData) => ({

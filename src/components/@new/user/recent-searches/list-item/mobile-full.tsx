@@ -25,7 +25,6 @@ import { IVoltPriceCalculation } from "@/types/volt";
 import VoltItemMulti from "@/components/volt/volt-item-multi";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import RecentSearchesMap from "../map";
-import RecentSearchesMobileListItemMap from "./map";
 
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
@@ -205,6 +204,7 @@ const RecentSearchesLitItemMobileFull = ({
                   ) : (
                     <VoltItem
                       id={`calculation-${property.data.id}`}
+                      isSellingProperty
                       onHover={(property) => {
                         setMpaInteraction((prevData) => ({
                           ...prevData,
@@ -237,59 +237,6 @@ const RecentSearchesLitItemMobileFull = ({
                 )}
               </div>
             )}
-            {/* {user && user.isSubscribed && (
-              <div className="flex flex-col gap-2">
-                {data.propertiesUsedForCalculation.map((property) => (
-                  <VoltItem
-                    id={`calculation-${property.data.parcelNumberNoFormatting}`}
-                    map={
-                      <RecentSearchesMobileListItemMap
-                        propertiesUsedForCalculation={data.propertiesUsedForCalculation.map(({ lat, lon, parcelNumberNoFormatting }) => ({
-                          latitude: lat,
-                          longitude: lon,
-                          parcelNumberNoFormatting,
-                        }))}
-                        sellingPropertyData={{
-                          latitude: data.lat,
-                          longitude: data.lon,
-                          parcelNumberNoFormatting: data.parcelNumberNoFormatting,
-                        }}
-                        highlightParcelNumber={property.parcelNumberNoFormatting}
-                      />
-                    }
-                    onHover={(property) => {
-                      setMpaInteraction((prevData) => ({
-                        ...prevData,
-                        hoveredParcelNumber: property.parcelNumberNoFormatting,
-                        zoom: true,
-                      }));
-                    }}
-                    onMouseLeave={() => {
-                      setMpaInteraction((prevData) => ({
-                        ...prevData,
-                        hoveredParcelNumber: null,
-                        zoom: false,
-                      }));
-                    }}
-                    onSelect={(property) => {
-                      setMpaInteraction((prevData) => ({
-                        ...prevData,
-                        openPopperParcelNumber: property.parcelNumberNoFormatting,
-                        zoom: false,
-                      }));
-                    }}
-                    key={property.id}
-                    data={{
-                      ...property,
-                    }}
-                    isHighlighted={
-                      mapInteraction.hoveredParcelNumber === property.parcelNumberNoFormatting ||
-                      mapInteraction.openPopperParcelNumber === property.parcelNumberNoFormatting
-                    }
-                  />
-                ))}
-              </div>
-            )} */}
             {(!user || !user.isSubscribed) && (
               <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">
                 <div className="relative size-16 ">

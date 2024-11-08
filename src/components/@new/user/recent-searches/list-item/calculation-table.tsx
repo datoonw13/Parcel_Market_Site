@@ -38,7 +38,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
           <TableHead className="text-black font-normal bg-grey-30">County</TableHead>
           <TableHead className="text-black font-normal bg-grey-30">Acreage</TableHead>
           <TableHead className="text-black font-normal bg-grey-30">Sold Price</TableHead>
-          <TableHead className="text-black font-normal bg-grey-30">VOLT Value Per Acre</TableHead>
+          <TableHead className="text-black font-normal bg-grey-30">Sold Price Per Acre</TableHead>
           <TableHead className="text-black font-normal bg-grey-30 ">Last sale date</TableHead>
           <TableHead className="text-black font-normal bg-grey-30 rounded-tr-2xl" />
         </TableRow>

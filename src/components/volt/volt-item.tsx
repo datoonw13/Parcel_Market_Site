@@ -18,9 +18,10 @@ interface VoltItemProps {
   id: string;
   isHighlighted?: boolean;
   map?: ReactElement;
+  isSellingProperty: boolean;
 }
 
-const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeave, onSelect, id, isHighlighted }) => {
+const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeave, onSelect, id, isHighlighted, isSellingProperty }) => {
   const [open, setOpen] = useState("");
 
   const ref = useRef<HTMLDivElement>(null);
@@ -102,7 +103,8 @@ const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeav
               <div className="space-y-1">
                 {data.pricePerAcreage && (
                   <p className="text-xs text-grey-600">
-                    VOLT Value Per Acre: <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
+                    {isSellingProperty ? "VOLT Value Per Acreage" : "Sold Price Per Acre"}:{" "}
+                    <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
                   </p>
                 )}
                 {data.lastSaleDate && (

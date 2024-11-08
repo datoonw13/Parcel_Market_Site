@@ -66,7 +66,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
                   Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
+                  Sold Price Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
                 </p>
               </div>
             ))}
@@ -118,7 +118,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
                     Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
                   </p>
                   <p className="!p-0 !m-0">
-                    Last Sale Price Per Acreage: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
+                    Sold Price Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
                   </p>
                 </div>
               ),
@@ -146,7 +146,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
                   Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
+                  Sold Price Per Acre: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
                 </p>
               </div>
             ),
@@ -155,6 +155,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
     }
   });
 
+  // pins for bulk data
   data.propertiesUsedForCalculation
     .filter((el) => el.isBulked)
     .forEach((item) => {
@@ -176,7 +177,7 @@ const RecentSearchesMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapIn
                   Last Sale Date: <b>{moment(item.data.properties[0].lastSaleDate).format("MM-DD-YYYY")}</b>
                 </p>
                 <p className="!p-0 !m-0">
-                  Last Sale Price Per Acreage: <b>{moneyFormatter.format(item.data.pricePerAcreage)}</b>
+                  Sold Price Per Acre: <b>{moneyFormatter.format(item.data.pricePerAcreage)}</b>
                 </p>
               </div>
             ),

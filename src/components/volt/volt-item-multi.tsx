@@ -64,7 +64,7 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
         </li>
 
         <li className="text-xs text-grey-600">
-          Per acre Price: <span className="text-black font-medium">{moneyFormatter.format(data.data.pricePerAcreage)}</span>
+          Sold Price Per Acre: <span className="text-black font-medium">{moneyFormatter.format(data.data.pricePerAcreage)}</span>
         </li>
       </ul>
     </div>
