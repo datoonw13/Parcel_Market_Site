@@ -58,13 +58,13 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
 
   const { price, title, desc } = subscriptionDetail(type);
   const isActive = checkIsActive(type, userActiveSubscription);
-  const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
+  // const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const [resumePending, setResumePending] = useState(false);
 
   return (
     <>
-      {openUpgradeModal && (
+      {/* {openUpgradeModal && (
         <UpdatePlanDialog
           closeDialog={() => setOpenUpgradeModal(false)}
           onSubmit={() => {
@@ -74,7 +74,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
           pending={false}
           subscription={type}
         />
-      )}
+      )} */}
       {openCancelModal && userActiveSubscription && (
         <CancelPlanDialog closeDialog={() => setOpenCancelModal(false)} userActiveSubscription={userActiveSubscription} />
       )}
@@ -126,7 +126,9 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
         {!isActive && (
           <Button
             onClick={async () => {
-              setOpenUpgradeModal(true);
+              // setOpenUpgradeModal(true);
+              params.set("plan", type);
+              router.push(`${routes.checkout.fullUrl}?${params.toString()}`);
             }}
             className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
             loading={resumePending}
