@@ -33,14 +33,14 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
   return (
     <Table className="">
       <TableHeader>
-        <TableRow>
-          <TableHead className="text-black font-normal bg-grey-30 rounded-tl-2xl">Parcel ID</TableHead>
+        <TableRow className="">
+          <TableHead className="text-black font-normal bg-grey-30 rounded-tl-2xl border-l border-l-transparent">Parcel ID</TableHead>
           <TableHead className="text-black font-normal bg-grey-30">County</TableHead>
           <TableHead className="text-black font-normal bg-grey-30">Acreage</TableHead>
           <TableHead className="text-black font-normal bg-grey-30">Sold Price</TableHead>
           <TableHead className="text-black font-normal bg-grey-30">Sold Price Per Acre</TableHead>
           <TableHead className="text-black font-normal bg-grey-30 ">Last sale date</TableHead>
-          <TableHead className="text-black font-normal bg-grey-30 rounded-tr-2xl" />
+          <TableHead className="text-black font-normal bg-grey-30 rounded-tr-2xl border-r border-r-transparent" />
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -71,7 +71,9 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                   }));
                 }}
               >
-                <TableCell>{el.isBulked ? "Multiple parcels" : el.data.parcelNumberNoFormatting}</TableCell>
+                <TableCell className="border-l border-l-transparent">
+                  {el.isBulked ? "Multiple parcels" : el.data.parcelNumberNoFormatting}
+                </TableCell>
                 <TableCell>{el.data.county.label}</TableCell>
                 <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
                 <TableCell>{moneyFormatter.format(el.isBulked ? el.data.price : el.data.lastSalePrice)}</TableCell>
@@ -79,7 +81,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                 <TableCell>
                   {moment(el.isBulked ? el.data.properties[0].lastSaleDate : el.data.lastSalePrice).format("MM/DD/YYYY")}
                 </TableCell>
-                <TableCell>
+                <TableCell className="border-r border-r-transparent">
                   {el.isBulked ? (
                     <>
                       {mapInteraction.openPopperParcelNumber !== el.data.parcelNumberNoFormatting ? (
