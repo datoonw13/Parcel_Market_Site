@@ -44,15 +44,15 @@ const PeopleFeedback = () => (
         className="overflow-hidden [&_.slick-track]:py-5 [&_.slick-track]:!grid [&_.slick-track]:grid-flow-col [&_slick-slide]:h-full [&_slick-slide>*]:!h-full"
       >
         {data.map((el) => (
-          <div key={el.userName} className="space-y-6 p-9 shadow-4 rounded-2xl h-full">
-            <div className="flex gap-5 items-center">
+          <div key={el.userName} className="!flex flex-col justify-between space-y-6 p-9 shadow-4 rounded-2xl h-full">
+            <div className="flex gap-5 items-start">
               <Avatar className="bg-grey-200 flex items-center justify-center size-14">
                 <AvatarFallback>
                   {el.userName[0]}
                   {el.userName.split(" ")[1][0]}
                 </AvatarFallback>
               </Avatar>
-              <div>
+              <div className="mt-1">
                 <p className="font-medium text-lg">{el.userName}</p>
                 <p className="text-grey-600 font-medium text-xs">Business owner</p>
               </div>
