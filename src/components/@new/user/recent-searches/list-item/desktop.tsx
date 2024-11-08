@@ -77,7 +77,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
 
   return (
     <div className="hidden lg:flex py-3 px-6 gap-6 flex-col">
-      <ul className="list-disc marker:primary-main-400 px-4 grid grid-cols-1 md:grid-cols-2 xl:md:grid-cols-3 gap-y-3 gap-x-10">
+      <ul className="list-disc marker:primary-main-400 px-4 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] gap-y-3 gap-x-10 2xl:gap-x-16">
         <li className="text-primary-main-400">
           <p className="truncate text-sm text-grey-600 font-medium">
             Owner: <span className="text-sm text-black font-medium">{data.owner}</span>
@@ -89,8 +89,8 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
           </p>
         </li>
         <li className="text-primary-main-400">
-          <p className="truncate text-sm text-grey-600 font-medium">
-            VOLT Value Per Acre: <span className="text-sm text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
+          <p className="text-sm text-grey-600 font-medium">
+            VOLT Value Per Acreage: <span className="text-sm text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
           </p>
         </li>
         <li className="text-primary-main-400">
