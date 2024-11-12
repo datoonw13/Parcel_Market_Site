@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
-import { IUserSignUp } from "@/types/auth";
+import { IDecodedAccessToken, IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/actions";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,6 +16,7 @@ import { subscribeAction } from "@/server-actions/common-actions";
 import { NumberInput, TextInput } from "@/components/ui/input";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
+import { decode, JwtPayload } from "jsonwebtoken";
 import Button from "../../shared/forms/Button";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 import GoogleAuthProvider from "../sign-in/google-auth-provider";
@@ -78,7 +79,14 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
           router.replace(newLocation);
           return;
         }
-        router.replace(requestData?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+
+        const decodeAccessToken = decode(requestData?.access_token || "");
+        const planSelected =
+          decodeAccessToken &&
+          typeof decodeAccessToken === "object" &&
+          (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
+
+        router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     } else {
       const request = await signUpUserAction(data);
