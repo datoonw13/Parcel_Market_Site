@@ -7,6 +7,7 @@ import { updateSubscriptionAction } from "@/server-actions/subscription/actions"
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { getAccessToken, updateAccessToken } from "@/server-actions/user/actions";
 import RadioButton from "../shared/forms/RadioButton";
 import Stripe from "./stripe/stripe";
 import Button from "../shared/forms/Button";
@@ -55,6 +56,10 @@ const PaymentMethods = ({
       if (!errorMessage) {
         router.push(`${routes.user.subscription.fullUrl}?success=true`);
       } else {
+        const data = await getAccessToken();
+        if (data.data) {
+          updateAccessToken(data.data);
+        }
         notify({ title: "Subscription Update", description: errorMessage }, { variant: "error" });
       }
     }

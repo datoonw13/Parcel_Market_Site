@@ -15,6 +15,9 @@ import { useRouter } from "next/navigation";
 import GoogleAuthProvider from "@/components/@new/auth/sign-in/google-auth-provider";
 import ForgotPasswordButton from "@/components/@new/user/profile/modals/forgot-password/forgot-password-button";
 import { TextInput } from "@/components/ui/input";
+import { decode } from "jsonwebtoken";
+import { IDecodedAccessToken } from "@/types/auth";
+import { JwtPayload } from "jwt-decode";
 
 const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const router = useRouter();
@@ -35,7 +38,11 @@ const SignInPage = ({ searchParams }: { searchParams: { [key: string]: string } 
         router.replace(newLocation);
         return;
       }
-      router.replace(request.data?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+      const decodeAccessToken = decode(request.data?.access_token || "");
+      const planSelected =
+        decodeAccessToken && typeof decodeAccessToken === "object" && (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
+
+      router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
     }
   };
 

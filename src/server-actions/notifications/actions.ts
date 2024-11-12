@@ -49,7 +49,7 @@ export const getNotificationsAction = async (
   } catch (error) {
     const errorData = error as ErrorResponse;
     return {
-      errorMessage: errorData.message,
+      errorMessage: errorData?.message,
       data: null,
     };
   }

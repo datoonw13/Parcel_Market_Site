@@ -2,6 +2,7 @@
 
 import { ErrorResponse } from "@/helpers/error-response";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 // https://api.parcelmarket.com
 // eslint-disable-next-line no-undef
@@ -20,6 +21,10 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     message: string;
     statusCode: number;
   };
+
+  if (response.statusCode === 401) {
+    revalidatePath("/");
+  }
 
   if (!response?.statusCode?.toString()?.startsWith("2")) {
     let errorMessage = "Something went wrong";

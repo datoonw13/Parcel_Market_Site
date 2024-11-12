@@ -10,7 +10,6 @@ import { removeParcelNumberFormatting } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import { IUserRecentSearches } from "@/types/user";
 import { PolygonProps } from "react-leaflet";
-import moment from "moment";
 import { fetcher } from "../fetcher";
 import { userSearchesTag } from "./tags";
 

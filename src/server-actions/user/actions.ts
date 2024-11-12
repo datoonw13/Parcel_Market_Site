@@ -27,7 +27,16 @@ export const setAuthToken = (token: string, remember?: boolean) => {
   revalidatePath("/");
 };
 
-export const refreshToken = async (): Promise<ResponseModel<string | null>> => {
+export const updateAccessToken = (token: string) => {
+  cookies().set({
+    name: "jwt",
+    value: token,
+    httpOnly: true,
+    secure: true,
+  });
+};
+
+export const getAccessToken = async (): Promise<ResponseModel<string | null>> => {
   try {
     const data = await fetcher<ISignInResponse>("user/token/refresh", {
       method: "POST",
@@ -68,7 +77,23 @@ export const signInUserAction = async (
       body: JSON.stringify(validations.data),
       cache: "no-cache",
     });
-    setAuthToken(data.access_token, remember);
+    // setAuthToken(data.access_token, remember);
+    // set jwt tokens in cookie
+    const decodedToken = jwtDecode(data.refresh_token) as { exp: number };
+    const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+    cookies().set({
+      name: "jwt-refresh",
+      value: data.refresh_token,
+      httpOnly: true,
+      secure: true,
+      ...(remember && { maxAge: maxAgeInSeconds }),
+    });
+    cookies().set({
+      name: "jwt",
+      value: data.access_token,
+      httpOnly: true,
+      secure: true,
+    });
     return { data, errorMessage: null };
   } catch (error) {
     return {
@@ -131,7 +156,8 @@ export const signUpUserAction = async (values: IUserSignUp): Promise<ResponseMod
 
 export const logOutUserAction = async () => {
   cookies().delete("jwt");
-  redirect("?logout=true");
+  cookies().delete("jwt-refresh");
+  revalidatePath("/");
 };
 
 export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {

@@ -10,6 +10,7 @@ const ROWS_PER_PAGE = 15;
 const RecentSearchesPage = async ({ searchParams }: { searchParams: Record<string, string | null> }) => {
   const data = await getUserSearches({ page: 1, pageSize: 1 });
   const filters = userRecentSearchesValidations.safeParse(searchParams);
+  // console.log(data, "111");
 
   return (
     <div className="space-y-4 md:space-y-6">

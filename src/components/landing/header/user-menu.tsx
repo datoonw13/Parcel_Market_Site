@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
-import { logOutUserAction } from "@/server-actions/user/actions";
+import { getAccessToken, logOutUserAction } from "@/server-actions/user/actions";
 import { IDecodedAccessToken } from "@/types/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,6 +28,7 @@ const UserMenu = ({ user }: { user: IDecodedAccessToken }) => {
         </Avatar>
       </PopoverTrigger>
       <PopoverContent className="outline-none translate-y-2">
+        <button onClick={() => getAccessToken()}>aeee</button>
         <div className="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80">
           <Avatar className="group cursor-pointer w-16 h-16">
             <AvatarFallback className="bg-primary-main-200">{`${user.firstName[0]}${user.lastName[0]}`}</AvatarFallback>

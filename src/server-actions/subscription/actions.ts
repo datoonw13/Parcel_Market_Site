@@ -8,7 +8,6 @@ import { DeletionAccountReason } from "@/types/auth";
 import { headers } from "next/headers";
 import routes from "@/helpers/routes";
 import { fetcher } from "../fetcher";
-import { refreshToken } from "../user/actions";
 import { subscriptionTags } from "./tags";
 
 export const getStripeSessionAction = async (subscriptionType: SubscriptionType): Promise<any | null> => {
@@ -22,7 +21,7 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
       method: "POST",
       body: JSON.stringify({
         subscriptionType,
-        redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.user.subscription.fullUrl}?success=true`,
+        redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.user.subscription.fullUrl}`,
       }),
     });
 
@@ -203,7 +202,7 @@ export const updateSubscriptionAction = async (
       method: "PUT",
       body: JSON.stringify({ paymentMethodId, subscriptionType }),
     });
-    revalidatePath("/", "layout");
+    // revalidatePath("/", "layout");
     return {
       errorMessage: null,
       data: null,

@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { getStripeSessionAction, revalidateAllPath } from "@/server-actions/subscription/actions";
 import { useSearchParams } from "next/navigation";
 import { SubscriptionType } from "@/types/subscriptions";
+import { getAccessToken, updateAccessToken } from "@/server-actions/user/actions";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "");
 
@@ -20,7 +21,11 @@ const Stripe = () => {
         stripe={stripePromise}
         options={{
           fetchClientSecret,
-          onComplete: () => {
+          onComplete: async () => {
+            const data = await getAccessToken();
+            if (data.data) {
+              updateAccessToken(data.data);
+            }
             revalidateAllPath();
           },
         }}

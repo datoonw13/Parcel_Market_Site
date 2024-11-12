@@ -42,14 +42,14 @@ const AuthSessionProvider = ({
   }, [user]);
 
   useEffect(() => {
-    if (user) {
-      setSessionTimer();
-    } else if (!user && timerRef.current) {
-      window.clearTimeout(timerRef.current);
-    }
-    return () => {
-      window.clearTimeout(timerRef.current);
-    };
+    // if (user) {
+    //   setSessionTimer();
+    // } else if (!user && timerRef.current) {
+    //   window.clearTimeout(timerRef.current);
+    // }
+    // return () => {
+    //   window.clearTimeout(timerRef.current);
+    // };
   }, [setSessionTimer, user]);
 
   return <AuthContext.Provider value={{ user, activeSubscription, subscriptions: userSubscriptions }}>{children}</AuthContext.Provider>;
