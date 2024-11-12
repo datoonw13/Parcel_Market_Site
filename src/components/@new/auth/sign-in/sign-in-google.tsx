@@ -6,6 +6,8 @@ import { cn } from "@/helpers/common";
 import { googleSignInUserAction } from "@/server-actions/user/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
+import { decode, JwtPayload } from "jsonwebtoken";
+import { IDecodedAccessToken } from "@/types/auth";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
 const SignInGoogle = () => {
@@ -29,7 +31,14 @@ const SignInGoogle = () => {
           router.replace(newLocation);
           return;
         }
-        router.replace(requestData?.payload.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+
+        const decodeAccessToken = decode(requestData?.access_token || "");
+        const planSelected =
+          decodeAccessToken &&
+          typeof decodeAccessToken === "object" &&
+          (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
+
+        router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     },
     onError: () => {
