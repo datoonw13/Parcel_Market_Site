@@ -18,6 +18,7 @@ const checkAuth = async (request: NextRequest) => {
 
   if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
     const { data, errorMessage } = await getAccessToken();
+
     if (data) {
       request.cookies.set("jwt", data);
     }

@@ -30,15 +30,15 @@ const AuthSessionProvider = ({
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const setSessionTimer = useCallback(() => {
-    if (timerRef.current) {
-      window.clearTimeout(timerRef.current);
-    }
-    if (user) {
-      const sessionDuration = moment(user.sessionUntil).diff(new Date());
-      timerRef.current = setTimeout(() => {
-        logOutUserAction();
-      }, sessionDuration);
-    }
+    // if (timerRef.current) {
+    //   window.clearTimeout(timerRef.current);
+    // }
+    // if (user) {
+    //   const sessionDuration = moment(user.sessionUntil).diff(new Date());
+    //   timerRef.current = setTimeout(() => {
+    //     logOutUserAction();
+    //   }, sessionDuration);
+    // }
   }, [user]);
 
   useEffect(() => {
