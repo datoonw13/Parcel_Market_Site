@@ -13,19 +13,19 @@ import { z } from "zod";
 import { DeletionAccountReason, IDecodedAccessToken, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
-export const setAuthToken = (token: string, remember?: boolean) => {
-  const decodedToken = jwtDecode(token) as { exp: number };
-  const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
-  // set jwt token in cookie
-  cookies().set({
-    name: "jwt",
-    value: token,
-    httpOnly: true,
-    secure: true,
-    ...(remember && { maxAge: maxAgeInSeconds }),
-  });
-  revalidatePath("/");
-};
+// export const setAuthToken = (token: string, remember?: boolean) => {
+//   const decodedToken = jwtDecode(token) as { exp: number };
+//   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+//   // set jwt token in cookie
+//   cookies().set({
+//     name: "jwt",
+//     value: token,
+//     httpOnly: true,
+//     secure: true,
+//     ...(remember && { maxAge: maxAgeInSeconds }),
+//   });
+//   revalidatePath("/");
+// };
 
 export const updateAccessToken = (token: string) => {
   cookies().set({
@@ -77,7 +77,6 @@ export const signInUserAction = async (
       body: JSON.stringify(validations.data),
       cache: "no-cache",
     });
-    // setAuthToken(data.access_token, remember);
     // set jwt tokens in cookie
     const decodedToken = jwtDecode(data.refresh_token) as { exp: number };
     const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
@@ -109,7 +108,20 @@ export const googleSignInUserAction = async (token: string): Promise<ResponseMod
       method: "POST",
       body: JSON.stringify({ token }),
     });
-    setAuthToken(data.access_token);
+    const decodedToken = jwtDecode(data.refresh_token) as { exp: number };
+    const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+    cookies().set({
+      name: "jwt-refresh",
+      value: data.refresh_token,
+      httpOnly: true,
+      secure: true,
+    });
+    cookies().set({
+      name: "jwt",
+      value: data.access_token,
+      httpOnly: true,
+      secure: true,
+    });
     return { data, errorMessage: null };
   } catch (error) {
     return {
@@ -125,7 +137,20 @@ export const googleSignUpUserAction = async (payload: IUserSignUp, token: string
       method: "POST",
       body: JSON.stringify({ token, ...payload }),
     });
-    setAuthToken(data.access_token);
+    const decodedToken = jwtDecode(data.refresh_token) as { exp: number };
+    const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+    cookies().set({
+      name: "jwt-refresh",
+      value: data.refresh_token,
+      httpOnly: true,
+      secure: true,
+    });
+    cookies().set({
+      name: "jwt",
+      value: data.access_token,
+      httpOnly: true,
+      secure: true,
+    });
     return { data, errorMessage: null };
   } catch (error) {
     return {
@@ -355,7 +380,17 @@ export const setNewEmailAction = async (values: { code: string; email: string })
       body: JSON.stringify(values),
       cache: "no-store",
     });
-    setAuthToken(request.access_token);
+    const newToken = await getAccessToken();
+    if (newToken.data) {
+      cookies().set({
+        name: "jwt",
+        value: newToken.data,
+        httpOnly: true,
+        secure: true,
+      });
+      revalidatePath("/");
+    }
+
     return {
       data: null,
       errorMessage: null,
@@ -396,8 +431,16 @@ export const updateUserInfoAction = async (values: z.infer<typeof updateUserInfo
       body: JSON.stringify(values),
       cache: "no-store",
     });
-    setAuthToken(request.access_token);
-    revalidatePath(routes.user.profile.fullUrl);
+    const newToken = await getAccessToken();
+    if (newToken.data) {
+      cookies().set({
+        name: "jwt",
+        value: newToken.data,
+        httpOnly: true,
+        secure: true,
+      });
+      revalidatePath("/");
+    }
     return {
       data: null,
       errorMessage: null,
