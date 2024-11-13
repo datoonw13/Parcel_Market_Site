@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IStripePaymentMethods, ISubscription, SubscriptionType } from "@/types/subscriptions";
-import { updateSubscriptionAction } from "@/server-actions/subscription/actions";
+import { getUserSubscriptions, updateSubscriptionAction } from "@/server-actions/subscription/actions";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getAccessToken, updateAccessToken } from "@/server-actions/user/actions";
+import LoadingCircle from "@/icons/LoadingCircle";
+import moment from "moment";
 import RadioButton from "../shared/forms/RadioButton";
 import Stripe from "./stripe/stripe";
 import Button from "../shared/forms/Button";
@@ -42,11 +44,19 @@ const PaymentMethods = ({
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const params = new URLSearchParams(searchParams.toString());
   const [paymentMethod, setPaymentMethod] = useState<string | null>("stripe");
   const hasUserActiveSubscription = userSubscriptions?.find((el) => el.status === "active");
   const { notify } = useNotification();
   const [updatePending, setUpdatePending] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+
+  const showLoader =
+    searchParams.get("selectedType") &&
+    searchParams.get("success") === "true" &&
+    searchParams.get("date") &&
+    moment.duration(moment(new Date()).diff(searchParams.get("date"))).as("minutes") <= 10;
 
   const handleUpdate = async () => {
     if (paymentMethod && params.get("plan")) {
@@ -65,6 +75,27 @@ const PaymentMethods = ({
     }
   };
 
+  const handleSubscriptionChange = async () => {
+    intervalRef.current = setInterval(async () => {
+      const data = await getUserSubscriptions();
+      let isUpdated = false;
+      if (searchParams.get("selectedType") === "Trial") {
+        isUpdated = !!data.data?.find((el) => el.status === "trialing");
+      } else {
+        isUpdated = !!data.data?.find((el) => el.type === searchParams.get("selectedType"));
+      }
+
+      if (isUpdated) {
+        const token = await getAccessToken();
+        if (token.data) {
+          updateAccessToken(token.data);
+          router.replace(routes.home.fullUrl);
+        }
+        window.clearInterval(intervalRef.current);
+      }
+    }, 5000);
+  };
+
   useEffect(() => {
     if (hasUserActiveSubscription && userPaymentMethods && userPaymentMethods?.length > 0) {
       const cardId = userPaymentMethods?.find((el) => el.isDefault)?.id;
@@ -72,8 +103,35 @@ const PaymentMethods = ({
     }
   }, [hasUserActiveSubscription, userPaymentMethods]);
 
+  useEffect(() => {
+    if (showLoader) {
+      handleSubscriptionChange();
+    } else {
+      window.clearInterval(intervalRef.current);
+    }
+
+    return () => {
+      window.clearInterval(intervalRef.current);
+    };
+  }, [showLoader]);
+
+  useEffect(() => {
+    if ((searchParams.get("success") || searchParams.get("date")) && !showLoader) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.delete("success");
+      newSearchParams.delete("date");
+      newSearchParams.delete("selectedPlan");
+      router.replace(`${pathname}?${newSearchParams.toString()}`);
+    }
+  }, [pathname, router, searchParams, showLoader]);
+
   return (
-    <div className="border border-grey-100 rounded-2xl w-full bg-white">
+    <div className="relative border border-grey-100 rounded-2xl w-full bg-white">
+      {showLoader && (
+        <div className="absolute z-50 bg-white/60 blur-sm flex items-center w-full h-full top-0 left-0">
+          <LoadingCircle />
+        </div>
+      )}
       <h1 className="px-6 pt-6 pb-4 border-b border-b-grey-100 md:text-lg font-medium md:font-semibold">Payment Method</h1>
       <div className="space-y-8 px-6 py-4 pb-6">
         <div className="">

@@ -7,6 +7,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { DeletionAccountReason } from "@/types/auth";
 import { headers } from "next/headers";
 import routes from "@/helpers/routes";
+import moment from "moment";
 import { fetcher } from "../fetcher";
 import { subscriptionTags } from "./tags";
 
@@ -16,12 +17,16 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
     // read the custom x-url header
     const domain = headersList.get("host") || "";
     const fullUrl = headersList.get("referer") || "";
+    const selectedPlan = new URL(fullUrl.toString()).searchParams.get("plan");
+    const date = moment().toISOString();
+    const url = new URL(fullUrl);
 
     const data = await fetcher<{ clientSecret: string }>(`stripe/create-checkout-session-subscription`, {
       method: "POST",
       body: JSON.stringify({
         subscriptionType,
-        redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.user.subscription.fullUrl}`,
+        redirectUri: `${url.origin}${url.pathname}?&success=true&date=${date}&selectedType=${selectedPlan}&plan=${selectedPlan}`,
+        // redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.home.fullUrl}`,
       }),
     });
 
