@@ -56,7 +56,7 @@ const PaymentMethods = ({
     searchParams.get("selectedType") &&
     searchParams.get("success") === "true" &&
     searchParams.get("date") &&
-    moment.duration(moment(new Date()).diff(searchParams.get("date"))).as("minutes") <= 10;
+    moment.duration(moment(new Date()).diff(searchParams.get("date"))).as("minutes") <= 3;
 
   const handleUpdate = async () => {
     if (paymentMethod && params.get("plan")) {
