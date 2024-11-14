@@ -73,13 +73,13 @@ export default function Subscribe() {
             }}
             ref={sliderRef}
             {...settings}
-            className="overflow-hidden lg:mx-10 xl:mx-20"
+            className="overflow-hidden lg:mx-10 xl:mx-20 [&_.slick-track]:!grid [&_.slick-track]:grid-flow-col"
             afterChange={(e) => setActiveSlide(Math.ceil(e))}
           >
-            <div className="h-[270px] group">
-              <div className="flex items-center h-full w-full">
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black h-[90%] w-full group-hover:h-full transition-all duration-100">
-                  <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Risk Free! No Payment Info Required</h2>
+            <div className="h-full group">
+              <div className="flex items-center h-full w-full md:scale-y-95 md:hover:scale-y-100 md:transition-all md:duration-100">
+                <div className="h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
+                  <h2 className="font-medium text-xs text-primary-main h-10 uppercase">Risk Free! No Payment Info Required</h2>
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     Free <span className="text-base font-normal">/ 14 Days</span>
                   </h1>
@@ -93,10 +93,10 @@ export default function Subscribe() {
                 </div>
               </div>
             </div>
-            <div className="h-[270px] group">
-              <div className="flex items-center h-full w-full">
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full h-[90%] group-hover:h-full transition-all duration-100">
-                  <h2 className="font-medium text-base text-primary-main mb-4 uppercase">save 10% per month</h2>
+            <div className="h-full group">
+              <div className="flex items-center h-full w-full md:scale-y-95 md:hover:scale-y-100 md:transition-all md:duration-100">
+                <div className="h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
+                  <h2 className="font-medium text-base text-primary-main h-10 uppercase">save 10% per month</h2>
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
                   </h1>
@@ -110,10 +110,10 @@ export default function Subscribe() {
                 </div>
               </div>
             </div>
-            <div className="h-[270px] group">
-              <div className="flex items-center h-full w-full">
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full h-[90%] group-hover:h-full transition-all duration-100">
-                  <h2 className="font-medium text-xs text-primary-main mb-4 uppercase">Per month</h2>
+            <div className="h-full group">
+              <div className="flex items-center h-full w-full md:scale-y-95 md:hover:scale-y-100 md:transition-all md:duration-100">
+                <div className="h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
+                  <h2 className="font-medium text-xs text-primary-main h-10 uppercase">Per month</h2>
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
                   </h1>
