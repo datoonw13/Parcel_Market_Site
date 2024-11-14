@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IStripePaymentMethods, ISubscription, SubscriptionType } from "@/types/subscriptions";
-import { getUserSubscriptions, updateSubscriptionAction } from "@/server-actions/subscription/actions";
+import { getUserSubscriptions, revalidateAllPath, updateSubscriptionAction } from "@/server-actions/subscription/actions";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -89,6 +89,7 @@ const PaymentMethods = ({
         const token = await getAccessToken();
         if (token.data) {
           updateAccessToken(token.data);
+          revalidateAllPath();
           router.replace(routes.home.fullUrl);
         }
         window.clearInterval(intervalRef.current);
