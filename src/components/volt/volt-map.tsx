@@ -383,7 +383,8 @@ const VoltMap: FC<VoltDesktopProps> = ({
   return (
     <Map
       properties={mapData}
-      zoom={step === VoltSteps.SEARCH ? 5 : 8}
+      // eslint-disable-next-line no-nested-ternary
+      zoom={step === VoltSteps.SEARCH ? 5 : step === VoltSteps.SEARCH_RESULTS && values.searchResult?.length === 1 ? 12 : 8}
       dragging={step !== VoltSteps.SEARCH}
       disableZoom={step === VoltSteps.SEARCH}
       setMarkerRef={(parcelNumber, ref) => {
