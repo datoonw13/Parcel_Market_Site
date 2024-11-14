@@ -52,7 +52,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ setValues, values, classN
               setMpaInteraction((prevData) => ({
                 ...prevData,
                 hoveredParcelNumber: removeParcelNumberFormatting(property.parcelNumberNoFormatting),
-                zoom: true,
+                zoom: values.searchResult!.length > 1,
               }));
             }}
             onMouseLeave={() => {
