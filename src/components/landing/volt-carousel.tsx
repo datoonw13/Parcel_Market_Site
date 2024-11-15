@@ -117,7 +117,7 @@ const VoltCarousel = () => {
             >
               <h1 className="text-grey-800 font-extrabold mb-1 text-sm">{el.title}</h1>
               <p className="font-light text-grey-800 text-xs mb-6">{el.desc}</p>
-              <Link href={routes.volt.fullUrl}>
+              <Link href={routes.volt.fullUrl} id={`${el.title.toLocaleLowerCase().replaceAll(" ", "_")}-button`}>
                 <Button className={cn(data[1].id !== el.id && "!bg-primary-main-100 text-primary-main", "h-8 text-xs")}>
                   Try for free
                 </Button>

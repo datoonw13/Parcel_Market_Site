@@ -37,7 +37,13 @@ const LandingUpdates = () => {
       <div className="space-y-3 max-w-96 mx-auto">
         <div className="space-y-2">
           <TextInput placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Button disabled={!isValidEmail} loading={subscribePending} onClick={handleSubscribe} className="w-full">
+          <Button
+            id="landing-subscribe-btn"
+            disabled={!isValidEmail}
+            loading={subscribePending}
+            onClick={handleSubscribe}
+            className="w-full"
+          >
             Subscribe
           </Button>
         </div>

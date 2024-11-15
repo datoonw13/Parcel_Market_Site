@@ -52,6 +52,7 @@ const LandingSlider = () => {
               onValueChange={(state) => {
                 setValues({ state, county: null });
               }}
+              id="landing__state-autocomplete"
             />
             <AutoComplete
               options={counties}
@@ -61,8 +62,10 @@ const LandingSlider = () => {
               }}
               selectedValue={getCountyValue(values.county, values.state)?.value || null}
               disabled={!values.state}
+              id="landing__county-autocomplete"
             />
             <Button
+              id="landing__volt-submit-button"
               disabled={!values.county || !values.state}
               onClick={() => router.push(`${routes.volt.fullUrl}?state=${values.state}&county=${values.county}`)}
             >

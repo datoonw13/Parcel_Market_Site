@@ -36,7 +36,9 @@ const AboutVolt = () => (
           surrounding a specific property faster than ever before.
         </h1>
         <Link className="w-full" href={routes.volt.fullUrl}>
-          <Button className="mt-6 md:mt-8 w-full md:w-fit">Try for free</Button>
+          <Button className="mt-6 md:mt-8 w-full md:w-fit" id="landing-about-volt-button">
+            Try for free
+          </Button>
         </Link>
       </div>
     </div>

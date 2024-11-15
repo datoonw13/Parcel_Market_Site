@@ -83,7 +83,7 @@ export default function Subscribe() {
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     Free <span className="text-base font-normal">/ 14 Days</span>
                   </h1>
-                  <Link href={routes.user.subscription.fullUrl}>
+                  <Link id="landing-subscription-try-free-btn" href={routes.user.subscription.fullUrl}>
                     <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
                       <div className="flex items-center justify-between gap-2 w-full text-primary-main group-hover:text-white font-semibold">
                         Try For Free <FaArrowRightLong />
@@ -100,7 +100,7 @@ export default function Subscribe() {
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     <span className="font-bold text-2xl">$</span>215 <span className="text-base font-normal">/ Annual</span>
                   </h1>
-                  <Link href={routes.user.subscription.fullUrl}>
+                  <Link id="landing-subscription-monthly-btn" href={routes.user.subscription.fullUrl}>
                     <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
                       <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold group-hover:text-white">
                         Subscribe <FaArrowRightLong />
@@ -117,7 +117,7 @@ export default function Subscribe() {
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     <span className="font-bold text-2xl">$</span>20 <span className="text-base font-normal">/ monthly</span>
                   </h1>
-                  <Link href={routes.user.subscription.fullUrl}>
+                  <Link id="landing-subscription-annually-btn" href={routes.user.subscription.fullUrl}>
                     <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
                       <div className="flex items-center justify-between gap-2 w-full text-primary-main font-semibold group-hover:text-white">
                         Subscribe <FaArrowRightLong />

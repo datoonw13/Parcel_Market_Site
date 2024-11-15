@@ -25,6 +25,7 @@ type AutoCompleteProps = {
   error?: boolean;
   inputRootClassName?: string;
   clearable?: boolean;
+  id?: string;
 };
 
 const AutoComplete: FC<AutoCompleteProps> = ({
@@ -37,6 +38,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
   error,
   inputRootClassName,
   clearable,
+  id,
 }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -78,6 +80,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
       >
         <PopoverPrimitive.Anchor>
           <CommandPrimitive.Input
+            id={id}
             asChild
             disabled={disabled}
             className="w-full"
