@@ -3,13 +3,14 @@
 import { updateUserInfoSchema, userSignInValidation } from "@/zod-validations/auth-validations";
 import { ResponseModel, ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import routes from "@/helpers/routes";
 import { revalidatePath } from "next/cache";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
+import { NextRequest } from "next/server";
 import { DeletionAccountReason, IDecodedAccessToken, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
@@ -180,9 +181,15 @@ export const signUpUserAction = async (values: IUserSignUp): Promise<ResponseMod
 };
 
 export const logOutUserAction = async () => {
+  const headersList = headers();
+  // read the custom x-url header
+  const domain = headersList.get("host") || "";
+  const fullUrl = headersList.get("referer") || "";
+
   cookies().delete("jwt");
   cookies().delete("jwt-refresh");
   revalidatePath("/");
+  redirect(fullUrl);
 };
 
 export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {

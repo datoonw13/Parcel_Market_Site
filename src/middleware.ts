@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import moment from "moment";
 import { decode } from "jsonwebtoken";
+import { cookies } from "next/headers";
 import routes, { getAllRoutes } from "./helpers/routes";
 import { getAccessToken } from "./server-actions/user/actions";
 
@@ -12,7 +13,7 @@ const checkAuth = async (request: NextRequest) => {
   const isAccessTokenValid =
     typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
 
-  const decodedRefreshToken = decode(request.cookies.get("jwt-refresh")?.value || "");
+  const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "");
   const isRefreshTokenValid =
     typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
 
