@@ -174,6 +174,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                         <div id="button-wrapper" className="fixed bottom-0 p-4 pb-8 w-full bg-white z-[60] border-x">
                           {step === VoltSteps.SEARCH_RESULTS && (
                             <Button
+                              id="volt-mobile-get-value-button"
                               loading={calculationPending}
                               onClick={() => {
                                 if (user) {
@@ -190,6 +191,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                           )}
                           {step === VoltSteps.CALCULATION && !user && (
                             <Button
+                              id="volt-mobile-view-sales-data-button"
                               className="w-full"
                               onClick={() => {
                                 router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);

@@ -181,6 +181,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
             </p>
           </div>
           <Button
+            id="volt-calculation-subscribe-button"
             variant="secondary"
             onClick={() => {
               router.push(

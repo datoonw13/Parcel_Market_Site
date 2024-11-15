@@ -205,6 +205,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 {step === VoltSteps.SEARCH_RESULTS && (
                   <div className="bg-white px-8 xl:px-11 pt-6 pb-8 xl:pb-11 border-t border-t-grey-100">
                     <Button
+                      id="volt-get-value-button"
                       loading={calculationPending}
                       onClick={() => {
                         if (user) {
@@ -223,6 +224,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 {step === VoltSteps.CALCULATION && !user && !isSmallDevice && (
                   <div className="bg-white px-8 xl:px-11 py-6 ">
                     <Button
+                      id="volt-view-sales-data-button"
                       className="w-full"
                       onClick={() => {
                         router.push(`${routes.auth.signIn.fullUrl}?redirect_uri=${routes.volt.fullUrl}`);

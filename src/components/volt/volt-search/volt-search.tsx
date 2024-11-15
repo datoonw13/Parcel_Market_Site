@@ -218,7 +218,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
               // error={!!errors.county}
             />
           </div>
-          <Button disabled={disableSearch || !isValid} loading={isSubmitting} onClick={onSubmit} className="mt-1">
+          <Button id="volt-search-btn" disabled={disableSearch || !isValid} loading={isSubmitting} onClick={onSubmit} className="mt-1">
             Search
           </Button>
         </div>
@@ -226,7 +226,11 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
           <LuInfo className="size-6 text-gray-800" />
           <p className="font-medium text-sm text-gray-800">
             Your search information is automatically saved to your profile{" "}
-            <Link href={routes.user.recentSearches.fullUrl} className="underline text-sm font-medium text-primary-main">
+            <Link
+              id="volt-recent-search-link"
+              href={routes.user.recentSearches.fullUrl}
+              className="underline text-sm font-medium text-primary-main"
+            >
               My Recent Searches
             </Link>
           </p>
