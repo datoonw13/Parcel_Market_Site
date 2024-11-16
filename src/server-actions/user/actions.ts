@@ -37,16 +37,16 @@ export const updateAccessToken = (token: string) => {
   });
 };
 
-export const getAccessToken = async (): Promise<ResponseModel<string | null>> => {
+export const generateAccessToken = async (): Promise<ResponseModel<string | null>> => {
   try {
-    const data = await fetcher<ISignInResponse>("user/token/refresh");
+    const data = await fetcher<ISignInResponse>("user/token/refresh", { method: "POST" });
     return {
       data: data.access_token,
       errorMessage: null,
     };
   } catch (error) {
     return {
-      errorMessage: JSON.stringify("error"),
+      errorMessage: (error as ErrorResponse).message,
       data: null,
     };
   }
@@ -384,7 +384,7 @@ export const setNewEmailAction = async (values: { code: string; email: string })
       body: JSON.stringify(values),
       cache: "no-store",
     });
-    const newToken = await getAccessToken();
+    const newToken = await generateAccessToken();
     if (newToken.data) {
       cookies().set({
         name: "jwt",
@@ -430,12 +430,12 @@ export const resendSignUpVerificationCodeAction = async (email: string): Promise
 
 export const updateUserInfoAction = async (values: z.infer<typeof updateUserInfoSchema>): Promise<ResponseModel<null>> => {
   try {
-    const request = await fetcher<ISignInResponse>("user/profile", {
+    await fetcher<ISignInResponse>("user/profile", {
       method: "PATCH",
       body: JSON.stringify(values),
       cache: "no-store",
     });
-    const newToken = await getAccessToken();
+    const newToken = await generateAccessToken();
     if (newToken.data) {
       cookies().set({
         name: "jwt",

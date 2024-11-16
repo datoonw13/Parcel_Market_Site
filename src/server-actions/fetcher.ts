@@ -22,9 +22,9 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     statusCode: number;
   };
 
-  if (response.statusCode === 401) {
-    revalidatePath("/");
-  }
+  // if (response.statusCode === 401) {
+  //   revalidatePath("/");
+  // }
 
   if (!response?.statusCode?.toString()?.startsWith("2")) {
     let errorMessage = "Something went wrong";

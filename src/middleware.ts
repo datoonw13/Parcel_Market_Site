@@ -1,41 +1,67 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import moment from "moment";
-import { decode } from "jsonwebtoken";
-import { cookies } from "next/headers";
+import { decode, JwtPayload } from "jsonwebtoken";
 import routes, { getAllRoutes } from "./helpers/routes";
-import { getAccessToken } from "./server-actions/user/actions";
+import { generateAccessToken } from "./server-actions/user/actions";
 
 const allRoute = getAllRoutes();
 
-const checkRefreshToken = () => {
-  const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "");
-  const isRefreshTokenValid =
-    typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
+const getTokens = async (request: NextRequest) => {
+  // refresh token
+  const refreshToken = request.cookies.get("jwt-refresh")?.value || null;
+  const refreshTokenExpireDate = refreshToken && Number((decode(refreshToken) as JwtPayload).exp);
+  const isRefreshTokenValid = refreshTokenExpireDate ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : false;
 
-  return {
-    decodedRefreshToken,
-    isValid: isRefreshTokenValid,
-  };
-};
-
-const checkAccessToken = () => {
-  const token = cookies().get("jwt")?.value;
-  if (!token) {
+  if (!isRefreshTokenValid) {
     return {
-      isValid: false,
+      access_token: null,
+      refresh_token: null,
+      removeTokens: refreshToken && !isRefreshTokenValid,
     };
   }
-  const decodedAccessToken = decode(token);
-  const isAccessTokenValid =
-    typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
+
+  // access token
+  const accessToken = request.cookies.get("jwt")?.value || null;
+  const accessTokenExpireDate = accessToken && Number((decode(accessToken) as JwtPayload).exp);
+  const isAccessTokenValid = accessTokenExpireDate ? moment(new Date()).isBefore(moment.unix(accessTokenExpireDate)) : false;
+
+  if (isAccessTokenValid) {
+    return {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      removeTokens: false,
+    };
+  }
+
+  if (!isAccessTokenValid) {
+    const { data: newAccessToken } = await generateAccessToken();
+
+    if (newAccessToken) {
+      return {
+        access_token: newAccessToken,
+        refresh_token: refreshToken,
+        removeTokens: false,
+      };
+    }
+    return {
+      access_token: null,
+      refresh_token: null,
+      removeTokens: true,
+    };
+  }
+
   return {
-    isValid: isAccessTokenValid,
+    access_token: null,
+    refresh_token: null,
+    removeTokens: true,
   };
 };
 
 export async function middleware(request: NextRequest) {
-  const { isValid: isAuthed } = checkRefreshToken();
+  const { access_token, refresh_token, removeTokens } = await getTokens(request);
+
+  const isAuthenticated = !!(access_token && refresh_token);
 
   let routeDetails: any = null;
 
@@ -51,29 +77,34 @@ export async function middleware(request: NextRequest) {
 
   let response = NextResponse.next();
 
-  if (routeDetails?.protected && !isAuthed) {
+  if (routeDetails?.protected && !isAuthenticated) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
 
-  if (request.nextUrl.pathname.includes("auth") && isAuthed) {
+  if (request.nextUrl.pathname.includes("auth") && isAuthenticated) {
     response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
   }
 
-  const { isValid: isAccessTokenValid } = checkAccessToken();
-  if (isAuthed && !isAccessTokenValid) {
-    const newAccessToken = await getAccessToken();
-    if (newAccessToken.data) {
-      response.cookies.set({
-        name: "jwt",
-        value: newAccessToken.data,
-        httpOnly: true,
-        secure: true,
-      });
-    } else {
-      response.cookies.set("check", JSON.stringify(newAccessToken));
-      response.cookies.delete("jwt");
-      response.cookies.delete("jwt-refresh");
-    }
+  if (access_token) {
+    response.cookies.set({
+      name: "jwt",
+      value: access_token,
+      httpOnly: true,
+      secure: true,
+    });
+  }
+  if (refresh_token) {
+    response.cookies.set({
+      name: "jwt-refresh",
+      value: refresh_token,
+      httpOnly: true,
+      secure: true,
+    });
+  }
+
+  if (removeTokens) {
+    response.cookies.delete("jwt");
+    response.cookies.delete("jwt-refresh");
   }
 
   return response;
