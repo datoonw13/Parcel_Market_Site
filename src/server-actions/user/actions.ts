@@ -46,7 +46,7 @@ export const generateAccessToken = async (): Promise<ResponseModel<string | null
     };
   } catch (error) {
     return {
-      errorMessage: `${error} api error`,
+      errorMessage: (error as ErrorResponse).message,
       data: null,
     };
   }
