@@ -35,7 +35,7 @@ const getTokens = async (request: NextRequest) => {
   }
 
   if (!isAccessTokenValid) {
-    const { data: newAccessToken } = await generateAccessToken();
+    const { data: newAccessToken, errorMessage } = await generateAccessToken();
 
     if (newAccessToken) {
       return {
@@ -48,6 +48,7 @@ const getTokens = async (request: NextRequest) => {
       access_token: null,
       refresh_token: null,
       removeTokens: true,
+      error: errorMessage,
     };
   }
 
@@ -59,7 +60,7 @@ const getTokens = async (request: NextRequest) => {
 };
 
 export async function middleware(request: NextRequest) {
-  const { access_token, refresh_token, removeTokens } = await getTokens(request);
+  const { access_token, refresh_token, removeTokens, error } = await getTokens(request);
 
   const isAuthenticated = !!(access_token && refresh_token);
 
@@ -76,7 +77,7 @@ export async function middleware(request: NextRequest) {
   }
 
   let response = NextResponse.next();
-
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ access_token, refresh_token, removeTokens, error }) || "araa");
   if (routeDetails?.protected && !isAuthenticated) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
@@ -106,8 +107,6 @@ export async function middleware(request: NextRequest) {
     response.cookies.delete("jwt");
     response.cookies.delete("jwt-refresh");
   }
-
-  response.cookies.set(moment().format("HH:mm:ss"), refresh_token || "araa");
 
   return response;
 }
