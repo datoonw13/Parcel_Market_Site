@@ -17,6 +17,8 @@ const checkAuth = async (request: NextRequest) => {
   const isRefreshTokenValid =
     typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
 
+  console.log(isAccessTokenValid, 11);
+
   if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
     const { data, errorMessage } = await getAccessToken();
 
@@ -24,15 +26,28 @@ const checkAuth = async (request: NextRequest) => {
       request.cookies.set("jwt", data);
     }
     if (errorMessage) {
-      request.cookies.delete("jwt");
-      request.cookies.delete("jwt-refresh");
+      return NextResponse.redirect(
+        new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=${JSON.stringify(errorMessage)}-api-error`, request.nextUrl.origin),
+        { ...request }
+      );
+      // request.cookies.delete("jwt");
+      // request.cookies.delete("jwt-refresh");
     }
   }
 
   if (decodedRefreshToken && !isRefreshTokenValid) {
-    request.cookies.delete("jwt");
-    request.cookies.delete("jwt-refresh");
+    return NextResponse.redirect(
+      new URL(
+        `${routes.auth.url}/${routes.auth.signIn.url}?error=${JSON.stringify(decodedRefreshToken)}-refresh-error`,
+        request.nextUrl.origin
+      ),
+      { ...request }
+    );
+
+    // request.cookies.delete("jwt");
+    // request.cookies.delete("jwt-refresh");
   }
+  return false;
 };
 
 export async function middleware(request: NextRequest) {
