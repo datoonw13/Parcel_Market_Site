@@ -8,37 +8,47 @@ import { getAccessToken } from "./server-actions/user/actions";
 
 const allRoute = getAllRoutes();
 
-const checkAuth = async (request: NextRequest) => {
-  const decodedAccessToken = decode(request.cookies.get("jwt")?.value || "");
-  const isAccessTokenValid =
-    typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
-
+const checkRefreshToken = () => {
   const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "");
   const isRefreshTokenValid =
     typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
 
-  if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
-    const { data, errorMessage } = await getAccessToken();
+  return {
+    decodedRefreshToken,
+    isValid: isRefreshTokenValid,
+  };
+};
 
-    if (data) {
-      request.cookies.set("jwt", data);
-    }
-    if (errorMessage) {
-      request.cookies.delete("jwt");
-      request.cookies.delete("jwt-refresh");
-    }
+const checkAccessToken = (token?: string) => {
+  if (!token) {
+    return {
+      isValid: false,
+    };
   }
-
-  if (decodedRefreshToken && !isRefreshTokenValid) {
-    request.cookies.delete("jwt");
-    request.cookies.delete("jwt-refresh");
-  }
-
-  return isRefreshTokenValid;
+  const decodedAccessToken = decode(token);
+  const isAccessTokenValid =
+    typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
+  return {
+    isValid: isAccessTokenValid,
+  };
 };
 
 export async function middleware(request: NextRequest) {
-  const isAuthed = await checkAuth(request);
+  const isAuthed = checkRefreshToken();
+
+  if (isAuthed) {
+    const { isValid: isAccessTokenValid } = checkAccessToken(request.cookies.get("jwt")?.value);
+
+    if (!isAccessTokenValid) {
+      const { data } = await getAccessToken();
+      if (data) {
+        request.cookies.set("jwt", data);
+      } else {
+        request.cookies.delete("jwt");
+        request.cookies.delete("jwt-refresh");
+      }
+    }
+  }
 
   let routeDetails: any = null;
 
@@ -52,15 +62,27 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  let response = NextResponse.next();
+
   if (routeDetails?.protected && !isAuthed) {
-    return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin), { ...request });
+    response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
 
   if (request.nextUrl.pathname.includes("auth") && isAuthed) {
-    return NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin), { ...request });
+    response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
   }
 
-  return NextResponse.next();
+  // refresh token flow
+  if (!isAuthed && (response.cookies.get("jwt-refresh") || response.cookies.get("jwt"))) {
+    response.cookies.delete("jwt");
+    response.cookies.delete("jwt-refresh");
+  }
+
+  if (request.cookies.get("jwt")?.value && request.cookies.get("jwt")?.value !== response.cookies.get("jwt")?.value) {
+    response.cookies.set("jwt", request.cookies.get("jwt")!.value);
+  }
+
+  return response;
 }
 
 export const config = {
