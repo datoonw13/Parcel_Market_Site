@@ -201,17 +201,12 @@ export const removeUserSearches = async (ids: number[]): Promise<ResponseModel<(
 export const checkAuth = async () => {
   try {
     const decodedAccessToken = decode(cookies().get("jwt")?.value || "") as any;
-    console.log(1);
-
     const isAccessTokenValid =
       typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
 
     const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "") as any;
-    console.log(3);
-
     const isRefreshTokenValid =
       typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
-    console.log(4);
 
     return {
       isAccessTokenValid,
