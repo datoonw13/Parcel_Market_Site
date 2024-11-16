@@ -79,7 +79,12 @@ export async function middleware(request: NextRequest) {
   }
 
   if (request.cookies.get("jwt")?.value) {
-    response.cookies.set("jwt", request.cookies.get("jwt")!.value);
+    response.cookies.set({
+      name: "jwt",
+      value: request.cookies.get("jwt")!.value,
+      httpOnly: true,
+      secure: true,
+    });
   }
 
   return response;
