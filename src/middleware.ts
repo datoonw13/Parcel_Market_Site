@@ -33,11 +33,12 @@ const checkAuth = async (request: NextRequest) => {
     request.cookies.delete("jwt");
     request.cookies.delete("jwt-refresh");
   }
+
+  return isRefreshTokenValid;
 };
 
 export async function middleware(request: NextRequest) {
-  await checkAuth(request);
-  const isAuthed = !!request.cookies.get("jwt");
+  const isAuthed = await checkAuth(request);
 
   let routeDetails: any = null;
 
@@ -51,57 +52,15 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (routeDetails?.protected && !request.cookies.get("jwt")) {
-    const response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin), { ...request });
-    if (!isAuthed) {
-      response.cookies.delete("jwt");
-      response.cookies.delete("jwt-refresh");
-    } else {
-      response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
-      response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
-    }
-    return response;
+  if (routeDetails?.protected && !isAuthed) {
+    return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin), { ...request });
   }
-
-  // update token after subscription change
-  // if (request.nextUrl.pathname === routes.user.subscription.fullUrl && request.nextUrl.searchParams.get("success")) {
-  //   const { data } = await refreshToken();
-  //   if (data) {
-  //     const decodedToken = jwtDecode(data) as { exp: number };
-  //     const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
-  //     const response = NextResponse.redirect(new URL(routes.user.subscription.fullUrl, request.nextUrl.origin));
-  //     response.cookies.set({
-  //       name: "jwt",
-  //       value: data,
-  //       httpOnly: true,
-  //       secure: true,
-  //       maxAge: maxAgeInSeconds,
-  //     });
-  //     return response;
-  //   }
-  // }
 
   if (request.nextUrl.pathname.includes("auth") && request.cookies.get("jwt")) {
-    const response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin), { ...request });
-    if (!isAuthed) {
-      response.cookies.delete("jwt");
-      response.cookies.delete("jwt-refresh");
-    } else {
-      response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
-      response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
-    }
-    return response;
+    return NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin), { ...request });
   }
 
-  const response = NextResponse.next();
-  if (!isAuthed) {
-    response.cookies.delete("jwt");
-    response.cookies.delete("jwt-refresh");
-  } else {
-    response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
-    response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
-  }
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
