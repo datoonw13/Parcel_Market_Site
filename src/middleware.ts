@@ -73,20 +73,21 @@ export async function middleware(request: NextRequest) {
     response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
   }
 
-  if (!isAuthed && (response.cookies.get("jwt-refresh") || response.cookies.get("jwt"))) {
-    response.cookies.delete("jwt");
-    response.cookies.delete("jwt-refresh");
-  }
-
   if (request.cookies.get("jwt")?.value) {
     response.cookies.set({
       name: "jwt",
       value: request.cookies.get("jwt")!.value,
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
     });
   }
+
+  response.cookies.set({
+    name: "test",
+    value: "test",
+    httpOnly: true,
+    secure: true,
+  });
 
   return response;
 }
