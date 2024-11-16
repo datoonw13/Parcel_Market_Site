@@ -39,10 +39,7 @@ export const updateAccessToken = (token: string) => {
 
 export const getAccessToken = async (): Promise<ResponseModel<string | null>> => {
   try {
-    const data = await fetcher<ISignInResponse>("user/token/refresh", {
-      method: "POST",
-      cache: "no-cache",
-    });
+    const data = await fetcher<ISignInResponse>("user/token/refresh");
     return {
       data: data.access_token,
       errorMessage: null,
