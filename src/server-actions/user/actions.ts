@@ -86,6 +86,7 @@ export const signInUserAction = async (
       value: data.refresh_token,
       httpOnly: true,
       secure: true,
+      sameSite: "strict",
       ...(remember && { maxAge: maxAgeInSeconds }),
     });
     cookies().set({
@@ -93,6 +94,7 @@ export const signInUserAction = async (
       value: data.access_token,
       httpOnly: true,
       secure: true,
+      sameSite: "strict",
     });
     return { data, errorMessage: null };
   } catch (error) {
