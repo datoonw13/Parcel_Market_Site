@@ -56,7 +56,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin), { ...request });
   }
 
-  if (request.nextUrl.pathname.includes("auth") && request.cookies.get("jwt")) {
+  if (request.nextUrl.pathname.includes("auth") && isAuthed) {
     return NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin), { ...request });
   }
 
