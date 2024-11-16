@@ -17,8 +17,7 @@ const getTokens = async (request: NextRequest) => {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: "true",
-      cookiesData: JSON.stringify({ level: 1, refreshTokenExpireDate }),
+      removeTokens: true,
     };
   }
 
@@ -26,8 +25,7 @@ const getTokens = async (request: NextRequest) => {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: "true",
-      cookiesData: JSON.stringify({ level: 11, refreshTokenExpireDate }),
+      removeTokens: true,
     };
   }
 
@@ -41,27 +39,22 @@ const getTokens = async (request: NextRequest) => {
       access_token: accessToken,
       refresh_token: refreshToken,
       removeTokens: false,
-      cookiesData: JSON.stringify({ level: 2, isAccessTokenValid }),
     };
   }
 
   if (!isAccessTokenValid) {
     const { data: newAccessToken, errorMessage } = await generateAccessToken();
-    console.log("avoie", refreshToken);
-
     if (newAccessToken) {
       return {
         access_token: newAccessToken,
         refresh_token: refreshToken,
         removeTokens: false,
-        cookiesData: JSON.stringify({ level: 4, newAccessToken, errorMessage }),
       };
     }
     return {
       access_token: null,
       refresh_token: null,
       removeTokens: true,
-      cookiesData: JSON.stringify({ level: 5, newAccessToken, errorMessage }),
     };
   }
 
@@ -69,13 +62,11 @@ const getTokens = async (request: NextRequest) => {
     access_token: null,
     refresh_token: null,
     removeTokens: false,
-    cookiesData: JSON.stringify({ level: 6 }),
   };
 };
 
 export async function middleware(request: NextRequest) {
-  const x = await getTokens(request);
-  const { access_token, refresh_token, removeTokens, cookiesData } = x;
+  const { access_token, refresh_token, removeTokens } = await getTokens(request);
 
   const isAuthenticated = !!(access_token && refresh_token);
 
@@ -92,7 +83,13 @@ export async function middleware(request: NextRequest) {
   }
 
   let response = NextResponse.next();
-  response.cookies.set(moment().format("HH:mm:ss"), cookiesData);
+
+  const refreshToken = request.cookies.get("jwt-refresh")?.value || "araa";
+  const refreshTokenExpireDate = refreshToken ? Number((decode(refreshToken) as JwtPayload).exp) || "araa" : "araa";
+  const isRefreshTokenValid =
+    typeof refreshTokenExpireDate === "number" ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : "araa";
+
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ refreshToken, refreshTokenExpireDate, isRefreshTokenValid }));
   if (routeDetails?.protected && !isAuthenticated) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
