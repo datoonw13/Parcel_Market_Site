@@ -43,30 +43,30 @@ const getTokens = async (request: NextRequest) => {
     };
   }
 
-  // if (!isAccessTokenValid) {
-  //   const request = await fetch(new URL("api/user/token/refresh", process.env.API_URL?.replace("/api/", "")), {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //       cookie: cookies().toString(),
-  //     },
-  //   });
-  //   const data = (await request.json()) as any;
+  if (!isAccessTokenValid) {
+    const request = await fetch(new URL("api/user/token/refresh", process.env.NEXT_PUBLIC_API_URL?.replace("/api/", "")), {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        cookie: cookies().toString(),
+      },
+    });
+    const data = (await request.json()) as any;
 
-  //   if (data?.data?.access_token) {
-  //     return {
-  //       access_token: data.data.access_token,
-  //       refresh_token: refreshToken,
-  //       removeTokens: false,
-  //     };
-  //   }
-  //   return {
-  //     access_token: null,
-  //     refresh_token: null,
-  //     removeTokens: true,
-  //   };
-  // }
+    if (data?.data?.access_token) {
+      return {
+        access_token: data.data.access_token,
+        refresh_token: refreshToken,
+        removeTokens: false,
+      };
+    }
+    return {
+      access_token: null,
+      refresh_token: null,
+      removeTokens: true,
+    };
+  }
 
   return {
     access_token: null,
@@ -126,7 +126,7 @@ export async function middleware(request: NextRequest) {
 
   response.cookies.set({
     name: "url",
-    value: `${process.env.API_URL} ----- esaa`,
+    value: `${process.env.NEXT_PUBLIC_API_URL} ----- esaa`,
     httpOnly: true,
     secure: true,
   });
