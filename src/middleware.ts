@@ -109,14 +109,8 @@ export async function middleware(request: NextRequest) {
     });
   }
 
-  const accessToken = request.cookies.get("jwt")?.value || null;
-  const accessTokenExpireDate = accessToken && Number((decode(accessToken) as JwtPayload).exp);
-  const isAccessTokenValid = accessTokenExpireDate ? moment(new Date()).isBefore(moment.unix(accessTokenExpireDate)) : false;
-
-  if (!isAccessTokenValid) {
-    const x = await generateAccessToken();
-    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", x }));
-  }
+  const x = await generateAccessToken();
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", x }));
 
   if (removeTokens) {
     // response.cookies.delete("jwt");
