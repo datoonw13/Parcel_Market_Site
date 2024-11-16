@@ -109,8 +109,16 @@ export async function middleware(request: NextRequest) {
     });
   }
 
-  const x = await generateAccessToken();
-  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", x }));
+  const x = await fetch(`${process.env.API_URL}user/token/refresh`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      cookie: request.cookies.toString(),
+    },
+  });
+  const s = await x.json();
+
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", s }));
 
   if (removeTokens) {
     // response.cookies.delete("jwt");
