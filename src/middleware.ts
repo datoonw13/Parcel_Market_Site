@@ -5,7 +5,6 @@ import { decode } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import routes, { getAllRoutes } from "./helpers/routes";
 import { getAccessToken } from "./server-actions/user/actions";
-import { revalidateAllPath } from "./server-actions/subscription/actions";
 
 const allRoute = getAllRoutes();
 
@@ -20,7 +19,8 @@ const checkRefreshToken = () => {
   };
 };
 
-const checkAccessToken = (token?: string) => {
+const checkAccessToken = () => {
+  const token = cookies().get("jwt")?.value;
   if (!token) {
     return {
       isValid: false,
@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isAuthed) {
-    const { isValid: isAccessTokenValid } = checkAccessToken(request.cookies.get("jwt")?.value);
+    const { isValid: isAccessTokenValid } = checkAccessToken();
     if (!isAccessTokenValid) {
       const newAccessToken = await getAccessToken();
       if (newAccessToken.data) {
@@ -76,13 +76,6 @@ export async function middleware(request: NextRequest) {
       }
     }
   }
-
-  response.cookies.set({
-    name: "test",
-    value: cookies().get("jwt-refresh")?.value || "araa",
-    httpOnly: true,
-    secure: true,
-  });
 
   return response;
 }
