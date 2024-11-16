@@ -79,6 +79,7 @@ export async function middleware(request: NextRequest) {
       value: request.cookies.get("jwt")!.value,
       httpOnly: true,
       secure: true,
+      sameSite: "strict",
     });
   }
 
