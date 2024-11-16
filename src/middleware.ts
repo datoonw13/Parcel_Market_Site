@@ -77,6 +77,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  response.cookies.set({
+    name: "test",
+    value: cookies().get("jwt-refresh")?.value || "araa",
+    httpOnly: true,
+    secure: true,
+  });
+
   return response;
 }
 
