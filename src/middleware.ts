@@ -17,7 +17,7 @@ const getTokens = async (request: NextRequest) => {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: true,
+      removeTokens: "true",
       cookiesData: JSON.stringify({ level: 1, refreshTokenExpireDate }),
     };
   }
@@ -26,8 +26,8 @@ const getTokens = async (request: NextRequest) => {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: true,
-      cookiesData: JSON.stringify({ level: 1, refreshTokenExpireDate }),
+      removeTokens: "true",
+      cookiesData: JSON.stringify({ level: 11, refreshTokenExpireDate }),
     };
   }
 
