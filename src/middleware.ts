@@ -110,11 +110,11 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const x = await fetch(`${process.env.API_URL}user/token/refresh`, {
-      method: "post",
+    const x = await fetch(new URL("user/token/refresh", `${process.env.API_URL}`), {
+      method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
-        cookie: request.cookies.toString(),
       },
     });
     const s = await x.json();
