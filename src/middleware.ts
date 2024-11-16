@@ -13,12 +13,11 @@ const getTokens = async (request: NextRequest) => {
   const refreshTokenExpireDate = refreshToken && Number((decode(refreshToken) as JwtPayload).exp);
   const isRefreshTokenValid = refreshTokenExpireDate ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : false;
 
-  if (!isRefreshTokenValid) {
+  if (refreshToken && !isRefreshTokenValid) {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: !!(refreshToken && !isRefreshTokenValid),
-      isRefreshTokenValid,
+      removeTokens: true,
       refreshTokenExpireDate,
     };
   }
