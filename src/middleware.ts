@@ -84,7 +84,7 @@ export async function middleware(request: NextRequest) {
 
   response.cookies.set({
     name: "test",
-    value: request.cookies.get("jwt")?.value || "vermodzebna",
+    value: JSON.stringify(request.cookies.getAll()) || "vermodzebna",
     httpOnly: true,
     secure: true,
   });
