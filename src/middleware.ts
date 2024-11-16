@@ -17,7 +17,9 @@ const getTokens = async (request: NextRequest) => {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: refreshToken && !isRefreshTokenValid,
+      removeTokens: !!(refreshToken && !isRefreshTokenValid),
+      isRefreshTokenValid,
+      refreshTokenExpireDate,
     };
   }
 
@@ -60,7 +62,8 @@ const getTokens = async (request: NextRequest) => {
 };
 
 export async function middleware(request: NextRequest) {
-  const { access_token, refresh_token, removeTokens, error } = await getTokens(request);
+  const x = await getTokens(request);
+  const { access_token, refresh_token, removeTokens, error } = x;
 
   const isAuthenticated = !!(access_token && refresh_token);
 
@@ -77,7 +80,7 @@ export async function middleware(request: NextRequest) {
   }
 
   let response = NextResponse.next();
-  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ access_token, refresh_token, removeTokens, error }) || "araa");
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify(x) || "araa");
   if (routeDetails?.protected && !isAuthenticated) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
