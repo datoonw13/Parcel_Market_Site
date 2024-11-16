@@ -198,20 +198,25 @@ export const removeUserSearches = async (ids: number[]): Promise<ResponseModel<(
 };
 
 export const checkAuth = async () => {
-  const decodedAccessToken = decode(cookies().get("jwt")?.value || "") as any;
-  const isAccessTokenValid =
-    typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
+  try {
+    const decodedAccessToken = decode(cookies().get("jwt")?.value || "") as any;
+    const isAccessTokenValid =
+      typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
 
-  const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "") as any;
-  const isRefreshTokenValid =
-    typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
+    const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "") as any;
+    const isRefreshTokenValid =
+      typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
 
-  return {
-    isAccessTokenValid,
-    isRefreshTokenValid,
-    decodedAccessToken,
-    decodedRefreshToken,
-  };
+    return {
+      isAccessTokenValid,
+      isRefreshTokenValid,
+      decodedAccessToken,
+      decodedRefreshToken,
+    };
+  } catch (error) {
+    console.log(error, 11);
+    return error;
+  }
 
   // if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
   //   const { data, errorMessage } = await getAccessToken();
