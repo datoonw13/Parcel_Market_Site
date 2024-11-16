@@ -27,7 +27,6 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
   // }
 
   if (!response?.statusCode?.toString()?.startsWith("2")) {
-    cookies().set("avoie", `movidaa - ${response?.statusCode}`);
     let errorMessage = "Something went wrong";
     if (response.message) {
       errorMessage = response.message;

@@ -13,6 +13,15 @@ const getTokens = async (request: NextRequest) => {
   const refreshTokenExpireDate = refreshToken && Number((decode(refreshToken) as JwtPayload).exp);
   const isRefreshTokenValid = refreshTokenExpireDate ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : false;
 
+  if (!refreshToken) {
+    return {
+      access_token: null,
+      refresh_token: null,
+      removeTokens: true,
+      cookiesData: JSON.stringify({ level: 1, refreshTokenExpireDate }),
+    };
+  }
+
   if (refreshToken && !isRefreshTokenValid) {
     return {
       access_token: null,
@@ -38,6 +47,7 @@ const getTokens = async (request: NextRequest) => {
 
   if (!isAccessTokenValid) {
     const { data: newAccessToken, errorMessage } = await generateAccessToken();
+    console.log("avoie", refreshToken);
 
     if (newAccessToken) {
       return {
