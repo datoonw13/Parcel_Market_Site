@@ -110,8 +110,6 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "url", url: `${process.env.API_URL}user/token/refresh` }));
-
     const x = await fetch(`${process.env.API_URL}user/token/refresh`, {
       method: "post",
       headers: {
@@ -122,8 +120,8 @@ export async function middleware(request: NextRequest) {
     const s = await x.json();
 
     response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", s }));
-  } catch (error) {
-    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "error", error: JSON.stringify(error) }));
+  } catch (error: any) {
+    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "error", error: `${JSON.stringify(error?.message)}1111` }));
   }
 
   if (removeTokens) {
