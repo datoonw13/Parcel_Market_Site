@@ -124,25 +124,6 @@ export async function middleware(request: NextRequest) {
     response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "error", error: `${JSON.stringify(error?.message)}1111` }));
   }
 
-  try {
-    const x = await fetch(`https://jsonplaceholder.typicode.com/todos/1`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        cookie: request.cookies.toString(),
-      },
-    });
-    const s = await x.json();
-    console.log(s, 11);
-
-    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida info", s }));
-  } catch (error: any) {
-    response.cookies.set(
-      moment().format("HH:mm:ss"),
-      JSON.stringify({ reason: "error info", error: `${JSON.stringify(error?.message)}1111` })
-    );
-  }
-
   if (removeTokens) {
     // response.cookies.delete("jwt");
     // response.cookies.delete("jwt-refresh");
