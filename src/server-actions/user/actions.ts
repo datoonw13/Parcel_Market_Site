@@ -49,7 +49,7 @@ export const getAccessToken = async (): Promise<ResponseModel<string | null>> =>
     };
   } catch (error) {
     return {
-      errorMessage: "error",
+      errorMessage: JSON.stringify("error"),
       data: null,
     };
   }
