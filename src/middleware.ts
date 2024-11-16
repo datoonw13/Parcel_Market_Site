@@ -17,8 +17,6 @@ const checkAuth = async (request: NextRequest) => {
   const isRefreshTokenValid =
     typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
 
-  console.log(isAccessTokenValid, 11);
-
   if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
     const { data, errorMessage } = await getAccessToken();
 
@@ -28,29 +26,18 @@ const checkAuth = async (request: NextRequest) => {
     if (errorMessage) {
       request.cookies.delete("jwt");
       request.cookies.delete("jwt-refresh");
-      return NextResponse.redirect(
-        new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=${JSON.stringify(errorMessage)}-api-error`, request.nextUrl.origin),
-        { ...request }
-      );
     }
   }
 
   if (decodedRefreshToken && !isRefreshTokenValid) {
     request.cookies.delete("jwt");
     request.cookies.delete("jwt-refresh");
-    return NextResponse.redirect(
-      new URL(
-        `${routes.auth.url}/${routes.auth.signIn.url}?error=${JSON.stringify(decodedRefreshToken)}-refresh-error`,
-        request.nextUrl.origin
-      ),
-      { ...request }
-    );
   }
-  return isRefreshTokenValid;
 };
 
 export async function middleware(request: NextRequest) {
-  const isAuthed = await checkAuth(request);
+  await checkAuth(request);
+  const isAuthed = !!request.cookies.get("jwt");
 
   let routeDetails: any = null;
 
@@ -102,9 +89,6 @@ export async function middleware(request: NextRequest) {
     } else {
       response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
       response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
-      return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=unaresh-error`, request.nextUrl.origin), {
-        ...request,
-      });
     }
     return response;
   }
@@ -113,13 +97,10 @@ export async function middleware(request: NextRequest) {
   if (!isAuthed) {
     response.cookies.delete("jwt");
     response.cookies.delete("jwt-refresh");
-    return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=boloresh-error`, request.nextUrl.origin), {
-      ...request,
-    });
+  } else {
+    response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
+    response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
   }
-  response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
-  response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
-
   return response;
 }
 
