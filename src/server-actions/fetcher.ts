@@ -22,10 +22,6 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     statusCode: number;
   };
 
-  // if (response.statusCode === 401) {
-  //   revalidatePath("/");
-  // }
-
   if (!response?.statusCode?.toString()?.startsWith("2")) {
     let errorMessage = "Something went wrong";
     if (response.message) {
@@ -33,7 +29,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     } else if (response.errors.length > 0) {
       errorMessage = response?.errors?.join("; ");
     }
-    throw new ErrorResponse(errorMessage, response.statusCode);
+    throw new ErrorResponse(errorMessage + JSON.stringify(response.errors), response.statusCode);
   }
   return response.data;
 };
