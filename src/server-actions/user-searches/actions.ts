@@ -10,9 +10,10 @@ import { removeParcelNumberFormatting } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import { IUserRecentSearches } from "@/types/user";
 import { PolygonProps } from "react-leaflet";
-import { decode } from "punycode";
 import moment from "moment";
 import { cookies, headers } from "next/headers";
+import { jwtDecode } from "jwt-decode";
+import { decode } from "jsonwebtoken";
 import { userSearchesTag } from "./tags";
 import { fetcher } from "../fetcher";
 
@@ -200,12 +201,17 @@ export const removeUserSearches = async (ids: number[]): Promise<ResponseModel<(
 export const checkAuth = async () => {
   try {
     const decodedAccessToken = decode(cookies().get("jwt")?.value || "") as any;
+    console.log(1);
+
     const isAccessTokenValid =
       typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
 
     const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "") as any;
+    console.log(3);
+
     const isRefreshTokenValid =
       typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
+    console.log(4);
 
     return {
       isAccessTokenValid,
@@ -213,9 +219,8 @@ export const checkAuth = async () => {
       decodedAccessToken,
       decodedRefreshToken,
     };
-  } catch (error) {
-    console.log(error, 11);
-    return error;
+  } catch (error: any) {
+    return error?.message;
   }
 
   // if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
