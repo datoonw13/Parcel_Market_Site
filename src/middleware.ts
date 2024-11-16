@@ -37,20 +37,6 @@ const checkAccessToken = (token?: string) => {
 export async function middleware(request: NextRequest) {
   const { isValid: isAuthed } = checkRefreshToken();
 
-  if (isAuthed) {
-    const { isValid: isAccessTokenValid } = checkAccessToken(request.cookies.get("jwt")?.value);
-
-    if (!isAccessTokenValid) {
-      const { data } = await getAccessToken();
-      if (data) {
-        request.cookies.set("jwt", data);
-      } else {
-        request.cookies.delete("jwt");
-        request.cookies.delete("jwt-refresh");
-      }
-    }
-  }
-
   let routeDetails: any = null;
 
   if (allRoute?.[request.nextUrl.pathname]) {
@@ -73,22 +59,23 @@ export async function middleware(request: NextRequest) {
     response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
   }
 
-  if (request.cookies.get("jwt")?.value) {
-    response.cookies.set({
-      name: "jwt",
-      value: request.cookies.get("jwt")!.value,
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-    });
+  if (isAuthed) {
+    const { isValid: isAccessTokenValid } = checkAccessToken(request.cookies.get("jwt")?.value);
+    if (!isAccessTokenValid) {
+      const newAccessToken = await getAccessToken();
+      if (newAccessToken.data) {
+        response.cookies.set({
+          name: "jwt",
+          value: newAccessToken.data,
+          httpOnly: true,
+          secure: true,
+        });
+      } else {
+        response.cookies.delete("jwt");
+        response.cookies.delete("jwt-refresh");
+      }
+    }
   }
-
-  response.cookies.set({
-    name: "test",
-    value: JSON.stringify(request.cookies.getAll()) || "vermodzebna",
-    httpOnly: true,
-    secure: true,
-  });
 
   return response;
 }
