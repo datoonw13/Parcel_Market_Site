@@ -26,16 +26,18 @@ const checkAuth = async (request: NextRequest) => {
       request.cookies.set("jwt", data);
     }
     if (errorMessage) {
+      request.cookies.delete("jwt");
+      request.cookies.delete("jwt-refresh");
       return NextResponse.redirect(
         new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=${JSON.stringify(errorMessage)}-api-error`, request.nextUrl.origin),
         { ...request }
       );
-      // request.cookies.delete("jwt");
-      // request.cookies.delete("jwt-refresh");
     }
   }
 
   if (decodedRefreshToken && !isRefreshTokenValid) {
+    request.cookies.delete("jwt");
+    request.cookies.delete("jwt-refresh");
     return NextResponse.redirect(
       new URL(
         `${routes.auth.url}/${routes.auth.signIn.url}?error=${JSON.stringify(decodedRefreshToken)}-refresh-error`,
@@ -43,9 +45,6 @@ const checkAuth = async (request: NextRequest) => {
       ),
       { ...request }
     );
-
-    // request.cookies.delete("jwt");
-    // request.cookies.delete("jwt-refresh");
   }
   return false;
 };
