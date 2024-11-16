@@ -5,6 +5,7 @@ import { decode } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import routes, { getAllRoutes } from "./helpers/routes";
 import { getAccessToken } from "./server-actions/user/actions";
+import { revalidateAllPath } from "./server-actions/subscription/actions";
 
 const allRoute = getAllRoutes();
 
@@ -76,6 +77,7 @@ export async function middleware(request: NextRequest) {
   if (!isAuthed && (response.cookies.get("jwt-refresh") || response.cookies.get("jwt"))) {
     response.cookies.delete("jwt");
     response.cookies.delete("jwt-refresh");
+    revalidateAllPath();
   }
 
   if (request.cookies.get("jwt")?.value && request.cookies.get("jwt")?.value !== response.cookies.get("jwt")?.value) {
