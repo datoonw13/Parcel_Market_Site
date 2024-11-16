@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import moment from "moment";
 import { decode, JwtPayload } from "jsonwebtoken";
+import { cookies } from "next/headers";
 import routes, { getAllRoutes } from "./helpers/routes";
 import { generateAccessToken } from "./server-actions/user/actions";
 
@@ -43,10 +44,18 @@ const getTokens = async (request: NextRequest) => {
   }
 
   if (!isAccessTokenValid) {
-    const { data: newAccessToken, errorMessage } = await generateAccessToken();
-    if (newAccessToken) {
+    const request = await fetch(new URL("api/user/token/refresh", `https://apitest.parcelmarket.com`), {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    const data = (await request.json()) as any;
+
+    if (data.data.access_token) {
       return {
-        access_token: newAccessToken,
+        access_token: data.data.access_token,
         refresh_token: refreshToken,
         removeTokens: false,
       };
@@ -109,24 +118,9 @@ export async function middleware(request: NextRequest) {
     });
   }
 
-  try {
-    const x = await fetch(new URL("api/user/token/refresh", `https://apitest.parcelmarket.com`), {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const s = await x.json();
-
-    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", s }));
-  } catch (error: any) {
-    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "error", error: `${JSON.stringify(error?.message)}1111` }));
-  }
-
   if (removeTokens) {
-    // response.cookies.delete("jwt");
-    // response.cookies.delete("jwt-refresh");
+    response.cookies.delete("jwt");
+    response.cookies.delete("jwt-refresh");
   }
 
   return response;
