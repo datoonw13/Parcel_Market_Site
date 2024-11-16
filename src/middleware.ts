@@ -109,18 +109,22 @@ export async function middleware(request: NextRequest) {
     });
   }
 
-  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "url", url: `${process.env.API_URL}user/token/refresh` }));
+  try {
+    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "url", url: `${process.env.API_URL}user/token/refresh` }));
 
-  const x = await fetch(`${process.env.API_URL}user/token/refresh`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-      cookie: request.cookies.toString(),
-    },
-  });
-  const s = await x.json();
+    const x = await fetch(`${process.env.API_URL}user/token/refresh`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        cookie: request.cookies.toString(),
+      },
+    });
+    const s = await x.json();
 
-  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", s }));
+    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", s }));
+  } catch (error) {
+    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "error", error: JSON.stringify(error) }));
+  }
 
   if (removeTokens) {
     // response.cookies.delete("jwt");
