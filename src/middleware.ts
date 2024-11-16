@@ -110,7 +110,7 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const x = await fetch(new URL("user/token/refresh", `${process.env.API_URL}`), {
+    const x = await fetch(new URL("/user/token/refresh", `https://apitest.parcelmarket.com/api`), {
       method: "POST",
       headers: {
         Accept: "application/json",
