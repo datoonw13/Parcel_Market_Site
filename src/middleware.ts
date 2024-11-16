@@ -73,14 +73,12 @@ export async function middleware(request: NextRequest) {
     response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
   }
 
-  // refresh token flow
   if (!isAuthed && (response.cookies.get("jwt-refresh") || response.cookies.get("jwt"))) {
     response.cookies.delete("jwt");
     response.cookies.delete("jwt-refresh");
-    revalidateAllPath();
   }
 
-  if (request.cookies.get("jwt")?.value && request.cookies.get("jwt")?.value !== response.cookies.get("jwt")?.value) {
+  if (request.cookies.get("jwt")?.value) {
     response.cookies.set("jwt", request.cookies.get("jwt")!.value);
   }
 
