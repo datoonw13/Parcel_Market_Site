@@ -59,21 +59,20 @@ export async function middleware(request: NextRequest) {
     response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
   }
 
-  if (isAuthed) {
-    const { isValid: isAccessTokenValid } = checkAccessToken();
-    if (!isAccessTokenValid) {
-      const newAccessToken = await getAccessToken();
-      if (newAccessToken.data) {
-        response.cookies.set({
-          name: "jwt",
-          value: newAccessToken.data,
-          httpOnly: true,
-          secure: true,
-        });
-      } else {
-        response.cookies.delete("jwt");
-        response.cookies.delete("jwt-refresh");
-      }
+  const { isValid: isAccessTokenValid } = checkAccessToken();
+  if (isAuthed && !isAccessTokenValid) {
+    const newAccessToken = await getAccessToken();
+    if (newAccessToken.data) {
+      response.cookies.set({
+        name: "jwt",
+        value: newAccessToken.data,
+        httpOnly: true,
+        secure: true,
+      });
+    } else {
+      response.cookies.set("check", JSON.stringify(newAccessToken));
+      response.cookies.delete("jwt");
+      response.cookies.delete("jwt-refresh");
     }
   }
 
