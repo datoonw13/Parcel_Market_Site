@@ -46,12 +46,11 @@ const checkAuth = async (request: NextRequest) => {
       { ...request }
     );
   }
-  return false;
+  return isRefreshTokenValid;
 };
 
 export async function middleware(request: NextRequest) {
-  await checkAuth(request);
-  const isAuthed = !!request.cookies.get("jwt");
+  const isAuthed = await checkAuth(request);
 
   let routeDetails: any = null;
 
@@ -103,6 +102,9 @@ export async function middleware(request: NextRequest) {
     } else {
       response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
       response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
+      return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=unaresh-error`, request.nextUrl.origin), {
+        ...request,
+      });
     }
     return response;
   }
@@ -111,10 +113,13 @@ export async function middleware(request: NextRequest) {
   if (!isAuthed) {
     response.cookies.delete("jwt");
     response.cookies.delete("jwt-refresh");
-  } else {
-    response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
-    response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
+    return NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}?error=boloresh-error`, request.nextUrl.origin), {
+      ...request,
+    });
   }
+  response.cookies.set("jwt-refresh", request.cookies.get("jwt-refresh")?.value!);
+  response.cookies.set("jwt", request.cookies.get("jwt")?.value!);
+
   return response;
 }
 
