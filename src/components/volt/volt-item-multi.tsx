@@ -114,7 +114,7 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
           </li>
         </ul>
       </div>
-      <div className="p-3 grid grid-cols-3 gap-1 rounded-b-2xl bg-grey-100 h-full py-3">
+      <div className={cn(`p-3 grid grid-cols-${Math.min(data.data.properties.length, 3)} gap-1 rounded-b-2xl bg-grey-100 h-full py-3`)}>
         {data.data.properties.map((item, itemI) => (
           <div key={item.id + itemI.toString()} className={cn("p-2 rounded-lg bg-white space-y-2 border border-transparent")}>
             <p className="text-xs text-grey-600">
