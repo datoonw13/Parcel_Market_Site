@@ -6,6 +6,7 @@ import routes from "@/helpers/routes";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { IDecodedAccessToken } from "@/types/auth";
 import { checkAuth } from "@/server-actions/user-searches/actions";
+import { generateAccessToken } from "@/server-actions/user/actions";
 import HeaderMenu from "./menu";
 
 const LandingHeader = ({ user }: { user: IDecodedAccessToken | null }) => (
@@ -24,8 +25,10 @@ const LandingHeader = ({ user }: { user: IDecodedAccessToken | null }) => (
         <button
           type="button"
           onClick={async () => {
-            const x = await checkAuth();
-            console.log(x);
+            // const x = await checkAuth();
+            // console.log(x);
+            const p = await generateAccessToken();
+            console.log(p);
           }}
         >
           aeeee

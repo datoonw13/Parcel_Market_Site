@@ -58,7 +58,7 @@ const getTokens = async (request: NextRequest) => {
   return {
     access_token: null,
     refresh_token: null,
-    removeTokens: true,
+    removeTokens: false,
     cookiesData: JSON.stringify({ level: 6 }),
   };
 };
