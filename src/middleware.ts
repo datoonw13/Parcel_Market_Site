@@ -124,13 +124,6 @@ export async function middleware(request: NextRequest) {
     response.cookies.delete("jwt-refresh");
   }
 
-  response.cookies.set({
-    name: "url",
-    value: `${process.env.NEXT_PUBLIC_API_URL} ----- esaa`,
-    httpOnly: true,
-    secure: true,
-  });
-
   return response;
 }
 
