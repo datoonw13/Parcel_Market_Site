@@ -107,6 +107,8 @@ export async function middleware(request: NextRequest) {
     response.cookies.delete("jwt-refresh");
   }
 
+  response.cookies.set(moment().format("HH:mm:ss"), refresh_token || "araa");
+
   return response;
 }
 
