@@ -125,14 +125,15 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const x = await fetch(`${process.env.API_URL}user/profile`, {
-      method: "post",
+    const x = await fetch(`https://jsonplaceholder.typicode.com/todos/1`, {
+      method: "get",
       headers: {
         "Content-Type": "application/json",
         cookie: request.cookies.toString(),
       },
     });
     const s = await x.json();
+    console.log(s, 11);
 
     response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida info", s }));
   } catch (error: any) {
