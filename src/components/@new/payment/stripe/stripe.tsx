@@ -6,7 +6,7 @@ import { useCallback, useRef, useState } from "react";
 import { getStripeSessionAction, revalidateAllPath } from "@/server-actions/subscription/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SubscriptionType } from "@/types/subscriptions";
-import { getAccessToken, updateAccessToken } from "@/server-actions/user/actions";
+import { generateAccessToken, updateAccessToken } from "@/server-actions/user/actions";
 import routes from "@/helpers/routes";
 import LoadingCircle from "@/icons/LoadingCircle";
 

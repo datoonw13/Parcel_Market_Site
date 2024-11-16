@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
-import { getAccessToken, logOutUserAction } from "@/server-actions/user/actions";
+import { generateAccessToken, logOutUserAction } from "@/server-actions/user/actions";
 import { IDecodedAccessToken } from "@/types/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
