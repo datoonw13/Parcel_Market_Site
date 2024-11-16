@@ -17,7 +17,7 @@ const getTokens = async (request: NextRequest) => {
     return {
       access_token: null,
       refresh_token: null,
-      removeTokens: true,
+      removeTokens: false,
     };
   }
 
@@ -84,13 +84,6 @@ export async function middleware(request: NextRequest) {
 
   let response = NextResponse.next();
 
-  const refreshToken = request.cookies.get("jwt-refresh")?.value || "araa";
-  const refreshTokenExpireDate =
-    refreshToken && refreshToken !== "araa" ? Number((decode(refreshToken) as JwtPayload)?.exp) || "araa" : "araa";
-  const isRefreshTokenValid =
-    typeof refreshTokenExpireDate === "number" ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : "araa";
-
-  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ refreshToken, refreshTokenExpireDate, isRefreshTokenValid }));
   if (routeDetails?.protected && !isAuthenticated) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
@@ -116,9 +109,18 @@ export async function middleware(request: NextRequest) {
     });
   }
 
+  const accessToken = request.cookies.get("jwt")?.value || null;
+  const accessTokenExpireDate = accessToken && Number((decode(accessToken) as JwtPayload).exp);
+  const isAccessTokenValid = accessTokenExpireDate ? moment(new Date()).isBefore(moment.unix(accessTokenExpireDate)) : false;
+
+  if (!isAccessTokenValid) {
+    const x = await generateAccessToken();
+    response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "shemovida", x }));
+  }
+
   if (removeTokens) {
-    response.cookies.delete("jwt");
-    response.cookies.delete("jwt-refresh");
+    // response.cookies.delete("jwt");
+    // response.cookies.delete("jwt-refresh");
   }
 
   return response;
