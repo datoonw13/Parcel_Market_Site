@@ -23,8 +23,8 @@ const LandingHeader = ({ user }: { user: IDecodedAccessToken | null }) => (
       >
         <button
           type="button"
-          onClick={() => {
-            const x = checkAuth();
+          onClick={async () => {
+            const x = await checkAuth();
             console.log(x);
           }}
         >
