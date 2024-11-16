@@ -84,12 +84,13 @@ export async function middleware(request: NextRequest) {
 
   let response = NextResponse.next();
 
-  // const refreshToken = request.cookies.get("jwt-refresh")?.value || "araa";
-  // const refreshTokenExpireDate = refreshToken ? Number((decode(refreshToken) as JwtPayload).exp) || "araa" : "araa";
-  // const isRefreshTokenValid =
-  //   typeof refreshTokenExpireDate === "number" ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : "araa";
+  const refreshToken = request.cookies.get("jwt-refresh")?.value || "araa";
+  const refreshTokenExpireDate =
+    refreshToken && refreshToken !== "araa" ? Number((decode(refreshToken) as JwtPayload)?.exp) || "araa" : "araa";
+  const isRefreshTokenValid =
+    typeof refreshTokenExpireDate === "number" ? moment(new Date()).isBefore(moment.unix(refreshTokenExpireDate)) : "araa";
 
-  // response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ refreshToken, refreshTokenExpireDate, isRefreshTokenValid }));
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ refreshToken, refreshTokenExpireDate, isRefreshTokenValid }));
   if (routeDetails?.protected && !isAuthenticated) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
