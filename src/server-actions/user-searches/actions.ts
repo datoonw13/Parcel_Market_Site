@@ -10,8 +10,11 @@ import { removeParcelNumberFormatting } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import { IUserRecentSearches } from "@/types/user";
 import { PolygonProps } from "react-leaflet";
-import { fetcher } from "../fetcher";
+import { decode } from "punycode";
+import moment from "moment";
+import { cookies, headers } from "next/headers";
 import { userSearchesTag } from "./tags";
+import { fetcher } from "../fetcher";
 
 export const getUserSearches = async (
   filters: Partial<z.infer<typeof userRecentSearchesValidations>> & { page: number; pageSize: number }
@@ -192,4 +195,38 @@ export const removeUserSearches = async (ids: number[]): Promise<ResponseModel<(
       data: null,
     };
   }
+};
+
+export const checkAuth = async () => {
+  const decodedAccessToken = decode(cookies().get("jwt")?.value || "") as any;
+  const isAccessTokenValid =
+    typeof decodedAccessToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedAccessToken?.exp))) : false;
+
+  const decodedRefreshToken = decode(cookies().get("jwt-refresh")?.value || "") as any;
+  const isRefreshTokenValid =
+    typeof decodedRefreshToken === "object" ? moment(new Date()).isBefore(moment.unix(Number(decodedRefreshToken?.exp))) : false;
+
+  return {
+    isAccessTokenValid,
+    isRefreshTokenValid,
+    decodedAccessToken,
+    decodedRefreshToken,
+  };
+
+  // if (decodedRefreshToken && isRefreshTokenValid && !isAccessTokenValid) {
+  //   const { data, errorMessage } = await getAccessToken();
+
+  //   if (data) {
+  //     request.cookies.set("jwt", data);
+  //   }
+  //   if (errorMessage) {
+  //     request.cookies.delete("jwt");
+  //     request.cookies.delete("jwt-refresh");
+  //   }
+  // }
+
+  // if (decodedRefreshToken && !isRefreshTokenValid) {
+  //   request.cookies.delete("jwt");
+  //   request.cookies.delete("jwt-refresh");
+  // }
 };
