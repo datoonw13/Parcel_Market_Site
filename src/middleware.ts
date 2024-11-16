@@ -34,7 +34,7 @@ const checkAccessToken = (token?: string) => {
 };
 
 export async function middleware(request: NextRequest) {
-  const isAuthed = checkRefreshToken();
+  const { isValid: isAuthed } = checkRefreshToken();
 
   if (isAuthed) {
     const { isValid: isAccessTokenValid } = checkAccessToken(request.cookies.get("jwt")?.value);
