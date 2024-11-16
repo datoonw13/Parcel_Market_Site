@@ -109,6 +109,8 @@ export async function middleware(request: NextRequest) {
     });
   }
 
+  response.cookies.set(moment().format("HH:mm:ss"), JSON.stringify({ reason: "url", url: `${process.env.API_URL}user/token/refresh` }));
+
   const x = await fetch(`${process.env.API_URL}user/token/refresh`, {
     method: "post",
     headers: {
