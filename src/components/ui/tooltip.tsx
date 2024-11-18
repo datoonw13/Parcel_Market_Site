@@ -26,14 +26,16 @@ interface TooltipProps {
   renderContent: ReactElement | string;
   buttonClassName?: string;
   contentClasses?: string;
+  id?: string;
 }
 
-const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses }) => {
+const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses, id }) => {
   const [open, setOpen] = useState(false);
   return (
     <TooltipPrimitive.Provider delayDuration={300}>
       <TooltipPrimitive.Root open={open} onOpenChange={setOpen}>
         <TooltipPrimitive.Trigger
+          id={id}
           onClick={(e) => {
             setOpen(!open);
           }}

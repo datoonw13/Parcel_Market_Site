@@ -172,6 +172,56 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
         </div>
       )}
 
+      <div className="flex flex-row gap-3 justify-end">
+        {isUserSubscriptionTrial || !user?.isSubscribed ? (
+          <Tooltip
+            id="export-map-disabled-btn"
+            renderButton={
+              <Button disabled className="" variant="secondary">
+                <div className="flex flex-row items-center gap-3">
+                  <IoEarthSharp className="size-4 text-info" />
+                  Export Map
+                </div>
+              </Button>
+            }
+            renderContent="You cannot export this data with the free plan"
+          />
+        ) : (
+          <Tooltip
+            id="export-map-temp-disabled-btn"
+            renderButton={
+              <Button disabled className="" variant="secondary">
+                <div className="flex flex-row items-center gap-3">
+                  <IoEarthSharp className="size-4 text-info" />
+                  Export Map
+                </div>
+              </Button>
+            }
+            renderContent="Temporary unavailable"
+          />
+        )}
+        {isUserSubscriptionTrial || !user?.isSubscribed ? (
+          <Tooltip
+            id="export-data-disabled-btn"
+            renderButton={
+              <Button disabled className="">
+                <div className="flex flex-row items-center gap-3">
+                  <IoCloudDownloadOutline className="size-4" />
+                  Export Data
+                </div>
+              </Button>
+            }
+            renderContent="You cannot export this data with the free plan"
+          />
+        ) : (
+          <Button className="" onClick={() => exportToExcel(data.propertiesUsedForCalculation)}>
+            <div className="flex flex-row items-center gap-3">
+              <IoCloudDownloadOutline className="size-4" />
+              Export Data
+            </div>
+          </Button>
+        )}
+      </div>
       {/* <div className="flex flex-row gap-3 justify-end">
         {isUserSubscriptionTrial || !user?.isSubscribed ? (
           <>
