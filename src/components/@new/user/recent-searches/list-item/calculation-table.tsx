@@ -71,9 +71,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                   }));
                 }}
               >
-                <TableCell className="border-l border-l-transparent">
-                  {el.isBulked ? "Multiple parcels" : el.data.parcelNumberNoFormatting}
-                </TableCell>
+                <TableCell className="border-l border-l-transparent">Multiple parcels</TableCell>
                 <TableCell>{el.data.county.label}</TableCell>
                 <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
                 <TableCell>{moneyFormatter.format(el.isBulked ? el.data.price : el.data.lastSalePrice)}</TableCell>
@@ -103,11 +101,11 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                     key={childEl.parcelNumberNoFormatting}
                   >
                     <TableCell className="">{childEl.parcelNumberNoFormatting}</TableCell>
-                    <TableCell>{el.data.county.label}</TableCell>
-                    <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
-                    <TableCell>{moneyFormatter.format(el.data.price)}</TableCell>
-                    <TableCell>{moneyFormatter.format(el.data.pricePerAcreage)}</TableCell>
-                    <TableCell>{moment(el.data.properties[0].lastSaleDate).format("MM/DD/YYYY")}</TableCell>
+                    <TableCell>{childEl.county.label}</TableCell>
+                    <TableCell>{childEl.acreage.toFixed(2)}</TableCell>
+                    <TableCell>{moneyFormatter.format(childEl.lastSalePrice)}</TableCell>
+                    <TableCell>{moneyFormatter.format(childEl.pricePerAcreage)}</TableCell>
+                    <TableCell>{moment(childEl.lastSaleDate).format("MM/DD/YYYY")}</TableCell>
                     <TableCell />
                   </TableRow>
                 ))}

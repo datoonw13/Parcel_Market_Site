@@ -141,29 +141,6 @@ export const getUserSearches = async (
           },
         };
       }),
-
-      // propertiesUsedForCalculation: item.assessments.map((property: any) => ({
-      //   acreage: Number(property.arcage),
-      //   city: property.city,
-      //   county: {
-      //     value: property.county,
-      //     label: property.county,
-      //   },
-      //   state: {
-      //     value: property.state,
-      //     label: property.state,
-      //   },
-      //   id: removeParcelNumberFormatting(property.parselId),
-      //   isMedianValid: property.isMedianValid,
-      //   isValid: property.isValid,
-      //   lastSaleDate: moment(property.lastSalesDate, "YYYY-MM-DD").toDate(),
-      //   lastSalePrice: Number(property.lastSalesPrice),
-      //   lat: Number(property.latitude),
-      //   lon: Number(property.longitude),
-      //   parcelNumber: property.parselId,
-      //   parcelNumberNoFormatting: removeParcelNumberFormatting(property.parselId),
-      //   pricePerAcreage: Number((Number(property.lastSalesPrice) / Number(property.arcage)).toFixed(2)),
-      // })),
     }));
     return {
       errorMessage: null,

@@ -168,7 +168,7 @@ export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCal
       formattedData.push({
         "Parcel ID": { s: { fill: { fgColor: { rgb: "757474" } } }, v: "Multiple parcels" },
         County: { s: { fill: { fgColor: { rgb: "757474" } } }, v: property.data.county.label },
-        Acreage: { s: { fill: { fgColor: { rgb: "757474" } } }, v: property.data.acreage },
+        Acreage: { s: { fill: { fgColor: { rgb: "757474" } } }, v: property.data.acreage.toFixed(2) },
         "Sold price": { s: { fill: { fgColor: { rgb: "757474" } } }, v: moneyFormatter.format(property.data.price) },
         "Sold price per acre": { s: { fill: { fgColor: { rgb: "757474" } } }, v: moneyFormatter.format(property.data.pricePerAcreage) },
         "Last sale date": {
@@ -180,7 +180,7 @@ export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCal
         formattedData.push({
           "Parcel ID": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.parcelNumberNoFormatting },
           County: { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.county.label },
-          Acreage: { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.acreage },
+          Acreage: { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.acreage.toFixed(2) },
           "Sold price": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: moneyFormatter.format(childProperty.pricePerAcreage) },
           "Sold price per acre": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: moneyFormatter.format(childProperty.pricePerAcreage) },
           "Last sale date": {
@@ -193,7 +193,7 @@ export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCal
       formattedData.push({
         "Parcel ID": { v: property.data.parcelNumberNoFormatting },
         County: { v: property.data.county.label },
-        Acreage: { v: property.data.acreage },
+        Acreage: { v: property.data.acreage.toFixed(2) },
         "Sold price": { v: moneyFormatter.format(property.data.lastSalePrice) },
         "Sold price per acre": { v: moneyFormatter.format(property.data.pricePerAcreage) },
         "Last sale date": { v: moment(property.data.lastSaleDate).format("MM-DD-YYYY") },
