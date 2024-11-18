@@ -21,7 +21,6 @@ export const userSignInValidation = z.object({
 export const userSignUpValidation = (isGoogleUser?: boolean) =>
   z
     .object({
-      source: z.string().trim(),
       firstName: z.string().trim().min(1),
       lastName: z.string().trim().min(1),
       email: emailSchema,
