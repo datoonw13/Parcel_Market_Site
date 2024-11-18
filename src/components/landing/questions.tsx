@@ -34,7 +34,7 @@ const LandingQuestions = () => (
         </Link>
       </AccordionItem>
     </Accordion>
-    <Link href={routes.questions.fullUrl}>
+    <Link href={routes.questions.fullUrl} id="landing-faq-see-more-btn">
       <Button className="max-w-xs w-full mx-auto flex">See More</Button>
     </Link>
   </div>
