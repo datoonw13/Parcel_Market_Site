@@ -45,10 +45,10 @@ const AccountActivation = ({ email, errorMessage }: { email: string; errorMessag
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-3  max-w-96 mx-auto">
-          <Button variant="secondary" onClick={() => router.push(routes.auth.signIn.fullUrl)}>
+          <Button id="acc-verification-close-btn" variant="secondary" onClick={() => router.push(routes.auth.signIn.fullUrl)}>
             Close
           </Button>
-          <Button onClick={resendEmail} loading={resendLoading}>
+          <Button id="acc-verification-resend-btn" onClick={resendEmail} loading={resendLoading}>
             Resend Email
           </Button>
         </div>
