@@ -198,7 +198,11 @@ const RecentSearchesLitItemMobileMini: FC<RecentSearchesLitItemMobileMiniProps> 
               highlightParcelNumber={data.parcelNumberNoFormatting}
             />
           </div>
-          <Button className="h-9 w-full bg-primary-main/20 hover:bg-primary-main/30 text-primary-main" onClick={onView}>
+          <Button
+            id="user-searches-see-more-btn"
+            className="h-9 w-full bg-primary-main/20 hover:bg-primary-main/30 text-primary-main"
+            onClick={onView}
+          >
             See More
           </Button>
         </div>
