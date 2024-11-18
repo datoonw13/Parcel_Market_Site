@@ -41,11 +41,17 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
           el.data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
       )?.data.parcelNumberNoFormatting;
 
-      if (propertyId && !isElementVisible(`calculation-${propertyId}`, "volt-scroll")) {
+      const isSellingProperty = propertyId === values.calculation?.parcelNumberNoFormatting;
+      if (propertyId && !isElementVisible(`calculation-${propertyId}`, "volt-scroll") && !isSellingProperty) {
         document.getElementById(`calculation-${propertyId}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     }
-  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber, values.calculation?.propertiesUsedForCalculation]);
+  }, [
+    mapInteraction.hoveredParcelNumber,
+    mapInteraction.openPopperParcelNumber,
+    values.calculation?.parcelNumberNoFormatting,
+    values.calculation?.propertiesUsedForCalculation,
+  ]);
 
   return (
     <>

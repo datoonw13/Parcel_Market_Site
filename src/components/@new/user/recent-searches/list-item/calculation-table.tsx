@@ -71,7 +71,9 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                   }));
                 }}
               >
-                <TableCell className="border-l border-l-transparent">Multiple parcels</TableCell>
+                <TableCell className="border-l border-l-transparent">
+                  {el.isBulked ? "Multiple parcels" : el.data.parcelNumberNoFormatting}
+                </TableCell>
                 <TableCell>{el.data.county.label}</TableCell>
                 <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
                 <TableCell>{moneyFormatter.format(el.isBulked ? el.data.price : el.data.lastSalePrice)}</TableCell>
