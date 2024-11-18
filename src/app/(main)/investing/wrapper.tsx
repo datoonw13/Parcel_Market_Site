@@ -76,7 +76,7 @@ const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) =>
           <p className="font-semibold text-sm">Description</p>
           <TextArea placeholder="" className="" rootClassName="h-44" {...register("comment")} />
         </div>
-        <Button className="!mt-6 w-full" onClick={onSubmit} loading={isSubmitting} disabled={!isValid}>
+        <Button id="investing-submit-btn" className="!mt-6 w-full" onClick={onSubmit} loading={isSubmitting} disabled={!isValid}>
           Send
         </Button>
       </div>

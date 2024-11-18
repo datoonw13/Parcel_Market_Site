@@ -66,8 +66,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    const referrer = document.referrer || searchParams.get("utm_source") || "no referrer";
     if (isGoogleUser) {
-      const { data: requestData, errorMessage } = await googleSignUpUserAction(data, access_token);
+      const { data: requestData, errorMessage } = await googleSignUpUserAction({ ...data, referrer }, access_token);
       if (errorMessage) {
         notify({ title: errorMessage }, { variant: "error" });
       } else {
@@ -89,7 +90,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
         router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     } else {
-      const request = await signUpUserAction(data);
+      const request = await signUpUserAction({ ...data, referrer });
       if (request?.errorMessage) {
         onFinish(request.errorMessage);
       } else {
