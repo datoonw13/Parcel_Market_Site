@@ -129,7 +129,10 @@ export const googleSignInUserAction = async (token: string): Promise<ResponseMod
   }
 };
 
-export const googleSignUpUserAction = async (payload: IUserSignUp, token: string): Promise<ResponseModel<ISignInResponse | null>> => {
+export const googleSignUpUserAction = async (
+  payload: IUserSignUp & { source: string },
+  token: string
+): Promise<ResponseModel<ISignInResponse | null>> => {
   try {
     const data = await fetcher<ISignInResponse>("user/register", {
       method: "POST",
@@ -158,7 +161,7 @@ export const googleSignUpUserAction = async (payload: IUserSignUp, token: string
   }
 };
 
-export const signUpUserAction = async (values: IUserSignUp): Promise<ResponseModel<null>> => {
+export const signUpUserAction = async (values: IUserSignUp & { source: string }): Promise<ResponseModel<null>> => {
   try {
     await fetcher<null>("user/register", {
       method: "POST",
