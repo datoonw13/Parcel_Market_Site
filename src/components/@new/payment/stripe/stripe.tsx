@@ -2,13 +2,10 @@
 
 import { loadStripe } from "@stripe/stripe-js";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { useCallback, useRef, useState } from "react";
-import { getStripeSessionAction, revalidateAllPath } from "@/server-actions/subscription/actions";
+import { useCallback, useState } from "react";
+import { getStripeSessionAction } from "@/server-actions/subscription/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SubscriptionType } from "@/types/subscriptions";
-import { generateAccessToken, updateAccessToken } from "@/server-actions/user/actions";
-import routes from "@/helpers/routes";
-import LoadingCircle from "@/icons/LoadingCircle";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "");
 
