@@ -1,14 +1,12 @@
 import { FC, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, ElementsConsumer, AddressElement } from "@stripe/react-stripe-js";
+import { Elements, CardElement, ElementsConsumer } from "@stripe/react-stripe-js";
 import { addPaymentMethodAction } from "@/server-actions/subscription/actions";
-import toast from "react-hot-toast";
 import TextField from "@/components/@new/shared/forms/text-field";
 import useNotification from "@/hooks/useNotification";
 import { RemoveIcon2 } from "../../../icons/RemoveIcons";
 import Button from "../../../shared/forms/Button";
 import ResponsiveModal from "../../../shared/modals/ResponsiveModal";
-import DialogActions from "../../../shared/modals/dialog/dialog-actions";
 
 interface AddPaymentModalProps {
   open: boolean;
@@ -37,7 +35,6 @@ const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
     });
     if (paymentMethod) {
       const { errorMessage } = await addPaymentMethodAction(paymentMethod.id);
-      console.log(errorMessage, 11, paymentMethod.id);
 
       if (!errorMessage) {
         notify({ title: "Payment method has been added", description: "Plan has been successfully changed" });
