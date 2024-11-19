@@ -92,7 +92,8 @@ const RenderContent: FC<ForgotPasswordModalProps> = ({ closeModal, open, user })
   const sendResetPasswordVerificationCode = useCallback(async () => {
     setPending(true);
     const { errorMessage } = await sendResetPasswordVerificationCodeAction(values.email);
-    if (!errorMessage || errorMessage === "You have to wait 1 minute after sending another code") {
+
+    if (!errorMessage || errorMessage.includes("You have to wait 1 minute after sending another code")) {
       setStep(ForgotPasswordSteps.VERIFICATION_CODE);
       setPending(false);
     } else {
