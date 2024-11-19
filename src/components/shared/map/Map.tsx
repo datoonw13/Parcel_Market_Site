@@ -4,15 +4,15 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import { Icon, Map as LeafletMap, Marker as LeafletMaker, LatLngExpression } from "leaflet";
-import { Fragment, ReactElement, ReactNode } from "react";
+import { Fragment, memo, ReactElement, ReactNode } from "react";
 import { FeatureGroup, MapContainer, Marker, Polygon, PolygonProps, Popup, TileLayer } from "react-leaflet";
 import { getCenter } from "geolib";
 import { removeParcelNumberFormatting } from "@/helpers/common";
 
 interface IProps {
   dragging?: boolean;
-  zoom: number;
-  properties: Array<{
+  zoom?: number;
+  properties?: Array<{
     latitude: number;
     longitude: number;
     center?: boolean;
@@ -52,7 +52,7 @@ const markerInvisible = new Icon({
   iconSize: [0, 0],
 });
 
-const getMarkerIcon = (mapItem: IProps["properties"][0], highlightItemParcelNumber?: string | null) => {
+const getMarkerIcon = (mapItem: any, highlightItemParcelNumber?: string | null) => {
   if (mapItem.markerType === "active") {
     return markerActive;
   }
@@ -79,6 +79,11 @@ const Map = ({
   highlightItemParcelNumber,
   dragging,
 }: IProps) => {
+  console.log("rere");
+
+  if (!properties) {
+    return "araa";
+  }
   const centerToItem = properties.find((el) => el.center);
   const centerToAllProperties = getCenter(properties.map((el) => ({ latitude: el.latitude, longitude: el.longitude }))) || {
     latitude: 0,
@@ -189,4 +194,4 @@ const Map = ({
   );
 };
 
-export default Map;
+export default memo(Map);
