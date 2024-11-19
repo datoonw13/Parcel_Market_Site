@@ -31,9 +31,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
   useEffect(() => {
     if (mapInteraction.hoveredParcelNumber) {
       const propertyId = values.calculation?.propertiesUsedForCalculation.find(
-        (el) =>
-          el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber ||
-          el.data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
+        (el) => el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber
       )?.data.parcelNumberNoFormatting;
 
       const isSellingProperty = propertyId === values.calculation?.parcelNumberNoFormatting;
@@ -41,12 +39,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         document.getElementById(`calculation-${propertyId}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     }
-  }, [
-    mapInteraction.hoveredParcelNumber,
-    mapInteraction.openPopperParcelNumber,
-    values.calculation?.parcelNumberNoFormatting,
-    values.calculation?.propertiesUsedForCalculation,
-  ]);
+  }, [mapInteraction.hoveredParcelNumber, values.calculation?.parcelNumberNoFormatting, values.calculation?.propertiesUsedForCalculation]);
 
   return (
     <>

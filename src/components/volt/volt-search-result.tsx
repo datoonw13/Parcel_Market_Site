@@ -25,10 +25,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ setValues, values, classN
   }, []);
 
   useEffect(() => {
-    if (
-      (mapInteraction.hoveredParcelNumber || mapInteraction.openPopperParcelNumber) &&
-      !isElementVisible(`search-result-${mapInteraction.hoveredParcelNumber}`, "volt-scroll")
-    ) {
+    if (mapInteraction.hoveredParcelNumber && !isElementVisible(`search-result-${mapInteraction.hoveredParcelNumber}`, "volt-scroll")) {
       document
         .getElementById(`calculation-${mapInteraction.hoveredParcelNumber}`)
         ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
