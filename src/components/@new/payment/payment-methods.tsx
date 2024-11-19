@@ -7,7 +7,7 @@ import { getUserSubscriptions, revalidateAllPath, updateSubscriptionAction } fro
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { generateAccessToken, updateAccessToken } from "@/server-actions/user/actions";
+import { removeAccessToken } from "@/server-actions/user/actions";
 import LoadingCircle from "@/icons/LoadingCircle";
 import moment from "moment";
 import RadioButton from "../shared/forms/RadioButton";
@@ -64,12 +64,10 @@ const PaymentMethods = ({
       const { errorMessage } = await updateSubscriptionAction(params.get("plan") as SubscriptionType, paymentMethod);
       setUpdatePending(false);
       if (!errorMessage) {
-        router.push(`${routes.user.subscription.fullUrl}?success=true`);
+        removeAccessToken();
+        revalidateAllPath();
+        router.push(`${routes.user.subscription.fullUrl}`);
       } else {
-        const data = await generateAccessToken();
-        if (data.data) {
-          updateAccessToken(data.data);
-        }
         notify({ title: "Subscription Update", description: errorMessage }, { variant: "error" });
       }
     }
@@ -86,12 +84,9 @@ const PaymentMethods = ({
       }
 
       if (isUpdated) {
-        const token = await generateAccessToken();
-        if (token.data) {
-          updateAccessToken(token.data);
-          revalidateAllPath();
-          router.replace(routes.home.fullUrl);
-        }
+        removeAccessToken();
+        revalidateAllPath();
+        router.replace(routes.home.fullUrl);
         window.clearInterval(intervalRef.current);
       }
     }, 5000);

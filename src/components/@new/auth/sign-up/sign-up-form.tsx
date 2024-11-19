@@ -65,8 +65,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
     },
   });
 
-  console.log(errors, 111);
-
   const onSubmit = handleSubmit(async (data) => {
     const source = document.referrer || searchParams.get("utm_source") || "no referrer";
     if (isGoogleUser) {
