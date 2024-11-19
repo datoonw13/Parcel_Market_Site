@@ -84,9 +84,12 @@ const PaymentMethods = ({
       } else {
         isUpdated = !!data.data?.find((el) => el.type === searchParams.get("selectedType"));
       }
+      console.log(data.data, 22);
 
       if (isUpdated) {
         const token = await generateAccessToken();
+        console.log(token, 111);
+
         if (token.data) {
           updateAccessToken(token.data);
           revalidateAllPath();
