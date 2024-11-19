@@ -11,8 +11,8 @@ import { removeParcelNumberFormatting } from "@/helpers/common";
 
 interface IProps {
   dragging?: boolean;
-  zoom?: number;
-  properties?: Array<{
+  zoom: number;
+  properties: Array<{
     latitude: number;
     longitude: number;
     center?: boolean;
@@ -79,11 +79,6 @@ const Map = ({
   highlightItemParcelNumber,
   dragging,
 }: IProps) => {
-  console.log("rere");
-
-  if (!properties) {
-    return "araa";
-  }
   const centerToItem = properties.find((el) => el.center);
   const centerToAllProperties = getCenter(properties.map((el) => ({ latitude: el.latitude, longitude: el.longitude }))) || {
     latitude: 0,
