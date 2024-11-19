@@ -114,9 +114,21 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
           </li>
         </ul>
       </div>
-      <div className={cn(`p-3 grid grid-cols-${Math.min(data.data.properties.length, 3)} gap-1 rounded-b-2xl bg-grey-100 h-full py-3`)}>
+      <div
+        style={{ gridTemplateColumns: `repeat(${data.data.properties.length === 2 ? 2 : 12}, 1fr)` }}
+        className={cn(
+          `p-3 gap-1 grid  rounded-b-2xl bg-grey-100 h-full py-3  `,
+          data.data.properties.length > 2 && "[&>div]:col-[span_4/auto]",
+          data.data.properties.length % 3 === 1 && "[&>*:nth-last-child(-n+1)]:col-[span_12/auto]",
+          data.data.properties.length % 3 === 2 && "[&>*:nth-last-child(-n+2)]:col-[span_6/auto]"
+        )}
+      >
         {data.data.properties.map((item, itemI) => (
-          <div key={item.id + itemI.toString()} className={cn("p-2 rounded-lg bg-white space-y-2 border border-transparent")}>
+          <div
+            // style={{ gridColumn: "span 4/auto" }}
+            key={item.id + itemI.toString()}
+            className={cn("p-2 rounded-lg bg-white space-y-2 border border-transparent")}
+          >
             <p className="text-xs text-grey-600">
               Acreage: <span className="text-black font-medium">{item.acreage.toFixed(2)}</span>
             </p>

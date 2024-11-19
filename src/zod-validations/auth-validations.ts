@@ -62,5 +62,5 @@ export const updateUserInfoSchema = z.object({
   unitNumber: z.string().trim().optional(),
   city: z.string().trim().min(1),
   state: z.string().trim().min(1),
-  postalCode: z.string().trim().min(1),
+  postalCode: z.string().trim().min(1).max(5),
 });

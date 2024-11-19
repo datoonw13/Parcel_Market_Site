@@ -1,7 +1,7 @@
 "use client";
 
 import { IVoltPriceCalculation, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { Map as LeafletMap, Marker } from "leaflet";
+import { Icon, Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
 import { Dispatch, FC, ReactElement, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
 import { moneyFormatter } from "@/helpers/common";
@@ -13,6 +13,16 @@ import { getCenter } from "geolib";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
+
+const markerDefault = new Icon({
+  iconUrl: "/map-default-icon.svg",
+  iconSize: [28, 36],
+});
+
+const markerHighlighted = new Icon({
+  iconUrl: "/map-highlighted-icon.svg",
+  iconSize: [28, 36],
+});
 
 interface VoltDesktopProps {
   step: VoltSteps;
@@ -41,24 +51,24 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
-      const getIcon = (el: IPropertyBaseInfo) => {
-        if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
-          return "active" as const;
-        }
-        if (
-          mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
-          mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
-        ) {
-          return "highlighted" as const;
-        }
-        return "default" as const;
-      };
+      // const getIcon = (el: IPropertyBaseInfo) => {
+      //   if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
+      //     return "active" as const;
+      //   }
+      //   if (
+      //     mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
+      //     mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
+      //   ) {
+      //     return "highlighted" as const;
+      //   }
+      //   return "default" as const;
+      // };
       return values.searchResult?.map((el) => ({
         parcelNumber: el.parcelNumberNoFormatting || "",
         latitude: el.lat,
         longitude: el.lon,
         polygon: el.polygon,
-        markerType: getIcon(el),
+        markerType: "default" as const,
         popup: (
           <div className="flex flex-col gap-1 space-y-2">
             <p className="!p-0 !m-0">
@@ -138,15 +148,15 @@ const VoltMap: FC<VoltDesktopProps> = ({
           </div>
         ),
       };
-      const isActive = (parcelNumber: string) => {
-        if (mapInteraction.hoveredParcelNumber?.includes("multiple") || mapInteraction.openPopperParcelNumber?.includes("multiple")) {
-          return (
-            mapInteraction.hoveredParcelNumber?.split("multiple")?.includes(parcelNumber) ||
-            mapInteraction.openPopperParcelNumber?.split("multiple").includes(parcelNumber)
-          );
-        }
-        return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
-      };
+      // const isActive = (parcelNumber: string) => {
+      //   if (mapInteraction.hoveredParcelNumber?.includes("multiple") || mapInteraction.openPopperParcelNumber?.includes("multiple")) {
+      //     return (
+      //       mapInteraction.hoveredParcelNumber?.split("multiple")?.includes(parcelNumber) ||
+      //       mapInteraction.openPopperParcelNumber?.split("multiple").includes(parcelNumber)
+      //     );
+      //   }
+      //   return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
+      // };
 
       let mapItems: Array<{
         parcelNumber: string;
@@ -165,7 +175,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
               parcelNumberNoFormatting: el.parcelNumberNoFormatting,
               latitude: el.lat,
               longitude: el.lon,
-              markerType: isActive(el.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
+              markerType: "default" as const,
               ...(user &&
                 user.isSubscribed && {
                   popup: (
@@ -193,7 +203,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
             parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
             latitude: property.data.lat,
             longitude: property.data.lon,
-            markerType: isActive(property.data.parcelNumberNoFormatting) ? ("highlighted" as const) : ("default" as const),
+            markerType: "default" as const,
             ...(user &&
               user.isSubscribed && {
                 popup: (
@@ -253,8 +263,6 @@ const VoltMap: FC<VoltDesktopProps> = ({
     }
     return [];
   }, [
-    mapInteraction.hoveredParcelNumber,
-    mapInteraction.openPopperParcelNumber,
     setValues,
     step,
     user,
@@ -264,16 +272,19 @@ const VoltMap: FC<VoltDesktopProps> = ({
     values.selectedItem?.parcelNumberNoFormatting,
   ]);
 
-  const canViewDetails = (parcelNumberNoFormatting: string) => {
-    if (
-      (user && user.isSubscribed) ||
-      step !== VoltSteps.CALCULATION ||
-      parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting
-    ) {
-      return true;
-    }
-    return false;
-  };
+  const canViewDetails = useCallback(
+    (parcelNumberNoFormatting: string) => {
+      if (
+        (user && user.isSubscribed) ||
+        step !== VoltSteps.CALCULATION ||
+        parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting
+      ) {
+        return true;
+      }
+      return false;
+    },
+    [step, user, values.selectedItem?.parcelNumberNoFormatting]
+  );
 
   const handleMapHoverInteraction = useCallback(() => {
     if (mapRef.current && mapInteraction.hoveredParcelNumber) {
@@ -321,7 +332,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
     if (mapRef.current) {
       if (mapInteraction.openPopperParcelNumber && !mapInteraction.openPopperParcelNumber.includes("multiple")) {
         const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
-        if (currentItemMarker) {
+        if (currentItemMarker && !currentItemMarker.isPopupOpen()) {
           currentItemMarker.openPopup();
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
@@ -346,22 +357,22 @@ const VoltMap: FC<VoltDesktopProps> = ({
           latitude: 0,
           longitude: 0,
         }) as any;
-        mapRef.current.closePopup();
-        if (mapInteraction.zoom) {
-          mapRef.current?.fitBounds(
-            [
-              {
-                lat: centerCoordinate.latitude,
-                lng: centerCoordinate.longitude,
-              },
-            ] as any,
-            { maxZoom: 14 }
-          );
-        }
+        // mapRef.current.closePopup();
+        // if (mapInteraction.zoom) {
+        //   mapRef.current?.fitBounds(
+        //     [
+        //       {
+        //         lat: centerCoordinate.latitude,
+        //         lng: centerCoordinate.longitude,
+        //       },
+        //     ] as any,
+        //     { maxZoom: 14 }
+        //   );
+        // }
 
         /// open popup
         const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
-        if (currentItemMarker) {
+        if (currentItemMarker && !currentItemMarker.isPopupOpen()) {
           currentItemMarker.openPopup();
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
@@ -371,6 +382,109 @@ const VoltMap: FC<VoltDesktopProps> = ({
       }
     }
   }, [mapInteraction.openPopperParcelNumber, mapInteraction.zoom, values.calculation?.propertiesUsedForCalculation]);
+
+  const setMapRef = useCallback((ref: LeafletMap) => {
+    mapRef.current = ref;
+  }, []);
+
+  const setMarkerRef = useCallback((parcelNumber: string, ref: any) => {
+    markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
+  }, []);
+
+  const mapMarkerMouseEnter = useCallback(
+    (parcelNumberNoFormatting: string) => {
+      setMpaInteraction((prevData) => ({
+        ...prevData,
+        hoveredParcelNumber: parcelNumberNoFormatting,
+        zoom: false,
+      }));
+    },
+    [setMpaInteraction]
+  );
+
+  const mapMarkerMouseLeave = useCallback(() => {
+    setMpaInteraction((prevData) => ({
+      ...prevData,
+      hoveredParcelNumber: null,
+      zoom: false,
+    }));
+  }, [setMpaInteraction]);
+
+  const mapPopupOpen = useCallback(
+    (parcelNumberNoFormatting: string) => {
+      setMpaInteraction((prevData) => ({
+        ...prevData,
+        openPopperParcelNumber: parcelNumberNoFormatting,
+        zoom: false,
+      }));
+    },
+    [setMpaInteraction]
+  );
+
+  const mapPopupClose = useCallback(() => {
+    setMpaInteraction((prevData) => ({
+      ...prevData,
+      openPopperParcelNumber: null,
+      zoom: false,
+    }));
+  }, [setMpaInteraction]);
+
+  const onMapMarkerClick = useCallback(
+    (parcelNumberNoFormatting: string) => {
+      if (!canViewDetails(parcelNumberNoFormatting)) {
+        setOpenPropertyDetailWarningModal(true);
+      }
+    },
+    [canViewDetails, setOpenPropertyDetailWarningModal]
+  );
+
+  const setMarkerIcon = useCallback(() => {
+    const highlightedParcelNumbersSet = new Set();
+
+    if (mapInteraction.openPopperParcelNumber) {
+      if (mapInteraction.openPopperParcelNumber.includes("multiple")) {
+        mapInteraction.openPopperParcelNumber.split("multiple").forEach(highlightedParcelNumbersSet.add, highlightedParcelNumbersSet);
+      } else {
+        highlightedParcelNumbersSet.add(mapInteraction.openPopperParcelNumber);
+      }
+    }
+    if (mapInteraction.hoveredParcelNumber) {
+      if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
+        mapInteraction.hoveredParcelNumber.split("multiple").forEach(highlightedParcelNumbersSet.add, highlightedParcelNumbersSet);
+      } else {
+        highlightedParcelNumbersSet.add(mapInteraction.hoveredParcelNumber);
+      }
+    }
+
+    if (highlightedParcelNumbersSet.has(values.calculation?.parcelNumberNoFormatting)) {
+      highlightedParcelNumbersSet.delete(values.calculation!.parcelNumberNoFormatting);
+    }
+
+    if (markerRefs.current) {
+      Object.keys(markerRefs.current).forEach((parcelNumberNoFormatting) => {
+        const marker = markerRefs.current?.[parcelNumberNoFormatting as keyof typeof markerRefs.current];
+        const markerIcon = marker?.getIcon().options;
+        if (
+          parcelNumberNoFormatting !== values.calculation?.parcelNumberNoFormatting &&
+          !highlightedParcelNumbersSet.has(parcelNumberNoFormatting) &&
+          markerIcon?.iconUrl === markerHighlighted.options.iconUrl
+        ) {
+          marker?.setIcon(markerDefault);
+        }
+      });
+    }
+
+    Array.from(highlightedParcelNumbersSet).forEach((el) => {
+      const marker = markerRefs.current?.[el as keyof typeof markerRefs.current];
+      if (marker) {
+        marker.setIcon(markerHighlighted);
+      }
+    });
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber, values.calculation]);
+
+  useEffect(() => {
+    setMarkerIcon();
+  }, [mapInteraction, setMarkerIcon]);
 
   useEffect(() => {
     handleMapHoverInteraction();
@@ -387,45 +501,13 @@ const VoltMap: FC<VoltDesktopProps> = ({
       zoom={step === VoltSteps.SEARCH ? 5 : step === VoltSteps.SEARCH_RESULTS && values.searchResult?.length === 1 ? 12 : 8}
       dragging={step !== VoltSteps.SEARCH}
       disableZoom={step === VoltSteps.SEARCH}
-      setMarkerRef={(parcelNumber, ref) => {
-        markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
-      }}
-      markerMouseEnter={(parcelNumberNoFormatting) => {
-        setMpaInteraction((prevData) => ({
-          ...prevData,
-          hoveredParcelNumber: parcelNumberNoFormatting,
-          zoom: false,
-        }));
-      }}
-      markerMouseLeave={() => {
-        setMpaInteraction((prevData) => ({
-          ...prevData,
-          hoveredParcelNumber: null,
-          zoom: false,
-        }));
-      }}
-      popupOpen={(parcelNumberNoFormatting) => {
-        setMpaInteraction((prevData) => ({
-          ...prevData,
-          openPopperParcelNumber: parcelNumberNoFormatting,
-          zoom: false,
-        }));
-      }}
-      popupClose={() => {
-        setMpaInteraction((prevData) => ({
-          ...prevData,
-          openPopperParcelNumber: null,
-          zoom: false,
-        }));
-      }}
-      onMarkerClick={(parcelNumberNoFormatting) => {
-        if (!canViewDetails(parcelNumberNoFormatting)) {
-          setOpenPropertyDetailWarningModal(true);
-        }
-      }}
-      setMapRef={(ref) => {
-        mapRef.current = ref;
-      }}
+      setMarkerRef={setMarkerRef}
+      markerMouseEnter={mapMarkerMouseEnter}
+      markerMouseLeave={mapMarkerMouseLeave}
+      popupOpen={mapPopupOpen}
+      popupClose={mapPopupClose}
+      onMarkerClick={onMapMarkerClick}
+      setMapRef={setMapRef}
     />
   );
 };
