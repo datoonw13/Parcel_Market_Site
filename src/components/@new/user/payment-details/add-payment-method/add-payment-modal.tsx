@@ -15,9 +15,7 @@ interface AddPaymentModalProps {
   closeModal: () => void;
 }
 
-const stripePromise = loadStripe(
-  "pk_test_51PgJWHK4fDeIIHWZmno0otYwwjWcWtxZO7yK2agdk0YQN2aDssiyrXEyIjsfYRXPd0sq9PpVM5hUWCTBH9mM9XGs00WDDK27VM"
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "");
 const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
   const { notify } = useNotification();
   const [addPending, setAddPending] = useState(false);
@@ -39,6 +37,8 @@ const Content: FC<AddPaymentModalProps> = ({ closeModal, open }) => {
     });
     if (paymentMethod) {
       const { errorMessage } = await addPaymentMethodAction(paymentMethod.id);
+      console.log(errorMessage, 11, paymentMethod.id);
+
       if (!errorMessage) {
         notify({ title: "Payment method has been added", description: "Plan has been successfully changed" });
         closeModal();
