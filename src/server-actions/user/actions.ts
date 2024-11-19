@@ -28,13 +28,8 @@ import { fetcher } from "../fetcher";
 //   revalidatePath("/");
 // };
 
-export const updateAccessToken = (token: string) => {
-  cookies().set({
-    name: "jwt",
-    value: token,
-    httpOnly: true,
-    secure: true,
-  });
+export const removeAccessToken = () => {
+  cookies().delete("jwt");
 };
 
 export const generateAccessToken = async (): Promise<ResponseModel<string | null>> => {
@@ -193,7 +188,16 @@ export const logOutUserAction = async () => {
 };
 
 export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
-  const userString = cookies().get("jwt")?.value;
+  const refreshToken = cookies().get("jwt-refresh");
+  let userString = cookies().get("jwt")?.value;
+
+  if (refreshToken && !userString) {
+    const newToken = await generateAccessToken();
+    if (newToken.data) {
+      userString = newToken.data;
+    }
+  }
+
   if (userString) {
     try {
       const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed, isGoogleUser, exp } = jwtDecode(
