@@ -13,7 +13,7 @@ import { updateUserInfoAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import useNotification from "@/hooks/useNotification";
 import { CiEdit } from "react-icons/ci";
-import { TextInput } from "@/components/ui/input";
+import { NumberInput, TextInput } from "@/components/ui/input";
 import Button from "../../shared/forms/Button";
 import UserProfileSection from "./UserProfileSection";
 import { AutoComplete } from "../../../ui/autocomplete";
@@ -157,13 +157,14 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
           selectedValue={getStateValue(watch("state"))?.value || null}
           error={!!errors.state}
         />
-        <TextInput
+        <NumberInput
           required
           value={watch("postalCode") || ""}
           error={!!errors.postalCode}
           onChange={(e) => setValue("postalCode", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
           label="Postal Code"
+          maxLength={5}
         />
       </div>
     </UserProfileSection>
