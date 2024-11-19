@@ -70,7 +70,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                 setMpaInteraction((prevData) => ({
                   ...prevData,
                   openPopperParcelNumber: property.parcelNumberNoFormatting,
-                  zoom: false,
+                  zoom: true,
                 }));
               }}
               id={`calculation-${values.selectedItem.id}`}
@@ -117,7 +117,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                     setMpaInteraction((prevData) => ({
                       ...prevData,
                       openPopperParcelNumber: parcelNumberNoFormatting,
-                      zoom: parcelNumberNoFormatting.includes("multiple"),
+                      zoom: true,
                     }));
                   }}
                   data={property}
@@ -148,7 +148,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                     setMpaInteraction((prevData) => ({
                       ...prevData,
                       openPopperParcelNumber: property.parcelNumberNoFormatting,
-                      zoom: false,
+                      zoom: true,
                     }));
                   }}
                   key={property.data.id}
