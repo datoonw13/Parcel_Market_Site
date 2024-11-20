@@ -7,6 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 import { saveAs } from "file-saver";
 import XLSX from "sheetjs-style";
+import { IUserRecentSearches } from "@/types/user";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -61,78 +62,133 @@ export const updateSearchParamsWithFilters = <T extends {}>(
   return params;
 };
 
-export const exportToKml = (
-  mainLandData: {
-    parcelNumberNoFormatting: string;
-    lat: number;
-    lon: number;
-    owner: string;
-    acreage: number;
-    pricePerAcreage: number;
-    price: number;
-    state: string;
-    county: string;
-  },
-  propertiesUsedForCalculation: {
-    parcelNumberNoFormatting: string;
-    lat: number;
-    lon: number;
-    lastSaleDate: Date;
-    pricePerAcreage: number;
-    acreage: number;
-  }[]
-) => {
-  const mainLandSaleHistory = propertiesUsedForCalculation.filter(
-    (el) => el.parcelNumberNoFormatting === mainLandData.parcelNumberNoFormatting
-  );
+export const exportToKml = (data: IUserRecentSearches) => {
+  const allProperties = data.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
+  const mainLandSaleHistory = allProperties.filter((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
 
   const mainLandKml = `
-  <Placemark>
-    <name>
-    </name>
-     <description>
-    <![CDATA[
-      <p>Owner: <b>${mainLandData.owner}</b></p>
-      <p>Acreage: <b>${mainLandData.acreage.toFixed(2)}</b></p>
-      <p>VOLT Value Per Acre: <b>${moneyFormatter.format(mainLandData.pricePerAcreage)}</b></p>
-       ${mainLandSaleHistory.length > 0 ? "<br/>" : ""}
-       ${mainLandSaleHistory.length > 0 ? "<b>Sales History<b/>" : ""}
-      ${mainLandSaleHistory.map(
-        (el) => `<div>
-          <p>Last Sale Date: <b>${moment(el.lastSaleDate).format("MM-DD-YYYY")}</b></p>
-        <p>VOLT Value Per Acre: <b>${moneyFormatter.format(el.pricePerAcreage)}</b></p>
-        </div>`
-      )}
-    ]]>
-  </description>
-    <Point>
-      <coordinates>${mainLandData.lon},${mainLandData.lat},0</coordinates>
-    </Point>
-  </Placemark>
+     <Placemark>
+        <name>Selling property</name>
+        <styleUrl>#selling-property-polygon</styleUrl>
+        <description>
+          <![CDATA[
+            <p style='color:black; font-size:16px; font-weight:600;font-family:sans-serif'>Selling property details:<p/>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Owner: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${data.owner}</span>
+            </p>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Acreage: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${data.acreage.toFixed(2)}</span>
+            </p>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>VOLT Value Per Acre: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moneyFormatter.format(
+              data.pricePerAcreage
+            )}</span>
+            </p>
+            ${mainLandSaleHistory.length > 0 ? "<br/>" : ""}
+            ${
+              mainLandSaleHistory.length > 0
+                ? "<p style='color:black; font-size:16px; font-weight:600;font-family:sans-serif'>Sales history:<p/>"
+                : ""
+            }
+            ${mainLandSaleHistory.map(
+              (el) => `
+                <div>
+                  <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Last Sale Date: 
+                  <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moment(el.lastSaleDate).format(
+                    "MM-DD-YYYY"
+                  )}</span></p>
+                  <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Sold Price Per Acre: 
+                   <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moneyFormatter.format(
+                     el.pricePerAcreage
+                   )}</span>
+                  </p>
+                </div>
+                <hr />
+                `
+            )}
+          ]]>
+        </description>
+        <Style>
+            <IconStyle>
+                <scale>1</scale>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <LabelStyle>
+            <color>ffffffff</color>
+            <scale>0.2</scale>
+        </LabelStyle>
+        <Point>
+            <altitudeMode>clampToGround</altitudeMode>
+            <extrude>0</extrude>
+            <coordinates>${data.lon},${data.lat},0</coordinates>
+        </Point>
+      </Placemark>
   `;
 
   const kmlContent: string[] = [mainLandKml];
-  propertiesUsedForCalculation
+
+  const colors: string[] = ["blue", "ltblu", "pink", "purple", "ylw"];
+  const coloredProperties = data.propertiesUsedForCalculation
+    .map((el, elI) =>
+      el.isBulked
+        ? el.data.properties.map((x) => ({
+            ...x,
+            color: colors[(elI % colors.length) as keyof typeof colors],
+            isBulked: true,
+          }))
+        : { ...el.data, color: "red", isBulked: false }
+    )
+    .flat();
+
+  coloredProperties
     .filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting))
     .forEach((item) => {
       const kmlItem = `
-    <Placemark>
-      <styleUrl>#mainLandPin</styleUrl>
-      <name>
-      </name>
-       <description>
-      <![CDATA[
-        <p>Parcel Number: <b>${item.parcelNumberNoFormatting}</b></p>
-        <p>Acreage: <b>${item.acreage.toFixed(2)}</b></p>
-        <p>Last Sale Date: <b>${moment(item.lastSaleDate).format("MM-DD-YYYY")}</b></p>
-        <p>VOLT Value Per Acre: <b>${moneyFormatter.format(item.pricePerAcreage)}</b></p>
-      ]]>
-    </description>
-      <Point>
-        <coordinates>${item.lon},${item.lat},0</coordinates>
-      </Point>
-    </Placemark>
-    `;
+     <Placemark>
+        <name>${item.isBulked ? `Bulk Sale - ${moment(item.lastSaleDate).format("MM-DD-YYYY")}` : ""}</name>
+        <styleUrl>#selling-property-polygon</styleUrl>
+        <description>
+          <![CDATA[
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Parcel Number: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${item.parcelNumberNoFormatting}</span>
+            </p>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Acreage: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${item.acreage.toFixed(2)}</span>
+            </p>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Last Sale Date: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moment(item.lastSaleDate).format(
+              "MM-DD-YYYY"
+            )}</span>
+            </p>
+              <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Sold Price Per Acreage: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moneyFormatter.format(
+              item.pricePerAcreage
+            )}</span>
+            </p>
+          ]]>
+        </description>
+        <Style>
+            <IconStyle>
+                <scale>1</scale>
+                <Icon>
+                     <href>http://maps.google.com/mapfiles/kml/paddle/${item.color}-blank.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <LabelStyle>
+            <color>ffffffff</color>
+            <scale>0.2</scale>
+        </LabelStyle>
+        <Point>
+            <altitudeMode>clampToGround</altitudeMode>
+            <extrude>0</extrude>
+            <coordinates>${item.lon},${item.lat},0</coordinates>
+        </Point>
+      </Placemark>
+  `;
       kmlContent.push(kmlItem);
     });
 
@@ -140,23 +196,21 @@ export const exportToKml = (
     <kml xmlns="http://www.opengis.net/kml/2.2">
       <Document>
        <Style id="mainLandPin">
-      <IconStyle>
-          <scale>1.3</scale>
-          <Icon>
-              <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
-          </Icon>
-          <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
-      </IconStyle>
-  </Style>
+          <IconStyle>
+            <scale>1.3</scale>
+            <Icon>
+                <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
+            </Icon>
+            <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+          </IconStyle>
+          
+        </Style>
         ${kmlContent.join("")}
       </Document>
     </kml>
   `;
   const blob = new Blob([kml], { type: "text/plain" });
-  saveAs(
-    blob,
-    `${mainLandData.state}/${mainLandData.county}/${mainLandData.acreage.toFixed(2)}/${moneyFormatter.format(mainLandData.price)}.kml`
-  );
+  saveAs(blob, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.kml`);
 };
 
 export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCalculation | IBulkPropertiesUsedForCalculation)[]) => {

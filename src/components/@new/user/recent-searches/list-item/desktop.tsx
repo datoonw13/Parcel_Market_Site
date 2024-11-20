@@ -187,18 +187,18 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
             renderContent="You cannot export this data with the free plan"
           />
         ) : (
-          <Tooltip
-            id="export-map-temp-disabled-btn"
-            renderButton={
-              <Button disabled className="" variant="secondary">
-                <div className="flex flex-row items-center gap-3">
-                  <IoEarthSharp className="size-4 text-info" />
-                  Export Map
-                </div>
-              </Button>
-            }
-            renderContent="Temporary unavailable"
-          />
+          <Button
+            onClick={() => {
+              exportToKml(data);
+            }}
+            className=""
+            variant="secondary"
+          >
+            <div className="flex flex-row items-center gap-3">
+              <IoEarthSharp className="size-4 text-info" />
+              Export Map
+            </div>
+          </Button>
         )}
         {isUserSubscriptionTrial || !user?.isSubscribed ? (
           <Tooltip
