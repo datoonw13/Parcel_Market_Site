@@ -13,7 +13,7 @@ const EventSourceListener = ({ jwt, userId }: { jwt: string; userId: number }) =
 
   useEffect(() => {
     const eventSource = new EventSource(`https://api.parcelmarket.com/api/notifications/${userId}?jwt=${jwt}`);
-    eventSource.onopen = () => console.log(">>> Connection opened!");
+    // eventSource.onopen = () => console.log(">>> Connection opened!");
     eventSource.onerror = (e) => console.log("ERROR!", e);
     eventSource.onmessage = (e) => {
       try {
