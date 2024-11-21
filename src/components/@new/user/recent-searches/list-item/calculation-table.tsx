@@ -105,7 +105,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                     <TableCell className="">{childEl.parcelNumberNoFormatting}</TableCell>
                     <TableCell>{childEl.county.label}</TableCell>
                     <TableCell>{childEl.acreage.toFixed(2)}</TableCell>
-                    <TableCell>{moneyFormatter.format(childEl.lastSalePrice)}</TableCell>
+                    <TableCell />
                     <TableCell>{moneyFormatter.format(childEl.pricePerAcreage)}</TableCell>
                     <TableCell>{moment(childEl.lastSaleDate).format("MM/DD/YYYY")}</TableCell>
                     <TableCell />

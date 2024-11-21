@@ -213,11 +213,11 @@ export const exportToKml = (data: IUserRecentSearches) => {
   saveAs(blob, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.kml`);
 };
 
-export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCalculation | IBulkPropertiesUsedForCalculation)[]) => {
+export const exportToExcel = (data: IUserRecentSearches) => {
   const wb = XLSX.utils.book_new();
 
   const formattedData: Array<Record<string, any>> = [];
-  propertiesUsedForCalculation.forEach((property) => {
+  data.propertiesUsedForCalculation.forEach((property) => {
     if (property.isBulked) {
       formattedData.push({
         "Parcel ID": { s: { fill: { fgColor: { rgb: "757474" } } }, v: "Multiple parcels" },
@@ -235,7 +235,7 @@ export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCal
           "Parcel ID": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.parcelNumberNoFormatting },
           County: { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.county.label },
           Acreage: { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: childProperty.acreage.toFixed(2) },
-          "Sold price": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: moneyFormatter.format(childProperty.pricePerAcreage) },
+          "Sold price": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: "" },
           "Sold price per acre": { s: { fill: { fgColor: { rgb: "9FD1B3" } } }, v: moneyFormatter.format(childProperty.pricePerAcreage) },
           "Last sale date": {
             s: { fill: { fgColor: { rgb: "9FD1B3" } } },
@@ -255,30 +255,47 @@ export const exportToExcel = (propertiesUsedForCalculation: (IPropertyUsedForCal
     }
   });
 
+  const headers = ["Parcel ID", "County", "Acreage", "Sold price", "Sold price per acre", "Last sale date"];
   const ws = XLSX.utils.json_to_sheet(formattedData, {
-    header: ["Parcel ID", "County", "Acreage", "Sold price", "Sold price per acre", "Last sale date"],
+    header: headers,
   });
 
-  const flattenData = propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
+  const flattenData = data.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
   const maxLengthData = {
-    parcelNumber: [...flattenData].sort((a, b) => b.parcelNumberNoFormatting.length - a.parcelNumberNoFormatting.length)[0]
-      .parcelNumberNoFormatting.length,
-    county: [...flattenData].sort((a, b) => b.county.label.length - a.county.label.length)[0].county.label.length,
-    acreage: [...flattenData].sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0].acreage.toString().length,
-    lastSalePrice: [...flattenData]
-      .sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0]
-      .lastSalePrice!.toString().length,
-    pricePerAcre: [...flattenData]
-      .sort((a, b) => b.pricePerAcreage.toString().length - a.pricePerAcreage.toString().length)[0]
-      .pricePerAcreage.toString().length,
-    lastSaleDate: [...flattenData]
-      .sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0]
-      .lastSaleDate!.toString().length,
+    parcelNumber: Math.max(
+      [...flattenData].sort((a, b) => b.parcelNumberNoFormatting.length - a.parcelNumberNoFormatting.length)[0].parcelNumberNoFormatting
+        .length,
+      headers[0].length
+    ),
+    county: Math.max(
+      [...flattenData].sort((a, b) => b.county.label.length - a.county.label.length)[0].county.label.length,
+      headers[1].length
+    ),
+    acreage: Math.max(
+      [...flattenData].sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0].acreage.toString().length,
+      headers[2].length
+    ),
+    lastSalePrice: Math.max(
+      [...flattenData].sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0].lastSalePrice!.toString()
+        .length,
+      headers[3].length
+    ),
+    pricePerAcre: Math.max(
+      [...flattenData]
+        .sort((a, b) => b.pricePerAcreage.toString().length - a.pricePerAcreage.toString().length)[0]
+        .pricePerAcreage.toString().length,
+      headers[4].length
+    ),
+    lastSaleDate: Math.max(
+      [...flattenData].sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0].lastSaleDate!.toString()
+        .length,
+      headers[5].length
+    ),
   };
 
   ws["!cols"] = Object.values(maxLengthData).map((el) => ({ width: el + 3 }));
 
   XLSX.utils.book_append_sheet(wb, ws, "sheet1");
 
-  XLSX.writeFile(wb, `${new Date()}.xlsx`);
+  XLSX.writeFile(wb, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.xlsx`);
 };
