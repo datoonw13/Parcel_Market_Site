@@ -51,18 +51,6 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
-      // const getIcon = (el: IPropertyBaseInfo) => {
-      //   if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
-      //     return "active" as const;
-      //   }
-      //   if (
-      //     mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
-      //     mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
-      //   ) {
-      //     return "highlighted" as const;
-      //   }
-      //   return "default" as const;
-      // };
       return values.searchResult?.map((el) => ({
         parcelNumber: el.parcelNumberNoFormatting || "",
         latitude: el.lat,
@@ -148,16 +136,6 @@ const VoltMap: FC<VoltDesktopProps> = ({
           </div>
         ),
       };
-      // const isActive = (parcelNumber: string) => {
-      //   if (mapInteraction.hoveredParcelNumber?.includes("multiple") || mapInteraction.openPopperParcelNumber?.includes("multiple")) {
-      //     return (
-      //       mapInteraction.hoveredParcelNumber?.split("multiple")?.includes(parcelNumber) ||
-      //       mapInteraction.openPopperParcelNumber?.split("multiple").includes(parcelNumber)
-      //     );
-      //   }
-      //   return mapInteraction.hoveredParcelNumber === parcelNumber || mapInteraction.openPopperParcelNumber === parcelNumber;
-      // };
-
       let mapItems: Array<{
         parcelNumber: string;
         parcelNumberNoFormatting: string;
@@ -166,7 +144,6 @@ const VoltMap: FC<VoltDesktopProps> = ({
         markerType: "highlighted" | "default";
         popup?: ReactElement;
       }> = [];
-
       values.calculation.propertiesUsedForCalculation.forEach((property) => {
         if (property.isBulked) {
           property.data.properties.forEach((el) => {
