@@ -51,12 +51,24 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
+      const getIcon = (el: IPropertyBaseInfo) => {
+        if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
+          return "active" as const;
+        }
+        if (
+          mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
+          mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
+        ) {
+          return "highlighted" as const;
+        }
+        return "default" as const;
+      };
       return values.searchResult?.map((el) => ({
         parcelNumber: el.parcelNumberNoFormatting || "",
         latitude: el.lat,
         longitude: el.lon,
         polygon: el.polygon,
-        markerType: "default" as const,
+        markerType: getIcon(el),
         popup: (
           <div className="flex flex-col gap-1 space-y-2">
             <p className="!p-0 !m-0">
@@ -240,6 +252,8 @@ const VoltMap: FC<VoltDesktopProps> = ({
     }
     return [];
   }, [
+    mapInteraction.hoveredParcelNumber,
+    mapInteraction.openPopperParcelNumber,
     setValues,
     step,
     user,
@@ -437,12 +451,17 @@ const VoltMap: FC<VoltDesktopProps> = ({
       highlightedParcelNumbersSet.delete(values.calculation!.parcelNumberNoFormatting);
     }
 
+    if (highlightedParcelNumbersSet.has(values.selectedItem?.parcelNumberNoFormatting)) {
+      highlightedParcelNumbersSet.delete(values.selectedItem!.parcelNumberNoFormatting);
+    }
+
     if (markerRefs.current) {
       Object.keys(markerRefs.current).forEach((parcelNumberNoFormatting) => {
         const marker = markerRefs.current?.[parcelNumberNoFormatting as keyof typeof markerRefs.current];
         const markerIcon = marker?.getIcon().options;
         if (
           parcelNumberNoFormatting !== values.calculation?.parcelNumberNoFormatting &&
+          parcelNumberNoFormatting !== values.selectedItem?.parcelNumberNoFormatting &&
           !highlightedParcelNumbersSet.has(parcelNumberNoFormatting) &&
           markerIcon?.iconUrl === markerHighlighted.options.iconUrl
         ) {
@@ -457,7 +476,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         marker.setIcon(markerHighlighted);
       }
     });
-  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber, values.calculation]);
+  }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber, values.calculation, values.selectedItem]);
 
   useEffect(() => {
     setMarkerIcon();
@@ -475,7 +494,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
     <Map
       properties={mapData}
       // eslint-disable-next-line no-nested-ternary
-      zoom={step === VoltSteps.SEARCH ? 5 : step === VoltSteps.SEARCH_RESULTS && values.searchResult?.length === 1 ? 12 : 8}
+      zoom={step === VoltSteps.SEARCH ? 5 : step === VoltSteps.SEARCH_RESULTS && values.searchResult?.length === 1 ? 16 : 8}
       dragging={step !== VoltSteps.SEARCH}
       disableZoom={step === VoltSteps.SEARCH}
       setMarkerRef={setMarkerRef}
