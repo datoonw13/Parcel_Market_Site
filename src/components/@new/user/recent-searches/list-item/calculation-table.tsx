@@ -79,7 +79,7 @@ const RecentSearchesCalculationTable: FC<RecentSearchesCalculationTableProps> = 
                 <TableCell>{moneyFormatter.format(el.isBulked ? el.data.price : el.data.lastSalePrice)}</TableCell>
                 <TableCell>{moneyFormatter.format(el.data.pricePerAcreage)}</TableCell>
                 <TableCell>
-                  {moment(el.isBulked ? el.data.properties[0].lastSaleDate : el.data.lastSalePrice).format("MM/DD/YYYY")}
+                  {moment(el.isBulked ? el.data.properties[0].lastSaleDate : el.data.lastSaleDate).format("MM/DD/YYYY")}
                 </TableCell>
                 <TableCell className="border-r border-r-transparent">
                   {el.isBulked ? (

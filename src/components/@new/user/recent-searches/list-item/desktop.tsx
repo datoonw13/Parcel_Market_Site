@@ -200,7 +200,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
             </div>
           </Button>
         )}
-        {!(isUserSubscriptionTrial || !user?.isSubscribed) ? (
+        {isUserSubscriptionTrial || !user?.isSubscribed ? (
           <Tooltip
             id="export-data-disabled-btn"
             renderButton={
