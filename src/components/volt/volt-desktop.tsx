@@ -32,6 +32,7 @@ interface VoltDesktopProps {
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
+  setDataSaved: Dispatch<SetStateAction<boolean>>;
 }
 
 const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
@@ -70,7 +71,7 @@ const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"
   return result;
 };
 
-const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values, setOpenPropertyDetailWarningModal }) => {
+const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, values, setOpenPropertyDetailWarningModal, setDataSaved }) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
     hoveredParcelNumber: null,
@@ -179,7 +180,10 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                         values={values}
                         setValues={setValues}
                         user={user}
-                        onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
+                        onSuccess={() => {
+                          setStep(VoltSteps.SEARCH_RESULTS);
+                          setDataSaved(false);
+                        }}
                       />
 
                       {step === VoltSteps.SEARCH_RESULTS && (

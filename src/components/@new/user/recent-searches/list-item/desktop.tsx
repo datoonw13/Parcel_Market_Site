@@ -187,18 +187,18 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
             renderContent="You cannot export this data with the free plan"
           />
         ) : (
-          <Tooltip
-            id="export-map-temp-disabled-btn"
-            renderButton={
-              <Button disabled className="" variant="secondary">
-                <div className="flex flex-row items-center gap-3">
-                  <IoEarthSharp className="size-4 text-info" />
-                  Export Map
-                </div>
-              </Button>
-            }
-            renderContent="Temporary unavailable"
-          />
+          <Button
+            onClick={() => {
+              exportToKml(data);
+            }}
+            className=""
+            variant="secondary"
+          >
+            <div className="flex flex-row items-center gap-3">
+              <IoEarthSharp className="size-4 text-info" />
+              Export Map
+            </div>
+          </Button>
         )}
         {isUserSubscriptionTrial || !user?.isSubscribed ? (
           <Tooltip
@@ -214,7 +214,7 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
             renderContent="You cannot export this data with the free plan"
           />
         ) : (
-          <Button className="" onClick={() => exportToExcel(data.propertiesUsedForCalculation)}>
+          <Button className="" onClick={() => exportToExcel(data)}>
             <div className="flex flex-row items-center gap-3">
               <IoCloudDownloadOutline className="size-4" />
               Export Data
@@ -222,78 +222,6 @@ const RecentSearchesLitItemDesktop: FC<RecentSearchesLitItemDesktopProps> = ({
           </Button>
         )}
       </div>
-      {/* <div className="flex flex-row gap-3 justify-end">
-        {isUserSubscriptionTrial || !user?.isSubscribed ? (
-          <>
-            <Tooltip
-              renderButton={
-                <Button disabled className="" variant="secondary">
-                  <div className="flex flex-row items-center gap-3">
-                    <IoEarthSharp className="size-4 text-info" />
-                    Export Map
-                  </div>
-                </Button>
-              }
-              renderContent="You cannot export this data with the free plan"
-            />
-
-            <Tooltip
-              renderButton={
-                <Button disabled className="">
-                  <div className="flex flex-row items-center gap-3">
-                    <IoCloudDownloadOutline className="size-4" />
-                    Export Data
-                  </div>
-                </Button>
-              }
-              renderContent="You cannot export this data with the free plan"
-            />
-          </>
-        ) : (
-          <>
-            <Button
-              className=""
-              variant="secondary"
-              onClick={() => {
-                exportToKml(
-                  {
-                    acreage: data.acreage,
-                    county: data.county.label,
-                    lat: data.lat,
-                    lon: data.lon,
-                    owner: data.owner,
-                    parcelNumberNoFormatting: data.parcelNumberNoFormatting,
-                    price: data.price,
-                    pricePerAcreage: data.pricePerAcreage,
-                    state: data.state.label,
-                  },
-                  data.propertiesUsedForCalculation.map(
-                    ({ acreage, lat, lon, lastSaleDate, parcelNumberNoFormatting, pricePerAcreage }) => ({
-                      acreage,
-                      lastSaleDate,
-                      lat,
-                      lon,
-                      parcelNumberNoFormatting,
-                      pricePerAcreage,
-                    })
-                  )
-                );
-              }}
-            >
-              <div className="flex flex-row items-center gap-3">
-                <IoEarthSharp className="size-4 text-info" />
-                Export Map
-              </div>
-            </Button>
-            <Button className="" onClick={() => exportToExcel(data.propertiesUsedForCalculation)}>
-              <div className="flex flex-row items-center gap-3">
-                <IoCloudDownloadOutline className="size-4" />
-                Export Data
-              </div>
-            </Button>
-          </>
-        )}
-      </div> */}
     </div>
   );
 };

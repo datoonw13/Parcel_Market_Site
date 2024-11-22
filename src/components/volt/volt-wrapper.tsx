@@ -35,21 +35,17 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
   const [openPropertyDetailWarningModal, setOpenPropertyDetailWarningModal] = useState(false);
 
   const resumeVoltFlow = useCallback(() => {
-    const dataFromSessionStorage = sessionStorage.getItem("volt");
-    const params = new URLSearchParams(searchParams as any);
-    if (params.get("resume") && dataFromSessionStorage) {
-      try {
-        const { values: data, step }: { step: VoltSteps; values: typeof values } = JSON.parse(sessionStorage.getItem("volt") || "");
-        setStep(step);
-        setValues(data);
-      } catch (error) {
-      } finally {
-        params.delete("resume");
-        router.replace(`${pathname}?${params.toString()}`);
-        sessionStorage.removeItem("volt");
-      }
-    }
-  }, [pathname, router, searchParams]);
+    try {
+      const {
+        values: data,
+        step,
+        dataSaved,
+      }: { step: VoltSteps; values: typeof values; dataSaved: boolean } = JSON.parse(sessionStorage.getItem("volt") || "");
+      setStep(step);
+      setValues(data);
+      setDataSaved(dataSaved);
+    } catch (error) {}
+  }, []);
 
   const handleCalculationDataSave = useCallback(async () => {
     if (!values.calculation) {
@@ -57,7 +53,6 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
     }
     setDataSaving(true);
     const { errorMessage } = await saveSearchDataAction(Number(values.calculation.id));
-
     if (errorMessage) {
       setValues(initialValues);
       setStep(VoltSteps.SEARCH);
@@ -65,6 +60,22 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
     setDataSaved(true);
     setDataSaving(false);
   }, [values.calculation]);
+
+  const saveData = useCallback(() => {
+    if (step > VoltSteps.SEARCH) {
+      const data = {
+        dataSaved,
+        step,
+        values,
+      };
+      const stringifiedData = JSON.stringify(data);
+      sessionStorage.setItem("volt", stringifiedData);
+    }
+  }, [dataSaved, step, values]);
+
+  useEffect(() => {
+    saveData();
+  }, [saveData, step, dataSaved]);
 
   useEffect(() => {
     resumeVoltFlow();
@@ -98,6 +109,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             user={user}
             step={step}
             setStep={setStep}
+            setDataSaved={setDataSaved}
           />
         )}
         {isSmallDevice && !detecting && (
@@ -108,6 +120,7 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
             setValues={setValues}
             step={step}
             setStep={setStep}
+            setDataSaved={setDataSaved}
           />
         )}
       </div>

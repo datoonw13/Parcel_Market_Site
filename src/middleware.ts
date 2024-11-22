@@ -4,7 +4,6 @@ import { decode, JwtPayload } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import routes, { getAllRoutes } from "./helpers/routes";
 import { generateAccessToken } from "./server-actions/user/actions";
-import { revalidatePath } from "./server-actions/common-actions";
 
 const allRoute = getAllRoutes();
 

@@ -27,6 +27,7 @@ interface VoltMobileProps {
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
+  setDataSaved: Dispatch<SetStateAction<boolean>>;
 }
 
 const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
@@ -65,7 +66,7 @@ const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"
   return result;
 };
 
-const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningModal, setStep, setValues, step, values }) => {
+const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningModal, setStep, setValues, step, values, setDataSaved }) => {
   const router = useRouter();
   const { notify } = useNotification();
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
@@ -102,6 +103,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
     if (errorMessage) {
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
     } else {
+      setDataSaved(false);
       setStep(VoltSteps.CALCULATION);
       setValues({ ...values, calculation: data });
       setMpaInteraction({
