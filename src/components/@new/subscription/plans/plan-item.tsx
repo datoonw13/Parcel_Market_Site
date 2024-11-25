@@ -33,7 +33,7 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
       };
     default:
       return {
-        title: "14 Days",
+        title: "5 Days",
         price: "Free",
         desc: "Risk Free! No Payment Info Required",
       };
