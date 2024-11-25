@@ -34,6 +34,18 @@ interface VoltDesktopProps {
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }
 
+const getIcon = (el: IPropertyBaseInfo, values: VoltDesktopProps["values"], mapInteraction: VoltDesktopProps["mapInteraction"]) => {
+  if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
+    return "active" as const;
+  }
+  if (
+    mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
+    mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
+  ) {
+    return "highlighted" as const;
+  }
+  return "default" as const;
+};
 const VoltMap: FC<VoltDesktopProps> = ({
   step,
   setValues,
@@ -51,24 +63,12 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [{ parcelNumber: "test", latitude: 39.8283459, longitude: -98.5794797, center: true, markerType: "none" as const }];
     }
     if (step === VoltSteps.SEARCH_RESULTS && values.searchResult) {
-      const getIcon = (el: IPropertyBaseInfo) => {
-        if (values.selectedItem?.parcelNumberNoFormatting === el.parcelNumberNoFormatting) {
-          return "active" as const;
-        }
-        if (
-          mapInteraction.hoveredParcelNumber === el.parcelNumberNoFormatting ||
-          mapInteraction.openPopperParcelNumber === el.parcelNumberNoFormatting
-        ) {
-          return "highlighted" as const;
-        }
-        return "default" as const;
-      };
       return values.searchResult?.map((el) => ({
         parcelNumber: el.parcelNumberNoFormatting || "",
         latitude: el.lat,
         longitude: el.lon,
         polygon: el.polygon,
-        markerType: getIcon(el),
+        markerType: getIcon(el, values, mapInteraction),
         popup: (
           <div className="flex flex-col gap-1 space-y-2">
             <p className="!p-0 !m-0">
@@ -252,8 +252,6 @@ const VoltMap: FC<VoltDesktopProps> = ({
     }
     return [];
   }, [
-    mapInteraction.hoveredParcelNumber,
-    mapInteraction.openPopperParcelNumber,
     setValues,
     step,
     user,

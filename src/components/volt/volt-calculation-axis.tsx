@@ -1,4 +1,4 @@
-import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
+import { moneyFormatter } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
@@ -11,15 +11,30 @@ import { Tooltip } from "../ui/tooltip";
 const isActive = (
   openPopperParcelNumber: string | null,
   hoveredParcelNumber: string | null,
-  targetParcelNumber: string,
-  data: VoltPriceCalculationAxisProps["data"]
+  targetProperty: VoltPriceCalculationAxisProps["data"][0]
 ) => {
-  const parcelNumber =
-    data.find((el) => el.parcelNumberNoFormatting === targetParcelNumber) ||
-    data.find((el) => el.parcelNumberNoFormatting.split("multiple").includes(targetParcelNumber));
+  let highlighted = false;
+  let active = false;
+
+  if (
+    hoveredParcelNumber &&
+    (targetProperty.parcelNumberNoFormatting === hoveredParcelNumber ||
+      targetProperty.parcelNumberNoFormatting.split("multiple").includes(hoveredParcelNumber))
+  ) {
+    highlighted = true;
+  }
+
+  if (
+    openPopperParcelNumber &&
+    (targetProperty.parcelNumberNoFormatting === openPopperParcelNumber ||
+      targetProperty.parcelNumberNoFormatting.split("multiple").includes(openPopperParcelNumber))
+  ) {
+    active = true;
+  }
+
   return {
-    active: openPopperParcelNumber ? parcelNumber?.parcelNumberNoFormatting.includes(openPopperParcelNumber) : false,
-    highlighted: hoveredParcelNumber ? parcelNumber?.parcelNumberNoFormatting.includes(hoveredParcelNumber) : false,
+    active,
+    highlighted,
   };
 };
 
@@ -159,18 +174,10 @@ const VoltPriceCalculationAxis = ({
                 className={cn(
                   `cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 hover:text-[#FF2F48]`,
                   isSmallDevice ? "size-5" : "size-6",
-                  isActive(
-                    mapInteraction.openPopperParcelNumber,
-                    mapInteraction.hoveredParcelNumber,
-                    property.parcelNumberNoFormatting,
-                    data
-                  ).active && "scale-150 text-[#FF2F48]",
-                  isActive(
-                    mapInteraction.openPopperParcelNumber,
-                    mapInteraction.hoveredParcelNumber,
-                    property.parcelNumberNoFormatting,
-                    data
-                  ).highlighted && "scale-150 text-[#FF2F48]"
+                  isActive(mapInteraction.openPopperParcelNumber, mapInteraction.hoveredParcelNumber, property).active &&
+                    "scale-150 text-[#FF2F48]",
+                  isActive(mapInteraction.openPopperParcelNumber, mapInteraction.hoveredParcelNumber, property).highlighted &&
+                    "scale-150 text-[#FF2F48]"
                 )}
               />
             ))}

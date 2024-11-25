@@ -81,7 +81,7 @@ export default function Subscribe() {
                 <div className="h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
                   <h2 className="font-medium text-xs text-primary-main h-10 uppercase">Risk Free! No Payment Info Required</h2>
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
-                    Free <span className="text-base font-normal">/ 14 Days</span>
+                    Free <span className="text-base font-normal">/ 5 Days</span>
                   </h1>
                   <Link id="landing-subscription-try-free-btn" href={routes.user.subscription.fullUrl}>
                     <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
