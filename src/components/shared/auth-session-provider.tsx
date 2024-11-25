@@ -29,8 +29,6 @@ const AuthSessionProvider = ({
   const activeSubscription = userSubscriptions?.find((el) => el.status === "active" || el.status === "trialing") || null;
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  console.log(process.env.NEXT_PUBLIC_API_URL, process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
-
   const setSessionTimer = useCallback(() => {
     // if (timerRef.current) {
     //   window.clearTimeout(timerRef.current);
