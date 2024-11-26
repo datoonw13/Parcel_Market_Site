@@ -29,7 +29,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     } else if (response.errors.length > 0) {
       errorMessage = response?.errors?.join("; ");
     }
-    throw new ErrorResponse(errorMessage + JSON.stringify(response.errors), response.statusCode);
+    throw new ErrorResponse(errorMessage, response.statusCode);
   }
   return response.data;
 };
