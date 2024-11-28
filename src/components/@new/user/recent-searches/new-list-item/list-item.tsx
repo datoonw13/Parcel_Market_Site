@@ -18,12 +18,14 @@ interface ListItemProps {
   searchData: AsyncReturnType<typeof getSearchDetails> | null;
 }
 const ListItem: FC<ListItemProps> = ({ data, viewId, loading, searchData }) => {
-  const [isTransitionPending, startTransition] = useTransition();
-  const [optimisticLoadingState, setOptimisticLoadingSate] = useOptimistic(false, (value, newValue: boolean) => newValue);
-  const [optimisticOpenState, setOptimisticOpenState] = useOptimistic(viewId === data?.id, (value, newValue: boolean) => newValue);
+  console.log(viewId, 11);
+
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const [isTransitionPending, startTransition] = useTransition();
+  const [optimisticLoadingState, setOptimisticLoadingSate] = useOptimistic(false, (value, newValue: boolean) => newValue);
+  const [optimisticOpenState, setOptimisticOpenState] = useOptimistic(viewId === data?.id, (value, newValue: boolean) => newValue);
   const isPending = loading || optimisticLoadingState;
   const isOpen = viewId === data?.id && optimisticOpenState && !isPending;
 
@@ -40,15 +42,17 @@ const ListItem: FC<ListItemProps> = ({ data, viewId, loading, searchData }) => {
   };
 
   const handleCollapse = () => {
-    const newSearchParams = new URLSearchParams(params.toString());
-    if (Number(newSearchParams.get("viewId")) === data.id) {
-      newSearchParams.delete("viewId");
+    const searchParams = new URLSearchParams(params.toString());
+    if (Number(searchParams.get("viewId")) === data.id) {
+      searchParams.delete("viewId");
       handleOptimistic(false);
     } else {
-      newSearchParams.set("viewId", data.id.toString());
+      searchParams.set("viewId", data.id.toString());
       handleOptimistic(true);
     }
-    router.push(`${pathname}?${newSearchParams.toString()}`);
+    // Temp fix to make route update fast
+    window.history.pushState(null, pathname, `?${searchParams.toString()}`);
+    router.push(`${pathname}?${searchParams.toString()}`);
   };
 
   return (

@@ -14,7 +14,6 @@ const ListItemWrapper: FC<ListItemWrapperProps> = async ({ data, viewId }) => {
 
   if (viewId === data.id) {
     req = await getSearchDetails(data.id);
-    console.log(req, 11);
   }
 
   return <ListItem data={data} searchData={req} viewId={viewId} />;
