@@ -1,8 +1,10 @@
 import RecentSearchesHeader from "@/components/@new/user/recent-searches/header";
 import UserRecentSearchesListWrapper from "@/components/@new/user/recent-searches/list-wrapper";
 import UserRecentSearchesLoader from "@/components/@new/user/recent-searches/loader";
+import routes from "@/helpers/routes";
 import { getUserSearches } from "@/server-actions/user-searches/actions";
 import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 const ROWS_PER_PAGE = 15;
@@ -20,6 +22,7 @@ const RecentSearchesPage = async ({ searchParams }: { searchParams: Record<strin
             filters={filters.data}
             pageSize={ROWS_PER_PAGE}
             totalItems={data.data?.pagination.totalCount || 0}
+            viewId={searchParams?.viewId ? Number(searchParams.viewId) : null}
           />
         </Suspense>
       )}

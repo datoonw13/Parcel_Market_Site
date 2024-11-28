@@ -4,16 +4,24 @@ import { userRecentSearchesValidations } from "@/zod-validations/filters-validat
 import { z } from "zod";
 import { getUserAction } from "@/server-actions/user/actions";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
+import { Suspense } from "react";
+import routes from "@/helpers/routes";
+import { redirect } from "next/navigation";
 import UserRecentSearchesList from "./list";
+import ListItem from "./new-list-item/list-item";
+import ListItemHeader from "./new-list-item/list-item-header";
+import ListItemWrapper from "./new-list-item/list-item-wrapper";
 
 const UserRecentSearchesListWrapper = async ({
   filters,
   pageSize,
   totalItems,
+  viewId,
 }: {
   filters: z.infer<typeof userRecentSearchesValidations>;
   pageSize: number;
   totalItems: number;
+  viewId: number | null;
 }) => {
   const user = await getUserAction();
   const userSubscription = await getUserSubscriptions();
@@ -21,7 +29,13 @@ const UserRecentSearchesListWrapper = async ({
 
   const { data } = await getUserSearches({ ...filters, page: filters.page || 1, pageSize });
 
-  if (totalItems === 0) {
+  if (!totalItems && viewId) {
+    console.log("aee");
+
+    // redirect(routes.user.recentSearches.fullUrl);
+  }
+
+  if (totalItems === 0 || !data) {
     return <NoResults errorMessage="No recent searches yet..." className="!mt-16" />;
   }
 
@@ -30,16 +44,22 @@ const UserRecentSearchesListWrapper = async ({
   }
 
   return (
-    !!data && (
-      <UserRecentSearchesList
-        isUserSubscriptionTrial={isUserSubscriptionTrial}
-        user={user}
-        pageSize={pageSize}
-        totalCount={data?.pagination.totalCount || 0}
-        data={data?.list}
-      />
-    )
+    <div className="w-full lg:border lg:rounded-2xl space-y-3 lg:space-y-0 lg:[&>div:last-child]:border-b-0 [&>div:first-child]:rounded-t-2xl [&>div:first-child>h3>button]:rounded-t-2xl">
+      {data.list.map((el) => (
+        <Suspense key={viewId === el.id ? new Date().toISOString() : el.id} fallback={<ListItemHeader data={el} viewId={viewId} loading />}>
+          <ListItemWrapper data={el} viewId={viewId} />
+        </Suspense>
+      ))}
+    </div>
   );
 };
 
 export default UserRecentSearchesListWrapper;
+
+// <UserRecentSearchesList
+// isUserSubscriptionTrial={isUserSubscriptionTrial}
+// user={user}
+// pageSize={pageSize}
+// totalCount={data?.pagination.totalCount || 0}
+// data={data?.list}
+// />
