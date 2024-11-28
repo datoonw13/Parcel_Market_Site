@@ -3,9 +3,9 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import Image from "next/image";
 import { IDecodedAccessToken } from "@/types/auth";
 import routes from "@/helpers/routes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MapInteractionModel } from "@/types/common";
-import { isElementVisible } from "@/lib/utils";
+import { cn, isElementVisible } from "@/lib/utils";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
@@ -19,8 +19,16 @@ interface VoltCalculationProps {
 }
 
 const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteraction, setMpaInteraction }) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleChange = (value: boolean) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("showAdditionalData", value ? "true" : "false");
+    router.push(`${pathname}?${newSearchParams.toString()}`);
+  };
 
   useEffect(() => {
     if (ref.current) {
@@ -94,6 +102,32 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
             acreage.
           </h2>
         </div>
+        <div className="bg-grey-100 rounded-xl p-3 space-y-4">
+          <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
+          <div className="bg-grey/10 rounded-lg p-0.5">
+            <ul className="grid grid-cols-2 min-h-8">
+              <li
+                className={cn(
+                  "text-center text-sm h-full flex items-center justify-center cursor-pointer",
+                  (searchParams.get("showAdditionalData") === "false" || !searchParams.has("showAdditionalData")) &&
+                    "bg-white shadow-1 font-semibold rounded-lg"
+                )}
+                onClick={() => handleChange(false)}
+              >
+                Default
+              </li>
+              <li
+                onClick={() => handleChange(true)}
+                className={cn(
+                  "text-center text-sm h-full flex items-center justify-center cursor-pointer",
+                  searchParams.get("showAdditionalData") === "true" && "bg-white shadow-1 font-semibold rounded-lg"
+                )}
+              >
+                Additional Data
+              </li>
+            </ul>
+          </div>
+        </div>
         {user && user.isSubscribed && (
           <div className="flex flex-col gap-2">
             {values.calculation?.propertiesUsedForCalculation.map((property) =>
@@ -163,6 +197,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
           </div>
         )}
       </div>
+
       {(!user || !user.isSubscribed) && (
         <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">
           <div className="relative size-16 ">
