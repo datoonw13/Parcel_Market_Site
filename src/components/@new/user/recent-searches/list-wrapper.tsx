@@ -7,6 +7,7 @@ import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import { Suspense } from "react";
 import routes from "@/helpers/routes";
 import { redirect } from "next/navigation";
+import { cn } from "@/lib/utils";
 import UserRecentSearchesList from "./list";
 import ListItem from "./new-list-item/list-item";
 import ListItemHeader from "./new-list-item/list-item-header";
@@ -44,10 +45,10 @@ const UserRecentSearchesListWrapper = async ({
   }
 
   return (
-    <div className="w-full lg:border lg:rounded-2xl space-y-3 lg:space-y-0 lg:[&>div:last-child]:border-b-0 [&>div:first-child]:rounded-t-2xl [&>div:first-child>h3>button]:rounded-t-2xl">
-      {data.list.map((el) => (
+    <div className={cn("w-full lg:border lg:rounded-2xl space-y-3 lg:space-y-0  ")}>
+      {data.list.map((el, elI) => (
         <Suspense key={viewId === el.id ? new Date().toISOString() : el.id} fallback={<ListItemHeader data={el} viewId={viewId} loading />}>
-          <ListItemWrapper data={el} viewId={viewId} />
+          <ListItemWrapper isLast={elI === data.list.length - 1} isFirst={elI === 0} data={el} viewId={viewId} />
         </Suspense>
       ))}
     </div>
