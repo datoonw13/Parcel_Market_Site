@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { IVoltPriceCalculation } from "@/types/volt";
 import VoltItemMulti from "@/components/volt/volt-item-multi";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
-import RecentSearchesMap from "../map";
+import RecentSearchesMap from "./map-desktop";
 
 const HEADER_ROWS = [
   { label: "Parcel ID", key: "parcelNumber" as const },
@@ -64,15 +64,13 @@ const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"
   return result;
 };
 
-const RecentSearchesLitItemMobileFull = ({
+const SearchItemDetailsMobileMapFull = ({
   data,
   user,
-  isUserSubscriptionTrial,
   openSubscriptionWarning,
 }: {
   data: IUserRecentSearches;
   user: IDecodedAccessToken | null;
-  isUserSubscriptionTrial?: boolean;
   openSubscriptionWarning: () => void;
 }) => {
   const router = useRouter();
@@ -91,8 +89,8 @@ const RecentSearchesLitItemMobileFull = ({
 
   return (
     <>
-      <div ref={rootRef} className="bg-white fixed w-full h-screen overflow-auto z-10 top-0 !m-0 left-0">
-        <LandingHeader user={null} />
+      <div ref={rootRef} className="bg-white fixed w-full h-screen overflow-auto z-10 top-0 !m-0 left-0 pb-28">
+        <LandingHeader user={user} />
         <div className="px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[11vw] py-4 flex flex-col gap-6">
           <div className="space-y-4">
             <div>
@@ -330,4 +328,4 @@ const RecentSearchesLitItemMobileFull = ({
   );
 };
 
-export default RecentSearchesLitItemMobileFull;
+export default SearchItemDetailsMobileMapFull;

@@ -310,6 +310,8 @@ const SearchesMobileFilters = ({ startTransition }: { startTransition: Transitio
                     );
                     const resetPage = { key: "page" as const, value: 1 };
                     const newSearchParams = updateSearchParamsWithFilters([...data, resetPage], searchParams.toString());
+                    newSearchParams.delete("viewId");
+
                     startTransition(() => {
                       router.push(`${pathname}?${newSearchParams.toString()}`);
                     });

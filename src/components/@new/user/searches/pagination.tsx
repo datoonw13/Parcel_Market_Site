@@ -24,6 +24,7 @@ const SearchesPagination = ({
       onChange={(page) => {
         startTransition(() => {
           params.set("page", (page + 1).toString());
+          params.delete("viewId");
           router.push(`${pathname}?${params.toString()}`);
         });
       }}

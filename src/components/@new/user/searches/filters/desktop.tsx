@@ -37,6 +37,7 @@ const SearchesDesktopFilters = ({ startTransition }: { startTransition: Transiti
       [...data, resetPage],
       searchParams.toString()
     );
+    newSearchParams.delete("viewId");
     startTransition(() => {
       router.push(`${pathname}?${newSearchParams.toString()}`);
     });

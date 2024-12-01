@@ -20,6 +20,8 @@ const SearchesFilters = ({ startTransition }: { startTransition: TransitionStart
     }
     timerRef.current = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
+      params.delete("viewId");
+
       if (value) {
         params.set("search", value);
       } else {
@@ -57,6 +59,7 @@ const SearchesFilters = ({ startTransition }: { startTransition: TransitionStart
                       inputEl.value = "";
                       const params = new URLSearchParams(searchParams.toString());
                       params.delete("search");
+                      params.delete("viewId");
                       router.push(`${pathname}?${params.toString()}`);
                     }
                   }}
