@@ -220,6 +220,7 @@ const SearchItemDetailsMobileMapFull = ({
                   setMpaInteraction={setMpaInteraction}
                   openWarningModal={() => setSubscriptionWarning(true)}
                   user={user}
+                  showAdditionalData={false}
                 />
               </div>
             </div>
