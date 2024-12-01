@@ -32,7 +32,7 @@ const SearchesWrapper = async ({
         {viewId && (
           <Suspense
             fallback={
-              <div className="lg:hidden flex items-center justify-center border border-t-0 rounded-b-2xl min-h-44 h-full bg-primary-main-100 border-primary-main-400 animate-pulse">
+              <div className="flex items-center justify-center border border-t-0 lg:border-0 lg:rounded-b-none rounded-b-2xl min-h-44 h-full bg-primary-main-100 border-primary-main-400 animate-pulse">
                 <AiOutlineLoading3Quarters className="animate-spin size-6 text-primary-main" />
               </div>
             }

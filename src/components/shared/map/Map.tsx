@@ -18,7 +18,7 @@ interface IProps {
     center?: boolean;
     polygon?: PolygonProps["positions"];
     parcelNumber: string;
-    markerType?: "default" | "active" | "none" | "highlighted" | "invisible";
+    markerType?: "default" | "default-yellow" | "active" | "none" | "highlighted" | "invisible";
     popup?: ReactElement;
   }>;
   setMapRef?: (ref: LeafletMap) => void;
@@ -52,6 +52,11 @@ const markerInvisible = new Icon({
   iconSize: [0, 0],
 });
 
+const markerDefaultYellow = new Icon({
+  iconUrl: "/map-default-orange-icon.svg",
+  iconSize: [28, 36],
+});
+
 const getMarkerIcon = (mapItem: any, highlightItemParcelNumber?: string | null) => {
   if (mapItem.markerType === "active") {
     return markerActive;
@@ -61,6 +66,9 @@ const getMarkerIcon = (mapItem: any, highlightItemParcelNumber?: string | null) 
   }
   if (mapItem.markerType === "invisible") {
     return markerInvisible;
+  }
+  if (mapItem.markerType === "default-yellow") {
+    return markerDefaultYellow;
   }
   return markerDefault;
 };

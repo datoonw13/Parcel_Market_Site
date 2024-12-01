@@ -11,15 +11,27 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
 interface SearchItemDetailsTableProps {
   data: IUserRecentSearches["propertiesUsedForCalculation"];
+  additionalDataResult?: IUserRecentSearches;
+  showAdditionalData: boolean;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
 }
 
-const SearchItemDetailsTable: FC<SearchItemDetailsTableProps> = ({ data, mapInteraction, setMpaInteraction }) => {
+const SearchItemDetailsTable: FC<SearchItemDetailsTableProps> = ({
+  data,
+  mapInteraction,
+  setMpaInteraction,
+  showAdditionalData,
+  additionalDataResult,
+}) => {
   const checkParcel = (targetParcelNumber: string) => {
     const item =
-      data?.find((el) => el.data.parcelNumberNoFormatting === targetParcelNumber) ||
-      data?.find((el) => el.data.parcelNumberNoFormatting.split("multiple").includes(targetParcelNumber));
+      [...data, ...(additionalDataResult?.propertiesUsedForCalculation || [])]?.find(
+        (el) => el.data.parcelNumberNoFormatting === targetParcelNumber
+      ) ||
+      [...data, ...(additionalDataResult?.propertiesUsedForCalculation || [])]?.find((el) =>
+        el.data.parcelNumberNoFormatting.split("multiple").includes(targetParcelNumber)
+      );
     return {
       active: mapInteraction.openPopperParcelNumber
         ? item?.data.parcelNumberNoFormatting.includes(mapInteraction.openPopperParcelNumber)
@@ -44,6 +56,50 @@ const SearchItemDetailsTable: FC<SearchItemDetailsTableProps> = ({ data, mapInte
         </TableRow>
       </TableHeader>
       <TableBody>
+        {showAdditionalData &&
+          additionalDataResult?.propertiesUsedForCalculation.map((el) => {
+            const { active, highlighted } = checkParcel(el.data.parcelNumberNoFormatting);
+            return (
+              <TableRow
+                key={el.data.parcelNumber}
+                className={cn(
+                  "bg-[#FEFAEB] border-b-[#FCEDB6] hover:bg-[#fcedb673]",
+                  active && "!bg-[#fcedb699]",
+                  highlighted && "bg-[#fcedb673]"
+                )}
+                onClick={() => {
+                  setMpaInteraction((prev) => ({
+                    ...prev,
+                    openPopperParcelNumber:
+                      mapInteraction.openPopperParcelNumber === el.data.parcelNumberNoFormatting ? "" : el.data.parcelNumberNoFormatting,
+                  }));
+                }}
+                onMouseEnter={() => {
+                  setMpaInteraction((prev) => ({
+                    ...prev,
+                    hoveredParcelNumber: el.data.parcelNumberNoFormatting,
+                    zoom: true,
+                  }));
+                }}
+                onMouseLeave={() => {
+                  setMpaInteraction((prev) => ({
+                    ...prev,
+                    hoveredParcelNumber: null,
+                  }));
+                }}
+              >
+                <TableCell className="border-l border-l-transparent">{el.data.parcelNumberNoFormatting}</TableCell>
+                <TableCell>{el.data.county.label}</TableCell>
+                <TableCell>{el.data.acreage.toFixed(2)}</TableCell>
+                <TableCell>{moneyFormatter.format(el.isBulked ? el.data.price : el.data.lastSalePrice)}</TableCell>
+                <TableCell>{moneyFormatter.format(el.data.pricePerAcreage)}</TableCell>
+                <TableCell>
+                  {moment(el.isBulked ? el.data.properties[0].lastSaleDate : el.data.lastSaleDate).format("MM/DD/YYYY")}
+                </TableCell>
+                <TableCell className="border-r border-r-transparent" />
+              </TableRow>
+            );
+          })}
         {data.map((el) => {
           const { active, highlighted } = checkParcel(el.data.parcelNumberNoFormatting);
           return (

@@ -18,8 +18,18 @@ const markerDefault = new Icon({
   iconSize: [28, 36],
 });
 
+const markerDefaultYellow = new Icon({
+  iconUrl: "/map-default-orange-icon.svg",
+  iconSize: [28, 36],
+});
+
 const markerHighlighted = new Icon({
   iconUrl: "/map-highlighted-icon.svg",
+  iconSize: [28, 36],
+});
+
+const markerHighlightedYellow = new Icon({
+  iconUrl: "/map-highlighted-orange-icon.svg",
   iconSize: [28, 36],
 });
 
@@ -29,9 +39,19 @@ interface VoltDesktopProps {
   openWarningModal: () => void;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  additionalDataResult?: IUserRecentSearches;
+  showAdditionalData: boolean;
 }
 
-const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningModal, mapInteraction, setMpaInteraction, data }) => {
+const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
+  user,
+  openWarningModal,
+  mapInteraction,
+  setMpaInteraction,
+  data,
+  showAdditionalData,
+  additionalDataResult,
+}) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
 
@@ -91,7 +111,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningMo
       parcelNumberNoFormatting: string;
       latitude: number;
       longitude: number;
-      markerType: "highlighted" | "default";
+      markerType: "highlighted" | "default" | "default-yellow";
       popup?: ReactElement;
     }> = [];
     data.propertiesUsedForCalculation.forEach((property) => {
@@ -153,6 +173,38 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningMo
         });
       }
     });
+    if (showAdditionalData) {
+      additionalDataResult?.propertiesUsedForCalculation.forEach((property) => {
+        if (!property.isBulked) {
+          mapItems.push({
+            parcelNumber: property.data.parcelNumberNoFormatting,
+            parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+            latitude: property.data.lat,
+            longitude: property.data.lon,
+            markerType: "default-yellow" as const,
+            ...(user &&
+              user.isSubscribed && {
+                popup: (
+                  <div className="flex flex-col gap-1 space-y-2">
+                    <p className="!p-0 !m-0">
+                      Parcel Number: <b>{property.data.parcelNumberNoFormatting}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Acreage: <b>{property.data.acreage.toFixed(2)}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
+                    </p>
+                    <p className="!p-0 !m-0">
+                      Sold Price Per Acre: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
+                    </p>
+                  </div>
+                ),
+              }),
+          });
+        }
+      });
+    }
 
     data.propertiesUsedForCalculation
       .filter((el) => el.isBulked)
@@ -188,6 +240,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningMo
     }
     return [mainProperty, ...mapItems];
   }, [
+    additionalDataResult?.propertiesUsedForCalculation,
     data.acreage,
     data.lat,
     data.lon,
@@ -197,6 +250,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningMo
     data.polygon,
     data.pricePerAcreage,
     data.propertiesUsedForCalculation,
+    showAdditionalData,
     user,
   ]);
 
@@ -277,10 +331,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningMo
             items.push(item);
           }
         });
-        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
-          latitude: 0,
-          longitude: 0,
-        }) as any;
 
         const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
         if (currentItemMarker && !currentItemMarker.isPopupOpen()) {
@@ -378,17 +428,18 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({ user, openWarningMo
         if (
           parcelNumberNoFormatting !== data.parcelNumberNoFormatting &&
           !highlightedParcelNumbersSet.has(parcelNumberNoFormatting) &&
-          markerIcon?.iconUrl === markerHighlighted.options.iconUrl
+          markerIcon?.iconUrl?.includes("highlighted")
         ) {
-          marker?.setIcon(markerDefault);
+          marker?.setIcon(markerIcon?.iconUrl.includes("orange") ? markerDefaultYellow : markerDefault);
         }
       });
     }
 
     Array.from(highlightedParcelNumbersSet).forEach((el) => {
       const marker = markerRefs.current?.[el as keyof typeof markerRefs.current];
+      const markerIcon = marker?.getIcon().options;
       if (marker) {
-        marker.setIcon(markerHighlighted);
+        marker.setIcon(markerIcon?.iconUrl?.includes("orange") ? markerHighlightedYellow : markerHighlighted);
       }
     });
   }, [data.parcelNumberNoFormatting, mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber]);

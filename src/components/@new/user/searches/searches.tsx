@@ -38,6 +38,7 @@ const Searches: FC<SearchesProps> = ({ data, hasEntries, hasSearchResults, total
 
     startViewDetailTransition(() => {
       const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.delete("additionalData");
       if (id === viewId) {
         newSearchParams.delete("viewId");
       } else {

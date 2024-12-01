@@ -16,11 +16,12 @@ import SearchItemDetailsMobileMapFull from "./mobile-full";
 
 interface SearchItemDetailsProps {
   data: IUserRecentSearches;
+  additionalDataResult: IUserRecentSearches;
   user: IDecodedAccessToken | null;
   isUserSubscriptionTrial: boolean;
 }
 
-const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptionTrial, user }) => {
+const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptionTrial, user, additionalDataResult }) => {
   const router = useRouter();
   const params = useSearchParams();
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
@@ -63,6 +64,7 @@ const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptio
                 user={user}
                 openSubscriptionWarning={() => setSubscriptionWarning(true)}
                 isUserSubscriptionTrial={isUserSubscriptionTrial}
+                additionalDataResult={additionalDataResult}
               />
             </div>
           )}
