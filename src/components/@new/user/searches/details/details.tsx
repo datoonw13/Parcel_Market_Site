@@ -3,7 +3,7 @@
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { IUserRecentSearches } from "@/types/user";
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IDecodedAccessToken } from "@/types/auth";
@@ -22,9 +22,17 @@ interface SearchItemDetailsProps {
 
 const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptionTrial, user }) => {
   const router = useRouter();
+  const params = useSearchParams();
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
-  const [showMobileFull, setMobileFull] = useState(false);
+  // const [showMobileFull, setMobileFull] = useState(false);
   const [subscriptionWarning, setSubscriptionWarning] = useState(false);
+
+  useEffect(
+    () => () => {
+      console.log("aee");
+    },
+    []
+  );
 
   return (
     <>
@@ -44,7 +52,7 @@ const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptio
         title="Please sign in or subscribe to see the sales data"
         description="You will need to sign in or subscribe to view, analyze, or export sales data"
       />
-      {showMobileFull && (
+      {params.has("fullView") && (
         <SearchItemDetailsMobileMapFull data={data} openSubscriptionWarning={() => setSubscriptionWarning(true)} user={user} />
       )}
       <AnimatePresence>
@@ -53,7 +61,7 @@ const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptio
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, x: "100%" }}
           transition={{ duration: 0.1, ease: "linear" }}
-          className={cn(showMobileFull && "hidden")}
+          className={cn(params.has("fullView") && "hidden")}
         >
           {isSmallDevice && !detecting && (
             <div className="py-6 content  bg-primary-main-50 border border-t-0 border-primary-main-400 rounded-b-2xl px-5 lg:px-6">
@@ -62,7 +70,7 @@ const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptio
                 canExport={!!(user?.isSubscribed && !isUserSubscriptionTrial)}
                 isOpen
                 onView={() => {
-                  setMobileFull(true);
+                  // setMobileFull(true);
                   // window.history.replaceState({}, "", `${pathname}?${params.toString()}`);
                 }}
               />

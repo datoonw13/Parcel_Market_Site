@@ -51,25 +51,6 @@ const Searches: FC<SearchesProps> = ({ data, hasEntries, hasSearchResults, total
     setViewId(Number(searchParams.get("viewId")) || null);
   }, [searchParams]);
 
-  useEffect(() => {
-    if (!viewDetailPending && viewId) {
-      const el = document.getElementById(viewId?.toString());
-      if (el) {
-        if (timerRef.current) {
-          window.clearTimeout(timerRef.current);
-        }
-        timerRef.current = setTimeout(() => {
-          el.scrollIntoView();
-        }, 500);
-      }
-    }
-    return () => {
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-    };
-  }, [viewDetailPending, viewId]);
-
   return (
     <>
       <div className="space-y-4 md:space-y-6 relative">
@@ -79,7 +60,6 @@ const Searches: FC<SearchesProps> = ({ data, hasEntries, hasSearchResults, total
         </div>
         {!hasEntries && <NoResults errorMessage="No recent searches yet..." className="!mt-16" />}
         {hasEntries && !hasSearchResults && <NoResults errorMessage="No search results..." className="!mt-16" />}
-
         {hasEntries && hasSearchResults && (
           <>
             <SearchesSelect />
@@ -95,7 +75,6 @@ const Searches: FC<SearchesProps> = ({ data, hasEntries, hasSearchResults, total
               )}
               {data?.map((el, elI) => (
                 <div
-                  id={el.id.toString()}
                   key={Math.random().toString()}
                   className={cn(elI === data.length - 1 && "lg:[&_.content]:border-b-0")}
                 >
