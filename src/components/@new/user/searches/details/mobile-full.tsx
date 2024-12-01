@@ -16,17 +16,14 @@ import { useRouter } from "next/navigation";
 // @ts-ignore
 import { IVoltPriceCalculation } from "@/types/volt";
 import VoltItemMulti from "@/components/volt/volt-item-multi";
-import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
+import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
+import { exportToExcel, exportToKml } from "@/lib/utils";
+import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
+import { Tooltip } from "@/components/ui/tooltip";
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader } from "@/components/ui/dialogs/drawer";
+import { DialogTitle } from "@/components/ui/dialogs/dialog";
 import RecentSearchesMap from "./map-desktop";
-
-const HEADER_ROWS = [
-  { label: "Parcel ID", key: "parcelNumber" as const },
-  { label: "County", key: "county" as const },
-  { label: "Acreage", key: "acreage" as const },
-  { label: "Sold Price", key: "lastSalePrice" as const },
-  { label: "VOLT Value Per Acre", key: "pricePerAcre" as const },
-  { label: "Last Sale Date", key: "lastSaleDate" as const },
-];
+import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 
 const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"], sellingLandParcelNumberNoFormatting?: string) => {
   const result: Array<{
@@ -67,12 +64,13 @@ const getAxisData = (data?: IVoltPriceCalculation["propertiesUsedForCalculation"
 const SearchItemDetailsMobileMapFull = ({
   data,
   user,
-  openSubscriptionWarning,
+  isUserSubscriptionTrial,
 }: {
   data: IUserRecentSearches;
   user: IDecodedAccessToken | null;
-  openSubscriptionWarning: () => void;
+  isUserSubscriptionTrial: boolean;
 }) => {
+  const [subscriptionWarning, setSubscriptionWarning] = useState(false);
   const router = useRouter();
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
     hoveredParcelNumber: null,
@@ -89,6 +87,85 @@ const SearchItemDetailsMobileMapFull = ({
 
   return (
     <>
+      <ResponsiveAlertDialog
+        mediaQuery={null}
+        open={subscriptionWarning}
+        closeModal={() => setSubscriptionWarning(false)}
+        okButton={{
+          show: true,
+          label: "Continue",
+          onClick: () => {
+            setSubscriptionWarning(false);
+            router.push(routes.user.subscription.fullUrl);
+          },
+        }}
+        cancelButton={{ show: true, label: "Close", onClick: () => setSubscriptionWarning(false) }}
+        title="Please sign in or subscribe to see the sales data"
+        description="You will need to sign in or subscribe to view, analyze, or export sales data"
+      />
+      <Drawer open onOpenChange={() => {}} modal={false}>
+        <DrawerContent className="[&>div:first-child]:hidden">
+          <DrawerHeader className="sr-only">
+            <DialogTitle className="border-b pb-4">EXPORT DATA</DialogTitle>
+          </DrawerHeader>
+          <DrawerFooter className="grid grid-cols-2 w-full pb-8">
+            {!user?.isSubscribed || isUserSubscriptionTrial ? (
+              <>
+                <Tooltip
+                  contentClasses="w-full"
+                  renderButton={
+                    <Button disabled className="w-full" variant="secondary">
+                      <div className="flex flex-row items-center gap-3">
+                        <IoEarthSharp className="size-4 text-info" />
+                        Export Map
+                      </div>
+                    </Button>
+                  }
+                  renderContent="You cannot export this data with the free plan"
+                />
+
+                <Tooltip
+                  renderButton={
+                    <Button disabled className="w-full">
+                      <div className="flex flex-row items-center gap-3">
+                        <IoCloudDownloadOutline className="size-4" />
+                        Export Data
+                      </div>
+                    </Button>
+                  }
+                  renderContent="You cannot export this data with the free plan"
+                />
+              </>
+            ) : (
+              <>
+                <Button
+                  className="w-full"
+                  variant="secondary"
+                  onClick={() => {
+                    exportToKml(data);
+                  }}
+                >
+                  <div className="flex flex-row items-center gap-3">
+                    <IoEarthSharp className="size-4 text-info" />
+                    Export Map
+                  </div>
+                </Button>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    exportToExcel(data);
+                  }}
+                >
+                  <div className="flex flex-row items-center gap-3">
+                    <IoCloudDownloadOutline className="size-4" />
+                    Export Data
+                  </div>
+                </Button>
+              </>
+            )}
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
       <div ref={rootRef} className="bg-white fixed w-full h-screen overflow-auto z-10 top-0 !m-0 left-0 pb-28">
         <LandingHeader user={user} />
         <div className="px-5 sm:px-8 md:px-11 lg:px-16 xl:px-[11vw] py-4 flex flex-col gap-6">
@@ -141,7 +218,7 @@ const SearchItemDetailsMobileMapFull = ({
                   data={data}
                   mapInteraction={mapInteraction}
                   setMpaInteraction={setMpaInteraction}
-                  openWarningModal={openSubscriptionWarning}
+                  openWarningModal={() => setSubscriptionWarning(true)}
                   user={user}
                 />
               </div>
@@ -152,7 +229,7 @@ const SearchItemDetailsMobileMapFull = ({
             user={user}
             mapInteraction={mapInteraction}
             setMpaInteraction={setMpaInteraction}
-            setOpenPropertyDetailWarningModal={openSubscriptionWarning}
+            setOpenPropertyDetailWarningModal={() => setSubscriptionWarning(true)}
             data={getAxisData(data.propertiesUsedForCalculation, data.parcelNumberNoFormatting)}
           />
           <div className="space-y-4">

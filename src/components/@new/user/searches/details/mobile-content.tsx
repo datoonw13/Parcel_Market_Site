@@ -15,11 +15,10 @@ import SearchItemDetailsMobileMap from "./map-mobile";
 interface SearchItemDetailsMobileContentProps {
   data: IUserRecentSearches;
   isOpen: boolean;
-  onView: () => void;
   canExport: boolean;
 }
 
-const SearchItemDetailsMobileContent: FC<SearchItemDetailsMobileContentProps> = ({ data, onView, isOpen, canExport }) => {
+const SearchItemDetailsMobileContent: FC<SearchItemDetailsMobileContentProps> = ({ data, isOpen, canExport }) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -161,11 +160,11 @@ const SearchItemDetailsMobileContent: FC<SearchItemDetailsMobileContentProps> = 
           className="h-9 w-full bg-primary-main/20 hover:bg-primary-main/30 text-primary-main"
           loading={isPending}
           onClick={() => {
-            startTransition(() => {
-              const newParams = new URLSearchParams(params.toString());
-              newParams.set("fullView", "true");
-              router.push(`${pathname}?${newParams.toString()}`);
-            });
+            // startTransition(() => {
+            const newParams = new URLSearchParams(params.toString());
+            newParams.set("fullView", "true");
+            router.push(`${pathname}/${data.id}`);
+            // });
           }}
         >
           See More

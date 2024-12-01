@@ -30,12 +30,6 @@ const UserRecentSearchesListWrapper = async ({
 
   const { data } = await getUserSearches({ ...filters, page: filters.page || 1, pageSize });
 
-  if (!totalItems && viewId) {
-    console.log("aee");
-
-    // redirect(routes.user.recentSearches.fullUrl);
-  }
-
   if (totalItems === 0 || !data) {
     return <NoResults errorMessage="No recent searches yet..." className="!mt-16" />;
   }

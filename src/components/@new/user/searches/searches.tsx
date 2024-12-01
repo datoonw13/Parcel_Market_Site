@@ -74,10 +74,7 @@ const Searches: FC<SearchesProps> = ({ data, hasEntries, hasSearchResults, total
                 </div>
               )}
               {data?.map((el, elI) => (
-                <div
-                  key={Math.random().toString()}
-                  className={cn(elI === data.length - 1 && "lg:[&_.content]:border-b-0")}
-                >
+                <div key={Math.random().toString()} className={cn(elI === data.length - 1 && "lg:[&_.content]:border-b-0")}>
                   <div
                     className={cn(
                       "grid grid-cols-[1fr_minmax(0,_max-content)] px-5 lg:px-6 py-5 lg:py-3 gap-3 items-center cursor-pointer hover:bg-primary-main-50",
