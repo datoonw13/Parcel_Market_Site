@@ -3,7 +3,7 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import Image from "next/image";
 import { IDecodedAccessToken } from "@/types/auth";
 import routes from "@/helpers/routes";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MapInteractionModel } from "@/types/common";
 import { cn, isElementVisible } from "@/lib/utils";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
@@ -16,19 +16,20 @@ interface VoltCalculationProps {
   user: IDecodedAccessToken | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  showAdditionalData: boolean;
+  setShowAdditionalData: (value: boolean) => void;
 }
 
-const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteraction, setMpaInteraction }) => {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+const VoltCalculation: FC<VoltCalculationProps> = ({
+  values,
+  user,
+  mapInteraction,
+  setMpaInteraction,
+  setShowAdditionalData,
+  showAdditionalData,
+}) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
-
-  const handleChange = (value: boolean) => {
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("showAdditionalData", value ? "true" : "false");
-    router.push(`${pathname}?${newSearchParams.toString()}`);
-  };
 
   useEffect(() => {
     if (ref.current) {
@@ -109,18 +110,17 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
               <li
                 className={cn(
                   "text-center text-sm h-full flex items-center justify-center cursor-pointer",
-                  (searchParams.get("showAdditionalData") === "false" || !searchParams.has("showAdditionalData")) &&
-                    "bg-white shadow-1 font-semibold rounded-lg"
+                  !showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
                 )}
-                onClick={() => handleChange(false)}
+                onClick={() => setShowAdditionalData(false)}
               >
                 Default
               </li>
               <li
-                onClick={() => handleChange(true)}
+                onClick={() => setShowAdditionalData(true)}
                 className={cn(
                   "text-center text-sm h-full flex items-center justify-center cursor-pointer",
-                  searchParams.get("showAdditionalData") === "true" && "bg-white shadow-1 font-semibold rounded-lg"
+                  showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
                 )}
               >
                 Additional Data
@@ -130,6 +130,44 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         </div>
         {user && user.isSubscribed && (
           <div className="flex flex-col gap-2">
+            {showAdditionalData &&
+              values.additionalDataResult?.propertiesUsedForCalculation.map(
+                (property) =>
+                  !property.isBulked && (
+                    <VoltItem
+                      isAdditional
+                      isSellingProperty={false}
+                      id={`calculation-${property.data.id}`}
+                      onHover={(property) => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          hoveredParcelNumber: property.parcelNumberNoFormatting,
+                          zoom: true,
+                        }));
+                      }}
+                      onMouseLeave={() => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          hoveredParcelNumber: null,
+                          zoom: false,
+                        }));
+                      }}
+                      onSelect={(property) => {
+                        setMpaInteraction((prevData) => ({
+                          ...prevData,
+                          openPopperParcelNumber: property.parcelNumberNoFormatting,
+                          zoom: true,
+                        }));
+                      }}
+                      key={property.data.id}
+                      data={{
+                        ...property.data,
+                      }}
+                      isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
+                      selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
+                    />
+                  )
+              )}
             {values.calculation?.propertiesUsedForCalculation.map((property) =>
               property.isBulked ? (
                 <VoltItemMulti

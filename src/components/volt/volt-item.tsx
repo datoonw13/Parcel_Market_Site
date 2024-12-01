@@ -19,9 +19,21 @@ interface VoltItemProps {
   isHighlighted?: boolean;
   map?: ReactElement;
   isSellingProperty: boolean;
+  isAdditional?: boolean;
 }
 
-const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeave, onSelect, id, isHighlighted, isSellingProperty }) => {
+const VoltItem: FC<VoltItemProps> = ({
+  map,
+  data,
+  selected,
+  onHover,
+  onMouseLeave,
+  onSelect,
+  id,
+  isHighlighted,
+  isSellingProperty,
+  isAdditional,
+}) => {
   const [open, setOpen] = useState("");
 
   const ref = useRef<HTMLDivElement>(null);
@@ -55,10 +67,13 @@ const VoltItem: FC<VoltItemProps> = ({ map, data, selected, onHover, onMouseLeav
       <AccordionItem
         value={data.id.toString()}
         className={cn(
-          "p-5 rounded-2xl border border-[#D5D3D3] cursor-pointer transition-all duration-100",
-          selected && " !border-primary-main-400 !bg-primary-main-50",
-          isHighlighted && "bg-grey-50 border-[#D5D3D3]",
-          "hover:bg-grey-50 hover:border-[#D5D3D3]"
+          "p-5 rounded-2xl border  cursor-pointer transition-all duration-100",
+          isAdditional ? "border-[#fcedb6] bg-[#fef7dd99] hover:bg-[#fef7ddcc]" : "border-[#D5D3D3]",
+          selected && !isAdditional && " !border-primary-main-400 !bg-primary-main-50",
+          selected && isAdditional && " !bg-[#fef7dd]",
+          isHighlighted && !isAdditional && "bg-grey-50 border-[#D5D3D3]",
+          isHighlighted && isAdditional && "bg-[#fef7ddcc]",
+          isAdditional ? "" : "hover:bg-grey-50 hover:border-[#D5D3D3]"
         )}
         onMouseEnter={() => onHover && onHover(data)}
         onMouseLeave={() => onMouseLeave && onMouseLeave(data)}
