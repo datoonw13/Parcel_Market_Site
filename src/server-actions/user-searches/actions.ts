@@ -5,7 +5,7 @@ import { ErrorResponse } from "@/helpers/error-response";
 import { revalidateTag } from "next/cache";
 import { AuthedUserSearches } from "@/types/auth";
 import { z } from "zod";
-import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
 import { getCountyValue, getStateValue } from "@/helpers/states";
 import { IUserRecentSearches } from "@/types/user";
@@ -18,7 +18,7 @@ import { userSearchesTag } from "./tags";
 import { fetcher } from "../fetcher";
 
 export const getUserSearches = async (
-  filters: Partial<z.infer<typeof userRecentSearchesValidations>> & { page: number; pageSize: number }
+  filters: Partial<z.infer<typeof userSearchesValidations>> & { page: number; pageSize: number }
 ): Promise<ResponseModel<({ list: { title: string; id: number }[] } & IPagination) | null>> => {
   try {
     const formattedFilters = Object.keys(filters).reduce((acc, cur) => {

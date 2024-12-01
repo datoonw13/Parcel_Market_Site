@@ -16,7 +16,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { removeUserSearches } from "@/server-actions/user-searches/actions";
 import { SortEnum } from "@/types/common";
 import { z } from "zod";
-import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import useNotification from "@/hooks/useNotification";
 import RecentSearchesPagination from "./pagination";
 import RecentSearchesLitItemMobileMini from "./list-item/mobile-mini";
@@ -114,7 +114,7 @@ const UserRecentSearchesList = ({
           }}
           sortEnum={SortEnum}
           sortChange={(value) => {
-            const newSearchParams = updateSearchParamsWithFilters<z.infer<typeof userRecentSearchesValidations>>(
+            const newSearchParams = updateSearchParamsWithFilters<z.infer<typeof userSearchesValidations>>(
               [{ key: "sortBy", value }],
               searchParams.toString()
             );

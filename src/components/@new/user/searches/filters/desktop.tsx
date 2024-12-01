@@ -8,10 +8,10 @@ import { updateSearchParamsWithFilters, parseSearchParams } from "@/lib/utils";
 import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { uniqBy } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { TransitionStartFunction, useMemo } from "react";
 import { z } from "zod";
 
-const RecentSearchesDesktopFilters = () => {
+const SearchesDesktopFilters = ({ startTransition }: { startTransition: TransitionStartFunction }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,7 +37,9 @@ const RecentSearchesDesktopFilters = () => {
       [...data, resetPage],
       searchParams.toString()
     );
-    router.push(`${pathname}?${newSearchParams.toString()}`);
+    startTransition(() => {
+      router.push(`${pathname}?${newSearchParams.toString()}`);
+    });
   };
 
   return (
@@ -208,4 +210,4 @@ const RecentSearchesDesktopFilters = () => {
   );
 };
 
-export default RecentSearchesDesktopFilters;
+export default SearchesDesktopFilters;

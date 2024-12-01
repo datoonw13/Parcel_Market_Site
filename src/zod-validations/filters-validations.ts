@@ -25,7 +25,7 @@ export const userPropertiesFiltersValidations = z.object({
   sortBy: z.nativeEnum(SortEnum).nullable(),
 });
 
-export const userRecentSearchesValidations = z.object({
+export const userSearchesValidations = z.object({
   search: z
     .string()
     .optional()

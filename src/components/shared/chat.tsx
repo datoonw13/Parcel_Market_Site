@@ -45,7 +45,7 @@ const Chat = () => {
       >
         <div
           ref={dragItemRef}
-          className="size-16 cursor-pointer !bg-contain fixed bottom-0 right-0"
+          className="size-16 cursor-pointer !bg-contain fixed bottom-0 right-0 z-50"
           style={{ background: `url(/chat-icon.svg)` }}
         />
       </Draggable>

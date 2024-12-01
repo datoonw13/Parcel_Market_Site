@@ -27,37 +27,10 @@ const ListItem: FC<ListItemProps> = ({ data, viewId, loading, searchData, isFirs
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const [isTransitionPending, startTransition] = useTransition();
-  const [optimisticLoadingState, setOptimisticLoadingSate] = useOptimistic(false, (value, newValue: boolean) => newValue);
-  const [optimisticOpenState, setOptimisticOpenState] = useOptimistic(viewId === data?.id, (value, newValue: boolean) => newValue);
-  const isPending = loading || optimisticLoadingState;
-  const isOpen = viewId === data?.id && optimisticOpenState && !isPending;
+  const isPending = false;
+  const isOpen = false;
 
-  const handleOptimistic = (isOpenState: boolean) => {
-    startTransition(() => {
-      if (isOpenState) {
-        setOptimisticLoadingSate(true);
-        setOptimisticOpenState(true);
-      } else {
-        setOptimisticLoadingSate(false);
-        setOptimisticOpenState(false);
-      }
-    });
-  };
-
-  const handleCollapse = () => {
-    const searchParams = new URLSearchParams(params.toString());
-    if (Number(searchParams.get("viewId")) === data.id) {
-      searchParams.delete("viewId");
-      handleOptimistic(false);
-    } else {
-      searchParams.set("viewId", data.id.toString());
-      handleOptimistic(true);
-    }
-    // Temp fix to make route update fast
-    // window.history.pushState(null, pathname, `?${searchParams.toString()}`);
-    router.push(`${pathname}?${searchParams.toString()}`);
-  };
+  const handleCollapse = () => {};
 
   if (isSmallDevice) {
     return (

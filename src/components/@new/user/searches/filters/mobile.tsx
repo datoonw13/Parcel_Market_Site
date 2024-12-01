@@ -8,7 +8,7 @@ import { cn, parseSearchParams, updateSearchParamsWithFilters } from "@/lib/util
 import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { uniqBy } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { TransitionStartFunction, useEffect, useMemo, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { TbFilter } from "react-icons/tb";
 import { z } from "zod";
@@ -19,7 +19,7 @@ const sortMultiSelectOptions = (options: { label: string; value: string }[], sel
   return [...checkedOptions, ...uncheckedOptions];
 };
 
-const RecentSearchesMobileFilters = () => {
+const SearchesMobileFilters = ({ startTransition }: { startTransition: TransitionStartFunction }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -310,7 +310,9 @@ const RecentSearchesMobileFilters = () => {
                     );
                     const resetPage = { key: "page" as const, value: 1 };
                     const newSearchParams = updateSearchParamsWithFilters([...data, resetPage], searchParams.toString());
-                    router.push(`${pathname}?${newSearchParams.toString()}`);
+                    startTransition(() => {
+                      router.push(`${pathname}?${newSearchParams.toString()}`);
+                    });
                   } catch (error) {}
                   setOpen(false);
                 }}
@@ -341,4 +343,4 @@ const RecentSearchesMobileFilters = () => {
   );
 };
 
-export default RecentSearchesMobileFilters;
+export default SearchesMobileFilters;

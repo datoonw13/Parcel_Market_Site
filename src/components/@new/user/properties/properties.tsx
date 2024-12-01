@@ -8,7 +8,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { userPropertiesFiltersValidations } from "@/zod-validations/filters-validations";
-import UserProfileSectionHeader from "../UserProfileSectionHeader";
+import UserProfileSectionHeader from "../UserSectionHeading";
 import Button from "../../shared/forms/Button";
 import SubscribeError from "../../shared/subscribe-error";
 import UserPropertiesFilters from "./filters/filters";

@@ -1,5 +1,5 @@
 import SubscribeError from "@/components/@new/shared/subscribe-error";
-import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
+import UserProfileSectionHeader from "@/components/@new/user/UserSectionHeading";
 import OfferDetailModal from "@/components/@new/user/offers/details/offer-detail-modal";
 import SentOfferDetailsWrapper from "@/components/@new/user/offers/sent/sent-offer-details-wrapper";
 import SentOffers from "@/components/@new/user/offers/sent/sent-offers";

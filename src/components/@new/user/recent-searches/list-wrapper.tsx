@@ -1,6 +1,6 @@
 import NoResults from "@/components/ui/no-result";
 import { getUserSearches } from "@/server-actions/user-searches/actions";
-import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { z } from "zod";
 import { getUserAction } from "@/server-actions/user/actions";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
@@ -19,7 +19,7 @@ const UserRecentSearchesListWrapper = async ({
   totalItems,
   viewId,
 }: {
-  filters: z.infer<typeof userRecentSearchesValidations>;
+  filters: z.infer<typeof userSearchesValidations>;
   pageSize: number;
   totalItems: number;
   viewId: number | null;
