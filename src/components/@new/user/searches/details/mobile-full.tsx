@@ -17,11 +17,11 @@ import { useRouter } from "next/navigation";
 import { IVoltPriceCalculation } from "@/types/volt";
 import VoltItemMulti from "@/components/volt/volt-item-multi";
 import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
-import { exportToExcel, exportToKml } from "@/lib/utils";
+import { cn, exportToExcel, exportToKml } from "@/lib/utils";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Drawer, DrawerContent, DrawerFooter, DrawerHeader } from "@/components/ui/dialogs/drawer";
-import { DialogTitle } from "@/components/ui/dialogs/dialog";
+import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialogs/dialog";
 import RecentSearchesMap from "./map-desktop";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 
@@ -65,12 +65,15 @@ const SearchItemDetailsMobileMapFull = ({
   data,
   user,
   isUserSubscriptionTrial,
+  additionalDataResult,
 }: {
   data: IUserRecentSearches;
+  additionalDataResult: IUserRecentSearches;
   user: IDecodedAccessToken | null;
   isUserSubscriptionTrial: boolean;
 }) => {
   const [subscriptionWarning, setSubscriptionWarning] = useState(false);
+  const [showExcelWarning, setExcelWarning] = useState(false);
   const router = useRouter();
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
     hoveredParcelNumber: null,
@@ -87,6 +90,44 @@ const SearchItemDetailsMobileMapFull = ({
 
   return (
     <>
+      <Drawer open={showExcelWarning} onOpenChange={(open) => !open && setExcelWarning(false)}>
+        <DrawerContent className="">
+          <div className="max-w-lg mx-auto p-6 space-y-6">
+            <>
+              <DialogHeader>
+                <div className={cn("h-12 w-12 rounded-full flex items-center justify-center mb-3 bg-primary-main-100 mx-auto")}>
+                  <IoCloudDownloadOutline className="size-6 text-primary-main" />
+                </div>
+                <DialogTitle className="text-center !font-semibold !text-base !p-0">Download Data</DialogTitle>
+                <DialogDescription className="text-center text-grey-800 text-sm max-w-80 mx-auto">
+                  You can download the data for the lands participating in the price calculation, or all the data, including vacant lands.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="w-full justify-center items-center flex flex-col-reverse gap-3">
+                <Button
+                  onClick={() => {
+                    exportToExcel(data, additionalDataResult);
+                    setExcelWarning(false);
+                  }}
+                  className="w-full"
+                  variant="secondary"
+                >
+                  Export Vacant Data
+                </Button>
+                <Button
+                  onClick={() => {
+                    exportToExcel(data);
+                    setExcelWarning(false);
+                  }}
+                  className={cn("w-full")}
+                >
+                  Export Data
+                </Button>
+              </div>
+            </>
+          </div>
+        </DrawerContent>
+      </Drawer>
       <ResponsiveAlertDialog
         mediaQuery={null}
         open={subscriptionWarning}
@@ -103,7 +144,7 @@ const SearchItemDetailsMobileMapFull = ({
         title="Please sign in or subscribe to see the sales data"
         description="You will need to sign in or subscribe to view, analyze, or export sales data"
       />
-      <Drawer open onOpenChange={() => {}} modal={false}>
+      <Drawer open={!showExcelWarning} onOpenChange={() => {}} modal={false}>
         <DrawerContent className="[&>div:first-child]:hidden">
           <DrawerHeader className="sr-only">
             <DialogTitle className="border-b pb-4">EXPORT DATA</DialogTitle>

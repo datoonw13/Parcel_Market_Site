@@ -213,10 +213,24 @@ export const exportToKml = (data: IUserRecentSearches) => {
   saveAs(blob, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.kml`);
 };
 
-export const exportToExcel = (data: IUserRecentSearches) => {
+export const exportToExcel = (data: IUserRecentSearches, additionalDataResult?: IUserRecentSearches) => {
   const wb = XLSX.utils.book_new();
 
   const formattedData: Array<Record<string, any>> = [];
+  if (additionalDataResult) {
+    additionalDataResult.propertiesUsedForCalculation.forEach((property) => {
+      if (!property.isBulked) {
+        formattedData.push({
+          "Parcel ID": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.parcelNumberNoFormatting },
+          County: { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.county.label },
+          Acreage: { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.acreage.toFixed(2) },
+          "Sold price": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moneyFormatter.format(property.data.lastSalePrice) },
+          "Sold price per acre": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moneyFormatter.format(property.data.pricePerAcreage) },
+          "Last sale date": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moment(property.data.lastSaleDate).format("MM-DD-YYYY") },
+        });
+      }
+    });
+  }
   data.propertiesUsedForCalculation.forEach((property) => {
     if (property.isBulked) {
       formattedData.push({

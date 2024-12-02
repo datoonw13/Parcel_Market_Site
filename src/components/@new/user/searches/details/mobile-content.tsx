@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
-import React, { FC, useEffect, useTransition } from "react";
+import React, { FC, useEffect, useState, useTransition } from "react";
 import { Drawer, DrawerContent, DrawerFooter, DrawerHeader } from "@/components/ui/dialogs/drawer";
-import { exportToExcel, exportToKml } from "@/lib/utils";
+import { cn, exportToExcel, exportToKml } from "@/lib/utils";
 import { Tooltip } from "@/components/ui/tooltip";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
-import { DialogTitle } from "@/components/ui/dialogs/dialog";
+import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialogs/dialog";
 import { IUserRecentSearches } from "@/types/user";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SearchItemDetailsMobileMap from "./map-mobile";
@@ -14,21 +14,61 @@ import SearchItemDetailsMobileMap from "./map-mobile";
 
 interface SearchItemDetailsMobileContentProps {
   data: IUserRecentSearches;
+  additionalDataResult: IUserRecentSearches;
   isOpen: boolean;
   canExport: boolean;
 }
 
-const SearchItemDetailsMobileContent: FC<SearchItemDetailsMobileContentProps> = ({ data, isOpen, canExport }) => {
+const SearchItemDetailsMobileContent: FC<SearchItemDetailsMobileContentProps> = ({ data, isOpen, canExport, additionalDataResult }) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [showExcelWarning, setExcelWarning] = useState(false);
 
   return (
     <>
-      {isOpen && !isPending && (
+      <Drawer open={showExcelWarning} onOpenChange={(open) => !open && setExcelWarning(false)}>
+        <DrawerContent className="">
+          <div className="max-w-lg mx-auto p-6 space-y-6">
+            <>
+              <DialogHeader>
+                <div className={cn("h-12 w-12 rounded-full flex items-center justify-center mb-3 bg-primary-main-100 mx-auto")}>
+                  <IoCloudDownloadOutline className="size-6 text-primary-main" />
+                </div>
+                <DialogTitle className="text-center !font-semibold !text-base !p-0">Download Data</DialogTitle>
+                <DialogDescription className="text-center text-grey-800 text-sm max-w-80 mx-auto">
+                  You can download the data for the lands participating in the price calculation, or all the data, including vacant lands.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="w-full justify-center items-center flex flex-col-reverse gap-3">
+                <Button
+                  onClick={() => {
+                    exportToExcel(data, additionalDataResult);
+                    setExcelWarning(false);
+                  }}
+                  className="w-full"
+                  variant="secondary"
+                >
+                  Export Vacant Data
+                </Button>
+                <Button
+                  onClick={() => {
+                    exportToExcel(data);
+                    setExcelWarning(false);
+                  }}
+                  className={cn("w-full")}
+                >
+                  Export Data
+                </Button>
+              </div>
+            </>
+          </div>
+        </DrawerContent>
+      </Drawer>
+      {!showExcelWarning && isOpen && !isPending && (
         <Drawer open onOpenChange={() => {}} modal={false}>
-          <DrawerContent className="[&>div:first-child]:hidden">
+          <DrawerContent className={cn("[&>div:first-child]:hidden")}>
             <DrawerHeader className="sr-only">
               <DialogTitle className="border-b pb-4">EXPORT DATA</DialogTitle>
             </DrawerHeader>

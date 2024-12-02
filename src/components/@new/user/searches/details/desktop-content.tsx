@@ -15,7 +15,8 @@ import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn, exportToExcel, exportToKml } from "@/lib/utils";
 import { IVoltPriceCalculation } from "@/types/volt";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialogs/dialog";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import SearchItemDetailsDesktopContentMap from "./map-desktop";
 import SearchItemDetailsTable from "./calculation-table";
@@ -78,10 +79,47 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
     hoveredParcelNumber: null,
     openPopperParcelNumber: null,
   });
+  const [showExcelWarning, setExcelWarning] = useState(false);
   const [showAdditionalData, setShowAdditionalData] = useState(false);
 
   return (
     <>
+      <Dialog open={showExcelWarning} onOpenChange={(open) => !open && setExcelWarning(false)}>
+        <DialogContent className={cn("rounded-xl max-w-md gap-6 p-6 z-[9999]")} closeModal={() => setExcelWarning(false)}>
+          <>
+            <DialogHeader>
+              <div className={cn("h-12 w-12 rounded-full flex items-center justify-center mb-3 bg-primary-main-100 mx-auto")}>
+                <IoCloudDownloadOutline className="size-6 text-primary-main" />
+              </div>
+              <DialogTitle className="text-center !font-semibold !text-base !p-0">Download Data</DialogTitle>
+              <DialogDescription className="text-center text-grey-800 text-sm max-w-80 mx-auto">
+                You can download the data for the lands participating in the price calculation, or all the data, including vacant lands.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="w-full justify-center items-center flex flex-row gap-3">
+              <Button
+                onClick={() => {
+                  exportToExcel(data, additionalDataResult);
+                  setExcelWarning(false);
+                }}
+                className="w-full"
+                variant="secondary"
+              >
+                Export Vacant Data
+              </Button>
+              <Button
+                onClick={() => {
+                  exportToExcel(data);
+                  setExcelWarning(false);
+                }}
+                className={cn("w-full")}
+              >
+                Export Data
+              </Button>
+            </div>
+          </>
+        </DialogContent>
+      </Dialog>
       <div className="bg-grey-50 p-3 grid grid-cols-2 items-center justify-between gap-24">
         <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
         <div className="bg-grey-100 rounded-lg p-0.5 min-w-max">
@@ -253,7 +291,13 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
               renderContent="You cannot export this data with the free plan"
             />
           ) : (
-            <Button className="" onClick={() => exportToExcel(data)}>
+            <Button
+              className=""
+              onClick={() => {
+                // exportToExcel(data);
+                setExcelWarning(true);
+              }}
+            >
               <div className="flex flex-row items-center gap-3">
                 <IoCloudDownloadOutline className="size-4" />
                 Export Data

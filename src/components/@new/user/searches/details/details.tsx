@@ -54,7 +54,12 @@ const SearchItemDetails: FC<SearchItemDetailsProps> = ({ data, isUserSubscriptio
         >
           {isSmallDevice && !detecting && (
             <div className="py-6 content  bg-primary-main-50 border border-t-0 border-primary-main-400 rounded-b-2xl px-5 lg:px-6">
-              <SearchItemDetailsMobileContent data={data} canExport={!!(user?.isSubscribed && !isUserSubscriptionTrial)} isOpen />
+              <SearchItemDetailsMobileContent
+                additionalDataResult={additionalDataResult}
+                data={data}
+                canExport={!!(user?.isSubscribed && !isUserSubscriptionTrial)}
+                isOpen
+              />
             </div>
           )}
           {!isSmallDevice && !detecting && (
