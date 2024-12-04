@@ -165,7 +165,6 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                     setValues={setValues}
                     mapInteraction={mapInteraction}
                     setMpaInteraction={setMpaInteraction}
-                    showAdditionalData={false}
                   />
                 </div>
                 <VoltMobileDrawer
@@ -227,14 +226,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
                         setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
                         data={getAxisData(values.calculation?.propertiesUsedForCalculation, values.selectedItem?.parcelNumberNoFormatting)}
                       />
-                      <VoltCalculation
-                        setShowAdditionalData={(value) => {}}
-                        showAdditionalData={false}
-                        values={values}
-                        user={user}
-                        mapInteraction={mapInteraction}
-                        setMpaInteraction={setMpaInteraction}
-                      />
+                      <VoltCalculation values={values} user={user} mapInteraction={mapInteraction} setMpaInteraction={setMpaInteraction} />
                     </div>
                   )}
                   <VoltFooter className="flex-col py-6 mt-auto" />
