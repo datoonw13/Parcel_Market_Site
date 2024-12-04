@@ -82,7 +82,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
   const { notify } = useNotification();
   const [calculationPending, setCalculationPending] = useState(false);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
-  const [showAdditionalData, setShowAdditionalData] = useState(false);
 
   const calculatePrice = async () => {
     if (!values.selectedItem) {
@@ -204,8 +203,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                           user={user}
                           mapInteraction={mapInteraction}
                           setMpaInteraction={setMpaInteraction}
-                          showAdditionalData={showAdditionalData}
-                          setShowAdditionalData={setShowAdditionalData}
                         />
                       )}
                     </div>
@@ -256,7 +253,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                 setValues={setValues}
                 mapInteraction={mapInteraction}
                 setMpaInteraction={setMpaInteraction}
-                showAdditionalData={showAdditionalData}
               />
             </td>
           </tr>

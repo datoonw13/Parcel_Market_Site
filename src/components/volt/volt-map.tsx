@@ -10,7 +10,9 @@ import { MapInteractionModel } from "@/types/common";
 import { IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
 import moment from "moment";
 import { getCenter } from "geolib";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { Button } from "../ui/button";
+import { breakPoints } from "../../../tailwind.config";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -42,7 +44,6 @@ interface VoltDesktopProps {
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
-  showAdditionalData: boolean;
 }
 
 const getIcon = (el: IPropertyBaseInfo, values: VoltDesktopProps["values"], mapInteraction: VoltDesktopProps["mapInteraction"]) => {
@@ -65,10 +66,10 @@ const VoltMap: FC<VoltDesktopProps> = ({
   setOpenPropertyDetailWarningModal,
   mapInteraction,
   setMpaInteraction,
-  showAdditionalData,
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
+  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.lg));
 
   const mapData = useMemo(() => {
     if (step === VoltSteps.SEARCH) {
@@ -228,7 +229,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
       });
 
-      if (showAdditionalData && values.additionalDataResult) {
+      if (values.additionalDataResult && !isSmallDevice) {
         values.additionalDataResult.propertiesUsedForCalculation.forEach((property) => {
           if (!property.isBulked) {
             mapItems.push({
@@ -296,7 +297,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [mainProperty, ...mapItems];
     }
     return [];
-  }, [mapInteraction, setValues, step, user, values, showAdditionalData]);
+  }, [isSmallDevice, mapInteraction, setValues, step, user, values]);
 
   const canViewDetails = useCallback(
     (parcelNumberNoFormatting: string) => {

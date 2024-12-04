@@ -6,30 +6,34 @@ import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 import { MapInteractionModel } from "@/types/common";
 import { cn, isElementVisible } from "@/lib/utils";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import NoAuthorizationSvg from "../../../public/no-authorization.svg";
 import VoltItem from "./volt-item";
 import { Button } from "../ui/button";
 import VoltItemMulti from "./volt-item-multi";
+import { breakPoints } from "../../../tailwind.config";
 
 interface VoltCalculationProps {
   values: VoltWrapperValuesModel;
   user: IDecodedAccessToken | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
-  showAdditionalData: boolean;
-  setShowAdditionalData: (value: boolean) => void;
 }
 
-const VoltCalculation: FC<VoltCalculationProps> = ({
-  values,
-  user,
-  mapInteraction,
-  setMpaInteraction,
-  setShowAdditionalData,
-  showAdditionalData,
-}) => {
+const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteraction, setMpaInteraction }) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
+  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.lg));
+
+  const data = [
+    ...(isSmallDevice ? [] : values.additionalDataResult?.propertiesUsedForCalculation || []),
+    ...(values.calculation?.propertiesUsedForCalculation || []),
+  ].sort((a, b) => {
+    const aPrice = (a.data as any)?.price || (a.data as any)?.lastSalePrice;
+    const bPrice = (b.data as any)?.price || (b.data as any)?.lastSalePrice;
+
+    return aPrice - bPrice;
+  });
 
   useEffect(() => {
     if (ref.current) {
@@ -103,45 +107,28 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
             acreage.
           </h2>
         </div>
-        <div className="bg-grey-100 rounded-xl p-3 space-y-4">
-          <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
-          <div className="bg-grey/10 rounded-lg p-0.5">
-            <ul className="grid grid-cols-2 min-h-8">
-              <li
-                className={cn(
-                  "text-center text-sm h-full flex items-center justify-center cursor-pointer",
-                  !showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
-                )}
-                onClick={() => setShowAdditionalData(false)}
-              >
-                Default
-              </li>
-              <li
-                onClick={() => setShowAdditionalData(true)}
-                className={cn(
-                  "text-center text-sm h-full flex items-center justify-center cursor-pointer",
-                  showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
-                )}
-              >
-                Additional Data
-              </li>
-            </ul>
-          </div>
-        </div>
+
         {user && user.isSubscribed && (
-          <div className="flex flex-col gap-2">
-            {showAdditionalData &&
-              values.additionalDataResult?.propertiesUsedForCalculation.map(
-                (property) =>
-                  !property.isBulked && (
-                    <VoltItem
-                      isAdditional
-                      isSellingProperty={false}
-                      id={`calculation-${property.data.id}`}
-                      onHover={(property) => {
+          <>
+            <div className="bg-grey-50 border border-grey-100 rounded-xl p-3 space-y-4 lg:hidden">
+              <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
+              <div className="bg-grey/10 rounded-lg p-0.5">
+                <ul className="">
+                  <li className={cn("text-center text-sm h-full flex items-center justify-center cursor-pointer py-1.5 font-semibold")}>
+                    View on desktop version
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              {data.map((property) => {
+                if (property.isBulked) {
+                  return (
+                    <VoltItemMulti
+                      onHover={(parcelNumberNoFormatting) => {
                         setMpaInteraction((prevData) => ({
                           ...prevData,
-                          hoveredParcelNumber: property.parcelNumberNoFormatting,
+                          hoveredParcelNumber: parcelNumberNoFormatting,
                           zoom: true,
                         }));
                       }}
@@ -152,87 +139,58 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                           zoom: false,
                         }));
                       }}
-                      onSelect={(property) => {
+                      onSelect={(parcelNumberNoFormatting) => {
                         setMpaInteraction((prevData) => ({
                           ...prevData,
-                          openPopperParcelNumber: property.parcelNumberNoFormatting,
+                          openPopperParcelNumber: parcelNumberNoFormatting,
                           zoom: true,
                         }));
                       }}
-                      key={property.data.id}
-                      data={{
-                        ...property.data,
-                      }}
-                      isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
-                      selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
+                      data={property}
+                      key={`calculation-${property.data.id}`}
+                      highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
+                      selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
+                      selected={mapInteraction.openPopperParcelNumber === property.data.id}
                     />
-                  )
-              )}
-            {values.calculation?.propertiesUsedForCalculation.map((property) =>
-              property.isBulked ? (
-                <VoltItemMulti
-                  onHover={(parcelNumberNoFormatting) => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      hoveredParcelNumber: parcelNumberNoFormatting,
-                      zoom: true,
-                    }));
-                  }}
-                  onMouseLeave={() => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      hoveredParcelNumber: null,
-                      zoom: false,
-                    }));
-                  }}
-                  onSelect={(parcelNumberNoFormatting) => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      openPopperParcelNumber: parcelNumberNoFormatting,
-                      zoom: true,
-                    }));
-                  }}
-                  data={property}
-                  key={`calculation-${property.data.id}`}
-                  highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
-                  selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
-                  selected={mapInteraction.openPopperParcelNumber === property.data.id}
-                />
-              ) : (
-                <VoltItem
-                  isSellingProperty={false}
-                  id={`calculation-${property.data.id}`}
-                  onHover={(property) => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      hoveredParcelNumber: property.parcelNumberNoFormatting,
-                      zoom: true,
-                    }));
-                  }}
-                  onMouseLeave={() => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      hoveredParcelNumber: null,
-                      zoom: false,
-                    }));
-                  }}
-                  onSelect={(property) => {
-                    setMpaInteraction((prevData) => ({
-                      ...prevData,
-                      openPopperParcelNumber: property.parcelNumberNoFormatting,
-                      zoom: true,
-                    }));
-                  }}
-                  key={property.data.id}
-                  data={{
-                    ...property.data,
-                  }}
-                  isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
-                  selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
-                />
-              )
-            )}
-          </div>
+                  );
+                }
+                return (
+                  <VoltItem
+                    isAdditional={!property.data.isMedianValid}
+                    isSellingProperty={false}
+                    id={`calculation-${property.data.id}`}
+                    onHover={(property) => {
+                      setMpaInteraction((prevData) => ({
+                        ...prevData,
+                        hoveredParcelNumber: property.parcelNumberNoFormatting,
+                        zoom: true,
+                      }));
+                    }}
+                    onMouseLeave={() => {
+                      setMpaInteraction((prevData) => ({
+                        ...prevData,
+                        hoveredParcelNumber: null,
+                        zoom: false,
+                      }));
+                    }}
+                    onSelect={(property) => {
+                      setMpaInteraction((prevData) => ({
+                        ...prevData,
+                        openPopperParcelNumber: property.parcelNumberNoFormatting,
+                        zoom: true,
+                      }));
+                    }}
+                    key={property.data.id}
+                    data={{
+                      ...property.data,
+                    }}
+                    isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
+                    selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
+                  />
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 
