@@ -4,7 +4,7 @@ import { ErrorResponse } from "@/helpers/error-response";
 import { IPagination, ResponseModel } from "@/types/common";
 import { INotification } from "@/types/notifications";
 import { revalidateTag } from "next/cache";
-import { userNotificationsValidations, userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { userNotificationsValidations, userSearchesValidations } from "@/zod-validations/filters-validations";
 import { z } from "zod";
 import { fetcher } from "../fetcher";
 import { notificationsTag } from "./tags";

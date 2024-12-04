@@ -1,5 +1,5 @@
 import PlanListWrapper from "@/components/@new/subscription/plans/plan-list-wrapper";
-import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
+import UserProfileSectionHeader from "@/components/@new/user/UserSectionHeading";
 import PaymentDetails from "@/components/@new/user/payment-details/payment-details";
 
 const UserProfileSubscription = async () => (

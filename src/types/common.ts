@@ -36,3 +36,5 @@ export interface MapInteractionModel {
 }
 
 export type UnwrapArray<T> = T extends Array<infer R> ? R : never;
+
+export type AsyncReturnType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R> ? R : any;

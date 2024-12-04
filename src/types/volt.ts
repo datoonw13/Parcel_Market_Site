@@ -10,6 +10,7 @@ import {
   IPropertySaleHistory,
   IPropertyUsedForCalculation,
 } from "./property";
+import { IUserRecentSearches } from "./user";
 
 export type VoltSearchModel = z.infer<typeof voltSearchSchema>;
 
@@ -54,6 +55,7 @@ export interface VoltWrapperValuesModel {
   searchResult: IMainPropertyBaseInfo[] | null;
   selectedItem: IMainPropertyBaseInfo | null;
   calculation: IVoltPriceCalculation | null;
+  additionalDataResult: IUserRecentSearches | null;
 }
 
 export interface IVoltPriceCalculationResponseProperty {

@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { z } from "zod";
-import { userRecentSearchesValidations } from "@/zod-validations/filters-validations";
+import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
 import useNotification from "@/hooks/useNotification";
