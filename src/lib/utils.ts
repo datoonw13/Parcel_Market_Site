@@ -216,22 +216,40 @@ export const exportToKml = (data: IUserRecentSearches) => {
 export const exportToExcel = (data: IUserRecentSearches, additionalDataResult?: IUserRecentSearches) => {
   const wb = XLSX.utils.book_new();
 
+  const list = [...(data.propertiesUsedForCalculation || []), ...(additionalDataResult?.propertiesUsedForCalculation || [])].sort(
+    (a, b) => {
+      const aPrice = (a.data as any)?.price || (a.data as any)?.lastSalePrice;
+      const bPrice = (b.data as any)?.price || (b.data as any)?.lastSalePrice;
+
+      return aPrice - bPrice;
+    }
+  );
+
   const formattedData: Array<Record<string, any>> = [];
-  if (additionalDataResult) {
-    additionalDataResult.propertiesUsedForCalculation.forEach((property) => {
-      if (!property.isBulked) {
-        formattedData.push({
-          "Parcel ID": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.parcelNumberNoFormatting },
-          County: { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.county.label },
-          Acreage: { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.acreage.toFixed(2) },
-          "Sold price": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moneyFormatter.format(property.data.lastSalePrice) },
-          "Sold price per acre": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moneyFormatter.format(property.data.pricePerAcreage) },
-          "Last sale date": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moment(property.data.lastSaleDate).format("MM-DD-YYYY") },
-        });
-      }
-    });
-  }
-  data.propertiesUsedForCalculation.forEach((property) => {
+
+  list.forEach((property) => {
+    if (!property.isBulked && !property.data.isMedianValid) {
+      formattedData.push({
+        "Parcel ID": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.parcelNumberNoFormatting },
+        County: { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.county.label },
+        Acreage: { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: property.data.acreage.toFixed(2) },
+        "Sold price": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moneyFormatter.format(property.data.lastSalePrice) },
+        "Sold price per acre": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moneyFormatter.format(property.data.pricePerAcreage) },
+        "Last sale date": { s: { fill: { fgColor: { rgb: "FEFAEB" } } }, v: moment(property.data.lastSaleDate).format("MM-DD-YYYY") },
+      });
+    }
+
+    if (!property.isBulked && property.data.isMedianValid) {
+      formattedData.push({
+        "Parcel ID": { v: property.data.parcelNumberNoFormatting },
+        County: { v: property.data.county.label },
+        Acreage: { v: property.data.acreage.toFixed(2) },
+        "Sold price": { v: moneyFormatter.format(property.data.lastSalePrice) },
+        "Sold price per acre": { v: moneyFormatter.format(property.data.pricePerAcreage) },
+        "Last sale date": { v: moment(property.data.lastSaleDate).format("MM-DD-YYYY") },
+      });
+    }
+
     if (property.isBulked) {
       formattedData.push({
         "Parcel ID": { s: { fill: { fgColor: { rgb: "757474" } } }, v: "Multiple parcels" },
@@ -257,15 +275,6 @@ export const exportToExcel = (data: IUserRecentSearches, additionalDataResult?: 
           },
         });
       });
-    } else {
-      formattedData.push({
-        "Parcel ID": { v: property.data.parcelNumberNoFormatting },
-        County: { v: property.data.county.label },
-        Acreage: { v: property.data.acreage.toFixed(2) },
-        "Sold price": { v: moneyFormatter.format(property.data.lastSalePrice) },
-        "Sold price per acre": { v: moneyFormatter.format(property.data.pricePerAcreage) },
-        "Last sale date": { v: moment(property.data.lastSaleDate).format("MM-DD-YYYY") },
-      });
     }
   });
 
@@ -274,7 +283,7 @@ export const exportToExcel = (data: IUserRecentSearches, additionalDataResult?: 
     header: headers,
   });
 
-  const flattenData = data.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
+  const flattenData = list.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
   const maxLengthData = {
     parcelNumber: Math.max(
       [...flattenData].sort((a, b) => b.parcelNumberNoFormatting.length - a.parcelNumberNoFormatting.length)[0].parcelNumberNoFormatting

@@ -73,7 +73,6 @@ const SearchItemDetailsMobileMapFull = ({
   isUserSubscriptionTrial: boolean;
 }) => {
   const [subscriptionWarning, setSubscriptionWarning] = useState(false);
-  const [showExcelWarning, setExcelWarning] = useState(false);
   const router = useRouter();
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
     hoveredParcelNumber: null,
@@ -90,44 +89,6 @@ const SearchItemDetailsMobileMapFull = ({
 
   return (
     <>
-      <Drawer open={showExcelWarning} onOpenChange={(open) => !open && setExcelWarning(false)}>
-        <DrawerContent className="">
-          <div className="max-w-lg mx-auto p-6 space-y-6">
-            <>
-              <DialogHeader>
-                <div className={cn("h-12 w-12 rounded-full flex items-center justify-center mb-3 bg-primary-main-100 mx-auto")}>
-                  <IoCloudDownloadOutline className="size-6 text-primary-main" />
-                </div>
-                <DialogTitle className="text-center !font-semibold !text-base !p-0">Download Data</DialogTitle>
-                <DialogDescription className="text-center text-grey-800 text-sm max-w-80 mx-auto">
-                  You can download the data for the lands participating in the price calculation, or all the data, including vacant lands.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="w-full justify-center items-center flex flex-col-reverse gap-3">
-                <Button
-                  onClick={() => {
-                    exportToExcel(data, additionalDataResult);
-                    setExcelWarning(false);
-                  }}
-                  className="w-full"
-                  variant="secondary"
-                >
-                  Export Vacant Data
-                </Button>
-                <Button
-                  onClick={() => {
-                    exportToExcel(data);
-                    setExcelWarning(false);
-                  }}
-                  className={cn("w-full")}
-                >
-                  Export Data
-                </Button>
-              </div>
-            </>
-          </div>
-        </DrawerContent>
-      </Drawer>
       <ResponsiveAlertDialog
         mediaQuery={null}
         open={subscriptionWarning}
@@ -144,7 +105,7 @@ const SearchItemDetailsMobileMapFull = ({
         title="Please sign in or subscribe to see the sales data"
         description="You will need to sign in or subscribe to view, analyze, or export sales data"
       />
-      <Drawer open={!showExcelWarning} onOpenChange={() => {}} modal={false}>
+      <Drawer open onOpenChange={() => {}} modal={false}>
         <DrawerContent className="[&>div:first-child]:hidden">
           <DrawerHeader className="sr-only">
             <DialogTitle className="border-b pb-4">EXPORT DATA</DialogTitle>
@@ -194,7 +155,7 @@ const SearchItemDetailsMobileMapFull = ({
                 <Button
                   className="w-full"
                   onClick={() => {
-                    exportToExcel(data);
+                    exportToExcel(data, additionalDataResult);
                   }}
                 >
                   <div className="flex flex-row items-center gap-3">
@@ -261,7 +222,6 @@ const SearchItemDetailsMobileMapFull = ({
                   setMpaInteraction={setMpaInteraction}
                   openWarningModal={() => setSubscriptionWarning(true)}
                   user={user}
-                  showAdditionalData={false}
                 />
               </div>
             </div>
@@ -280,72 +240,84 @@ const SearchItemDetailsMobileMapFull = ({
               <h2 className="text-grey-800 text-sm">Vacant parcels sold over the past 2 years, within 10 miles, and similar acreage.</h2>
             </div>
             {user && user.isSubscribed && (
-              <div className="flex flex-col gap-2">
-                {data?.propertiesUsedForCalculation.map((property) =>
-                  property.isBulked ? (
-                    <VoltItemMulti
-                      onHover={(parcelNumberNoFormatting) => {
-                        setMpaInteraction((prevData) => ({
-                          ...prevData,
-                          hoveredParcelNumber: parcelNumberNoFormatting,
-                          zoom: true,
-                        }));
-                      }}
-                      onMouseLeave={() => {
-                        setMpaInteraction((prevData) => ({
-                          ...prevData,
-                          hoveredParcelNumber: null,
-                          zoom: false,
-                        }));
-                      }}
-                      onSelect={(parcelNumberNoFormatting) => {
-                        setMpaInteraction((prevData) => ({
-                          ...prevData,
-                          openPopperParcelNumber: parcelNumberNoFormatting,
-                          zoom: parcelNumberNoFormatting.includes("multiple"),
-                        }));
-                      }}
-                      data={property}
-                      key={`calculation-${property.data.id}`}
-                      highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
-                      selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
-                      selected={mapInteraction.openPopperParcelNumber === property.data.id}
-                    />
-                  ) : (
-                    <VoltItem
-                      id={`calculation-${property.data.id}`}
-                      isSellingProperty
-                      onHover={(property) => {
-                        setMpaInteraction((prevData) => ({
-                          ...prevData,
-                          hoveredParcelNumber: property.parcelNumberNoFormatting,
-                          zoom: true,
-                        }));
-                      }}
-                      onMouseLeave={() => {
-                        setMpaInteraction((prevData) => ({
-                          ...prevData,
-                          hoveredParcelNumber: null,
-                          zoom: false,
-                        }));
-                      }}
-                      onSelect={(property) => {
-                        setMpaInteraction((prevData) => ({
-                          ...prevData,
-                          openPopperParcelNumber: property.parcelNumberNoFormatting,
-                          zoom: false,
-                        }));
-                      }}
-                      key={property.data.id}
-                      data={{
-                        ...property.data,
-                      }}
-                      isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
-                      selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
-                    />
-                  )
-                )}
-              </div>
+              <>
+                <div className="bg-grey-50 border border-grey-100 rounded-xl p-3 space-y-4 lg:hidden">
+                  <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
+                  <div className="bg-grey/10 rounded-lg p-0.5">
+                    <ul className="">
+                      <li className={cn("text-center text-sm h-full flex items-center justify-center cursor-pointer py-1.5 font-semibold")}>
+                        View on desktop version
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {data?.propertiesUsedForCalculation.map((property) =>
+                    property.isBulked ? (
+                      <VoltItemMulti
+                        onHover={(parcelNumberNoFormatting) => {
+                          setMpaInteraction((prevData) => ({
+                            ...prevData,
+                            hoveredParcelNumber: parcelNumberNoFormatting,
+                            zoom: true,
+                          }));
+                        }}
+                        onMouseLeave={() => {
+                          setMpaInteraction((prevData) => ({
+                            ...prevData,
+                            hoveredParcelNumber: null,
+                            zoom: false,
+                          }));
+                        }}
+                        onSelect={(parcelNumberNoFormatting) => {
+                          setMpaInteraction((prevData) => ({
+                            ...prevData,
+                            openPopperParcelNumber: parcelNumberNoFormatting,
+                            zoom: parcelNumberNoFormatting.includes("multiple"),
+                          }));
+                        }}
+                        data={property}
+                        key={`calculation-${property.data.id}`}
+                        highlightedItemParcelNumber={mapInteraction.hoveredParcelNumber}
+                        selectedItemParcelNumber={mapInteraction.openPopperParcelNumber}
+                        selected={mapInteraction.openPopperParcelNumber === property.data.id}
+                      />
+                    ) : (
+                      <VoltItem
+                        id={`calculation-${property.data.id}`}
+                        isSellingProperty
+                        onHover={(property) => {
+                          setMpaInteraction((prevData) => ({
+                            ...prevData,
+                            hoveredParcelNumber: property.parcelNumberNoFormatting,
+                            zoom: true,
+                          }));
+                        }}
+                        onMouseLeave={() => {
+                          setMpaInteraction((prevData) => ({
+                            ...prevData,
+                            hoveredParcelNumber: null,
+                            zoom: false,
+                          }));
+                        }}
+                        onSelect={(property) => {
+                          setMpaInteraction((prevData) => ({
+                            ...prevData,
+                            openPopperParcelNumber: property.parcelNumberNoFormatting,
+                            zoom: false,
+                          }));
+                        }}
+                        key={property.data.id}
+                        data={{
+                          ...property.data,
+                        }}
+                        isHighlighted={mapInteraction.hoveredParcelNumber === property.data.parcelNumberNoFormatting}
+                        selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
+                      />
+                    )
+                  )}
+                </div>
+              </>
             )}
             {(!user || !user.isSubscribed) && (
               <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">

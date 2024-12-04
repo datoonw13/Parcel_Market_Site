@@ -7,7 +7,7 @@ import { MapInteractionModel } from "@/types/common";
 import { IUserRecentSearches } from "@/types/user";
 import moment from "moment";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FC, useEffect, useRef, useState, useTransition } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
@@ -15,7 +15,6 @@ import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn, exportToExcel, exportToKml } from "@/lib/utils";
 import { IVoltPriceCalculation } from "@/types/volt";
-import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialogs/dialog";
 import NoAuthorizationSvg from "../../../../../../public/no-authorization.svg";
 import SearchItemDetailsDesktopContentMap from "./map-desktop";
@@ -73,14 +72,11 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
   additionalDataResult,
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
   const [mapInteraction, setMpaInteraction] = useState<MapInteractionModel>({
     hoveredParcelNumber: null,
     openPopperParcelNumber: null,
   });
   const [showExcelWarning, setExcelWarning] = useState(false);
-  const [showAdditionalData, setShowAdditionalData] = useState(false);
 
   return (
     <>
@@ -120,35 +116,6 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
           </>
         </DialogContent>
       </Dialog>
-      <div className="bg-grey-50 p-3 grid grid-cols-2 items-center justify-between gap-24">
-        <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
-        <div className="bg-grey-100 rounded-lg p-0.5 min-w-max">
-          <ul className="grid grid-cols-2 min-h-8">
-            <li
-              className={cn(
-                "text-center text-sm h-full flex items-center justify-center cursor-pointer relative",
-                !showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
-              )}
-              onClick={() => {
-                setShowAdditionalData(false);
-              }}
-            >
-              Default
-            </li>
-            <li
-              onClick={() => {
-                setShowAdditionalData(true);
-              }}
-              className={cn(
-                "text-center text-sm h-full flex items-center justify-center cursor-pointer",
-                showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
-              )}
-            >
-              Additional Data
-            </li>
-          </ul>
-        </div>
-      </div>
       <div className="hidden lg:flex py-3 px-6 gap-6 flex-col">
         <ul className="list-disc marker:primary-main-400 px-4 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] gap-y-3 gap-x-10 2xl:gap-x-16">
           <li className="text-primary-main-400">
@@ -203,7 +170,6 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
             openWarningModal={openSubscriptionWarning}
             user={user}
             additionalDataResult={additionalDataResult}
-            showAdditionalData={showAdditionalData}
           />
         </div>
         <VoltPriceCalculationAxis
@@ -221,7 +187,6 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
             <SearchItemDetailsTable
               data={data.propertiesUsedForCalculation}
               additionalDataResult={additionalDataResult}
-              showAdditionalData={showAdditionalData}
               mapInteraction={mapInteraction}
               setMpaInteraction={setMpaInteraction}
             />
@@ -294,8 +259,8 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
             <Button
               className=""
               onClick={() => {
-                // exportToExcel(data);
-                setExcelWarning(true);
+                exportToExcel(data, additionalDataResult);
+                // setExcelWarning(true);
               }}
             >
               <div className="flex flex-row items-center gap-3">

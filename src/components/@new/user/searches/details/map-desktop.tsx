@@ -40,7 +40,6 @@ interface VoltDesktopProps {
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
   additionalDataResult?: IUserRecentSearches;
-  showAdditionalData: boolean;
 }
 
 const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
@@ -49,7 +48,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
   mapInteraction,
   setMpaInteraction,
   data,
-  showAdditionalData,
   additionalDataResult,
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
@@ -173,7 +171,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         });
       }
     });
-    if (showAdditionalData) {
+    if (additionalDataResult) {
       additionalDataResult?.propertiesUsedForCalculation.forEach((property) => {
         if (!property.isBulked) {
           mapItems.push({
@@ -240,7 +238,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
     }
     return [mainProperty, ...mapItems];
   }, [
-    additionalDataResult?.propertiesUsedForCalculation,
+    additionalDataResult,
     data.acreage,
     data.lat,
     data.lon,
@@ -250,7 +248,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
     data.polygon,
     data.pricePerAcreage,
     data.propertiesUsedForCalculation,
-    showAdditionalData,
     user,
   ]);
 
