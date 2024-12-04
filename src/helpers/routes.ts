@@ -84,8 +84,8 @@ const routes = {
       protected: true,
     },
     recentSearches: {
-      url: "recent-searches",
-      fullUrl: "/user/recent-searches",
+      url: "searches",
+      fullUrl: "/user/searches",
       protected: true,
     },
   },

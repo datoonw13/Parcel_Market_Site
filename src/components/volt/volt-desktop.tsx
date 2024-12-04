@@ -16,6 +16,7 @@ import { IoBookmarkOutline } from "react-icons/io5";
 import { Tooltip } from "@/components/ui/tooltip";
 import Link from "next/link";
 import Logo from "@/icons/Logo";
+import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search/volt-search";
@@ -108,8 +109,10 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     if (errorMessage) {
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
     } else {
+      const { data: additionalDataResult } = await getAdditionalSearchDetails(Number(data!.id));
+
       setStep(VoltSteps.CALCULATION);
-      setValues((prev) => ({ ...prev, calculation: data }));
+      setValues((prev) => ({ ...prev, calculation: data, additionalDataResult }));
       setMpaInteraction({
         hoveredParcelNumber: null,
         openPopperParcelNumber: null,

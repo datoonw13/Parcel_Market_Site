@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import UserProfileSectionHeader from "@/components/@new/user/UserProfileSectionHeader";
+import UserProfileSectionHeader from "@/components/@new/user/UserSectionHeading";
 import ReceivedOffersDesktopFilters from "@/components/@new/user/offers/received/received-offer-desktop-filters";
 import ReceivedOffers from "@/components/@new/user/offers/received/received-offers";
 import ReceivedOfferListLoading from "@/components/@new/user/offers/received/received-offers-loading";

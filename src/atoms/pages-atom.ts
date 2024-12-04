@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-export const userRecentSearchesAtom = atom<{
+export const userSearchesAtom = atom<{
   selecting: boolean;
   selectedIds: number[];
   isAllSelected: boolean;

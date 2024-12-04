@@ -10,7 +10,9 @@ import { MapInteractionModel } from "@/types/common";
 import { IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
 import moment from "moment";
 import { getCenter } from "geolib";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { Button } from "../ui/button";
+import { breakPoints } from "../../../tailwind.config";
 
 const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
 
@@ -19,8 +21,18 @@ const markerDefault = new Icon({
   iconSize: [28, 36],
 });
 
+const markerDefaultYellow = new Icon({
+  iconUrl: "/map-default-orange-icon.svg",
+  iconSize: [28, 36],
+});
+
 const markerHighlighted = new Icon({
   iconUrl: "/map-highlighted-icon.svg",
+  iconSize: [28, 36],
+});
+
+const markerHighlightedYellow = new Icon({
+  iconUrl: "/map-highlighted-orange-icon.svg",
   iconSize: [28, 36],
 });
 
@@ -57,6 +69,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
+  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.lg));
 
   const mapData = useMemo(() => {
     if (step === VoltSteps.SEARCH) {
@@ -153,7 +166,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         parcelNumberNoFormatting: string;
         latitude: number;
         longitude: number;
-        markerType: "highlighted" | "default";
+        markerType: "highlighted" | "default" | "default-yellow";
         popup?: ReactElement;
       }> = [];
       values.calculation.propertiesUsedForCalculation.forEach((property) => {
@@ -216,6 +229,39 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
       });
 
+      if (values.additionalDataResult && !isSmallDevice) {
+        values.additionalDataResult.propertiesUsedForCalculation.forEach((property) => {
+          if (!property.isBulked) {
+            mapItems.push({
+              parcelNumber: property.data.parcelNumberNoFormatting,
+              parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+              latitude: property.data.lat,
+              longitude: property.data.lon,
+              markerType: "default-yellow" as const,
+              ...(user &&
+                user.isSubscribed && {
+                  popup: (
+                    <div className="flex flex-col gap-1 space-y-2">
+                      <p className="!p-0 !m-0">
+                        Parcel Number: <b>{property.data.parcelNumberNoFormatting}</b>
+                      </p>
+                      <p className="!p-0 !m-0">
+                        Acreage: <b>{property.data.acreage.toFixed(2)}</b>
+                      </p>
+                      <p className="!p-0 !m-0">
+                        Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
+                      </p>
+                      <p className="!p-0 !m-0">
+                        Sold Price Per Acre: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
+                      </p>
+                    </div>
+                  ),
+                }),
+            });
+          }
+        });
+      }
+
       values.calculation.propertiesUsedForCalculation
         .filter((el) => el.isBulked)
         .forEach((item) => {
@@ -251,15 +297,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [mainProperty, ...mapItems];
     }
     return [];
-  }, [
-    setValues,
-    step,
-    user,
-    values.calculation,
-    values.searchResult,
-    values.selectedItem?.parcelNumber,
-    values.selectedItem?.parcelNumberNoFormatting,
-  ]);
+  }, [isSmallDevice, mapInteraction, setValues, step, user, values]);
 
   const canViewDetails = useCallback(
     (parcelNumberNoFormatting: string) => {
@@ -461,17 +499,19 @@ const VoltMap: FC<VoltDesktopProps> = ({
           parcelNumberNoFormatting !== values.calculation?.parcelNumberNoFormatting &&
           parcelNumberNoFormatting !== values.selectedItem?.parcelNumberNoFormatting &&
           !highlightedParcelNumbersSet.has(parcelNumberNoFormatting) &&
-          markerIcon?.iconUrl === markerHighlighted.options.iconUrl
+          markerIcon?.iconUrl?.includes("highlighted")
         ) {
-          marker?.setIcon(markerDefault);
+          marker?.setIcon(markerIcon?.iconUrl.includes("orange") ? markerDefaultYellow : markerDefault);
         }
       });
     }
 
     Array.from(highlightedParcelNumbersSet).forEach((el) => {
       const marker = markerRefs.current?.[el as keyof typeof markerRefs.current];
+      const markerIcon = marker?.getIcon().options;
+
       if (marker) {
-        marker.setIcon(markerHighlighted);
+        marker.setIcon(markerIcon?.iconUrl?.includes("orange") ? markerHighlightedYellow : markerHighlighted);
       }
     });
   }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber, values.calculation, values.selectedItem]);

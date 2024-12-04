@@ -20,6 +20,7 @@ const initialValues = {
   searchResult: null,
   selectedItem: null,
   calculation: null,
+  additionalDataResult: null,
 };
 
 const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
