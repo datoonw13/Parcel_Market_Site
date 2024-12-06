@@ -224,7 +224,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                       disabled={!values.selectedItem}
                       className="w-full"
                     >
-                      Get Value
+                      Get Data
                     </Button>
                   </div>
                 )}
