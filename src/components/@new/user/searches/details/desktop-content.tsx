@@ -116,6 +116,10 @@ const SearchItemDetailsDesktopContent: FC<SearchItemDetailsDesktopContentProps> 
           </>
         </DialogContent>
       </Dialog>
+      <div className="bg-grey-50 px-4 py-3 text-grey-800 text-xs">
+        Vacant land parcels that have sold in the past two years, within 10 miles of the subject parcel and are of similar acreage. Yellow
+        shading and yellow pins indicate sales not used in VOLT&apos;s algorithms and may be considered qualified sales
+      </div>
       <div className="hidden lg:flex py-3 px-6 gap-6 flex-col">
         <ul className="list-disc marker:primary-main-400 px-4 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] gap-y-3 gap-x-10 2xl:gap-x-16">
           <li className="text-primary-main-400">
