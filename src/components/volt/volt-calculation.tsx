@@ -29,8 +29,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
     ...(isSmallDevice ? [] : values.additionalDataResult?.propertiesUsedForCalculation || []),
     ...(values.calculation?.propertiesUsedForCalculation || []),
   ].sort((a, b) => {
-    const aPrice = (a.data as any)?.price || (a.data as any)?.lastSalePrice;
-    const bPrice = (b.data as any)?.price || (b.data as any)?.lastSalePrice;
+    const aPrice = a.data.pricePerAcreage || a.data.pricePerAcreage;
+    const bPrice = b.data.pricePerAcreage || b.data.pricePerAcreage;
 
     return aPrice - bPrice;
   });
