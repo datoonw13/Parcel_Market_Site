@@ -68,11 +68,11 @@ export const exportToKml = (data: IUserRecentSearches) => {
 
   const mainLandKml = `
      <Placemark>
-        <name>Selling property</name>
+        <name>Subject property</name>
         <styleUrl>#selling-property-polygon</styleUrl>
         <description>
           <![CDATA[
-            <p style='color:black; font-size:16px; font-weight:600;font-family:sans-serif'>Selling property details:<p/>
+            <p style='color:black; font-size:16px; font-weight:600;font-family:sans-serif'>Subject property details:<p/>
             <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Owner: 
             <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${data.owner}</span>
             </p>
