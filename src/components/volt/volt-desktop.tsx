@@ -105,12 +105,20 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     };
     setCalculationPending(true);
 
-    const { errorMessage, data } = await calculateLandPriceAction(reqData);
+    let { errorMessage, data } = await calculateLandPriceAction(reqData);
+
+    if (errorMessage) {
+      const repeatReq = await calculateLandPriceAction(reqData);
+      if (!repeatReq.errorMessage) {
+        errorMessage = repeatReq.errorMessage;
+        data = repeatReq.data;
+      }
+    }
+
     if (errorMessage) {
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
     } else {
-      const { data: additionalDataResult } = await getAdditionalSearchDetails(Number(data!.id));
-
+      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(data!.id));
       setStep(VoltSteps.CALCULATION);
       setValues((prev) => ({ ...prev, calculation: data, additionalDataResult }));
       setMpaInteraction({
