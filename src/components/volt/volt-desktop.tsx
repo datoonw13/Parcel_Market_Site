@@ -105,12 +105,20 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     };
     setCalculationPending(true);
 
-    const { errorMessage, data } = await calculateLandPriceAction(reqData);
+    let { errorMessage, data } = await calculateLandPriceAction(reqData);
+
+    if (errorMessage) {
+      const repeatReq = await calculateLandPriceAction(reqData);
+      if (!repeatReq.errorMessage) {
+        errorMessage = repeatReq.errorMessage;
+        data = repeatReq.data;
+      }
+    }
+
     if (errorMessage) {
       notify({ title: "Error", description: errorMessage }, { variant: "error" });
     } else {
-      const { data: additionalDataResult } = await getAdditionalSearchDetails(Number(data!.id));
-
+      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(data!.id));
       setStep(VoltSteps.CALCULATION);
       setValues((prev) => ({ ...prev, calculation: data, additionalDataResult }));
       setMpaInteraction({
@@ -196,6 +204,15 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                           mapInteraction={mapInteraction}
                           setMpaInteraction={setMpaInteraction}
                         />
+                      )}
+                      {calculationPending && (
+                        <div id="loader" className="space-y-4">
+                          <div className="space-y-1">
+                            <div className="max-w-40 w-full h-6 rounded-2xl bg-grey-100 animate-pulse" />
+                            <div className="max-w-64 w-full h-5 rounded-2xl bg-grey-100 animate-pulse" />
+                          </div>
+                          <div className="w-full h-64 rounded-2xl bg-grey-100 animate-pulse" />
+                        </div>
                       )}
                       {step === VoltSteps.CALCULATION && (
                         <VoltCalculation
