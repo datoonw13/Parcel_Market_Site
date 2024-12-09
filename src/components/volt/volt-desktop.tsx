@@ -205,6 +205,15 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                           setMpaInteraction={setMpaInteraction}
                         />
                       )}
+                      {calculationPending && (
+                        <div id="loader" className="space-y-4">
+                          <div className="space-y-1">
+                            <div className="max-w-40 w-full h-6 rounded-2xl bg-grey-100 animate-pulse" />
+                            <div className="max-w-64 w-full h-5 rounded-2xl bg-grey-100 animate-pulse" />
+                          </div>
+                          <div className="w-full h-64 rounded-2xl bg-grey-100 animate-pulse" />
+                        </div>
+                      )}
                       {step === VoltSteps.CALCULATION && (
                         <VoltCalculation
                           values={values}
