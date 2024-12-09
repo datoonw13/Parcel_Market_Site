@@ -29,8 +29,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
     ...(isSmallDevice ? [] : values.additionalDataResult?.propertiesUsedForCalculation || []),
     ...(values.calculation?.propertiesUsedForCalculation || []),
   ].sort((a, b) => {
-    const aPrice = (a.data as any)?.price || (a.data as any)?.lastSalePrice;
-    const bPrice = (b.data as any)?.price || (b.data as any)?.lastSalePrice;
+    const aPrice = a.data.pricePerAcreage || a.data.pricePerAcreage;
+    const bPrice = b.data.pricePerAcreage || b.data.pricePerAcreage;
 
     return aPrice - bPrice;
   });
@@ -103,8 +103,8 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
         <div className="space-y-1">
           <h1 className="font-semibold text-lg">Recent Sales</h1>
           <h2 className="text-sm text-grey-800">
-            These are vacant land parcels that have sold in the past two years, within 10 miles of the subject parcel and are of similar
-            acreage.
+            Vacant land parcels that have sold in the past two years, within 10 miles of the subject parcel and are of similar acreage.
+            Yellow shading and yellow pins indicate sales not used in VOLT&apos;s algorithms and may be considered qualified sales
           </h2>
         </div>
 
