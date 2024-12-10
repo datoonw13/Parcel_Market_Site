@@ -17,8 +17,6 @@ import { decode } from "jsonwebtoken";
 import { userSearchesTag } from "./tags";
 import { fetcher } from "../fetcher";
 
-export const maxDuration = 40;
-
 export const getUserSearches = async (
   filters: Partial<z.infer<typeof userSearchesValidations>> & { page: number; pageSize: number }
 ): Promise<ResponseModel<({ list: { title: string; id: number }[] } & IPagination) | null>> => {
