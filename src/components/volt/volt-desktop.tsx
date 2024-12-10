@@ -113,16 +113,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
       res = await calculateLandPriceAction(reqData);
     }
 
-    if (res?.errorMessage) {
-      const repeatReq = await calculateLandPriceAction(reqData);
-      if (!repeatReq.errorMessage) {
-        res.errorMessage = repeatReq.errorMessage;
-        res.data = repeatReq.data;
-      }
-    }
-
-    if (res.errorMessage) {
-      notify({ title: "Error", description: res.errorMessage }, { variant: "error" });
+    if (res?.errorMessage || !res?.data) {
+      notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
     } else {
       const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(res.data!.id));
       setStep(VoltSteps.CALCULATION);
