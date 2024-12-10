@@ -110,6 +110,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     try {
       res = await calculateLandPriceAction(reqData);
     } catch (error) {
+      console.log(error, 22);
+
       res = await calculateLandPriceAction(reqData);
     }
 
