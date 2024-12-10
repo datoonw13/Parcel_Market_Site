@@ -85,7 +85,6 @@ export const calculateLandPriceAction = async (
       next: {
         revalidate: 3600,
       },
-      signal: AbortSignal.timeout(30 * 1000), // <=== HERE
     });
 
     const formattedResponse: IVoltPriceCalculation = {
