@@ -105,22 +105,28 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     };
     setCalculationPending(true);
 
-    const req = await calculateLandPriceAction(reqData);
+    let res: any = null;
 
-    if (req?.errorMessage) {
+    try {
+      res = await calculateLandPriceAction(reqData);
+    } catch (error) {
+      res = await calculateLandPriceAction(reqData);
+    }
+
+    if (res?.errorMessage) {
       const repeatReq = await calculateLandPriceAction(reqData);
       if (!repeatReq.errorMessage) {
-        req.errorMessage = repeatReq.errorMessage;
-        req.data = repeatReq.data;
+        res.errorMessage = repeatReq.errorMessage;
+        res.data = repeatReq.data;
       }
     }
 
-    if (req.errorMessage) {
-      notify({ title: "Error", description: req.errorMessage }, { variant: "error" });
+    if (res.errorMessage) {
+      notify({ title: "Error", description: res.errorMessage }, { variant: "error" });
     } else {
-      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(req.data!.id));
+      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(res.data!.id));
       setStep(VoltSteps.CALCULATION);
-      setValues((prev) => ({ ...prev, calculation: req.data, additionalDataResult }));
+      setValues((prev) => ({ ...prev, calculation: res.data, additionalDataResult }));
       setMpaInteraction({
         hoveredParcelNumber: null,
         openPopperParcelNumber: null,
