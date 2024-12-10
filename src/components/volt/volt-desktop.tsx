@@ -105,15 +105,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     };
     setCalculationPending(true);
 
-    let res: any = null;
-
-    try {
-      res = await calculateLandPriceAction(reqData);
-    } catch (error) {
-      console.log(error, 22);
-
-      res = await calculateLandPriceAction(reqData);
-    }
+    const res = await calculateLandPriceAction(reqData);
 
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
