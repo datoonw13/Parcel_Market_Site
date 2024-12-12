@@ -27,6 +27,7 @@ import VoltCalculation from "./volt-calculation";
 import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import VoltMap from "./volt-map";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
+import VoltSearchMap from "./search-map";
 
 const MapBox = dynamic(() => import("./mapbox"), { ssr: false });
 
@@ -127,7 +128,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     setCalculationPending(false);
   };
 
-  useStates();
   return (
     <>
       <TermsConditionsDialog
@@ -263,7 +263,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full">
               {selectedSearchType === "map" ? (
-                <MapBox />
+                <VoltSearchMap data={values.searchDetails} />
               ) : (
                 <VoltMap
                   step={step}

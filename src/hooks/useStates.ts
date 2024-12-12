@@ -32,7 +32,7 @@ const useStates = () => {
       .map((el) => ({ value: el, label: data[el as keyof typeof data][0].stateName }))
       .sort((a, b) => a.label.localeCompare(b.label));
     if (!showAll) {
-      result = result.filter((el) => !statesBlackList.includes(el.label));
+      // result = result.filter((el) => !statesBlackList.includes(el.label));
     }
     return result;
   }, []);

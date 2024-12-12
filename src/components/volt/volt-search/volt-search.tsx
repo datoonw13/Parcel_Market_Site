@@ -68,6 +68,15 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
 
   const onSubmit = handleSubmit(async (data) => {
     setStep(VoltSteps.SEARCH);
+
+    if (watch("searchType") === "map") {
+      setValues((prev) => ({
+        ...prev,
+        searchDetails: { ...data },
+      }));
+      return;
+    }
+
     const { data: properties, errorMessage } = await getPropertiesAction(data);
     if (errorMessage) {
       setError(errorMessage === "Search limit exceeded for this month." ? "limit" : "notFound");

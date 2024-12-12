@@ -7,25 +7,17 @@ import { polygon, convertArea } from "@turf/helpers";
 mapboxgl.accessToken = "pk.eyJ1IjoibXJ6aXBwbzEyMyIsImEiOiJjbTRqazMzZGEwaTZiMmxzaGw5bmwxazhlIn0.kU8XbKNSEtMyNoAifLqbEQ";
 
 const MapboxComponent = () => {
-  //   const [hoveredFeatureProperty, setHoveredFeatureProperty] = useState<number | null>(null);
   const hoveredFeaturePropertyId = useRef<null | number>(null);
   const mapContainerRef = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
   const handleMouseMove = (e: MapMouseEvent) => {
-    // Get details on the vector features at the point clicked
     const features = map.current!.queryRenderedFeatures(e.point, { layers: ["parcel-assist"] });
 
     if (features.length > 0) {
-      // There may be multiple features if polygons overlap! Only show one here
       const feature = features[0] as any;
-      const coordinates = e.lngLat;
-      const { id } = feature;
       const { fid }: { fid: number } = feature.properties;
 
-      // Update the clicked feature property for style
-
-      // Update the map style
       if (hoveredFeaturePropertyId.current !== fid) {
         map.current!.setFeatureState(
           { source: "parcels", sourceLayer: "parcels", id: hoveredFeaturePropertyId.current! },
@@ -36,22 +28,7 @@ const MapboxComponent = () => {
         map.current!.setFeatureState({ source: "parcels", sourceLayer: "parcels", id: hoveredFeaturePropertyId.current }, { hover: true });
         map.current!.triggerRepaint();
       }
-
-      // hoveredFeatureId = id;
-      // if (hoveredFeatureId !== clickedFeatureProperty) {
-      //   map.setFeatureState({ source: "parcels", sourceLayer: "parcels", id: hoveredFeatureId }, { hover: true });
-      //   // Trigger a repaint
-      //   map.triggerRepaint();
-      // }
     }
-  };
-
-  const handleMouseLeave = (dataId: string) => {
-    if (hoveredFeaturePropertyId.current !== null) {
-      map.current!.setFeatureState({ source: dataId, sourceLayer: dataId, id: hoveredFeaturePropertyId.current }, { hover: false });
-      map.current!.triggerRepaint();
-    }
-    hoveredFeaturePropertyId.current = null;
   };
 
   const initializeMap = () => {
@@ -65,9 +42,6 @@ const MapboxComponent = () => {
     }
 
     if (map.current) {
-      // Add our navigation control (the +/- zoom buttons)
-      //   map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-
       map.current.on("load", async () => {
         const parcelCreate = await fetch(
           `https://tiles.regrid.com/api/v1/parcels?format=mvt&token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzMzNjgyNTcyLCJleHAiOjE3MzYyNzQ1NzIsInUiOjQ3Mzc0NSwiZyI6MjMxNTMsImNhcCI6InBhOnRzOnBzOmJmOm1hOnR5OmVvOnpvOnNiIn0.Q6B0LNieVvSoxU8AZhogRW9xEB4WfYeZjfBnbavbh0o`,
