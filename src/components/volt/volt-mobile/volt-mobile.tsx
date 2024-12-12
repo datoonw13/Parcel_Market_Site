@@ -143,14 +143,14 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
           <div className={cn("flex flex-col overflow-auto h-full")}>
             {step === VoltSteps.SEARCH && (
               <>
-                <VoltSearch
+                {/* <VoltSearch
                   className="p-5"
                   setStep={setStep}
                   values={values}
                   setValues={setValues}
                   user={user}
                   onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
-                />
+                /> */}
                 <VoltFooter className="flex-col py-6" />
               </>
             )}
