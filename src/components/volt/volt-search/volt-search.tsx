@@ -29,9 +29,11 @@ interface VoltSearchProps {
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
+  setSearchType: Dispatch<SetStateAction<VoltSearchModel["searchType"]>>;
+  selectedSearchType: VoltSearchModel["searchType"];
 }
 
-const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep }) => {
+const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep, selectedSearchType, setSearchType }) => {
   const params = useSearchParams();
   const router = useRouter();
   const searchParams = useMemo(() => new URLSearchParams(params as any), [params]);
@@ -46,7 +48,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   } = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
-      searchType: "fullName",
+      searchType: selectedSearchType,
     },
   });
 
@@ -57,6 +59,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
     setValue("searchType", type, { shouldValidate: true });
+    setSearchType(type);
     if (isSubmitted) {
       trigger();
     }
@@ -151,6 +154,15 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
                     renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
                     renderContent="The legal entity registered to the land with the County, such as an LLC, Inc, Corp, etc."
                   />
+                </div>
+              }
+            />
+            <RadioGroupItem
+              value="map"
+              label={
+                <div className="flex items-center gap-2">
+                  <p>Search by Map</p>
+                  <Tooltip renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />} renderContent="Some info." />
                 </div>
               }
             />

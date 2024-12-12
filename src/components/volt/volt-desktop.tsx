@@ -2,7 +2,7 @@
 
 import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapInteractionModel } from "@/types/common";
@@ -17,6 +17,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import Link from "next/link";
 import Logo from "@/icons/Logo";
 import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
+import dynamic from "next/dynamic";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search/volt-search";
@@ -25,6 +26,8 @@ import VoltCalculation from "./volt-calculation";
 import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import VoltMap from "./volt-map";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
+
+const MapBox = dynamic(() => import("./mapbox"), { ssr: false });
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -82,6 +85,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
   const { notify } = useNotification();
   const [calculationPending, setCalculationPending] = useState(false);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
+  const [selectedSearchType, setSearchType] = useState<VoltSearchModel["searchType"]>("fullName");
 
   const calculatePrice = async () => {
     if (!values.selectedItem) {
@@ -187,6 +191,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                           setStep(VoltSteps.SEARCH_RESULTS);
                           setDataSaved(false);
                         }}
+                        selectedSearchType={selectedSearchType}
+                        setSearchType={setSearchType}
                       />
 
                       {step === VoltSteps.SEARCH_RESULTS && (
@@ -254,15 +260,19 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full">
-              <VoltMap
-                step={step}
-                user={user}
-                setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
-                values={values}
-                setValues={setValues}
-                mapInteraction={mapInteraction}
-                setMpaInteraction={setMpaInteraction}
-              />
+              {selectedSearchType === "map" ? (
+                <MapBox />
+              ) : (
+                <VoltMap
+                  step={step}
+                  user={user}
+                  setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
+                  values={values}
+                  setValues={setValues}
+                  mapInteraction={mapInteraction}
+                  setMpaInteraction={setMpaInteraction}
+                />
+              )}
             </td>
           </tr>
           {step === VoltSteps.CALCULATION && (
