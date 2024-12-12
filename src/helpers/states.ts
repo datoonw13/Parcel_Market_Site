@@ -3,7 +3,7 @@ import { usaCities, usaStatesFull } from "typed-usa-states";
 const statesBlackList = [
   "Louisiana",
   "Montana",
-  // "Texas",
+  "Texas",
   "Idaho",
   "Mississippi",
   "New",
