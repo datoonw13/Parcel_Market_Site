@@ -14,6 +14,7 @@ import { getPropertiesAction } from "@/server-actions/volt/actions";
 import { VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
+import useStates from "@/hooks/useStates";
 import { voltSearchSchema } from "../../../zod-validations/volt";
 import { Tooltip } from "../../ui/tooltip";
 import { RadioGroupItem } from "../../ui/radio-group";
@@ -51,10 +52,10 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
       searchType: selectedSearchType,
     },
   });
-
+  const { states, getCountiesByState, getCounty } = useStates();
   const selectedState = watch("state");
-  const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => getCounties(selectedState), [selectedState]);
+  const counties = getCountiesByState(selectedState);
+
   const disableSearch = !!(error === "limit");
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
@@ -173,7 +174,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
             <TextInput
               value={watch("parcelNumber") || ""}
               onChange={(e) => setValue("parcelNumber", e.target.value || undefined, { shouldValidate: true })}
-              // error={!!errors.parcelNumber}
               label="Enter Parcel ID"
               disabled={disableSearch}
             />
@@ -183,7 +183,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
               <TextInput
                 value={watch("firstName") || ""}
                 onChange={(e) => setValue("firstName", e.target.value || undefined, { shouldValidate: true })}
-                // error={!!errors.firstName}
                 rootClassName="w-full"
                 label="First Name"
                 disabled={disableSearch}
@@ -191,7 +190,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
               <TextInput
                 value={watch("lastName") || ""}
                 onChange={(e) => setValue("lastName", e.target.value || undefined, { shouldValidate: true })}
-                // error={!!errors.lastName}
                 rootClassName="w-full"
                 label="Last Name"
                 disabled={disableSearch}
@@ -202,7 +200,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
             <TextInput
               value={watch("entityName") || ""}
               onChange={(e) => setValue("entityName", e.target.value || undefined, { shouldValidate: true })}
-              // error={!!errors.entityName}
               label="Enter name of the entity"
               disabled={disableSearch}
             />
@@ -217,17 +214,15 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
                 setValue("county", "", { shouldValidate: true });
               }}
               disabled={disableSearch}
-              // error={!!errors.state}
             />
             <AutoComplete
-              options={counties}
+              options={counties || []}
               placeholder="County"
               onValueChange={(item) => {
                 setValue("county", item || "", { shouldValidate: true });
               }}
-              selectedValue={getCountyValue(watch("county"), watch("state"))?.value || null}
+              selectedValue={getCounty(selectedState, watch("county"))?.short.value || null}
               disabled={!watch("state") || disableSearch}
-              // error={!!errors.county}
             />
           </div>
           <Button id="volt-search-btn" disabled={disableSearch || !isValid} loading={isSubmitting} onClick={onSubmit} className="mt-1">

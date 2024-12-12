@@ -18,6 +18,7 @@ import Link from "next/link";
 import Logo from "@/icons/Logo";
 import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
 import dynamic from "next/dynamic";
+import useStates from "@/hooks/useStates";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search/volt-search";
@@ -126,6 +127,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     setCalculationPending(false);
   };
 
+  useStates();
   return (
     <>
       <TermsConditionsDialog
