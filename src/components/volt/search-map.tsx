@@ -23,7 +23,7 @@ const VoltSearchMap = ({ data }: { data: VoltWrapperValuesModel["searchDetails"]
     state: string;
     county: string;
     parcelNumber: string;
-  } | null>(null)
+  } | null>(null);
 
   const toggleMapOptions = useCallback(() => {
     if (!mapRef) {
@@ -143,17 +143,22 @@ const VoltSearchMap = ({ data }: { data: VoltWrapperValuesModel["searchDetails"]
         if (feature) {
           // @ts-ignore
           const acreage = convertArea(area(polygon(feature.geometry?.coordinates)), "meters", "acres").toFixed(2);
-            setOpenParcelData({
-              owner: feature?.properties?.owner || '',
-              acreage: Number(acreage),
-              county: getCounty(feature?.properties?.path.split("/")[2], feature?.properties?.path.split("/")[3])?.short.label || feature?.properties?.path,
-              state: allStates.find(el => el.value === feature?.properties?.path.split("/")[2])?.label || '',
-              parcelNumber: feature?.properties?.parcelnumb
-            })
-            console.log(feature, 22);
-            
+          setOpenParcelData({
+            owner: feature?.properties?.owner || "",
+            acreage: Number(acreage),
+            county:
+              getCounty(feature?.properties?.path.split("/")[2], feature?.properties?.path.split("/")[3])?.short.label ||
+              feature?.properties?.path,
+            state: allStates.find((el) => el.value === feature?.properties?.path.split("/")[2])?.label || "",
+            parcelNumber: feature?.properties?.parcelnumb,
+          });
+          console.log(feature, 22);
+
           if (popupRef.current) {
-            new Popup({ closeButton: false, className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-4 [&>div:last-child]:p-3" }).setLngLat(e.lngLat).setDOMContent(popupRef.current).addTo(mapRef);
+            new Popup({ closeButton: false, className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-4 [&>div:last-child]:p-3" })
+              .setLngLat(e.lngLat)
+              .setDOMContent(popupRef.current)
+              .addTo(mapRef);
           }
         }
       });
@@ -182,11 +187,21 @@ const VoltSearchMap = ({ data }: { data: VoltWrapperValuesModel["searchDetails"]
       <div style={{ display: "none" }}>
         <div ref={popupRef}>
           <ul className="">
-            <li className="text-xs text-grey-800 py-0.5">Owner: <span className="text-black">{openParcelData?.owner}</span></li>
-            <li className="text-xs text-grey-800 py-0.5">Parcel ID: <span className="text-black">{openParcelData?.parcelNumber}</span></li>
-            <li className="text-xs text-grey-800 py-0.5">Acreage: <span className="text-black">{openParcelData?.acreage}</span></li>
-            <li className="text-xs text-grey-800 py-0.5">State: <span className="text-black">{openParcelData?.state}</span></li>
-            <li className="text-xs text-grey-800 py-0.5">County: <span className="text-black">{openParcelData?.county}</span></li>
+            <li className="text-xs text-grey-800 py-0.5">
+              Owner: <span className="text-black">{openParcelData?.owner}</span>
+            </li>
+            <li className="text-xs text-grey-800 py-0.5">
+              Parcel ID: <span className="text-black">{openParcelData?.parcelNumber}</span>
+            </li>
+            <li className="text-xs text-grey-800 py-0.5">
+              Acreage: <span className="text-black">{openParcelData?.acreage}</span>
+            </li>
+            <li className="text-xs text-grey-800 py-0.5">
+              State: <span className="text-black">{openParcelData?.state}</span>
+            </li>
+            <li className="text-xs text-grey-800 py-0.5">
+              County: <span className="text-black">{openParcelData?.county}</span>
+            </li>
           </ul>
           <Button className="mt-3 w-full min-w-40">Get Data</Button>
         </div>
