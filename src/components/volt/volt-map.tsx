@@ -115,18 +115,18 @@ const VoltMap: FC<VoltDesktopProps> = ({
       values.calculation.propertiesUsedForCalculation.forEach((property) => {
         if (property.isBulked) {
           property.data.properties.forEach((el) => {
-            if (el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting) {
+            if (el.parcelNumberNoFormatting === values.calculation?.parcelNumberNoFormatting) {
               mainLandSaleHistory.push(el);
             }
           });
-        } else if (property.data.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting) {
+        } else if (property.data.parcelNumberNoFormatting === values.calculation?.parcelNumberNoFormatting) {
           mainLandSaleHistory.push(property.data);
         }
       });
 
       const mainProperty = {
-        parcelNumber: values.selectedItem?.parcelNumber || "",
-        parcelNumberNoFormatting: values.selectedItem?.parcelNumberNoFormatting || "",
+        parcelNumber: values.calculation.parcelNumber || "",
+        parcelNumberNoFormatting: values.calculation.parcelNumberNoFormatting || "",
         latitude: Number(values.calculation.lat),
         longitude: Number(values.calculation.lon),
         polygon: values.calculation.polygon,

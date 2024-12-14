@@ -42,17 +42,23 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
   }, []);
 
   useEffect(() => {
-    if (mapInteraction.hoveredParcelNumber) {
-      const propertyId = values.calculation?.propertiesUsedForCalculation.find(
-        (el) => el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber
-      )?.data.parcelNumberNoFormatting;
+    if (mapInteraction.hoveredParcelNumber && values.calculation?.propertiesUsedForCalculation && values.additionalDataResult) {
+      const data = [...values.calculation.propertiesUsedForCalculation, ...values.additionalDataResult.propertiesUsedForCalculation];
+
+      const propertyId = data.find((el) => el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber)?.data
+        .parcelNumberNoFormatting;
 
       const isSellingProperty = propertyId === values.calculation?.parcelNumberNoFormatting;
       if (propertyId && !isElementVisible(`calculation-${propertyId}`, "volt-scroll") && !isSellingProperty) {
         document.getElementById(`calculation-${propertyId}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     }
-  }, [mapInteraction.hoveredParcelNumber, values.calculation?.parcelNumberNoFormatting, values.calculation?.propertiesUsedForCalculation]);
+  }, [
+    mapInteraction.hoveredParcelNumber,
+    values.additionalDataResult,
+    values.calculation?.parcelNumberNoFormatting,
+    values.calculation?.propertiesUsedForCalculation,
+  ]);
 
   return (
     <>
@@ -62,7 +68,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
           <h2 className="text-sm text-grey-800">This is the parcel of land that you searched.</h2>
         </div>
         <div className="flex flex-col gap-2">
-          {values.selectedItem && (
+          {values.calculation && (
             <VoltItem
               isSellingProperty
               onHover={(property) => {
@@ -86,14 +92,23 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                   zoom: true,
                 }));
               }}
-              id={`calculation-${values.selectedItem.id}`}
+              id={`calculation-${values.calculation.id}`}
               data={{
-                ...values.selectedItem,
+                acreage: values.calculation.acreage,
+                city: values.calculation.city,
+                county: values.calculation.county,
+                id: values.calculation.id,
+                lat: values.calculation.lat,
+                lon: values.calculation.lon,
+                parcelNumber: values.calculation.parcelNumber,
+                parcelNumberNoFormatting: values.calculation.parcelNumberNoFormatting,
+                state: values.calculation.state,
+                owner: values.calculation.owner,
               }}
               selected
               isHighlighted={
-                mapInteraction.hoveredParcelNumber === values.selectedItem.parcelNumberNoFormatting ||
-                mapInteraction.openPopperParcelNumber === values.selectedItem.parcelNumberNoFormatting
+                mapInteraction.hoveredParcelNumber === values.calculation.parcelNumberNoFormatting ||
+                mapInteraction.openPopperParcelNumber === values.calculation.parcelNumberNoFormatting
               }
             />
           )}

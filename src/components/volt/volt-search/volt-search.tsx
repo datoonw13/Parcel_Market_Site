@@ -72,6 +72,10 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
     if (watch("searchType") === "map") {
       setValues((prev) => ({
         ...prev,
+        additionalDataResult: null,
+        calculation: null,
+        searchResult: null,
+        selectedItem: null,
         searchDetails: { ...data },
       }));
       return;

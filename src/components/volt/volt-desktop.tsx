@@ -128,6 +128,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     setCalculationPending(false);
   };
 
+  console.log(values, 22);
+
   return (
     <>
       <TermsConditionsDialog
@@ -262,8 +264,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full">
-              {selectedSearchType === "map" ? (
-                <VoltSearchMap data={values.searchDetails} />
+              {selectedSearchType === "map" && !values.calculation ? (
+                <VoltSearchMap setStep={setStep} data={values.searchDetails} values={values} setValues={setValues} />
               ) : (
                 <VoltMap
                   step={step}
@@ -286,7 +288,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                   mapInteraction={mapInteraction}
                   setMpaInteraction={setMpaInteraction}
                   setOpenPropertyDetailWarningModal={() => setOpenPropertyDetailWarningModal(true)}
-                  data={getAxisData(values.calculation?.propertiesUsedForCalculation, values.selectedItem?.parcelNumberNoFormatting)}
+                  data={getAxisData(values.calculation?.propertiesUsedForCalculation, values.calculation?.parcelNumberNoFormatting)}
                 />
               </td>
             </tr>

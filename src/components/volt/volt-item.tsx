@@ -72,7 +72,7 @@ const VoltItem: FC<VoltItemProps> = ({
           selected && !isAdditional && " !border-primary-main-400 !bg-primary-main-50",
           selected && isAdditional && " !bg-[#fef7dd]",
           isHighlighted && !isAdditional && "bg-grey-50 border-[#D5D3D3]",
-          isHighlighted && isAdditional && "bg-[#fef7ddcc]",
+          isHighlighted && isAdditional && "bg-[#f7edc6]",
           isAdditional ? "" : "hover:bg-grey-50 hover:border-[#D5D3D3]"
         )}
         onMouseEnter={() => onHover && onHover(data)}
