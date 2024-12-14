@@ -6,7 +6,7 @@ import data from "../../public/files/states_counties.json";
 const statesBlackList = [
   "Louisiana",
   "Montana",
-  // "Texas",
+  "Texas",
   "Idaho",
   "Mississippi",
   "New",
