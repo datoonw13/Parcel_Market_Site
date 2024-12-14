@@ -32,9 +32,20 @@ interface VoltSearchProps {
   setStep: Dispatch<SetStateAction<VoltSteps>>;
   setSearchType: Dispatch<SetStateAction<VoltSearchModel["searchType"]>>;
   selectedSearchType: VoltSearchModel["searchType"];
+  setMobileSearchMap?: () => void;
 }
 
-const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep, selectedSearchType, setSearchType }) => {
+const VoltSearch: FC<VoltSearchProps> = ({
+  user,
+  className,
+  onSuccess,
+  setValues,
+  values,
+  setStep,
+  selectedSearchType,
+  setSearchType,
+  setMobileSearchMap,
+}) => {
   const params = useSearchParams();
   const router = useRouter();
   const searchParams = useMemo(() => new URLSearchParams(params as any), [params]);
@@ -70,6 +81,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
     setStep(VoltSteps.SEARCH);
 
     if (watch("searchType") === "map") {
+      setMobileSearchMap && setMobileSearchMap();
       setValues((prev) => ({
         ...prev,
         additionalDataResult: null,

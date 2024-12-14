@@ -1,8 +1,8 @@
 "use client";
 
 import { IDecodedAccessToken } from "@/types/auth";
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Button } from "@/components/ui/button";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
@@ -19,6 +19,7 @@ import VoltMap from "../volt-map";
 import VoltSearchResult from "../volt-search-result";
 import VoltPriceCalculationAxis from "../volt-calculation-axis";
 import VoltCalculation from "../volt-calculation";
+import VoltSearchMap from "../search-map";
 
 interface VoltMobileProps {
   user: IDecodedAccessToken | null;
@@ -76,6 +77,8 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
   const [calculationPending, setCalculationPending] = useState(false);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
   const [agreeTerm, setAgreeTerm] = useState(false);
+  const [selectedSearchType, setSearchType] = useState<VoltSearchModel["searchType"]>("fullName");
+  const [showSearchMap, setSearchMap] = useState(false);
 
   const calculatePrice = async () => {
     if (!values.selectedItem) {
@@ -115,8 +118,20 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
     setCalculationPending(false);
   };
 
+  useEffect(() => {
+    if (step !== VoltSteps.SEARCH) {
+      setSearchMap(false);
+    }
+  }, [step]);
+
   return (
     <>
+      {showSearchMap && (
+        <div className="z-10 fixed top-0 left-0 bg-white w-screen h-screen">
+          <VoltMobileHeader goBack={() => setSearchMap(false)} step={2} user={user} />
+          <VoltSearchMap setStep={setStep} data={values.searchDetails} values={values} setValues={setValues} />
+        </div>
+      )}
       <div className="flex flex-col h-full lg:hidden w-full relative">
         <VoltMobileHeader
           step={step}
@@ -143,14 +158,17 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, setOpenPropertyDetailWarningMod
           <div className={cn("flex flex-col overflow-auto h-full")}>
             {step === VoltSteps.SEARCH && (
               <>
-                {/* <VoltSearch
+                <VoltSearch
                   className="p-5"
                   setStep={setStep}
                   values={values}
                   setValues={setValues}
                   user={user}
                   onSuccess={() => setStep(VoltSteps.SEARCH_RESULTS)}
-                /> */}
+                  selectedSearchType={selectedSearchType}
+                  setSearchType={setSearchType}
+                  setMobileSearchMap={() => setSearchMap(true)}
+                />
                 <VoltFooter className="flex-col py-6" />
               </>
             )}

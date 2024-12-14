@@ -128,8 +128,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     setCalculationPending(false);
   };
 
-  console.log(values, 22);
-
   return (
     <>
       <TermsConditionsDialog
