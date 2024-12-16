@@ -315,6 +315,8 @@ const VoltMap: FC<VoltDesktopProps> = ({
 
   const handleMapHoverInteraction = useCallback(() => {
     if (mapRef.current && mapInteraction.hoveredParcelNumber) {
+      const currentZoom = mapRef.current.getZoom();
+
       if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
         const properties = values.calculation?.propertiesUsedForCalculation
           .filter((el) => el.isBulked)
@@ -340,7 +342,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
                 lng: centerCoordinate.longitude,
               },
             ] as any,
-            { maxZoom: 14 }
+            { maxZoom: currentZoom }
           );
         }
       } else {
@@ -348,7 +350,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         if (currentItemMarker) {
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: currentZoom });
           }
         }
       }
