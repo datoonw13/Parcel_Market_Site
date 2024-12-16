@@ -88,6 +88,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
   const [calculationPending, setCalculationPending] = useState(false);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
   const [selectedSearchType, setSearchType] = useState<VoltSearchModel["searchType"]>("fullName");
+  const [showAdditionalData, setShowAdditionalData] = useState(false);
 
   const calculatePrice = async () => {
     if (!values.selectedItem) {
@@ -220,6 +221,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                           user={user}
                           mapInteraction={mapInteraction}
                           setMpaInteraction={setMpaInteraction}
+                          setShowAdditionalData={setShowAdditionalData}
+                          showAdditionalData={showAdditionalData}
                         />
                       )}
                     </div>
@@ -273,6 +276,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
                   setValues={setValues}
                   mapInteraction={mapInteraction}
                   setMpaInteraction={setMpaInteraction}
+                  showAdditionalData={showAdditionalData}
                 />
               )}
             </td>

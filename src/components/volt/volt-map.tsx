@@ -44,6 +44,7 @@ interface VoltDesktopProps {
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  showAdditionalData?: boolean;
 }
 
 const getIcon = (el: IPropertyBaseInfo, values: VoltDesktopProps["values"], mapInteraction: VoltDesktopProps["mapInteraction"]) => {
@@ -66,6 +67,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
   setOpenPropertyDetailWarningModal,
   mapInteraction,
   setMpaInteraction,
+  showAdditionalData,
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
@@ -229,7 +231,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
       });
 
-      if (values.additionalDataResult && !isSmallDevice) {
+      if (values.additionalDataResult && showAdditionalData && !isSmallDevice) {
         values.additionalDataResult.propertiesUsedForCalculation.forEach((property) => {
           if (!property.isBulked) {
             mapItems.push({
@@ -297,7 +299,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [mainProperty, ...mapItems];
     }
     return [];
-  }, [isSmallDevice, mapInteraction, setValues, step, user, values]);
+  }, [isSmallDevice, mapInteraction, setValues, step, user, values, showAdditionalData]);
 
   const canViewDetails = useCallback(
     (parcelNumberNoFormatting: string) => {

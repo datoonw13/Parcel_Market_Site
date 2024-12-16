@@ -18,15 +18,25 @@ interface VoltCalculationProps {
   user: IDecodedAccessToken | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  showAdditionalData?: boolean;
+  setShowAdditionalData?: (value: boolean) => void;
 }
 
-const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteraction, setMpaInteraction }) => {
+const VoltCalculation: FC<VoltCalculationProps> = ({
+  values,
+  user,
+  mapInteraction,
+  setMpaInteraction,
+  setShowAdditionalData,
+  showAdditionalData,
+}) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.lg));
 
   const data = [
-    ...(isSmallDevice ? [] : values.additionalDataResult?.propertiesUsedForCalculation || []),
+    // eslint-disable-next-line no-nested-ternary
+    ...(isSmallDevice ? [] : showAdditionalData ? values.additionalDataResult?.propertiesUsedForCalculation || [] : []),
     ...(values.calculation?.propertiesUsedForCalculation || []),
   ].sort((a, b) => {
     const aPrice = a.data.pricePerAcreage || a.data.pricePerAcreage;
@@ -122,7 +132,33 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
             Yellow shading and yellow pins indicate sales not used in VOLT&apos;s algorithms and may be considered qualified sales
           </h2>
         </div>
-
+        {setShowAdditionalData && (
+          <div className="bg-grey-50 rounded-xl p-3 space-y-4">
+            <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
+            <div className="bg-grey/10 rounded-lg p-0.5">
+              <ul className="grid grid-cols-2 min-h-8">
+                <li
+                  className={cn(
+                    "text-center text-sm h-full flex items-center justify-center cursor-pointer",
+                    !showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
+                  )}
+                  onClick={() => setShowAdditionalData(false)}
+                >
+                  Default
+                </li>
+                <li
+                  onClick={() => setShowAdditionalData(true)}
+                  className={cn(
+                    "text-center text-sm h-full flex items-center justify-center cursor-pointer",
+                    showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
+                  )}
+                >
+                  Additional Data
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
         {user && user.isSubscribed && (
           <>
             <div className="bg-grey-50 border border-grey-100 rounded-xl p-3 space-y-4 lg:hidden">
