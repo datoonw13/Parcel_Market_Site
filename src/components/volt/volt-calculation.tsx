@@ -18,15 +18,25 @@ interface VoltCalculationProps {
   user: IDecodedAccessToken | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  showAdditionalData?: boolean;
+  setShowAdditionalData?: (value: boolean) => void;
 }
 
-const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteraction, setMpaInteraction }) => {
+const VoltCalculation: FC<VoltCalculationProps> = ({
+  values,
+  user,
+  mapInteraction,
+  setMpaInteraction,
+  setShowAdditionalData,
+  showAdditionalData,
+}) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.lg));
 
   const data = [
-    ...(isSmallDevice ? [] : values.additionalDataResult?.propertiesUsedForCalculation || []),
+    // eslint-disable-next-line no-nested-ternary
+    ...(isSmallDevice ? [] : showAdditionalData ? values.additionalDataResult?.propertiesUsedForCalculation || [] : []),
     ...(values.calculation?.propertiesUsedForCalculation || []),
   ].sort((a, b) => {
     const aPrice = a.data.pricePerAcreage || a.data.pricePerAcreage;
@@ -42,17 +52,23 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
   }, []);
 
   useEffect(() => {
-    if (mapInteraction.hoveredParcelNumber) {
-      const propertyId = values.calculation?.propertiesUsedForCalculation.find(
-        (el) => el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber
-      )?.data.parcelNumberNoFormatting;
+    if (mapInteraction.hoveredParcelNumber && values.calculation?.propertiesUsedForCalculation && values.additionalDataResult) {
+      const data = [...values.calculation.propertiesUsedForCalculation, ...values.additionalDataResult.propertiesUsedForCalculation];
+
+      const propertyId = data.find((el) => el.data.parcelNumberNoFormatting === mapInteraction.hoveredParcelNumber)?.data
+        .parcelNumberNoFormatting;
 
       const isSellingProperty = propertyId === values.calculation?.parcelNumberNoFormatting;
       if (propertyId && !isElementVisible(`calculation-${propertyId}`, "volt-scroll") && !isSellingProperty) {
         document.getElementById(`calculation-${propertyId}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     }
-  }, [mapInteraction.hoveredParcelNumber, values.calculation?.parcelNumberNoFormatting, values.calculation?.propertiesUsedForCalculation]);
+  }, [
+    mapInteraction.hoveredParcelNumber,
+    values.additionalDataResult,
+    values.calculation?.parcelNumberNoFormatting,
+    values.calculation?.propertiesUsedForCalculation,
+  ]);
 
   return (
     <>
@@ -62,7 +78,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
           <h2 className="text-sm text-grey-800">This is the parcel of land that you searched.</h2>
         </div>
         <div className="flex flex-col gap-2">
-          {values.selectedItem && (
+          {values.calculation && (
             <VoltItem
               isSellingProperty
               onHover={(property) => {
@@ -86,14 +102,23 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
                   zoom: true,
                 }));
               }}
-              id={`calculation-${values.selectedItem.id}`}
+              id={`calculation-${values.calculation.id}`}
               data={{
-                ...values.selectedItem,
+                acreage: values.calculation.acreage,
+                city: values.calculation.city,
+                county: values.calculation.county,
+                id: values.calculation.id,
+                lat: values.calculation.lat,
+                lon: values.calculation.lon,
+                parcelNumber: values.calculation.parcelNumber,
+                parcelNumberNoFormatting: values.calculation.parcelNumberNoFormatting,
+                state: values.calculation.state,
+                owner: values.calculation.owner,
               }}
               selected
               isHighlighted={
-                mapInteraction.hoveredParcelNumber === values.selectedItem.parcelNumberNoFormatting ||
-                mapInteraction.openPopperParcelNumber === values.selectedItem.parcelNumberNoFormatting
+                mapInteraction.hoveredParcelNumber === values.calculation.parcelNumberNoFormatting ||
+                mapInteraction.openPopperParcelNumber === values.calculation.parcelNumberNoFormatting
               }
             />
           )}
@@ -107,7 +132,33 @@ const VoltCalculation: FC<VoltCalculationProps> = ({ values, user, mapInteractio
             Yellow shading and yellow pins indicate sales not used in VOLT&apos;s algorithms and may be considered qualified sales
           </h2>
         </div>
-
+        {setShowAdditionalData && (
+          <div className="bg-grey-50 rounded-xl p-3 space-y-4">
+            <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
+            <div className="bg-grey/10 rounded-lg p-0.5">
+              <ul className="grid grid-cols-2 min-h-8">
+                <li
+                  className={cn(
+                    "text-center text-sm h-full flex items-center justify-center cursor-pointer",
+                    !showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
+                  )}
+                  onClick={() => setShowAdditionalData(false)}
+                >
+                  Default
+                </li>
+                <li
+                  onClick={() => setShowAdditionalData(true)}
+                  className={cn(
+                    "text-center text-sm h-full flex items-center justify-center cursor-pointer",
+                    showAdditionalData && "bg-white shadow-1 font-semibold rounded-lg"
+                  )}
+                >
+                  Additional Data
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
         {user && user.isSubscribed && (
           <>
             <div className="bg-grey-50 border border-grey-100 rounded-xl p-3 space-y-4 lg:hidden">

@@ -8,6 +8,8 @@ import { z } from "zod";
 import { saveAs } from "file-saver";
 import XLSX from "sheetjs-style";
 import { IUserRecentSearches } from "@/types/user";
+import { PolygonProps } from "react-leaflet";
+import { Polygon } from "geojson";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -322,3 +324,15 @@ export const exportToExcel = (data: IUserRecentSearches, additionalDataResult?: 
 
   XLSX.writeFile(wb, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.xlsx`);
 };
+
+export function swapPolygonCoordinates(polygon: any) {
+  return polygon.map((item: any) => {
+    if (Array.isArray(item[0])) {
+      // If the first element is an array, recursively process it
+      return swapPolygonCoordinates(item);
+    }
+    // Otherwise, swap the coordinate pair
+    const [x, y] = item;
+    return [y, x];
+  });
+}

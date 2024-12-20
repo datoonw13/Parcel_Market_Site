@@ -44,6 +44,7 @@ interface VoltDesktopProps {
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
+  showAdditionalData?: boolean;
 }
 
 const getIcon = (el: IPropertyBaseInfo, values: VoltDesktopProps["values"], mapInteraction: VoltDesktopProps["mapInteraction"]) => {
@@ -66,6 +67,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
   setOpenPropertyDetailWarningModal,
   mapInteraction,
   setMpaInteraction,
+  showAdditionalData,
 }) => {
   const markerRefs = useRef<{ [key: string]: Marker }>();
   const mapRef = useRef<LeafletMap | null>(null);
@@ -115,18 +117,18 @@ const VoltMap: FC<VoltDesktopProps> = ({
       values.calculation.propertiesUsedForCalculation.forEach((property) => {
         if (property.isBulked) {
           property.data.properties.forEach((el) => {
-            if (el.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting) {
+            if (el.parcelNumberNoFormatting === values.calculation?.parcelNumberNoFormatting) {
               mainLandSaleHistory.push(el);
             }
           });
-        } else if (property.data.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting) {
+        } else if (property.data.parcelNumberNoFormatting === values.calculation?.parcelNumberNoFormatting) {
           mainLandSaleHistory.push(property.data);
         }
       });
 
       const mainProperty = {
-        parcelNumber: values.selectedItem?.parcelNumber || "",
-        parcelNumberNoFormatting: values.selectedItem?.parcelNumberNoFormatting || "",
+        parcelNumber: values.calculation.parcelNumber || "",
+        parcelNumberNoFormatting: values.calculation.parcelNumberNoFormatting || "",
         latitude: Number(values.calculation.lat),
         longitude: Number(values.calculation.lon),
         polygon: values.calculation.polygon,
@@ -229,7 +231,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         }
       });
 
-      if (values.additionalDataResult && !isSmallDevice) {
+      if (values.additionalDataResult && showAdditionalData && !isSmallDevice) {
         values.additionalDataResult.propertiesUsedForCalculation.forEach((property) => {
           if (!property.isBulked) {
             mapItems.push({
@@ -297,7 +299,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
       return [mainProperty, ...mapItems];
     }
     return [];
-  }, [isSmallDevice, mapInteraction, setValues, step, user, values]);
+  }, [isSmallDevice, mapInteraction, setValues, step, user, values, showAdditionalData]);
 
   const canViewDetails = useCallback(
     (parcelNumberNoFormatting: string) => {
@@ -315,6 +317,8 @@ const VoltMap: FC<VoltDesktopProps> = ({
 
   const handleMapHoverInteraction = useCallback(() => {
     if (mapRef.current && mapInteraction.hoveredParcelNumber) {
+      const currentZoom = mapRef.current.getZoom();
+
       if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
         const properties = values.calculation?.propertiesUsedForCalculation
           .filter((el) => el.isBulked)
@@ -340,7 +344,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
                 lng: centerCoordinate.longitude,
               },
             ] as any,
-            { maxZoom: 14 }
+            { maxZoom: currentZoom }
           );
         }
       } else {
@@ -348,7 +352,7 @@ const VoltMap: FC<VoltDesktopProps> = ({
         if (currentItemMarker) {
           const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
           if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
+            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: currentZoom });
           }
         }
       }
