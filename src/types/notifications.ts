@@ -10,6 +10,8 @@ export enum NotificationType {
   SentOfferExpiring = "sentOfferExpiring",
   SubscriptionExpired = "subscriptionExpired",
   SubscriptionUpdated = "subscriptionUpdated",
+  SubscriptionReminder = "subscriptionReminder",
+  SubscriptionFollowUp = "subscriptionFollowUp",
 }
 
 export interface INotificationBase {
@@ -61,6 +63,14 @@ export interface SubscriptionUpdatedNotification extends INotificationBase {
   type: NotificationType.SubscriptionUpdated;
 }
 
+export interface SubscriptionReminderNotification extends INotificationBase {
+  type: NotificationType.SubscriptionReminder;
+}
+
+export interface SubscriptionFollowUpNotification extends INotificationBase {
+  type: NotificationType.SubscriptionFollowUp;
+}
+
 export interface INotificationEnum {
   [NotificationType.NewMessage]: INewMessageNotification;
   [NotificationType.NewOfferReceived]: INewOfferReceivedNotification;
@@ -70,6 +80,8 @@ export interface INotificationEnum {
   [NotificationType.SentOfferExpiring]: ISentOfferExpiringNotification;
   [NotificationType.SubscriptionExpired]: SubscriptionExpiredNotification;
   [NotificationType.SubscriptionUpdated]: SubscriptionUpdatedNotification;
+  [NotificationType.SubscriptionReminder]: SubscriptionReminderNotification;
+  [NotificationType.SubscriptionFollowUp]: SubscriptionFollowUpNotification;
 }
 
 export type INotification =
@@ -80,7 +92,9 @@ export type INotification =
   | IReceivedOfferCanceledNotification
   | ISentOfferExpiringNotification
   | SubscriptionExpiredNotification
-  | SubscriptionUpdatedNotification;
+  | SubscriptionUpdatedNotification
+  | SubscriptionReminderNotification
+  | SubscriptionFollowUpNotification;
 
 export enum NotificationFilter {
   ALL = "all",

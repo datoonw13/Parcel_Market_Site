@@ -7,7 +7,7 @@ const propertyLocationSchema = z.object({
 
 export const propertyOwnerValidation = z
   .object({
-    searchType: z.enum(["fullName", "entityName", "parcelNumber"]),
+    searchType: z.enum(["fullName", "entityName", "parcelNumber", "map"]),
     parcelNumber: z.string().trim().optional(),
     firstName: z.string().trim().optional(),
     lastName: z.string().trim().optional(),

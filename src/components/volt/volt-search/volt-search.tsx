@@ -14,6 +14,7 @@ import { getPropertiesAction } from "@/server-actions/volt/actions";
 import { VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
+import useStates from "@/hooks/useStates";
 import { voltSearchSchema } from "../../../zod-validations/volt";
 import { Tooltip } from "../../ui/tooltip";
 import { RadioGroupItem } from "../../ui/radio-group";
@@ -29,9 +30,22 @@ interface VoltSearchProps {
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
+  setSearchType: Dispatch<SetStateAction<VoltSearchModel["searchType"]>>;
+  selectedSearchType: VoltSearchModel["searchType"];
+  setMobileSearchMap?: () => void;
 }
 
-const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues, values, setStep }) => {
+const VoltSearch: FC<VoltSearchProps> = ({
+  user,
+  className,
+  onSuccess,
+  setValues,
+  values,
+  setStep,
+  selectedSearchType,
+  setSearchType,
+  setMobileSearchMap,
+}) => {
   const params = useSearchParams();
   const router = useRouter();
   const searchParams = useMemo(() => new URLSearchParams(params as any), [params]);
@@ -46,17 +60,18 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
   } = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
-      searchType: "fullName",
+      searchType: selectedSearchType,
     },
   });
-
+  const { states, getCountiesByState, getCounty } = useStates();
   const selectedState = watch("state");
-  const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => getCounties(selectedState), [selectedState]);
+  const counties = getCountiesByState(selectedState);
+
   const disableSearch = !!(error === "limit");
 
   const onSearchTypeChange = (type: VoltSearchModel["searchType"]) => {
     setValue("searchType", type, { shouldValidate: true });
+    setSearchType(type);
     if (isSubmitted) {
       trigger();
     }
@@ -64,6 +79,20 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
 
   const onSubmit = handleSubmit(async (data) => {
     setStep(VoltSteps.SEARCH);
+
+    if (watch("searchType") === "map") {
+      setMobileSearchMap && setMobileSearchMap();
+      setValues((prev) => ({
+        ...prev,
+        additionalDataResult: null,
+        calculation: null,
+        searchResult: null,
+        selectedItem: null,
+        searchDetails: { ...data },
+      }));
+      return;
+    }
+
     const { data: properties, errorMessage } = await getPropertiesAction(data);
     if (errorMessage) {
       setError(errorMessage === "Search limit exceeded for this month." ? "limit" : "notFound");
@@ -154,6 +183,15 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
                 </div>
               }
             />
+            <RadioGroupItem
+              value="map"
+              label={
+                <div className="flex items-center gap-2">
+                  <p>Search by Map</p>
+                  <Tooltip renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />} renderContent="Some info." />
+                </div>
+              }
+            />
           </RadioGroup>
         </div>
         <div className="flex gap-3 flex-col">
@@ -161,7 +199,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
             <TextInput
               value={watch("parcelNumber") || ""}
               onChange={(e) => setValue("parcelNumber", e.target.value || undefined, { shouldValidate: true })}
-              // error={!!errors.parcelNumber}
               label="Enter Parcel ID"
               disabled={disableSearch}
             />
@@ -171,7 +208,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
               <TextInput
                 value={watch("firstName") || ""}
                 onChange={(e) => setValue("firstName", e.target.value || undefined, { shouldValidate: true })}
-                // error={!!errors.firstName}
                 rootClassName="w-full"
                 label="First Name"
                 disabled={disableSearch}
@@ -179,7 +215,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
               <TextInput
                 value={watch("lastName") || ""}
                 onChange={(e) => setValue("lastName", e.target.value || undefined, { shouldValidate: true })}
-                // error={!!errors.lastName}
                 rootClassName="w-full"
                 label="Last Name"
                 disabled={disableSearch}
@@ -190,7 +225,6 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
             <TextInput
               value={watch("entityName") || ""}
               onChange={(e) => setValue("entityName", e.target.value || undefined, { shouldValidate: true })}
-              // error={!!errors.entityName}
               label="Enter name of the entity"
               disabled={disableSearch}
             />
@@ -205,17 +239,15 @@ const VoltSearch: FC<VoltSearchProps> = ({ user, className, onSuccess, setValues
                 setValue("county", "", { shouldValidate: true });
               }}
               disabled={disableSearch}
-              // error={!!errors.state}
             />
             <AutoComplete
-              options={counties}
+              options={counties || []}
               placeholder="County"
               onValueChange={(item) => {
                 setValue("county", item || "", { shouldValidate: true });
               }}
-              selectedValue={getCountyValue(watch("county"), watch("state"))?.value || null}
+              selectedValue={getCounty(selectedState, watch("county"))?.short.value || null}
               disabled={!watch("state") || disableSearch}
-              // error={!!errors.county}
             />
           </div>
           <Button id="volt-search-btn" disabled={disableSearch || !isValid} loading={isSubmitting} onClick={onSubmit} className="mt-1">
