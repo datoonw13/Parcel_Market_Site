@@ -2043,6 +2043,13 @@
   resolved "https://registry.npmjs.org/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz"
   integrity sha512-6j56HdLTwWGO0fJPlrZtdU/B13q8Uwmo18Ck2GnGgN9PCFyKTZ3UbXeEdRFh18i9XQ92eH2VdtpJHpBD3aripQ==
 
+"@mapbox/polylabel@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@mapbox/polylabel/-/polylabel-1.0.2.tgz"
+  integrity sha512-htPcy9pNNuTvlWIQIMZZORRgCnH2DFLEACxYc2yQHqwRYv5cO84lvQqxLUHC+4xqSbW41mIo/bhyPx+OUzofHg==
+  dependencies:
+    tinyqueue "^1.1.0"
+
 "@mapbox/tiny-sdf@^2.0.6":
   version "2.0.6"
   resolved "https://registry.npmjs.org/@mapbox/tiny-sdf/-/tiny-sdf-2.0.6.tgz"
@@ -3285,6 +3292,16 @@
   integrity sha512-78lSzSQuLHq0363sVlmkX9uxBejeWGyZhQBAh7oc1ucnsYsem1m4ynjDXG8/hKP4nG/yUFWPdV9xklezKdvzKw==
   dependencies:
     "@turf/meta" "^4.7.3"
+
+"@turf/centroid@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.npmjs.org/@turf/centroid/-/centroid-7.1.0.tgz"
+  integrity sha512-1Y1b2l+ZB1CZ+ITjUCsGqC4/tSjwm/R4OUfDztVqyyCq/VvezkLmTNqvXTGXgfP0GXkpv68iCfxF5M7QdM5pJQ==
+  dependencies:
+    "@turf/helpers" "^7.1.0"
+    "@turf/meta" "^7.1.0"
+    "@types/geojson" "^7946.0.10"
+    tslib "^2.6.2"
 
 "@turf/helpers@^7.1.0":
   version "7.1.0"
@@ -11174,6 +11191,11 @@ tinyexec@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/tinyexec/-/tinyexec-0.3.0.tgz"
   integrity sha512-tVGE0mVJPGb0chKhqmsoosjsS+qUnJVGJpZgsHYQcGoPlG3B51R3PouqTgEGH2Dc9jjFyOqOpix6ZHNMXp1FZg==
+
+tinyqueue@^1.1.0:
+  version "1.2.3"
+  resolved "https://registry.npmjs.org/tinyqueue/-/tinyqueue-1.2.3.tgz"
+  integrity sha512-Qz9RgWuO9l8lT+Y9xvbzhPT2efIUIFd69N7eF7tJ9lnQl0iLj1M7peK7IoUGZL9DJHw9XftqLreccfxcQgYLxA==
 
 tinyqueue@^3.0.0:
   version "3.0.0"
