@@ -91,15 +91,12 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
   const initializeMap = useCallback(() => {
     if (mapRef) {
       mapRef.on("load", async () => {
-        const parcelCreate = await fetch(
-          `https://tiles.regrid.com/api/v1/parcels?format=mvt&token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzMzNjgyNTcyLCJleHAiOjE3MzYyNzQ1NzIsInUiOjQ3Mzc0NSwiZyI6MjMxNTMsImNhcCI6InBhOnRzOnBzOmJmOm1hOnR5OmVvOnpvOnNiIn0.Q6B0LNieVvSoxU8AZhogRW9xEB4WfYeZjfBnbavbh0o`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const parcelCreate = await fetch(`https://tiles.regrid.com/api/v1/parcels?format=mvt&token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const parcelCreateData = await parcelCreate.json();
 
         mapRef!.addSource(parcelCreateData.id, {
