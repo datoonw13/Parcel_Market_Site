@@ -832,13 +832,9 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 filter: ["all", ["==", "bulkId", feature.properties.bulkId]],
               })
               .forEach((feature) => {
-                ref.setLayoutProperty("properties-used-for-calc", "icon-image", [
-                  "match",
-                  ["id"], // get the feature id (make sure your data has an id set or use generateIds for GeoJSON sources
-                  feature.id,
-                  "primaryHighlighted", // image when id is the clicked feature id
-                  "primary", // default
-                ]);
+                ref.setFeatureState(feature, {
+                  
+                });
               });
           }
 
