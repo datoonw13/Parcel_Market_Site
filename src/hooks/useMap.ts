@@ -45,7 +45,7 @@ const createMarkerImage = (type: keyof typeof markerImages) => {
 const useMap = (markerIcons?: Array<typeof markerImages.primary>) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const selectedFeatureId = useRef<Array<string | number>>([]);
+  const hoveredFeaturesIds = useRef<Array<string | number>>([]);
 
   useEffect(() => {
     if (ref) {
@@ -65,7 +65,7 @@ const useMap = (markerIcons?: Array<typeof markerImages.primary>) => {
     ref,
     setRef,
     loaded,
-    selectedFeatureId,
+    hoveredFeaturesIds,
   };
 };
 

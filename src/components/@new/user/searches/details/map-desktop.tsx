@@ -475,15 +475,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { IUserRecentSearches } from "@/types/user";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import useMap from "@/hooks/useMap";
-import { GeoJSONSourceSpecification, Map as MapBox, SourceSpecification } from "mapbox-gl";
-import { Feature, GeoJsonObject, GeoJsonProperties, Geometry, Position } from "geojson";
+import { GeoJSONSourceSpecification, SourceSpecification } from "mapbox-gl";
+import { Feature, FeatureCollection, GeoJsonObject, GeoJsonProperties, Geometry, Position } from "geojson";
 
-const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
+const MapComponent = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
 const markerImages = {
   primary: "/map-default-icon.svg",
@@ -493,18 +493,11 @@ const markerImages = {
   active: "/map-active-icon.svg",
 };
 
-const createMarkerImage = (type: keyof typeof markerImages) => {
-  const el = document.createElement("img");
-  const width = 28;
-  const height = 36;
-  el.src = `${markerImages[type]}`;
-  el.style.width = `${width}px`;
-  el.style.height = `${height}px`;
-  el.style.backgroundSize = "100%";
-  el.style.backgroundRepeat = "no-repeat";
-  return el;
-};
-
+enum PROPERTY_TYPE {
+  selling,
+  calcProps,
+  notValid,
+}
 interface VoltDesktopProps {
   data: IUserRecentSearches;
   user: IDecodedAccessToken | null;
@@ -522,11 +515,20 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
   user,
   additionalDataResult,
 }) => {
-  const { ref, setRef, selectedFeatureId, loaded } = useMap();
-  const [geoJson, setGeoJson] = useState<GeoJSONSourceSpecification["data"] | null>(null);
+  const { ref, setRef, hoveredFeaturesIds, loaded } = useMap();
+  const [geoJson, setGeoJson] = useState<FeatureCollection | null>(null);
+  const formattedFeatures = useMemo(() => {
+    const map = new Map();
+    geoJson?.features.forEach((feature, featureIndex) => {
+      if (feature.properties?.parcelNumber) {
+        map.set(feature.properties.parcelNumber, { feature, index: featureIndex });
+      }
+    });
+    return map;
+  }, [geoJson?.features]);
 
   useEffect(() => {
-    const generateIdGeoJson: GeoJSONSourceSpecification["data"] = {
+    const generateIdGeoJson: FeatureCollection = {
       type: "FeatureCollection",
       features: [],
     };
@@ -537,12 +539,16 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         coordinates: [data.lon, data.lat],
       },
       properties: {
-        type: "selling-property",
+        type: PROPERTY_TYPE.selling,
         owner: data.owner,
         acreage: data.acreage,
         pricePerAcreage: data.pricePerAcreage,
         price: data.price,
         parcelNumber: data.parcelNumberNoFormatting,
+        id: data.parcelNumberNoFormatting,
+        icon: "active",
+        iconSelected: "active",
+        iconSize: 1.5,
       },
     });
     generateIdGeoJson.features.push({
@@ -552,12 +558,13 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         coordinates: data.polygon as any,
       },
       properties: {
-        type: "selling-property",
+        type: PROPERTY_TYPE.selling,
         owner: data.owner,
         parcelNumber: data.parcelNumberNoFormatting,
+        id: data.parcelNumberNoFormatting,
       },
     });
-    data.propertiesUsedForCalculation.forEach((property) => {
+    data.propertiesUsedForCalculation.forEach((property, propertyI) => {
       if (property.isBulked) {
         property.data.properties.forEach((childProperty) => {
           generateIdGeoJson.features.push({
@@ -568,7 +575,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               coordinates: [childProperty.lon, childProperty.lat],
             },
             properties: {
-              type: "used-for-calc",
+              type: PROPERTY_TYPE.calcProps,
               acreage: childProperty.acreage,
               pricePerAcreage: childProperty.pricePerAcreage,
               lastSaleDate: childProperty.lastSaleDate,
@@ -576,6 +583,10 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               isBulked: true,
               bulkId: property.data.parcelNumberNoFormatting,
               parcelNumber: childProperty.parcelNumberNoFormatting,
+              id: childProperty.parcelNumberNoFormatting,
+              icon: "primary",
+              iconSelected: "primaryHighlighted",
+              iconSize: 1,
             },
           });
         });
@@ -588,13 +599,17 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
             coordinates: [property.data.lon, property.data.lat],
           },
           properties: {
-            type: "used-for-calc",
+            type: PROPERTY_TYPE.calcProps,
             acreage: property.data.acreage,
             pricePerAcreage: property.data.pricePerAcreage,
             lastSaleDate: property.data.lastSaleDate,
             lastSalePrice: property.data.lastSalePrice,
             isBulked: false,
             parcelNumber: property.data.parcelNumberNoFormatting,
+            id: property.data.parcelNumberNoFormatting,
+            icon: "primary",
+            iconSelected: "primaryHighlighted",
+            iconSize: 1,
           },
         });
       }
@@ -611,7 +626,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               coordinates: [childProperty.lon, childProperty.lat],
             },
             properties: {
-              type: "additional-data",
+              type: PROPERTY_TYPE.notValid,
               acreage: childProperty.acreage,
               pricePerAcreage: childProperty.pricePerAcreage,
               lastSaleDate: childProperty.lastSaleDate,
@@ -619,6 +634,10 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               isBulked: true,
               bulkId: property.data.parcelNumberNoFormatting,
               parcelNumber: childProperty.parcelNumberNoFormatting,
+              id: childProperty.parcelNumberNoFormatting,
+              icon: "secondary",
+              iconSelected: "secondaryHighlighted",
+              iconSize: 1,
             },
           });
         });
@@ -631,13 +650,17 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
             coordinates: [property.data.lon, property.data.lat],
           },
           properties: {
-            type: "additional-data",
+            type: PROPERTY_TYPE.notValid,
             acreage: property.data.acreage,
             pricePerAcreage: property.data.pricePerAcreage,
             lastSaleDate: property.data.lastSaleDate,
             lastSalePrice: property.data.lastSalePrice,
             parcelNumber: property.data.parcelNumberNoFormatting,
+            id: property.data.parcelNumberNoFormatting,
             isBulked: false,
+            icon: "secondary",
+            iconSelected: "secondaryHighlighted",
+            iconSize: 1,
           },
         });
       }
@@ -647,214 +670,135 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
 
   useEffect(() => {
     if (loaded && ref && geoJson) {
-      // ref.addSource("earthquakes", {
-      //   type: "geojson",
-      //   data: `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&minmagnitude=1&starttime=2024-12-12T12:46:25.276Z`, // Use the sevenDaysAgo variable to only retrieve quakes from the past week
-      //   generateId: true, // This ensures that all features have unique IDs
-      // });
-      // ref.addLayer({
-      //   id: "earthquakes-viz",
-      //   type: "circle",
-      //   source: "earthquakes",
-      // paint: {
-      //   // The feature-state dependent circle-radius expression will render
-      //   // the radius size according to its magnitude when
-      //   // a feature's hover state is set to true
-      //   "circle-radius": [
-      //     "case",
-      //     ["boolean", ["feature-state", "hover"], false],
-      //     ["interpolate", ["linear"], ["get", "mag"], 1, 8, 1.5, 10, 2, 12, 2.5, 14, 3, 16, 3.5, 18, 4.5, 20, 6.5, 22, 8.5, 24, 10.5, 26],
-      //     5,
-      //   ],
-      //   "circle-stroke-color": "#000",
-      //   "circle-stroke-width": 1,
-      //   // The feature-state dependent circle-color expression will render
-      //   // the color according to its magnitude when
-      //   // a feature's hover state is set to true
-      //   "circle-color": [
-      //     "case",
-      //     ["boolean", ["feature-state", "hover"], false],
-      //     [
-      //       "interpolate",
-      //       ["linear"],
-      //       ["get", "mag"],
-      //       1,
-      //       "#fff7ec",
-      //       1.5,
-      //       "#fee8c8",
-      //       2,
-      //       "#fdd49e",
-      //       2.5,
-      //       "#fdbb84",
-      //       3,
-      //       "#fc8d59",
-      //       3.5,
-      //       "#ef6548",
-      //       4.5,
-      //       "#d7301f",
-      //       6.5,
-      //       "#b30000",
-      //       8.5,
-      //       "#7f0000",
-      //       10.5,
-      //       "#000",
-      //     ],
-      //     "#000",
-      //   ],
-      // },
-      // });
-
-      // ref.on("mousemove", "earthquakes-viz", (event) => {
-      //   ref.getCanvas().style.cursor = "pointer";
-      //   if (event.features?.[0].id) {
-      //     if (selectedFeatureId.current) {
-      //       ref.removeFeatureState({
-      //         source: "earthquakes",
-      //         id: selectedFeatureId.current,
-      //       });
-      //     }
-
-      //     selectedFeatureId.current = event.features[0].id;
-      //     ref.setFeatureState(
-      //       {
-      //         source: "earthquakes",
-      //         id: selectedFeatureId.current,
-      //       },
-      //       {
-      //         hover: true,
-      //       }
-      //     );
-      //   }
-      // });
-
-      // ref.on("mouseleave", "earthquakes-viz", () => {
-      //   if (selectedFeatureId.current) {
-      //     ref.setFeatureState(
-      //       {
-      //         source: "earthquakes",
-      //         id: selectedFeatureId.current,
-      //       },
-      //       {
-      //         hover: false,
-      //       }
-      //     );
-      //   }
-
-      //   // quakeID = null;
-      //   // Remove the information from the previously hovered feature from the sidebar
-      //   // magDisplay.textContent = "";
-      //   // locDisplay.textContent = "";
-      //   // dateDisplay.textContent = "";
-      //   // Reset the cursor style
-      //   ref.getCanvas().style.cursor = "";
-      // });
-
       ref.addSource("properties", {
         type: "geojson",
         data: geoJson,
         generateId: true, // This ensures that all features have unique IDs
-        cluster: false,
       });
 
       ref.addLayer({
-        id: "properties-used-for-calc",
+        id: "properties-layer",
         type: "symbol",
         source: "properties",
-        filter: ["all", ["==", "type", "used-for-calc"]],
         layout: {
-          "icon-image": "primary",
-          "icon-size": 1,
-          "icon-allow-overlap": true,
-        },
-      });
-
-      ref.addLayer({
-        id: "properties-additional-data",
-        type: "symbol",
-        source: "properties",
-        filter: ["all", ["==", "type", "additional-data"]],
-        layout: {
-          "icon-allow-overlap": true,
-          "icon-image": "secondary",
-          // "icon-size": 1,
-          "circle-sort-key": [
-            "case",
-            ["boolean", ["feature-state", "hover"], false],
-            [
-              "interpolate",
-              ["linear"],
-              ["get", "mag"],
-              1,
-              "#fff7ec",
-              1.5,
-              "#fee8c8",
-              2,
-              "#fdd49e",
-              2.5,
-              "#fdbb84",
-              3,
-              "#fc8d59",
-              3.5,
-              "#ef6548",
-              4.5,
-              "#d7301f",
-              6.5,
-              "#b30000",
-              8.5,
-              "#7f0000",
-              10.5,
-              "#000",
-            ],
-            "#000",
+          "icon-image": "{icon}",
+          "icon-size": [
+            "match",
+            ["get", "type"],
+            [PROPERTY_TYPE.selling],
+            1.5,
+            [PROPERTY_TYPE.calcProps],
+            1,
+            [PROPERTY_TYPE.notValid],
+            1,
+            1.2,
           ],
+          "icon-allow-overlap": true,
+        },
+        paint: {
+          "icon-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0, 1],
         },
       });
 
       ref.addLayer({
-        id: "properties-selling-property",
+        id: "properties-layer-selected",
         type: "symbol",
         source: "properties",
-        filter: ["all", ["==", "type", "selling-property"]],
         layout: {
-          "icon-image": "active",
+          "icon-image": "{iconSelected}",
+          "icon-allow-overlap": true,
           "icon-size": 1.5,
         },
+        paint: {
+          "icon-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
+        },
       });
+      ref.on("mousemove", "properties-layer", (e) => {
+        const feature = ref.queryRenderedFeatures(e.point).filter((el) => el.source === "properties")[0];
+        // console.log(features, 22);
 
-      ref.on("mouseenter", "properties-used-for-calc", (event) => {
-        ref.getCanvas().style.cursor = "pointer";
-        const feature = event.features?.[0];
         if (feature) {
-          if (feature?.properties?.isBulked) {
-            console.log(feature.properties.bulkId.split("multiple"));
-            ref
-              .querySourceFeatures("properties", {
-                filter: ["all", ["==", "bulkId", feature.properties.bulkId]],
-              })
-              .forEach((feature) => {
-                ref.setFeatureState(feature, {
-                  
-                });
-              });
+          if (hoveredFeaturesIds.current.length > 0) {
+            hoveredFeaturesIds.current.forEach((x) => {
+              ref.setFeatureState({ source: "properties", id: x }, { hover: false });
+            });
+            hoveredFeaturesIds.current = [];
           }
 
-          // ref.setLayoutProperty("properties-used-for-calc", "icon-image", [
-          //   "match",
-          //   ["id"], // get the feature id (make sure your data has an id set or use generateIds for GeoJSON sources
-          //   feature.id,
-          //   "primaryHighlighted", // image when id is the clicked feature id
-          //   "primary", // default
-          // ]);
+          if (feature.id) {
+            if (feature.properties.isBulked) {
+              ref
+                .querySourceFeatures("properties", {
+                  filter: ["in", "bulkId", feature.properties.bulkId],
+                })
+                .forEach((x) => {
+                  ref.setFeatureState({ source: "properties", id: x.id }, { hover: true });
+                  hoveredFeaturesIds.current.push(x.id);
+                });
+            } else {
+              hoveredFeaturesIds.current.push(feature.id);
+              hoveredFeaturesIds.current.forEach((x) => {
+                ref.setFeatureState({ source: "properties", id: x }, { hover: true });
+              });
+            }
+          }
         }
       });
 
+      ref.on("mouseleave", "properties-layer", (e) => {
+        hoveredFeaturesIds.current.forEach((x) => {
+          ref.setFeatureState({ source: "properties", id: x }, { hover: false });
+        });
+
+        hoveredFeaturesIds.current = [];
+      });
       ref.setCenter([data.lon, data.lat]);
       ref.setZoom(10);
     }
-  }, [loaded, ref, geoJson, data.lon, data.lat]);
+  }, [loaded, ref, geoJson, data.lon, data.lat, setMpaInteraction, hoveredFeaturesIds]);
+
+  // useEffect(() => {
+  //   if (mapInteraction.hoveredParcelNumber && ref) {
+  //     // const t0 = performance.now();
+  //     const parcelNumbers = mapInteraction.hoveredParcelNumber.split("multiple");
+
+  //     const newGeoJson = { ...geoJson };
+
+  //     // });
+  //     // newGeoJson.features[3].properties!.icon = "primaryHighlighted";
+  //     // const source = ref.getSource("properties");
+  //     // newGeoJson.features?.forEach((el) => {
+  //     //   if (el.properties?.type === PROPERTY_TYPE.selling) {
+  //     //   } else if (parcelNumbers.includes(el.properties?.parcelNumber)) {
+  //     //     el.properties!.icon = el.properties!.type === PROPERTY_TYPE.calcProps ? "primaryHighlighted" : "secondaryHighlighted";
+  //     //   } else {
+  //     //     el.properties!.icon = el.properties!.type === PROPERTY_TYPE.calcProps ? "primary" : "secondary";
+  //     //   }
+  //     // });
+
+  //     // if (source?.type === "geojson") {
+  //     // source.setData(newGeoJson);
+  //     // }
+  //     // const t1 = performance.now();
+  //     // console.log(t1 - t0);
+  //   } else {
+  //     // const source = ref?.getSource("properties");
+  //     const newGeoJson = { ...geoJson };
+
+  //     // newGeoJson.features?.forEach((el) => {
+  //     //   if (el.properties?.type === PROPERTY_TYPE.selling) {
+  //     //     el.properties!.icon = el.properties!.type === PROPERTY_TYPE.calcProps ? "primary" : "secondary";
+  //     //   } else {
+  //     //     el.properties!.icon = el.properties!.type === PROPERTY_TYPE.calcProps ? "primary" : "secondary";
+  //     //   }
+  //     // });
+
+  //     // source?.setData({ ...newGeoJson });
+  //   }
+  // }, [geoJson, mapInteraction, ref]);
   return (
     <>
-      <Map ref={ref} setRef={setRef} />
+      <MapComponent ref={ref} setRef={setRef} />
     </>
   );
 };

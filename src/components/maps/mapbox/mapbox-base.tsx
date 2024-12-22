@@ -17,6 +17,7 @@ interface MapboxBaseProps {
 const MapboxBase: FC<MapboxBaseProps> = (props) => {
   const { center, style, zoom, setRef, ref } = props;
   const mapContainerRef = useRef(null);
+  console.log("reree");
 
   const initializeMap = useCallback(() => {
     if (mapContainerRef.current) {
