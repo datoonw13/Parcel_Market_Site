@@ -7,15 +7,17 @@ import { IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } fro
 import useStates from "@/hooks/useStates";
 import area from "@turf/area";
 import { polygon, convertArea } from "@turf/helpers";
+import centroid from "@turf/centroid";
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
+// @ts-ignore
+import polylabel from "@mapbox/polylabel";
 import { Button } from "../ui/button";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
-
 interface VoltSearchMapProps {
   data: VoltWrapperValuesModel["searchDetails"];
   setStep: Dispatch<SetStateAction<VoltSteps>>;
@@ -160,16 +162,19 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
         const coordinates = feature.geometry?.coordinates;
 
         if (feature) {
+          const turfPolygon = polygon(coordinates);
           // @ts-ignore
-          const acreage = convertArea(area(polygon(coordinates)), "meters", "acres").toFixed(2);
+          const acreage = convertArea(area(turfPolygon), "meters", "acres").toFixed(2);
+          const center = polylabel(coordinates);
+
           setOpenParcelData({
             owner: feature?.properties?.owner || "",
             acreage: Number(acreage),
             county: feature?.properties?.path.split("/")[3] || "",
             state: feature?.properties?.path.split("/")[2] || "",
             parcelNumber: feature?.properties?.parcelnumb,
-            lat: e.lngLat.lat,
-            lng: e.lngLat.lng,
+            lat: center[1],
+            lng: center[0],
             coordinates: JSON.stringify(swapPolygonCoordinates(feature.geometry?.coordinates)),
           });
 
