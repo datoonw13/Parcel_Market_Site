@@ -1,21 +1,22 @@
 "use client";
 
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
-import { Map as MapBoX } from "mapbox-gl";
+import { GeoJSONFeature, Map as MapBoX } from "mapbox-gl";
 import { IUserRecentSearches } from "@/types/user";
 import { FeatureCollection } from "geojson";
 import { MapInteractionModel } from "@/types/common";
 
 interface IInitiateMap {
-  parcelNumber: string;
+  parcelNumberNoFormatting: string;
   owner: string;
   lng: number;
   lat: number;
   coordinates: any;
+  acreage: number;
   properties: IUserRecentSearches["propertiesUsedForCalculation"];
 }
 
-enum PropertyTypeEnum {
+export enum PropertyTypeEnum {
   primary,
   secondary,
   tertiary,
@@ -23,6 +24,7 @@ enum PropertyTypeEnum {
 interface IBaseFeature {
   type: PropertyTypeEnum;
   parcelNumber: string;
+  acreage: number;
   icon?: string;
   iconSelected?: string;
 }
@@ -58,7 +60,7 @@ interface ITertiaryFeature extends IBaseFeature {
   pricePerAcreage: number;
 }
 
-type IFeature = IPrimaryFeature | ISecondaryFeature | ITertiaryFeature;
+export type IFeature = IPrimaryFeature | ISecondaryFeature | ITertiaryFeature;
 
 const markerImages = {
   primary: {
@@ -88,10 +90,12 @@ const useMap = ({
   markerIcons,
   setMapInteraction,
   mapInteraction,
+  onMarkerClick,
 }: {
   markerIcons?: Array<typeof markerImages.primary>;
   setMapInteraction?: Dispatch<SetStateAction<MapInteractionModel>>;
   mapInteraction?: MapInteractionModel;
+  onMarkerClick: (data: GeoJSONFeature, ref: MapBoX) => void;
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -116,11 +120,12 @@ const useMap = ({
         },
         properties: {
           type: PropertyTypeEnum.primary,
-          parcelNumber: data.parcelNumber,
+          parcelNumber: data.parcelNumberNoFormatting,
           owner: data.owner,
           coordinates: data.coordinates,
           lat: data.lat,
           lng: data.lng,
+          acreage: data.acreage,
         },
       });
       geoJson.current.features.push({
@@ -131,65 +136,97 @@ const useMap = ({
         },
         properties: {
           type: PropertyTypeEnum.primary,
-          parcelNumber: data.parcelNumber,
+          parcelNumber: data.parcelNumberNoFormatting,
           owner: data.owner,
           coordinates: [data.lng, data.lat],
           lat: data.lat,
           lng: data.lng,
           icon: "active",
           iconSelected: "active",
+          acreage: data.acreage,
         },
       });
 
-      data.properties.forEach((property) => {
-        if (property.isBulked) {
-          property.data.properties.forEach((childProperty) => {
+      data.properties
+        .filter((el) => {
+          if (el.isBulked) {
+            return !el.data.parcelNumberNoFormatting.split("multiple").includes(data.parcelNumberNoFormatting);
+          }
+          return el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting;
+        })
+        .forEach((property) => {
+          if (property.isBulked) {
+            property.data.properties.forEach((childProperty) => {
+              geoJson.current.features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [childProperty.lon, childProperty.lat],
+                },
+                properties: {
+                  type: childProperty.isMedianValid ? PropertyTypeEnum.secondary : PropertyTypeEnum.tertiary,
+                  parcelNumber: childProperty.parcelNumberNoFormatting,
+                  lat: childProperty.lat,
+                  lng: childProperty.lon,
+                  bulkId: property.data.parcelNumberNoFormatting,
+                  lastSaleDate: childProperty.lastSaleDate,
+                  lastSalePrice: childProperty.lastSalePrice,
+                  pricePerAcreage: childProperty.pricePerAcreage,
+                  icon: childProperty.isMedianValid ? "primary" : "secondary",
+                  iconSelected: childProperty.isMedianValid ? "primaryHighlighted" : "secondaryHighlighted",
+                  acreage: childProperty.acreage,
+                },
+              });
+            });
+          } else {
             geoJson.current.features.push({
               type: "Feature",
               geometry: {
                 type: "Point",
-                coordinates: [childProperty.lon, childProperty.lat],
+                coordinates: [property.data.lon, property.data.lat],
               },
               properties: {
-                type: childProperty.isMedianValid ? PropertyTypeEnum.secondary : PropertyTypeEnum.tertiary,
-                parcelNumber: childProperty.parcelNumberNoFormatting,
-                lat: childProperty.lat,
-                lng: childProperty.lon,
-                bulkId: property.data.parcelNumberNoFormatting,
-                lastSaleDate: childProperty.lastSaleDate,
-                lastSalePrice: childProperty.lastSalePrice,
-                pricePerAcreage: childProperty.pricePerAcreage,
-                icon: childProperty.isMedianValid ? "primary" : "secondary",
-                iconSelected: childProperty.isMedianValid ? "primaryHighlighted" : "secondaryHighlighted",
+                type: property.data.isMedianValid ? PropertyTypeEnum.secondary : PropertyTypeEnum.tertiary,
+                parcelNumber: property.data.parcelNumberNoFormatting,
+                lat: property.data.lat,
+                lng: property.data.lon,
+                lastSaleDate: property.data.lastSaleDate,
+                lastSalePrice: property.data.lastSalePrice,
+                pricePerAcreage: property.data.pricePerAcreage,
+                icon: property.data.isMedianValid ? "primary" : "secondary",
+                iconSelected: property.data.isMedianValid ? "primaryHighlighted" : "secondaryHighlighted",
+                acreage: property.data.acreage,
               },
             });
-          });
-        } else {
-          geoJson.current.features.push({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [property.data.lon, property.data.lat],
-            },
-            properties: {
-              type: property.data.isMedianValid ? PropertyTypeEnum.secondary : PropertyTypeEnum.tertiary,
-              parcelNumber: property.data.parcelNumberNoFormatting,
-              lat: property.data.lat,
-              lng: property.data.lon,
-              lastSaleDate: property.data.lastSaleDate,
-              lastSalePrice: property.data.lastSalePrice,
-              pricePerAcreage: property.data.pricePerAcreage,
-              icon: property.data.isMedianValid ? "primary" : "secondary",
-              iconSelected: property.data.isMedianValid ? "primaryHighlighted" : "secondaryHighlighted",
-            },
-          });
-        }
-      });
+          }
+        });
 
       ref.addSource("properties", {
         type: "geojson",
         data: geoJson.current,
         generateId: true,
+      });
+
+      ref.addLayer({
+        id: "polygons-main",
+        type: "fill",
+        source: "properties",
+        layout: {},
+        paint: {
+          "fill-color": "#F44D61",
+          "fill-opacity": 0.2,
+        },
+      });
+
+      ref.addLayer({
+        id: "polygons-outline",
+        type: "line",
+        source: "properties",
+        layout: {},
+        paint: {
+          "line-color": "rgba(244, 77, 97, 1)",
+          "line-width": 2,
+        },
       });
 
       ref.addLayer({
@@ -253,12 +290,19 @@ const useMap = ({
             hoveredParcelNumber: null,
           }));
       });
+
+      ref.on("click", "properties-layer", (e) => {
+        const feature = ref.queryRenderedFeatures(e.point).filter((el) => el.source === "properties")[0];
+        if (onMarkerClick) {
+          onMarkerClick(feature, ref);
+        }
+      });
     },
-    [loaded, ref, setMapInteraction]
+    [loaded, onMarkerClick, ref, setMapInteraction]
   );
 
   const handleMarkerHover = useCallback(() => {
-    if (!ref || !mapInteraction) {
+    if (!ref || !mapInteraction || !loaded) {
       return;
     }
 
@@ -305,7 +349,7 @@ const useMap = ({
       });
       hoveredFeatureParcelNumber.current = null;
     }
-  }, [mapInteraction, ref]);
+  }, [loaded, mapInteraction, ref]);
 
   useEffect(() => {
     handleMarkerHover();
