@@ -10,6 +10,7 @@ import { GeoJSONFeature, Popup, Map as MapBoX } from "mapbox-gl";
 import { swapPolygonCoordinates } from "@/lib/utils";
 import moment from "moment";
 import { moneyFormatter } from "@/helpers/common";
+import { AutoComplete } from "@/components/ui/autocomplete";
 
 const MapComponent = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -67,6 +68,19 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
     ref?.setZoom(8);
   }, [additionalDataResult?.propertiesUsedForCalculation, data, initiateMap, ref]);
 
+  const styles = [
+    "mapbox://styles/mapbox/standard",
+    "mapbox://styles/mapbox/standard-satellite",
+    "mapbox://styles/mapbox/streets-v12",
+    "mapbox://styles/mapbox/outdoors-v12",
+    "mapbox://styles/mapbox/light-v11",
+    "mapbox://styles/mapbox/dark-v11",
+    "mapbox://styles/mapbox/satellite-v9",
+    "mapbox://styles/mapbox/satellite-streets-v12",
+    "mapbox://styles/mapbox/navigation-day-v1",
+    "mapbox://styles/mapbox/navigation-night-v1",
+  ];
+
   return (
     <>
       <div style={{ display: "none" }}>
@@ -97,7 +111,26 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
           )}
         </div>
       </div>
-      <MapComponent ref={ref} setRef={setRef} />
+      <div className="w-full h-full relative">
+        <div className="absolute left-0 top-0 z-50">
+          <AutoComplete
+            selectedValue={null}
+            options={styles.map((el) => ({ label: el, value: el }))}
+            placeholder="State"
+            onValueChange={(value) => {
+              if (value) {
+                console.log(value, ref);
+
+                ref?.setStyle(value);
+              }
+              // setValue("state", value || "", { shouldValidate: true });
+              // setValue("county", "", { shouldValidate: true });
+            }}
+            // disabled={disableSearch}
+          />
+        </div>
+        <MapComponent ref={ref} setRef={setRef} />
+      </div>
     </>
   );
 };

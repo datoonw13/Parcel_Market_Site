@@ -3,6 +3,7 @@
 import { FC, memo, useCallback, useEffect, useRef } from "react";
 import mapboxgl, { LngLatLike } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { AutoComplete } from "@/components/ui/autocomplete";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
 
@@ -40,7 +41,11 @@ const MapboxBase: FC<MapboxBaseProps> = (props) => {
     };
   }, [initializeMap, ref, setRef]);
 
-  return <div className="map-container w-full h-full" ref={mapContainerRef} />;
+  return (
+    <>
+      <div className="map-container w-full h-full" ref={mapContainerRef} />
+    </>
+  );
 };
 
 export default memo(MapboxBase);
