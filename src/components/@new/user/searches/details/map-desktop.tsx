@@ -515,7 +515,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
   user,
   additionalDataResult,
 }) => {
-  const { ref, setRef, hoveredFeaturesIds, loaded } = useMap();
+  const { ref, setRef, loaded, initiateMap } = useMap({ setMapInteraction: setMpaInteraction, mapInteraction });
   const [geoJson, setGeoJson] = useState<FeatureCollection | null>(null);
   const formattedFeatures = useMemo(() => {
     const map = new Map();
@@ -527,235 +527,247 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
     return map;
   }, [geoJson?.features]);
 
+  // useEffect(() => {
+  //   const generateIdGeoJson: FeatureCollection = {
+  //     type: "FeatureCollection",
+  //     features: [],
+  //   };
+  //   generateIdGeoJson.features.push({
+  //     type: "Feature",
+  //     geometry: {
+  //       type: "Point",
+  //       coordinates: [data.lon, data.lat],
+  //     },
+  //     properties: {
+  //       type: PROPERTY_TYPE.selling,
+  //       owner: data.owner,
+  //       acreage: data.acreage,
+  //       pricePerAcreage: data.pricePerAcreage,
+  //       price: data.price,
+  //       parcelNumber: data.parcelNumberNoFormatting,
+  //       id: data.parcelNumberNoFormatting,
+  //       icon: "active",
+  //       iconSelected: "active",
+  //       iconSize: 1.5,
+  //     },
+  //   });
+  //   generateIdGeoJson.features.push({
+  //     type: "Feature",
+  //     geometry: {
+  //       type: "Polygon",
+  //       coordinates: data.polygon as any,
+  //     },
+  //     properties: {
+  //       type: PROPERTY_TYPE.selling,
+  //       owner: data.owner,
+  //       parcelNumber: data.parcelNumberNoFormatting,
+  //       id: data.parcelNumberNoFormatting,
+  //     },
+  //   });
+  //   data.propertiesUsedForCalculation.forEach((property, propertyI) => {
+  //     if (property.isBulked) {
+  //       property.data.properties.forEach((childProperty) => {
+  //         generateIdGeoJson.features.push({
+  //           id: childProperty.parcelNumberNoFormatting,
+  //           type: "Feature",
+  //           geometry: {
+  //             type: "Point",
+  //             coordinates: [childProperty.lon, childProperty.lat],
+  //           },
+  //           properties: {
+  //             type: PROPERTY_TYPE.calcProps,
+  //             acreage: childProperty.acreage,
+  //             pricePerAcreage: childProperty.pricePerAcreage,
+  //             lastSaleDate: childProperty.lastSaleDate,
+  //             lastSalePrice: childProperty.lastSalePrice,
+  //             isBulked: true,
+  //             bulkId: property.data.parcelNumberNoFormatting,
+  //             parcelNumber: childProperty.parcelNumberNoFormatting,
+  //             id: childProperty.parcelNumberNoFormatting,
+  //             icon: "primary",
+  //             iconSelected: "primaryHighlighted",
+  //             iconSize: 1,
+  //           },
+  //         });
+  //       });
+  //     } else {
+  //       generateIdGeoJson.features.push({
+  //         id: property.data.parcelNumberNoFormatting,
+  //         type: "Feature",
+  //         geometry: {
+  //           type: "Point",
+  //           coordinates: [property.data.lon, property.data.lat],
+  //         },
+  //         properties: {
+  //           type: PROPERTY_TYPE.calcProps,
+  //           acreage: property.data.acreage,
+  //           pricePerAcreage: property.data.pricePerAcreage,
+  //           lastSaleDate: property.data.lastSaleDate,
+  //           lastSalePrice: property.data.lastSalePrice,
+  //           isBulked: false,
+  //           parcelNumber: property.data.parcelNumberNoFormatting,
+  //           id: property.data.parcelNumberNoFormatting,
+  //           icon: "primary",
+  //           iconSelected: "primaryHighlighted",
+  //           iconSize: 1,
+  //         },
+  //       });
+  //     }
+  //   });
+
+  //   additionalDataResult?.propertiesUsedForCalculation.forEach((property) => {
+  //     if (property.isBulked) {
+  //       property.data.properties.forEach((childProperty) => {
+  //         generateIdGeoJson.features.push({
+  //           id: childProperty.parcelNumberNoFormatting,
+  //           type: "Feature",
+  //           geometry: {
+  //             type: "Point",
+  //             coordinates: [childProperty.lon, childProperty.lat],
+  //           },
+  //           properties: {
+  //             type: PROPERTY_TYPE.notValid,
+  //             acreage: childProperty.acreage,
+  //             pricePerAcreage: childProperty.pricePerAcreage,
+  //             lastSaleDate: childProperty.lastSaleDate,
+  //             lastSalePrice: childProperty.lastSalePrice,
+  //             isBulked: true,
+  //             bulkId: property.data.parcelNumberNoFormatting,
+  //             parcelNumber: childProperty.parcelNumberNoFormatting,
+  //             id: childProperty.parcelNumberNoFormatting,
+  //             icon: "secondary",
+  //             iconSelected: "secondaryHighlighted",
+  //             iconSize: 1,
+  //           },
+  //         });
+  //       });
+  //     } else {
+  //       generateIdGeoJson.features.push({
+  //         id: property.data.parcelNumberNoFormatting,
+  //         type: "Feature",
+  //         geometry: {
+  //           type: "Point",
+  //           coordinates: [property.data.lon, property.data.lat],
+  //         },
+  //         properties: {
+  //           type: PROPERTY_TYPE.notValid,
+  //           acreage: property.data.acreage,
+  //           pricePerAcreage: property.data.pricePerAcreage,
+  //           lastSaleDate: property.data.lastSaleDate,
+  //           lastSalePrice: property.data.lastSalePrice,
+  //           parcelNumber: property.data.parcelNumberNoFormatting,
+  //           id: property.data.parcelNumberNoFormatting,
+  //           isBulked: false,
+  //           icon: "secondary",
+  //           iconSelected: "secondaryHighlighted",
+  //           iconSize: 1,
+  //         },
+  //       });
+  //     }
+  //   });
+  //   setGeoJson(generateIdGeoJson);
+  // }, [additionalDataResult?.propertiesUsedForCalculation, data]);
+
   useEffect(() => {
-    const generateIdGeoJson: FeatureCollection = {
-      type: "FeatureCollection",
-      features: [],
-    };
-    generateIdGeoJson.features.push({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [data.lon, data.lat],
-      },
-      properties: {
-        type: PROPERTY_TYPE.selling,
-        owner: data.owner,
-        acreage: data.acreage,
-        pricePerAcreage: data.pricePerAcreage,
-        price: data.price,
-        parcelNumber: data.parcelNumberNoFormatting,
-        id: data.parcelNumberNoFormatting,
-        icon: "active",
-        iconSelected: "active",
-        iconSize: 1.5,
-      },
+    const { owner, polygon, lat, lon, parcelNumberNoFormatting, propertiesUsedForCalculation } = data;
+    initiateMap({
+      owner,
+      coordinates: polygon,
+      lat,
+      lng: lon,
+      parcelNumber: parcelNumberNoFormatting,
+      properties: [...propertiesUsedForCalculation, ...(additionalDataResult?.propertiesUsedForCalculation || [])],
     });
-    generateIdGeoJson.features.push({
-      type: "Feature",
-      geometry: {
-        type: "Polygon",
-        coordinates: data.polygon as any,
-      },
-      properties: {
-        type: PROPERTY_TYPE.selling,
-        owner: data.owner,
-        parcelNumber: data.parcelNumberNoFormatting,
-        id: data.parcelNumberNoFormatting,
-      },
-    });
-    data.propertiesUsedForCalculation.forEach((property, propertyI) => {
-      if (property.isBulked) {
-        property.data.properties.forEach((childProperty) => {
-          generateIdGeoJson.features.push({
-            id: childProperty.parcelNumberNoFormatting,
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [childProperty.lon, childProperty.lat],
-            },
-            properties: {
-              type: PROPERTY_TYPE.calcProps,
-              acreage: childProperty.acreage,
-              pricePerAcreage: childProperty.pricePerAcreage,
-              lastSaleDate: childProperty.lastSaleDate,
-              lastSalePrice: childProperty.lastSalePrice,
-              isBulked: true,
-              bulkId: property.data.parcelNumberNoFormatting,
-              parcelNumber: childProperty.parcelNumberNoFormatting,
-              id: childProperty.parcelNumberNoFormatting,
-              icon: "primary",
-              iconSelected: "primaryHighlighted",
-              iconSize: 1,
-            },
-          });
-        });
-      } else {
-        generateIdGeoJson.features.push({
-          id: property.data.parcelNumberNoFormatting,
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [property.data.lon, property.data.lat],
-          },
-          properties: {
-            type: PROPERTY_TYPE.calcProps,
-            acreage: property.data.acreage,
-            pricePerAcreage: property.data.pricePerAcreage,
-            lastSaleDate: property.data.lastSaleDate,
-            lastSalePrice: property.data.lastSalePrice,
-            isBulked: false,
-            parcelNumber: property.data.parcelNumberNoFormatting,
-            id: property.data.parcelNumberNoFormatting,
-            icon: "primary",
-            iconSelected: "primaryHighlighted",
-            iconSize: 1,
-          },
-        });
-      }
-    });
+  }, [additionalDataResult?.propertiesUsedForCalculation, data, initiateMap]);
 
-    additionalDataResult?.propertiesUsedForCalculation.forEach((property) => {
-      if (property.isBulked) {
-        property.data.properties.forEach((childProperty) => {
-          generateIdGeoJson.features.push({
-            id: childProperty.parcelNumberNoFormatting,
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [childProperty.lon, childProperty.lat],
-            },
-            properties: {
-              type: PROPERTY_TYPE.notValid,
-              acreage: childProperty.acreage,
-              pricePerAcreage: childProperty.pricePerAcreage,
-              lastSaleDate: childProperty.lastSaleDate,
-              lastSalePrice: childProperty.lastSalePrice,
-              isBulked: true,
-              bulkId: property.data.parcelNumberNoFormatting,
-              parcelNumber: childProperty.parcelNumberNoFormatting,
-              id: childProperty.parcelNumberNoFormatting,
-              icon: "secondary",
-              iconSelected: "secondaryHighlighted",
-              iconSize: 1,
-            },
-          });
-        });
-      } else {
-        generateIdGeoJson.features.push({
-          id: property.data.parcelNumberNoFormatting,
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [property.data.lon, property.data.lat],
-          },
-          properties: {
-            type: PROPERTY_TYPE.notValid,
-            acreage: property.data.acreage,
-            pricePerAcreage: property.data.pricePerAcreage,
-            lastSaleDate: property.data.lastSaleDate,
-            lastSalePrice: property.data.lastSalePrice,
-            parcelNumber: property.data.parcelNumberNoFormatting,
-            id: property.data.parcelNumberNoFormatting,
-            isBulked: false,
-            icon: "secondary",
-            iconSelected: "secondaryHighlighted",
-            iconSize: 1,
-          },
-        });
-      }
-    });
-    setGeoJson(generateIdGeoJson);
-  }, [additionalDataResult?.propertiesUsedForCalculation, data]);
+  // useEffect(() => {
+  //   if (loaded && ref && geoJson) {
+  //     ref.addSource("properties", {
+  //       type: "geojson",
+  //       data: geoJson,
+  //       generateId: true, // This ensures that all features have unique IDs
+  //     });
 
-  useEffect(() => {
-    if (loaded && ref && geoJson) {
-      ref.addSource("properties", {
-        type: "geojson",
-        data: geoJson,
-        generateId: true, // This ensures that all features have unique IDs
-      });
+  //     ref.addLayer({
+  //       id: "properties-layer",
+  //       type: "symbol",
+  //       source: "properties",
+  //       layout: {
+  //         "icon-image": "{icon}",
+  //         "icon-size": [
+  //           "match",
+  //           ["get", "type"],
+  //           [PROPERTY_TYPE.selling],
+  //           1.5,
+  //           [PROPERTY_TYPE.calcProps],
+  //           1,
+  //           [PROPERTY_TYPE.notValid],
+  //           1,
+  //           1.2,
+  //         ],
+  //         "icon-allow-overlap": true,
+  //       },
+  //       paint: {
+  //         "icon-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0, 1],
+  //       },
+  //     });
 
-      ref.addLayer({
-        id: "properties-layer",
-        type: "symbol",
-        source: "properties",
-        layout: {
-          "icon-image": "{icon}",
-          "icon-size": [
-            "match",
-            ["get", "type"],
-            [PROPERTY_TYPE.selling],
-            1.5,
-            [PROPERTY_TYPE.calcProps],
-            1,
-            [PROPERTY_TYPE.notValid],
-            1,
-            1.2,
-          ],
-          "icon-allow-overlap": true,
-        },
-        paint: {
-          "icon-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0, 1],
-        },
-      });
+  //     ref.addLayer({
+  //       id: "properties-layer-selected",
+  //       type: "symbol",
+  //       source: "properties",
+  //       layout: {
+  //         "icon-image": "{iconSelected}",
+  //         "icon-allow-overlap": true,
+  //         "icon-size": 1.5,
+  //       },
+  //       paint: {
+  //         "icon-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
+  //       },
+  //     });
+  //     ref.on("mousemove", "properties-layer", (e) => {
+  //       const feature = ref.queryRenderedFeatures(e.point).filter((el) => el.source === "properties")[0];
+  //       // console.log(features, 22);
 
-      ref.addLayer({
-        id: "properties-layer-selected",
-        type: "symbol",
-        source: "properties",
-        layout: {
-          "icon-image": "{iconSelected}",
-          "icon-allow-overlap": true,
-          "icon-size": 1.5,
-        },
-        paint: {
-          "icon-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 1, 0],
-        },
-      });
-      ref.on("mousemove", "properties-layer", (e) => {
-        const feature = ref.queryRenderedFeatures(e.point).filter((el) => el.source === "properties")[0];
-        // console.log(features, 22);
+  //       if (feature) {
+  //         if (hoveredFeaturesIds.current.length > 0) {
+  //           hoveredFeaturesIds.current.forEach((x) => {
+  //             ref.setFeatureState({ source: "properties", id: x }, { hover: false });
+  //           });
+  //           hoveredFeaturesIds.current = [];
+  //         }
 
-        if (feature) {
-          if (hoveredFeaturesIds.current.length > 0) {
-            hoveredFeaturesIds.current.forEach((x) => {
-              ref.setFeatureState({ source: "properties", id: x }, { hover: false });
-            });
-            hoveredFeaturesIds.current = [];
-          }
+  //         if (feature.id) {
+  //           if (feature.properties.isBulked) {
+  //             ref
+  //               .querySourceFeatures("properties", {
+  //                 filter: ["in", "bulkId", feature.properties.bulkId],
+  //               })
+  //               .forEach((x) => {
+  //                 ref.setFeatureState({ source: "properties", id: x.id }, { hover: true });
+  //                 hoveredFeaturesIds.current.push(x.id);
+  //               });
+  //           } else {
+  //             hoveredFeaturesIds.current.push(feature.id);
+  //             hoveredFeaturesIds.current.forEach((x) => {
+  //               ref.setFeatureState({ source: "properties", id: x }, { hover: true });
+  //             });
+  //           }
+  //         }
+  //       }
+  //     });
 
-          if (feature.id) {
-            if (feature.properties.isBulked) {
-              ref
-                .querySourceFeatures("properties", {
-                  filter: ["in", "bulkId", feature.properties.bulkId],
-                })
-                .forEach((x) => {
-                  ref.setFeatureState({ source: "properties", id: x.id }, { hover: true });
-                  hoveredFeaturesIds.current.push(x.id);
-                });
-            } else {
-              hoveredFeaturesIds.current.push(feature.id);
-              hoveredFeaturesIds.current.forEach((x) => {
-                ref.setFeatureState({ source: "properties", id: x }, { hover: true });
-              });
-            }
-          }
-        }
-      });
+  //     ref.on("mouseleave", "properties-layer", (e) => {
+  //       hoveredFeaturesIds.current.forEach((x) => {
+  //         ref.setFeatureState({ source: "properties", id: x }, { hover: false });
+  //       });
 
-      ref.on("mouseleave", "properties-layer", (e) => {
-        hoveredFeaturesIds.current.forEach((x) => {
-          ref.setFeatureState({ source: "properties", id: x }, { hover: false });
-        });
-
-        hoveredFeaturesIds.current = [];
-      });
-      ref.setCenter([data.lon, data.lat]);
-      ref.setZoom(10);
-    }
-  }, [loaded, ref, geoJson, data.lon, data.lat, setMpaInteraction, hoveredFeaturesIds]);
+  //       hoveredFeaturesIds.current = [];
+  //     });
+  //     ref.setCenter([data.lon, data.lat]);
+  //     ref.setZoom(10);
+  //   }
+  // }, [loaded, ref, geoJson, data.lon, data.lat, setMpaInteraction, hoveredFeaturesIds]);
 
   // useEffect(() => {
   //   if (mapInteraction.hoveredParcelNumber && ref) {
