@@ -19,6 +19,8 @@ import AuthSessionProvider from "@/components/shared/auth-session-provider";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import Chat from "@/components/shared/chat";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
+import Script from "next/script";
+import Image from "next/image";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,6 +41,9 @@ const bricolage = Bricolage_Grotesque({
 export const metadata: Metadata = {
   title: "Parcel Market",
   description: "Value, buy, and sell vacant land",
+  other: {
+    ...(process.env.NODE_ENV === "production" && { "facebook-domain-verification": "ioj6davcfxs2k7yp656xaihld7114b" }),
+  },
 };
 
 export const viewport: Viewport = {
@@ -59,9 +64,38 @@ export default async function RootLayout({
   return (
     <>
       <html lang="en">
+        {process.env.NODE_ENV === "production" && (
+          <Script id="fb-pixel" strategy="afterInteractive">
+            {`
+               !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '567998256023099');
+                fbq('track', 'PageView');
+              `}
+          </Script>
+        )}
+
         <GoogleTagManager gtmId="GTM-P59N8LFM" />
         <GoogleAnalytics gaId="G-SBBPRZKYR6" />
         <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-dvh")}>
+          {process.env.NODE_ENV === "production" && (
+            <noscript>
+              <Image
+                alt=""
+                height="1"
+                width="1"
+                style={{ display: "none" }}
+                src="https://www.facebook.com/tr?id=567998256023099&ev=PageView&noscript=1"
+              />
+            </noscript>
+          )}
+
           <noscript>
             <iframe
               src="https://www.googletagmanager.com/ns.html?id=GTM-P2BZG9G9"
