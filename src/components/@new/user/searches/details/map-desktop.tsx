@@ -5,12 +5,13 @@ import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState 
 import { IUserRecentSearches } from "@/types/user";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
-import useMap, { IFeature, PropertyTypeEnum } from "@/hooks/useMap";
+import useMap from "@/hooks/useMap";
 import { GeoJSONFeature, Popup, Map as MapBoX } from "mapbox-gl";
 import { swapPolygonCoordinates } from "@/lib/utils";
 import moment from "moment";
 import { moneyFormatter } from "@/helpers/common";
 import { AutoComplete } from "@/components/ui/autocomplete";
+import { IFeature, PropertyTypeEnum } from "@/types/mapbox";
 
 const MapComponent = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -46,27 +47,74 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
       new Popup({ closeButton: false, className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-4 [&>div:last-child]:p-3" })
         .setLngLat([properties.lng, properties.lat])
         .setDOMContent(popupRef.current)
-        .addTo(ref);
+        .addTo(ref)
+        .on("close", () => {
+          setOpenParcelData(null);
+        });
     }
   }, []);
 
-  const { ref, setRef, initiateMap } = useMap({ setMapInteraction: setMpaInteraction, mapInteraction, onMarkerClick });
+  const { ref, setRef, initiateMap, addRegridLayer, setGeoJson, loaded } = useMap({
+    setMapInteraction: setMpaInteraction,
+    mapInteraction,
+    onMarkerClick,
+  });
+
+  const onLoad = useCallback(async () => {
+    if (loaded) {
+      const { owner, lat, lon, parcelNumberNoFormatting, propertiesUsedForCalculation, acreage } = data;
+      const properties: IFeature[] = [];
+
+      propertiesUsedForCalculation.forEach((property) => {
+        if (property.isBulked) {
+          property.data.properties.forEach((childProperty) => {
+            properties.push({
+              acreage: property.data.acreage,
+              lat: childProperty.lat,
+              lng: childProperty.lon,
+              parcelNumberNoFormatting: childProperty.parcelNumberNoFormatting,
+              type: childProperty.isMedianValid ? PropertyTypeEnum.secondary : PropertyTypeEnum.tertiary,
+              bulkId: property.data.parcelNumberNoFormatting,
+              icon: childProperty.isMedianValid ? "secondary" : "tertiary",
+              iconSelected: childProperty.isMedianValid ? "secondaryHighlighted" : "tertiaryHighlighted",
+              lastSaleDate: childProperty.lastSaleDate,
+              lastSalePrice: childProperty.lastSalePrice,
+              pricePerAcreage: childProperty.pricePerAcreage,
+            });
+          });
+        } else {
+          properties.push({
+            acreage: property.data.acreage,
+            lat: property.data.lat,
+            lng: property.data.lon,
+            parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+            type: property.data.isMedianValid ? PropertyTypeEnum.secondary : PropertyTypeEnum.tertiary,
+            icon: property.data.isMedianValid ? "secondary" : "tertiary",
+            iconSelected: property.data.isMedianValid ? "secondaryHighlighted" : "tertiaryHighlighted",
+            lastSaleDate: property.data.lastSaleDate,
+            lastSalePrice: property.data.lastSalePrice,
+            pricePerAcreage: property.data.pricePerAcreage,
+          });
+        }
+      });
+      setGeoJson({
+        owner,
+        lat,
+        lng: lon,
+        parcelNumberNoFormatting,
+        acreage,
+        properties,
+      });
+      // await addRegridLayer();
+
+      ref?.setCenter([data.lon, data.lat]);
+      ref?.setZoom(8);
+    }
+  }, [data, ref, setGeoJson, loaded]);
 
   useEffect(() => {
-    const { owner, polygon, lat, lon, parcelNumberNoFormatting, propertiesUsedForCalculation, acreage } = data;
-    initiateMap({
-      owner,
-      coordinates: swapPolygonCoordinates(polygon as any),
-      lat,
-      lng: lon,
-      parcelNumberNoFormatting,
-      acreage,
-      properties: [...propertiesUsedForCalculation, ...(additionalDataResult?.propertiesUsedForCalculation || [])],
-    });
-
-    ref?.setCenter([data.lon, data.lat]);
-    ref?.setZoom(8);
-  }, [additionalDataResult?.propertiesUsedForCalculation, data, initiateMap, ref]);
+    onLoad();
+  }, [onLoad]);
 
   const styles = [
     "mapbox://styles/mapbox/standard",
@@ -92,7 +140,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               ) : (
                 <>
                   <li className="text-xs text-grey-800 py-0.5">
-                    Parcel Number: <span className="text-black font-semibold">{openParcelData?.parcelNumber}</span>
+                    Parcel Number: <span className="text-black font-semibold">{openParcelData?.parcelNumberNoFormatting}</span>
                   </li>
                   <li className="text-xs text-grey-800 py-0.5">
                     Acreage: <span className="text-black font-semibold">{openParcelData.acreage}</span>
