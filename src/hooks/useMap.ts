@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
-import { GeoJSONFeature, Map as MapBoX } from "mapbox-gl";
+import { GeoJSONFeature, Map as MapBoX, Popup } from "mapbox-gl";
 import { createMarkerImage } from "@/lib/map";
 import { MapGeoJson } from "@/types/mapbox";
 
@@ -45,9 +45,11 @@ const useMap = () => {
       onMarkerMouseEnter,
       onMarkerMouseLeave,
       cluster,
+      onClick,
     }: {
       onMarkerMouseEnter: (parcelNumberNoFormatting: string) => void;
       onMarkerMouseLeave: () => void;
+      onClick: (parcelNumberNoFormatting: string) => void;
       cluster?: boolean;
     }) => {
       if (!ref || !loaded) return;
@@ -113,6 +115,14 @@ const useMap = () => {
       ref.on("mouseleave", MAP_ITEMS_IDS.markersLayerId, (e) => {
         onMarkerMouseLeave();
       });
+
+      ref.on("click", MAP_ITEMS_IDS.markersLayerId, (e) => {
+        const feature = ref.queryRenderedFeatures(e.point)[0];
+        const properties = feature.properties as MapGeoJson["features"][0]["properties"];
+        if (properties) {
+          onClick(properties.bulkId ? properties.bulkId : properties.parcelNumberNoFormatting);
+        }
+      });
     },
     [loaded, ref]
   );
@@ -163,6 +173,22 @@ const useMap = () => {
     [ref, loaded]
   );
 
+  const openPopup = useCallback(
+    ({ lat, lng, popupRef, onClose }: { lng: number; lat: number; popupRef: any; onClose: () => void }) => {
+      if (ref) {
+        new Popup({ closeButton: false, className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-4 [&>div:last-child]:p-3" })
+          .setLngLat([lng, lat])
+          .setDOMContent(popupRef)
+          .addTo(ref)
+          .on("close", () => {
+            onClose();
+          });
+      }
+    },
+
+    [ref]
+  );
+
   useEffect(() => {
     if (ref) {
       ref.on("load", () => {
@@ -175,9 +201,11 @@ const useMap = () => {
     async ({
       onMarkerMouseEnter,
       onMarkerMouseLeave,
+      onClick,
     }: {
       onMarkerMouseEnter: (parcelNumberNoFormatting: string) => void;
       onMarkerMouseLeave: () => void;
+      onClick: (parcelNumberNoFormatting: string) => void;
     }) => {
       if (!ref || !loaded) {
         return;
@@ -278,6 +306,14 @@ const useMap = () => {
           }
         }
       });
+
+      ref.on("click", MAP_ITEMS_IDS.markersLayerId, (e) => {
+        const feature = ref.queryRenderedFeatures(e.point)[0];
+        const properties = feature.properties as MapGeoJson["features"][0]["properties"];
+        if (properties) {
+          onClick(properties.bulkId ? properties.bulkId : properties.parcelNumberNoFormatting);
+        }
+      });
     },
     [loaded, ref]
   );
@@ -291,6 +327,8 @@ const useMap = () => {
     showMarkers,
     highlightFeatures,
     showRegridTiles,
+    openPopup,
+    geoJson: geoJson.current,
     // addRegridLayer,
     // setGeoJson,
     // addMarkers,
