@@ -13,6 +13,8 @@ export interface IGeneratedFeatureProperties {
   markerIcon?: string;
   hoveredMarkerIcon?: string;
   selectedMarkerIcon?: string;
+  polygonLineColor?: string;
+  polygonFillColor?: string;
   owner?: string;
   isMedianValid?: string;
   bulkId?: string;

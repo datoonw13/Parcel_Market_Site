@@ -56,7 +56,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
   //   }
   // }, []);
 
-  const { ref, setRef, setGeoJson, addMarkerImages, loaded, showMarkers, highlightFeatures } = useMap();
+  const { ref, setRef, setGeoJson, addMarkerImages, loaded, showMarkers, highlightFeatures, showRegridTiles } = useMap();
 
   const initiateMap = useCallback(async () => {
     if (loaded) {
@@ -87,6 +87,8 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
           acreage,
           price,
           pricePerAcreage,
+          polygonLineColor: "#05471C",
+          polygonFillColor: "#05471C",
         },
       });
 
@@ -115,6 +117,8 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 markerSize: 1,
                 hoveredMarkerSize: 1.2,
                 selectedMarkerSize: 1.2,
+                polygonLineColor: "#F78290",
+                polygonFillColor: "#F78290",
               },
             });
           });
@@ -140,6 +144,8 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               markerSize: 1,
               hoveredMarkerSize: 1.2,
               selectedMarkerSize: 1.2,
+              polygonLineColor: "#F78290",
+              polygonFillColor: "#F78290",
             },
           });
         }
@@ -159,7 +165,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 parcelNumber: bulkedProperty.parcelNumber,
                 lng: bulkedProperty.lon,
                 lat: bulkedProperty.lat,
-                type: "calculation-valid",
+                type: "calculation-not-valid",
                 acreage: property.data.acreage,
                 bulkId: property.data.id,
                 markerIcon: "yellow",
@@ -168,6 +174,8 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 markerSize: 1,
                 hoveredMarkerSize: 1.2,
                 selectedMarkerSize: 1.2,
+                polygonLineColor: "#f5990e",
+                polygonFillColor: "#f5990e",
               },
             });
           });
@@ -183,7 +191,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               parcelNumber: property.data.parcelNumber,
               lng: property.data.lon,
               lat: property.data.lat,
-              type: "calculation-valid",
+              type: "calculation-not-valid",
               markerIcon: "yellow",
               acreage: property.data.acreage,
               hoveredMarkerIcon: "yellowHighlighted",
@@ -191,6 +199,8 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               markerSize: 1,
               hoveredMarkerSize: 30,
               selectedMarkerSize: 1.2,
+              polygonLineColor: "#f5990e",
+              polygonFillColor: "#f5990e",
             },
           });
         }
@@ -204,12 +214,31 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         onMarkerMouseLeave: () => {
           setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
         },
+        cluster: geoJson.features.length > 100,
+      });
+      showRegridTiles({
+        onMarkerMouseEnter: (parcelNumberNoFormatting) => {
+          setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
+        },
+        onMarkerMouseLeave: () => {
+          setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
+        },
       });
 
       ref?.setCenter([data.lon, data.lat]);
       ref?.setZoom(8);
     }
-  }, [loaded, data, additionalDataResult?.propertiesUsedForCalculation, addMarkerImages, setGeoJson, showMarkers, ref, setMpaInteraction]);
+  }, [
+    loaded,
+    data,
+    additionalDataResult?.propertiesUsedForCalculation,
+    addMarkerImages,
+    setGeoJson,
+    showMarkers,
+    showRegridTiles,
+    ref,
+    setMpaInteraction,
+  ]);
 
   const handleMarkerInteractions = useCallback(() => {
     if (loaded) {
