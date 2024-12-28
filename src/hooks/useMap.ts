@@ -63,7 +63,7 @@ const useMap = () => {
         const feature = ref.queryRenderedFeatures(e.point)[0];
         const properties = feature.properties as MapGeoJson["features"][0]["properties"];
         if (properties) {
-          onMarkerMouseEnter(properties.parcelNumberNoFormatting);
+          onMarkerMouseEnter(properties.bulkId ? properties.bulkId : properties.parcelNumberNoFormatting);
         }
       });
       ref.on("mouseleave", "markers-layer", (e) => {
