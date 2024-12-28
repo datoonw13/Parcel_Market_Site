@@ -232,6 +232,7 @@ const useMap = () => {
               "owner",
               "lat",
               "lon",
+              "gisacre",
             ],
           },
         }),

@@ -93,17 +93,37 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
   const initializeMap = useCallback(() => {
     if (mapRef) {
       mapRef.on("load", async () => {
-        const parcelCreate = await fetch(`https://tiles.regrid.com/api/v1/parcels?format=mvt&token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
-          method: "GET",
+        const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            query: {
+              parcel: true,
+            },
+            fields: {
+              parcel: [
+                "usedesc",
+                "parcelnumb_no_formatting",
+                "parcelnumb",
+                "state2",
+                "county",
+                "city",
+                "zoning_description",
+                "owner",
+                "lat",
+                "lon",
+                "gisacre",
+              ],
+            },
+          }),
         });
-        const parcelCreateData = await parcelCreate.json();
+        const parcelCreateData = await createTiles.json();
 
         mapRef!.addSource(parcelCreateData.id, {
           type: "vector",
-          tiles: parcelCreateData.tiles,
+          tiles: parcelCreateData.vector,
           promoteId: "fid",
         });
         mapRef!.addLayer({
@@ -159,22 +179,15 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
           layers: ["parcel-assist"],
         })?.[0];
 
-        const coordinates = feature.geometry?.coordinates;
-
         if (feature) {
-          const turfPolygon = polygon(coordinates);
-          // @ts-ignore
-          const acreage = convertArea(area(turfPolygon), "meters", "acres").toFixed(2);
-          const center = polylabel(coordinates);
-
           setOpenParcelData({
             owner: feature?.properties?.owner || "",
-            acreage: Number(acreage),
+            acreage: Number(feature.properties.gisacre),
             county: feature?.properties?.path.split("/")[3] || "",
             state: feature?.properties?.path.split("/")[2] || "",
             parcelNumber: feature?.properties?.parcelnumb,
-            lat: center[1],
-            lng: center[0],
+            lat: Number(feature.properties.lat),
+            lng: Number(feature.properties.lon),
             coordinates: JSON.stringify(swapPolygonCoordinates(feature.geometry?.coordinates)),
           });
 
