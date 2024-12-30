@@ -143,6 +143,7 @@ const useMap = () => {
             ["get", markerType],
           ];
         });
+
         ref.setLayoutProperty(MAP_ITEMS_IDS.markersLayerId, "icon-image", [
           "case",
           ...markerIconFilters.flat(),

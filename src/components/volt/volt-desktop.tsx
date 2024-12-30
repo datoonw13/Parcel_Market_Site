@@ -28,6 +28,7 @@ import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import VoltMap from "./volt-map";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
 import VoltSearchMap from "./search-map";
+import SearchItemDetailsDesktopMap from "../@new/user/searches/details/map-desktop";
 
 const MapBox = dynamic(() => import("./mapbox"), { ssr: false });
 
@@ -265,18 +266,30 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full">
-              {selectedSearchType === "map" && !values.calculation ? (
+              {selectedSearchType === "map" && step === VoltSteps.SEARCH && (
                 <VoltSearchMap setStep={setStep} data={values.searchDetails} values={values} setValues={setValues} />
-              ) : (
+              )}
+              {step === VoltSteps.SEARCH_RESULTS && (
                 <VoltMap
                   step={step}
-                  user={user}
-                  setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
                   values={values}
                   setValues={setValues}
                   mapInteraction={mapInteraction}
                   setMpaInteraction={setMpaInteraction}
                   showAdditionalData={showAdditionalData}
+                  setOpenPropertyDetailWarningModal={() => {}}
+                  user={user}
+                />
+              )}
+
+              {step === VoltSteps.CALCULATION && values.calculation && (
+                <SearchItemDetailsDesktopMap
+                  data={values.calculation as any}
+                  mapInteraction={mapInteraction}
+                  setMpaInteraction={setMpaInteraction}
+                  additionalDataResult={values.additionalDataResult as any}
+                  user={user}
+                  openWarningModal={() => {}}
                 />
               )}
             </td>

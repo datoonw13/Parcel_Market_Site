@@ -7,7 +7,7 @@ import { IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } fro
 import useStates from "@/hooks/useStates";
 import area from "@turf/area";
 import { polygon, convertArea } from "@turf/helpers";
-import centroid from "@turf/centroid";
+
 import { calculateLandPriceAction } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
@@ -40,6 +40,8 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     county: string;
     parcelNumber: string;
     coordinates: string;
+    proeprtyType: string;
+    locality: string;
   } | null>(null);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
   const [calculationPending, setCalculationPending] = useState(false);
@@ -180,15 +182,19 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
         })?.[0];
 
         if (feature) {
+          console.log(feature, 22);
+
           setOpenParcelData({
             owner: feature?.properties?.owner || "",
-            acreage: Number(feature.properties.gisacre),
-            county: feature?.properties?.path.split("/")[3] || "",
-            state: feature?.properties?.path.split("/")[2] || "",
+            acreage: Number(Number(feature.properties.gisacre).toFixed(2)),
+            county: feature?.properties?.county?.toLocaleLowerCase() || "",
+            state: feature?.properties?.state2.toLocaleLowerCase() || "",
             parcelNumber: feature?.properties?.parcelnumb,
             lat: Number(feature.properties.lat),
             lng: Number(feature.properties.lon),
             coordinates: JSON.stringify(swapPolygonCoordinates(feature.geometry?.coordinates)),
+            proeprtyType: feature?.properties.zoning_description || feature.properties.usedesc || "",
+            locality: feature.properties.city || "",
           });
 
           if (popupRef.current) {
@@ -212,7 +218,7 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
         state: openParcelData.state,
         parcelNumber: openParcelData.parcelNumber,
         owner: openParcelData.owner,
-        propertyType: "",
+        propertyType: openParcelData.proeprtyType,
         coordinates: openParcelData.coordinates,
         locality: "",
       },
@@ -222,6 +228,9 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
         lon: openParcelData.lng.toString(),
       },
     };
+
+    console.log(reqData, 22);
+
     setCalculationPending(true);
 
     const res = await calculateLandPriceAction(reqData);
@@ -238,7 +247,7 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
 
   useEffect(() => {
     if (mapRef) {
-      toggleMapOptions();
+      // toggleMapOptions();
       initializeMap();
     }
   }, [initializeMap, mapRef, toggleMapOptions]);
@@ -248,7 +257,7 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
       const county = getCounty(data.state, data.county);
       if (county) {
         mapRef.flyTo({ center: [county.full.lng, county.full.lat], zoom: 14 });
-        toggleMapOptions();
+        // toggleMapOptions();
       }
     }
   }, [data, getCounty, mapRef, toggleMapOptions]);
