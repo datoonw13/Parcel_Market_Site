@@ -120,6 +120,7 @@ const useMap = () => {
         const feature = ref.queryRenderedFeatures(e.point)[0];
         const properties = feature.properties as MapGeoJson["features"][0]["properties"];
         if (properties) {
+          console.log(properties, "ATOM");
           onClick(properties.bulkId ? properties.bulkId : properties.parcelNumberNoFormatting);
         }
       });
@@ -306,6 +307,16 @@ const useMap = () => {
           } else {
             onMarkerMouseLeave();
           }
+        }
+      });
+
+      ref.on("click", MAP_ITEMS_IDS.polygonsFillLayerId, (e) => {
+        const feature = ref.queryRenderedFeatures(e.point)[0];
+        const properties = feature.properties as MapGeoJson["features"][0]["properties"];
+        if (properties && feature.layer?.id !== "markers-layer") {
+          e.preventDefault();
+          console.log(properties, "REGRID");
+          // onClick(properties.bulkId ? properties.bulkId : properties.parcelNumberNoFormatting);
         }
       });
 
