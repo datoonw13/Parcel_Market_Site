@@ -245,3 +245,12 @@ export const saveSearchDataAction = async (id: number): Promise<ResponseModel<nu
     };
   }
 };
+
+export const testAction = async (x: any) => {
+  try {
+    const res = await fetch(`https://run.mocky.io/v3/83848510-6583-43ea-9081-d84c21902f88?mocky-delay=${x}ms`);
+    return JSON.stringify(res);
+  } catch (error) {
+    return JSON.stringify(error);
+  }
+};
