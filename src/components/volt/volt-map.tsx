@@ -780,6 +780,9 @@ const VoltMap: FC<VoltMapProps> = ({
             <ul className="">
               <>
                 <li className="text-xs text-grey-800 py-0.5">
+                  Parcel Number <span className="text-black font-semibold">{searchResultPopupDetails.parcelNumberNoFormatting}</span>
+                </li>
+                <li className="text-xs text-grey-800 py-0.5">
                   Owner <span className="text-black font-semibold">{searchResultPopupDetails.owner}</span>
                 </li>
                 <li className="text-xs text-grey-800 py-0.5">
