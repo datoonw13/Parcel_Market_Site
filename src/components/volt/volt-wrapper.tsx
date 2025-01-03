@@ -6,7 +6,7 @@ import { IDecodedAccessToken } from "@/types/auth";
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
-import { saveSearchDataAction, testAction } from "@/server-actions/volt/actions";
+import { saveSearchDataAction } from "@/server-actions/volt/actions";
 import VoltDesktop from "./volt-desktop";
 import VoltMobile from "./volt-mobile/volt-mobile";
 import PropertyDetailWarningModal from "./property-detail-warning-modal";
@@ -90,43 +90,6 @@ const VoltWrapper: FC<VoltWrapperProps> = ({ user }) => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={async () => {
-          const res = await testAction(59000);
-          console.log(res);
-        }}
-      >
-        server action 59
-      </button>
-      <button
-        type="button"
-        onClick={async () => {
-          const res = await testAction(60000);
-          console.log(res);
-        }}
-      >
-        server action 60
-      </button>
-      <button
-        type="button"
-        onClick={async () => {
-          const res = await testAction(61000);
-          console.log(res);
-        }}
-      >
-        server action 61
-      </button>
-
-      <button
-        type="button"
-        onClick={async () => {
-          const res = await fetch(`https://run.mocky.io/v3/83848510-6583-43ea-9081-d84c21902f88?mocky-delay=${61000}ms`);
-          console.log(JSON.stringify(res));
-        }}
-      >
-        server action 61 custom
-      </button>
       <PropertyDetailWarningModal
         closeModal={() => setOpenPropertyDetailWarningModal(false)}
         open={openPropertyDetailWarningModal}
