@@ -43,15 +43,7 @@ const useStates = () => {
       stateId ? data?.[stateId as keyof typeof data].map((el) => ({ value: el.county, label: el.county })) || null : null,
     []
   );
-  const getState = useCallback(
-    (stateId: string) =>
-      states.find((el) => {
-        console.log(el, stateId);
-
-        return el.value === stateId;
-      }) || null,
-    [states]
-  );
+  const getState = useCallback((stateId: string) => states.find((el) => el.value === stateId) || null, [states]);
   const getCounty = useCallback((stateId: string, county: string) => {
     const res = data?.[stateId as keyof typeof data]?.find((x) => x.county.toLocaleLowerCase() === county.toLocaleLowerCase()) || null;
     // eslint-disable-next-line no-nested-ternary

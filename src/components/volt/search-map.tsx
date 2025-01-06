@@ -117,6 +117,7 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
                 "lat",
                 "lon",
                 "gisacre",
+                "ll_gisacre",
               ],
             },
           }),
@@ -186,7 +187,7 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
 
           setOpenParcelData({
             owner: feature?.properties?.owner || "",
-            acreage: Number(Number(feature.properties.gisacre).toFixed(2)),
+            acreage: Number(Number(feature.properties.gisacre || feature.properties.ll_gisacre).toFixed(2)),
             county: feature?.properties?.county?.toLocaleLowerCase() || "",
             state: feature?.properties?.state2.toLocaleLowerCase() || "",
             parcelNumber: feature?.properties?.parcelnumb,
