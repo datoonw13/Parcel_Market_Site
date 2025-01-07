@@ -78,6 +78,7 @@ export const getPropertiesAction = async (
 export const calculateLandPriceAction = async (
   payload: IVoltPriceCalculationReqParams
 ): Promise<ResponseModel<IVoltPriceCalculation | null>> => {
+  let x: any = null;
   try {
     const request = await fetcher<IVoltPriceCalculationResponse>(`properties/calculate/price?${new URLSearchParams(payload.queryParams)}`, {
       method: "POST",
@@ -86,6 +87,7 @@ export const calculateLandPriceAction = async (
         revalidate: 3600,
       },
     });
+    x = request;
 
     const formattedResponse: IVoltPriceCalculation = {
       id: request.id,
@@ -197,7 +199,7 @@ export const calculateLandPriceAction = async (
   } catch (error) {
     const errorData = error as ErrorResponse;
     return {
-      data: null,
+      data: x,
       errorMessage: errorData.message,
     };
   }
