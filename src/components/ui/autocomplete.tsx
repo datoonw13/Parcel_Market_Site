@@ -168,7 +168,9 @@ const AutoComplete: FC<AutoCompleteProps> = ({
             }}
             transition={{ duration: 0.1 }}
             onAnimationStart={() => {
-              document?.querySelector(`[data-value=${selectedValue}]`)?.scrollIntoView();
+              try {
+                document?.querySelector(`[data-value=${selectedValue}]`)?.scrollIntoView();
+              } catch (error) {}
             }}
           >
             <ScrollArea className="max-h-72 w-full">
