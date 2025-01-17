@@ -96,6 +96,10 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                     coordinates: [bulkedProperty.lon, bulkedProperty.lat],
                   },
                   properties: {
+                    // @ts-ignore
+
+                    state: bulkedProperty.state.value,
+                    county: bulkedProperty.county.label,
                     parcelNumberNoFormatting: bulkedProperty.parcelNumberNoFormatting,
                     parcelNumber: bulkedProperty.parcelNumber,
                     lng: bulkedProperty.lon,
@@ -124,6 +128,10 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 coordinates: [property.data.lon, property.data.lat],
               },
               properties: {
+                // @ts-ignore
+
+                state: property.data.state.value,
+                county: property.data.county.label,
                 parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
                 parcelNumber: property.data.parcelNumber,
                 lng: property.data.lon,
@@ -159,6 +167,10 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                     coordinates: [bulkedProperty.lon, bulkedProperty.lat],
                   },
                   properties: {
+                    // @ts-ignore
+
+                    state: bulkedProperty.state.value,
+                    county: bulkedProperty.county.label,
                     parcelNumberNoFormatting: bulkedProperty.parcelNumberNoFormatting,
                     parcelNumber: bulkedProperty.parcelNumber,
                     lng: bulkedProperty.lon,
@@ -185,6 +197,9 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 coordinates: [property.data.lon, property.data.lat],
               },
               properties: {
+                // @ts-ignore
+                state: property.data.state.value,
+                county: property.data.county.label,
                 parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
                 parcelNumber: property.data.parcelNumber,
                 lng: property.data.lon,
@@ -207,48 +222,103 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
       setGeoJson(geoJsonInit);
       showMarkers({
         onMarkerMouseEnter: (parcelNumberNoFormatting) => {
-          setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
+          // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
         },
         onMarkerMouseLeave: () => {
-          setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
+          // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
         },
         onClick: (parcelNumberNoFormatting) => {
-          setMpaInteraction((prev) => ({
-            ...prev,
-            openPopperParcelNumber: parcelNumberNoFormatting,
-          }));
+          // setMpaInteraction((prev) => ({
+          //   ...prev,
+          //   openPopperParcelNumber: parcelNumberNoFormatting,
+          // }));
         },
         cluster: geoJsonInit.features.length > 100,
       });
-      showRegridTiles({
+      await showRegridTiles({
         onMarkerMouseEnter: (parcelNumberNoFormatting) => {
-          setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
+          // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
         },
         onMarkerMouseLeave: () => {
-          setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
+          // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
         },
         onClick: (parcelNumberNoFormatting) => {
-          setMpaInteraction((prev) => ({
-            ...prev,
-            openPopperParcelNumber: parcelNumberNoFormatting,
-          }));
+          // setMpaInteraction((prev) => ({
+          //   ...prev,
+          //   openPopperParcelNumber: parcelNumberNoFormatting,
+          // }));
         },
       });
 
+      if (ref) {
+        ref.on("click", "markers-layer", (e) => {
+          const feature = ref.queryRenderedFeatures(e.point)[0];
+          const properties = feature.properties as MapGeoJson["features"][0]["properties"];
+          if (properties) {
+            const html = Object.keys(properties)
+              .filter((key) =>
+                [
+                  "parcelNumberNoFormatting",
+                  "parcelNumber",
+                  "lng",
+                  "lat",
+                  "acreage",
+                  "price",
+                  "pricePerAcreage",
+                  "state",
+                  "county",
+                ].includes(key)
+              )
+              .reduce(
+                // @ts-ignore
+                (acc, cur) => [
+                  ...acc,
+                  `
+                <li style="width: max-content;"">
+                    ${cur}: <span style="font-weight:600;">${(properties as any)?.[cur as any]}</span>
+                </li>
+                </br>
+               `,
+                ],
+                []
+              ) as any;
+            new Popup()
+              .setLngLat([properties.lng, properties.lat])
+              .setHTML(`<ul style="height: 350px; overflow:auto; max-width: 400px; width: 100%;"><h1>ATTOM</h1> <br/>${html.join("")}</ul>`)
+              .addTo(ref);
+          }
+        });
+
+        ref.on("click", "polygons-fill-layer-id", (e) => {
+          const feature = ref.queryRenderedFeatures(e.point)[0];
+
+          if (feature.properties && feature.layer?.id !== "markers-layer") {
+            const html = Object.keys(feature.properties).reduce(
+              // @ts-ignore
+              (acc, cur) => [
+                ...acc,
+                `
+                <li style="width: max-content;"">
+                    ${cur}: <span style="font-weight:600;">${feature?.properties?.[cur]}</span>
+                </li>
+                </br>
+               `,
+              ],
+              []
+            ) as any;
+            new Popup()
+              .setLngLat(e.lngLat)
+              .setHTML(
+                `<ul style="height: 350px; overflow:auto; max-width: 400px; width: 100%;"><h1>REGRID</h1> <br/>${html.join("")}</ul>`
+              )
+              .addTo(ref);
+          }
+        });
+      }
       ref?.setCenter([data.lon, data.lat]);
       ref?.setZoom(8);
     }
-  }, [
-    loaded,
-    data,
-    additionalDataResult?.propertiesUsedForCalculation,
-    addMarkerImages,
-    setGeoJson,
-    showMarkers,
-    showRegridTiles,
-    ref,
-    setMpaInteraction,
-  ]);
+  }, [loaded, data, additionalDataResult?.propertiesUsedForCalculation, addMarkerImages, setGeoJson, showMarkers, showRegridTiles, ref]);
 
   const handleMarkerInteractions = useCallback(() => {
     if (loaded) {
@@ -410,6 +480,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
 
   return (
     <>
+      <div ref={popupRef} />
       {/* <div style={{ display: "none" }}>
         <div ref={popupRef}>
           {openParcelData && (
