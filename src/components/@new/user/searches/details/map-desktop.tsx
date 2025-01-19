@@ -254,6 +254,8 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         ref.on("click", "markers-layer", (e) => {
           const feature = ref.queryRenderedFeatures(e.point)[0];
           const properties = feature.properties as MapGeoJson["features"][0]["properties"];
+          console.log(properties);
+
           if (properties) {
             const html = Object.keys(properties)
               .filter((key) =>
@@ -282,9 +284,33 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
                 ],
                 []
               ) as any;
+            const history: any = [];
+
+            if (properties.type === "selling") {
+              data.propertiesUsedForCalculation.forEach((el) => {
+                if (el.isBulked) {
+                  el.data.properties.flat().forEach((childEl) => {
+                    if ((childEl as any).isMainProperty) {
+                      history.push(el.data);
+                    }
+                  });
+                }
+                if (!el.isBulked) {
+                  if ((el.data as any)?.isMainProperty) {
+                    history.push(el.data);
+                  }
+                }
+              });
+            }
+
+            const html2 = `<div><h1>History </h1> <br/> <br/> ${JSON.stringify(history) || "No History"} </div>`;
             new Popup()
               .setLngLat([properties.lng, properties.lat])
-              .setHTML(`<ul style="height: 350px; overflow:auto; max-width: 400px; width: 100%;"><h1>ATTOM</h1> <br/>${html.join("")}</ul>`)
+              .setHTML(
+                `<ul style="height: 350px; overflow:auto; max-width: 400px; width: 100%;"><h1>ATTOM</h1> <br/>${html.join(
+                  ""
+                )} <br/> ${html2}</ul> `
+              )
               .addTo(ref);
           }
         });
