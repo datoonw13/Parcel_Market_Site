@@ -16,6 +16,7 @@ import { swapPolygonCoordinates } from "@/lib/utils";
 import polylabel from "@mapbox/polylabel";
 import { Button } from "../ui/button";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
+import { AutoComplete } from "../ui/autocomplete";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 interface VoltSearchMapProps {
@@ -92,90 +93,88 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     [mapRef]
   );
 
-  const initializeMap = useCallback(() => {
+  const initializeMap = useCallback(async () => {
     if (mapRef) {
-      mapRef.on("load", async () => {
-        const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: {
+            parcel: true,
           },
-          body: JSON.stringify({
-            query: {
-              parcel: true,
-            },
-            fields: {
-              parcel: [
-                "usedesc",
-                "parcelnumb_no_formatting",
-                "parcelnumb",
-                "state2",
-                "county",
-                "city",
-                "zoning_description",
-                "owner",
-                "lat",
-                "lon",
-                "gisacre",
-                "ll_gisacre",
-              ],
-            },
-          }),
-        });
-        const parcelCreateData = await createTiles.json();
-
-        mapRef!.addSource(parcelCreateData.id, {
-          type: "vector",
-          tiles: parcelCreateData.vector,
-          promoteId: "fid",
-        });
-        mapRef!.addLayer({
-          id: "parcels",
-          type: "line",
-          source: parcelCreateData.id,
-          "source-layer": parcelCreateData.id,
-          minzoom: 14,
-          maxzoom: 20,
-          layout: {
-            visibility: "visible",
-          },
-          paint: {
-            "line-color": "#649d8d",
-          },
-        });
-
-        mapRef!.addLayer({
-          id: "parcel-assist",
-          type: "fill",
-          source: parcelCreateData.id,
-          "source-layer": parcelCreateData.id,
-          minzoom: 14,
-          maxzoom: 20,
-          layout: {
-            visibility: "visible",
-          },
-          paint: {
-            "fill-color": [
-              "case",
-              ["boolean", ["feature-state", "selected"], false],
-              "#649d8d", // Turns parcel green when clicked
-              ["boolean", ["feature-state", "hover"], false],
-              "#649d8d", // Turns green when hovered
-              "#fff", // Default color
-            ],
-            "fill-opacity": [
-              "case",
-              ["boolean", ["feature-state", "selected"], false],
-              0.9, // Almost fully opaque when selected
-              ["boolean", ["feature-state", "hover"], false],
-              0.5, // Half transparent when hovered
-              0.1, // Default color
+          fields: {
+            parcel: [
+              "usedesc",
+              "parcelnumb_no_formatting",
+              "parcelnumb",
+              "state2",
+              "county",
+              "city",
+              "zoning_description",
+              "owner",
+              "lat",
+              "lon",
+              "gisacre",
+              "ll_gisacre",
             ],
           },
-        });
-
-        mapRef.on("mousemove", "parcel-assist", handleMouseMove);
+        }),
       });
+      const parcelCreateData = await createTiles.json();
+
+      mapRef!.addSource(parcelCreateData.id, {
+        type: "vector",
+        tiles: parcelCreateData.vector,
+        promoteId: "fid",
+      });
+      mapRef!.addLayer({
+        id: "parcels",
+        type: "line",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        minzoom: 14,
+        maxzoom: 20,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "line-color": "#649d8d",
+        },
+      });
+
+      mapRef!.addLayer({
+        id: "parcel-assist",
+        type: "fill",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        minzoom: 14,
+        maxzoom: 20,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "fill-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#649d8d", // Turns parcel green when clicked
+            ["boolean", ["feature-state", "hover"], false],
+            "#649d8d", // Turns green when hovered
+            "#fff", // Default color
+          ],
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            0.9, // Almost fully opaque when selected
+            ["boolean", ["feature-state", "hover"], false],
+            0.5, // Half transparent when hovered
+            0.1, // Default color
+          ],
+        },
+      });
+
+      mapRef.on("mousemove", "parcel-assist", handleMouseMove);
 
       mapRef.on("click", (e) => {
         const feature: any = mapRef!.queryRenderedFeatures(e.point, {
@@ -263,8 +262,39 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     }
   }, [data, getCounty, mapRef, toggleMapOptions]);
 
+  const styles = [
+    "mapbox://styles/mapbox/standard",
+    "mapbox://styles/mapbox/standard-satellite",
+    "mapbox://styles/mapbox/streets-v12",
+    "mapbox://styles/mapbox/outdoors-v12",
+    "mapbox://styles/mapbox/light-v11",
+    "mapbox://styles/mapbox/dark-v11",
+    "mapbox://styles/mapbox/satellite-v9",
+    "mapbox://styles/mapbox/satellite-streets-v12",
+    "mapbox://styles/mapbox/navigation-day-v1",
+    "mapbox://styles/mapbox/navigation-night-v1",
+  ];
+
   return (
     <>
+      <div className="fixed right-0 top-0 z-50">
+        <AutoComplete
+          selectedValue={null}
+          options={styles.map((el) => ({ label: el, value: el }))}
+          placeholder="State"
+          onValueChange={(value) => {
+            if (value) {
+              mapRef?.setStyle(value);
+              mapRef?.on("style.load", (e) => {
+                initializeMap();
+              });
+            }
+            // setValue("state", value || "", { shouldValidate: true });
+            // setValue("county", "", { shouldValidate: true });
+          }}
+          // disabled={disableSearch}
+        />
+      </div>
       <TermsConditionsDialog
         open={showCalculationTerms}
         closeModal={() => setShowCalculationTerms(false)}
