@@ -45,8 +45,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
 }) => {
   const popupRef = useRef<HTMLDivElement>(null);
 
-  const { ref, setRef, setGeoJson, addMarkerImages, loaded, showMarkers, highlightFeatures, showRegridTiles, openPopup, geoJson } =
-    useMap();
+  const { ref, setRef, setGeoJson, addMarkerImages, showMarkers, highlightFeatures, showRegridTiles, openPopup, geoJson } = useMap();
 
   function clearMap() {
     if (!ref) return;
@@ -74,7 +73,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
 
   const initiateMap = useCallback(
     async (styleChange?: boolean) => {
-      if (loaded) {
+      if (ref) {
         const { lat, lon, parcelNumberNoFormatting, acreage, parcelNumber, price, pricePerAcreage } = data;
         const geoJsonInit: MapGeoJson = {
           type: "FeatureCollection",
@@ -370,11 +369,11 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         ref?.setZoom(8);
       }
     },
-    [loaded, data, additionalDataResult?.propertiesUsedForCalculation, addMarkerImages, setGeoJson, showMarkers, showRegridTiles, ref]
+    [data, additionalDataResult?.propertiesUsedForCalculation, addMarkerImages, setGeoJson, showMarkers, showRegridTiles, ref]
   );
 
   const handleMarkerInteractions = useCallback(() => {
-    if (loaded) {
+    if (ref) {
       const data: any = [];
 
       if (mapInteraction.hoveredParcelNumber) {
@@ -409,7 +408,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
   }, [
     geoJson.features,
     highlightFeatures,
-    loaded,
     mapInteraction.hoveredParcelNumber,
     mapInteraction.openPopperParcelNumber,
     openPopup,

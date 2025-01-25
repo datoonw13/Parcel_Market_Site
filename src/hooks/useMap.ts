@@ -16,7 +16,7 @@ const MAP_ITEMS_IDS = {
 
 const useMap = () => {
   const [ref, setRef] = useState<MapBoX | null>(null);
-  const [loaded, setLoaded] = useState(false);
+
   const geoJson = useRef<MapGeoJson>({
     type: "FeatureCollection",
     features: [],
@@ -28,7 +28,7 @@ const useMap = () => {
 
   const addMarkerImages = useCallback(
     (data: Record<string, string>) => {
-      if (ref && loaded) {
+      if (ref) {
         Object.keys(data).forEach((key) => {
           const img = createMarkerImage(data[key]);
           img.onload = (e) => {
@@ -37,7 +37,7 @@ const useMap = () => {
         });
       }
     },
-    [loaded, ref]
+    [ref]
   );
 
   const showMarkers = useCallback(
@@ -52,7 +52,7 @@ const useMap = () => {
       onClick: (parcelNumberNoFormatting: string) => void;
       cluster?: boolean;
     }) => {
-      if (!ref || !loaded) return;
+      if (!ref) return;
       ref.addSource(MAP_ITEMS_IDS.markersSourceId, {
         type: "geojson",
         data: geoJson.current,
@@ -120,19 +120,19 @@ const useMap = () => {
         const feature = ref.queryRenderedFeatures(e.point)[0];
         const properties = feature.properties as MapGeoJson["features"][0]["properties"];
         if (properties) {
-          console.log(properties, "ATOM");
           onClick(properties.bulkId ? properties.bulkId : properties.parcelNumberNoFormatting);
         }
       });
     },
-    [loaded, ref]
+    [ref]
   );
 
   const highlightFeatures = useCallback(
     (data: Array<{ [key: string]: "default" | "hovered" | "selected" }>) => {
-      if (!ref || !loaded || !ref.getLayer(MAP_ITEMS_IDS.markersLayerId)) {
+      if (!ref || !ref.getLayer(MAP_ITEMS_IDS.markersLayerId)) {
         return;
       }
+
       if (data.length > 0) {
         const markerIconFilters = data.map((el) => {
           const [key, value] = [Object.keys(el)[0], Object.values(el)[0]];
@@ -172,7 +172,7 @@ const useMap = () => {
         ref.setLayoutProperty(MAP_ITEMS_IDS.markersLayerId, "icon-size", ["get", "markerSize"]);
       }
     },
-    [ref, loaded]
+    [ref]
   );
 
   const openPopup = useCallback(
@@ -191,14 +191,6 @@ const useMap = () => {
     [ref]
   );
 
-  useEffect(() => {
-    if (ref) {
-      ref.on("load", () => {
-        setLoaded(true);
-      });
-    }
-  }, [ref]);
-
   const showRegridTiles = useCallback(
     async ({
       onMarkerMouseEnter,
@@ -209,7 +201,7 @@ const useMap = () => {
       onMarkerMouseLeave: () => void;
       onClick: (parcelNumberNoFormatting: string) => void;
     }) => {
-      if (!ref || !loaded) {
+      if (!ref) {
         return;
       }
 
@@ -257,7 +249,7 @@ const useMap = () => {
           type: "line",
           source: parcelCreateData.id,
           "source-layer": parcelCreateData.id,
-          minzoom: 10,
+          minzoom: 12,
           maxzoom: 20,
           paint: {
             "line-color": ["case", ...lineColorFilters.flat(), "#649d8d"],
@@ -282,7 +274,7 @@ const useMap = () => {
           type: "fill",
           source: parcelCreateData.id,
           "source-layer": parcelCreateData.id,
-          minzoom: 10,
+          minzoom: 12,
           maxzoom: 20,
           paint: {
             "fill-color": ["case", ...fillColorFilters.flat(), "transparent"],
@@ -328,13 +320,12 @@ const useMap = () => {
         }
       });
     },
-    [loaded, ref]
+    [ref]
   );
 
   return {
     ref,
     setRef,
-    loaded,
     setGeoJson,
     addMarkerImages,
     showMarkers,
@@ -342,9 +333,7 @@ const useMap = () => {
     showRegridTiles,
     openPopup,
     geoJson: geoJson.current,
-    // addRegridLayer,
-    // setGeoJson,
-    // addMarkers,
+    loaded: false,
   };
 };
 
