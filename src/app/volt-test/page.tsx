@@ -5,12 +5,12 @@ import { propertySearchTypeValidation } from "@/zod-validations/volt-new";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-const VoltPage = async ({ searchParams }: { [key: string]: string }) => {
+const VoltPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const searchParamsObj = Object.fromEntries(new URLSearchParams(searchParams));
   const validationResult = await propertySearchTypeValidation.safeParseAsync(searchParamsObj);
 
   if (validationResult.error && Object.keys(searchParamsObj).length > 0) {
-    return redirect(`/volt-new`);
+    return redirect(`/volt-test`);
   }
 
   if (validationResult.data?.entityName) {
@@ -18,12 +18,10 @@ const VoltPage = async ({ searchParams }: { [key: string]: string }) => {
     delete validationResult.data.entityName;
   }
 
-  // const request = validationResult.error ? null : await getData(validationResult.data!);
-
   return (
     <VoltDesktopWrapper>
       <Suspense
-        key={JSON.stringify(validationResult.data)}
+        key={validationResult.data ? JSON.stringify(validationResult.data) : ""}
         fallback={<VoltSearchDetails isLoading searchParams={validationResult.data || null} />}
       >
         <SearchAsyncWrapper searchParams={validationResult.data || null} />

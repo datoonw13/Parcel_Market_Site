@@ -11,16 +11,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useStates from "@/hooks/useStates";
 import { FC, useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { testReq } from "@/server-actions/new-volt/server-actions";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useResetAtom } from "jotai/utils";
+import { useAtom } from "jotai";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { AutoComplete } from "../ui/autocomplete";
 import { Alert } from "../ui/alert";
-import { voltAtom } from "./volt-atom";
+import { voltAtom, voltSearchTypeAtom } from "./volt-atom";
 
 type ISearchDetails = z.infer<typeof propertySearchTypeValidation>;
 
@@ -34,6 +35,7 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
   const router = useRouter();
   const pathname = usePathname();
   const [isQueryParamsUpdating, startTransition] = useTransition();
+  const [voltSearchTypeAtomValue, setSearchTypeAtomValue] = useAtom(voltSearchTypeAtom);
   const resetVoltAtom = useResetAtom(voltAtom);
   const {
     handleSubmit,
@@ -45,7 +47,7 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
   } = useForm<ISearchDetails>({
     resolver: zodResolver(propertySearchTypeValidation),
     defaultValues: {
-      searchType: "parcelNumber",
+      searchType: voltSearchTypeAtomValue,
     },
   });
   const { states, getCountiesByState, getCounty, getState } = useStates();
@@ -92,8 +94,9 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
         delete searchParams.firstName;
       }
       reset({ ...searchParams });
+      setSearchTypeAtomValue(searchParams.searchType);
     }
-  }, [searchParams, reset]);
+  }, [reset, searchParams, setSearchTypeAtomValue]);
 
   useEffect(() => {
     setInitialValues();
@@ -112,6 +115,10 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
         </div>
         <RadioGroup
           onValueChange={(value) => {
+            if (value === "map") {
+              router.push(pathname);
+            }
+            setSearchTypeAtomValue(value as ISearchDetails["searchType"]);
             setValue("searchType", value as ISearchDetails["searchType"], { shouldValidate: true, shouldDirty: true });
             trigger();
           }}
@@ -231,33 +238,37 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-3">
-        <LuInfo className="size-6 text-gray-800" />
-        <p className="font-medium text-sm text-gray-800">
-          Your search information is automatically saved to your profile{" "}
-          <Link
-            id="volt-recent-search-link"
-            href={routes.user.recentSearches.fullUrl}
-            className="underline text-sm font-medium text-primary-main"
-          >
-            Data Dashboard
-          </Link>
-        </p>
-      </div>
-      {showError && (
-        <Alert
-          handleClose={() => setError(false)}
-          variant="warning"
-          title="We could not find your property."
-          description="Please check your information and try again."
-        />
-      )}
-      {showLoading && (
-        <div className="space-y-4">
-          <div className="rounded-2xl w-full h-7 animate-pulse bg-grey-100" />
-          <div className="rounded-2xl w-full h-40 animate-pulse bg-grey-100" />
-          <div className="rounded-2xl w-full h-40 animate-pulse bg-grey-100" />
-        </div>
+      {voltSearchTypeAtomValue !== "map" && (
+        <>
+          <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-3">
+            <LuInfo className="size-6 text-gray-800" />
+            <p className="font-medium text-sm text-gray-800">
+              Your search information is automatically saved to your profile{" "}
+              <Link
+                id="volt-recent-search-link"
+                href={routes.user.recentSearches.fullUrl}
+                className="underline text-sm font-medium text-primary-main"
+              >
+                Data Dashboard
+              </Link>
+            </p>
+          </div>
+          {showError && (
+            <Alert
+              handleClose={() => setError(false)}
+              variant="warning"
+              title="We could not find your property."
+              description="Please check your information and try again."
+            />
+          )}
+          {showLoading && (
+            <div className="space-y-4">
+              <div className="rounded-2xl w-full h-7 animate-pulse bg-grey-100" />
+              <div className="rounded-2xl w-full h-40 animate-pulse bg-grey-100" />
+              <div className="rounded-2xl w-full h-40 animate-pulse bg-grey-100" />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

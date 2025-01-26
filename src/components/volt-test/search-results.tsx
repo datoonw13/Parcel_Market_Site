@@ -3,11 +3,10 @@
 import { cn } from "@/lib/utils";
 import { VoltWrapperValuesModel } from "@/types/volt";
 import { FC, useEffect } from "react";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useResetAtom } from "jotai/utils";
-import { propertyInteractionAtom } from "@/atoms/property-interaction-atom";
 import VoltItem from "./volt-item";
-import { voltAtom } from "./volt-atom";
+import { voltAtom, voltSearchTypeAtom } from "./volt-atom";
 
 interface IVoltSearchResults {
   data: NonNullable<VoltWrapperValuesModel["searchResult"]>;
@@ -17,6 +16,7 @@ interface IVoltSearchResults {
 const VoltSearchResults: FC<IVoltSearchResults> = ({ data, className }) => {
   const [voltAtomValue, setVoltAtom] = useAtom(voltAtom);
   const resetVoltAtom = useResetAtom(voltAtom);
+  const voltSearchTypeAtomValue = useAtomValue(voltSearchTypeAtom);
 
   useEffect(() => {
     setVoltAtom((prev) => ({
@@ -28,6 +28,10 @@ const VoltSearchResults: FC<IVoltSearchResults> = ({ data, className }) => {
       resetVoltAtom();
     };
   }, [data, resetVoltAtom, setVoltAtom]);
+
+  if (voltSearchTypeAtomValue === "map") {
+    return null;
+  }
 
   return (
     <div className={cn("space-y-4", className)}>

@@ -1,8 +1,10 @@
 import { z } from "zod";
 
+export const searchType = z.enum(["fullName", "entityName", "parcelNumber", "map"]);
+
 export const propertySearchTypeValidation = z
   .object({
-    searchType: z.enum(["fullName", "entityName", "parcelNumber", "map"]),
+    searchType,
     parcelNumber: z.string().trim().optional(),
     firstName: z.string().trim().optional(),
     lastName: z.string().trim().optional(),
