@@ -21,7 +21,7 @@ import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { AutoComplete } from "../ui/autocomplete";
 import { Alert } from "../ui/alert";
-import { voltAtom, voltSearchTypeAtom } from "./volt-atom";
+import { voltAtom, voltSearchDetailsAtom } from "./volt-atom";
 
 type ISearchDetails = z.infer<typeof propertySearchTypeValidation>;
 
@@ -35,7 +35,7 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
   const router = useRouter();
   const pathname = usePathname();
   const [isQueryParamsUpdating, startTransition] = useTransition();
-  const [voltSearchTypeAtomValue, setSearchTypeAtomValue] = useAtom(voltSearchTypeAtom);
+  const [voltSearchDetailsAtomValue, setVoltSearchDetailsAtom] = useAtom(voltSearchDetailsAtom);
   const resetVoltAtom = useResetAtom(voltAtom);
   const {
     handleSubmit,
@@ -47,7 +47,7 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
   } = useForm<ISearchDetails>({
     resolver: zodResolver(propertySearchTypeValidation),
     defaultValues: {
-      searchType: voltSearchTypeAtomValue,
+      searchType: "parcelNumber",
     },
   });
   const { states, getCountiesByState, getCounty, getState } = useStates();
@@ -94,13 +94,29 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
         delete searchParams.firstName;
       }
       reset({ ...searchParams });
-      setSearchTypeAtomValue(searchParams.searchType);
     }
-  }, [reset, searchParams, setSearchTypeAtomValue]);
+  }, [reset, searchParams]);
 
   useEffect(() => {
     setInitialValues();
   }, [setInitialValues]);
+
+  // useEffect(() => {
+  //   if(voltSearchDetailsAtomValue && voltSearchDetailsAtomValue?.searchType === 'map') {
+
+  //   }
+  // }, [voltSearchDetailsAtomValue])
+
+  useEffect(() => {
+    const { unsubscribe } = watch((value) => {
+      setVoltSearchDetailsAtom({ ...value });
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [setVoltSearchDetailsAtom, watch]);
+
+  console.log(voltSearchDetailsAtomValue);
 
   return (
     <div className="space-y-6">
@@ -118,7 +134,6 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
             if (value === "map") {
               router.push(pathname);
             }
-            setSearchTypeAtomValue(value as ISearchDetails["searchType"]);
             setValue("searchType", value as ISearchDetails["searchType"], { shouldValidate: true, shouldDirty: true });
             trigger();
           }}
@@ -238,7 +253,7 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
           </Button>
         </div>
       </div>
-      {voltSearchTypeAtomValue !== "map" && (
+      {voltSearchDetailsAtomValue?.searchType !== "map" && (
         <>
           <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-3">
             <LuInfo className="size-6 text-gray-800" />

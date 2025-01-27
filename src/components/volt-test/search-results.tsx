@@ -6,7 +6,7 @@ import { FC, useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import VoltItem from "./volt-item";
-import { voltAtom, voltSearchTypeAtom } from "./volt-atom";
+import { voltAtom, voltSearchDetailsAtom } from "./volt-atom";
 
 interface IVoltSearchResults {
   data: NonNullable<VoltWrapperValuesModel["searchResult"]>;
@@ -16,7 +16,7 @@ interface IVoltSearchResults {
 const VoltSearchResults: FC<IVoltSearchResults> = ({ data, className }) => {
   const [voltAtomValue, setVoltAtom] = useAtom(voltAtom);
   const resetVoltAtom = useResetAtom(voltAtom);
-  const voltSearchTypeAtomValue = useAtomValue(voltSearchTypeAtom);
+  const voltSearchDetailsAtomValue = useAtomValue(voltSearchDetailsAtom);
 
   useEffect(() => {
     setVoltAtom((prev) => ({
@@ -29,7 +29,7 @@ const VoltSearchResults: FC<IVoltSearchResults> = ({ data, className }) => {
     };
   }, [data, resetVoltAtom, setVoltAtom]);
 
-  if (voltSearchTypeAtomValue === "map") {
+  if (voltSearchDetailsAtomValue?.searchType === "map") {
     return null;
   }
 

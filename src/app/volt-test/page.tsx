@@ -18,12 +18,18 @@ const VoltPage = async ({ searchParams }: { searchParams: { [key: string]: strin
     delete validationResult.data.entityName;
   }
 
+  const newKey = () => {
+    const newData: any = validationResult.data && { ...validationResult.data };
+
+    if (newData?.searchType) {
+      delete newData.searchType;
+    }
+
+    return JSON.stringify(newData);
+  };
   return (
     <VoltDesktopWrapper>
-      <Suspense
-        key={validationResult.data ? JSON.stringify(validationResult.data) : ""}
-        fallback={<VoltSearchDetails isLoading searchParams={validationResult.data || null} />}
-      >
+      <Suspense key={newKey()} fallback={<VoltSearchDetails isLoading searchParams={validationResult.data || null} />}>
         <SearchAsyncWrapper searchParams={validationResult.data || null} />
       </Suspense>
     </VoltDesktopWrapper>

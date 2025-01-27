@@ -12,4 +12,4 @@ export const voltAtom = atomWithReset<{
   zoomMap: boolean;
 }>({ searchResults: null, sellingPropertyParcelNumber: null, hoveredParcelNumber: null, selectedParcelNumber: null, zoomMap: false });
 
-export const voltSearchTypeAtom = atom<z.infer<typeof propertySearchTypeValidation>["searchType"]>("parcelNumber");
+export const voltSearchDetailsAtom = atom<Partial<z.infer<typeof propertySearchTypeValidation>> | null>(null);
