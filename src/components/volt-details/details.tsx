@@ -14,14 +14,14 @@ const VoltDetails = ({ loading }: { loading?: boolean }) => {
   const { ref, setRef } = useMap();
 
   return (
-    <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative", loading && "blur-[1px]")}>
+    <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative")}>
       {loading && (
-        <div className="w-full h-full z-10 bg-black-100 absolute flex items-center justify-center">
-          <LoadingIcon1 className="!size-10 [&>path]:fill-primary-main-800" />
+        <div className="w-full h-full z-10 absolute flex items-center justify-center">
+          <LoadingIcon1 className="!size-10 [&>path]:fill-primary-main-800 z-10" />
         </div>
       )}
-      <div>
-        <Suspense fallback={<div className="w-full h-full bg-primary-main-100 animate-pulse" />}>
+      <div className={cn(!ref && "bg-grey-100 animate-pulse")}>
+        <Suspense fallback={<div className="w-full h-full bg-primary-main-800 animate-pulse" />}>
           <Map setRef={setRef} ref={ref} />
         </Suspense>
       </div>

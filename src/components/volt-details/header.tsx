@@ -9,18 +9,14 @@ interface VoltDetailsHeaderProps {
   startFetchingTransition: TransitionStartFunction;
 }
 
-const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition }) => {
-  console.log("aee");
-
-  return (
-    <div className="border-y border-y-grey-100 px-6 py-3 bg-[#F7F7F7]">
-      <VoltDetailsFiltersWrapper
-        searchParams={searchParams}
-        initialFilters={initialFilters}
-        startFetchingTransition={startFetchingTransition}
-      />
-    </div>
-  );
-};
+const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition }) => (
+  <div className="border-y border-y-grey-100 px-6 py-3 bg-[#F7F7F7]">
+    <VoltDetailsFiltersWrapper
+      searchParams={searchParams}
+      initialFilters={initialFilters}
+      startFetchingTransition={startFetchingTransition}
+    />
+  </div>
+);
 
 export default VoltDetailsHeader;
