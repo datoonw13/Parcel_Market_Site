@@ -7,11 +7,12 @@ import { z } from "zod";
 interface VoltDetailsSoldWithinFiltersProps {
   value: z.infer<typeof voltDetailsFiltersValidations>["soldWithin"];
   onChange: (value: z.infer<typeof voltDetailsFiltersValidations>["soldWithin"]) => void;
+  showLabel?: boolean;
 }
 
-const VoltDetailsSoldWithinFilters: FC<VoltDetailsSoldWithinFiltersProps> = ({ onChange, value }) => (
+const VoltDetailsSoldWithinFilters: FC<VoltDetailsSoldWithinFiltersProps> = ({ onChange, value, showLabel }) => (
   <div className="space-y-3">
-    {/* <h2 className="text-black font-medium text-sm">You can choose the desired Radius.</h2> */}
+    {showLabel && <h2 className="text-black font-medium text-sm">You can choose the desired Radius.</h2>}
     <div className="space-x-1.5">
       <span className="cursor-pointer">
         <input checked={value === 1} onChange={() => onChange(1)} id="sold-within-1" type="checkbox" className="hidden peer" />

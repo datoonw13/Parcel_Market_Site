@@ -5,6 +5,7 @@ import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import VoltDetailsDesktopFilters from "./desktop";
+import VoltDetailsMobileFilters from "./mobile";
 
 type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
 
@@ -47,9 +48,17 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ searchP
     });
   }, [filters, params, pathname, router, startFetchingTransition]);
 
+  const resetFilters = useCallback(() => {
+    setFilters({
+      ...initialFilters,
+      ...(validateFilters.data && { ...validateFilters.data }),
+    });
+  }, [initialFilters, validateFilters.data]);
+
   return (
     <div>
-      <VoltDetailsDesktopFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
+      {/* <VoltDetailsDesktopFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} /> */}
+      <VoltDetailsMobileFilters resetFilters={resetFilters} onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
     </div>
   );
 };

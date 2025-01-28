@@ -9,14 +9,20 @@ import { MdArrowForwardIos } from "react-icons/md";
 
 const VoltDetailsFiltersDropDown = ({
   renderContent,
+  renderContentAdditionalContent,
   value,
   label,
   onClose,
+  icon,
+  side,
 }: {
   renderContent: (close: () => void) => ReactNode;
+  renderContentAdditionalContent?: (close: () => void) => ReactNode;
   value: string;
   label: string;
   onClose?: () => void;
+  icon?: ReactNode;
+  side?: any;
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -37,11 +43,23 @@ const VoltDetailsFiltersDropDown = ({
               <p className="text-start leading-none text-primary-main font-medium text-xs">{value}</p>
               <p className="text-start leading-none text-black font-medium text-sm pt-1">{label}</p>
             </div>
-            <MdArrowForwardIos className={cn("text-[#1E1E1E] transition-all", open ? "-rotate-90" : "rotate-90")} />
+            {icon || <MdArrowForwardIos className={cn("text-[#1E1E1E] transition-all", open ? "-rotate-90" : "rotate-90")} />}
           </div>
         </PopoverTrigger>
-        <PopoverContent align="start" className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
-          {renderContent(() => setOpen(false))}
+        <PopoverContent
+          side={side}
+          align="start"
+          className="flex gap-2"
+          // className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100"
+        >
+          <div className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
+            {renderContent(() => setOpen(false))}
+          </div>
+          {renderContentAdditionalContent && (
+            <div className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
+              {renderContentAdditionalContent(() => setOpen(false))}
+            </div>
+          )}
         </PopoverContent>
       </Popover>
     </>
