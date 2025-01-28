@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 
 const formatData = (data: any) => ({
   id: data.id,
+  dateCreated: data.dateCreated,
   parcelNumber: data.parcelNumber,
   parcelNumberNoFormatting: removeParcelNumberFormatting(data.parcelNumber),
   acreage: Number(data.acrage),
@@ -47,9 +48,11 @@ const formatData = (data: any) => ({
             el.data.properties.length === 1
               ? `${removeParcelNumberFormatting(el.data.properties[0].parselId)}multiple`
               : el.data.properties.map((el: any) => removeParcelNumberFormatting(el.parselId)).join("multiple"),
-          acreage: el.data.acreage,
-          price: el.data.price,
-          pricePerAcreage: el.data.pricePerAcreage,
+          acreage: el.data.properties.reduce((acc, cur) => acc + Number(cur.arcage), 0),
+          price: el.data.properties.reduce((acc, cur) => acc + Number(cur.lastSalesPrice), 0),
+          pricePerAcreage:
+            el.data.properties.reduce((acc, cur) => acc + Number(cur.lastSalesPrice), 0) /
+            el.data.properties.reduce((acc, cur) => acc + Number(cur.arcage), 0),
           county: {
             value: el.data.properties[0].county,
             label: el.data.properties[0].county,
@@ -113,12 +116,18 @@ const formatData = (data: any) => ({
 
 export const getData = async (
   id: number
-): Promise<ResponseModel<{ data: IVoltPriceCalculation; additionalData: IVoltPriceCalculation } | null>> => {
+): Promise<
+  ResponseModel<{
+    data: IVoltPriceCalculation & { dateCreated: Date };
+    additionalData: IVoltPriceCalculation & { dateCreated: Date };
+  } | null>
+> => {
   try {
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
     const dataReq = await fetcher<any>(`properties/${id}`);
     const additionalDataReq = await fetcher<any>(`properties/${id}?getAll=true`);
+    console.log(JSON.stringify(dataReq));
 
     return {
       errorMessage: null,
@@ -144,7 +153,7 @@ const INITIAL_FILTERS = {
   soldWithin: 2,
 } as z.infer<typeof voltDetailsFiltersValidations>;
 
-const VoltPropertyDetailsPage = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams: { [key: string]: string }; params: { id: string } }) => {
   const filtersValidation = await voltDetailsFiltersValidations.safeParseAsync({
     ...searchParams,
   });
@@ -161,9 +170,11 @@ const VoltPropertyDetailsPage = async ({ searchParams }: { searchParams: { [key:
     redirect(`/volt/2?${newParams.toString()}`);
   }
 
-  const data = filtersValidation.data ? await getData(2816) : null;
+  const data = filtersValidation.data ? await getData(Number(params.id)) : null;
 
-  return filtersValidation.data && <VoltDetailsLayout initialFilters={INITIAL_FILTERS} searchParams={searchParams} />;
+  return (
+    filtersValidation.data && <VoltDetailsLayout data={data?.data || null} initialFilters={INITIAL_FILTERS} searchParams={searchParams} />
+  );
 };
 
 export default VoltPropertyDetailsPage;

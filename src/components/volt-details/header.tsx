@@ -7,6 +7,8 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
+import { moneyFormatter } from "@/helpers/common";
+import moment from "moment";
 import VoltDetailsFiltersWrapper from "./filters/wrapper";
 import { Tooltip } from "../ui/tooltip";
 import { Switch } from "../ui/switch";
@@ -16,9 +18,20 @@ interface VoltDetailsHeaderProps {
   searchParams: { [key: string]: string };
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
+  data: {
+    owner: string;
+    parcelNumber: string;
+    acreage: number;
+    stateAndCounty: string;
+    price: number;
+    pricePerAcreage: number;
+    propertyType: string;
+    searchDate: Date;
+    averageOfPropertiesUsedForCal: number;
+  } | null;
 }
 
-const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition }) => {
+const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition, data }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
 
   return (
@@ -32,12 +45,14 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
           />
           <div className="flex items-center gap-2">
             <div className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
-              <p className="text-sm font-medium">Avg: 1,239$</p>
+              <p className="text-sm font-medium">
+                Avg: {data?.averageOfPropertiesUsedForCal && moneyFormatter.format(data?.averageOfPropertiesUsedForCal)}
+              </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
             <div className="border border-grey-100 bg-white flex justify-between items-center rounded-xl h-full">
               <div className="p-3 border-r flex items-center gap-2">
-                <p className="text-sm font-medium">Avg: 1,239$</p>
+                <p className="text-sm font-medium">VOLT: {data?.pricePerAcreage && moneyFormatter.format(data?.pricePerAcreage)}</p>
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
               </div>
               <div className="p-3 flex">
@@ -46,7 +61,42 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
             </div>
           </div>
         </div>
-        <VoltDetailsFiltersDropDown label="12.3 Acre, Residental - Vacant Land" value="Subject land" renderContent={() => <div>ae</div>} />
+        <VoltDetailsFiltersDropDown
+          label="12.3 Acre, Residental - Vacant Land"
+          value="Subject land"
+          renderContent={() => (
+            <ul className="!w-[--radix-popper-anchor-width] p-4 space-y-4">
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Owner: <span className="text-sm font-medium text-black">{data?.owner}</span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Parcel ID: <span className="text-sm font-medium text-black">{data?.parcelNumber}</span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Acreage: <span className="text-sm font-medium text-black">{data?.acreage}</span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                State/county: <span className="text-sm font-medium text-black">{data?.stateAndCounty}</span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Volt Value: <span className="text-sm font-medium text-black">{data?.price && moneyFormatter.format(data?.price)}</span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Price per acreage:{" "}
+                <span className="text-sm font-medium text-black">
+                  {data?.pricePerAcreage && moneyFormatter.format(data.pricePerAcreage)}
+                </span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>
+              </li>
+              <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                Search date:{" "}
+                <span className="text-sm font-medium text-black">{data?.searchDate && moment(data.searchDate).format("MM-DD-YYYY")}</span>
+              </li>
+            </ul>
+          )}
+        />
       </div>
     )
   );

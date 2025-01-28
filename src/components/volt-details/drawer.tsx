@@ -3,8 +3,18 @@
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Drawer } from "vaul";
+import { IVoltPriceCalculation } from "@/types/volt";
+import VoltDetailsProgressLine from "./progress-line";
 
-const VoltDetailsDrawer = ({ container }: { container: HTMLDivElement | null }) => {
+const VoltDetailsDrawer = ({
+  container,
+  data,
+  averageOfPropertiesUsedForCal,
+}: {
+  container: HTMLDivElement | null;
+  data: IVoltPriceCalculation & { dateCreated: Date };
+  averageOfPropertiesUsedForCal: number;
+}) => {
   const [snap, setSnap] = useState<number | string | null>(0);
   const [snapPoints, setSnapPoints] = useState<Array<string | number>>([0, 1]);
   const [drawerContentRef, setDrawerContentRef] = useState<HTMLDivElement | null>(null);
@@ -15,18 +25,20 @@ const VoltDetailsDrawer = ({ container }: { container: HTMLDivElement | null }) 
   const setDrawerContentDimension = useCallback(() => {
     if (!container || !drawerContentRef || !firstSectionRef || !overlayRef) return;
     const { width, height } = container.getBoundingClientRect();
-    drawerContentRef.style.width = `${width}px`;
+    drawerContentRef.style.width = `${width + 1}px`;
     drawerContentRef.style.height = `${height}px`;
 
-    overlayRef.style.width = `${width}px`;
+    overlayRef.style.width = `${width + 1}px`;
     overlayRef.style.height = `${height}px`;
 
     const { height: firstSectionHeight } = firstSectionRef.getBoundingClientRect();
+    console.log(firstSectionHeight, 22);
 
-    const minSnapPoint = firstSectionHeight / height + 0.08;
+    const minSnapPoint = firstSectionHeight / height + 0.15;
 
     setSnapPoints([minSnapPoint, 1]);
     setSnap(minSnapPoint);
+    document.body.style.pointerEvents = "auto";
   }, [container, drawerContentRef, firstSectionRef, overlayRef]);
 
   useEffect(() => {
@@ -43,7 +55,6 @@ const VoltDetailsDrawer = ({ container }: { container: HTMLDivElement | null }) 
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
       fadeFromIndex={1}
-      defaultOpen
       open
       snapToSequentialPoint
       onRelease={(e) => {
@@ -56,7 +67,6 @@ const VoltDetailsDrawer = ({ container }: { container: HTMLDivElement | null }) 
           e.currentTarget.style.transform = "";
         }
       }}
-      setBackgroundColorOnScale
     >
       <Drawer.Overlay ref={setOverlayRef} className={cn("absolute inset-0 bg-black/40", isDragging || snap === 1 ? "block" : "hidden")} />
       <Drawer.Portal>
@@ -76,22 +86,7 @@ const VoltDetailsDrawer = ({ container }: { container: HTMLDivElement | null }) 
             <div className="z-10 overflow-hidden">
               <div ref={setFirstSectionRef} className={cn("z-10 p-5")}>
                 <div className={cn("w-44 h-2 rounded-xl mx-auto bg-grey-100 hidden my-3", snap === 1 && "block")} />
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test</p>
-                <p>Test2</p>
-                <p>Test2</p>
-                <p>Test2</p>
-                <p>Test2</p>
-                <p>Test2</p>
-                <p>Test2</p>
-                <p>Test2123</p>
-                <p>Test2123</p>
-                <p>Test2123</p>
-                <p>Test2123</p>
-                <p>Test2123</p>
-                <p>Test2123</p>
-                <p>Test2123</p>
+                <VoltDetailsProgressLine data={data} averageOfPropertiesUsedForCal={averageOfPropertiesUsedForCal} />
               </div>
               {/* <div className="overflow-scroll">
                 <p>Test</p>
