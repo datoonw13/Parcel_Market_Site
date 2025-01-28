@@ -8,6 +8,7 @@ import { LuSearch } from "react-icons/lu";
 import { IoFilter } from "react-icons/io5";
 import { MdArrowForwardIos } from "react-icons/md";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 import VoltDetailsFiltersDropDown from "./dropdown";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
@@ -39,10 +40,15 @@ const getAcreageLabel = (min: number | null, max: number | null) => {
 const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setFilters, onSubmit, resetFilters }) => {
   // const [localFilters, setLocalFilters] = useState(filters);
   const [showPropertyFilters, setPropertyFilter] = useState(false);
+  const [propertyLocalFilter, setPropertyLocalFilter] = useState(filters.propertyTypes);
+  const params = useSearchParams();
+  const partialFiltersSchema = voltDetailsFiltersValidations.partial();
+  const validateFilters = partialFiltersSchema.safeParse(Object.fromEntries(new URLSearchParams(params.toString())));
 
   return (
     <VoltDetailsFiltersDropDown
-      value={`${0} Selected`}
+      className=""
+      value={`${validateFilters.data ? Object.values(validateFilters.data).filter(Boolean).length : 0} Selected`}
       label="Filter"
       onClose={() => {
         resetFilters();
@@ -84,7 +90,10 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
             </div>
             <div className="px-5">
               <div
-                onClick={() => setPropertyFilter(!showPropertyFilters)}
+                onClick={() => {
+                  setPropertyFilter(!showPropertyFilters);
+                  setPropertyLocalFilter(filters.propertyTypes);
+                }}
                 className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 cursor-pointer"
               >
                 <div>
@@ -128,9 +137,9 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
                 <div className="bg-white p-4 rounded-t-xl border-b border-b-grey-100">
                   <VoltDetailsPropertyTypeFilters
                     onChange={(propertyTypes) => {
-                      setFilters((prev) => ({ ...prev, propertyTypes }));
+                      setPropertyLocalFilter(propertyTypes);
                     }}
-                    selected={filters.propertyTypes}
+                    selected={propertyLocalFilter}
                   />
                 </div>
                 <div className="px-4 py-3 flex justify-end gap-4">
@@ -139,7 +148,7 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
                     variant="secondary"
                     onClick={() => {
                       setPropertyFilter(false);
-                      setFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
+                      setPropertyLocalFilter(filters.propertyTypes);
                     }}
                   >
                     Close
@@ -148,6 +157,7 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
                     className="w-full max-w-[150px]"
                     onClick={() => {
                       setPropertyFilter(false);
+                      setFilters((prev) => ({ ...prev, propertyTypes: propertyLocalFilter }));
                     }}
                   >
                     Done

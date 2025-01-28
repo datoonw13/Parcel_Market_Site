@@ -4,8 +4,10 @@ import React, { FC, TransitionStartFunction, useCallback, useEffect, useState } 
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import VoltDetailsDesktopFilters from "./desktop";
 import VoltDetailsMobileFilters from "./mobile";
+import { breakPoints } from "../../../../tailwind.config";
 
 type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
 
@@ -19,6 +21,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ searchP
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
+  const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
   const partialFiltersSchema = voltDetailsFiltersValidations.partial();
   const validateFilters = partialFiltersSchema.safeParse(searchParams);
 
@@ -56,10 +59,14 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ searchP
   }, [initialFilters, validateFilters.data]);
 
   return (
-    <div>
-      {/* <VoltDetailsDesktopFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} /> */}
-      <VoltDetailsMobileFilters resetFilters={resetFilters} onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
-    </div>
+    !detecting && (
+      <div>
+        {!isSmallDevice && <VoltDetailsDesktopFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />}
+        {isSmallDevice && (
+          <VoltDetailsMobileFilters resetFilters={resetFilters} onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
+        )}
+      </div>
+    )
   );
 };
 
