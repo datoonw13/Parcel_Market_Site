@@ -1,0 +1,57 @@
+"use client";
+
+import React, { FC, TransitionStartFunction, useCallback, useEffect, useState } from "react";
+import { z } from "zod";
+import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import VoltDetailsDesktopFilters from "./desktop";
+
+type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
+
+interface VoltDetailsFiltersWrapperProps {
+  searchParams: { [key: string]: string };
+  initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
+  startFetchingTransition: TransitionStartFunction;
+}
+
+const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ searchParams, initialFilters, startFetchingTransition }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const partialFiltersSchema = voltDetailsFiltersValidations.partial();
+  const validateFilters = partialFiltersSchema.safeParse(searchParams);
+
+  const [filters, setFilters] = useState<IFilters>({
+    ...initialFilters,
+    ...(validateFilters.data && { ...validateFilters.data }),
+  });
+
+  useEffect(() => {
+    if (validateFilters.error) {
+      router.push(pathname);
+    }
+  }, [pathname, router, validateFilters]);
+
+  const updateQueryParams = useCallback(() => {
+    const newQueryParams = new URLSearchParams(params.toString());
+
+    Object.keys(filters).forEach((key) => {
+      if (filters[key as keyof typeof filters]) {
+        newQueryParams.set(key, filters[key as keyof typeof filters]!.toString());
+      } else {
+        newQueryParams.delete(key);
+      }
+      startFetchingTransition(() => {
+        router.push(`${pathname}?${newQueryParams.toString()}`);
+      });
+    });
+  }, [filters, params, pathname, router, startFetchingTransition]);
+
+  return (
+    <div>
+      <VoltDetailsDesktopFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
+    </div>
+  );
+};
+
+export default VoltDetailsFiltersWrapper;

@@ -1,5 +1,6 @@
 import { SortEnum } from "@/types/common";
 import { NotificationFilter } from "@/types/notifications";
+import { PropertyTypesEnum } from "@/types/volt-details";
 import { z } from "zod";
 
 export const marketplaceFiltersValidations = z.object({
@@ -84,4 +85,45 @@ export const userNotificationsValidations = z.object({
     .optional()
     .nullable()
     .transform((x) => x || null),
+});
+
+const schema = z.union([
+  z
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => val === 5 || val === 15, {
+      message: "Value must be either 5 or 15",
+    }),
+  z.number().refine((val) => val === 5 || val === 15, {
+    message: "Value must be either 5 or 15",
+  }),
+]);
+
+export const voltDetailsFiltersValidations = z.object({
+  radius: z.union([
+    z.coerce.number().refine((val) => val === 5),
+    z.coerce.number().refine((val) => val === 10),
+    z.coerce.number().refine((val) => val === 15),
+  ]),
+  soldWithin: z.union([
+    z.coerce.number().refine((val) => val === 1),
+    z.coerce.number().refine((val) => val === 2),
+    z.coerce.number().refine((val) => val === 3),
+  ]),
+  acreageMin: z.coerce.number().nullable().optional(),
+  acreageMax: z.coerce.number().nullable().optional(),
+  propertyTypes: z
+    .string()
+    .refine(
+      (data) => {
+        const types = data.split(",").map((el) => Number(el));
+        const isValid = types.every((el) => PropertyTypesEnum[el]);
+        return isValid;
+      },
+      {
+        message: "Invalid property type",
+      }
+    )
+    .nullable()
+    .optional(),
 });
