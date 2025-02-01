@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, TransitionStartFunction } from "react";
+import React, { FC, TransitionStartFunction, useMemo } from "react";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { FaCircleInfo } from "react-icons/fa6";
@@ -9,6 +9,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
+import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import VoltDetailsFiltersWrapper from "./filters/wrapper";
 import { Tooltip } from "../ui/tooltip";
 import { Switch } from "../ui/switch";
@@ -18,21 +19,18 @@ interface VoltDetailsHeaderProps {
   searchParams: { [key: string]: string };
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
-  data: {
-    owner: string;
-    parcelNumber: string;
-    acreage: number;
-    stateAndCounty: string;
-    price: number;
-    pricePerAcreage: number;
-    propertyType: string;
-    searchDate: Date;
-    averageOfPropertiesUsedForCal: number;
-  } | null;
+  data: z.infer<typeof PropertyDataSchema>;
 }
 
 const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition, data }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
+
+  const avgPriceOfAssessments = useMemo(() => {
+    let totalPrices = 0;
+    totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
+    const avgPrice = totalPrices / data.assessments.length;
+    return avgPrice;
+  }, [data.assessments]);
 
   return (
     !detecting && (
@@ -45,14 +43,12 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
           />
           <div className="flex items-center gap-2">
             <div className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
-              <p className="text-sm font-medium">
-                Avg: {data?.averageOfPropertiesUsedForCal && moneyFormatter.format(data?.averageOfPropertiesUsedForCal)}
-              </p>
+              <p className="text-sm font-medium">Avg: {moneyFormatter.format(avgPriceOfAssessments)}</p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
             <div className="border border-grey-100 bg-white flex justify-between items-center rounded-xl h-full">
               <div className="p-3 border-r flex items-center gap-2">
-                <p className="text-sm font-medium">VOLT: {data?.pricePerAcreage && moneyFormatter.format(data?.pricePerAcreage)}</p>
+                <p className="text-sm font-medium">VOLT: {moneyFormatter.format(data.price / data.acreage)}</p>
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
               </div>
               <div className="p-3 flex">
@@ -76,23 +72,20 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
                 Acreage: <span className="text-sm font-medium text-black">{data?.acreage}</span>
               </li>
               <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                State/county: <span className="text-sm font-medium text-black">{data?.stateAndCounty}</span>
+                State/County: <span className="text-sm font-medium text-black">ae</span>
               </li>
               <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                 Volt Value: <span className="text-sm font-medium text-black">{data?.price && moneyFormatter.format(data?.price)}</span>
               </li>
               <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                Price per acreage:{" "}
-                <span className="text-sm font-medium text-black">
-                  {data?.pricePerAcreage && moneyFormatter.format(data.pricePerAcreage)}
-                </span>
+                Price Per Acreage:{" "}
+                <span className="text-sm font-medium text-black">{moneyFormatter.format(data.price / data.acreage)}</span>
               </li>
               <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                 Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>
               </li>
               <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                Search date:{" "}
-                <span className="text-sm font-medium text-black">{data?.searchDate && moment(data.searchDate).format("MM-DD-YYYY")}</span>
+                Search Date: <span className="text-sm font-medium text-black">{moment(data.dateCreated).format("MM-DD-YYYY")}</span>
               </li>
             </ul>
           )}

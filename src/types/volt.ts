@@ -131,3 +131,66 @@ export interface IVoltPriceCalculationResponse {
   };
   properties: Array<IVoltPriceCalculationResponseProperty | IVoltPriceCalculationResponseBulkProperties>;
 }
+
+/// // new
+
+export interface IAssessment {
+  isBulked: boolean;
+  data: {
+    id: number;
+    owner: string | null;
+    parselId: string;
+    propertyType: string;
+    arcage: string;
+    price: string;
+    isValid: boolean;
+    isMedianValid: boolean;
+    address: string;
+    lastSalesPrice: string;
+    lastSalesDate: string;
+    latitude: string;
+    longitude: string;
+    state: string;
+    county: string;
+    bulkGroupId: string | null;
+    isMainProperty: boolean;
+  };
+}
+
+export interface IPropertyData {
+  id: number;
+  owner: string;
+  user_id: number;
+  state: string;
+  county: string;
+  propertyType: string;
+  acrage: string;
+  parcelNumber: string;
+  legalDescription: string | null;
+  apiOwnerName: string | null;
+  lotSize: string | null;
+  salePrice: string | null;
+  saleYear: string | null;
+  price: string;
+  price_sum: string;
+  median_middle_price: string;
+  accepted: boolean;
+  dateCreated: string;
+  lastsalesprice: string;
+  lastsalesdate: string;
+  city: string | null;
+  coordinates: string;
+  lat: string;
+  lon: string;
+  locality: string;
+  median: string;
+  medianLowerBound: string;
+  medianUpperBound: string;
+  averagePricePerAcreValidMedians: string;
+  radius: string | null;
+  soldWithin: string | null;
+  acreageMin: string | null;
+  acreageMax: string | null;
+  propertyTypes: string | null;
+  assessments: IAssessment[];
+}

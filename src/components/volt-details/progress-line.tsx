@@ -3,28 +3,46 @@
 import { cn } from "@/lib/utils";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
-import { IVoltPriceCalculation } from "@/types/volt";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction, useMemo } from "react";
 import { moneyFormatter } from "@/helpers/common";
+import { PropertyDataSchema } from "@/zod-validations/volt-new";
+import { z } from "zod";
 import { Tooltip } from "../ui/tooltip";
 
 interface VoltDetailsProgressLineProps {
-  data: IVoltPriceCalculation & { dateCreated: Date };
-  averageOfPropertiesUsedForCal: number;
+  data: z.infer<typeof PropertyDataSchema>;
+  setPropertiesInteraction: Dispatch<
+    SetStateAction<{
+      [key: string]: "hovered" | "popup";
+    }>
+  >;
+  propertiesInteraction: { [key: string]: "hovered" | "popup" };
 }
 
-const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ averageOfPropertiesUsedForCal, data }) => {
-  //   const averagePricePerAcre = Number((data.reduce((acc, cur) => acc + cur.pricePerAcre, 0) / data.length).toFixed(2));
-  const allPrices = data.propertiesUsedForCalculation
-    .map((el) => (el.isBulked ? el.data.properties.map((childEl) => childEl.pricePerAcreage) : el.data.pricePerAcreage))
-    .flat();
+const hasSellingProperty = (
+  sellingPropertyParcelNumberNoFormatting: string,
+  data: z.infer<typeof PropertyDataSchema>["assessments"][0]
+) => {
+  if (data.isBulked) {
+    return !!data.data.properties.find((el) => el.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting);
+  }
+  return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
+};
+
+const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ data, propertiesInteraction, setPropertiesInteraction }) => {
+  const avgPriceOfAssessments = useMemo(() => {
+    let totalPrices = 0;
+    totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
+    const avgPrice = totalPrices / data.assessments.length;
+    return avgPrice;
+  }, [data.assessments]);
+
+  const allPrices = useMemo(() => data.assessments.map((el) => el.data.pricePerAcreage), [data.assessments]);
   const minPricePerAcre = Math.min(...allPrices);
   const maxPricePerAcre = Math.max(...allPrices);
 
   const getItemXAxisPositionInPercent = (price: number) =>
     Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
-
-  console.log(minPricePerAcre, maxPricePerAcre, data);
 
   return (
     <div className="border border-primary-main-400 bg-[#FAFFFB] p-5 rounded-2xl space-y-12">
@@ -37,7 +55,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ averageOfPr
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                {moneyFormatter.format(averageOfPropertiesUsedForCal)} <span className="text-grey-600">- Average PPA</span>
+                {moneyFormatter.format(avgPriceOfAssessments)} <span className="text-grey-600">- Average PPA</span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
@@ -49,7 +67,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ averageOfPr
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                {moneyFormatter.format(data.pricePerAcreage)} <span className="text-grey-600">- VOLT PPA</span>
+                {moneyFormatter.format(data.price / data.acreage)} <span className="text-grey-600">- VOLT PPA</span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
@@ -66,7 +84,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ averageOfPr
         <div className="relative">
           <hr className="w-full h-1.5 rounded-lg" style={{ background: "linear-gradient(90deg, #16DB65 8%, #05471C 95.44%)" }} />
           <div
-            style={{ left: `calc(${getItemXAxisPositionInPercent(averageOfPropertiesUsedForCal)}%)` }}
+            style={{ left: `calc(${getItemXAxisPositionInPercent(avgPriceOfAssessments)}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
@@ -75,7 +93,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ averageOfPr
             </div>
           </div>
           <div
-            style={{ left: `calc(${getItemXAxisPositionInPercent(data.pricePerAcreage)}%)` }}
+            style={{ left: `calc(${getItemXAxisPositionInPercent(data.price / data.acreage)}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
@@ -83,33 +101,53 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ averageOfPr
               <div className="size-3 bg-warning rounded-full absolute" />
             </div>
           </div>
-          {data.propertiesUsedForCalculation.map((property) => (
-            <FaLocationDot
-              onMouseEnter={() => {
-                //   setMpaInteraction((prevData) => ({
-                //     ...prevData,
-                //     hoveredParcelNumber: property.parcelNumberNoFormatting,
-                //     zoom: true,
-                //   }));
-              }}
-              onMouseLeave={() => {}}
-              onClick={() => {}}
-              key={property.data.parcelNumberNoFormatting}
-              style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
-              className={cn(
-                `size-6 cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 `,
-                `${
-                  data.parcelNumberNoFormatting === property.data.parcelNumberNoFormatting
-                    ? "text-primary-dark"
-                    : "text-[#F78290] hover:text-[#FF2F48]"
-                }`
-                //   isActive(mapInteraction.openPopperParcelNumber, mapInteraction.hoveredParcelNumber, property).active &&
-                //     "scale-150 text-[#FF2F48]",
-                //   isActive(mapInteraction.openPopperParcelNumber, mapInteraction.hoveredParcelNumber, property).highlighted &&
-                //     "scale-150 text-[#FF2F48]"
-              )}
-            />
-          ))}
+          {data.assessments.map((property) => {
+            const parcelNumberNoFormatting = property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting;
+            return (
+              <FaLocationDot
+                onMouseEnter={() => {
+                  if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+                    setPropertiesInteraction((prev) => ({ ...prev, [parcelNumberNoFormatting]: "hovered" }));
+                  }
+                }}
+                onMouseLeave={() => {
+                  if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+                    const newData = { ...propertiesInteraction };
+                    delete newData[parcelNumberNoFormatting];
+                    setPropertiesInteraction((prev) => ({ ...newData }));
+                  }
+                }}
+                onClick={() => {
+                  const newData = { ...propertiesInteraction };
+                  Object.keys(newData).forEach((key) => {
+                    if (newData[key] === "popup") {
+                      delete newData[key];
+                    }
+                  });
+
+                  newData[parcelNumberNoFormatting] = "popup" as const;
+
+                  setPropertiesInteraction({ ...newData });
+                }}
+                key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
+                style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
+                className={cn(
+                  `size-6 cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 `,
+                  `${
+                    hasSellingProperty(data.parcelNumberNoFormatting, property)
+                      ? "text-primary-dark-800"
+                      : "text-[#F78290] hover:text-[#FF2F48]"
+                  }`,
+                  propertiesInteraction[parcelNumberNoFormatting] &&
+                    hasSellingProperty(data.parcelNumberNoFormatting, property) &&
+                    "text-primary-dark scale-150",
+                  propertiesInteraction[parcelNumberNoFormatting] &&
+                    !hasSellingProperty(data.parcelNumberNoFormatting, property) &&
+                    "scale-150 text-[#FF2F48]"
+                )}
+              />
+            );
+          })}
         </div>
         <div className="flex items-center justify-between mt-2">
           <p className="font-semibold text-xs">
