@@ -18,6 +18,7 @@ interface VoltDetailsProgressLineProps {
     }>
   >;
   propertiesInteraction: { [key: string]: "hovered" | "popup" };
+  isNonValidMedianHighlighted: boolean;
 }
 
 const hasSellingProperty = (
@@ -30,7 +31,12 @@ const hasSellingProperty = (
   return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
 };
 
-const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ data, propertiesInteraction, setPropertiesInteraction }) => {
+const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
+  data,
+  propertiesInteraction,
+  setPropertiesInteraction,
+  isNonValidMedianHighlighted,
+}) => {
   const avgPriceOfAssessments = useMemo(() => {
     let totalPrices = 0;
     totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);

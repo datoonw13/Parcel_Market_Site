@@ -20,9 +20,10 @@ const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr:
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
+  isNonValidMedianHighlighted: boolean;
 }
 
-const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
+const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }) => {
   const { ref, setRef } = useMap();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
@@ -44,6 +45,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
               data={data}
               propertiesInteraction={propertiesInteraction}
               setPropertiesInteraction={setPropertiesInteraction}
+              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
             />
           </div>
         )}
@@ -53,6 +55,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
               data={data}
               propertiesInteraction={propertiesInteraction}
               setPropertiesInteraction={setPropertiesInteraction}
+              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
             />
           </div>
         )}

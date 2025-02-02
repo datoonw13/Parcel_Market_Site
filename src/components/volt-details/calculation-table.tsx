@@ -81,9 +81,15 @@ interface VoltDetailsCalculationTableProps {
     }>
   >;
   propertiesInteraction: { [key: string]: "hovered" | "popup" };
+  isNonValidMedianHighlighted: boolean;
 }
 
-const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({ data, propertiesInteraction, setPropertiesInteraction }) => {
+const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
+  data,
+  propertiesInteraction,
+  setPropertiesInteraction,
+  isNonValidMedianHighlighted,
+}) => {
   const [sort, setSort] = useState<Partial<{ [key in keyof typeof HEADERS]: "asc" | "desc" }>>({ pricePerAcreage: "asc" });
   const sortKey = Object.keys(sort)[0] as keyof typeof HEADERS;
   const sortValue = Object.values(sort)[0];

@@ -91,10 +91,12 @@ const BulkAssessmentBaseSchema = z
     state: z.string(),
     county: z.string(),
     properties: z.array(AssessmentBaseSchema),
+    isMedianValid: z.boolean().optional(),
   })
   .transform((input) => ({
     ...input,
     id: input.properties.map((el) => el.parcelNumberNoFormatting).join("multiple"),
+    isMedianValid: input.isMedianValid === undefined ? true : input.isMedianValid,
   }));
 
 // const AssessmentSchema = z.object({

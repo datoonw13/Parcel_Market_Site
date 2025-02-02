@@ -20,6 +20,7 @@ interface VoltDetailsLayoutProps {
 const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchParams, loading, data }) => {
   const [isFetching, startFetchingTransition] = useTransition();
   const [backDrop, setBackDrop] = useState(false);
+  const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
 
   return (
     <div className="h-screen flex flex-col">
@@ -30,6 +31,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
         searchParams={searchParams}
         startFetchingTransition={startFetchingTransition}
         setBackDrop={setBackDrop}
+        isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+        setNonValidMedianHighlighted={setNonValidMedianHighlighted}
       />
       <div className={cn("w-full h-full overflow-hidden relative")}>
         <AnimatePresence>
@@ -51,7 +54,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
             />
           )}
         </AnimatePresence>
-        <VoltDetails data={data} />;
+        <VoltDetails data={data} isNonValidMedianHighlighted={isNonValidMedianHighlighted} />;
       </div>
     </div>
   );

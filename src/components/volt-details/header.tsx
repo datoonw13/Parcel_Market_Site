@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, TransitionStartFunction, useMemo } from "react";
+import React, { Dispatch, FC, SetStateAction, TransitionStartFunction, useMemo } from "react";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { FaCircleInfo } from "react-icons/fa6";
@@ -21,9 +21,19 @@ interface VoltDetailsHeaderProps {
   startFetchingTransition: TransitionStartFunction;
   data: z.infer<typeof PropertyDataSchema>;
   setBackDrop: (value: boolean) => void;
+  isNonValidMedianHighlighted: boolean;
+  setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
 }
 
-const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition, data, setBackDrop }) => {
+const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
+  searchParams,
+  initialFilters,
+  startFetchingTransition,
+  data,
+  setBackDrop,
+  isNonValidMedianHighlighted,
+  setNonValidMedianHighlighted,
+}) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
 
   const avgPriceOfAssessments = useMemo(() => {
@@ -54,7 +64,11 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
               </div>
               <div className="p-3 flex">
-                <Switch className="[&:has([data-state=checked])]:bg-warning" />
+                <Switch
+                  checked={isNonValidMedianHighlighted}
+                  onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
+                  className="[&:has([data-state=checked])]:bg-warning"
+                />
               </div>
             </div>
           </div>
