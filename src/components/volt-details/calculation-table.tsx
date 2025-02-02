@@ -53,26 +53,14 @@ const hasSellingProperty = (
   return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
 };
 
-const generateClasses = (isMedianValid: boolean, hasSellingProperty: boolean) => {
-  let classNames = "";
-  if (isMedianValid) {
-    if (hasSellingProperty) {
-      classNames = "hover:bg-grey-30 border-y border-y-2 border-y-[#17DC66]";
-    } else {
-      classNames = "border-t hover:bg-grey-30";
-    }
-  }
-
-  if (!isMedianValid) {
-    if (hasSellingProperty) {
-      classNames = `bg-[#FEFAEB] hover:bg-[#fef8e2] border-y border-y-2 border-y-[#17DC66]`;
-    } else {
-      classNames = `bg-[#FEFAEB] hover:bg-[#fef8e2] border-y border-y-2 border-y-[#FCEDB6]`;
-    }
-  }
-
-  return classNames;
-};
+const generateClasses = (isMedianValid: boolean, hasSellingProperty: boolean, selected: boolean, isNonValidMedianHighlighted: boolean) =>
+  cn(
+    "border-b hover:bg-grey-30",
+    !isMedianValid && isNonValidMedianHighlighted && "bg-[#FEFAEB] hover:bg-[#fdf5d8]",
+    hasSellingProperty && "border-y border-y-2 border-y-[#17DC66]",
+    selected && !isMedianValid && isNonValidMedianHighlighted && "bg-[#fdf5d8]",
+    selected && isMedianValid && "bg-grey-30"
+  );
 interface VoltDetailsCalculationTableProps {
   data: z.infer<typeof PropertyDataSchema>;
   setPropertiesInteraction: Dispatch<
@@ -157,9 +145,12 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <tr
                   className={cn(
                     "cursor-pointer border-t  transition-all",
-                    propertiesInteraction[assessment.data.id] === "popup" && "bg-grey-30",
-                    propertiesInteraction[assessment.data.id] === "hovered" && "bg-grey-30"
-                    // generateClasses(true, hasSellingProperty(data.parcelNumberNoFormatting, assessment))
+                    generateClasses(
+                      assessment.data.isMedianValid,
+                      hasSellingProperty(data.parcelNumberNoFormatting, assessment),
+                      !!(propertiesInteraction[assessment.data.id] || propertiesInteraction[assessment.data.id]),
+                      isNonValidMedianHighlighted
+                    )
                   )}
                   onClick={() => {
                     const newData = { ...propertiesInteraction };
@@ -196,11 +187,16 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   <td className="text-grey-800 text-xs">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
                   <td className="text-grey-800 text-xs">{moment(assessment.data.properties[0].lastSalesDate).format("MM-DD-YYYY")}</td>
                   <td className="text-grey-800 text-xs">
-                    {propertiesInteraction[assessment.data.id] === "popup" ? (
-                      <MdKeyboardArrowDown className="size-5" />
-                    ) : (
-                      <MdKeyboardArrowUp className="size-5" />
-                    )}
+                    <div className="flex items-center gap-2 justify-end">
+                      {propertiesInteraction[assessment.data.id] === "popup" ? (
+                        <MdKeyboardArrowDown className="size-5" />
+                      ) : (
+                        <MdKeyboardArrowUp className="size-5" />
+                      )}
+                      {hasSellingProperty(data.parcelNumberNoFormatting, assessment) && (
+                        <FaLocationDot className="text-primary-dark size-4" />
+                      )}
+                    </div>
                   </td>
                 </tr>
                 {propertiesInteraction[assessment.data.id] === "popup" &&
@@ -212,18 +208,21 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                         // generateClasses(true, hasSellingProperty(data.parcelNumberNoFormatting, { isBulked: false, data: childAssessment }))
                       )}
                     >
-                      <td className="text-grey-800 text-xs !pl-7 ">{childAssessment.parcelNumberNoFormatting}</td>
-                      <td className="text-grey-800 text-xs !pl-7 ">{assessment.data.county}</td>
-                      <td className="text-grey-800 text-xs !pl-7 ">{assessment.data.acreage.toFixed(2)}</td>
-                      <td className="text-grey-800 text-xs !pl-7 ">{moneyFormatter.format(assessment.data.price)}</td>
-                      <td className="text-grey-800 text-xs !pl-7 ">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
-                      <td className="text-grey-800 text-xs !pl-7 ">
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumberNoFormatting}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.toFixed(2)}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{moneyFormatter.format(assessment.data.price)}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         {moment(assessment.data.properties[0].lastSalesDate).format("MM-DD-YYYY")}
                       </td>
-                      <td className="text-grey-800 text-xs !pl-7 ">
-                        {hasSellingProperty(data.parcelNumberNoFormatting, { isBulked: false, data: childAssessment }) && (
-                          <FaLocationDot className="text-primary-dark size-4" />
-                        )}
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
+                        <div className="flex items-center gap-2 justify-end">
+                          <MdKeyboardArrowUp className="size-5 opacity-0" />
+                          {hasSellingProperty(data.parcelNumberNoFormatting, { isBulked: false, data: childAssessment }) && (
+                            <FaLocationDot className="text-primary-dark size-4" />
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -232,9 +231,16 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
               <tr
                 key={assessment.data.parcelNumberNoFormatting}
                 className={cn(
-                  generateClasses(assessment.data.isMedianValid, hasSellingProperty(data.parcelNumberNoFormatting, assessment)),
-                  propertiesInteraction[assessment.data.parcelNumberNoFormatting] === "popup" && "bg-grey-30",
-                  propertiesInteraction[assessment.data.parcelNumberNoFormatting] === "hovered" && "bg-grey-30"
+                  generateClasses(
+                    assessment.data.isMedianValid,
+                    hasSellingProperty(data.parcelNumberNoFormatting, assessment),
+                    !!(
+                      propertiesInteraction[assessment.data.parcelNumberNoFormatting] ||
+                      propertiesInteraction[assessment.data.parcelNumberNoFormatting]
+                    ),
+
+                    isNonValidMedianHighlighted
+                  )
                 )}
                 onClick={() => {
                   const newData = { ...propertiesInteraction };
@@ -271,7 +277,12 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <td className="text-grey-800 text-xs">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
                 <td className="text-grey-800 text-xs">{moment(assessment.data.lastSalesDate).format("MM-DD-YYYY")}</td>
                 <td className="text-grey-800 text-xs !pl-7 ">
-                  {hasSellingProperty(data.parcelNumberNoFormatting, assessment) && <FaLocationDot className="text-primary-dark size-4" />}
+                  <div className="flex items-center gap-2 justify-end">
+                    <MdKeyboardArrowUp className="size-5 opacity-0" />
+                    {hasSellingProperty(data.parcelNumberNoFormatting, assessment) && (
+                      <FaLocationDot className="text-primary-dark size-4" />
+                    )}
+                  </div>
                 </td>
               </tr>
             )
