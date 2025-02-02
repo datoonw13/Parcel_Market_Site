@@ -8,6 +8,7 @@ import { moneyFormatter } from "@/helpers/common";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { Tooltip } from "../ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger, PopoverArrow } from "../ui/popover";
 
 interface VoltDetailsProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -104,48 +105,81 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({ data, prope
           {data.assessments.map((property) => {
             const parcelNumberNoFormatting = property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting;
             return (
-              <FaLocationDot
-                onMouseEnter={() => {
-                  if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
-                    setPropertiesInteraction((prev) => ({ ...prev, [parcelNumberNoFormatting]: "hovered" }));
-                  }
-                }}
-                onMouseLeave={() => {
-                  if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
-                    const newData = { ...propertiesInteraction };
-                    delete newData[parcelNumberNoFormatting];
-                    setPropertiesInteraction((prev) => ({ ...newData }));
-                  }
-                }}
-                onClick={() => {
-                  const newData = { ...propertiesInteraction };
-                  Object.keys(newData).forEach((key) => {
-                    if (newData[key] === "popup") {
-                      delete newData[key];
-                    }
-                  });
+              <Popover key={parcelNumberNoFormatting} open={propertiesInteraction[parcelNumberNoFormatting] === "popup"}>
+                <PopoverTrigger className={cn("")} asChild>
+                  <div
+                    style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
+                    className="absolute top-0 -translate-y-full -translate-x-1/2"
+                  >
+                    <FaLocationDot
+                      onMouseEnter={() => {
+                        if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+                          setPropertiesInteraction((prev) => ({ ...prev, [parcelNumberNoFormatting]: "hovered" }));
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+                          const newData = { ...propertiesInteraction };
+                          delete newData[parcelNumberNoFormatting];
+                          setPropertiesInteraction((prev) => ({ ...newData }));
+                        }
+                      }}
+                      onClick={() => {
+                        const newData = { ...propertiesInteraction };
+                        Object.keys(newData).forEach((key) => {
+                          if (newData[key] === "popup" && key !== parcelNumberNoFormatting) {
+                            delete newData[key];
+                          }
+                        });
 
-                  newData[parcelNumberNoFormatting] = "popup" as const;
-
-                  setPropertiesInteraction({ ...newData });
-                }}
-                key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
-                style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
-                className={cn(
-                  `size-6 cursor-pointer absolute top-0 -translate-y-full text-[#F78290] -translate-x-1/2 transition-all duration-100 hover:scale-150 `,
-                  `${
-                    hasSellingProperty(data.parcelNumberNoFormatting, property)
-                      ? "text-primary-dark-800"
-                      : "text-[#F78290] hover:text-[#FF2F48]"
-                  }`,
-                  propertiesInteraction[parcelNumberNoFormatting] &&
-                    hasSellingProperty(data.parcelNumberNoFormatting, property) &&
-                    "text-primary-dark scale-150",
-                  propertiesInteraction[parcelNumberNoFormatting] &&
-                    !hasSellingProperty(data.parcelNumberNoFormatting, property) &&
-                    "scale-150 text-[#FF2F48]"
-                )}
-              />
+                        if (newData[parcelNumberNoFormatting] === "popup") {
+                          newData[parcelNumberNoFormatting] = "hovered";
+                        } else {
+                          newData[parcelNumberNoFormatting] = "popup";
+                        }
+                        setPropertiesInteraction({ ...newData });
+                      }}
+                      key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
+                      style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
+                      className={cn(
+                        `size-6 cursor-pointer text-[#F78290] transition-all duration-100 hover:scale-150 `,
+                        `${
+                          hasSellingProperty(data.parcelNumberNoFormatting, property)
+                            ? "text-primary-dark-800"
+                            : "text-[#F78290] hover:text-[#FF2F48]"
+                        }`,
+                        propertiesInteraction[parcelNumberNoFormatting] &&
+                          hasSellingProperty(data.parcelNumberNoFormatting, property) &&
+                          "text-primary-dark scale-150",
+                        propertiesInteraction[parcelNumberNoFormatting] &&
+                          !hasSellingProperty(data.parcelNumberNoFormatting, property) &&
+                          "scale-150 text-[#FF2F48]"
+                      )}
+                    />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent side="top" sideOffset={15} className="!outline-none">
+                  {/* <PopoverArrow  /> */}
+                  <div
+                    className="p-0.5"
+                    style={{
+                      background: "linear-gradient(98.39deg, #17DC66 -6.77%, #06481D 112.7%)",
+                      borderRadius: 12,
+                      boxShadow: "0px 4px 12px 0px #0000001F",
+                    }}
+                  >
+                    <div style={{ borderRadius: 10 }} className="bg-[#F1FEF4] p-3">
+                      <p className="text-xs text-grey-600">
+                        Price Per Acre:{" "}
+                        <span className="text-black font-medium">{moneyFormatter.format(property.data.pricePerAcreage)}</span>
+                      </p>
+                      <p className="text-xs text-grey-600">
+                        Acreage: <span className="text-black font-medium">{property.data.acreage.toFixed(2)}</span>
+                      </p>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             );
           })}
         </div>
