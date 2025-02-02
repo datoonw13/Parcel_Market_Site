@@ -53,10 +53,13 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   }
 
   const data = filtersValidation.data ? await getData(Number(params.id)) : null;
+  const propertyTypes = await fetcher<{ [key: string]: string }>("properties/propertyTypes");
 
   return (
     filtersValidation.data &&
-    data?.data && <VoltDetailsLayout data={data.data} initialFilters={INITIAL_FILTERS} searchParams={searchParams} />
+    data?.data && (
+      <VoltDetailsLayout propertyTypes={propertyTypes} data={data.data} initialFilters={INITIAL_FILTERS} searchParams={searchParams} />
+    )
   );
 };
 

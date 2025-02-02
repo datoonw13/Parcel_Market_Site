@@ -15,9 +15,10 @@ interface VoltDetailsLayoutProps {
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   loading?: boolean;
   data: z.infer<typeof PropertyDataSchema>;
+  propertyTypes: { [key: string]: string };
 }
 
-const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchParams, loading, data }) => {
+const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchParams, loading, data, propertyTypes }) => {
   const [isFetching, startFetchingTransition] = useTransition();
   const [backDrop, setBackDrop] = useState(false);
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
@@ -33,6 +34,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
         setBackDrop={setBackDrop}
         isNonValidMedianHighlighted={isNonValidMedianHighlighted}
         setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+        propertyTypes={propertyTypes}
       />
       <div className={cn("w-full h-full overflow-hidden relative")}>
         <AnimatePresence>

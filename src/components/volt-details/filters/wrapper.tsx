@@ -16,6 +16,7 @@ interface VoltDetailsFiltersWrapperProps {
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
   onFilterToggle?: (value: boolean) => void;
+  propertyTypes: { [key: string]: string };
 }
 
 const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
@@ -23,6 +24,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   initialFilters,
   startFetchingTransition,
   onFilterToggle,
+  propertyTypes,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -73,10 +75,17 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
             onSubmit={updateQueryParams}
             filters={filters}
             setFilters={setFilters}
+            propertyTypes={propertyTypes}
           />
         )}
         {isSmallDevice && (
-          <VoltDetailsMobileFilters resetFilters={resetFilters} onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
+          <VoltDetailsMobileFilters
+            propertyTypes={propertyTypes}
+            resetFilters={resetFilters}
+            onSubmit={updateQueryParams}
+            filters={filters}
+            setFilters={setFilters}
+          />
         )}
       </div>
     )

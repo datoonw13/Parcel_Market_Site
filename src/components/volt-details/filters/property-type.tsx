@@ -9,32 +9,30 @@ import { z } from "zod";
 interface VoltDetailsPropertyTypeFiltersProps {
   selected: z.infer<typeof voltDetailsFiltersValidations>["propertyTypes"];
   onChange: (value: z.infer<typeof voltDetailsFiltersValidations>["propertyTypes"]) => void;
+  propertyTypes: { [key: string]: string };
 }
 
-const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = ({ onChange, selected }) => (
+const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = ({ onChange, selected, propertyTypes }) => (
   <div className="grid grid-cols-3 gap-4">
-    {Object.values(PropertyTypesEnum)
-      .filter((el) => Number.isNaN(Number(el)))
-      .map((type) => (
-        <Checkbox
-          onCheckedChange={() => {
-            const isChecked = selected?.split(",")?.includes(PropertyTypesEnum[type as keyof typeof PropertyTypesEnum].toString());
-            let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
-            if (isChecked) {
-              newSelected = newSelected.filter(
-                (el: any) => (el as PropertyTypesEnum) !== PropertyTypesEnum[type as keyof typeof PropertyTypesEnum]
-              );
-            } else {
-              newSelected = [...newSelected, PropertyTypesEnum[type as keyof typeof PropertyTypesEnum]];
-            }
-            onChange(newSelected.length ? newSelected.join(",") : null);
-          }}
-          checked={!!selected?.split(",")?.includes(PropertyTypesEnum[type as keyof typeof PropertyTypesEnum].toString())}
-          label={<span className="font-medium text-xs">{type}</span>}
-          key={type}
-          id={type.toString()}
-        />
-      ))}
+    {Object.keys(propertyTypes).map((key) => (
+      <Checkbox
+        onCheckedChange={() => {
+          const isChecked = selected?.split(",")?.includes(key.toString());
+          let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
+
+          if (isChecked) {
+            newSelected = newSelected.filter((el: any) => el !== key);
+          } else {
+            newSelected = [...newSelected, key];
+          }
+          onChange(newSelected.length ? newSelected.join(",") : null);
+        }}
+        checked={!!selected?.split(",")?.includes(key.toString())}
+        label={<span className="font-medium text-xs">{propertyTypes[key]}</span>}
+        key={key}
+        id={key.toString()}
+      />
+    ))}
   </div>
 );
 

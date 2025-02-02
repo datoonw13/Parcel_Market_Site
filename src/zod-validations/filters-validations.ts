@@ -114,16 +114,16 @@ export const voltDetailsFiltersValidations = z.object({
   acreageMax: z.coerce.number().nullable().optional(),
   propertyTypes: z
     .string()
-    .refine(
-      (data) => {
-        const types = data.split(",").map((el) => Number(el));
-        const isValid = types.every((el) => PropertyTypesEnum[el]);
-        return isValid;
-      },
-      {
-        message: "Invalid property type",
-      }
-    )
+    // .refine(
+    //   (data) => {
+    //     const types = data.split(",").map((el) => Number(el));
+    //     const isValid = types.every((el) => PropertyTypesEnum[el]);
+    //     return isValid;
+    //   },
+    //   {
+    //     message: "Invalid property type",
+    //   }
+    // )
     .nullable()
     .optional(),
 });

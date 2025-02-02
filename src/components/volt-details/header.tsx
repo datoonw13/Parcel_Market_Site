@@ -23,6 +23,7 @@ interface VoltDetailsHeaderProps {
   setBackDrop: (value: boolean) => void;
   isNonValidMedianHighlighted: boolean;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
+  propertyTypes: { [key: string]: string };
 }
 
 const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
@@ -33,6 +34,7 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
   setBackDrop,
   isNonValidMedianHighlighted,
   setNonValidMedianHighlighted,
+  propertyTypes,
 }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
 
@@ -52,6 +54,7 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
             initialFilters={initialFilters}
             startFetchingTransition={startFetchingTransition}
             onFilterToggle={setBackDrop}
+            propertyTypes={propertyTypes}
           />
           <div className="flex items-center gap-2">
             <div className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">

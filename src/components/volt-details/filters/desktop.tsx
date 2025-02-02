@@ -18,6 +18,7 @@ interface IVoltDetailsDesktopFilters {
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
   onFilterToggle?: (value: boolean) => void;
+  propertyTypes: { [key: string]: string };
 }
 
 const getAcreageLabel = (min: number | null, max: number | null) => {
@@ -33,7 +34,7 @@ const getAcreageLabel = (min: number | null, max: number | null) => {
   return "N/A";
 };
 
-const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit, onFilterToggle }) => {
+const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit, onFilterToggle, propertyTypes }) => {
   const [localFilters, setLocalFilters] = useState(filters);
 
   return (
@@ -159,6 +160,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
             {" "}
             <div className="bg-white p-4 rounded-t-xl border-b border-b-grey-100">
               <VoltDetailsPropertyTypeFilters
+                propertyTypes={propertyTypes}
                 onChange={(propertyTypes) => {
                   setLocalFilters((prev) => ({ ...prev, propertyTypes }));
                 }}

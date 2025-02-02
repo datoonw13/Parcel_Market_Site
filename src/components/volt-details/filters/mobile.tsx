@@ -22,23 +22,10 @@ interface IVoltDetailsMobileFilters {
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
   resetFilters: () => void;
+  propertyTypes: { [key: string]: string };
 }
 
-const getAcreageLabel = (min: number | null, max: number | null) => {
-  if (min && !max) {
-    return `[${min}, N/A]`;
-  }
-  if (!min && max) {
-    return `[N/A, ${max}]`;
-  }
-  if (min && max) {
-    return `[${min}, ${max}]`;
-  }
-  return "N/A";
-};
-
-const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setFilters, onSubmit, resetFilters }) => {
-  // const [localFilters, setLocalFilters] = useState(filters);
+const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setFilters, onSubmit, resetFilters, propertyTypes }) => {
   const [showPropertyFilters, setPropertyFilter] = useState(false);
   const [propertyLocalFilter, setPropertyLocalFilter] = useState(filters.propertyTypes);
   const params = useSearchParams();
@@ -136,6 +123,7 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
                 {" "}
                 <div className="bg-white p-4 rounded-t-xl border-b border-b-grey-100">
                   <VoltDetailsPropertyTypeFilters
+                    propertyTypes={propertyTypes}
                     onChange={(propertyTypes) => {
                       setPropertyLocalFilter(propertyTypes);
                     }}
