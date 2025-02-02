@@ -31,6 +31,31 @@ const hasSellingProperty = (
   return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
 };
 
+const getStyles = (
+  sellingPropertyParcelNumberNoFormatting: string,
+  data: z.infer<typeof PropertyDataSchema>["assessments"][0],
+  isNonValidMedianHighlighted: boolean,
+  isActive: boolean
+) => {
+  if (data.data.isMedianValid && !hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
+    return `text-[#F78290] ${isActive && "scale-150 text-[#FF2F48]"}`;
+  }
+  if (data.data.isMedianValid && hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
+    return `text-primary-dark ${isActive && "scale-150 text-primary-dark"}`;
+  }
+  if (!data.data.isMedianValid && !isNonValidMedianHighlighted && !hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
+    return `text-[#F78290] ${isActive && "scale-150 text-[#FF2F48]"}`;
+  }
+  if (!data.data.isMedianValid && !isNonValidMedianHighlighted && hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
+    return `text-primary-dark ${isActive && "scale-150 text-primary-dark"}`;
+  }
+  if (!data.data.isMedianValid && isNonValidMedianHighlighted) {
+    return `text-[#ffae36] ${isActive && "scale-150 text-[#FF9900]"}`;
+  }
+
+  return "";
+};
+
 const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   data,
   propertiesInteraction,
@@ -148,18 +173,20 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                       key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
                       style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
                       className={cn(
-                        `size-6 cursor-pointer text-[#F78290] transition-all duration-100 hover:scale-150 `,
-                        `${
-                          hasSellingProperty(data.parcelNumberNoFormatting, property)
-                            ? "text-primary-dark-800"
-                            : "text-[#F78290] hover:text-[#FF2F48]"
-                        }`,
-                        propertiesInteraction[parcelNumberNoFormatting] &&
-                          hasSellingProperty(data.parcelNumberNoFormatting, property) &&
-                          "text-primary-dark scale-150",
-                        propertiesInteraction[parcelNumberNoFormatting] &&
-                          !hasSellingProperty(data.parcelNumberNoFormatting, property) &&
-                          "scale-150 text-[#FF2F48]"
+                        `size-6 cursor-pointer transition-all duration-100 `,
+                        getStyles(
+                          data.parcelNumberNoFormatting,
+                          property,
+                          isNonValidMedianHighlighted,
+                          !!propertiesInteraction[parcelNumberNoFormatting]
+                        )
+                        // property.data.isMedianValid && "text-[#F78290] hover:text-[#FF2F48]",
+                        // !property.data.isMedianValid && isNonValidMedianHighlighted && "text-[#ffae36] hover:text-[#FF9900]",
+                        // !property.data.isMedianValid && !isNonValidMedianHighlighted && "text-[#F78290] hover:text-[#FF2F48]",
+                        // !property.data.isMedianValid &&
+                        //   !isNonValidMedianHighlighted &&
+                        //   hasSellingProperty(data.parcelNumberNoFormatting, property) &&
+                        //   "text-primary-dark hover:text-primary-dark"
                       )}
                     />
                   </div>

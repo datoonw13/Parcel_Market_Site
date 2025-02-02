@@ -201,13 +201,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 </tr>
                 {propertiesInteraction[assessment.data.id] === "popup" &&
                   assessment.data.properties.map((childAssessment) => (
-                    <tr
-                      key={childAssessment.parcelNumberNoFormatting}
-                      className={cn(
-                        "border-t"
-                        // generateClasses(true, hasSellingProperty(data.parcelNumberNoFormatting, { isBulked: false, data: childAssessment }))
-                      )}
-                    >
+                    <tr key={childAssessment.parcelNumberNoFormatting} className={cn("border-t")}>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumberNoFormatting}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.toFixed(2)}</td>
