@@ -80,10 +80,10 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
           onOpen={() => {
             setBackDrop(true);
           }}
-          label="12.3 Acre, Residental - Vacant Land"
-          value="Subject land"
+          label={`${data.acreage.toFixed(2)} Acre, ${data.propertyType || "N/A"}`}
+          value="Subject Parcel"
           renderContent={() => (
-            <ul className="!w-[--radix-popper-anchor-width] p-4 space-y-4">
+            <ul className="min-w-[--radix-popper-anchor-width] p-4 space-y-4">
               <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                 Owner: <span className="text-sm font-medium text-black">{data?.owner}</span>
               </li>

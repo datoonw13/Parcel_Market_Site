@@ -59,6 +59,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 className="w-full"
                 onClick={() => {
                   close();
+                  onFilterToggle && onFilterToggle(false);
                   setFilters((prev) => ({ ...prev, radius: localFilters.radius }));
                 }}
               >
@@ -90,6 +91,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 className="w-full"
                 onClick={() => {
                   close();
+                  onFilterToggle && onFilterToggle(false);
                   setFilters((prev) => ({ ...prev, soldWithin: localFilters.soldWithin }));
                 }}
               >
@@ -134,6 +136,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 className="w-full"
                 onClick={() => {
                   close();
+                  onFilterToggle && onFilterToggle(false);
                   setFilters((prev) => ({ ...prev, acreageMin: localFilters.acreageMin, acreageMax: localFilters.acreageMax }));
                 }}
               >
@@ -168,6 +171,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 variant="secondary"
                 onClick={() => {
                   close();
+                  onFilterToggle && onFilterToggle(false);
                   setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
                 }}
               >
@@ -177,6 +181,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 className="w-full max-w-[150px]"
                 onClick={() => {
                   close();
+                  onFilterToggle && onFilterToggle(false);
                   setFilters((prev) => ({ ...prev, propertyTypes: localFilters.propertyTypes }));
                 }}
               >
