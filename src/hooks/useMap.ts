@@ -127,6 +127,64 @@ const useMap = () => {
     [ref]
   );
 
+  const showMarkersNew = useCallback(
+    ({ cluster }: { cluster?: boolean }) => {
+      if (!ref) return;
+      ref.addSource(MAP_ITEMS_IDS.markersSourceId, {
+        type: "geojson",
+        data: geoJson.current,
+        generateId: true,
+        ...(cluster && {
+          cluster: true,
+          clusterMaxZoom: 12,
+          clusterRadius: 50,
+        }),
+      });
+
+      ref.addLayer({
+        id: MAP_ITEMS_IDS.markersLayerId,
+        type: "symbol",
+        source: MAP_ITEMS_IDS.markersSourceId,
+        layout: {
+          "icon-image": "{markerIcon}",
+          "icon-size": ["get", "markerSize"],
+          "icon-allow-overlap": true,
+        },
+      });
+
+      if (cluster) {
+        ref.addLayer({
+          id: MAP_ITEMS_IDS.markersClusterId,
+          type: "circle",
+          source: MAP_ITEMS_IDS.markersSourceId,
+          filter: ["has", "point_count"],
+          paint: {
+            // Use step expressions (https://docs.mapbox.com/style-spec/reference/expressions/#step)
+            // with three steps to implement three types of circles:
+            //   * Blue, 20px circles when point count is less than 100
+            //   * Yellow, 30px circles when point count is between 100 and 750
+            //   * Pink, 40px circles when point count is greater than or equal to 750
+            "circle-color": ["step", ["get", "point_count"], "#51bbd6", 100, "#f1f075", 750, "#f28cb1"],
+            "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+          },
+        });
+
+        ref.addLayer({
+          id: MAP_ITEMS_IDS.markersClusterCountId,
+          type: "symbol",
+          source: MAP_ITEMS_IDS.markersSourceId,
+          filter: ["has", "point_count"],
+          layout: {
+            "text-field": ["get", "point_count_abbreviated"],
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 12,
+          },
+        });
+      }
+    },
+    [ref]
+  );
+
   const highlightFeatures = useCallback(
     (data: Array<{ [key: string]: "default" | "hovered" | "selected" }>) => {
       if (!ref || !ref.getLayer(MAP_ITEMS_IDS.markersLayerId)) {
@@ -334,6 +392,8 @@ const useMap = () => {
     openPopup,
     geoJson: geoJson.current,
     loaded: false,
+    showMarkersNew,
+    mapItemsIds: MAP_ITEMS_IDS,
   };
 };
 

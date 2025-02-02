@@ -2,7 +2,7 @@
 
 import useMap from "@/hooks/useMap";
 import dynamic from "next/dynamic";
-import { FC, Suspense, useState } from "react";
+import { FC, Suspense, useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { IVoltPriceCalculation } from "@/types/volt";
 import { RiExternalLinkFill } from "react-icons/ri";
@@ -15,6 +15,7 @@ import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
+import VoltDetailsMap from "./map";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -24,41 +25,82 @@ interface VoltDetailsProps {
 }
 
 const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }) => {
-  const { ref, setRef } = useMap();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
   const [backDrop, setBackDrop] = useState(false);
 
-  console.log(data, 22);
+  const onMarkerInteraction = useCallback(
+    (parcelNumberNoFormatting: string, action: "hover" | "popup") => {
+      if (action === "hover") {
+        const newData = { ...propertiesInteraction };
+        Object.keys(newData).forEach((key) => {
+          if (newData[key] === "hovered") {
+            delete newData[key];
+          }
+        });
+
+        if (propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+          newData[parcelNumberNoFormatting] = "hovered";
+        }
+        setPropertiesInteraction({ ...newData });
+      } else {
+        setPropertiesInteraction({ [parcelNumberNoFormatting]: "popup" });
+      }
+    },
+    [propertiesInteraction]
+  );
+
+  const onMouseLeave = useCallback(() => {
+    const newData = { ...propertiesInteraction };
+    Object.keys(newData).forEach((key) => {
+      if (newData[key] === "hovered") {
+        delete newData[key];
+      }
+    });
+    setPropertiesInteraction({ ...newData });
+  }, [propertiesInteraction]);
+
+  const onPopupClose = useCallback(() => {
+    const newData = { ...propertiesInteraction };
+    Object.keys(newData).forEach((key) => {
+      if (newData[key] === "popup") {
+        delete newData[key];
+      }
+    });
+    setPropertiesInteraction({ ...newData });
+  }, [propertiesInteraction]);
+
+  console.log(propertiesInteraction, 22);
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative")}>
       <div className={cn("overflow-hidden")} ref={setContainer}>
         <div className="w-full h-[90%]">
-          <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>
-            <Map setRef={setRef} ref={ref} />
-          </Suspense>
+          <VoltDetailsMap
+            propertiesInteraction={propertiesInteraction}
+            onMouseLeave={onMouseLeave}
+            onMarkerInteraction={onMarkerInteraction}
+            data={data}
+            isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+            onPopupClose={onPopupClose}
+          />
         </div>
-        {ref && (
-          <div className="my-6 mx-4">
-            <VoltDetailsProgressLine
-              data={data}
-              propertiesInteraction={propertiesInteraction}
-              setPropertiesInteraction={setPropertiesInteraction}
-              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-            />
-          </div>
-        )}
-        {ref && (
-          <div className="mx-4 mb-4">
-            <VoltDetailsCalculationTable
-              data={data}
-              propertiesInteraction={propertiesInteraction}
-              setPropertiesInteraction={setPropertiesInteraction}
-              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-            />
-          </div>
-        )}
+        <div className="my-6 mx-4">
+          <VoltDetailsProgressLine
+            data={data}
+            propertiesInteraction={propertiesInteraction}
+            setPropertiesInteraction={setPropertiesInteraction}
+            isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+          />
+        </div>
+        <div className="mx-4 mb-4">
+          <VoltDetailsCalculationTable
+            data={data}
+            propertiesInteraction={propertiesInteraction}
+            setPropertiesInteraction={setPropertiesInteraction}
+            isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+          />
+        </div>
       </div>
       <div className="h-full flex flex-col py-6 justify-between overflow-hidden relative">
         <AnimatePresence>

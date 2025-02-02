@@ -55,11 +55,13 @@ const hasSellingProperty = (
 
 const generateClasses = (isMedianValid: boolean, hasSellingProperty: boolean, selected: boolean, isNonValidMedianHighlighted: boolean) =>
   cn(
-    "border-b hover:bg-grey-30",
-    !isMedianValid && isNonValidMedianHighlighted && "bg-[#FEFAEB] hover:bg-[#fdf5d8]",
-    hasSellingProperty && "border-y border-y-2 border-y-[#17DC66]",
-    selected && !isMedianValid && isNonValidMedianHighlighted && "bg-[#fdf5d8]",
-    selected && isMedianValid && "bg-grey-30"
+    `border-b hover:bg-grey-30 ${selected && "bg-grey-30"}`,
+    isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-30"}`,
+    !isMedianValid &&
+      isNonValidMedianHighlighted &&
+      `border-y border-y-2 border-y-[${hasSellingProperty ? "#17DC66" : "#FCEDB6"}] bg-[#FEFAEB] hover:bg-[#fdf5d8] ${
+        selected && "bg-[#fdf5d8]"
+      }`
   );
 interface VoltDetailsCalculationTableProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -105,7 +107,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
           [&>tbody>tr>td]:p-4 
           [&>tbody>tr>td:first-child]:pl-6
           [&>tbody>tr>td:last-child]:pr-6
-          [&>tbody>tr:last-child]:border-b-0
+          [&>tbody>tr:last-child]:border-b-transparent
           [&>tbody>tr:last-child>td:first-child]:rounded-bl-2xl [&>tbody>tr:last-child>td:last-child]:rounded-br-2xl
           `
         )}

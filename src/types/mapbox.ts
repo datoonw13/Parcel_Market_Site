@@ -16,8 +16,8 @@ export interface IGeneratedFeatureProperties {
   polygonLineColor?: string;
   polygonFillColor?: string;
   owner?: string;
-  isMedianValid?: string;
-  bulkId?: string;
+  bulkId?: string | null;
+  isBulkMedianValid?: boolean;
   lastSaleDate?: Date;
   price?: number;
   pricePerAcreage?: number;
