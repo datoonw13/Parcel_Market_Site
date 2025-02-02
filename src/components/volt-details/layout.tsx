@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import VoltDetails from "./details";
 import VoltDetailsHeaderLogo from "./logo";
 import VoltDetailsHeader from "./header";
+import { LoadingIcon1 } from "../@new/icons/LoadingIcons";
 
 interface VoltDetailsLayoutProps {
   searchParams: { [key: string]: string };
@@ -24,41 +25,48 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
 
   return (
-    <div className="h-screen flex flex-col">
-      <VoltDetailsHeaderLogo />
-      <VoltDetailsHeader
-        data={data}
-        initialFilters={initialFilters}
-        searchParams={searchParams}
-        startFetchingTransition={startFetchingTransition}
-        setBackDrop={setBackDrop}
-        isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-        setNonValidMedianHighlighted={setNonValidMedianHighlighted}
-        propertyTypes={propertyTypes}
-      />
-      <div className={cn("w-full h-full overflow-hidden relative")}>
-        <AnimatePresence>
-          {backDrop && (
-            <motion.div
-              exit={{
-                opacity: 0,
-                filter: "blur(5px)",
-                transition: { ease: "easeIn", duration: 0.22 },
-              }}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { type: "spring", duration: 0.7 },
-              }}
-              className="absolute bg-black/40 h-full w-full content-[''] z-10 top-0"
-            />
-          )}
-        </AnimatePresence>
-        <VoltDetails data={data} isNonValidMedianHighlighted={isNonValidMedianHighlighted} />;
+    <>
+      {isFetching && (
+        <div className="fixed w-full h-full top-0 left-0 bg-black-100 z-50 flex items-center justify-center">
+          <LoadingIcon1 className="!w-8 !h-8 text-primary-main" />
+        </div>
+      )}
+      <div className="h-screen flex flex-col">
+        <VoltDetailsHeaderLogo />
+        <VoltDetailsHeader
+          data={data}
+          initialFilters={initialFilters}
+          searchParams={searchParams}
+          startFetchingTransition={startFetchingTransition}
+          setBackDrop={setBackDrop}
+          isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+          setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+          propertyTypes={propertyTypes}
+        />
+        <div className={cn("w-full h-full overflow-hidden relative")}>
+          <AnimatePresence>
+            {backDrop && (
+              <motion.div
+                exit={{
+                  opacity: 0,
+                  filter: "blur(5px)",
+                  transition: { ease: "easeIn", duration: 0.22 },
+                }}
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                  transition: { type: "spring", duration: 0.7 },
+                }}
+                className="absolute bg-black/40 h-full w-full content-[''] z-10 top-0"
+              />
+            )}
+          </AnimatePresence>
+          <VoltDetails data={data} isNonValidMedianHighlighted={isNonValidMedianHighlighted} />;
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
