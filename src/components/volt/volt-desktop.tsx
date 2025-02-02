@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapInteractionModel } from "@/types/common";
 import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
-import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+import { calculateLandPriceAction, calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
@@ -95,37 +95,27 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
     if (!values.selectedItem) {
       return;
     }
-    const reqData: IVoltPriceCalculationReqParams = {
-      body: {
-        county: values.selectedItem?.county.value,
-        state: values.selectedItem?.state.value,
-        parcelNumber: values.selectedItem?.parcelNumberNoFormatting,
-        owner: values.selectedItem.owner,
-        propertyType: values.selectedItem.propertyType || "",
-        coordinates: JSON.stringify(values.selectedItem.polygon),
-        locality: values.selectedItem.city,
-      },
-      queryParams: {
-        acre: values.selectedItem.acreage.toString(),
-        lat: values.selectedItem.lat.toString(),
-        lon: values.selectedItem.lon.toString(),
-      },
-    };
     setCalculationPending(true);
 
-    const res = await calculateLandPriceAction(reqData);
+    const res = await calculateLandPriceAction2({
+      county: values.selectedItem?.county.value || "",
+      state: values.selectedItem?.state.value,
+      parcelNumber: values.selectedItem?.parcelNumberNoFormatting,
+      owner: values.selectedItem.owner,
+      propertyType: values.selectedItem.propertyType || "",
+      coordinates: JSON.stringify(values.selectedItem.polygon),
+      locality: values.selectedItem.city,
+      acrage: values.selectedItem.acreage.toString(),
+      lat: values.selectedItem.lat.toString(),
+      lon: values.selectedItem.lon.toString(),
+    });
+
+    if (res.data) {
+      router.push(`/volt/${res.data}`);
+    }
 
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    } else {
-      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(res.data!.id));
-      setStep(VoltSteps.CALCULATION);
-      setValues((prev) => ({ ...prev, calculation: res.data, additionalDataResult }));
-      setMpaInteraction({
-        hoveredParcelNumber: null,
-        openPopperParcelNumber: null,
-        zoom: false,
-      });
     }
     setCalculationPending(false);
   };

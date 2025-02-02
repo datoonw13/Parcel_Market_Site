@@ -119,7 +119,6 @@ export const PropertyDataSchema = z
   .object({
     id: z.number(),
     owner: z.string(),
-    user_id: z.number(),
     state: z.string(),
     county: z.string(),
     propertyType: z.string(),

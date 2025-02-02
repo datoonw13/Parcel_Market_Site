@@ -13,6 +13,7 @@ export const getData = async (id: number): Promise<ResponseModel<z.infer<typeof 
     searchParams.set("getAll", "true");
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?propertyId=${id}`);
     const data = await PropertyDataSchema.safeParseAsync(req);
+
     return {
       errorMessage: null,
       data: data.data!,
@@ -52,6 +53,8 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   }
 
   const data = filtersValidation.data ? await getData(Number(params.id)) : null;
+
+  console.log(data, 22);
 
   return (
     filtersValidation.data &&

@@ -205,6 +205,41 @@ export const calculateLandPriceAction = async (
   }
 };
 
+export const calculateLandPriceAction2 = async (payload: {
+  owner?: string;
+  parcelNumber: string;
+  propertyType: string;
+  state: string;
+  county: string;
+  coordinates: string;
+  locality: string;
+  lat: string;
+  lon: string;
+  acrage: string;
+}): Promise<ResponseModel<number | null>> => {
+  try {
+    const request = await fetcher<{ propertyId: number }>(`properties`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      next: {
+        revalidate: 3600,
+      },
+    });
+
+    revalidateTag(userSearchesTag);
+    return {
+      data: request.propertyId,
+      errorMessage: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      data: null,
+      errorMessage: errorData.message,
+    };
+  }
+};
+
 export const sellLendAction = async (payload: PropertySellReq): Promise<ResponseModel<number | null>> => {
   try {
     const request = await fetcher<PropertySellReq & { id: number }>(`selling-properties`, {
