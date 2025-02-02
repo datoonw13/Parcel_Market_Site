@@ -16,12 +16,14 @@ const VoltDetailsFiltersDropDown = ({
   icon,
   side,
   className,
+  onOpen,
 }: {
   renderContent: (close: () => void) => ReactNode;
   renderContentAdditionalContent?: (close: () => void) => ReactNode;
   value: string;
   label: string;
   onClose?: () => void;
+  onOpen?: () => void;
   icon?: ReactNode;
   side?: any;
   className?: string;
@@ -36,6 +38,9 @@ const VoltDetailsFiltersDropDown = ({
           setOpen(value);
           if (!value && onClose) {
             onClose();
+          }
+          if (onOpen && value) {
+            onOpen();
           }
         }}
       >

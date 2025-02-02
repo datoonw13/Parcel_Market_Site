@@ -20,9 +20,10 @@ interface VoltDetailsHeaderProps {
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
   data: z.infer<typeof PropertyDataSchema>;
+  setBackDrop: (value: boolean) => void;
 }
 
-const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition, data }) => {
+const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFilters, startFetchingTransition, data, setBackDrop }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
 
   const avgPriceOfAssessments = useMemo(() => {
@@ -40,6 +41,7 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
             searchParams={searchParams}
             initialFilters={initialFilters}
             startFetchingTransition={startFetchingTransition}
+            onFilterToggle={setBackDrop}
           />
           <div className="flex items-center gap-2">
             <div className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
@@ -58,6 +60,12 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({ searchParams, initialFi
           </div>
         </div>
         <VoltDetailsFiltersDropDown
+          onClose={() => {
+            setBackDrop(false);
+          }}
+          onOpen={() => {
+            setBackDrop(true);
+          }}
           label="12.3 Acre, Residental - Vacant Land"
           value="Subject land"
           renderContent={() => (

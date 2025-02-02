@@ -9,12 +9,12 @@ import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
-import { ScrollArea } from "../ui/scroll-area";
-import { LoadingIcon1 } from "../@new/icons/LoadingIcons";
-import VoltDetailsDrawer from "./drawer";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
+import VoltDetailsCalculationTable from "./calculation-table";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -26,6 +26,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
   const { ref, setRef } = useMap();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
+  const [backDrop, setBackDrop] = useState(false);
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative")}>
@@ -44,10 +45,35 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
             />
           </div>
         )}
+        {ref && (
+          <div className="mx-4">
+            <VoltDetailsCalculationTable />
+          </div>
+        )}
       </div>
-      <div className="h-full flex flex-col py-6 justify-between overflow-hidden">
+      <div className="h-full flex flex-col py-6 justify-between overflow-hidden relative">
+        <AnimatePresence>
+          {backDrop && (
+            <motion.div
+              exit={{
+                opacity: 0,
+                filter: "blur(5px)",
+                transition: { ease: "easeIn", duration: 0.22 },
+              }}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                filter: "blur(0px)",
+                transition: { type: "spring", duration: 0.7 },
+              }}
+              className="absolute bg-black/40 h-full w-full content-[''] z-10 top-0"
+            />
+          )}
+        </AnimatePresence>
         <div className="flex flex-col gap-4 px-4">
           <AutoComplete
+            onOpenChange={setBackDrop}
             options={["Layover 1", "Layover 2", "Layover 3", "Layover 4", "Layover 5"].map((el) => ({ label: el, value: el }))}
             onValueChange={(item) => {
               // if (item) {
@@ -60,6 +86,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
             selectedValue={null}
           />
           <AutoComplete
+            onOpenChange={setBackDrop}
             options={["BaseMap 1", "BaseMap 2", "BaseMap 3", "BaseMap 4", "BaseMap 5"].map((el) => ({ label: el, value: el }))}
             onValueChange={(item) => {
               // if (item) {
@@ -75,8 +102,11 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data }) => {
             Data Dashboard <RiExternalLinkFill className="!text-primary-main size-5" />
           </Button>
           <Button variant="default" className="w-full ">
-            Search another land
+            Subscribe to see price
           </Button>
+          <Link className="underline text-primary-main font-medium text-center" href="/">
+            Search another land
+          </Link>
         </div>
         <div className="my-3 overflow-hidden relative">
           <div

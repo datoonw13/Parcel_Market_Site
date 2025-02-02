@@ -17,6 +17,7 @@ interface IVoltDetailsDesktopFilters {
   filters: IFilters;
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
+  onFilterToggle?: (value: boolean) => void;
 }
 
 const getAcreageLabel = (min: number | null, max: number | null) => {
@@ -32,15 +33,17 @@ const getAcreageLabel = (min: number | null, max: number | null) => {
   return "N/A";
 };
 
-const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit }) => {
+const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit, onFilterToggle }) => {
   const [localFilters, setLocalFilters] = useState(filters);
 
   return (
     <div className="flex gap-2">
       <VoltDetailsFiltersDropDown
+        onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={`${filters.radius} Mile`}
         label="Radius"
         onClose={() => {
+          onFilterToggle && onFilterToggle(false);
           setLocalFilters((prev) => ({ ...prev, radius: filters.radius }));
         }}
         renderContent={(close) => (
@@ -66,9 +69,11 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         )}
       />
       <VoltDetailsFiltersDropDown
+        onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={`${filters.soldWithin} Year`}
         label="Sold Within"
         onClose={() => {
+          onFilterToggle && onFilterToggle(false);
           setLocalFilters((prev) => ({ ...prev, radius: filters.radius }));
         }}
         renderContent={(close) => (
@@ -95,9 +100,11 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         )}
       />
       <VoltDetailsFiltersDropDown
+        onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={getAcreageLabel(filters.acreageMin || null, filters.acreageMax || null)}
         label="Acreage"
         onClose={() => {
+          onFilterToggle && onFilterToggle(false);
           setLocalFilters((prev) => ({ ...prev, acreageMin: filters.acreageMin, acreageMax: filters.acreageMax }));
         }}
         renderContent={(close) => (
@@ -137,10 +144,12 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         )}
       />
       <VoltDetailsFiltersDropDown
+        onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={`Selected (${filters.propertyTypes?.split(",")?.length || 0})`}
         label="Property Type"
         onClose={() => {
           setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
+          onFilterToggle && onFilterToggle(false);
         }}
         renderContent={(close) => (
           <>

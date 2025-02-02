@@ -15,9 +15,15 @@ interface VoltDetailsFiltersWrapperProps {
   searchParams: { [key: string]: string };
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
+  onFilterToggle?: (value: boolean) => void;
 }
 
-const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ searchParams, initialFilters, startFetchingTransition }) => {
+const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
+  searchParams,
+  initialFilters,
+  startFetchingTransition,
+  onFilterToggle,
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -61,7 +67,14 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ searchP
   return (
     !detecting && (
       <div>
-        {!isSmallDevice && <VoltDetailsDesktopFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />}
+        {!isSmallDevice && (
+          <VoltDetailsDesktopFilters
+            onFilterToggle={onFilterToggle}
+            onSubmit={updateQueryParams}
+            filters={filters}
+            setFilters={setFilters}
+          />
+        )}
         {isSmallDevice && (
           <VoltDetailsMobileFilters resetFilters={resetFilters} onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} />
         )}
