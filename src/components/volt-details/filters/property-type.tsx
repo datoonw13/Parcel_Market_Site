@@ -19,9 +19,10 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
         onCheckedChange={() => {
           const isChecked = selected?.split(",")?.includes(key.toString());
           let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
+          console.log(newSelected, isChecked);
 
           if (isChecked) {
-            newSelected = newSelected.filter((el: any) => el !== key);
+            newSelected = newSelected.filter((el: any) => el !== Number(key));
           } else {
             newSelected = [...newSelected, key];
           }

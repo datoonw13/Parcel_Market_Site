@@ -34,6 +34,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   const [ref, setRef] = useState<MapBoX | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
+  console.log(data);
+
   const addMarkerImages = useCallback(
     (data: Record<string, string>) =>
       Promise.all(
@@ -53,6 +55,106 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   const setInitialData = useCallback(async () => {
     if (ref) {
+      if (ref.getSource("markers-source")) {
+        const source = ref.getSource("markers-source");
+        if (source?.type === "geojson") {
+          const geoJsonInit: MapGeoJson = {
+            type: "FeatureCollection",
+            features: [],
+          };
+          geoJsonInit.features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [data.lon, data.lat],
+            },
+            properties: {
+              parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+              parcelNumber: data.parcelNumber,
+              lng: data.lon,
+              lat: data.lat,
+              type: "selling",
+              markerIcon: "selling",
+              hoveredMarkerIcon: "selling",
+              selectedMarkerIcon: "selling",
+              markerSize: 1.5,
+              hoveredMarkerSize: 1.5,
+              selectedMarkerSize: 1.5,
+              acreage: data.acreage,
+              price: data.price,
+              pricePerAcreage: data.price / data.acreage,
+              polygonLineColor: "#05471C",
+              polygonFillColor: "#05471C",
+            },
+          });
+
+          data.assessments.forEach((el) => {
+            if (el.isBulked) {
+              el.data.properties.forEach((childEl) => {
+                if (childEl.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
+                  geoJsonInit.features.push({
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [childEl.longitude, childEl.latitude],
+                    },
+                    properties: {
+                      parcelNumberNoFormatting: childEl.parcelNumberNoFormatting,
+                      parcelNumber: childEl.parcelNumber,
+                      lng: childEl.longitude,
+                      lat: childEl.latitude,
+                      type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
+                      markerIcon: "red",
+                      hoveredMarkerIcon: "redHighlighted",
+                      selectedMarkerIcon: "redHighlighted",
+                      markerSize: 1,
+                      hoveredMarkerSize: 1.5,
+                      selectedMarkerSize: 1.5,
+                      acreage: childEl.acreage,
+                      price: childEl.lastSalesPrice,
+                      pricePerAcreage: childEl.pricePerAcreage,
+                      lastSaleDate: childEl.lastSalesDate,
+                      polygonLineColor: "#05471C",
+                      polygonFillColor: "#05471C",
+                      bulkId: el.data.id,
+                      isBulkMedianValid: el.data.isMedianValid,
+                    },
+                  });
+                }
+              });
+            } else if (el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
+              geoJsonInit.features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [el.data.longitude, el.data.latitude],
+                },
+                properties: {
+                  parcelNumberNoFormatting: el.data.parcelNumberNoFormatting,
+                  parcelNumber: el.data.parcelNumber,
+                  lng: el.data.longitude,
+                  lat: el.data.latitude,
+                  type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
+                  markerIcon: "red",
+                  hoveredMarkerIcon: "redHighlighted",
+                  selectedMarkerIcon: "redHighlighted",
+                  markerSize: 1,
+                  hoveredMarkerSize: 1.5,
+                  selectedMarkerSize: 1.5,
+                  acreage: el.data.acreage,
+                  price: el.data.lastSalesPrice,
+                  pricePerAcreage: el.data.pricePerAcreage,
+                  lastSaleDate: el.data.lastSalesDate,
+                  polygonLineColor: "#05471C",
+                  polygonFillColor: "#05471C",
+                },
+              });
+            }
+          });
+          source.setData(geoJsonInit);
+        }
+        return;
+      }
       await addMarkerImages(mapDefaultMarkers);
       const geoJsonInit: MapGeoJson = {
         type: "FeatureCollection",
@@ -198,6 +300,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ref.setZoom(8);
       ref.setCenter([data.lon, data.lat]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     addMarkerImages,
     data.acreage,
