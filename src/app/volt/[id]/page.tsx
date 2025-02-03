@@ -7,11 +7,11 @@ import VoltDetailsLayout from "@/components/volt-details/layout";
 import { redirect } from "next/navigation";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 
-export const getData = async (id: number): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
+export const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
-    const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?propertyId=${id}`);
+    const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
     const data = await PropertyDataSchema.safeParseAsync(req);
 
     return {
@@ -52,7 +52,9 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
     redirect(`/volt/${params.id}?${newParams.toString()}`);
   }
 
-  const data = filtersValidation.data ? await getData(Number(params.id)) : null;
+  const queryParams = new URLSearchParams(searchParams);
+  queryParams.set("propertyId", params.id);
+  const data = filtersValidation.data ? await getData(queryParams.toString()) : null;
   const propertyTypes = await fetcher<{ [key: string]: string }>("properties/propertyTypes");
 
   return (
