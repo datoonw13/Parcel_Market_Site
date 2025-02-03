@@ -56,7 +56,6 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   queryParams.set("propertyId", params.id);
   const data = filtersValidation.data ? await getData(queryParams.toString()) : null;
   const propertyTypes = await fetcher<{ [key: string]: string }>("properties/propertyTypes");
-
   return (
     filtersValidation.data &&
     data?.data && (

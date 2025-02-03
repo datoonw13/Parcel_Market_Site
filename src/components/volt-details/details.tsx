@@ -12,7 +12,7 @@ import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
-import VoltDetailsMap from "./map";
+import VoltDetailsMap from "./map/map";
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -24,36 +24,57 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
   const [backDrop, setBackDrop] = useState(false);
 
-  const onMarkerInteraction = useCallback(
-    (parcelNumberNoFormatting: string, action: "hover" | "popup") => {
+  const onMarkerInteraction = useCallback((parcelNumberNoFormatting: string, action: "hover" | "popup") => {
+    // if (action === "hover") {
+    //   const newData = { ...propertiesInteraction };
+    //   Object.keys(newData).forEach((key) => {
+    //     if (newData[key] === "hovered") {
+    //       delete newData[key];
+    //     }
+    //   });
+
+    //   if (propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+    //     newData[parcelNumberNoFormatting] = "hovered";
+    //   }
+    //   setPropertiesInteraction({ ...newData });
+    // } else {
+    //   setPropertiesInteraction({ [parcelNumberNoFormatting]: "popup" });
+    // }
+    setPropertiesInteraction((prev) => {
       if (action === "hover") {
-        const newData = { ...propertiesInteraction };
+        const newData = { ...prev };
         Object.keys(newData).forEach((key) => {
           if (newData[key] === "hovered") {
             delete newData[key];
           }
         });
 
-        if (propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
+        if (newData[parcelNumberNoFormatting] !== "popup") {
           newData[parcelNumberNoFormatting] = "hovered";
         }
-        setPropertiesInteraction({ ...newData });
-      } else {
-        setPropertiesInteraction({ [parcelNumberNoFormatting]: "popup" });
+        return { ...newData };
       }
-    },
-    [propertiesInteraction]
-  );
+      return { [parcelNumberNoFormatting]: "popup" };
+    });
+  }, []);
 
   const onMouseLeave = useCallback(() => {
-    const newData = { ...propertiesInteraction };
-    Object.keys(newData).forEach((key) => {
-      if (newData[key] === "hovered") {
-        delete newData[key];
-      }
+    // const newData = { ...propertiesInteraction };
+    // Object.keys(newData).forEach((key) => {
+    //   if (newData[key] === "hovered") {
+    //     delete newData[key];
+    //   }
+    // });
+    setPropertiesInteraction((prev) => {
+      const newData = { ...prev };
+      Object.keys(newData).forEach((key) => {
+        if (newData[key] === "hovered") {
+          delete newData[key];
+        }
+      });
+      return newData;
     });
-    setPropertiesInteraction({ ...newData });
-  }, [propertiesInteraction]);
+  }, []);
 
   const onPopupClose = useCallback(() => {
     const newData = { ...propertiesInteraction };

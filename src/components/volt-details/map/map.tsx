@@ -11,6 +11,9 @@ import { MapGeoJson } from "@/types/mapbox";
 import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
 import { GeoJSONFeature, Map as MapBoX, Popup } from "mapbox-gl";
 import { icon } from "leaflet";
+import { moneyFormatter } from "@/helpers/common";
+import moment from "moment";
+import VoltDetailsMapPopup from "./map-popup";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -32,24 +35,152 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   onPopupClose,
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
-  // const [openPopupDetails, setOpenPopupDetails] = useState<VoltDetailsMapProps["data"]["assessments"][0] | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const lastPopupId = useRef<string | null>(null);
 
   const openPopupDetails = useMemo(() => {
     const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
     if (!id) {
       return null;
     }
+
+    if (data.parcelNumberNoFormatting === id) {
+      const salesHistory = data.assessments
+        .map((el) => (el.isBulked ? el.data.properties : el.data))
+        .flat()
+        .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+      const details = {
+        type: "main-property" as const,
+        lat: data.lat,
+        lon: data.lon,
+        salesHistory: salesHistory
+          ? {
+              lastSaleDate: salesHistory.lastSalesDate,
+              lastSalesPrice: salesHistory.lastSalesPrice,
+            }
+          : null,
+        data: {
+          owner: {
+            label: "Owner",
+            value: data.owner,
+          },
+          parcelNumber: {
+            label: "Parcel ID",
+            value: data.parcelNumberNoFormatting,
+          },
+          acreage: {
+            label: "Acreage",
+            value: data.acreage.toFixed(2),
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${data.state}/${data.county.replace("County", "")}`,
+          },
+          voltValue: {
+            label: "Sale Date",
+            value: moneyFormatter.format(data.price),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: moneyFormatter.format(data.price / data.acreage),
+          },
+        },
+      };
+      return details;
+    }
+
     const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
-    const isSellingProperty = !property?.isBulked && property?.data.parcelNumberNoFormatting === data.parcelNumberNoFormatting;
+    if (!property) {
+      return null;
+    }
 
-    return {
-      property,
-      isSellingProperty,
-    };
-  }, [data.assessments, data.parcelNumberNoFormatting, propertiesInteraction]);
+    if (property.isBulked) {
+      const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
 
-  console.log(data);
+      const details = {
+        type: "bulk" as const,
+        lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
+        lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
+        hasSellingProperty,
+        data: {
+          parcelNumber: {
+            label: "Parcel ID",
+            value: "Multiple",
+          },
+          acreage: {
+            label: "Acreage",
+            value: property.data.acreage.toFixed(2),
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+          },
+          lastSalePrice: {
+            label: "Last Sale Price",
+            value: moneyFormatter.format(property.data.price),
+          },
+          lastSaleDate: {
+            label: "Last Sale Date",
+            value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: property.data.pricePerAcreage.toFixed(2),
+          },
+        },
+      };
+      return details;
+    }
+
+    if (!property.isBulked) {
+      const details = {
+        type: "default" as const,
+        lat: property.data.latitude,
+        lon: property.data.longitude,
+        data: {
+          parcelNumber: {
+            label: "Parcel ID",
+            value: property.data.parcelNumberNoFormatting,
+          },
+          acreage: {
+            label: "Acreage",
+            value: property.data.acreage.toFixed(2),
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+          },
+          lastSalePrice: {
+            label: "Last Sale Price",
+            value: moneyFormatter.format(property.data.lastSalesPrice),
+          },
+          lastSaleDate: {
+            label: "Last Sale Date",
+            value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: property.data.pricePerAcreage.toFixed(2),
+          },
+        },
+      };
+
+      return details;
+    }
+
+    return null;
+  }, [
+    data.acreage,
+    data.assessments,
+    data.county,
+    data.lat,
+    data.lon,
+    data.owner,
+    data.parcelNumberNoFormatting,
+    data.price,
+    data.state,
+    propertiesInteraction,
+  ]);
 
   const addMarkerImages = useCallback(
     (data: Record<string, string>) =>
@@ -380,7 +511,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [isNonValidMedianHighlighted, ref]);
 
   const handleMarkerInteraction = useCallback(() => {
-    ref?.on("mouseover", "markers-layer", (e) => {
+    ref?.on("mousemove", "markers-layer", (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
       if (feature) {
         const id = feature.bulkId ? feature.bulkId : feature.parcelNumberNoFormatting;
@@ -407,7 +538,15 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   const openPopup = useCallback(
     ({ lat, lng, popupRef, onClose }: { lng: number; lat: number; popupRef: any; onClose: () => void }) => {
       if (ref) {
-        new Popup({ closeButton: false, className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-4 [&>div:last-child]:p-3" })
+        const existedPopup = ref._popups[0];
+        if (existedPopup) {
+          existedPopup.setLngLat([lng, lat]);
+          return;
+        }
+        new Popup({
+          closeButton: false,
+          className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3",
+        })
           .setLngLat([lng, lat])
           .setDOMContent(popupRef.current)
           .setMaxWidth("max-content")
@@ -432,31 +571,23 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       list.push({ [hoveredMarker]: "hovered" });
     }
     if (openPopupMarker) {
-      list.push({ [openPopupMarker]: "hovered" });
+      list.push({ [openPopupMarker]: "selected" });
       const property = data.assessments.find((el) =>
         el.isBulked ? el.data.id === openPopupMarker : el.data.parcelNumberNoFormatting === openPopupMarker
       );
 
       if (property) {
-        if (property.isBulked) {
-          openPopup({
-            lat: property.data.properties[0].latitude,
-            lng: property.data.properties[0].longitude,
-            popupRef,
-            onClose: () => {
-              onPopupClose();
-            },
-          });
-        } else {
-          openPopup({
-            lat: property.data.latitude,
-            lng: property.data.longitude,
-            popupRef,
-            onClose: () => {
-              onPopupClose();
-            },
-          });
-        }
+        ref._popups.forEach((popup) => {
+          // popup.remove();
+        });
+        openPopup({
+          lat: property.isBulked ? property.data.properties[0].latitude : property.data.latitude,
+          lng: property.isBulked ? property.data.properties[0].longitude : property.data.longitude,
+          popupRef,
+          onClose: () => {
+            onPopupClose();
+          },
+        });
       }
     }
 
@@ -519,69 +650,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   return (
     <>
       <div style={{ display: "none" }}>
-        {openPopupDetails && (
-          <div ref={popupRef}>
-            <ul className="grid grid-cols-2 gap-x-8 gap-y-2">
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">Owner</p>
-                  <p className="text-black font-medium text-sm">
-                    {openPopupDetails.property?.isBulked
-                      ? openPopupDetails.property.data.properties[0].owner || "N/A"
-                      : openPopupDetails.property?.data.owner || "N/A"}
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">Acreage</p>
-                  <p className="text-black font-medium text-sm">{openPopupDetails.property?.data.acreage.toFixed(2)}</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">State/County</p>
-                  <p className="text-black font-medium text-sm">
-                    {openPopupDetails.property?.isBulked
-                      ? `${openPopupDetails.property?.data.properties[0].state}/${openPopupDetails.property?.data.properties[0].county}`
-                      : `${openPopupDetails.property?.data.state}/${openPopupDetails.property?.data.county}`}
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">VOLT Value</p>
-                  <p className="text-black font-medium text-sm">Name, Surname</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">Owner</p>
-                  <p className="text-black font-medium text-sm">Name, Surname</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">Owner</p>
-                  <p className="text-black font-medium text-sm">Name, Surname</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="rounded-full size-1.5 bg-primary-main-400" />
-                <div>
-                  <p className="text-grey-600 font-medium text-sm">Owner</p>
-                  <p className="text-black font-medium text-sm">Name, Surname</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        )}
+        <div className="" ref={popupRef}>
+          {openPopupDetails && <VoltDetailsMapPopup data={openPopupDetails} />}
+        </div>
       </div>
       <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>
         <Map setRef={setRef} ref={ref} />

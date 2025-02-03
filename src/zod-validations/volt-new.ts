@@ -62,7 +62,6 @@ const AssessmentBaseSchema = z
     parselId: z.string(),
     propertyType: z.string(),
     arcage: z.coerce.number(),
-    price: z.coerce.number(),
     isValid: z.boolean(),
     isMedianValid: z.boolean(),
     address: z.string(),
@@ -72,7 +71,7 @@ const AssessmentBaseSchema = z
     longitude: z.coerce.number(),
     state: z.string(),
     county: z.string(),
-    bulkGroupId: z.string().nullable(),
+    // bulkGroupId: z.string().nullable(),
     isMainProperty: z.boolean().nullable(),
   })
   .transform(({ arcage, parselId, ...input }) => ({
@@ -80,7 +79,7 @@ const AssessmentBaseSchema = z
     acreage: arcage,
     parcelNumber: parselId,
     parcelNumberNoFormatting: removeParcelNumberFormatting(parselId),
-    pricePerAcreage: input.price / Number(arcage),
+    pricePerAcreage: input.lastSalesPrice / arcage,
   }));
 
 const BulkAssessmentBaseSchema = z

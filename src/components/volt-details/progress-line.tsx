@@ -163,11 +163,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                           }
                         });
 
-                        if (newData[parcelNumberNoFormatting] === "popup") {
-                          newData[parcelNumberNoFormatting] = "hovered";
-                        } else {
-                          newData[parcelNumberNoFormatting] = "popup";
-                        }
+                        newData[parcelNumberNoFormatting] = "popup";
                         setPropertiesInteraction({ ...newData });
                       }}
                       key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
