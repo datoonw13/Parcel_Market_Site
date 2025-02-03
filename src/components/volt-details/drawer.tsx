@@ -86,7 +86,7 @@ const VoltDetailsDrawer = ({
             <div className="z-10 overflow-hidden">
               <div ref={setFirstSectionRef} className={cn("z-10 p-5")}>
                 <div className={cn("w-44 h-2 rounded-xl mx-auto bg-grey-100 hidden my-3", snap === 1 && "block")} />
-                <VoltDetailsProgressLine data={data} averageOfPropertiesUsedForCal={averageOfPropertiesUsedForCal} />
+                {/* <VoltDetailsProgressLine data={data} averageOfPropertiesUsedForCal={averageOfPropertiesUsedForCal} /> */}
               </div>
               {/* <div className="overflow-scroll">
                 <p>Test</p>
