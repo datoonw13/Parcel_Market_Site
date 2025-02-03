@@ -8,12 +8,13 @@ import useStates from "@/hooks/useStates";
 import area from "@turf/area";
 import { polygon, convertArea } from "@turf/helpers";
 
-import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+import { calculateLandPriceAction, calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
 // @ts-ignore
 import polylabel from "@mapbox/polylabel";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
 import { AutoComplete } from "../ui/autocomplete";
@@ -32,6 +33,7 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
   const [mapRef, setMapRef] = useState<MapBoX | null>(null);
   const hoveredFeaturePropertyId = useRef<null | number>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [openParcelData, setOpenParcelData] = useState<{
     owner: string;
     acreage: number;
@@ -212,35 +214,27 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     if (!openParcelData) {
       return;
     }
-    const reqData: IVoltPriceCalculationReqParams = {
-      body: {
-        county: openParcelData.county,
-        state: openParcelData.state,
-        parcelNumber: openParcelData.parcelNumber,
-        owner: openParcelData.owner,
-        propertyType: openParcelData.proeprtyType,
-        coordinates: openParcelData.coordinates,
-        locality: "",
-      },
-      queryParams: {
-        acre: openParcelData.acreage.toString(),
-        lat: openParcelData.lat.toString(),
-        lon: openParcelData.lng.toString(),
-      },
-    };
-
-    console.log(reqData, 22);
-
     setCalculationPending(true);
 
-    const res = await calculateLandPriceAction(reqData);
+    const res = await calculateLandPriceAction2({
+      county: openParcelData.county,
+      state: openParcelData.state,
+      parcelNumber: openParcelData.parcelNumber,
+      owner: openParcelData.owner,
+      propertyType: openParcelData.proeprtyType,
+      coordinates: openParcelData.coordinates,
+      locality: "",
+      acrage: openParcelData.acreage.toString(),
+      lat: openParcelData.lat.toString(),
+      lon: openParcelData.lng.toString(),
+    });
+
+    if (res.data) {
+      router.push(`/volt/${res.data}`);
+    }
 
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    } else {
-      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(res.data!.id));
-      setStep(VoltSteps.CALCULATION);
-      setValues((prev) => ({ ...prev, calculation: res.data, additionalDataResult }));
     }
     setCalculationPending(false);
   };

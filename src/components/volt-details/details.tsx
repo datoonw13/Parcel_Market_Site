@@ -1,10 +1,7 @@
 "use client";
 
-import useMap from "@/hooks/useMap";
-import dynamic from "next/dynamic";
-import { FC, Suspense, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
-import { IVoltPriceCalculation } from "@/types/volt";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
@@ -16,8 +13,6 @@ import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
 import VoltDetailsMap from "./map";
-
-const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -69,8 +64,6 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
     });
     setPropertiesInteraction({ ...newData });
   }, [propertiesInteraction]);
-
-  console.log(propertiesInteraction, 22);
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative")}>

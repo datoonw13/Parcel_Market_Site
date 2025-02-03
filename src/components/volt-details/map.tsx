@@ -4,7 +4,7 @@
 
 import useMap from "@/hooks/useMap";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, SetStateAction, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
@@ -32,7 +32,22 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   onPopupClose,
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
+  // const [openPopupDetails, setOpenPopupDetails] = useState<VoltDetailsMapProps["data"]["assessments"][0] | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+
+  const openPopupDetails = useMemo(() => {
+    const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
+    if (!id) {
+      return null;
+    }
+    const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
+    const isSellingProperty = !property?.isBulked && property?.data.parcelNumberNoFormatting === data.parcelNumberNoFormatting;
+
+    return {
+      property,
+      isSellingProperty,
+    };
+  }, [data.assessments, data.parcelNumberNoFormatting, propertiesInteraction]);
 
   console.log(data);
 
@@ -382,7 +397,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
       if (feature) {
         const id = feature.bulkId ? feature.bulkId : feature.parcelNumberNoFormatting;
-        onMarkerInteraction(id, "popup");
+        if (id) {
+          onMarkerInteraction(id, "popup");
+        }
       }
     });
   }, [onMarkerInteraction, onMouseLeave, ref]);
@@ -393,6 +410,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         new Popup({ closeButton: false, className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-4 [&>div:last-child]:p-3" })
           .setLngLat([lng, lat])
           .setDOMContent(popupRef.current)
+          .setMaxWidth("max-content")
           .addTo(ref)
           .on("close", () => {
             onClose();
@@ -501,7 +519,69 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   return (
     <>
       <div style={{ display: "none" }}>
-        <div ref={popupRef}>aeee</div>
+        {openPopupDetails && (
+          <div ref={popupRef}>
+            <ul className="grid grid-cols-2 gap-x-8 gap-y-2">
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">Owner</p>
+                  <p className="text-black font-medium text-sm">
+                    {openPopupDetails.property?.isBulked
+                      ? openPopupDetails.property.data.properties[0].owner || "N/A"
+                      : openPopupDetails.property?.data.owner || "N/A"}
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">Acreage</p>
+                  <p className="text-black font-medium text-sm">{openPopupDetails.property?.data.acreage.toFixed(2)}</p>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">State/County</p>
+                  <p className="text-black font-medium text-sm">
+                    {openPopupDetails.property?.isBulked
+                      ? `${openPopupDetails.property?.data.properties[0].state}/${openPopupDetails.property?.data.properties[0].county}`
+                      : `${openPopupDetails.property?.data.state}/${openPopupDetails.property?.data.county}`}
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">VOLT Value</p>
+                  <p className="text-black font-medium text-sm">Name, Surname</p>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">Owner</p>
+                  <p className="text-black font-medium text-sm">Name, Surname</p>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">Owner</p>
+                  <p className="text-black font-medium text-sm">Name, Surname</p>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="rounded-full size-1.5 bg-primary-main-400" />
+                <div>
+                  <p className="text-grey-600 font-medium text-sm">Owner</p>
+                  <p className="text-black font-medium text-sm">Name, Surname</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
       <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>
         <Map setRef={setRef} ref={ref} />
