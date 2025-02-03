@@ -57,6 +57,7 @@ const generateClasses = (isMedianValid: boolean, hasSellingProperty: boolean, se
   cn(
     `border-b hover:bg-grey-30 ${selected && "bg-grey-30"}`,
     isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-30"}`,
+    !isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-30"}`,
     !isMedianValid &&
       isNonValidMedianHighlighted &&
       `border-y border-y-2 border-y-[${hasSellingProperty ? "#17DC66" : "#FCEDB6"}] bg-[#FEFAEB] hover:bg-[#fdf5d8] ${
