@@ -7,7 +7,7 @@ import VoltDetailsLayout from "@/components/volt-details/layout";
 import { redirect } from "next/navigation";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 
-export const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
+const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
