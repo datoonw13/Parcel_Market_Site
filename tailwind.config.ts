@@ -100,6 +100,7 @@ const config: Config = {
         "3": "0px -8px 20px 0px #00000014",
         "4": "0px 0px 14px 0px rgba(0, 0, 0, 0.08)",
         "5": "0px 4px 20px 0px rgba(0, 0, 0, 0.08)",
+        "6": "0 4px 20px 0 rgba(0,0,0,.25)",
       },
       fontSize: {
         xss: ["0.625rem", "14px"],

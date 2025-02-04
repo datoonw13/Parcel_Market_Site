@@ -98,18 +98,19 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
   }, [data.assessments, sortKey, sortValue]);
 
   return (
-    <div className="w-full  border rounded-2xl">
+    <div className="w-full  border mb-0.5">
+      {/* [&>tbody>tr:last-child>td:first-child]:rounded-bl-2xl [&>tbody>tr:last-child>td:last-child]:rounded-br-2xl */}
+
       <table
         className={cn(
           `w-full 
           [&>thead>tr>th]:p-3 
-          [&>thead>tr>th:first-child]:rounded-tl-2xl [&>thead>tr>th:first-child]:pl-6 
-          [&>thead>tr>th:last-child]:rounded-tr-2xl [&>thead>tr>th:last-child]:pr-6
+          [&>thead>tr>th:first-child]:r222ounded-tl-2xl [&>thead>tr>th:first-child]:pl-6 
+          [&>thead>tr>th:last-child]:ro22unded-tr-2xl [&>thead>tr>th:last-child]:pr-6
           [&>tbody>tr>td]:p-4 
           [&>tbody>tr>td:first-child]:pl-6
           [&>tbody>tr>td:last-child]:pr-6
           [&>tbody>tr:last-child]:border-b-transparent
-          [&>tbody>tr:last-child>td:first-child]:rounded-bl-2xl [&>tbody>tr:last-child>td:last-child]:rounded-br-2xl
           `
         )}
       >

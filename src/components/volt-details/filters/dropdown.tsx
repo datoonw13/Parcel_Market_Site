@@ -16,6 +16,7 @@ const VoltDetailsFiltersDropDown = ({
   icon,
   side,
   className,
+  buttonClassName,
   onOpen,
 }: {
   renderContent: (close: () => void) => ReactNode;
@@ -27,6 +28,7 @@ const VoltDetailsFiltersDropDown = ({
   icon?: ReactNode;
   side?: any;
   className?: string;
+  buttonClassName?: string;
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -45,7 +47,9 @@ const VoltDetailsFiltersDropDown = ({
         }}
       >
         <PopoverTrigger className={cn("w-full", className)}>
-          <div className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4">
+          <div
+            className={cn("border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4", buttonClassName)}
+          >
             <div>
               <p className="text-start leading-none text-primary-main font-medium text-xs">{value}</p>
               <p className="text-start leading-none text-black font-medium text-sm pt-1">{label}</p>

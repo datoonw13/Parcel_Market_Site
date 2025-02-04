@@ -77,7 +77,13 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
     Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
 
   return (
-    <div className="border border-primary-main-400 bg-[#FAFFFB] p-5 rounded-2xl space-y-12">
+    // rounded-b-2xl
+    <div
+      className="border border-primary-main-400 bg-[#FAFFFB] p-5  border-t-0 space-y-12 relative z-10"
+      style={{
+        boxShadow: "rgba(0, 0, 0, 0.2) 0px -18px 48px 0px",
+      }}
+    >
       <div className="flex items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
         <div className="flex gap-4 items-center">
           <div className="flex items-center gap-2">

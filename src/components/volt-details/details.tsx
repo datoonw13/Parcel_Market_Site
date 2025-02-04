@@ -8,11 +8,14 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { moneyFormatter } from "@/helpers/common";
+import moment from "moment";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
 import VoltDetailsMap from "./map/map";
+import VoltDetailsFiltersDropDown from "./filters/dropdown";
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -132,27 +135,29 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative")}>
-      <div className={cn("overflow-hidden")} ref={setContainer}>
-        <div className="w-full h-[90%]">
-          <VoltDetailsMap
-            propertiesInteraction={propertiesInteraction}
-            onMouseLeave={onMouseLeave}
-            onMarkerInteraction={onMarkerInteraction}
-            data={data}
-            isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-            onPopupClose={onPopupClose}
-            selectedLayer={selectedLayer}
-          />
+      <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
+        <div>
+          <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
+            <div className="h-full">
+              <VoltDetailsMap
+                propertiesInteraction={propertiesInteraction}
+                onMouseLeave={onMouseLeave}
+                onMarkerInteraction={onMarkerInteraction}
+                data={data}
+                isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+                onPopupClose={onPopupClose}
+                selectedLayer={selectedLayer}
+              />
+            </div>
+            <VoltDetailsProgressLine
+              data={data}
+              propertiesInteraction={propertiesInteraction}
+              setPropertiesInteraction={setPropertiesInteraction}
+              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+            />
+          </div>
         </div>
-        <div className="my-6 mx-4">
-          <VoltDetailsProgressLine
-            data={data}
-            propertiesInteraction={propertiesInteraction}
-            setPropertiesInteraction={setPropertiesInteraction}
-            isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-          />
-        </div>
-        <div className="mx-4 mb-4">
+        <div className="">
           <VoltDetailsCalculationTable
             data={data}
             propertiesInteraction={propertiesInteraction}
@@ -161,7 +166,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
           />
         </div>
       </div>
-      <div className="h-full flex flex-col py-6 justify-between overflow-hidden relative">
+      <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-hidden  shadow-2 relative z-10">
         <AnimatePresence>
           {backDrop && (
             <motion.div
@@ -181,7 +186,46 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
             />
           )}
         </AnimatePresence>
-        <div className="flex flex-col gap-4 px-4">
+        <div id="map-options" className="flex flex-col gap-4 px-4">
+          <VoltDetailsFiltersDropDown
+            onClose={() => {
+              setBackDrop(false);
+            }}
+            onOpen={() => {
+              setBackDrop(true);
+            }}
+            label={`${data.acreage.toFixed(2)} Acre, ${data.propertyType || "N/A"}`}
+            value="Subject Parcel"
+            renderContent={() => (
+              <ul className="min-w-[--radix-popper-anchor-width] p-4 space-y-4">
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Owner: <span className="text-sm font-medium text-black">{data?.owner}</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Parcel ID: <span className="text-sm font-medium text-black">{data?.parcelNumber}</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Acreage: <span className="text-sm font-medium text-black">{data?.acreage}</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  State/County: <span className="text-sm font-medium text-black">ae</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Volt Value: <span className="text-sm font-medium text-black">{data?.price && moneyFormatter.format(data?.price)}</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Price Per Acreage:{" "}
+                  <span className="text-sm font-medium text-black">{moneyFormatter.format(data.price / data.acreage)}</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>
+                </li>
+                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+                  Search Date: <span className="text-sm font-medium text-black">{moment(data.dateCreated).format("MM-DD-YYYY")}</span>
+                </li>
+              </ul>
+            )}
+          />
           <AutoComplete
             onOpenChange={setBackDrop}
             options={mapLayers}

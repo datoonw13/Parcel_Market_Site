@@ -40,6 +40,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
   return (
     <div className="flex gap-2">
       <VoltDetailsFiltersDropDown
+        buttonClassName="shadow-6 border-0"
         onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={`${filters.radius} Mile`}
         label="Radius"
@@ -71,6 +72,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         )}
       />
       <VoltDetailsFiltersDropDown
+        buttonClassName="shadow-6 border-0"
         onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={`${filters.soldWithin} Year`}
         label="Sold Within"
@@ -103,6 +105,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         )}
       />
       <VoltDetailsFiltersDropDown
+        buttonClassName="shadow-6 border-0"
         onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={getAcreageLabel(filters.acreageMin || null, filters.acreageMax || null)}
         label="Acreage"
@@ -148,6 +151,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         )}
       />
       <VoltDetailsFiltersDropDown
+        buttonClassName="shadow-6 border-0"
         onOpen={() => onFilterToggle && onFilterToggle(true)}
         value={`Selected (${filters.propertyTypes?.split(",")?.length || 0})`}
         label="Property Type"
@@ -193,7 +197,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
           </>
         )}
       />
-      <Button className="size-12" onClick={onSubmit}>
+      <Button className="size-12 shadow-6" onClick={onSubmit}>
         <LuSearch className="text-white size-5" />
       </Button>
     </div>
