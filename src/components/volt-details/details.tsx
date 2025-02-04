@@ -134,7 +134,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
   }, [propertiesInteraction]);
 
   return (
-    <div className={cn("w-full h-full grid grid-cols-[1fr_min(25vw,_330px)] overflow-hidden relative")}>
+    <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
         <div>
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">

@@ -78,7 +78,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
 
   return (
     // rounded-b-2xl
-    <div className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  border-t-0 space-y-8 relative z-10 shadow-3">
+    <div className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  border-t-0 space-y-8 relative z-10 shadow-3 -translate-y-0.5">
       <div className="flex items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
         <div className="flex gap-4 items-center">
           <div className="flex items-center gap-2">
@@ -216,9 +216,9 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
         <div className="flex items-center justify-between mt-2">
           <p className="font-semibold text-xs">
             {moneyFormatter.format(minPricePerAcre)}{" "}
-            <span className="text-grey-600 font-semibold text-xs">- Lowest sale reported per acre</span>
+            <span className="text-grey-600 font-semibold text-sm">- Lowest sale reported per acre</span>
           </p>
-          <p className="font-semibold text-xs">
+          <p className="font-semibold text-sm">
             <span className="text-grey-600 font-semibold text-xs">Highest sale reported per acre - </span>{" "}
             {moneyFormatter.format(maxPricePerAcre)}
           </p>
