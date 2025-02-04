@@ -34,6 +34,7 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
 
   return (
     <VoltDetailsFiltersDropDown
+      buttonClassName="shadow-6"
       className=""
       value={`${validateFilters.data ? Object.values(validateFilters.data).filter(Boolean).length : 0} Selected`}
       label="Filter"
