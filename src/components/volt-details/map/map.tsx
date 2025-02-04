@@ -9,13 +9,24 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
 import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
-import { GeoJSONFeature, Map as MapBoX, Popup } from "mapbox-gl";
+import { CustomLayerInterface, GeoJSONFeature, LayerSpecification, Map as MapBoX, Popup, Source } from "mapbox-gl";
 import { icon } from "leaflet";
 import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
 import VoltDetailsMapPopup from "./map-popup";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
+
+const mapData = {
+  sources: {
+    markersSource: "markersSource",
+  },
+  layers: {
+    markersLayer: "markersLayer",
+    markerClusterCountLayer: "markers-cluster-count-layer",
+    markerClusterLayer: "markers-cluster-layer",
+  },
+};
 
 interface VoltDetailsMapProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -24,6 +35,7 @@ interface VoltDetailsMapProps {
   onMouseLeave: () => void;
   onPopupClose: () => void;
   propertiesInteraction: { [key: string]: "hovered" | "popup" };
+  selectedLayer: string;
 }
 
 const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
@@ -33,10 +45,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   onMouseLeave,
   propertiesInteraction,
   onPopupClose,
+  selectedLayer,
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  const lastPopupId = useRef<string | null>(null);
 
   const openPopupDetails = useMemo(() => {
     const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
@@ -201,8 +213,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   const setInitialData = useCallback(async () => {
     if (ref) {
-      if (ref.getSource("markers-source")) {
-        const source = ref.getSource("markers-source");
+      if (ref.getSource(mapData.sources.markersSource)) {
+        const source = ref.getSource(mapData.sources.markersSource);
         if (source?.type === "geojson") {
           const geoJsonInit: MapGeoJson = {
             type: "FeatureCollection",
@@ -396,7 +408,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         }
       });
 
-      ref.addSource("markers-source", {
+      ref.addSource(mapData.sources.markersSource, {
         type: "geojson",
         data: geoJsonInit,
         generateId: true,
@@ -408,9 +420,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       });
 
       ref.addLayer({
-        id: "markers-layer",
+        id: mapData.layers.markersLayer,
         type: "symbol",
-        source: "markers-source",
+        source: mapData.sources.markersSource,
         layout: {
           "icon-image": "{markerIcon}",
           "icon-size": ["get", "markerSize"],
@@ -420,9 +432,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
       if (geoJsonInit.features.length > 50) {
         ref.addLayer({
-          id: "markers-cluster",
+          id: mapData.layers.markerClusterLayer,
           type: "circle",
-          source: "markers-source",
+          source: mapData.sources.markersSource,
           filter: ["has", "point_count"],
           paint: {
             "circle-color": ["step", ["get", "point_count"], "#51bbd6", 100, "#f1f075", 750, "#f28cb1"],
@@ -431,9 +443,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         });
 
         ref.addLayer({
-          id: "markers-cluster-count",
+          id: mapData.layers.markerClusterCountLayer,
           type: "symbol",
-          source: "markers-source",
+          source: mapData.sources.markersSource,
           filter: ["has", "point_count"],
           layout: {
             "text-field": ["get", "point_count_abbreviated"],
@@ -462,7 +474,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   const updateMarkerColor = useCallback(() => {
     if (!ref) return;
     if (isNonValidMedianHighlighted) {
-      const source = ref.getSource("markers-source");
+      const source = ref.getSource(mapData.sources.markersSource);
       if (source?.type === "geojson") {
         const data = source._data as MapGeoJson;
         const newData = {
@@ -486,7 +498,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         // source.setData({ ...newData });
       }
     } else {
-      const source = ref.getSource("markers-source");
+      const source = ref.getSource(mapData.sources.markersSource);
       if (source?.type === "geojson") {
         const data = source._data as MapGeoJson;
         const newData = {
@@ -511,7 +523,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [isNonValidMedianHighlighted, ref]);
 
   const handleMarkerInteraction = useCallback(() => {
-    ref?.on("mousemove", "markers-layer", (e) => {
+    ref?.on("mousemove", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
       if (feature) {
         const id = feature.bulkId ? feature.bulkId : feature.parcelNumberNoFormatting;
@@ -519,11 +531,11 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       }
     });
 
-    ref?.on("mouseleave", "markers-layer", (e) => {
+    ref?.on("mouseleave", mapData.layers.markersLayer, (e) => {
       onMouseLeave();
     });
 
-    ref?.on("click", "markers-layer", (e) => {
+    ref?.on("click", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
 
       if (feature) {
@@ -561,7 +573,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   );
 
   const highlightMarkers = useCallback(() => {
-    if (!ref || !ref.getLayer("markers-layer")) return;
+    if (!ref || !ref.getLayer(mapData.layers.markersLayer)) return;
     const hoveredMarker = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "hovered");
     const openPopupMarker = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
 
@@ -603,7 +615,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         ];
       });
 
-      ref.setLayoutProperty("markers-layer", "icon-image", [
+      ref.setLayoutProperty(mapData.layers.markersLayer, "icon-image", [
         "case",
         ...markerIconFilters.flat(),
         ["get", "markerIcon"], // Otherwise, use default icon
@@ -620,14 +632,14 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         ];
       });
 
-      ref.setLayoutProperty("markers-layer", "icon-size", [
+      ref.setLayoutProperty(mapData.layers.markersLayer, "icon-size", [
         "case",
         ...markerSizeFilters.flat(),
         ["get", "markerSize"], // Otherwise, use default icon
       ]);
     } else {
-      ref.setLayoutProperty("markers-layer", "icon-image", ["get", "markerIcon"]);
-      ref.setLayoutProperty("markers-layer", "icon-size", ["get", "markerSize"]);
+      ref.setLayoutProperty(mapData.layers.markersLayer, "icon-image", ["get", "markerIcon"]);
+      ref.setLayoutProperty(mapData.layers.markersLayer, "icon-size", ["get", "markerSize"]);
     }
   }, [data, onPopupClose, openPopup, propertiesInteraction, ref]);
 
@@ -646,6 +658,42 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   useEffect(() => {
     highlightMarkers();
   }, [highlightMarkers]);
+
+  useEffect(() => {
+    if (selectedLayer && ref) {
+      const sources: Source[] = [];
+      Object.values(mapData.sources).forEach((source) => {
+        const currentSource = ref.getSource(source);
+        if (currentSource) {
+          sources.push(currentSource);
+        }
+      });
+
+      const layers: (LayerSpecification | CustomLayerInterface)[] = [];
+      Object.values(mapData.layers).forEach((layer) => {
+        const currentLayer = ref.getLayer(layer);
+
+        if (currentLayer) {
+          layers.push(currentLayer);
+        }
+      });
+
+      ref.setStyle(selectedLayer);
+
+      ref.once("style.load", () => {
+        sources.forEach((source) => {
+          ref.addSource(source.id, source.serialize());
+        });
+        layers.forEach((layer) => {
+          ref.addLayer(layer);
+        });
+      });
+
+      ref.once("styledata", () => {
+        addMarkerImages(mapDefaultMarkers);
+      });
+    }
+  }, [addMarkerImages, ref, selectedLayer]);
 
   return (
     <>

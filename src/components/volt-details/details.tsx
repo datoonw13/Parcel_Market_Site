@@ -19,10 +19,54 @@ interface VoltDetailsProps {
   isNonValidMedianHighlighted: boolean;
 }
 
+const mapLayers = [
+  {
+    label: "Navigation Day",
+    value: "mapbox://styles/mapbox/navigation-day-v1",
+  },
+  {
+    label: "Standart",
+    value: "mapbox://styles/mapbox/standard",
+  },
+  {
+    label: "Standard Satellite",
+    value: "mapbox://styles/mapbox/standard-satellite",
+  },
+  {
+    label: "Streets",
+    value: "mapbox://styles/mapbox/streets-v12",
+  },
+  {
+    label: "Outdoors",
+    value: "mapbox://styles/mapbox/outdoors-v12",
+  },
+  {
+    label: "Light",
+    value: "mapbox://styles/mapbox/light-v11",
+  },
+  {
+    label: "Dark",
+    value: "mapbox://styles/mapbox/dark-v11",
+  },
+  {
+    label: "Satellite",
+    value: "mapbox://styles/mapbox/satellite-v9",
+  },
+  {
+    label: "Satellite Streets",
+    value: "mapbox://styles/mapbox/satellite-streets-v12",
+  },
+  {
+    label: "Navigation Night",
+    value: "mapbox://styles/mapbox/navigation-night-v1",
+  },
+];
+
 const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
   const [backDrop, setBackDrop] = useState(false);
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
 
   const onMarkerInteraction = useCallback((parcelNumberNoFormatting: string, action: "hover" | "popup") => {
     // if (action === "hover") {
@@ -97,6 +141,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
             data={data}
             isNonValidMedianHighlighted={isNonValidMedianHighlighted}
             onPopupClose={onPopupClose}
+            selectedLayer={selectedLayer}
           />
         </div>
         <div className="my-6 mx-4">
@@ -139,16 +184,17 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
         <div className="flex flex-col gap-4 px-4">
           <AutoComplete
             onOpenChange={setBackDrop}
-            options={["Layover 1", "Layover 2", "Layover 3", "Layover 4", "Layover 5"].map((el) => ({ label: el, value: el }))}
+            options={mapLayers}
             onValueChange={(item) => {
+              setSelectedLayer(item || "");
               // if (item) {
               //   searchParams.set("state", item);
               //   searchParams.delete("county");
               //   router.push(`${pathname}?${searchParams.toString()}`);
               // }
             }}
-            placeholder="Layovers"
-            selectedValue={null}
+            placeholder="Layers"
+            selectedValue={selectedLayer}
           />
           <AutoComplete
             onOpenChange={setBackDrop}
