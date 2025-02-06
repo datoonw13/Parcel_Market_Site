@@ -8,7 +8,7 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
 import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
-import { Map as MapBoX, Popup } from "mapbox-gl";
+import { Map as MapBoX, Marker, Popup } from "mapbox-gl";
 import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
 import VoltDetailsMapPopup from "./map-popup";
@@ -201,8 +201,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
             new Promise((resolve) => {
               const img = createMarkerImage(data[key]);
               img.onload = (e) => {
-                ref!.addImage(key, img);
-                resolve(img);
+                ref?.loadImage(data[key], () => {
+                  ref!.addImage(key, img);
+                  resolve(img);
+                });
               };
             })
         )
@@ -214,6 +216,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     if (ref) {
       window.map = ref;
       await addMarkerImages(mapDefaultMarkers);
+
       const geoJsonInit: MapGeoJson = {
         type: "FeatureCollection",
         features: [],
