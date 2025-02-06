@@ -57,12 +57,7 @@ const VoltDetailsFiltersDropDown = ({
             {icon || <MdArrowForwardIos className={cn("text-[#1E1E1E] transition-all", open ? "-rotate-90" : "rotate-90")} />}
           </div>
         </PopoverTrigger>
-        <PopoverContent
-          side={side}
-          align="start"
-          className="flex gap-2 "
-          // className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100"
-        >
+        <PopoverContent side={side} align="start" className="flex gap-2 ">
           <div className="min-w-[--radix-popper-anchor-width] bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
             {renderContent(() => setOpen(false))}
           </div>
