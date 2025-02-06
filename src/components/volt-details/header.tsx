@@ -3,17 +3,14 @@
 import React, { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useMemo, useRef } from "react";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { FaCircleInfo } from "react-icons/fa6";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { moneyFormatter } from "@/helpers/common";
-import moment from "moment";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import VoltDetailsFiltersWrapper from "./filters/wrapper";
 import { Tooltip } from "../ui/tooltip";
 import { Switch } from "../ui/switch";
-import VoltDetailsFiltersDropDown from "./filters/dropdown";
 
 interface VoltDetailsHeaderProps {
   searchParams: { [key: string]: string };
@@ -48,8 +45,6 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
 
   const handleResize = useCallback(() => {
     const el = document.getElementById("map-options");
-    console.log(el, 22);
-
     if (el && ref.current) {
       const { width } = el.getBoundingClientRect();
       ref.current.style.width = `calc(100% - ${width}px)`;
@@ -68,7 +63,6 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
 
   return (
     !detecting && (
-      // <div ref={ref} className={cn("fixed z-10 px-6 py-3 w-full grid  gap-6 grid-cols-1")}>
       <div
         ref={ref}
         className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] fixed z-10 py-1.5 px-2 ", isSmallDevice ? " gap-8" : "gap-14")}

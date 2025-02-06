@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
-import { Dispatch, FC, SetStateAction, useMemo } from "react";
+import { Dispatch, FC, SetStateAction, useMemo, useRef } from "react";
 import { moneyFormatter } from "@/helpers/common";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
@@ -62,6 +62,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   setPropertiesInteraction,
   isNonValidMedianHighlighted,
 }) => {
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const avgPriceOfAssessments = useMemo(() => {
     let totalPrices = 0;
     totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
@@ -158,6 +159,12 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                           }
                           return prev;
                         });
+                      }}
+                      onDoubleClick={() => {
+                        if (!property.isBulked) {
+                          window.map.setZoom(14);
+                          window.map.setCenter([property.data.longitude, property.data.latitude]);
+                        }
                       }}
                       onClick={() => {
                         const newData = { ...propertiesInteraction };
