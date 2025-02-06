@@ -70,7 +70,13 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
     return avgPrice;
   }, [data.assessments]);
 
-  const allPrices = useMemo(() => data.assessments.map((el) => el.data.pricePerAcreage), [data.assessments]);
+  const allPrices = useMemo(
+    () =>
+      isNonValidMedianHighlighted
+        ? data.assessments.filter((el) => el.data.isMedianValid).map((el) => el.data.pricePerAcreage)
+        : data.assessments.map((el) => el.data.pricePerAcreage),
+    [data.assessments, isNonValidMedianHighlighted]
+  );
   const minPricePerAcre = Math.min(...allPrices);
   const maxPricePerAcre = Math.max(...allPrices);
 
@@ -164,6 +170,9 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                         if (!property.isBulked) {
                           window.map.setZoom(14);
                           window.map.setCenter([property.data.longitude, property.data.latitude]);
+                        } else {
+                          window.map.setZoom(12);
+                          window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
                         }
                       }}
                       onClick={() => {
