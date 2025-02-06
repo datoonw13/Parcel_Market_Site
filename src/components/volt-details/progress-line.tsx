@@ -137,7 +137,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
           {data.assessments.map((property) => {
             const parcelNumberNoFormatting = property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting;
             return (
-              <Popover key={parcelNumberNoFormatting} open={propertiesInteraction[parcelNumberNoFormatting] === "popup"}>
+              <Popover key={parcelNumberNoFormatting} open={propertiesInteraction[parcelNumberNoFormatting] === "hovered"}>
                 <PopoverTrigger className={cn("")} asChild>
                   <div
                     style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}

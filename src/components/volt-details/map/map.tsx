@@ -49,6 +49,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const openPopupDetails = useMemo(() => {
     const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
@@ -213,106 +214,106 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   const setInitialData = useCallback(async () => {
     if (ref) {
-      if (ref.getSource(mapData.sources.markersSource)) {
-        const source = ref.getSource(mapData.sources.markersSource);
-        if (source?.type === "geojson") {
-          const geoJsonInit: MapGeoJson = {
-            type: "FeatureCollection",
-            features: [],
-          };
-          geoJsonInit.features.push({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [data.lon, data.lat],
-            },
-            properties: {
-              parcelNumberNoFormatting: data.parcelNumberNoFormatting,
-              parcelNumber: data.parcelNumber,
-              lng: data.lon,
-              lat: data.lat,
-              type: "selling",
-              markerIcon: "selling",
-              hoveredMarkerIcon: "selling",
-              selectedMarkerIcon: "selling",
-              markerSize: 1.5,
-              hoveredMarkerSize: 1.5,
-              selectedMarkerSize: 1.5,
-              acreage: data.acreage,
-              price: data.price,
-              pricePerAcreage: data.price / data.acreage,
-              polygonLineColor: "#05471C",
-              polygonFillColor: "#05471C",
-            },
-          });
+      // if (ref.getSource(mapData.sources.markersSource)) {
+      //   const source = ref.getSource(mapData.sources.markersSource);
+      //   if (source?.type === "geojson") {
+      //     const geoJsonInit: MapGeoJson = {
+      //       type: "FeatureCollection",
+      //       features: [],
+      //     };
+      //     geoJsonInit.features.push({
+      //       type: "Feature",
+      //       geometry: {
+      //         type: "Point",
+      //         coordinates: [data.lon, data.lat],
+      //       },
+      //       properties: {
+      //         parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+      //         parcelNumber: data.parcelNumber,
+      //         lng: data.lon,
+      //         lat: data.lat,
+      //         type: "selling",
+      //         markerIcon: "selling",
+      //         hoveredMarkerIcon: "selling",
+      //         selectedMarkerIcon: "selling",
+      //         markerSize: 1.5,
+      //         hoveredMarkerSize: 1.5,
+      //         selectedMarkerSize: 1.5,
+      //         acreage: data.acreage,
+      //         price: data.price,
+      //         pricePerAcreage: data.price / data.acreage,
+      //         polygonLineColor: "#05471C",
+      //         polygonFillColor: "#05471C",
+      //       },
+      //     });
 
-          data.assessments.forEach((el) => {
-            if (el.isBulked) {
-              el.data.properties.forEach((childEl) => {
-                if (childEl.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
-                  geoJsonInit.features.push({
-                    type: "Feature",
-                    geometry: {
-                      type: "Point",
-                      coordinates: [childEl.longitude, childEl.latitude],
-                    },
-                    properties: {
-                      parcelNumberNoFormatting: childEl.parcelNumberNoFormatting,
-                      parcelNumber: childEl.parcelNumber,
-                      lng: childEl.longitude,
-                      lat: childEl.latitude,
-                      type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
-                      markerIcon: "red",
-                      hoveredMarkerIcon: "redHighlighted",
-                      selectedMarkerIcon: "redHighlighted",
-                      markerSize: 1,
-                      hoveredMarkerSize: 1.5,
-                      selectedMarkerSize: 1.5,
-                      acreage: childEl.acreage,
-                      price: childEl.lastSalesPrice,
-                      pricePerAcreage: childEl.pricePerAcreage,
-                      lastSaleDate: childEl.lastSalesDate,
-                      polygonLineColor: "#05471C",
-                      polygonFillColor: "#05471C",
-                      bulkId: el.data.id,
-                      isBulkMedianValid: el.data.isMedianValid,
-                    },
-                  });
-                }
-              });
-            } else if (el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
-              geoJsonInit.features.push({
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [el.data.longitude, el.data.latitude],
-                },
-                properties: {
-                  parcelNumberNoFormatting: el.data.parcelNumberNoFormatting,
-                  parcelNumber: el.data.parcelNumber,
-                  lng: el.data.longitude,
-                  lat: el.data.latitude,
-                  type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
-                  markerIcon: "red",
-                  hoveredMarkerIcon: "redHighlighted",
-                  selectedMarkerIcon: "redHighlighted",
-                  markerSize: 1,
-                  hoveredMarkerSize: 1.5,
-                  selectedMarkerSize: 1.5,
-                  acreage: el.data.acreage,
-                  price: el.data.lastSalesPrice,
-                  pricePerAcreage: el.data.pricePerAcreage,
-                  lastSaleDate: el.data.lastSalesDate,
-                  polygonLineColor: "#05471C",
-                  polygonFillColor: "#05471C",
-                },
-              });
-            }
-          });
-          source.setData(geoJsonInit);
-        }
-        return;
-      }
+      //     data.assessments.forEach((el) => {
+      //       if (el.isBulked) {
+      //         el.data.properties.forEach((childEl) => {
+      //           if (childEl.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
+      //             geoJsonInit.features.push({
+      //               type: "Feature",
+      //               geometry: {
+      //                 type: "Point",
+      //                 coordinates: [childEl.longitude, childEl.latitude],
+      //               },
+      //               properties: {
+      //                 parcelNumberNoFormatting: childEl.parcelNumberNoFormatting,
+      //                 parcelNumber: childEl.parcelNumber,
+      //                 lng: childEl.longitude,
+      //                 lat: childEl.latitude,
+      //                 type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
+      //                 markerIcon: "red",
+      //                 hoveredMarkerIcon: "redHighlighted",
+      //                 selectedMarkerIcon: "redHighlighted",
+      //                 markerSize: 1,
+      //                 hoveredMarkerSize: 1.5,
+      //                 selectedMarkerSize: 1.5,
+      //                 acreage: childEl.acreage,
+      //                 price: childEl.lastSalesPrice,
+      //                 pricePerAcreage: childEl.pricePerAcreage,
+      //                 lastSaleDate: childEl.lastSalesDate,
+      //                 polygonLineColor: "#05471C",
+      //                 polygonFillColor: "#05471C",
+      //                 bulkId: el.data.id,
+      //                 isBulkMedianValid: el.data.isMedianValid,
+      //               },
+      //             });
+      //           }
+      //         });
+      //       } else if (el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
+      //         geoJsonInit.features.push({
+      //           type: "Feature",
+      //           geometry: {
+      //             type: "Point",
+      //             coordinates: [el.data.longitude, el.data.latitude],
+      //           },
+      //           properties: {
+      //             parcelNumberNoFormatting: el.data.parcelNumberNoFormatting,
+      //             parcelNumber: el.data.parcelNumber,
+      //             lng: el.data.longitude,
+      //             lat: el.data.latitude,
+      //             type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
+      //             markerIcon: "red",
+      //             hoveredMarkerIcon: "redHighlighted",
+      //             selectedMarkerIcon: "redHighlighted",
+      //             markerSize: 1,
+      //             hoveredMarkerSize: 1.5,
+      //             selectedMarkerSize: 1.5,
+      //             acreage: el.data.acreage,
+      //             price: el.data.lastSalesPrice,
+      //             pricePerAcreage: el.data.pricePerAcreage,
+      //             lastSaleDate: el.data.lastSalesDate,
+      //             polygonLineColor: "#05471C",
+      //             polygonFillColor: "#05471C",
+      //           },
+      //         });
+      //       }
+      //     });
+      //     source.setData(geoJsonInit);
+      //   }
+      //   return;
+      // }
       await addMarkerImages(mapDefaultMarkers);
       const geoJsonInit: MapGeoJson = {
         type: "FeatureCollection",
@@ -454,7 +455,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           },
         });
       }
-
       ref.setZoom(8);
       ref.setCenter([data.lon, data.lat]);
     }
@@ -551,13 +551,13 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     ({ lat, lng, popupRef, onClose }: { lng: number; lat: number; popupRef: any; onClose: () => void }) => {
       if (ref) {
         const existedPopup = ref._popups[0];
-        if (existedPopup) {
+        if (existedPopup && !existedPopup._classList.has("tooltip")) {
           existedPopup.setLngLat([lng, lat]);
           return;
         }
         new Popup({
           closeButton: false,
-          className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3",
+          className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3 popup",
         })
           .setLngLat([lng, lat])
           .setDOMContent(popupRef.current)
@@ -566,6 +566,30 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           .on("close", () => {
             onClose();
           });
+      }
+    },
+
+    [ref]
+  );
+
+  const openTooltip = useCallback(
+    ({ lat, lng, popupRef }: { lng: number; lat: number; popupRef: any }) => {
+      if (ref) {
+        const existedTooltip = ref._popups.find((el) => el._classList.has("tooltip"));
+        if (existedTooltip) {
+          existedTooltip.remove();
+        }
+        new Popup({
+          closeButton: false,
+          className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3 tooltip",
+          closeOnClick: false,
+          closeOnMove: false,
+          offset: [0, -20],
+        })
+          .setLngLat([lng, lat])
+          .setDOMContent(popupRef.current)
+          .setMaxWidth("max-content")
+          .addTo(ref);
       }
     },
 
@@ -581,7 +605,25 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
     if (hoveredMarker) {
       list.push({ [hoveredMarker]: "hovered" });
+      const property = data.assessments.find((el) =>
+        el.isBulked ? el.data.id === hoveredMarker : el.data.parcelNumberNoFormatting === hoveredMarker
+      );
+
+      if (property) {
+        openTooltip({
+          lat: property.isBulked ? property.data.properties[0].latitude : property.data.latitude,
+          lng: property.isBulked ? property.data.properties[0].longitude : property.data.longitude,
+          popupRef: tooltipRef,
+        });
+      }
+    } else {
+      ref._popups.forEach((el) => {
+        if (el._classList.has("tooltip")) {
+          el.remove();
+        }
+      });
     }
+
     if (openPopupMarker) {
       list.push({ [openPopupMarker]: "selected" });
       const property = data.assessments.find((el) =>
@@ -641,7 +683,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ref.setLayoutProperty(mapData.layers.markersLayer, "icon-image", ["get", "markerIcon"]);
       ref.setLayoutProperty(mapData.layers.markersLayer, "icon-size", ["get", "markerSize"]);
     }
-  }, [data, onPopupClose, openPopup, propertiesInteraction, ref]);
+  }, [data.assessments, onPopupClose, openPopup, openTooltip, propertiesInteraction, ref]);
 
   useEffect(() => {
     setInitialData();
@@ -660,46 +702,30 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [highlightMarkers]);
 
   useEffect(() => {
-    if (selectedLayer && ref) {
-      const sources: Source[] = [];
-      Object.values(mapData.sources).forEach((source) => {
-        const currentSource = ref.getSource(source);
-        if (currentSource) {
-          sources.push(currentSource);
-        }
-      });
-
-      const layers: (LayerSpecification | CustomLayerInterface)[] = [];
-      Object.values(mapData.layers).forEach((layer) => {
-        const currentLayer = ref.getLayer(layer);
-
-        if (currentLayer) {
-          layers.push(currentLayer);
-        }
-      });
-
-      ref.setStyle(selectedLayer);
-
-      ref.once("style.load", () => {
-        sources.forEach((source) => {
-          ref.addSource(source.id, source.serialize());
-        });
-        layers.forEach((layer) => {
-          ref.addLayer(layer);
-        });
-      });
-
-      ref.once("styledata", () => {
-        addMarkerImages(mapDefaultMarkers);
+    if (ref) {
+      ref.on("style.load", () => {
+        setInitialData();
       });
     }
-  }, [addMarkerImages, ref, selectedLayer]);
+  }, [ref, setInitialData]);
+
+  useEffect(() => {
+    if (ref && selectedLayer) {
+      ref.setStyle(selectedLayer);
+    }
+  }, [ref, selectedLayer]);
 
   return (
     <>
       <div style={{ display: "none" }}>
         <div className="" ref={popupRef}>
           {openPopupDetails && <VoltDetailsMapPopup data={openPopupDetails} />}
+        </div>
+      </div>
+      <div style={{ display: "none" }}>
+        <div className="" ref={tooltipRef}>
+          <p>Click to get info</p>
+          <p>Double click to zoom in</p>
         </div>
       </div>
       <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>

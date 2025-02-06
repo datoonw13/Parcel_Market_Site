@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { orderBy } from "lodash";
 import moment from "moment";
-import { Dispatch, FC, Fragment, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, FC, Fragment, SetStateAction, useMemo, useRef, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { LuArrowUpDown } from "react-icons/lu";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
@@ -81,6 +81,8 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
   setPropertiesInteraction,
   isNonValidMedianHighlighted,
 }) => {
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
   const [sort, setSort] = useState<Partial<{ [key in keyof typeof HEADERS]: "asc" | "desc" }>>({ pricePerAcreage: "asc" });
   const sortKey = Object.keys(sort)[0] as keyof typeof HEADERS;
   const sortValue = Object.values(sort)[0];
@@ -173,15 +175,29 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   }}
                   onMouseEnter={() => {
                     if (propertiesInteraction && propertiesInteraction[assessment.data.id] !== "popup") {
+                      const newData = Object.keys(propertiesInteraction).reduce((acc, cur) => {
+                        if (propertiesInteraction[cur] === "popup") {
+                          return {
+                            ...acc,
+                            cur: "popup",
+                          };
+                        }
+                        return {
+                          ...acc,
+                        };
+                      }, {});
                       setPropertiesInteraction((prev) => ({ ...prev, [assessment.data.id]: "hovered" }));
                     }
                   }}
                   onMouseLeave={() => {
-                    if (propertiesInteraction && propertiesInteraction[assessment.data.id] !== "popup") {
-                      const newData = { ...propertiesInteraction };
-                      delete newData[assessment.data.id];
-                      setPropertiesInteraction((prev) => ({ ...newData }));
-                    }
+                    setPropertiesInteraction((prev) => {
+                      if (propertiesInteraction && propertiesInteraction[assessment.data.id] !== "popup") {
+                        const newData = { ...prev };
+                        delete newData[assessment.data.id];
+                        return newData;
+                      }
+                      return prev;
+                    });
                   }}
                 >
                   <td className="text-grey-800 text-xs">Multiple</td>
