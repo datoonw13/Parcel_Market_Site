@@ -593,6 +593,17 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         ["get", "markerIcon"], // Otherwise, use default icon
       ]);
 
+      ///
+      const symbolSortFilters = list.map((el) => {
+        const [key, value] = [Object.keys(el)[0], Object.values(el)[0]];
+        // eslint-disable-next-line no-nested-ternary
+
+        return [["==", ["get", key.includes("multiple") ? "bulkId" : "parcelNumberNoFormatting"], key], 2];
+      });
+
+      ref.setLayoutProperty(mapData.layers.markersLayer, "symbol-sort-key", ["case", ...symbolSortFilters.flat(), 1]);
+      ///
+
       const markerSizeFilters = list.map((el) => {
         const [key, value] = [Object.keys(el)[0], Object.values(el)[0]];
         // eslint-disable-next-line no-nested-ternary
