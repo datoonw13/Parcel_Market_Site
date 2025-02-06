@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useState } from "react";
+import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
+import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
@@ -17,10 +18,16 @@ import VoltDetailsCalculationTable from "./calculation-table";
 import VoltDetailsMap from "./map/map";
 import VoltDetailsFiltersDropDown from "./filters/dropdown";
 import { ScrollArea } from "../ui/scroll-area";
+import VoltDetailsHeader from "./header";
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
+  searchParams: { [key: string]: string };
+  initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
+  propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
+  startFetchingTransition: TransitionStartFunction;
+  setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
 }
 
 const mapLayers = [
@@ -66,7 +73,15 @@ const mapLayers = [
   },
 ];
 
-const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }) => {
+const VoltDetails: FC<VoltDetailsProps> = ({
+  data,
+  isNonValidMedianHighlighted,
+  initialFilters,
+  propertyTypes,
+  searchParams,
+  setNonValidMedianHighlighted,
+  startFetchingTransition,
+}) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
   const [backDrop, setBackDrop] = useState(false);
@@ -139,7 +154,18 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
         <div>
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
-            <div className="h-full">
+            <div className="h-full relative">
+              <div className="absolute h-[calc(100%-50px)] w-full">
+                <VoltDetailsHeader
+                  data={data}
+                  initialFilters={initialFilters}
+                  searchParams={searchParams}
+                  startFetchingTransition={startFetchingTransition}
+                  isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+                  setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+                  propertyTypes={propertyTypes}
+                />
+              </div>
               <VoltDetailsMap
                 propertiesInteraction={propertiesInteraction}
                 onMouseLeave={onMouseLeave}

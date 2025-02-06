@@ -30,17 +30,18 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
           <LoadingIcon1 className="!w-8 !h-8 text-primary-main" />
         </div>
       )}
-      <VoltDetailsHeader
-        data={data}
-        initialFilters={initialFilters}
-        searchParams={searchParams}
-        startFetchingTransition={startFetchingTransition}
-        isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-        setNonValidMedianHighlighted={setNonValidMedianHighlighted}
-        propertyTypes={propertyTypes}
-      />
+
       <div id="details" className={cn("w-full h-full overflow-hidden relative")}>
-        <VoltDetails data={data} isNonValidMedianHighlighted={isNonValidMedianHighlighted} />;
+        <VoltDetails
+          data={data}
+          initialFilters={initialFilters}
+          searchParams={searchParams}
+          propertyTypes={propertyTypes}
+          isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+          startFetchingTransition={startFetchingTransition}
+          setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+        />
+        ;
       </div>
     </>
   );

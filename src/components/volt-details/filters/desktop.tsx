@@ -153,7 +153,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
       <VoltDetailsFiltersDropDown
         buttonClassName="shadow-6 border-0"
         onOpen={() => onFilterToggle && onFilterToggle(true)}
-        value={`Selected (${filters.propertyTypes?.split(",")?.length || 0})`}
+        value={`Selected (${filters.propertyTypes?.split(",")?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
         label="Property Type"
         onClose={() => {
           setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));

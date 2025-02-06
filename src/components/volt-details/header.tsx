@@ -49,21 +49,24 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
     }
   }, []);
 
-  useEffect(() => {
-    handleResize();
-    if (!detecting) {
-      window.addEventListener("resize", handleResize);
-    }
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [handleResize, detecting]);
+  // useEffect(() => {
+  //   handleResize();
+  //   if (!detecting) {
+  //     window.addEventListener("resize", handleResize);
+  //   }
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, [handleResize, detecting]);
 
   return (
     !detecting && (
       <div
         ref={ref}
-        className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] fixed z-10 py-1.5 px-2 ", isSmallDevice ? " gap-8" : "gap-14")}
+        className={cn(
+          "grid w-full grid-cols-[1fr_minmax(0,_max-content)] sticky top-0 bottom-8 z-10 py-1.5 px-2 ",
+          isSmallDevice ? " gap-8" : "gap-14"
+        )}
       >
         <VoltDetailsFiltersWrapper
           searchParams={searchParams}
