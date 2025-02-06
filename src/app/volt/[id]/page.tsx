@@ -13,7 +13,6 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     searchParams.set("getAll", "true");
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
     const data = await PropertyDataSchema.safeParseAsync(req);
-
     return {
       errorMessage: null,
       data: data.data!,
@@ -55,7 +54,7 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   const queryParams = new URLSearchParams(searchParams);
   queryParams.set("propertyId", params.id);
   const data = filtersValidation.data ? await getData(queryParams.toString()) : null;
-  const propertyTypes = await fetcher<{ [key: string]: string }>("properties/propertyTypes");
+  const propertyTypes = await fetcher<Array<{ id: number; group: "vacant-land" | "other"; value: string }>>("properties/propertyTypes");
   return (
     filtersValidation.data &&
     data?.data && (

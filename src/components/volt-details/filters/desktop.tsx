@@ -18,7 +18,7 @@ interface IVoltDetailsDesktopFilters {
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
   onFilterToggle?: (value: boolean) => void;
-  propertyTypes: { [key: string]: string };
+  propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
 }
 
 const getAcreageLabel = (min: number | null, max: number | null) => {

@@ -184,8 +184,6 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
         })?.[0];
 
         if (feature) {
-          console.log(feature, 22);
-
           setOpenParcelData({
             owner: feature?.properties?.owner || "",
             acreage: Number(Number(feature.properties.gisacre || feature.properties.ll_gisacre).toFixed(2)),

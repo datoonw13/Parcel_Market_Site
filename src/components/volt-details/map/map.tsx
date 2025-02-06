@@ -214,6 +214,25 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   const setInitialData = useCallback(async () => {
     if (ref) {
+      Object.keys(mapData.layers).forEach((el) => {
+        const layer = ref.getLayer(el);
+        if (layer) {
+          ref.removeLayer(layer.id);
+        }
+      });
+      Object.keys(mapData.sources).forEach((el) => {
+        const source = ref.getSource(el);
+        if (source) {
+          ref.removeSource(el);
+        }
+      });
+
+      Object.keys(mapDefaultMarkers).forEach((img) => {
+        const image = ref.hasImage(img);
+        if (image) {
+          ref.removeImage(img);
+        }
+      });
       window.map = ref;
       await addMarkerImages(mapDefaultMarkers);
 

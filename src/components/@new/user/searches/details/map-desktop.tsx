@@ -278,8 +278,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
           ref.on("click", "markers-layer", (e) => {
             const feature = ref.queryRenderedFeatures(e.point)[0];
             const properties = feature.properties as MapGeoJson["features"][0]["properties"];
-            console.log(properties);
-
             if (properties) {
               const html = Object.keys(properties)
                 .filter((key) =>

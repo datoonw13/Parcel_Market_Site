@@ -11,13 +11,11 @@ import shpjs from "shpjs";
 const TestMap = ({ searchParams }: any) => {
   const [data, setData] = useState();
   const [mapRef, setMapRef] = useState<Map | null>(null);
-  console.log("ae", searchParams);
 
   const getData = useCallback(async () => {
     if (mapRef) {
       const x = await shpjs(`./${searchParams.state}+${searchParams.county}.zip`);
       const newLayer = geoJson(x);
-      console.log(newLayer.getBounds());
       mapRef.addLayer(newLayer);
       mapRef.flyTo(newLayer.getBounds().getCenter(), 10);
     }

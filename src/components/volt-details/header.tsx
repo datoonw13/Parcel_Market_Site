@@ -19,7 +19,7 @@ interface VoltDetailsHeaderProps {
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
-  propertyTypes: { [key: string]: string };
+  propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
 }
 
 const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({

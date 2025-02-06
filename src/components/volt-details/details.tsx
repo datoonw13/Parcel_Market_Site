@@ -16,6 +16,7 @@ import VoltDetailsProgressLine from "./progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
 import VoltDetailsMap from "./map/map";
 import VoltDetailsFiltersDropDown from "./filters/dropdown";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -157,16 +158,18 @@ const VoltDetails: FC<VoltDetailsProps> = ({ data, isNonValidMedianHighlighted }
             />
           </div>
         </div>
-        <div className="">
-          <VoltDetailsCalculationTable
-            data={data}
-            propertiesInteraction={propertiesInteraction}
-            setPropertiesInteraction={setPropertiesInteraction}
-            isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-          />
+        <div className="h-screen overflow-hidden">
+          <ScrollArea className="h-full [&>div>div:first-child]:h-full">
+            <VoltDetailsCalculationTable
+              data={data}
+              propertiesInteraction={propertiesInteraction}
+              setPropertiesInteraction={setPropertiesInteraction}
+              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+            />
+          </ScrollArea>
         </div>
       </div>
-      <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-hidden  shadow-2 relative z-10">
+      <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-auto  shadow-2 relative z-10">
         <AnimatePresence>
           {backDrop && (
             <motion.div

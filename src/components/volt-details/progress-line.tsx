@@ -80,8 +80,6 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   const getItemXAxisPositionInPercent = (price: number) =>
     Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
 
-  console.log(assessments);
-
   return (
     // rounded-b-2xl
     <div className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  border-t-0 space-y-8 relative z-10 shadow-3 -translate-y-0.5">

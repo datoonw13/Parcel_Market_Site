@@ -116,8 +116,6 @@ const VoltSearchDetails: FC<IVoltSearchDetails> = ({ isLoading, searchParams, is
     };
   }, [setVoltSearchDetailsAtom, watch]);
 
-  console.log(voltSearchDetailsAtomValue);
-
   return (
     <div className="space-y-6">
       <h1 className="font-semibold text-lg">Let’s locate your property using some basic information</h1>

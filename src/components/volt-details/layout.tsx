@@ -16,7 +16,7 @@ interface VoltDetailsLayoutProps {
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   loading?: boolean;
   data: z.infer<typeof PropertyDataSchema>;
-  propertyTypes: { [key: string]: string };
+  propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
 }
 
 const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchParams, loading, data, propertyTypes }) => {

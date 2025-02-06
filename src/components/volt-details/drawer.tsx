@@ -32,7 +32,6 @@ const VoltDetailsDrawer = ({
     overlayRef.style.height = `${height}px`;
 
     const { height: firstSectionHeight } = firstSectionRef.getBoundingClientRect();
-    console.log(firstSectionHeight, 22);
 
     const minSnapPoint = firstSectionHeight / height + 0.15;
 
