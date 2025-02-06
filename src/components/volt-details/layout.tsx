@@ -21,7 +21,6 @@ interface VoltDetailsLayoutProps {
 
 const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchParams, loading, data, propertyTypes }) => {
   const [isFetching, startFetchingTransition] = useTransition();
-  const [backDrop, setBackDrop] = useState(false);
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
 
   return (
@@ -36,31 +35,11 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
         initialFilters={initialFilters}
         searchParams={searchParams}
         startFetchingTransition={startFetchingTransition}
-        setBackDrop={setBackDrop}
         isNonValidMedianHighlighted={isNonValidMedianHighlighted}
         setNonValidMedianHighlighted={setNonValidMedianHighlighted}
         propertyTypes={propertyTypes}
       />
       <div id="details" className={cn("w-full h-full overflow-hidden relative")}>
-        <AnimatePresence>
-          {backDrop && (
-            <motion.div
-              exit={{
-                opacity: 0,
-                filter: "blur(5px)",
-                transition: { ease: "easeIn", duration: 0.22 },
-              }}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { type: "spring", duration: 0.7 },
-              }}
-              className="absolute bg-black/40 h-full w-full content-[''] z-10 top-0"
-            />
-          )}
-        </AnimatePresence>
         <VoltDetails data={data} isNonValidMedianHighlighted={isNonValidMedianHighlighted} />;
       </div>
     </>

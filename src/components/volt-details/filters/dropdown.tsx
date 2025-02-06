@@ -63,7 +63,7 @@ const VoltDetailsFiltersDropDown = ({
           className="flex gap-2 "
           // className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100"
         >
-          <div className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
+          <div className="min-w-[--radix-popper-anchor-width] bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
             {renderContent(() => setOpen(false))}
           </div>
           {renderContentAdditionalContent && (

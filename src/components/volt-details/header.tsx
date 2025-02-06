@@ -17,7 +17,6 @@ interface VoltDetailsHeaderProps {
   initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
   data: z.infer<typeof PropertyDataSchema>;
-  setBackDrop: (value: boolean) => void;
   isNonValidMedianHighlighted: boolean;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
   propertyTypes: { [key: string]: string };
@@ -28,7 +27,6 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
   initialFilters,
   startFetchingTransition,
   data,
-  setBackDrop,
   isNonValidMedianHighlighted,
   setNonValidMedianHighlighted,
   propertyTypes,
@@ -71,7 +69,6 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
           searchParams={searchParams}
           initialFilters={initialFilters}
           startFetchingTransition={startFetchingTransition}
-          onFilterToggle={setBackDrop}
           propertyTypes={propertyTypes}
         />
         <div className="flex items-center gap-2">
