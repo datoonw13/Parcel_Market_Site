@@ -150,11 +150,14 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                         }
                       }}
                       onMouseLeave={() => {
-                        if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
-                          const newData = { ...propertiesInteraction };
-                          delete newData[parcelNumberNoFormatting];
-                          setPropertiesInteraction((prev) => ({ ...newData }));
-                        }
+                        setPropertiesInteraction((prev) => {
+                          if (prev && prev[parcelNumberNoFormatting] !== "popup") {
+                            const newData = { ...prev };
+                            delete newData[parcelNumberNoFormatting];
+                            return newData;
+                          }
+                          return prev;
+                        });
                       }}
                       onClick={() => {
                         const newData = { ...propertiesInteraction };

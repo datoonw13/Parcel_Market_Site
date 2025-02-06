@@ -277,11 +277,14 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   }
                 }}
                 onMouseLeave={() => {
-                  if (propertiesInteraction && propertiesInteraction[assessment.data.parcelNumberNoFormatting] !== "popup") {
-                    const newData = { ...propertiesInteraction };
-                    delete newData[assessment.data.parcelNumberNoFormatting];
-                    setPropertiesInteraction((prev) => ({ ...newData }));
-                  }
+                  setPropertiesInteraction((prev) => {
+                    if (propertiesInteraction && propertiesInteraction[assessment.data.parcelNumberNoFormatting] !== "popup") {
+                      const newData = { ...prev };
+                      delete newData[assessment.data.parcelNumberNoFormatting];
+                      return newData;
+                    }
+                    return prev;
+                  });
                 }}
               >
                 <td className="text-grey-800 text-xs">{assessment.data.parcelNumberNoFormatting}</td>
