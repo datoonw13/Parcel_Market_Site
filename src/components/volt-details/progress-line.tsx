@@ -63,25 +63,24 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   isNonValidMedianHighlighted,
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  const avgPriceOfAssessments = useMemo(() => {
+  const avgPriceOfAllAssessments = useMemo(() => {
     let totalPrices = 0;
     totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
     const avgPrice = totalPrices / data.assessments.length;
     return avgPrice;
   }, [data.assessments]);
 
-  const allPrices = useMemo(
-    () =>
-      isNonValidMedianHighlighted
-        ? data.assessments.filter((el) => el.data.isMedianValid).map((el) => el.data.pricePerAcreage)
-        : data.assessments.map((el) => el.data.pricePerAcreage),
-    [data.assessments, isNonValidMedianHighlighted]
-  );
+  const assessments = isNonValidMedianHighlighted ? data.assessments.filter((el) => el.data.isMedianValid) : data.assessments;
+
+  const allPrices = useMemo(() => assessments.map((el) => el.data.pricePerAcreage), [assessments]);
+
   const minPricePerAcre = Math.min(...allPrices);
   const maxPricePerAcre = Math.max(...allPrices);
 
   const getItemXAxisPositionInPercent = (price: number) =>
     Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
+
+  console.log(assessments);
 
   return (
     // rounded-b-2xl
@@ -95,7 +94,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                {moneyFormatter.format(avgPriceOfAssessments)} <span className="text-grey-600">- Average PPA</span>
+                {moneyFormatter.format(avgPriceOfAllAssessments)} <span className="text-grey-600">- Average PPA</span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
@@ -124,7 +123,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
         <div className="relative">
           <hr className="w-full h-1.5 rounded-lg" style={{ background: "linear-gradient(90deg, #16DB65 8%, #05471C 95.44%)" }} />
           <div
-            style={{ left: `calc(${getItemXAxisPositionInPercent(avgPriceOfAssessments)}%)` }}
+            style={{ left: `calc(${getItemXAxisPositionInPercent(avgPriceOfAllAssessments)}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
@@ -141,7 +140,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
               <div className="size-3 bg-warning rounded-full absolute" />
             </div>
           </div>
-          {data.assessments.map((property) => {
+          {assessments.map((property) => {
             const parcelNumberNoFormatting = property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting;
             return (
               <Popover key={parcelNumberNoFormatting} open={propertiesInteraction[parcelNumberNoFormatting] === "hovered"}>
