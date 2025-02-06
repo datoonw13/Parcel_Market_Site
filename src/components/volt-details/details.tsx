@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useState } from "react";
+import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
@@ -86,6 +86,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
   const [backDrop, setBackDrop] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
+  const tableRef = useRef<HTMLDivElement>(null);
 
   const onMarkerInteraction = useCallback((parcelNumberNoFormatting: string, action: "hover" | "popup") => {
     // if (action === "hover") {
@@ -149,6 +150,22 @@ const VoltDetails: FC<VoltDetailsProps> = ({
     setPropertiesInteraction({ ...newData });
   }, [propertiesInteraction]);
 
+  const handleResize = useCallback(() => {
+    const el = document.getElementById("volt-progress-line");
+    if (el && tableRef.current) {
+      const { height } = el.getBoundingClientRect();
+      tableRef.current.style.height = `calc(100vh - ${height + 17}px)`;
+    }
+  }, []);
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
+
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
@@ -184,7 +201,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
             />
           </div>
         </div>
-        <div className="h-screen overflow-hidden">
+        <div ref={tableRef} className="h-screen overflow-hidden">
           <ScrollArea className="h-full [&>div>div:first-child]:h-full">
             <VoltDetailsCalculationTable
               data={data}

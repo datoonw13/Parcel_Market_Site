@@ -55,9 +55,9 @@ const hasSellingProperty = (
 
 const generateClasses = (isMedianValid: boolean, hasSellingProperty: boolean, selected: boolean, isNonValidMedianHighlighted: boolean) =>
   cn(
-    `border-b hover:bg-grey-30 ${selected && "bg-grey-30"}`,
-    isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-30"}`,
-    !isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-30"}`,
+    `border-b hover:bg-grey-30/60 ${selected && "bg-grey-50"}`,
+    isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-50"}`,
+    !isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-50"}`,
     !isMedianValid &&
       isNonValidMedianHighlighted &&
       `border-y border-y-2 border-y-[${hasSellingProperty ? "#17DC66" : "#FCEDB6"}] bg-[#FEFAEB] hover:bg-[#fdf5d8] ${
@@ -100,15 +100,15 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
   }, [data.assessments, sortKey, sortValue]);
 
   return (
-    <div className="w-full  border mb-0.5">
+    <div className="w-full mb-0.5">
       {/* [&>tbody>tr:last-child>td:first-child]:rounded-bl-2xl [&>tbody>tr:last-child>td:last-child]:rounded-br-2xl */}
 
       <table
         className={cn(
           `w-full 
           [&>thead>tr>th]:p-3 
-          [&>thead>tr>th:first-child]:r222ounded-tl-2xl [&>thead>tr>th:first-child]:pl-6 
-          [&>thead>tr>th:last-child]:ro22unded-tr-2xl [&>thead>tr>th:last-child]:pr-6
+          [&>thead>tr>th:first-child]:pl-6 
+          [&>thead>tr>th:last-child]:pr-6
           [&>tbody>tr>td]:p-4 
           [&>tbody>tr>td:first-child]:pl-6
           [&>tbody>tr>td:last-child]:pr-6
@@ -117,9 +117,16 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
         )}
       >
         <thead>
-          <tr>
+          <tr className="">
             {Object.keys(HEADERS).map((key) => (
-              <th align="left" className="bg-grey-30 text-sm font-semibold" key={key}>
+              <th
+                style={{
+                  boxShadow: "inset 0 1.5px 0 #E9E9E9, inset 0 0px 0 #000000",
+                }}
+                align="left"
+                className="bg-grey-30 text-sm font-semibold sticky top-0 shadow-5"
+                key={key}
+              >
                 <div
                   onClick={() => {
                     setSort({ [key]: sort[key as keyof typeof HEADERS] === "desc" ? "asc" : "desc" });
