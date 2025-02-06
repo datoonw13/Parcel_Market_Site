@@ -22,7 +22,7 @@ interface IVoltDetailsMobileFilters {
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
   resetFilters: () => void;
-  propertyTypes: { [key: string]: string };
+  propertyTypes: any;
 }
 
 const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setFilters, onSubmit, resetFilters, propertyTypes }) => {
