@@ -73,7 +73,7 @@ const generateClasses = (data: {
   }
 
   if (!isMedianValid && isNonValidMedianHighlighted) {
-    classNames = `${classNames} border-y-[#FCEDB6] bg-[#FEFAEB]`;
+    classNames = `${classNames} bg-[#FEFAEB]`;
     if (hovered) {
       classNames = `${classNames} bg-[#fdf5d8]`;
     }
@@ -83,9 +83,7 @@ const generateClasses = (data: {
   }
 
   if (hasSellingProperty) {
-    console.log("aqa");
-
-    classNames = `${classNames} border-y-[#17DC66]`;
+    classNames = `${classNames} outline outline-primary-main outline-1`;
   }
   return cn(classNames);
 };
