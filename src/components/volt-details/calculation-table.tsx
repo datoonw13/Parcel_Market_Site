@@ -53,17 +53,43 @@ const hasSellingProperty = (
   return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
 };
 
-const generateClasses = (isMedianValid: boolean, hasSellingProperty: boolean, selected: boolean, isNonValidMedianHighlighted: boolean) =>
-  cn(
-    `border-b hover:bg-grey-30/60 ${selected && "bg-grey-50"}`,
-    isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-50"}`,
-    !isMedianValid && hasSellingProperty && `border-y border-y-2 border-y-[#17DC66] ${selected && "bg-grey-50"}`,
-    !isMedianValid &&
-      isNonValidMedianHighlighted &&
-      `border-y border-y-2 border-y-[${hasSellingProperty ? "#17DC66" : "#FCEDB6"}] bg-[#FEFAEB] hover:bg-[#fdf5d8] ${
-        selected && "bg-[#fdf5d8]"
-      }`
-  );
+const generateClasses = (data: {
+  selected: boolean;
+  hovered: boolean;
+  isMedianValid: boolean;
+  hasSellingProperty: boolean;
+  isNonValidMedianHighlighted: boolean;
+}) => {
+  const { hasSellingProperty, hovered, isMedianValid, isNonValidMedianHighlighted, selected } = data;
+  let classNames = "border-y";
+
+  if (isMedianValid || (!isMedianValid && !isNonValidMedianHighlighted)) {
+    if (hovered) {
+      classNames = `${classNames} bg-grey-30/60`;
+    }
+    if (selected) {
+      classNames = `${classNames} bg-grey-50`;
+    }
+  }
+
+  if (!isMedianValid && isNonValidMedianHighlighted) {
+    classNames = `${classNames} border-y-[#FCEDB6] bg-[#FEFAEB]`;
+    if (hovered) {
+      classNames = `${classNames} bg-[#fdf5d8]`;
+    }
+    if (selected) {
+      classNames = `${classNames} bg-[#fdf5d8]`;
+    }
+  }
+
+  if (hasSellingProperty) {
+    console.log("aqa");
+
+    classNames = `${classNames} border-y-[#17DC66]`;
+  }
+  return cn(classNames);
+};
+
 interface VoltDetailsCalculationTableProps {
   data: z.infer<typeof PropertyDataSchema>;
   setPropertiesInteraction: Dispatch<
@@ -112,7 +138,6 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
           [&>tbody>tr>td]:p-4 
           [&>tbody>tr>td:first-child]:pl-6
           [&>tbody>tr>td:last-child]:pr-6
-          [&>tbody>tr:last-child]:border-b-transparent
           `
         )}
       >
@@ -121,7 +146,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
             {Object.keys(HEADERS).map((key) => (
               <th
                 style={{
-                  boxShadow: "inset 0 1.5px 0 #E9E9E9, inset 0 0px 0 #000000",
+                  boxShadow: "inset 0 1px 0 #E9E9E9, inset 0 0px 0 #000000",
                 }}
                 align="left"
                 className="bg-grey-30 text-sm font-semibold sticky top-0 shadow-5"
@@ -158,12 +183,13 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <tr
                   className={cn(
                     "cursor-pointer border-t  transition-all",
-                    generateClasses(
-                      assessment.data.isMedianValid,
-                      hasSellingProperty(data.parcelNumberNoFormatting, assessment),
-                      !!(propertiesInteraction[assessment.data.id] || propertiesInteraction[assessment.data.id]),
-                      isNonValidMedianHighlighted
-                    )
+                    generateClasses({
+                      hasSellingProperty: hasSellingProperty(data.parcelNumberNoFormatting, assessment),
+                      hovered: propertiesInteraction[assessment.data.id] === "hovered",
+                      selected: propertiesInteraction[assessment.data.id] === "popup",
+                      isMedianValid: assessment.data.isMedianValid,
+                      isNonValidMedianHighlighted,
+                    })
                   )}
                   onClick={() => {
                     const newData = { ...propertiesInteraction };
@@ -251,18 +277,13 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
             ) : (
               <tr
                 key={assessment.data.parcelNumberNoFormatting}
-                className={cn(
-                  generateClasses(
-                    assessment.data.isMedianValid,
-                    hasSellingProperty(data.parcelNumberNoFormatting, assessment),
-                    !!(
-                      propertiesInteraction[assessment.data.parcelNumberNoFormatting] ||
-                      propertiesInteraction[assessment.data.parcelNumberNoFormatting]
-                    ),
-
-                    isNonValidMedianHighlighted
-                  )
-                )}
+                className={generateClasses({
+                  hasSellingProperty: hasSellingProperty(data.parcelNumberNoFormatting, assessment),
+                  hovered: propertiesInteraction[assessment.data.parcelNumberNoFormatting] === "hovered",
+                  selected: propertiesInteraction[assessment.data.parcelNumberNoFormatting] === "popup",
+                  isMedianValid: assessment.data.isMedianValid,
+                  isNonValidMedianHighlighted,
+                })}
                 onClick={() => {
                   const newData = { ...propertiesInteraction };
                   Object.keys(newData).forEach((key) => {
