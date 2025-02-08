@@ -3,15 +3,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
 import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
-import { Map as MapBoX, Marker, Popup } from "mapbox-gl";
-import { moneyFormatter } from "@/helpers/common";
-import moment from "moment";
-import VoltDetailsMapPopup from "./map-popup";
+import { Map as MapBoX, Popup } from "mapbox-gl";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -49,149 +46,149 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   const popupRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const openPopupDetails = useMemo(() => {
-    const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
-    if (!id) {
-      return null;
-    }
+  // const openPopupDetails = useMemo(() => {
+  //   const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
+  //   if (!id) {
+  //     return null;
+  //   }
 
-    if (data.parcelNumberNoFormatting === id) {
-      const salesHistory = data.assessments
-        .map((el) => (el.isBulked ? el.data.properties : el.data))
-        .flat()
-        .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
-      const details = {
-        type: "main-property" as const,
-        lat: data.lat,
-        lon: data.lon,
-        salesHistory: salesHistory
-          ? {
-              lastSaleDate: salesHistory.lastSalesDate,
-              lastSalesPrice: salesHistory.lastSalesPrice,
-            }
-          : null,
-        data: {
-          owner: {
-            label: "Owner",
-            value: data.owner,
-          },
-          parcelNumber: {
-            label: "Parcel ID",
-            value: data.parcelNumberNoFormatting,
-          },
-          acreage: {
-            label: "Acreage",
-            value: data.acreage.toFixed(2),
-          },
-          stateAndCounty: {
-            label: "State/County",
-            value: `${data.state}/${data.county.replace("County", "")}`,
-          },
-          voltValue: {
-            label: "Sale Date",
-            value: moneyFormatter.format(data.price),
-          },
-          pricePerAcreage: {
-            label: "Price Per Acreage",
-            value: moneyFormatter.format(data.price / data.acreage),
-          },
-        },
-      };
-      return details;
-    }
+  //   if (data.parcelNumberNoFormatting === id) {
+  //     const salesHistory = data.assessments
+  //       .map((el) => (el.isBulked ? el.data.properties : el.data))
+  //       .flat()
+  //       .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+  //     const details = {
+  //       type: "main-property" as const,
+  //       lat: data.lat,
+  //       lon: data.lon,
+  //       salesHistory: salesHistory
+  //         ? {
+  //             lastSaleDate: salesHistory.lastSalesDate,
+  //             lastSalesPrice: salesHistory.lastSalesPrice,
+  //           }
+  //         : null,
+  //       data: {
+  //         owner: {
+  //           label: "Owner",
+  //           value: data.owner,
+  //         },
+  //         parcelNumber: {
+  //           label: "Parcel ID",
+  //           value: data.parcelNumberNoFormatting,
+  //         },
+  //         acreage: {
+  //           label: "Acreage",
+  //           value: data.acreage.toFixed(2),
+  //         },
+  //         stateAndCounty: {
+  //           label: "State/County",
+  //           value: `${data.state}/${data.county.replace("County", "")}`,
+  //         },
+  //         voltValue: {
+  //           label: "Sale Date",
+  //           value: moneyFormatter.format(data.price),
+  //         },
+  //         pricePerAcreage: {
+  //           label: "Price Per Acreage",
+  //           value: moneyFormatter.format(data.price / data.acreage),
+  //         },
+  //       },
+  //     };
+  //     return details;
+  //   }
 
-    const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
-    if (!property) {
-      return null;
-    }
+  //   const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
+  //   if (!property) {
+  //     return null;
+  //   }
 
-    if (property.isBulked) {
-      const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+  //   if (property.isBulked) {
+  //     const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
 
-      const details = {
-        type: "bulk" as const,
-        lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
-        lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
-        hasSellingProperty,
-        data: {
-          parcelNumber: {
-            label: "Parcel ID",
-            value: "Multiple",
-          },
-          acreage: {
-            label: "Acreage",
-            value: property.data.acreage.toFixed(2),
-          },
-          stateAndCounty: {
-            label: "State/County",
-            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-          },
-          lastSalePrice: {
-            label: "Last Sale Price",
-            value: moneyFormatter.format(property.data.price),
-          },
-          lastSaleDate: {
-            label: "Last Sale Date",
-            value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
-          },
-          pricePerAcreage: {
-            label: "Price Per Acreage",
-            value: property.data.pricePerAcreage.toFixed(2),
-          },
-        },
-      };
-      return details;
-    }
+  //     const details = {
+  //       type: "bulk" as const,
+  //       lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
+  //       lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
+  //       hasSellingProperty,
+  //       data: {
+  //         parcelNumber: {
+  //           label: "Parcel ID",
+  //           value: "Multiple",
+  //         },
+  //         acreage: {
+  //           label: "Acreage",
+  //           value: property.data.acreage.toFixed(2),
+  //         },
+  //         stateAndCounty: {
+  //           label: "State/County",
+  //           value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+  //         },
+  //         lastSalePrice: {
+  //           label: "Last Sale Price",
+  //           value: moneyFormatter.format(property.data.price),
+  //         },
+  //         lastSaleDate: {
+  //           label: "Last Sale Date",
+  //           value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
+  //         },
+  //         pricePerAcreage: {
+  //           label: "Price Per Acreage",
+  //           value: property.data.pricePerAcreage.toFixed(2),
+  //         },
+  //       },
+  //     };
+  //     return details;
+  //   }
 
-    if (!property.isBulked) {
-      const details = {
-        type: "default" as const,
-        lat: property.data.latitude,
-        lon: property.data.longitude,
-        data: {
-          parcelNumber: {
-            label: "Parcel ID",
-            value: property.data.parcelNumberNoFormatting,
-          },
-          acreage: {
-            label: "Acreage",
-            value: property.data.acreage.toFixed(2),
-          },
-          stateAndCounty: {
-            label: "State/County",
-            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-          },
-          lastSalePrice: {
-            label: "Last Sale Price",
-            value: moneyFormatter.format(property.data.lastSalesPrice),
-          },
-          lastSaleDate: {
-            label: "Last Sale Date",
-            value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
-          },
-          pricePerAcreage: {
-            label: "Price Per Acreage",
-            value: property.data.pricePerAcreage.toFixed(2),
-          },
-        },
-      };
+  //   if (!property.isBulked) {
+  //     const details = {
+  //       type: "default" as const,
+  //       lat: property.data.latitude,
+  //       lon: property.data.longitude,
+  //       data: {
+  //         parcelNumber: {
+  //           label: "Parcel ID",
+  //           value: property.data.parcelNumberNoFormatting,
+  //         },
+  //         acreage: {
+  //           label: "Acreage",
+  //           value: property.data.acreage.toFixed(2),
+  //         },
+  //         stateAndCounty: {
+  //           label: "State/County",
+  //           value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+  //         },
+  //         lastSalePrice: {
+  //           label: "Last Sale Price",
+  //           value: moneyFormatter.format(property.data.lastSalesPrice),
+  //         },
+  //         lastSaleDate: {
+  //           label: "Last Sale Date",
+  //           value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
+  //         },
+  //         pricePerAcreage: {
+  //           label: "Price Per Acreage",
+  //           value: property.data.pricePerAcreage.toFixed(2),
+  //         },
+  //       },
+  //     };
 
-      return details;
-    }
+  //     return details;
+  //   }
 
-    return null;
-  }, [
-    data.acreage,
-    data.assessments,
-    data.county,
-    data.lat,
-    data.lon,
-    data.owner,
-    data.parcelNumberNoFormatting,
-    data.price,
-    data.state,
-    propertiesInteraction,
-  ]);
+  //   return null;
+  // }, [
+  //   data.acreage,
+  //   data.assessments,
+  //   data.county,
+  //   data.lat,
+  //   data.lon,
+  //   data.owner,
+  //   data.parcelNumberNoFormatting,
+  //   data.price,
+  //   data.state,
+  //   propertiesInteraction,
+  // ]);
 
   const addMarkerImages = useCallback(
     (data: Record<string, string>) =>
@@ -477,30 +474,30 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     });
   }, [onMarkerInteraction, onMouseLeave, ref]);
 
-  const openPopup = useCallback(
-    ({ lat, lng, popupRef, onClose }: { lng: number; lat: number; popupRef: any; onClose: () => void }) => {
-      if (ref) {
-        const existedPopup = ref._popups[0];
-        if (existedPopup && !existedPopup._classList.has("tooltip")) {
-          existedPopup.setLngLat([lng, lat]);
-          return;
-        }
-        new Popup({
-          closeButton: false,
-          className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3 popup",
-        })
-          .setLngLat([lng, lat])
-          .setDOMContent(popupRef.current)
-          .setMaxWidth("max-content")
-          .addTo(ref)
-          .on("close", () => {
-            onClose();
-          });
-      }
-    },
+  // const openPopup = useCallback(
+  //   ({ lat, lng, popupRef, onClose }: { lng: number; lat: number; popupRef: any; onClose: () => void }) => {
+  //     if (ref) {
+  //       const existedPopup = ref._popups[0];
+  //       if (existedPopup && !existedPopup._classList.has("tooltip")) {
+  //         existedPopup.setLngLat([lng, lat]);
+  //         return;
+  //       }
+  //       new Popup({
+  //         closeButton: false,
+  //         className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3 popup",
+  //       })
+  //         .setLngLat([lng, lat])
+  //         .setDOMContent(popupRef.current)
+  //         .setMaxWidth("max-content")
+  //         .addTo(ref)
+  //         .on("close", () => {
+  //           onClose();
+  //         });
+  //     }
+  //   },
 
-    [ref]
-  );
+  //   [ref]
+  // );
 
   const openTooltip = useCallback(
     ({ lat, lng, popupRef }: { lng: number; lat: number; popupRef: any }) => {
@@ -564,14 +561,14 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         ref._popups.forEach((popup) => {
           // popup.remove();
         });
-        openPopup({
-          lat: property.isBulked ? property.data.properties[0].latitude : property.data.latitude,
-          lng: property.isBulked ? property.data.properties[0].longitude : property.data.longitude,
-          popupRef,
-          onClose: () => {
-            onPopupClose();
-          },
-        });
+        // openPopup({
+        //   lat: property.isBulked ? property.data.properties[0].latitude : property.data.latitude,
+        //   lng: property.isBulked ? property.data.properties[0].longitude : property.data.longitude,
+        //   popupRef,
+        //   onClose: () => {
+        //     onPopupClose();
+        //   },
+        // });
       }
     }
 
@@ -624,7 +621,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ref.setLayoutProperty(mapData.layers.markersLayer, "icon-image", ["get", "markerIcon"]);
       ref.setLayoutProperty(mapData.layers.markersLayer, "icon-size", ["get", "markerSize"]);
     }
-  }, [data.assessments, onPopupClose, openPopup, openTooltip, propertiesInteraction, ref]);
+  }, [data.assessments, openTooltip, propertiesInteraction, ref]);
 
   useEffect(() => {
     setInitialData();
@@ -658,11 +655,11 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   return (
     <>
-      <div style={{ display: "none" }}>
+      {/* <div style={{ display: "none" }}>
         <div className="" ref={popupRef}>
           {openPopupDetails && <VoltDetailsMapPopup data={openPopupDetails} />}
         </div>
-      </div>
+      </div> */}
       <div style={{ display: "none" }}>
         <div className="" ref={tooltipRef}>
           <ul>

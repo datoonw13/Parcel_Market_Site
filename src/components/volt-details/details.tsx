@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
@@ -11,6 +11,7 @@ import Link from "next/link";
 import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
+import { IoMdClose } from "react-icons/io";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
@@ -19,6 +20,7 @@ import VoltDetailsMap from "./map/map";
 import VoltDetailsFiltersDropDown from "./filters/dropdown";
 import { ScrollArea } from "../ui/scroll-area";
 import VoltDetailsHeader from "./header";
+import VoltDetailsMapPopup from "./map/map-popup";
 
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -83,6 +85,8 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   const [backDrop, setBackDrop] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
   const tableRef = useRef<HTMLDivElement>(null);
+
+  const mapPopupRef = useRef<HTMLDivElement>(null);
 
   const onMarkerInteraction = useCallback((parcelNumberNoFormatting: string, action: "hover" | "popup") => {
     // if (action === "hover") {
@@ -154,6 +158,159 @@ const VoltDetails: FC<VoltDetailsProps> = ({
     }
   }, []);
 
+  const openPopupDetails = useMemo(() => {
+    const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
+    if (!id) {
+      return null;
+    }
+
+    if (data.parcelNumberNoFormatting === id) {
+      const salesHistory = data.assessments
+        .map((el) => (el.isBulked ? el.data.properties : el.data))
+        .flat()
+        .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+      const details = {
+        type: "main-property" as const,
+        lat: data.lat,
+        lon: data.lon,
+        salesHistory: salesHistory
+          ? {
+              lastSaleDate: moment(salesHistory.lastSalesDate).format("MM-DD-YYYY"),
+              lastSalesPrice: moneyFormatter.format(salesHistory.lastSalesPrice),
+            }
+          : null,
+        data: {
+          owner: {
+            label: "Owner",
+            value: data.owner,
+          },
+          parcelNumber: {
+            label: "Parcel ID",
+            value: data.parcelNumberNoFormatting,
+          },
+          acreage: {
+            label: "Acreage",
+            value: data.acreage.toFixed(2),
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${data.state}/${data.county.replace("County", "")}`,
+          },
+          voltValue: {
+            label: "Sale Date",
+            value: moneyFormatter.format(data.price),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: moneyFormatter.format(data.price / data.acreage),
+          },
+        },
+      };
+      return details;
+    }
+
+    const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
+    if (!property) {
+      return null;
+    }
+
+    if (property.isBulked) {
+      const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+
+      const details = {
+        type: "bulk" as const,
+        lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
+        lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
+        hasSellingProperty,
+        data: {
+          parcelNumber: {
+            label: "Parcel ID",
+            value: "Multiple",
+          },
+          acreage: {
+            label: "Acreage",
+            value: property.data.acreage.toFixed(2),
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+          },
+          lastSalePrice: {
+            label: "Last Sale Price",
+            value: moneyFormatter.format(property.data.price),
+          },
+          lastSaleDate: {
+            label: "Last Sale Date",
+            value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: moneyFormatter.format(property.data.pricePerAcreage),
+          },
+        },
+      };
+      return details;
+    }
+
+    if (!property.isBulked) {
+      const details = {
+        type: "default" as const,
+        lat: property.data.latitude,
+        lon: property.data.longitude,
+        data: {
+          parcelNumber: {
+            label: "Parcel ID",
+            value: property.data.parcelNumberNoFormatting,
+          },
+          acreage: {
+            label: "Acreage",
+            value: property.data.acreage.toFixed(2),
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+          },
+          lastSalePrice: {
+            label: "Last Sale Price",
+            value: moneyFormatter.format(property.data.lastSalesPrice),
+          },
+          lastSaleDate: {
+            label: "Last Sale Date",
+            value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: moneyFormatter.format(property.data.pricePerAcreage),
+          },
+        },
+      };
+
+      return details;
+    }
+
+    return null;
+  }, [
+    data.acreage,
+    data.assessments,
+    data.county,
+    data.lat,
+    data.lon,
+    data.owner,
+    data.parcelNumberNoFormatting,
+    data.price,
+    data.state,
+    propertiesInteraction,
+  ]);
+
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (mapPopupRef.current && !mapPopupRef.current.contains(event.target as Node)) {
+        onPopupClose();
+      }
+    },
+    [onPopupClose]
+  );
+
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -161,6 +318,13 @@ const VoltDetails: FC<VoltDetailsProps> = ({
       window.removeEventListener("resize", handleResize);
     };
   }, [handleResize]);
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [handleClickOutside]);
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
@@ -186,6 +350,34 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                 onPopupClose={onPopupClose}
                 selectedLayer={selectedLayer}
               />
+              <AnimatePresence>
+                {openPopupDetails && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: "linear" }}
+                    ref={mapPopupRef}
+                  >
+                    <div
+                      style={{
+                        boxShadow: "0px 4px 22px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                      className="bg-white w-fit h-fit rounded-2xl absolute bottom-8 left-4 z-10 overflow-hidden pr-1 py-4"
+                    >
+                      <ScrollArea className="flex max-h-96 max-w-lg flex-col overflow-y-auto">
+                        <div className="flex items-center gap-4 justify-between px-4 sticky top-0 bg-white pb-4">
+                          <h1 className="font-medium text-sm">Selected land information</h1>
+                          <IoMdClose className="size-6 cursor-pointer" onClick={onPopupClose} />
+                        </div>
+                        <div className="px-4">
+                          <VoltDetailsMapPopup data={openPopupDetails} />
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             <VoltDetailsProgressLine
               data={data}

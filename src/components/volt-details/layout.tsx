@@ -2,14 +2,10 @@
 
 import { FC, useState, useTransition } from "react";
 import { z } from "zod";
-import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
 import VoltDetails from "./details";
-import VoltDetailsHeaderLogo from "./logo";
-import VoltDetailsHeader from "./header";
-import { LoadingIcon1, LoadingIcon2 } from "../@new/icons/LoadingIcons";
+import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 
 interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -65,7 +61,6 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) 
           startFetchingTransition={startFetchingTransition}
           setNonValidMedianHighlighted={setNonValidMedianHighlighted}
         />
-        ;
       </div>
     </>
   );

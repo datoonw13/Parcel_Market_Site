@@ -7,8 +7,8 @@ interface IMain {
   lat: number;
   lon: number;
   salesHistory: {
-    lastSaleDate: Date;
-    lastSalesPrice: number;
+    lastSaleDate: string;
+    lastSalesPrice: number | string;
   } | null;
   data: {
     [key: string]: {
@@ -64,12 +64,12 @@ const VoltDetailsMapPopup: FC<{ data: IData | null }> = ({ data }) => (
         <li className="flex items-center gap-2">
           <div className="rounded-full size-1.5 bg-primary-main-400" />
           <p className="text-grey-600 font-medium text-sm max-w-40">Last sale date: </p>
-          <p className="text-black font-medium text-sm max-w-40">{moment(data.salesHistory.lastSaleDate).format("MM-DD-YYYY")}</p>
+          <p className="text-black font-medium text-sm max-w-40">{data.salesHistory.lastSaleDate}</p>
         </li>
         <li className="flex items-center gap-2">
           <div className="rounded-full size-1.5 bg-primary-main-400" />
           <p className="text-grey-600 font-medium text-sm max-w-40">Last sale price: </p>
-          <p className="text-black font-medium text-sm max-w-40">{moneyFormatter.format(data.salesHistory.lastSalesPrice)}</p>
+          <p className="text-black font-medium text-sm max-w-40">{data.salesHistory.lastSalesPrice}</p>
         </li>
       </div>
     )}
