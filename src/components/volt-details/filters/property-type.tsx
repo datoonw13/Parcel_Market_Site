@@ -18,11 +18,12 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
     <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
       <div className="flex flex-col max-w-72">
         <p className="bg-white sticky top-0 z-10 mr-2 text-sm font-medium pb-2">Vacant Land</p>
-        <div className="pr-1">
+        <div className="pr-1 flex flex-col gap-1">
           {propertyTypes
             .filter((el) => el.group === "vacant-land")
             .map((propertyType) => (
               <Checkbox
+                className="items-start [&>button]:mt-1"
                 onCheckedChange={() => {
                   const isChecked = selected?.split(",")?.includes(propertyType.id.toString());
                   let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
@@ -52,11 +53,12 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
     <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
       <div className="flex flex-col max-w-72">
         <p className="bg-white sticky top-0 z-10 mr-2 text-sm font-medium pb-2">Others</p>
-        <div className="pr-1">
+        <div className="pr-1 flex flex-col gap-1">
           {propertyTypes
             .filter((el) => el.group === "other")
             .map((propertyType) => (
               <Checkbox
+                className="items-start [&>button]:mt-1"
                 onCheckedChange={() => {
                   const isChecked = selected?.split(",")?.includes(propertyType.id.toString());
                   let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
