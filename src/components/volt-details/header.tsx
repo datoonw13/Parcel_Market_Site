@@ -1,8 +1,7 @@
 "use client";
 
-import React, { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useMemo, useRef } from "react";
+import React, { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useMemo, useRef } from "react";
 import { z } from "zod";
-import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
@@ -13,8 +12,6 @@ import { Tooltip } from "../ui/tooltip";
 import { Switch } from "../ui/switch";
 
 interface VoltDetailsHeaderProps {
-  searchParams: { [key: string]: string };
-  initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
@@ -23,8 +20,6 @@ interface VoltDetailsHeaderProps {
 }
 
 const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
-  searchParams,
-  initialFilters,
   startFetchingTransition,
   data,
   isNonValidMedianHighlighted,
@@ -41,24 +36,6 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
     return avgPrice;
   }, [data.assessments]);
 
-  const handleResize = useCallback(() => {
-    const el = document.getElementById("map-options");
-    if (el && ref.current) {
-      const { width } = el.getBoundingClientRect();
-      ref.current.style.width = `calc(100% - ${width}px)`;
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   handleResize();
-  //   if (!detecting) {
-  //     window.addEventListener("resize", handleResize);
-  //   }
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, [handleResize, detecting]);
-
   return (
     !detecting && (
       <div
@@ -68,12 +45,7 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
           isSmallDevice ? " gap-8" : "gap-14"
         )}
       >
-        <VoltDetailsFiltersWrapper
-          searchParams={searchParams}
-          initialFilters={initialFilters}
-          startFetchingTransition={startFetchingTransition}
-          propertyTypes={propertyTypes}
-        />
+        <VoltDetailsFiltersWrapper startFetchingTransition={startFetchingTransition} propertyTypes={propertyTypes} />
         <div className="flex items-center gap-2">
           <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
             <p className="text-sm font-medium">Avg: {moneyFormatter.format(avgPriceOfAssessments)}</p>

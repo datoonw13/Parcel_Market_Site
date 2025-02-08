@@ -12,14 +12,11 @@ import VoltDetailsHeader from "./header";
 import { LoadingIcon1, LoadingIcon2 } from "../@new/icons/LoadingIcons";
 
 interface VoltDetailsLayoutProps {
-  searchParams: { [key: string]: string };
-  initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
-  loading?: boolean;
   data: z.infer<typeof PropertyDataSchema>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
 }
 
-const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchParams, loading, data, propertyTypes }) => {
+const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) => {
   const [isFetching, startFetchingTransition] = useTransition();
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
 
@@ -63,8 +60,6 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ initialFilters, searchP
       <div id="details" className={cn("w-full h-full overflow-hidden relative")}>
         <VoltDetails
           data={data}
-          initialFilters={initialFilters}
-          searchParams={searchParams}
           propertyTypes={propertyTypes}
           isNonValidMedianHighlighted={isNonValidMedianHighlighted}
           startFetchingTransition={startFetchingTransition}

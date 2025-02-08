@@ -23,8 +23,6 @@ import VoltDetailsHeader from "./header";
 interface VoltDetailsProps {
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
-  searchParams: { [key: string]: string };
-  initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   startFetchingTransition: TransitionStartFunction;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
@@ -76,9 +74,7 @@ const mapLayers = [
 const VoltDetails: FC<VoltDetailsProps> = ({
   data,
   isNonValidMedianHighlighted,
-  initialFilters,
   propertyTypes,
-  searchParams,
   setNonValidMedianHighlighted,
   startFetchingTransition,
 }) => {
@@ -175,8 +171,6 @@ const VoltDetails: FC<VoltDetailsProps> = ({
               <div className="absolute h-[calc(100%-50px)] w-full">
                 <VoltDetailsHeader
                   data={data}
-                  initialFilters={initialFilters}
-                  searchParams={searchParams}
                   startFetchingTransition={startFetchingTransition}
                   isNonValidMedianHighlighted={isNonValidMedianHighlighted}
                   setNonValidMedianHighlighted={setNonValidMedianHighlighted}

@@ -12,37 +12,19 @@ import { breakPoints } from "../../../../tailwind.config";
 type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
 
 interface VoltDetailsFiltersWrapperProps {
-  searchParams: { [key: string]: string };
-  initialFilters: z.infer<typeof voltDetailsFiltersValidations>;
   startFetchingTransition: TransitionStartFunction;
   onFilterToggle?: (value: boolean) => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
 }
 
-const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
-  searchParams,
-  initialFilters,
-  startFetchingTransition,
-  onFilterToggle,
-  propertyTypes,
-}) => {
+const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ startFetchingTransition, onFilterToggle, propertyTypes }) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
-  const partialFiltersSchema = voltDetailsFiltersValidations.partial();
-  const validateFilters = partialFiltersSchema.safeParse(searchParams);
+  const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
 
-  const [filters, setFilters] = useState<IFilters>({
-    ...initialFilters,
-    ...(validateFilters.data && { ...validateFilters.data }),
-  });
-
-  useEffect(() => {
-    if (validateFilters.error) {
-      router.push(pathname);
-    }
-  }, [pathname, router, validateFilters]);
+  const [filters, setFilters] = useState<IFilters>({ ...validatedFilters.data! });
 
   const updateQueryParams = useCallback(() => {
     const newQueryParams = new URLSearchParams(params.toString());
@@ -58,13 +40,6 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
       });
     });
   }, [filters, params, pathname, router, startFetchingTransition]);
-
-  const resetFilters = useCallback(() => {
-    setFilters({
-      ...initialFilters,
-      ...(validateFilters.data && { ...validateFilters.data }),
-    });
-  }, [initialFilters, validateFilters.data]);
 
   return (
     !detecting && (
