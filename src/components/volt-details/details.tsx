@@ -85,6 +85,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   const [backDrop, setBackDrop] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
   const tableRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<ReturnType<typeof setTimeout>>();
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
 
@@ -326,6 +327,13 @@ const VoltDetails: FC<VoltDetailsProps> = ({
     };
   }, [handleClickOutside]);
 
+  useEffect(
+    () => () => {
+      window.clearTimeout(timeRef.current);
+    },
+    []
+  );
+
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
@@ -379,12 +387,26 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                 )}
               </AnimatePresence>
             </div>
-            <VoltDetailsProgressLine
-              data={data}
-              propertiesInteraction={propertiesInteraction}
-              setPropertiesInteraction={setPropertiesInteraction}
-              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-            />
+            <div
+              onWheel={() => {
+                const elements = document.getElementsByClassName("scroll-arrow");
+                Array.from(elements).forEach((el) => {
+                  if (!el.classList.contains("animate-scroll")) {
+                    el.classList.add("animate-scroll");
+                    timeRef.current = setTimeout(() => {
+                      el.classList.remove("animate-scroll");
+                    }, 1000);
+                  }
+                });
+              }}
+            >
+              <VoltDetailsProgressLine
+                data={data}
+                propertiesInteraction={propertiesInteraction}
+                setPropertiesInteraction={setPropertiesInteraction}
+                isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+              />
+            </div>
           </div>
         </div>
         <div ref={tableRef} className="h-screen overflow-hidden">
@@ -506,6 +528,13 @@ const VoltDetails: FC<VoltDetailsProps> = ({
             }}
             className="overflow-y-auto w-[calc(100%+18px)] h-full overflow-x-hidden cursor-n-resize"
           >
+            <div className="flex sticky top-0 h-full items-center justify-center">
+              <div className="flex flex-col items-center gap-5">
+                <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:rotate-180 after:-translate-y-full after:block after:absolute after:top-0 after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
+                <p className="text-grey-800">scroll area</p>
+                <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:block after:absolute after:top-[100%] after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
+              </div>
+            </div>
             {container && <div className="" style={{ height: container.scrollHeight }} />}
           </div>
         </div>

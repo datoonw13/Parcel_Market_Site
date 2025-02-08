@@ -142,10 +142,16 @@ const config: Config = {
             height: "0",
           },
         },
+        scroll: {
+          "0%": { height: "40px" },
+          "30%": { height: "70px" },
+          "60%": { height: "40px" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        scroll: "scroll 1.5s",
       },
     },
   },
