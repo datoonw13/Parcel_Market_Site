@@ -1,30 +1,26 @@
 "use client";
 
-import React, { FC, TransitionStartFunction, useCallback, useEffect, useState } from "react";
+import React, { Dispatch, FC, TransitionStartFunction, useCallback, useEffect, useState, useTransition } from "react";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { LoadingIcon2 } from "@/components/@new/icons/LoadingIcons";
+import { SetStateAction } from "jotai";
 import VoltDetailsDesktopFilters from "./desktop";
-import VoltDetailsMobileFilters from "./mobile";
-import { breakPoints } from "../../../../tailwind.config";
-
-type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
 
 interface VoltDetailsFiltersWrapperProps {
-  startFetchingTransition: TransitionStartFunction;
-  onFilterToggle?: (value: boolean) => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
+  filters: z.infer<typeof voltDetailsFiltersValidations>;
+  setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
+  startFetchingTransition: TransitionStartFunction;
 }
 
-const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ startFetchingTransition, onFilterToggle, propertyTypes }) => {
+const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ propertyTypes, filters, setFilters, startFetchingTransition }) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
-  const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
-
-  const [filters, setFilters] = useState<IFilters>({ ...validatedFilters.data! });
 
   const updateQueryParams = useCallback(() => {
     const newQueryParams = new URLSearchParams(params.toString());
@@ -42,18 +38,18 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ startFe
   }, [filters, params, pathname, router, startFetchingTransition]);
 
   return (
-    !detecting && (
-      <div>
-        {!isSmallDevice && (
-          <VoltDetailsDesktopFilters
-            onFilterToggle={onFilterToggle}
-            onSubmit={updateQueryParams}
-            filters={filters}
-            setFilters={setFilters}
-            propertyTypes={propertyTypes}
-          />
-        )}
-        {/* {isSmallDevice && (
+    <>
+      {!detecting && (
+        <div>
+          {!isSmallDevice && (
+            <VoltDetailsDesktopFilters
+              onSubmit={updateQueryParams}
+              filters={filters}
+              setFilters={setFilters}
+              propertyTypes={propertyTypes}
+            />
+          )}
+          {/* {isSmallDevice && (
           <VoltDetailsMobileFilters
             propertyTypes={propertyTypes}
             resetFilters={resetFilters}
@@ -62,8 +58,9 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ startFe
             setFilters={setFilters}
           />
         )} */}
-      </div>
-    )
+        </div>
+      )}
+    </>
   );
 };
 

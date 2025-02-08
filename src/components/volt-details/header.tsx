@@ -7,6 +7,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { moneyFormatter } from "@/helpers/common";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
+import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import VoltDetailsFiltersWrapper from "./filters/wrapper";
 import { Tooltip } from "../ui/tooltip";
 import { Switch } from "../ui/switch";
@@ -17,6 +18,8 @@ interface VoltDetailsHeaderProps {
   isNonValidMedianHighlighted: boolean;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
+  filters: z.infer<typeof voltDetailsFiltersValidations>;
+  setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
 }
 
 const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
@@ -25,6 +28,8 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
   isNonValidMedianHighlighted,
   setNonValidMedianHighlighted,
   propertyTypes,
+  filters,
+  setFilters,
 }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
   const ref = useRef<HTMLDivElement>(null);
@@ -45,7 +50,12 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
           isSmallDevice ? " gap-8" : "gap-14"
         )}
       >
-        <VoltDetailsFiltersWrapper startFetchingTransition={startFetchingTransition} propertyTypes={propertyTypes} />
+        <VoltDetailsFiltersWrapper
+          startFetchingTransition={startFetchingTransition}
+          filters={filters}
+          setFilters={setFilters}
+          propertyTypes={propertyTypes}
+        />
         <div className="flex items-center gap-2">
           <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
             <p className="text-sm font-medium">Avg: {moneyFormatter.format(avgPriceOfAssessments)}</p>

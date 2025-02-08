@@ -28,6 +28,8 @@ interface VoltDetailsProps {
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   startFetchingTransition: TransitionStartFunction;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
+  filters: z.infer<typeof voltDetailsFiltersValidations>;
+  setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
 }
 
 const mapLayers = [
@@ -79,6 +81,8 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   propertyTypes,
   setNonValidMedianHighlighted,
   startFetchingTransition,
+  filters,
+  setFilters,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
@@ -347,6 +351,8 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                   isNonValidMedianHighlighted={isNonValidMedianHighlighted}
                   setNonValidMedianHighlighted={setNonValidMedianHighlighted}
                   propertyTypes={propertyTypes}
+                  filters={filters}
+                  setFilters={setFilters}
                 />
               </div>
               <VoltDetailsMap
@@ -528,13 +534,15 @@ const VoltDetails: FC<VoltDetailsProps> = ({
             }}
             className="overflow-y-auto w-[calc(100%+18px)] h-full overflow-x-hidden cursor-n-resize"
           >
-            <div className="flex sticky top-0 h-full items-center justify-center">
-              <div className="flex flex-col items-center gap-5">
-                <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:rotate-180 after:-translate-y-full after:block after:absolute after:top-0 after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
-                <p className="text-grey-800">scroll area</p>
-                <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:block after:absolute after:top-[100%] after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
+            {container && (
+              <div className="flex sticky top-0 h-full items-center justify-center">
+                <div className="flex flex-col items-center gap-5">
+                  <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:rotate-180 after:-translate-y-full after:block after:absolute after:top-0 after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
+                  <p className="text-grey-800">scroll area</p>
+                  <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:block after:absolute after:top-[100%] after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
+                </div>
               </div>
-            </div>
+            )}
             {container && <div className="" style={{ height: container.scrollHeight }} />}
           </div>
         </div>

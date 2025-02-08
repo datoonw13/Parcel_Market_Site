@@ -4,6 +4,8 @@ import { FC, useState, useTransition } from "react";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import VoltDetails from "./details";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 
@@ -13,13 +15,16 @@ interface VoltDetailsLayoutProps {
 }
 
 const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) => {
+  const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
+  const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
+  const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({ ...validatedFilters.data! });
 
   return (
     <>
       {isFetching && (
-        <div className="fixed w-full h-full top-0 left-0 bg-black-1000/70 z-20 flex items-center justify-center">
+        <div className="fixed z-30 w-full h-full top-0 left-0 bg-black-1000/70 flex items-center justify-center">
           <div className="rounded-2xl bg-white p-6 shadow-3 max-w-md space-y-4">
             <div className="relative w-fit mx-auto">
               <svg
@@ -46,13 +51,18 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) 
               <LoadingIcon2 className="animate-spin size-12 text-primary-main" />
             </div>
             <p className="text-grey-800">
-              Fetching <span className="font-bold">[12, 18]</span> acre lands sold in last <span className="font-bold">2</span> years in{" "}
-              <span className="font-bold">3</span> mile radius
+              Fetching{" "}
+              {(filters.acreageMin || filters.acreageMax) && (
+                <>
+                  <span className="font-bold">{`[${filters.acreageMin || "N/A"}, ${filters.acreageMax || "N/A"}]`}</span> acre
+                </>
+              )}{" "}
+              lands sold in last <span className="font-bold">{filters.soldWithin}</span> years in{" "}
+              <span className="font-bold">{filters.radius}</span> mile radius
             </p>
           </div>
         </div>
       )}
-
       <div id="details" className={cn("w-full h-full overflow-hidden relative")}>
         <VoltDetails
           data={data}
@@ -60,6 +70,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) 
           isNonValidMedianHighlighted={isNonValidMedianHighlighted}
           startFetchingTransition={startFetchingTransition}
           setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+          filters={filters}
+          setFilters={setFilters}
         />
       </div>
     </>
