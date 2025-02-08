@@ -336,7 +336,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         generateId: true,
         ...(geoJsonInit.features.length > 50 && {
           cluster: true,
-          clusterMaxZoom: 12,
+          clusterMaxZoom: 8,
           clusterRadius: 50,
         }),
       });
