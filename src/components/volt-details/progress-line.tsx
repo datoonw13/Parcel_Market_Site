@@ -7,6 +7,7 @@ import { Dispatch, FC, SetStateAction, useMemo, useRef } from "react";
 import { moneyFormatter } from "@/helpers/common";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
+import Image from "next/image";
 import { Tooltip } from "../ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger, PopoverArrow } from "../ui/popover";
 
@@ -31,29 +32,30 @@ const hasSellingProperty = (
   return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
 };
 
-const getStyles = (
-  sellingPropertyParcelNumberNoFormatting: string,
-  data: z.infer<typeof PropertyDataSchema>["assessments"][0],
+const getPin = (
+  hasSellingProperty: boolean,
+  isMedianValid: boolean,
+  isActive: boolean,
   isNonValidMedianHighlighted: boolean,
-  isActive: boolean
+  group?: string
 ) => {
-  if (data.data.isMedianValid && !hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
-    return `text-[#F78290] ${isActive && "scale-150 text-[#FF2F48]"}`;
+  if (isNonValidMedianHighlighted && !isMedianValid) {
+    if (isActive) {
+      return group ? `yellow-highlighted-${group}` : "yellow-highlighted-default";
+    }
+    return group ? `yellow-${group}` : "yellow-default";
   }
-  if (data.data.isMedianValid && hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
-    return `text-primary-dark ${isActive && "scale-150 text-primary-dark"}`;
-  }
-  if (!data.data.isMedianValid && !isNonValidMedianHighlighted && !hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
-    return `text-[#F78290] ${isActive && "scale-150 text-[#FF2F48]"}`;
-  }
-  if (!data.data.isMedianValid && !isNonValidMedianHighlighted && hasSellingProperty(sellingPropertyParcelNumberNoFormatting, data)) {
-    return `text-primary-dark ${isActive && "scale-150 text-primary-dark"}`;
-  }
-  if (!data.data.isMedianValid && isNonValidMedianHighlighted) {
-    return `text-[#ffae36] ${isActive && "scale-150 text-[#FF9900]"}`;
+  if (hasSellingProperty) {
+    if (isActive) {
+      return group ? `green-highlighted-${group}` : "green-highlighted-default";
+    }
+    return group ? `green-${group}` : "green-default";
   }
 
-  return "";
+  if (isActive) {
+    return group ? `red-highlighted-${group}` : "red-highlighted-default";
+  }
+  return group ? `red-${group}` : "red-default";
 };
 
 const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
@@ -149,7 +151,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                     style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
                     className="absolute top-0 -translate-y-full -translate-x-1/2"
                   >
-                    <FaLocationDot
+                    <div
                       onMouseEnter={() => {
                         if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
                           setPropertiesInteraction((prev) => ({ ...prev, [parcelNumberNoFormatting]: "hovered" }));
@@ -186,15 +188,9 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                         setPropertiesInteraction({ ...newData });
                       }}
                       key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
-                      style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
                       className={cn(
-                        `size-6 cursor-pointer transition-all duration-100 `,
-                        getStyles(
-                          data.parcelNumberNoFormatting,
-                          property,
-                          isNonValidMedianHighlighted,
-                          !!propertiesInteraction[parcelNumberNoFormatting]
-                        )
+                        `cursor-pointer transition-all duration-100 relative `,
+                        propertiesInteraction[parcelNumberNoFormatting] ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
                         // property.data.isMedianValid && "text-[#F78290] hover:text-[#FF2F48]",
                         // !property.data.isMedianValid && isNonValidMedianHighlighted && "text-[#ffae36] hover:text-[#FF9900]",
                         // !property.data.isMedianValid && !isNonValidMedianHighlighted && "text-[#F78290] hover:text-[#FF2F48]",
@@ -203,7 +199,21 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                         //   hasSellingProperty(data.parcelNumberNoFormatting, property) &&
                         //   "text-primary-dark hover:text-primary-dark"
                       )}
-                    />
+                    >
+                      <Image
+                        alt=""
+                        src={`/map/pins/${getPin(
+                          hasSellingProperty(data.parcelNumberNoFormatting, property),
+                          property.data.isMedianValid,
+                          !!propertiesInteraction[parcelNumberNoFormatting],
+                          isNonValidMedianHighlighted,
+                          property.isBulked ? property.data.group : undefined
+                        )}.svg`}
+                        fill
+                        loading="eager"
+                        className="w-full h-full  object-cover"
+                      />
+                    </div>
                   </div>
                 </PopoverTrigger>
                 <PopoverContent side="top" sideOffset={15} className="!outline-none">
