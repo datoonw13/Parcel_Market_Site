@@ -91,6 +91,7 @@ const BulkAssessmentBaseSchema = z
     county: z.string(),
     properties: z.array(AssessmentBaseSchema),
     isMedianValid: z.boolean().optional(),
+    group: z.string(),
   })
   .transform((input) => ({
     ...input,

@@ -43,152 +43,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   selectedLayer,
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-
-  // const openPopupDetails = useMemo(() => {
-  //   const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
-  //   if (!id) {
-  //     return null;
-  //   }
-
-  //   if (data.parcelNumberNoFormatting === id) {
-  //     const salesHistory = data.assessments
-  //       .map((el) => (el.isBulked ? el.data.properties : el.data))
-  //       .flat()
-  //       .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
-  //     const details = {
-  //       type: "main-property" as const,
-  //       lat: data.lat,
-  //       lon: data.lon,
-  //       salesHistory: salesHistory
-  //         ? {
-  //             lastSaleDate: salesHistory.lastSalesDate,
-  //             lastSalesPrice: salesHistory.lastSalesPrice,
-  //           }
-  //         : null,
-  //       data: {
-  //         owner: {
-  //           label: "Owner",
-  //           value: data.owner,
-  //         },
-  //         parcelNumber: {
-  //           label: "Parcel ID",
-  //           value: data.parcelNumberNoFormatting,
-  //         },
-  //         acreage: {
-  //           label: "Acreage",
-  //           value: data.acreage.toFixed(2),
-  //         },
-  //         stateAndCounty: {
-  //           label: "State/County",
-  //           value: `${data.state}/${data.county.replace("County", "")}`,
-  //         },
-  //         voltValue: {
-  //           label: "Sale Date",
-  //           value: moneyFormatter.format(data.price),
-  //         },
-  //         pricePerAcreage: {
-  //           label: "Price Per Acreage",
-  //           value: moneyFormatter.format(data.price / data.acreage),
-  //         },
-  //       },
-  //     };
-  //     return details;
-  //   }
-
-  //   const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
-  //   if (!property) {
-  //     return null;
-  //   }
-
-  //   if (property.isBulked) {
-  //     const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
-
-  //     const details = {
-  //       type: "bulk" as const,
-  //       lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
-  //       lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
-  //       hasSellingProperty,
-  //       data: {
-  //         parcelNumber: {
-  //           label: "Parcel ID",
-  //           value: "Multiple",
-  //         },
-  //         acreage: {
-  //           label: "Acreage",
-  //           value: property.data.acreage.toFixed(2),
-  //         },
-  //         stateAndCounty: {
-  //           label: "State/County",
-  //           value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-  //         },
-  //         lastSalePrice: {
-  //           label: "Last Sale Price",
-  //           value: moneyFormatter.format(property.data.price),
-  //         },
-  //         lastSaleDate: {
-  //           label: "Last Sale Date",
-  //           value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
-  //         },
-  //         pricePerAcreage: {
-  //           label: "Price Per Acreage",
-  //           value: property.data.pricePerAcreage.toFixed(2),
-  //         },
-  //       },
-  //     };
-  //     return details;
-  //   }
-
-  //   if (!property.isBulked) {
-  //     const details = {
-  //       type: "default" as const,
-  //       lat: property.data.latitude,
-  //       lon: property.data.longitude,
-  //       data: {
-  //         parcelNumber: {
-  //           label: "Parcel ID",
-  //           value: property.data.parcelNumberNoFormatting,
-  //         },
-  //         acreage: {
-  //           label: "Acreage",
-  //           value: property.data.acreage.toFixed(2),
-  //         },
-  //         stateAndCounty: {
-  //           label: "State/County",
-  //           value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-  //         },
-  //         lastSalePrice: {
-  //           label: "Last Sale Price",
-  //           value: moneyFormatter.format(property.data.lastSalesPrice),
-  //         },
-  //         lastSaleDate: {
-  //           label: "Last Sale Date",
-  //           value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
-  //         },
-  //         pricePerAcreage: {
-  //           label: "Price Per Acreage",
-  //           value: property.data.pricePerAcreage.toFixed(2),
-  //         },
-  //       },
-  //     };
-
-  //     return details;
-  //   }
-
-  //   return null;
-  // }, [
-  //   data.acreage,
-  //   data.assessments,
-  //   data.county,
-  //   data.lat,
-  //   data.lon,
-  //   data.owner,
-  //   data.parcelNumberNoFormatting,
-  //   data.price,
-  //   data.state,
-  //   propertiesInteraction,
-  // ]);
 
   const addMarkerImages = useCallback(
     (data: Record<string, string>) =>
@@ -208,7 +63,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ),
     [ref]
   );
-
   const setInitialData = useCallback(async () => {
     if (ref) {
       Object.values(mapData.layers).forEach((el) => {
@@ -251,12 +105,12 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           lng: data.lon,
           lat: data.lat,
           type: "selling",
-          markerIcon: "selling",
-          hoveredMarkerIcon: "selling",
-          selectedMarkerIcon: "selling",
-          markerSize: 1.5,
-          hoveredMarkerSize: 1.5,
-          selectedMarkerSize: 1.5,
+          markerIcon: "green-highlighted-default",
+          hoveredMarkerIcon: "green-highlighted-default",
+          selectedMarkerIcon: "green-highlighted-default",
+          markerSize: 1,
+          hoveredMarkerSize: 1,
+          selectedMarkerSize: 1,
           acreage: data.acreage,
           price: data.price,
           pricePerAcreage: data.price / data.acreage,
@@ -281,12 +135,12 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                   lng: childEl.longitude,
                   lat: childEl.latitude,
                   type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
-                  markerIcon: "red",
-                  hoveredMarkerIcon: "redHighlighted",
-                  selectedMarkerIcon: "redHighlighted",
+                  markerIcon: `red-${el.data.group}`,
+                  hoveredMarkerIcon: `red-highlighted-${el.data.group}`,
+                  selectedMarkerIcon: `red-highlighted-${el.data.group}`,
                   markerSize: 1,
-                  hoveredMarkerSize: 1.5,
-                  selectedMarkerSize: 1.5,
+                  hoveredMarkerSize: 1,
+                  selectedMarkerSize: 1,
                   acreage: childEl.acreage,
                   price: childEl.lastSalesPrice,
                   pricePerAcreage: childEl.pricePerAcreage,
@@ -295,6 +149,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                   polygonFillColor: "#05471C",
                   bulkId: el.data.id,
                   isBulkMedianValid: el.data.isMedianValid,
+                  group: el.data.group,
                 },
               });
             }
@@ -312,12 +167,12 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
               lng: el.data.longitude,
               lat: el.data.latitude,
               type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
-              markerIcon: "red",
-              hoveredMarkerIcon: "redHighlighted",
-              selectedMarkerIcon: "redHighlighted",
+              markerIcon: "red-default",
+              hoveredMarkerIcon: "red-highlighted-default",
+              selectedMarkerIcon: "red-highlighted-default",
               markerSize: 1,
-              hoveredMarkerSize: 1.5,
-              selectedMarkerSize: 1.5,
+              hoveredMarkerSize: 1,
+              selectedMarkerSize: 1,
               acreage: el.data.acreage,
               price: el.data.lastSalesPrice,
               pricePerAcreage: el.data.pricePerAcreage,
@@ -415,9 +270,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 ...el,
                 properties: {
                   ...el.properties,
-                  markerIcon: "yellow",
-                  hoveredMarkerIcon: "yellowHighlighted",
-                  selectedMarkerIcon: "yellowHighlighted",
+                  markerIcon: el.properties.bulkId ? `yellow-${el.properties.group}` : "yellow",
+                  hoveredMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellowHighlighted",
+                  selectedMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellowHighlighted",
                 },
               }
             : el

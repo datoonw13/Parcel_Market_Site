@@ -21,6 +21,7 @@ export interface IGeneratedFeatureProperties {
   lastSaleDate?: Date;
   price?: number;
   pricePerAcreage?: number;
+  group?: string;
 }
 
 export type MapGeoJson = FeatureCollection<Geometry, IGeneratedFeatureProperties>;
