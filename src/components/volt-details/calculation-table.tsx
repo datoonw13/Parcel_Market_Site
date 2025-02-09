@@ -265,7 +265,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             {hasSellingProperty(data.parcelNumberNoFormatting, assessment) ? (
-                              <div className="relative min-w-5 min-h-5 h-5 -z-10">
+                              <div className="relative min-w-5 min-h-5 h-5 z-10">
                                 <Image
                                   alt=""
                                   src={`/map/pins/green-${assessment.data.group}.svg`}
@@ -275,7 +275,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="relative min-w-5 min-h-5 h-5 -z-10">
+                              <div className="relative min-w-5 min-h-5 h-5 z-10">
                                 <Image
                                   alt=""
                                   src={`/map/pins/${isNonValidMedianHighlighted && !assessment.data.isMedianValid ? "yellow" : "red"}-${
