@@ -9,7 +9,7 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import Image from "next/image";
 import { Tooltip } from "../ui/tooltip";
-import { Popover, PopoverContent, PopoverTrigger, PopoverArrow } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface VoltDetailsProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -191,13 +191,6 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                       className={cn(
                         `cursor-pointer transition-all duration-100 relative `,
                         propertiesInteraction[parcelNumberNoFormatting] ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
-                        // property.data.isMedianValid && "text-[#F78290] hover:text-[#FF2F48]",
-                        // !property.data.isMedianValid && isNonValidMedianHighlighted && "text-[#ffae36] hover:text-[#FF9900]",
-                        // !property.data.isMedianValid && !isNonValidMedianHighlighted && "text-[#F78290] hover:text-[#FF2F48]",
-                        // !property.data.isMedianValid &&
-                        //   !isNonValidMedianHighlighted &&
-                        //   hasSellingProperty(data.parcelNumberNoFormatting, property) &&
-                        //   "text-primary-dark hover:text-primary-dark"
                       )}
                     >
                       <Image

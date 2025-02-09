@@ -28,7 +28,6 @@ interface VoltDetailsMapProps {
   isNonValidMedianHighlighted: boolean;
   onMarkerInteraction: (parcelNumberNoFormatting: string, action: "hover" | "popup") => void;
   onMouseLeave: () => void;
-  onPopupClose: () => void;
   propertiesInteraction: { [key: string]: "hovered" | "popup" };
   selectedLayer: string;
 }
@@ -39,7 +38,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   onMarkerInteraction,
   onMouseLeave,
   propertiesInteraction,
-  onPopupClose,
   selectedLayer,
 }) => {
   const [ref, setRef] = useState<MapBoX | null>(null);
@@ -128,6 +126,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           pricePerAcreage: data.price / data.acreage,
           polygonLineColor: "#05471C",
           polygonFillColor: "#05471C",
+          bulkId: (mainLandBulkGroup?.isBulked && mainLandBulkGroup?.data.id) || null,
+          isBulkMedianValid: mainLandBulkGroup?.data.isMedianValid,
+          group: mainLandBulkGroup?.isBulked ? mainLandBulkGroup?.data.group : undefined,
         },
       });
 
