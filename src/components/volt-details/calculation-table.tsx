@@ -5,12 +5,15 @@ import { cn } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { orderBy } from "lodash";
 import moment from "moment";
+import Image from "next/image";
 import { Dispatch, FC, Fragment, SetStateAction, useMemo, useRef, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { LuArrowUpDown } from "react-icons/lu";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { z } from "zod";
+import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "@radix-ui/react-tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const HEADERS = {
   parcelNumber: {
@@ -244,9 +247,53 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       ) : (
                         <MdKeyboardArrowUp className="size-5" />
                       )}
-                      {hasSellingProperty(data.parcelNumberNoFormatting, assessment) && (
-                        <FaLocationDot className="text-primary-dark size-4" />
-                      )}
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            {hasSellingProperty(data.parcelNumberNoFormatting, assessment) ? (
+                              <div className="relative min-w-5 min-h-5 h-5">
+                                <Image
+                                  alt=""
+                                  src={`/map/pins/green-${assessment.data.group}.svg`}
+                                  fill
+                                  loading="eager"
+                                  className="w-full h-full  object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="relative min-w-5 min-h-5 h-5">
+                                <Image
+                                  alt=""
+                                  src={`/map/pins/${isNonValidMedianHighlighted && !assessment.data.isMedianValid ? "yellow" : "red"}-${
+                                    assessment.data.group
+                                  }.svg`}
+                                  fill
+                                  loading="eager"
+                                  className="w-full h-full  object-cover"
+                                />
+                              </div>
+                            )}
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <div
+                              className="p-0.5"
+                              style={{
+                                background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                                borderRadius: 12,
+                                boxShadow: "0px 4px 12px 0px #0000001F",
+                              }}
+                            >
+                              <div style={{ borderRadius: 10 }} className="bg-white p-3">
+                                <p className="font-medium text-xs max-w-44">
+                                  Lands marked with{" "}
+                                  <span className="font-semibold text-[#F44D61]">({assessment.data.group.toLocaleUpperCase()})</span> where
+                                  sold together
+                                </p>
+                              </div>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   </td>
                 </tr>
