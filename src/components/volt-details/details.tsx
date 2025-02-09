@@ -450,25 +450,6 @@ const VoltDetails: FC<VoltDetailsProps> = ({
         </div>
       </div>
       <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-auto  shadow-2 relative z-10">
-        <AnimatePresence>
-          {backDrop && (
-            <motion.div
-              exit={{
-                opacity: 0,
-                filter: "blur(5px)",
-                transition: { ease: "easeIn", duration: 0.22 },
-              }}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { type: "spring", duration: 0.7 },
-              }}
-              className="absolute bg-black/40 h-full w-full content-[''] z-10 top-0"
-            />
-          )}
-        </AnimatePresence>
         <div id="map-options" className="flex flex-col gap-4 px-4">
           <VoltDetailsFiltersDropDown
             onClose={() => {
