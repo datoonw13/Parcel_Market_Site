@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, hideNumber } from "@/lib/utils";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
@@ -30,6 +30,7 @@ interface VoltDetailsProps {
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
   filters: z.infer<typeof voltDetailsFiltersValidations>;
   setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
+  isSubscribed: boolean;
 }
 
 const mapLayers = [
@@ -83,6 +84,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   startFetchingTransition,
   filters,
   setFilters,
+  isSubscribed,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
@@ -174,14 +176,18 @@ const VoltDetails: FC<VoltDetailsProps> = ({
         .map((el) => (el.isBulked ? el.data.properties : el.data))
         .flat()
         .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+
       const details = {
         type: "main-property" as const,
         lat: data.lat,
         lon: data.lon,
         salesHistory: salesHistory
           ? {
+              blur: !isSubscribed,
               lastSaleDate: moment(salesHistory.lastSalesDate).format("MM-DD-YYYY"),
-              lastSalesPrice: moneyFormatter.format(salesHistory.lastSalesPrice),
+              lastSalesPrice: isSubscribed
+                ? moneyFormatter.format(salesHistory.lastSalesPrice)
+                : hideNumber(moneyFormatter.format(salesHistory.lastSalesPrice)),
             }
           : null,
         data: {
@@ -202,12 +208,16 @@ const VoltDetails: FC<VoltDetailsProps> = ({
             value: `${data.state}/${data.county.replace("County", "")}`,
           },
           voltValue: {
-            label: "Sale Date",
-            value: moneyFormatter.format(data.price),
+            label: "Volt Value",
+            value: isSubscribed ? moneyFormatter.format(data.price) : hideNumber(moneyFormatter.format(data.price)),
+            blur: !isSubscribed,
           },
           pricePerAcreage: {
             label: "Price Per Acreage",
-            value: moneyFormatter.format(data.price / data.acreage),
+            value: isSubscribed
+              ? moneyFormatter.format(data.price / data.acreage)
+              : hideNumber(moneyFormatter.format(data.price / data.acreage)),
+            blur: !isSubscribed,
           },
         },
       };
@@ -242,7 +252,8 @@ const VoltDetails: FC<VoltDetailsProps> = ({
           },
           lastSalePrice: {
             label: "Last Sale Price",
-            value: moneyFormatter.format(property.data.price),
+            value: isSubscribed ? moneyFormatter.format(property.data.price) : hideNumber(moneyFormatter.format(property.data.price)),
+            blur: !isSubscribed,
           },
           lastSaleDate: {
             label: "Last Sale Date",
@@ -250,7 +261,10 @@ const VoltDetails: FC<VoltDetailsProps> = ({
           },
           pricePerAcreage: {
             label: "Price Per Acreage",
-            value: moneyFormatter.format(property.data.pricePerAcreage),
+            value: isSubscribed
+              ? moneyFormatter.format(property.data.pricePerAcreage)
+              : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
+            blur: !isSubscribed,
           },
         },
       };
@@ -277,7 +291,10 @@ const VoltDetails: FC<VoltDetailsProps> = ({
           },
           lastSalePrice: {
             label: "Last Sale Price",
-            value: moneyFormatter.format(property.data.lastSalesPrice),
+            value: isSubscribed
+              ? moneyFormatter.format(property.data.lastSalesPrice)
+              : hideNumber(moneyFormatter.format(property.data.lastSalesPrice)),
+            blur: !isSubscribed,
           },
           lastSaleDate: {
             label: "Last Sale Date",
@@ -285,7 +302,10 @@ const VoltDetails: FC<VoltDetailsProps> = ({
           },
           pricePerAcreage: {
             label: "Price Per Acreage",
-            value: moneyFormatter.format(property.data.pricePerAcreage),
+            value: isSubscribed
+              ? moneyFormatter.format(property.data.pricePerAcreage)
+              : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
+            blur: !isSubscribed,
           },
         },
       };
@@ -304,6 +324,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
     data.parcelNumberNoFormatting,
     data.price,
     data.state,
+    isSubscribed,
     propertiesInteraction,
   ]);
 
@@ -344,7 +365,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
         <div>
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
             <div className="h-full relative">
-              <div className="absolute h-[calc(100%-50px)] w-full">
+              <div className="absolute h-[calc(100%-60px)] w-full">
                 <VoltDetailsHeader
                   data={data}
                   startFetchingTransition={startFetchingTransition}
@@ -353,6 +374,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                   propertyTypes={propertyTypes}
                   filters={filters}
                   setFilters={setFilters}
+                  isSubscribed={isSubscribed}
                 />
               </div>
               <VoltDetailsMap
@@ -361,7 +383,6 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                 onMarkerInteraction={onMarkerInteraction}
                 data={data}
                 isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-                onPopupClose={onPopupClose}
                 selectedLayer={selectedLayer}
               />
               <AnimatePresence>
@@ -411,6 +432,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                 propertiesInteraction={propertiesInteraction}
                 setPropertiesInteraction={setPropertiesInteraction}
                 isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+                isSubscribed={isSubscribed}
               />
             </div>
           </div>
@@ -422,6 +444,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
               propertiesInteraction={propertiesInteraction}
               setPropertiesInteraction={setPropertiesInteraction}
               isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+              isSubscribed={isSubscribed}
             />
           </ScrollArea>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { moneyFormatter } from "@/helpers/common";
-import { cn } from "@/lib/utils";
+import { cn, hideNumber } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { orderBy } from "lodash";
 import moment from "moment";
@@ -100,6 +100,7 @@ interface VoltDetailsCalculationTableProps {
   >;
   propertiesInteraction: { [key: string]: "hovered" | "popup" };
   isNonValidMedianHighlighted: boolean;
+  isSubscribed: boolean;
 }
 
 const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
@@ -107,6 +108,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
   propertiesInteraction,
   setPropertiesInteraction,
   isNonValidMedianHighlighted,
+  isSubscribed,
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
@@ -150,7 +152,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   boxShadow: "inset 0 1px 0 #E9E9E9, inset 0 0px 0 #000000",
                 }}
                 align="left"
-                className="bg-grey-30 text-sm font-semibold sticky top-0 shadow-5"
+                className="bg-grey-30 text-sm font-semibold sticky top-0 shadow-5 z-10"
                 key={key}
               >
                 <div
@@ -237,8 +239,20 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   <td className="text-grey-800 text-xs">Multiple</td>
                   <td className="text-grey-800 text-xs">{assessment.data.county}</td>
                   <td className="text-grey-800 text-xs">{assessment.data.acreage.toFixed(2)}</td>
-                  <td className="text-grey-800 text-xs">{moneyFormatter.format(assessment.data.price)}</td>
-                  <td className="text-grey-800 text-xs">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
+                  <td className="text-grey-800 text-xs">
+                    <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
+                      {isSubscribed
+                        ? moneyFormatter.format(assessment.data.price)
+                        : hideNumber(moneyFormatter.format(assessment.data.price))}
+                    </span>
+                  </td>
+                  <td className="text-grey-800 text-xs">
+                    <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
+                      {isSubscribed
+                        ? moneyFormatter.format(assessment.data.pricePerAcreage)
+                        : hideNumber(moneyFormatter.format(assessment.data.pricePerAcreage))}
+                    </span>
+                  </td>
                   <td className="text-grey-800 text-xs">{moment(assessment.data.properties[0].lastSalesDate).format("MM-DD-YYYY")}</td>
                   <td className="text-grey-800 text-xs">
                     <div className="flex items-center gap-2 justify-end">
@@ -251,7 +265,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             {hasSellingProperty(data.parcelNumberNoFormatting, assessment) ? (
-                              <div className="relative min-w-5 min-h-5 h-5">
+                              <div className="relative min-w-5 min-h-5 h-5 -z-10">
                                 <Image
                                   alt=""
                                   src={`/map/pins/green-${assessment.data.group}.svg`}
@@ -261,7 +275,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="relative min-w-5 min-h-5 h-5">
+                              <div className="relative min-w-5 min-h-5 h-5 -z-10">
                                 <Image
                                   alt=""
                                   src={`/map/pins/${isNonValidMedianHighlighted && !assessment.data.isMedianValid ? "yellow" : "red"}-${
@@ -303,8 +317,20 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumberNoFormatting}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.toFixed(2)}</td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{moneyFormatter.format(assessment.data.price)}</td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
+                        <span className="blur-[2px] relative z-0">
+                          {isSubscribed
+                            ? moneyFormatter.format(assessment.data.price)
+                            : hideNumber(moneyFormatter.format(assessment.data.price))}
+                        </span>
+                      </td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
+                        <span className="blur-[2px] relative z-0">
+                          {isSubscribed
+                            ? moneyFormatter.format(assessment.data.pricePerAcreage)
+                            : hideNumber(moneyFormatter.format(assessment.data.pricePerAcreage))}
+                        </span>
+                      </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         {moment(assessment.data.properties[0].lastSalesDate).format("MM-DD-YYYY")}
                       </td>
@@ -363,8 +389,20 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <td className="text-grey-800 text-xs">{assessment.data.parcelNumberNoFormatting}</td>
                 <td className="text-grey-800 text-xs">{assessment.data.county}</td>
                 <td className="text-grey-800 text-xs">{assessment.data.acreage.toFixed(2)}</td>
-                <td className="text-grey-800 text-xs">{moneyFormatter.format(assessment.data.lastSalesPrice)}</td>
-                <td className="text-grey-800 text-xs">{moneyFormatter.format(assessment.data.pricePerAcreage)}</td>
+                <td className="text-grey-800 text-xs">
+                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
+                    {isSubscribed
+                      ? moneyFormatter.format(assessment.data.lastSalesPrice)
+                      : hideNumber(moneyFormatter.format(assessment.data.lastSalesPrice))}
+                  </span>
+                </td>
+                <td className="text-grey-800 text-xs">
+                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
+                    {isSubscribed
+                      ? moneyFormatter.format(assessment.data.pricePerAcreage)
+                      : hideNumber(moneyFormatter.format(assessment.data.pricePerAcreage))}
+                  </span>
+                </td>
                 <td className="text-grey-800 text-xs">{moment(assessment.data.lastSalesDate).format("MM-DD-YYYY")}</td>
                 <td className="text-grey-800 text-xs !pl-7 ">
                   <div className="flex items-center gap-2 justify-end">

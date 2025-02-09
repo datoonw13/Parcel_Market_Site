@@ -330,3 +330,20 @@ export function swapPolygonCoordinates(coords: Polygon["coordinates"]): Polygon[
     (ring) => ring.map(([x, y]) => [y, x] as Position) // Swap X and Y in each position
   );
 }
+
+export const hideNumber = (num: string): string => {
+  const value = num.split("");
+
+  let cnt = 0;
+
+  for (let i = 0; i < value.length; i += 1) {
+    if (!Number.isNaN(Number(value[i]))) {
+      value[i] = "*";
+      cnt += 1;
+    }
+    if (cnt > 2) {
+      return value.join("");
+    }
+  }
+  return value.join("");
+};

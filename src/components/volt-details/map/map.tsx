@@ -126,7 +126,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           pricePerAcreage: data.price / data.acreage,
           polygonLineColor: "#05471C",
           polygonFillColor: "#05471C",
-          bulkId: (mainLandBulkGroup?.isBulked && mainLandBulkGroup?.data.id) || null,
+          // bulkId: (mainLandBulkGroup?.isBulked && mainLandBulkGroup?.data.id) || null,
           isBulkMedianValid: mainLandBulkGroup?.data.isMedianValid,
           group: mainLandBulkGroup?.isBulked ? mainLandBulkGroup?.data.group : undefined,
         },

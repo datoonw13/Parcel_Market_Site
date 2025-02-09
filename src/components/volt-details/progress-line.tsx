@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, hideNumber } from "@/lib/utils";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { Dispatch, FC, SetStateAction, useMemo, useRef } from "react";
@@ -20,6 +20,7 @@ interface VoltDetailsProgressLineProps {
   >;
   propertiesInteraction: { [key: string]: "hovered" | "popup" };
   isNonValidMedianHighlighted: boolean;
+  isSubscribed: boolean;
 }
 
 const hasSellingProperty = (
@@ -63,6 +64,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   propertiesInteraction,
   setPropertiesInteraction,
   isNonValidMedianHighlighted,
+  isSubscribed,
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const avgPriceOfAllAssessments = useMemo(() => {
@@ -222,7 +224,11 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                     <div style={{ borderRadius: 10 }} className="bg-[#F1FEF4] p-3">
                       <p className="text-xs text-grey-600">
                         Price Per Acre:{" "}
-                        <span className="text-black font-medium">{moneyFormatter.format(property.data.pricePerAcreage)}</span>
+                        <span className={cn("text-black font-medium", !isSubscribed && "blur-[2px]")}>
+                          {isSubscribed
+                            ? moneyFormatter.format(property.data.pricePerAcreage)
+                            : hideNumber(moneyFormatter.format(property.data.pricePerAcreage))}
+                        </span>
                       </p>
                       <p className="text-xs text-grey-600">
                         Acreage: <span className="text-black font-medium">{property.data.acreage.toFixed(2)}</span>
@@ -236,12 +242,16 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
         </div>
         <div className="flex items-center justify-between mt-2">
           <p className="font-semibold text-xs">
-            {moneyFormatter.format(minPricePerAcre)}{" "}
+            <span className={cn(!isSubscribed && "blur-[2px]")}>
+              {isSubscribed ? moneyFormatter.format(minPricePerAcre) : hideNumber(moneyFormatter.format(minPricePerAcre))}
+            </span>{" "}
             <span className="text-grey-600 font-semibold text-sm">- Lowest sale reported per acre</span>
           </p>
           <p className="font-semibold text-sm">
             <span className="text-grey-600 font-semibold text-xs">Highest sale reported per acre - </span>{" "}
-            {moneyFormatter.format(maxPricePerAcre)}
+            <span className={cn(!isSubscribed && "blur-[2px]")}>
+              {isSubscribed ? moneyFormatter.format(maxPricePerAcre) : hideNumber(moneyFormatter.format(maxPricePerAcre))}
+            </span>
           </p>
         </div>
       </div>

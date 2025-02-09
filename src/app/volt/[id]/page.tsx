@@ -6,13 +6,57 @@ import { ResponseModel } from "@/types/common";
 import VoltDetailsLayout from "@/components/volt-details/layout";
 import { redirect } from "next/navigation";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
+import { getUserAction } from "@/server-actions/user/actions";
+import x from "../../../../public/test.json";
 
 const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
+    let bulkCnt = 0;
+    const alphabet = [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+    ];
+    if (req.assessments) {
+      req.assessments = req.assessments.map((el) => {
+        if (el.isBulked) {
+          const newData = { ...el };
+          newData.data.group = alphabet[bulkCnt];
+          bulkCnt += 1;
+          return newData;
+        }
+        return el;
+      });
+    }
+
     const data = await PropertyDataSchema.safeParseAsync(req);
+
     return {
       errorMessage: null,
       data: data.data!,
@@ -35,6 +79,7 @@ const INITIAL_FILTERS = {
 } as z.infer<typeof voltDetailsFiltersValidations>;
 
 const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams: { [key: string]: string }; params: { id: string } }) => {
+  const user = await getUserAction();
   const filtersValidation = await voltDetailsFiltersValidations.safeParseAsync({
     ...searchParams,
   });
@@ -58,9 +103,7 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
 
   return (
     filtersValidation.data &&
-    data?.data && (
-      <VoltDetailsLayout propertyTypes={propertyTypes} data={data.data} initialFilters={INITIAL_FILTERS} searchParams={searchParams} />
-    )
+    data?.data && <VoltDetailsLayout isSubscribed={!!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data} />
   );
 };
 

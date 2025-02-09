@@ -12,9 +12,10 @@ import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
+  isSubscribed: boolean;
 }
 
-const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) => {
+const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, isSubscribed }) => {
   const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
@@ -72,6 +73,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes }) 
           setNonValidMedianHighlighted={setNonValidMedianHighlighted}
           filters={filters}
           setFilters={setFilters}
+          isSubscribed={isSubscribed}
         />
       </div>
     </>
