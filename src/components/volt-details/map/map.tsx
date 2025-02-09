@@ -89,6 +89,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       window.map = ref;
       await addMarkerImages(mapDefaultMarkers);
 
+      const mainLandBulkGroup = data.assessments.find(
+        (el) => el.isBulked && el.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting)
+      );
       const geoJsonInit: MapGeoJson = {
         type: "FeatureCollection",
         features: [],
@@ -105,9 +108,18 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           lng: data.lon,
           lat: data.lat,
           type: "selling",
-          markerIcon: "green-highlighted-default",
-          hoveredMarkerIcon: "green-highlighted-default",
-          selectedMarkerIcon: "green-highlighted-default",
+          markerIcon:
+            mainLandBulkGroup && mainLandBulkGroup.isBulked
+              ? `green-highlighted-${mainLandBulkGroup.data.group}`
+              : "green-highlighted-default",
+          hoveredMarkerIcon:
+            mainLandBulkGroup && mainLandBulkGroup.isBulked
+              ? `green-highlighted-${mainLandBulkGroup.data.group}`
+              : "green-highlighted-default",
+          selectedMarkerIcon:
+            mainLandBulkGroup && mainLandBulkGroup.isBulked
+              ? `green-highlighted-${mainLandBulkGroup.data.group}`
+              : "green-highlighted-default",
           markerSize: 1,
           hoveredMarkerSize: 1,
           selectedMarkerSize: 1,
@@ -270,9 +282,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 ...el,
                 properties: {
                   ...el.properties,
-                  markerIcon: el.properties.bulkId ? `yellow-${el.properties.group}` : "yellow",
-                  hoveredMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellowHighlighted",
-                  selectedMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellowHighlighted",
+                  markerIcon: el.properties.bulkId ? `yellow-${el.properties.group}` : "yellow-default",
+                  hoveredMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellow-default",
+                  selectedMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellow-default",
                 },
               }
             : el
@@ -294,9 +306,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 ...el,
                 properties: {
                   ...el.properties,
-                  markerIcon: "red",
-                  hoveredMarkerIcon: "redHighlighted",
-                  selectedMarkerIcon: "redHighlighted",
+                  markerIcon: el.properties.bulkId ? `red-${el.properties.group}` : "red-default",
+                  hoveredMarkerIcon: el.properties.bulkId ? `red-highlighted-${el.properties.group}` : "red-highlighted-default",
+                  selectedMarkerIcon: el.properties.bulkId ? `red-highlighted-${el.properties.group}` : "red-highlighted-default",
                 },
               }
             : el
