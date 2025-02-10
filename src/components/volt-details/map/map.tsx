@@ -284,8 +284,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 properties: {
                   ...el.properties,
                   markerIcon: el.properties.bulkId ? `yellow-${el.properties.group}` : "yellow-default",
-                  hoveredMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellow-default",
-                  selectedMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellow-default",
+                  hoveredMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellow-highlighted-default",
+                  selectedMarkerIcon: el.properties.bulkId ? `yellow-highlighted-${el.properties.group}` : "yellow-highlighted-default",
                 },
               }
             : el
