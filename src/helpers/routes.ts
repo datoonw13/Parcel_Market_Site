@@ -143,6 +143,11 @@ const routes = {
     url: "volt",
     protected: false,
     fullUrl: "/volt",
+    calculationTerms: {
+      url: ":id",
+      fullUrl: "/volt/:id",
+      protected: true,
+    },
   },
   privacyPolicy: {
     url: "privacy-policy",
