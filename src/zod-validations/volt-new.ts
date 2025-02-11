@@ -136,11 +136,11 @@ export const PropertyDataSchema = z
     medianLowerBound: z.coerce.number(),
     medianUpperBound: z.coerce.number(),
     averagePricePerAcreValidMedians: z.coerce.number(),
-    radius: z.coerce.number().nullable(),
-    soldWithin: z.string().nullable(),
-    acreageMin: z.coerce.number().nullable(),
-    acreageMax: z.coerce.number().nullable(),
-    propertyTypes: z.array(z.number()).nullable(),
+    // radius: z.coerce.number().nullable(),
+    // soldWithin: z.string().nullable(),
+    // acreageMin: z.coerce.number().nullable(),
+    // acreageMax: z.coerce.number().nullable(),
+    // propertyTypes: z.array(z.number()).nullable(),
     assessments: z.array(AssessmentSchema),
   })
   .transform(({ acrage, ...input }) => ({

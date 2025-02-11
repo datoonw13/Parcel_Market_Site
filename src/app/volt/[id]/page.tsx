@@ -14,46 +14,6 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
-    let bulkCnt = 0;
-    const alphabet = [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "o",
-      "p",
-      "q",
-      "r",
-      "s",
-      "t",
-      "u",
-      "v",
-      "w",
-      "x",
-      "y",
-      "z",
-    ];
-    if (req.assessments) {
-      req.assessments = req.assessments.map((el) => {
-        if (el.isBulked) {
-          const newData = { ...el };
-          newData.data.group = alphabet[bulkCnt];
-          bulkCnt += 1;
-          return newData;
-        }
-        return el;
-      });
-    }
 
     const data = await PropertyDataSchema.safeParseAsync(req);
 
