@@ -21,11 +21,24 @@ export const getAllStates = (props?: { filterBlackList?: boolean }) =>
     .filter((el) => (el.contiguous && props?.filterBlackList ? !statesBlackList.includes(el.name) : true))
     .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
 
-export const getCounties = (stateValue: string | null) => {
-  if (!stateValue) {
+export const getState = (state: string | null) => {
+  if (!state) {
+    return null;
+  }
+  const result = getAllStates().find(
+    (el) => el.value.toLocaleLowerCase() === state.toLocaleLowerCase() || el.label.toLocaleLowerCase() === state.toLocaleLowerCase()
+  );
+  return result ? { label: result.label, value: result.value } : null;
+};
+
+export const getCounties = (state: string | null) => {
+  if (!state) {
     return [];
   }
-  const counties = getAllStates().find(({ value }) => value === stateValue.toLocaleLowerCase())?.counties || [];
+  const selectedState = getState(state);
+
+  const counties =
+    getAllStates().find(({ value }) => value.toLocaleLowerCase() === selectedState?.value.toLocaleLowerCase())?.counties || [];
   const formattedCounties = counties.map((el) => ({
     label: el,
     value: el
@@ -38,22 +51,16 @@ export const getCounties = (stateValue: string | null) => {
   return formattedCounties;
 };
 
-export const getStateValue = (stateValue: string | null) => {
-  if (!stateValue) {
-    return null;
-  }
-  const result = getAllStates().find((el) => el.value === stateValue.toLocaleLowerCase());
-  return result ? { label: result.label, value: result.value } : null;
-};
-
-export const getCountyValue = (countyValue: string | null, stateValue: string | null) => {
-  if (!countyValue || !stateValue) {
+export const getCounty = (county: string | null, state: string | null) => {
+  if (!county || !state) {
     return null;
   }
 
   return (
-    getCounties(stateValue.toLocaleLowerCase()).find(({ value }) => value.toLocaleLowerCase().includes(countyValue.toLocaleLowerCase())) ||
-    null
+    getCounties(state).find(
+      ({ value, label }) =>
+        value.toLocaleLowerCase().includes(county.toLocaleLowerCase()) || label.toLocaleLowerCase().includes(county.toLocaleLowerCase())
+    ) || null
   );
 };
 

@@ -171,147 +171,147 @@ const VoltDetails: FC<VoltDetailsProps> = ({
       return null;
     }
 
-    if (data.parcelNumberNoFormatting === id) {
-      const salesHistory = data.assessments
-        .map((el) => (el.isBulked ? el.data.properties : el.data))
-        .flat()
-        .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+    // if (data.parcelNumberNoFormatting === id) {
+    //   const salesHistory = data.assessments
+    //     .map((el) => (el.isBulked ? el.data.properties : el.data))
+    //     .flat()
+    //     .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
 
-      const details = {
-        type: "main-property" as const,
-        lat: data.lat,
-        lon: data.lon,
-        salesHistory: salesHistory
-          ? {
-              blur: !isSubscribed,
-              lastSaleDate: moment(salesHistory.lastSalesDate).format("MM-DD-YYYY"),
-              lastSalesPrice: isSubscribed
-                ? moneyFormatter.format(salesHistory.lastSalesPrice)
-                : hideNumber(moneyFormatter.format(salesHistory.lastSalesPrice)),
-            }
-          : null,
-        data: {
-          owner: {
-            label: "Owner",
-            value: data.owner,
-          },
-          parcelNumber: {
-            label: "Parcel ID",
-            value: data.parcelNumberNoFormatting,
-          },
-          acreage: {
-            label: "Acreage",
-            value: data.acreage.toFixed(2),
-          },
-          stateAndCounty: {
-            label: "State/County",
-            value: `${data.state}/${data.county.replace("County", "")}`,
-          },
-          voltValue: {
-            label: "Volt Value",
-            value: isSubscribed ? moneyFormatter.format(data.price) : hideNumber(moneyFormatter.format(data.price)),
-            blur: !isSubscribed,
-          },
-          pricePerAcreage: {
-            label: "Price Per Acreage",
-            value: isSubscribed
-              ? moneyFormatter.format(data.price / data.acreage)
-              : hideNumber(moneyFormatter.format(data.price / data.acreage)),
-            blur: !isSubscribed,
-          },
-        },
-      };
-      return details;
-    }
+    //   const details = {
+    //     type: "main-property" as const,
+    //     lat: data.lat,
+    //     lon: data.lon,
+    //     salesHistory: salesHistory
+    //       ? {
+    //           blur: !isSubscribed,
+    //           lastSaleDate: moment(salesHistory.lastSalesDate).format("MM-DD-YYYY"),
+    //           lastSalesPrice: isSubscribed
+    //             ? moneyFormatter.format(salesHistory.lastSalesPrice)
+    //             : hideNumber(moneyFormatter.format(salesHistory.lastSalesPrice)),
+    //         }
+    //       : null,
+    //     data: {
+    //       owner: {
+    //         label: "Owner",
+    //         value: data.owner,
+    //       },
+    //       parcelNumber: {
+    //         label: "Parcel ID",
+    //         value: data.parcelNumberNoFormatting,
+    //       },
+    //       acreage: {
+    //         label: "Acreage",
+    //         value: data.acreage.toFixed(2),
+    //       },
+    //       stateAndCounty: {
+    //         label: "State/County",
+    //         value: `${data.state}/${data.county.replace("County", "")}`,
+    //       },
+    //       voltValue: {
+    //         label: "Volt Value",
+    //         value: isSubscribed ? moneyFormatter.format(data.price) : hideNumber(moneyFormatter.format(data.price)),
+    //         blur: !isSubscribed,
+    //       },
+    //       pricePerAcreage: {
+    //         label: "Price Per Acreage",
+    //         value: isSubscribed
+    //           ? moneyFormatter.format(data.price / data.acreage)
+    //           : hideNumber(moneyFormatter.format(data.price / data.acreage)),
+    //         blur: !isSubscribed,
+    //       },
+    //     },
+    //   };
+    //   return details;
+    // }
 
-    const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
-    if (!property) {
-      return null;
-    }
+    // const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
+    // if (!property) {
+    //   return null;
+    // }
 
-    if (property.isBulked) {
-      const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+    // if (property.isBulked) {
+    //   const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
 
-      const details = {
-        type: "bulk" as const,
-        lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
-        lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
-        hasSellingProperty,
-        data: {
-          parcelNumber: {
-            label: "Parcel ID",
-            value: "Multiple",
-          },
-          acreage: {
-            label: "Acreage",
-            value: property.data.acreage.toFixed(2),
-          },
-          stateAndCounty: {
-            label: "State/County",
-            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-          },
-          lastSalePrice: {
-            label: "Last Sale Price",
-            value: isSubscribed ? moneyFormatter.format(property.data.price) : hideNumber(moneyFormatter.format(property.data.price)),
-            blur: !isSubscribed,
-          },
-          lastSaleDate: {
-            label: "Last Sale Date",
-            value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
-          },
-          pricePerAcreage: {
-            label: "Price Per Acreage",
-            value: isSubscribed
-              ? moneyFormatter.format(property.data.pricePerAcreage)
-              : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
-            blur: !isSubscribed,
-          },
-        },
-      };
-      return details;
-    }
+    //   const details = {
+    //     type: "bulk" as const,
+    //     lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
+    //     lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
+    //     hasSellingProperty,
+    //     data: {
+    //       parcelNumber: {
+    //         label: "Parcel ID",
+    //         value: "Multiple",
+    //       },
+    //       acreage: {
+    //         label: "Acreage",
+    //         value: property.data.acreage.toFixed(2),
+    //       },
+    //       stateAndCounty: {
+    //         label: "State/County",
+    //         value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+    //       },
+    //       lastSalePrice: {
+    //         label: "Last Sale Price",
+    //         value: isSubscribed ? moneyFormatter.format(property.data.price) : hideNumber(moneyFormatter.format(property.data.price)),
+    //         blur: !isSubscribed,
+    //       },
+    //       lastSaleDate: {
+    //         label: "Last Sale Date",
+    //         value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
+    //       },
+    //       pricePerAcreage: {
+    //         label: "Price Per Acreage",
+    //         value: isSubscribed
+    //           ? moneyFormatter.format(property.data.pricePerAcreage)
+    //           : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
+    //         blur: !isSubscribed,
+    //       },
+    //     },
+    //   };
+    //   return details;
+    // }
 
-    if (!property.isBulked) {
-      const details = {
-        type: "default" as const,
-        lat: property.data.latitude,
-        lon: property.data.longitude,
-        data: {
-          parcelNumber: {
-            label: "Parcel ID",
-            value: property.data.parcelNumberNoFormatting,
-          },
-          acreage: {
-            label: "Acreage",
-            value: property.data.acreage.toFixed(2),
-          },
-          stateAndCounty: {
-            label: "State/County",
-            value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-          },
-          lastSalePrice: {
-            label: "Last Sale Price",
-            value: isSubscribed
-              ? moneyFormatter.format(property.data.lastSalesPrice)
-              : hideNumber(moneyFormatter.format(property.data.lastSalesPrice)),
-            blur: !isSubscribed,
-          },
-          lastSaleDate: {
-            label: "Last Sale Date",
-            value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
-          },
-          pricePerAcreage: {
-            label: "Price Per Acreage",
-            value: isSubscribed
-              ? moneyFormatter.format(property.data.pricePerAcreage)
-              : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
-            blur: !isSubscribed,
-          },
-        },
-      };
+    // if (!property.isBulked) {
+    //   const details = {
+    //     type: "default" as const,
+    //     lat: property.data.latitude,
+    //     lon: property.data.longitude,
+    //     data: {
+    //       parcelNumber: {
+    //         label: "Parcel ID",
+    //         value: property.data.parcelNumberNoFormatting,
+    //       },
+    //       acreage: {
+    //         label: "Acreage",
+    //         value: property.data.acreage.toFixed(2),
+    //       },
+    //       stateAndCounty: {
+    //         label: "State/County",
+    //         value: `${property.data.state}/${property.data.county.replace("County", "")}`,
+    //       },
+    //       lastSalePrice: {
+    //         label: "Last Sale Price",
+    //         value: isSubscribed
+    //           ? moneyFormatter.format(property.data.lastSalesPrice)
+    //           : hideNumber(moneyFormatter.format(property.data.lastSalesPrice)),
+    //         blur: !isSubscribed,
+    //       },
+    //       lastSaleDate: {
+    //         label: "Last Sale Date",
+    //         value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
+    //       },
+    //       pricePerAcreage: {
+    //         label: "Price Per Acreage",
+    //         value: isSubscribed
+    //           ? moneyFormatter.format(property.data.pricePerAcreage)
+    //           : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
+    //         blur: !isSubscribed,
+    //       },
+    //     },
+    //   };
 
-      return details;
-    }
+    //   return details;
+    // }
 
     return null;
   }, [
@@ -321,7 +321,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
     data.lat,
     data.lon,
     data.owner,
-    data.parcelNumberNoFormatting,
+    data.parcelNumber,
     data.price,
     data.state,
     isSubscribed,
@@ -458,7 +458,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
             onOpen={() => {
               setBackDrop(true);
             }}
-            label={`${data.acreage.toFixed(2)} Acre, ${data.propertyType || "N/A"}`}
+            label={`${data.acreage.formattedString} Acre, ${data.propertyType || "N/A"}`}
             value="Subject Parcel"
             renderContent={() => (
               <ul className="min-w-[--radix-popper-anchor-width] p-4 space-y-4">
@@ -466,20 +466,19 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                   Owner: <span className="text-sm font-medium text-black">{data?.owner}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Parcel ID: <span className="text-sm font-medium text-black">{data?.parcelNumber}</span>
+                  Parcel ID: <span className="text-sm font-medium text-black">{data?.parcelNumber.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Acreage: <span className="text-sm font-medium text-black">{data?.acreage}</span>
+                  Acreage: <span className="text-sm font-medium text-black">{data?.acreage.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                   State/County: <span className="text-sm font-medium text-black">ae</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Volt Value: <span className="text-sm font-medium text-black">{data?.price && moneyFormatter.format(data?.price)}</span>
+                  Volt Value: <span className="text-sm font-medium text-black">{data?.price.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Price Per Acreage:{" "}
-                  <span className="text-sm font-medium text-black">{moneyFormatter.format(data.price / data.acreage)}</span>
+                  Price Per Acreage: <span className="text-sm font-medium text-black">{data.pricePerAcreage.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                   Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>

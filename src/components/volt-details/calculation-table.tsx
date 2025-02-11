@@ -46,14 +46,11 @@ const HEADERS = {
   },
 };
 
-const hasSellingProperty = (
-  sellingPropertyParcelNumberNoFormatting: string,
-  data: z.infer<typeof PropertyDataSchema>["assessments"][0]
-) => {
+const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
   if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting);
+    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
   }
-  return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
+  return data.data.id === sellingPropertyId;
 };
 
 const generateClasses = (data: {
@@ -117,21 +114,19 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
   const sortValue = Object.values(sort)[0];
   const assessments = useMemo(() => {
     if (sortKey === "lastSaleDate") {
-      return [...data.assessments].sort((d1, d2) => {
-        const date1 = d1.isBulked ? d1.data.properties[0].lastSalesDate : d1.data.lastSalesDate;
-        const date2 = d2.isBulked ? d2.data.properties[0].lastSalesDate : d2.data.lastSalesDate;
+      return [...data.assessments.data].sort((d1, d2) => {
+        const date1 = d1.isBulked ? d1.data.lastSaleDate : d1.data.lastSaleDate;
+        const date2 = d2.isBulked ? d2.data.lastSaleDate : d2.data.lastSaleDate;
         return sortValue === "asc"
           ? new Date(date1).getTime() - new Date(date2).getTime()
           : new Date(date2).getTime() - new Date(date1).getTime();
       });
     }
-    return orderBy(data.assessments, [`data.${sortKey}`], [sortValue]);
+    return orderBy(data.assessments.data, [`data.${sortKey === "pricePerAcreage" ? "pricePerAcreage.value" : sortKey}`], [sortValue]);
   }, [data.assessments, sortKey, sortValue]);
 
   return (
     <div className="w-full mb-0.5">
-      {/* [&>tbody>tr:last-child>td:first-child]:rounded-bl-2xl [&>tbody>tr:last-child>td:last-child]:rounded-br-2xl */}
-
       <table
         className={cn(
           `w-full 
@@ -187,7 +182,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   className={cn(
                     "cursor-pointer border-t  transition-all",
                     generateClasses({
-                      hasSellingProperty: hasSellingProperty(data.parcelNumberNoFormatting, assessment),
+                      hasSellingProperty: hasSellingProperty(data.id, assessment),
                       hovered: propertiesInteraction[assessment.data.id] === "hovered",
                       selected: propertiesInteraction[assessment.data.id] === "popup",
                       isMedianValid: assessment.data.isMedianValid,
@@ -237,23 +232,17 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   }}
                 >
                   <td className="text-grey-800 text-xs">Multiple</td>
-                  <td className="text-grey-800 text-xs">{assessment.data.county}</td>
-                  <td className="text-grey-800 text-xs">{assessment.data.acreage.toFixed(2)}</td>
+                  <td className="text-grey-800 text-xs">{assessment.data.county.label}</td>
+                  <td className="text-grey-800 text-xs">{assessment.data.acreage.formattedString}</td>
                   <td className="text-grey-800 text-xs">
-                    <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
-                      {isSubscribed
-                        ? moneyFormatter.format(assessment.data.price)
-                        : hideNumber(moneyFormatter.format(assessment.data.price))}
-                    </span>
+                    <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.price.formattedString}</span>
                   </td>
                   <td className="text-grey-800 text-xs">
                     <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
-                      {isSubscribed
-                        ? moneyFormatter.format(assessment.data.pricePerAcreage)
-                        : hideNumber(moneyFormatter.format(assessment.data.pricePerAcreage))}
+                      {assessment.data.pricePerAcreage.formattedString}
                     </span>
                   </td>
-                  <td className="text-grey-800 text-xs">{moment(assessment.data.properties[0].lastSalesDate).format("MM-DD-YYYY")}</td>
+                  <td className="text-grey-800 text-xs">{moment(assessment.data.lastSaleDate).format("MM-DD-YYYY")}</td>
                   <td className="text-grey-800 text-xs">
                     <div className="flex items-center gap-2 justify-end">
                       {propertiesInteraction[assessment.data.id] === "popup" ? (
@@ -264,7 +253,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            {hasSellingProperty(data.parcelNumberNoFormatting, assessment) ? (
+                            {hasSellingProperty(data.id, assessment) ? (
                               <div className="relative min-w-5 min-h-5 h-5 z-10">
                                 <Image
                                   alt=""
@@ -313,31 +302,25 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 </tr>
                 {propertiesInteraction[assessment.data.id] === "popup" &&
                   assessment.data.properties.map((childAssessment) => (
-                    <tr key={childAssessment.parcelNumberNoFormatting} className={cn("border-t")}>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumberNoFormatting}</td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county}</td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.toFixed(2)}</td>
+                    <tr key={childAssessment.id} className={cn("border-t")}>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumber.formattedString}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county.label}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.formattedString}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        <span className="blur-[2px] relative z-0">
-                          {isSubscribed
-                            ? moneyFormatter.format(assessment.data.price)
-                            : hideNumber(moneyFormatter.format(assessment.data.price))}
+                        <span className={cn("relative z-0", !isSubscribed && "blur-[2px]")}>{assessment.data.price.formattedString}</span>
+                      </td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
+                        <span className={cn("relative z-0", !isSubscribed && "blur-[2px]")}>
+                          {assessment.data.pricePerAcreage.formattedString}
                         </span>
                       </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        <span className="blur-[2px] relative z-0">
-                          {isSubscribed
-                            ? moneyFormatter.format(assessment.data.pricePerAcreage)
-                            : hideNumber(moneyFormatter.format(assessment.data.pricePerAcreage))}
-                        </span>
-                      </td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        {moment(assessment.data.properties[0].lastSalesDate).format("MM-DD-YYYY")}
+                        {moment(assessment.data.lastSaleDate).format("MM-DD-YYYY")}
                       </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         <div className="flex items-center gap-2 justify-end">
                           <MdKeyboardArrowUp className="size-5 opacity-0" />
-                          {hasSellingProperty(data.parcelNumberNoFormatting, { isBulked: false, data: childAssessment }) && (
+                          {hasSellingProperty(data.id, { isBulked: false, data: childAssessment }) && (
                             <FaLocationDot className="text-primary-dark size-4" />
                           )}
                         </div>
@@ -347,69 +330,59 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
               </Fragment>
             ) : (
               <tr
-                key={assessment.data.parcelNumberNoFormatting}
+                key={assessment.data.id}
                 className={generateClasses({
-                  hasSellingProperty: hasSellingProperty(data.parcelNumberNoFormatting, assessment),
-                  hovered: propertiesInteraction[assessment.data.parcelNumberNoFormatting] === "hovered",
-                  selected: propertiesInteraction[assessment.data.parcelNumberNoFormatting] === "popup",
+                  hasSellingProperty: hasSellingProperty(data.id, assessment),
+                  hovered: propertiesInteraction[assessment.data.id] === "hovered",
+                  selected: propertiesInteraction[assessment.data.id] === "popup",
                   isMedianValid: assessment.data.isMedianValid,
                   isNonValidMedianHighlighted,
                 })}
                 onClick={() => {
                   const newData = { ...propertiesInteraction };
                   Object.keys(newData).forEach((key) => {
-                    if (newData[key] === "popup" && key !== assessment.data.parcelNumberNoFormatting) {
+                    if (newData[key] === "popup" && key !== assessment.data.id) {
                       delete newData[key];
                     }
                   });
 
-                  if (newData[assessment.data.parcelNumberNoFormatting] === "popup") {
-                    newData[assessment.data.parcelNumberNoFormatting] = "hovered";
+                  if (newData[assessment.data.id] === "popup") {
+                    newData[assessment.data.id] = "hovered";
                   } else {
-                    newData[assessment.data.parcelNumberNoFormatting] = "popup";
+                    newData[assessment.data.id] = "popup";
                   }
                   setPropertiesInteraction({ ...newData });
                 }}
                 onMouseEnter={() => {
-                  if (propertiesInteraction && propertiesInteraction[assessment.data.parcelNumberNoFormatting] !== "popup") {
-                    setPropertiesInteraction((prev) => ({ ...prev, [assessment.data.parcelNumberNoFormatting]: "hovered" }));
+                  if (propertiesInteraction && propertiesInteraction[assessment.data.id] !== "popup") {
+                    setPropertiesInteraction((prev) => ({ ...prev, [assessment.data.id]: "hovered" }));
                   }
                 }}
                 onMouseLeave={() => {
                   setPropertiesInteraction((prev) => {
-                    if (propertiesInteraction && propertiesInteraction[assessment.data.parcelNumberNoFormatting] !== "popup") {
+                    if (propertiesInteraction && propertiesInteraction[assessment.data.id] !== "popup") {
                       const newData = { ...prev };
-                      delete newData[assessment.data.parcelNumberNoFormatting];
+                      delete newData[assessment.data.id];
                       return newData;
                     }
                     return prev;
                   });
                 }}
               >
-                <td className="text-grey-800 text-xs">{assessment.data.parcelNumberNoFormatting}</td>
-                <td className="text-grey-800 text-xs">{assessment.data.county}</td>
-                <td className="text-grey-800 text-xs">{assessment.data.acreage.toFixed(2)}</td>
+                <td className="text-grey-800 text-xs">{assessment.data.id}</td>
+                <td className="text-grey-800 text-xs">{assessment.data.county.label}</td>
+                <td className="text-grey-800 text-xs">{assessment.data.acreage.formattedString}</td>
                 <td className="text-grey-800 text-xs">
-                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
-                    {isSubscribed
-                      ? moneyFormatter.format(assessment.data.lastSalesPrice)
-                      : hideNumber(moneyFormatter.format(assessment.data.lastSalesPrice))}
-                  </span>
+                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.lastSalePrice.formattedString}</span>
                 </td>
                 <td className="text-grey-800 text-xs">
-                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
-                    {isSubscribed
-                      ? moneyFormatter.format(assessment.data.pricePerAcreage)
-                      : hideNumber(moneyFormatter.format(assessment.data.pricePerAcreage))}
-                  </span>
+                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.pricePerAcreage.formattedString}</span>
                 </td>
-                <td className="text-grey-800 text-xs">{moment(assessment.data.lastSalesDate).format("MM-DD-YYYY")}</td>
+                <td className="text-grey-800 text-xs">{moment(assessment.data.lastSaleDate).format("MM-DD-YYYY")}</td>
                 <td className="text-grey-800 text-xs !pl-7 ">
                   <div className="flex items-center gap-2 justify-end">
                     <MdKeyboardArrowUp className="size-5 opacity-0" />
-                    {hasSellingProperty(data.parcelNumberNoFormatting, assessment) && (
-                      <FaLocationDot className="text-primary-dark size-4" />
-                    )}
+                    {hasSellingProperty(data.id, assessment) && <FaLocationDot className="text-primary-dark size-4" />}
                   </div>
                 </td>
               </tr>

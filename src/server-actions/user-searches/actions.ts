@@ -7,7 +7,7 @@ import { AuthedUserSearches } from "@/types/auth";
 import { z } from "zod";
 import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
-import { getCountyValue, getStateValue } from "@/helpers/states";
+import { getCounty, getState } from "@/helpers/states";
 import { IUserRecentSearches } from "@/types/user";
 import { PolygonProps } from "react-leaflet";
 import moment from "moment";
@@ -39,8 +39,8 @@ export const getUserSearches = async (
     });
 
     const data = request.data?.map((item) => {
-      const state = getStateValue(item.state)?.label || item.state.toLocaleLowerCase() || "";
-      const county = getCountyValue(item.county, item.state)?.label || item.county.toLocaleLowerCase() || "";
+      const state = getState(item.state)?.label || item.state.toLocaleLowerCase() || "";
+      const county = getCounty(item.county, item.state)?.label || item.county.toLocaleLowerCase() || "";
       return {
         title: `${state}/${county}/${Number(item.acrage).toFixed(2)}/${moneyFormatter.format(item.price)}`,
         id: item.id,
@@ -74,11 +74,11 @@ export const getSearchDetails = async (id: number): Promise<ResponseModel<IUserR
       acreage: Number(request.acrage),
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCountyValue(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
       },
       state: {
         value: request.state.toLocaleLowerCase() || "",
-        label: getStateValue(request.state)?.label || request.state.toLocaleLowerCase() || "",
+        label: getState(request.state)?.label || request.state.toLocaleLowerCase() || "",
       },
       city: request.locality,
       lat: Number(request.lat),
@@ -200,11 +200,11 @@ export const getAdditionalSearchDetails = async (id: number): Promise<ResponseMo
       acreage: Number(request.acrage),
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCountyValue(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
       },
       state: {
         value: request.state.toLocaleLowerCase() || "",
-        label: getStateValue(request.state)?.label || request.state.toLocaleLowerCase() || "",
+        label: getState(request.state)?.label || request.state.toLocaleLowerCase() || "",
       },
       city: request.locality,
       lat: Number(request.lat),

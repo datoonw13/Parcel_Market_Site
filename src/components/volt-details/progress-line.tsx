@@ -23,14 +23,11 @@ interface VoltDetailsProgressLineProps {
   isSubscribed: boolean;
 }
 
-const hasSellingProperty = (
-  sellingPropertyParcelNumberNoFormatting: string,
-  data: z.infer<typeof PropertyDataSchema>["assessments"][0]
-) => {
+const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
   if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting);
+    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
   }
-  return data.data.parcelNumberNoFormatting === sellingPropertyParcelNumberNoFormatting;
+  return data.data.id === sellingPropertyId;
 };
 
 const getPin = (
@@ -67,22 +64,22 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   isSubscribed,
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  const avgPriceOfAllAssessments = useMemo(() => {
-    let totalPrices = 0;
-    totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
-    const avgPrice = totalPrices / data.assessments.length;
-    return avgPrice;
-  }, [data.assessments]);
+  // const avgPriceOfAllAssessments = useMemo(() => {
+  //   let totalPrices = 0;
+  //   totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
+  //   const avgPrice = totalPrices / data.assessments.length;
+  //   return avgPrice;
+  // }, [data.assessments]);
 
-  const assessments = isNonValidMedianHighlighted ? data.assessments.filter((el) => el.data.isMedianValid) : data.assessments;
+  const assessments = isNonValidMedianHighlighted ? data.assessments.data.filter((el) => el.data.isMedianValid) : data.assessments.data;
 
-  const allPrices = useMemo(() => assessments.map((el) => el.data.pricePerAcreage), [assessments]);
+  // const allPrices = useMemo(() => assessments.map((el) => el.data.pricePerAcreage), [assessments]);
 
-  const minPricePerAcre = Math.min(...allPrices);
-  const maxPricePerAcre = Math.max(...allPrices);
+  // const minPricePerAcre = Math.min(...allPrices);
+  // const maxPricePerAcre = Math.max(...allPrices);
 
-  const getItemXAxisPositionInPercent = (price: number) =>
-    Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
+  // const getItemXAxisPositionInPercent = (price: number) =>
+  //   Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
 
   return (
     <div
@@ -98,7 +95,10 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                {moneyFormatter.format(avgPriceOfAllAssessments)} <span className="text-grey-600">- Average PPA</span>
+                <span className={cn(!isSubscribed && "blur-[2px]")}>
+                  {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
+                </span>{" "}
+                <span className="text-grey-600">- Average PPA</span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
@@ -110,7 +110,8 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                {moneyFormatter.format(data.price / data.acreage)} <span className="text-grey-600">- VOLT PPA</span>
+                <span className={cn(!isSubscribed && "blur-[2px]")}>{data.pricePerAcreage.formattedString}</span>{" "}
+                <span className="text-grey-600">- VOLT PPA</span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
@@ -127,7 +128,11 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
         <div className="relative">
           <hr className="w-full h-1.5 rounded-lg" style={{ background: "linear-gradient(90deg, #16DB65 8%, #05471C 95.44%)" }} />
           <div
-            style={{ left: `calc(${getItemXAxisPositionInPercent(avgPriceOfAllAssessments)}%)` }}
+            style={{
+              left: `calc(${
+                data.assessments.calculations.avgPriceOfAllAssessments.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]
+              }%)`,
+            }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
@@ -136,7 +141,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
             </div>
           </div>
           <div
-            style={{ left: `calc(${getItemXAxisPositionInPercent(data.price / data.acreage)}%)` }}
+            style={{ left: `calc(${data.pricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
@@ -144,113 +149,116 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
               <div className="size-3 bg-warning rounded-full absolute" />
             </div>
           </div>
-          {assessments.map((property) => {
-            const parcelNumberNoFormatting = property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting;
-            return (
-              <Popover key={parcelNumberNoFormatting} open={propertiesInteraction[parcelNumberNoFormatting] === "hovered"}>
-                <PopoverTrigger className={cn("")} asChild>
+          {assessments.map((property) => (
+            <Popover key={property.data.id} open={propertiesInteraction[property.data.id] === "hovered"}>
+              <PopoverTrigger className={cn("")} asChild>
+                <div
+                  style={{
+                    left: `calc(${property.data.pricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}% - 0px)`,
+                  }}
+                  className="absolute top-0 -translate-y-full -translate-x-1/2"
+                >
                   <div
-                    style={{ left: `calc(${getItemXAxisPositionInPercent(property.data.pricePerAcreage)}% - 0px)` }}
-                    className="absolute top-0 -translate-y-full -translate-x-1/2"
-                  >
-                    <div
-                      onMouseEnter={() => {
-                        if (propertiesInteraction && propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
-                          setPropertiesInteraction((prev) => ({ ...prev, [parcelNumberNoFormatting]: "hovered" }));
-                        }
-                      }}
-                      onMouseLeave={() => {
-                        setPropertiesInteraction((prev) => {
-                          if (prev && prev[parcelNumberNoFormatting] !== "popup") {
-                            const newData = { ...prev };
-                            delete newData[parcelNumberNoFormatting];
-                            return newData;
-                          }
-                          return prev;
-                        });
-                      }}
-                      onDoubleClick={() => {
-                        if (!property.isBulked) {
-                          window.map.setZoom(14);
-                          window.map.setCenter([property.data.longitude, property.data.latitude]);
-                        } else {
-                          window.map.setZoom(12);
-                          window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
-                        }
-                      }}
-                      onClick={() => {
-                        const newData = { ...propertiesInteraction };
-                        Object.keys(newData).forEach((key) => {
-                          if (newData[key] === "popup" && key !== parcelNumberNoFormatting) {
-                            delete newData[key];
-                          }
-                        });
-
-                        newData[parcelNumberNoFormatting] = "popup";
-                        setPropertiesInteraction({ ...newData });
-                      }}
-                      key={property.isBulked ? property.data.id : property.data.parcelNumberNoFormatting}
-                      className={cn(
-                        `cursor-pointer transition-all duration-100 relative `,
-                        propertiesInteraction[parcelNumberNoFormatting] ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
-                      )}
-                    >
-                      <Image
-                        alt=""
-                        src={`/map/pins/${getPin(
-                          hasSellingProperty(data.parcelNumberNoFormatting, property),
-                          property.data.isMedianValid,
-                          !!propertiesInteraction[parcelNumberNoFormatting],
-                          isNonValidMedianHighlighted,
-                          property.isBulked ? property.data.group : undefined
-                        )}.svg`}
-                        fill
-                        loading="eager"
-                        className="w-full h-full  object-cover"
-                      />
-                    </div>
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent side="top" sideOffset={15} className="!outline-none">
-                  {/* <PopoverArrow  /> */}
-                  <div
-                    className="p-0.5"
-                    style={{
-                      background: "linear-gradient(98.39deg, #17DC66 -6.77%, #06481D 112.7%)",
-                      borderRadius: 12,
-                      boxShadow: "0px 4px 12px 0px #0000001F",
+                    onMouseEnter={() => {
+                      if (propertiesInteraction && propertiesInteraction[property.data.id] !== "popup") {
+                        setPropertiesInteraction((prev) => ({ ...prev, [property.data.id]: "hovered" }));
+                      }
                     }}
+                    onMouseLeave={() => {
+                      setPropertiesInteraction((prev) => {
+                        if (prev && prev[property.data.id] !== "popup") {
+                          const newData = { ...prev };
+                          delete newData[property.data.id];
+                          return newData;
+                        }
+                        return prev;
+                      });
+                    }}
+                    onDoubleClick={() => {
+                      if (!property.isBulked) {
+                        window.map.setZoom(14);
+                        window.map.setCenter([property.data.longitude, property.data.latitude]);
+                      } else {
+                        window.map.setZoom(12);
+                        window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
+                      }
+                    }}
+                    onClick={() => {
+                      const newData = { ...propertiesInteraction };
+                      Object.keys(newData).forEach((key) => {
+                        if (newData[key] === "popup" && key !== property.data.id) {
+                          delete newData[key];
+                        }
+                      });
+
+                      newData[property.data.id] = "popup";
+                      setPropertiesInteraction({ ...newData });
+                    }}
+                    key={property.data.id}
+                    className={cn(
+                      `cursor-pointer transition-all duration-100 relative `,
+                      propertiesInteraction[property.data.id] ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
+                    )}
                   >
-                    <div style={{ borderRadius: 10 }} className="bg-[#F1FEF4] p-3">
-                      <p className="text-xs text-grey-600">
-                        Price Per Acre:{" "}
-                        <span className={cn("text-black font-medium", !isSubscribed && "blur-[2px]")}>
-                          {isSubscribed
-                            ? moneyFormatter.format(property.data.pricePerAcreage)
-                            : hideNumber(moneyFormatter.format(property.data.pricePerAcreage))}
-                        </span>
-                      </p>
-                      <p className="text-xs text-grey-600">
-                        Acreage: <span className="text-black font-medium">{property.data.acreage.toFixed(2)}</span>
-                      </p>
-                    </div>
+                    <Image
+                      alt=""
+                      src={`/map/pins/${getPin(
+                        hasSellingProperty(data.id, property),
+                        property.data.isMedianValid,
+                        !!propertiesInteraction[property.data.id],
+                        isNonValidMedianHighlighted,
+                        property.isBulked ? property.data.group : undefined
+                      )}.svg`}
+                      fill
+                      loading="eager"
+                      className="w-full h-full  object-cover"
+                    />
                   </div>
-                </PopoverContent>
-              </Popover>
-            );
-          })}
+                </div>
+              </PopoverTrigger>
+              <PopoverContent side="top" sideOffset={15} className="!outline-none">
+                {/* <PopoverArrow  /> */}
+                <div
+                  className="p-0.5"
+                  style={{
+                    background: "linear-gradient(98.39deg, #17DC66 -6.77%, #06481D 112.7%)",
+                    borderRadius: 12,
+                    boxShadow: "0px 4px 12px 0px #0000001F",
+                  }}
+                >
+                  <div style={{ borderRadius: 10 }} className="bg-[#F1FEF4] p-3">
+                    <p className="text-xs text-grey-600">
+                      Price Per Acre:{" "}
+                      <span className={cn("text-black font-medium", !isSubscribed && "blur-[2px]")}>
+                        {property.data.pricePerAcreage.formattedString}
+                      </span>
+                    </p>
+                    <p className="text-xs text-grey-600">
+                      Acreage: <span className="text-black font-medium">{property.data.acreage.formattedString}</span>
+                    </p>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          ))}
         </div>
         <div className="flex items-center justify-between mt-2">
           <p className="font-semibold text-xs">
             <span className={cn(!isSubscribed && "blur-[2px]")}>
-              {isSubscribed ? moneyFormatter.format(minPricePerAcre) : hideNumber(moneyFormatter.format(minPricePerAcre))}
+              {
+                data.assessments.calculations[`${isNonValidMedianHighlighted ? "minPriceOfValidAssessments" : "minPriceOfAllAssessments"}`]
+                  .formattedString
+              }
             </span>{" "}
             <span className="text-grey-600 font-semibold text-sm">- Lowest sale reported per acre</span>
           </p>
           <p className="font-semibold text-sm">
             <span className="text-grey-600 font-semibold text-xs">Highest sale reported per acre - </span>{" "}
             <span className={cn(!isSubscribed && "blur-[2px]")}>
-              {isSubscribed ? moneyFormatter.format(maxPricePerAcre) : hideNumber(moneyFormatter.format(maxPricePerAcre))}
+              {
+                data.assessments.calculations[`${isNonValidMedianHighlighted ? "maxPriceOfValidAssessments" : "maxPriceOfAllAssessments"}`]
+                  .formattedString
+              }
             </span>
           </p>
         </div>

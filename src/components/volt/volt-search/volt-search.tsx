@@ -6,7 +6,7 @@ import { RadioGroup } from "@radix-ui/react-radio-group";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
+import { getAllStates, getCounties, getCounty, getState } from "@/helpers/states";
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IDecodedAccessToken } from "@/types/auth";
 import { cn } from "@/lib/utils";
@@ -231,7 +231,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
           )}
           <div className="flex flex-col sm:flex-row gap-3 w-full">
             <AutoComplete
-              selectedValue={getStateValue(watch("state"))?.value || null}
+              selectedValue={getState(watch("state"))?.value || null}
               options={states}
               placeholder="State"
               onValueChange={(value) => {

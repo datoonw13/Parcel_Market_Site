@@ -5,7 +5,7 @@ import Image from "next/image";
 import Fade from "embla-carousel-fade";
 import Autoplay from "embla-carousel-autoplay";
 import { AutoComplete } from "@/components/ui/autocomplete";
-import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
+import { getAllStates, getCounties, getCounty, getState } from "@/helpers/states";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
@@ -60,7 +60,7 @@ const LandingSlider = () => {
               onValueChange={(county) => {
                 setValues({ ...values, county });
               }}
-              selectedValue={getCountyValue(values.county, values.state)?.value || null}
+              selectedValue={getCounty(values.county, values.state)?.value || null}
               disabled={!values.state}
               id="landing__county-autocomplete"
             />

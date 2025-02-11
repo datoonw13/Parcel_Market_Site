@@ -347,3 +347,14 @@ export const hideNumber = (num: string): string => {
   }
   return value.join("");
 };
+
+export const hideString = (item: string): string => {
+  const value = item.split("");
+
+  const hideItemsCnt = item.length < 3 ? 2 : 3;
+
+  for (let i = 0; i < hideItemsCnt; i += 1) {
+    value[i] = "*";
+  }
+  return value.join("");
+};

@@ -3,7 +3,7 @@
 import { AutoComplete } from "@/components/ui/autocomplete";
 import AutoCompleteMulti from "@/components/ui/autocomplete-multi";
 import MinmaxDropdown from "@/components/ui/minmax-dropdown";
-import { getAllStates, getCounties, getStateValue } from "@/helpers/states";
+import { getAllStates, getCounties, getState } from "@/helpers/states";
 import { updateSearchParamsWithFilters, parseSearchParams } from "@/lib/utils";
 import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { uniqBy } from "lodash";

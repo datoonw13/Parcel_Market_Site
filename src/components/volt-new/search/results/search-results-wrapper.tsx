@@ -1,6 +1,6 @@
 import { removeParcelNumberFormatting } from "@/helpers/common";
 import { ErrorResponse } from "@/helpers/error-response";
-import { getCountyValue, getStateValue } from "@/helpers/states";
+import { getCounty, getState } from "@/helpers/states";
 import { fetcher } from "@/server-actions/fetcher";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import { propertySearchTypeValidation } from "@/zod-validations/volt-new";
@@ -35,12 +35,12 @@ const getData = async (data: z.infer<typeof propertySearchTypeValidation>) => {
       county: {
         value: property.properties.fields.county.toLocaleLowerCase(),
         label:
-          getCountyValue(property.properties.fields.county, property.properties.fields.state2)?.label ||
+          getCounty(property.properties.fields.county, property.properties.fields.state2)?.label ||
           property.properties.fields.county.toLocaleLowerCase(),
       },
       state: {
         value: property.properties.fields.state2.toLocaleLowerCase(),
-        label: getStateValue(property.properties.fields.state2)?.label || property.properties.fields.state2.toLocaleLowerCase(),
+        label: getState(property.properties.fields.state2)?.label || property.properties.fields.state2.toLocaleLowerCase(),
       },
       lat: Number(property.properties.fields.lat),
       lon: Number(property.properties.fields.lon),

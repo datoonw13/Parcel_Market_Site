@@ -1,12 +1,13 @@
 import { Geometry, FeatureCollection } from "geojson";
 
 export interface IGeneratedFeatureProperties {
-  parcelNumber: string;
+  id: string;
+  // parcelNumber: string;
   parcelNumberNoFormatting: string;
   lng: number;
   lat: number;
   type: "selling" | "calculation-valid" | "calculation-not-valid";
-  acreage: number;
+  acreage: number | string;
   markerSize?: number;
   hoveredMarkerSize?: number;
   selectedMarkerSize?: number;
@@ -19,8 +20,8 @@ export interface IGeneratedFeatureProperties {
   bulkId?: string | null;
   isBulkMedianValid?: boolean;
   lastSaleDate?: Date;
-  price?: number;
-  pricePerAcreage?: number;
+  price?: number | string;
+  pricePerAcreage?: number | string;
   group?: string;
 }
 

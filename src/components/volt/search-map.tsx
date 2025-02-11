@@ -231,6 +231,8 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
       router.push(`/volt/${res.data}`);
     }
 
+    console.log(res, 22);
+
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
     }

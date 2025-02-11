@@ -7,7 +7,7 @@ import { revalidateTag } from "next/cache";
 import { PropertySellReq, IMainPropertyBaseInfo } from "@/types/property";
 import { voltSearchSchema } from "@/zod-validations/volt";
 import { removeParcelNumberFormatting } from "@/helpers/common";
-import { getCountyValue, getStateValue } from "@/helpers/states";
+import { getCounty, getState } from "@/helpers/states";
 import { IVoltPriceCalculationReqParams, IVoltPriceCalculation, IVoltPriceCalculationResponse } from "@/types/volt";
 import { fetcher } from "../fetcher";
 import { userListingsTag } from "../user-listings/tags";
@@ -49,12 +49,12 @@ export const getPropertiesAction = async (
       county: {
         value: property.properties.fields.county.toLocaleLowerCase(),
         label:
-          getCountyValue(property.properties.fields.county, property.properties.fields.state2)?.label ||
+          getCounty(property.properties.fields.county, property.properties.fields.state2)?.label ||
           property.properties.fields.county.toLocaleLowerCase(),
       },
       state: {
         value: property.properties.fields.state2.toLocaleLowerCase(),
-        label: getStateValue(property.properties.fields.state2)?.label || property.properties.fields.state2.toLocaleLowerCase(),
+        label: getState(property.properties.fields.state2)?.label || property.properties.fields.state2.toLocaleLowerCase(),
       },
       lat: Number(property.properties.fields.lat),
       lon: Number(property.properties.fields.lon),
@@ -96,11 +96,11 @@ export const calculateLandPriceAction = async (
       acreage: Number(request.acrage),
       state: {
         value: request.state.toLocaleLowerCase() || "",
-        label: getStateValue(request.state)?.label || request.state.toLocaleLowerCase() || "",
+        label: getState(request.state)?.label || request.state.toLocaleLowerCase() || "",
       },
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCountyValue(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
       },
       city: request.locality,
       lat: Number(request.lat),
@@ -232,6 +232,8 @@ export const calculateLandPriceAction2 = async (payload: {
       errorMessage: null,
     };
   } catch (error) {
+    console.log(error, 22);
+
     const errorData = error as ErrorResponse;
     return {
       data: null,

@@ -87,9 +87,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       window.map = ref;
       await addMarkerImages(mapDefaultMarkers);
 
-      const mainLandBulkGroup = data.assessments.find(
-        (el) => el.isBulked && el.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting)
-      );
+      const mainLandBulkGroup = data.assessments.data.find((el) => el.isBulked && el.data.properties.find((el) => el.id === data.id));
       const geoJsonInit: MapGeoJson = {
         type: "FeatureCollection",
         features: [],
@@ -101,8 +99,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           coordinates: [data.lon, data.lat],
         },
         properties: {
-          parcelNumberNoFormatting: data.parcelNumberNoFormatting,
-          parcelNumber: data.parcelNumber,
+          id: data.id,
+          parcelNumberNoFormatting: data.parcelNumber.formattedString,
           lng: data.lon,
           lat: data.lat,
           type: "selling",
@@ -121,9 +119,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           markerSize: 1,
           hoveredMarkerSize: 1,
           selectedMarkerSize: 1,
-          acreage: data.acreage,
-          price: data.price,
-          pricePerAcreage: data.price / data.acreage,
+          acreage: data.acreage.formattedString,
+          price: data.price.formattedString,
+          pricePerAcreage: data.pricePerAcreage.formattedString,
           polygonLineColor: "#05471C",
           polygonFillColor: "#05471C",
           // bulkId: (mainLandBulkGroup?.isBulked && mainLandBulkGroup?.data.id) || null,
@@ -132,10 +130,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         },
       });
 
-      data.assessments.forEach((el) => {
+      data.assessments.data.forEach((el) => {
         if (el.isBulked) {
           el.data.properties.forEach((childEl) => {
-            if (childEl.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
+            if (childEl.id !== data.id) {
               geoJsonInit.features.push({
                 type: "Feature",
                 geometry: {
@@ -143,8 +141,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                   coordinates: [childEl.longitude, childEl.latitude],
                 },
                 properties: {
-                  parcelNumberNoFormatting: childEl.parcelNumberNoFormatting,
-                  parcelNumber: childEl.parcelNumber,
+                  id: childEl.id,
+                  parcelNumberNoFormatting: childEl.parcelNumber.formattedString,
                   lng: childEl.longitude,
                   lat: childEl.latitude,
                   type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
@@ -154,10 +152,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                   markerSize: 1,
                   hoveredMarkerSize: 1,
                   selectedMarkerSize: 1,
-                  acreage: childEl.acreage,
-                  price: childEl.lastSalesPrice,
-                  pricePerAcreage: childEl.pricePerAcreage,
-                  lastSaleDate: childEl.lastSalesDate,
+                  acreage: childEl.acreage.formattedString,
+                  price: childEl.lastSalePrice.formattedString,
+                  pricePerAcreage: childEl.pricePerAcreage.formattedString,
+                  lastSaleDate: childEl.lastSaleDate,
                   polygonLineColor: "#05471C",
                   polygonFillColor: "#05471C",
                   bulkId: el.data.id,
@@ -167,7 +165,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
               });
             }
           });
-        } else if (el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting) {
+        } else if (el.data.id !== data.id) {
           geoJsonInit.features.push({
             type: "Feature",
             geometry: {
@@ -175,8 +173,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
               coordinates: [el.data.longitude, el.data.latitude],
             },
             properties: {
-              parcelNumberNoFormatting: el.data.parcelNumberNoFormatting,
-              parcelNumber: el.data.parcelNumber,
+              id: el.data.id,
+              parcelNumberNoFormatting: el.data.parcelNumber.formattedString,
               lng: el.data.longitude,
               lat: el.data.latitude,
               type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
@@ -186,10 +184,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
               markerSize: 1,
               hoveredMarkerSize: 1,
               selectedMarkerSize: 1,
-              acreage: el.data.acreage,
-              price: el.data.lastSalesPrice,
-              pricePerAcreage: el.data.pricePerAcreage,
-              lastSaleDate: el.data.lastSalesDate,
+              acreage: el.data.acreage.formattedString,
+              price: el.data.lastSalePrice.formattedString,
+              pricePerAcreage: el.data.pricePerAcreage.formattedString,
+              lastSaleDate: el.data.lastSaleDate,
               polygonLineColor: "#05471C",
               polygonFillColor: "#05471C",
             },
@@ -256,17 +254,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ref.setCenter([data.lon, data.lat]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    addMarkerImages,
-    data.acreage,
-    data.assessments,
-    data.lat,
-    data.lon,
-    data.parcelNumber,
-    data.parcelNumberNoFormatting,
-    data.price,
-    ref,
-  ]);
+  }, [addMarkerImages, data.acreage, data.assessments, data.lat, data.lon, data.parcelNumber, data.price, ref]);
 
   const updateMarkerColor = useCallback(() => {
     if (!ref) return;
@@ -402,9 +390,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
     if (hoveredMarker) {
       list.push({ [hoveredMarker]: "hovered" });
-      const property = data.assessments.find((el) =>
-        el.isBulked ? el.data.id === hoveredMarker : el.data.parcelNumberNoFormatting === hoveredMarker
-      );
+      const property = data.assessments.data.find((el) => (el.isBulked ? el.data.id === hoveredMarker : el.data.id === hoveredMarker));
 
       if (property) {
         openTooltip({
@@ -423,9 +409,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
     if (openPopupMarker) {
       list.push({ [openPopupMarker]: "selected" });
-      const property = data.assessments.find((el) =>
-        el.isBulked ? el.data.id === openPopupMarker : el.data.parcelNumberNoFormatting === openPopupMarker
-      );
+      const property = data.assessments.data.find((el) => (el.isBulked ? el.data.id === openPopupMarker : el.data.id === openPopupMarker));
 
       if (property) {
         ref._popups.forEach((popup) => {

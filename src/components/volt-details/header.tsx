@@ -37,13 +37,6 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
 }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
 
-  const avgPriceOfAssessments = useMemo(() => {
-    let totalPrices = 0;
-    totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
-    const avgPrice = totalPrices / data.assessments.length;
-    return avgPrice;
-  }, [data.assessments]);
-
   return (
     !detecting && (
       <div
@@ -64,7 +57,7 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
               <p className="text-sm font-medium">
                 Avg:{" "}
                 <span className={cn(!isSubscribed && "blur-[2px]")}>
-                  {isSubscribed ? moneyFormatter.format(avgPriceOfAssessments) : hideNumber(moneyFormatter.format(avgPriceOfAssessments))}
+                  {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
                 </span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
@@ -73,11 +66,7 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
               <div className="p-3 border-r flex items-center gap-2">
                 <p className="text-sm font-medium">
                   VOLT:
-                  <span className={cn(!isSubscribed && "blur-[2px]")}>
-                    {isSubscribed
-                      ? moneyFormatter.format(data.price / data.acreage)
-                      : hideNumber(moneyFormatter.format(data.price / data.acreage))}
-                  </span>
+                  <span className={cn(!isSubscribed && "blur-[2px]")}>{data.price.formattedString}</span>
                 </p>
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
               </div>

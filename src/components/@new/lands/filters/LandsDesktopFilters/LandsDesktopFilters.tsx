@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllStates, getCounties, getCountyValue, getStateValue } from "@/helpers/states";
+import { getAllStates, getCounties, getCounty, getState } from "@/helpers/states";
 import { Dispatch, FC, SetStateAction } from "react";
 import clsx from "clsx";
 import Popper from "@/components/@new/shared/Popper";
@@ -39,7 +39,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         getOptionKey={(item) => item.value}
         onChange={(item) => setFilters({ ...filters, state: item?.value || null, county: null })}
         placeholder="State"
-        value={getStateValue(filters.state) as any}
+        value={getState(filters.state) as any}
         onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
         getSelectedOption={(item) => item.value === filters.state}
       />
@@ -53,7 +53,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         getOptionKey={(item) => item.value}
         onChange={(item) => setFilters({ ...filters, county: item?.value || null })}
         placeholder="County"
-        value={getCountyValue(filters.county, filters.state)}
+        value={getCounty(filters.county, filters.state)}
         disabled={!filters.state}
         onFilter={(searchValue, items) => items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))}
         getSelectedOption={(item) => item.value === filters.county}

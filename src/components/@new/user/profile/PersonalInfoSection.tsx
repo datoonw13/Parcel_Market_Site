@@ -8,7 +8,7 @@ import { updateUserInfoSchema } from "@/zod-validations/auth-validations";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getAllStates, getStateValue } from "@/helpers/states";
+import { getAllStates, getState } from "@/helpers/states";
 import { updateUserInfoAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import useNotification from "@/hooks/useNotification";
@@ -154,7 +154,7 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
             }
           }}
           placeholder="State"
-          selectedValue={getStateValue(watch("state"))?.value || null}
+          selectedValue={getState(watch("state"))?.value || null}
           error={!!errors.state}
         />
         <NumberInput
