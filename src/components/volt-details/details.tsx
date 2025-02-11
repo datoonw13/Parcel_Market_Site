@@ -87,7 +87,12 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   isSubscribed,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [propertiesInteraction, setPropertiesInteraction] = useState<{ [key: string]: "hovered" | "popup" }>({});
+  const [propertiesInteraction, setPropertiesInteraction] = useState<{
+    [key: string]: {
+      action: "hovered" | "popup";
+      bulkId?: string | null;
+    };
+  }>({});
   const [backDrop, setBackDrop] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
   const tableRef = useRef<HTMLDivElement>(null);
@@ -95,51 +100,38 @@ const VoltDetails: FC<VoltDetailsProps> = ({
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
 
-  const onMarkerInteraction = useCallback((parcelNumberNoFormatting: string, action: "hover" | "popup") => {
-    // if (action === "hover") {
-    //   const newData = { ...propertiesInteraction };
-    //   Object.keys(newData).forEach((key) => {
-    //     if (newData[key] === "hovered") {
-    //       delete newData[key];
-    //     }
-    //   });
-
-    //   if (propertiesInteraction[parcelNumberNoFormatting] !== "popup") {
-    //     newData[parcelNumberNoFormatting] = "hovered";
-    //   }
-    //   setPropertiesInteraction({ ...newData });
-    // } else {
-    //   setPropertiesInteraction({ [parcelNumberNoFormatting]: "popup" });
-    // }
+  const onMarkerInteraction = useCallback((data: { id: string; action: "hovered" | "popup"; bulkId?: string | null }) => {
     setPropertiesInteraction((prev) => {
-      if (action === "hover") {
+      if (data.action === "hovered") {
         const newData = { ...prev };
         Object.keys(newData).forEach((key) => {
-          if (newData[key] === "hovered") {
+          if (newData[data.id]?.action === "hovered") {
             delete newData[key];
           }
         });
 
-        if (newData[parcelNumberNoFormatting] !== "popup") {
-          newData[parcelNumberNoFormatting] = "hovered";
+        if (newData[data.id]?.action !== "popup") {
+          newData[data.id] = {
+            action: "hovered",
+            bulkId: data.bulkId,
+          };
         }
         return { ...newData };
       }
-      return { [parcelNumberNoFormatting]: "popup" };
+      return {
+        [data.id]: {
+          action: data.action,
+          bulkId: data.bulkId,
+        },
+      };
     });
   }, []);
 
   const onMouseLeave = useCallback(() => {
-    // const newData = { ...propertiesInteraction };
-    // Object.keys(newData).forEach((key) => {
-    //   if (newData[key] === "hovered") {
-    //     delete newData[key];
-    //   }
-    // });
     setPropertiesInteraction((prev) => {
       const newData = { ...prev };
       Object.keys(newData).forEach((key) => {
-        if (newData[key] === "hovered") {
+        if (newData[key].action === "hovered") {
           delete newData[key];
         }
       });
@@ -150,7 +142,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   const onPopupClose = useCallback(() => {
     const newData = { ...propertiesInteraction };
     Object.keys(newData).forEach((key) => {
-      if (newData[key] === "popup") {
+      if (newData[key].action === "popup") {
         delete newData[key];
       }
     });
@@ -166,164 +158,159 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   }, []);
 
   const openPopupDetails = useMemo(() => {
-    const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
+    const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key].action === "popup");
+
     if (!id) {
       return null;
     }
 
-    // if (data.parcelNumberNoFormatting === id) {
-    //   const salesHistory = data.assessments
-    //     .map((el) => (el.isBulked ? el.data.properties : el.data))
-    //     .flat()
-    //     .find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+    if (data.id === id) {
+      const salesHistory = data.assessments.data
+        .map((el) => (el.isBulked ? el.data.properties : el.data))
+        .flat()
+        .find((el) => el.id === data.id);
 
-    //   const details = {
-    //     type: "main-property" as const,
-    //     lat: data.lat,
-    //     lon: data.lon,
-    //     salesHistory: salesHistory
-    //       ? {
-    //           blur: !isSubscribed,
-    //           lastSaleDate: moment(salesHistory.lastSalesDate).format("MM-DD-YYYY"),
-    //           lastSalesPrice: isSubscribed
-    //             ? moneyFormatter.format(salesHistory.lastSalesPrice)
-    //             : hideNumber(moneyFormatter.format(salesHistory.lastSalesPrice)),
-    //         }
-    //       : null,
-    //     data: {
-    //       owner: {
-    //         label: "Owner",
-    //         value: data.owner,
-    //       },
-    //       parcelNumber: {
-    //         label: "Parcel ID",
-    //         value: data.parcelNumberNoFormatting,
-    //       },
-    //       acreage: {
-    //         label: "Acreage",
-    //         value: data.acreage.toFixed(2),
-    //       },
-    //       stateAndCounty: {
-    //         label: "State/County",
-    //         value: `${data.state}/${data.county.replace("County", "")}`,
-    //       },
-    //       voltValue: {
-    //         label: "Volt Value",
-    //         value: isSubscribed ? moneyFormatter.format(data.price) : hideNumber(moneyFormatter.format(data.price)),
-    //         blur: !isSubscribed,
-    //       },
-    //       pricePerAcreage: {
-    //         label: "Price Per Acreage",
-    //         value: isSubscribed
-    //           ? moneyFormatter.format(data.price / data.acreage)
-    //           : hideNumber(moneyFormatter.format(data.price / data.acreage)),
-    //         blur: !isSubscribed,
-    //       },
-    //     },
-    //   };
-    //   return details;
-    // }
+      const details = {
+        type: "main-property" as const,
+        lat: data.lat,
+        lon: data.lon,
+        salesHistory: salesHistory
+          ? {
+              blur: !isSubscribed,
+              lastSaleDate: moment(salesHistory.lastSaleDate).format("MM-DD-YYYY"),
+              lastSalesPrice: salesHistory.lastSalePrice.formattedString,
+            }
+          : null,
+        data: {
+          owner: {
+            label: "Owner",
+            value: data.owner,
+          },
+          parcelNumber: {
+            label: "Parcel ID",
+            value: data.parcelNumber.formattedString,
+          },
+          acreage: {
+            label: "Acreage",
+            value: data.acreage.formattedString,
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${data.state.label}/${data.county.label}`,
+          },
+          voltValue: {
+            label: "Volt Value",
+            value: data.price.formattedString,
+            blur: !isSubscribed,
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: data.price.formattedString,
+            blur: !isSubscribed,
+          },
+        },
+      };
+      return details;
+    }
 
-    // const property = data.assessments.find((el) => (el.isBulked ? el.data.id === id : el.data.parcelNumberNoFormatting === id));
-    // if (!property) {
-    //   return null;
-    // }
+    const property = propertiesInteraction[id]?.bulkId
+      ? data.assessments.data.find((el) => el.data.id === propertiesInteraction[id].bulkId)
+      : data.assessments.data.find((el) => el.data.id === id);
 
-    // if (property.isBulked) {
-    //   const hasSellingProperty = !!property.data.properties.find((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
+    if (!property) {
+      return null;
+    }
 
-    //   const details = {
-    //     type: "bulk" as const,
-    //     lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
-    //     lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
-    //     hasSellingProperty,
-    //     data: {
-    //       parcelNumber: {
-    //         label: "Parcel ID",
-    //         value: "Multiple",
-    //       },
-    //       acreage: {
-    //         label: "Acreage",
-    //         value: property.data.acreage.toFixed(2),
-    //       },
-    //       stateAndCounty: {
-    //         label: "State/County",
-    //         value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-    //       },
-    //       lastSalePrice: {
-    //         label: "Last Sale Price",
-    //         value: isSubscribed ? moneyFormatter.format(property.data.price) : hideNumber(moneyFormatter.format(property.data.price)),
-    //         blur: !isSubscribed,
-    //       },
-    //       lastSaleDate: {
-    //         label: "Last Sale Date",
-    //         value: moment(property.data.properties[0].lastSalesDate).format("MM-DD-YYYY"),
-    //       },
-    //       pricePerAcreage: {
-    //         label: "Price Per Acreage",
-    //         value: isSubscribed
-    //           ? moneyFormatter.format(property.data.pricePerAcreage)
-    //           : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
-    //         blur: !isSubscribed,
-    //       },
-    //     },
-    //   };
-    //   return details;
-    // }
+    if (property.isBulked) {
+      const hasSellingProperty = !!property.data.properties.find((el) => el.id === data.id);
 
-    // if (!property.isBulked) {
-    //   const details = {
-    //     type: "default" as const,
-    //     lat: property.data.latitude,
-    //     lon: property.data.longitude,
-    //     data: {
-    //       parcelNumber: {
-    //         label: "Parcel ID",
-    //         value: property.data.parcelNumberNoFormatting,
-    //       },
-    //       acreage: {
-    //         label: "Acreage",
-    //         value: property.data.acreage.toFixed(2),
-    //       },
-    //       stateAndCounty: {
-    //         label: "State/County",
-    //         value: `${property.data.state}/${property.data.county.replace("County", "")}`,
-    //       },
-    //       lastSalePrice: {
-    //         label: "Last Sale Price",
-    //         value: isSubscribed
-    //           ? moneyFormatter.format(property.data.lastSalesPrice)
-    //           : hideNumber(moneyFormatter.format(property.data.lastSalesPrice)),
-    //         blur: !isSubscribed,
-    //       },
-    //       lastSaleDate: {
-    //         label: "Last Sale Date",
-    //         value: moment(property.data.lastSalesDate).format("MM-DD-YYYY"),
-    //       },
-    //       pricePerAcreage: {
-    //         label: "Price Per Acreage",
-    //         value: isSubscribed
-    //           ? moneyFormatter.format(property.data.pricePerAcreage)
-    //           : hideNumber(moneyFormatter.format(property.data.pricePerAcreage)),
-    //         blur: !isSubscribed,
-    //       },
-    //     },
-    //   };
+      const details = {
+        type: "bulk" as const,
+        lat: hasSellingProperty ? data.lat : property.data.properties[0].latitude,
+        lon: hasSellingProperty ? data.lon : property.data.properties[0].longitude,
+        hasSellingProperty,
+        data: {
+          parcelNumber: {
+            label: "Parcel ID",
+            value: `Multiple(${property.data.group.toLocaleUpperCase()})`,
+          },
+          acreage: {
+            label: "Acreage",
+            value: property.data.acreage.formattedString,
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${property.data.state.label}/${property.data.county.label}`,
+          },
+          lastSalePrice: {
+            label: "Last Sale Price",
+            value: property.data.price.formattedString,
+            blur: !isSubscribed,
+          },
+          lastSaleDate: {
+            label: "Last Sale Date",
+            value: moment(property.data.lastSaleDate).format("MM-DD-YYYY"),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: property.data.pricePerAcreage.formattedString,
+            blur: !isSubscribed,
+          },
+        },
+      };
+      return details;
+    }
 
-    //   return details;
-    // }
+    if (!property.isBulked) {
+      const details = {
+        type: "default" as const,
+        lat: property.data.latitude,
+        lon: property.data.longitude,
+        data: {
+          parcelNumber: {
+            label: "Parcel ID",
+            value: property.data.parcelNumber.formattedString,
+          },
+          acreage: {
+            label: "Acreage",
+            value: property.data.acreage.formattedString,
+          },
+          stateAndCounty: {
+            label: "State/County",
+            value: `${property.data.state.label}/${property.data.county.label}`,
+          },
+          lastSalePrice: {
+            label: "Last Sale Price",
+            value: property.data.lastSalePrice.formattedString,
+            blur: !isSubscribed,
+          },
+          lastSaleDate: {
+            label: "Last Sale Date",
+            value: moment(property.data.lastSaleDate).format("MM-DD-YYYY"),
+          },
+          pricePerAcreage: {
+            label: "Price Per Acreage",
+            value: property.data.pricePerAcreage.formattedString,
+            blur: !isSubscribed,
+          },
+        },
+      };
+
+      return details;
+    }
 
     return null;
   }, [
-    data.acreage,
-    data.assessments,
-    data.county,
+    data.acreage.formattedString,
+    data.assessments.data,
+    data.county.label,
+    data.id,
     data.lat,
     data.lon,
     data.owner,
-    data.parcelNumber,
-    data.price,
-    data.state,
+    data.parcelNumber.formattedString,
+    data.price.formattedString,
+    data.state.label,
     isSubscribed,
     propertiesInteraction,
   ]);

@@ -15,10 +15,18 @@ interface VoltDetailsProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
   setPropertiesInteraction: Dispatch<
     SetStateAction<{
-      [key: string]: "hovered" | "popup";
+      [key: string]: {
+        action: "hovered" | "popup";
+        bulkId?: string | null;
+      };
     }>
   >;
-  propertiesInteraction: { [key: string]: "hovered" | "popup" };
+  propertiesInteraction: {
+    [key: string]: {
+      action: "hovered" | "popup";
+      bulkId?: string | null;
+    };
+  };
   isNonValidMedianHighlighted: boolean;
   isSubscribed: boolean;
 }
@@ -56,6 +64,29 @@ const getPin = (
   return group ? `red-${group}` : "red-default";
 };
 
+const getState = (
+  id: string,
+  propertiesInteraction: {
+    [key: string]: {
+      action: "hovered" | "popup";
+      bulkId?: string | null;
+    };
+  }
+) => {
+  const hovered =
+    propertiesInteraction[id]?.action === "hovered" ||
+    Object.values(propertiesInteraction).find((el) => el.bulkId === id)?.action === "hovered";
+  const popup =
+    propertiesInteraction[id]?.action === "popup" ||
+    Object.values(propertiesInteraction).find((el) => el.bulkId === id)?.action === "popup";
+
+  return {
+    hovered,
+    popup,
+    isActive: hovered || popup,
+  };
+};
+
 const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   data,
   propertiesInteraction,
@@ -63,23 +94,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   isNonValidMedianHighlighted,
   isSubscribed,
 }) => {
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  // const avgPriceOfAllAssessments = useMemo(() => {
-  //   let totalPrices = 0;
-  //   totalPrices = data.assessments.reduce((acc, cur) => acc + cur.data.pricePerAcreage, 0);
-  //   const avgPrice = totalPrices / data.assessments.length;
-  //   return avgPrice;
-  // }, [data.assessments]);
-
   const assessments = isNonValidMedianHighlighted ? data.assessments.data.filter((el) => el.data.isMedianValid) : data.assessments.data;
-
-  // const allPrices = useMemo(() => assessments.map((el) => el.data.pricePerAcreage), [assessments]);
-
-  // const minPricePerAcre = Math.min(...allPrices);
-  // const maxPricePerAcre = Math.max(...allPrices);
-
-  // const getItemXAxisPositionInPercent = (price: number) =>
-  //   Number((((price - minPricePerAcre) / (maxPricePerAcre - minPricePerAcre)) * 100).toFixed(2));
 
   return (
     <div
@@ -149,98 +164,107 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
               <div className="size-3 bg-warning rounded-full absolute" />
             </div>
           </div>
-          {assessments.map((property) => (
-            <Popover key={property.data.id} open={propertiesInteraction[property.data.id] === "hovered"}>
-              <PopoverTrigger className={cn("")} asChild>
-                <div
-                  style={{
-                    left: `calc(${property.data.pricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}% - 0px)`,
-                  }}
-                  className="absolute top-0 -translate-y-full -translate-x-1/2"
-                >
+          {assessments.map((property) => {
+            const { hovered, isActive, popup } = getState(property.data.id, propertiesInteraction);
+            return (
+              <Popover key={property.data.id} open={propertiesInteraction[property.data.id]?.action === "hovered"}>
+                <PopoverTrigger className={cn("")} asChild>
                   <div
-                    onMouseEnter={() => {
-                      if (propertiesInteraction && propertiesInteraction[property.data.id] !== "popup") {
-                        setPropertiesInteraction((prev) => ({ ...prev, [property.data.id]: "hovered" }));
-                      }
+                    style={{
+                      left: `calc(${property.data.pricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}% - 0px)`,
                     }}
-                    onMouseLeave={() => {
-                      setPropertiesInteraction((prev) => {
-                        if (prev && prev[property.data.id] !== "popup") {
-                          const newData = { ...prev };
-                          delete newData[property.data.id];
-                          return newData;
-                        }
-                        return prev;
-                      });
-                    }}
-                    onDoubleClick={() => {
-                      if (!property.isBulked) {
-                        window.map.setZoom(14);
-                        window.map.setCenter([property.data.longitude, property.data.latitude]);
-                      } else {
-                        window.map.setZoom(12);
-                        window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
-                      }
-                    }}
-                    onClick={() => {
-                      const newData = { ...propertiesInteraction };
-                      Object.keys(newData).forEach((key) => {
-                        if (newData[key] === "popup" && key !== property.data.id) {
-                          delete newData[key];
-                        }
-                      });
-
-                      newData[property.data.id] = "popup";
-                      setPropertiesInteraction({ ...newData });
-                    }}
-                    key={property.data.id}
-                    className={cn(
-                      `cursor-pointer transition-all duration-100 relative `,
-                      propertiesInteraction[property.data.id] ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
-                    )}
+                    className="absolute top-0 -translate-y-full -translate-x-1/2"
                   >
-                    <Image
-                      alt=""
-                      src={`/map/pins/${getPin(
-                        hasSellingProperty(data.id, property),
-                        property.data.isMedianValid,
-                        !!propertiesInteraction[property.data.id],
-                        isNonValidMedianHighlighted,
-                        property.isBulked ? property.data.group : undefined
-                      )}.svg`}
-                      fill
-                      loading="eager"
-                      className="w-full h-full  object-cover"
-                    />
+                    <div
+                      onMouseEnter={() => {
+                        if (!popup) {
+                          setPropertiesInteraction((prev) => ({
+                            ...prev,
+                            [property.data.id]: { action: "hovered", bulkId: property.data.id },
+                          }));
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        setPropertiesInteraction((prev) => {
+                          if (prev && prev[property.data.id].action !== "popup") {
+                            const newData = { ...prev };
+                            delete newData[property.data.id];
+                            return newData;
+                          }
+                          return prev;
+                        });
+                      }}
+                      onDoubleClick={() => {
+                        if (!property.isBulked) {
+                          window.map.setZoom(14);
+                          window.map.setCenter([property.data.longitude, property.data.latitude]);
+                        } else {
+                          window.map.setZoom(12);
+                          window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
+                        }
+                      }}
+                      onClick={() => {
+                        const newData = { ...propertiesInteraction };
+                        Object.keys(newData).forEach((key) => {
+                          if (newData[key]?.action === "popup" && key !== property.data.id) {
+                            delete newData[key];
+                          }
+                        });
+
+                        newData[property.data.id] = {
+                          action: "popup",
+                          bulkId: property.data.id,
+                        };
+                        setPropertiesInteraction({ ...newData });
+                      }}
+                      key={property.data.id}
+                      className={cn(
+                        `cursor-pointer transition-all duration-100 relative `,
+                        isActive ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
+                      )}
+                    >
+                      <Image
+                        alt=""
+                        src={`/map/pins/${getPin(
+                          hasSellingProperty(data.id, property),
+                          property.data.isMedianValid,
+                          isActive,
+                          isNonValidMedianHighlighted,
+                          property.isBulked ? property.data.group : undefined
+                        )}.svg`}
+                        fill
+                        loading="eager"
+                        className="w-full h-full  object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent side="top" sideOffset={15} className="!outline-none">
-                {/* <PopoverArrow  /> */}
-                <div
-                  className="p-0.5"
-                  style={{
-                    background: "linear-gradient(98.39deg, #17DC66 -6.77%, #06481D 112.7%)",
-                    borderRadius: 12,
-                    boxShadow: "0px 4px 12px 0px #0000001F",
-                  }}
-                >
-                  <div style={{ borderRadius: 10 }} className="bg-[#F1FEF4] p-3">
-                    <p className="text-xs text-grey-600">
-                      Price Per Acre:{" "}
-                      <span className={cn("text-black font-medium", !isSubscribed && "blur-[2px]")}>
-                        {property.data.pricePerAcreage.formattedString}
-                      </span>
-                    </p>
-                    <p className="text-xs text-grey-600">
-                      Acreage: <span className="text-black font-medium">{property.data.acreage.formattedString}</span>
-                    </p>
+                </PopoverTrigger>
+                <PopoverContent side="top" sideOffset={15} className="!outline-none">
+                  {/* <PopoverArrow  /> */}
+                  <div
+                    className="p-0.5"
+                    style={{
+                      background: "linear-gradient(98.39deg, #17DC66 -6.77%, #06481D 112.7%)",
+                      borderRadius: 12,
+                      boxShadow: "0px 4px 12px 0px #0000001F",
+                    }}
+                  >
+                    <div style={{ borderRadius: 10 }} className="bg-[#F1FEF4] p-3">
+                      <p className="text-xs text-grey-600">
+                        Price Per Acre:{" "}
+                        <span className={cn("text-black font-medium", !isSubscribed && "blur-[2px]")}>
+                          {property.data.pricePerAcreage.formattedString}
+                        </span>
+                      </p>
+                      <p className="text-xs text-grey-600">
+                        Acreage: <span className="text-black font-medium">{property.data.acreage.formattedString}</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          ))}
+                </PopoverContent>
+              </Popover>
+            );
+          })}
         </div>
         <div className="flex items-center justify-between mt-2">
           <p className="font-semibold text-xs">

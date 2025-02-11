@@ -26,9 +26,14 @@ const mapData = {
 interface VoltDetailsMapProps {
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
-  onMarkerInteraction: (parcelNumberNoFormatting: string, action: "hover" | "popup") => void;
+  onMarkerInteraction: (data: { id: string; action: "hovered" | "popup"; bulkId?: string | null }) => void;
   onMouseLeave: () => void;
-  propertiesInteraction: { [key: string]: "hovered" | "popup" };
+  propertiesInteraction: {
+    [key: string]: {
+      action: "hovered" | "popup";
+      bulkId?: string | null;
+    };
+  };
   selectedLayer: string;
 }
 
@@ -311,8 +316,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     ref?.on("mousemove", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
       if (feature) {
-        const id = feature.bulkId ? feature.bulkId : feature.parcelNumberNoFormatting;
-        onMarkerInteraction(id, "hover");
+        onMarkerInteraction({ id: feature.id, action: "hovered", bulkId: feature?.bulkId || null });
       }
     });
 
@@ -324,38 +328,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
 
       if (feature) {
-        const id = feature.bulkId ? feature.bulkId : feature.parcelNumberNoFormatting;
-        if (id) {
-          onMarkerInteraction(id, "popup");
-        }
+        onMarkerInteraction({ id: feature.id, action: "popup", bulkId: feature?.bulkId || null });
       }
     });
   }, [onMarkerInteraction, onMouseLeave, ref]);
-
-  // const openPopup = useCallback(
-  //   ({ lat, lng, popupRef, onClose }: { lng: number; lat: number; popupRef: any; onClose: () => void }) => {
-  //     if (ref) {
-  //       const existedPopup = ref._popups[0];
-  //       if (existedPopup && !existedPopup._classList.has("tooltip")) {
-  //         existedPopup.setLngLat([lng, lat]);
-  //         return;
-  //       }
-  //       new Popup({
-  //         closeButton: false,
-  //         className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3 popup",
-  //       })
-  //         .setLngLat([lng, lat])
-  //         .setDOMContent(popupRef.current)
-  //         .setMaxWidth("max-content")
-  //         .addTo(ref)
-  //         .on("close", () => {
-  //           onClose();
-  //         });
-  //     }
-  //   },
-
-  //   [ref]
-  // );
 
   const openTooltip = useCallback(
     ({ lat, lng, popupRef }: { lng: number; lat: number; popupRef: any }) => {
@@ -383,14 +359,17 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   const highlightMarkers = useCallback(() => {
     if (!ref || !ref.getLayer(mapData.layers.markersLayer)) return;
-    const hoveredMarker = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "hovered");
-    const openPopupMarker = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key] === "popup");
 
-    const list: Array<{ [key: string]: "default" | "hovered" | "selected" }> = [];
+    const list = Object.keys(propertiesInteraction).map((id) => ({
+      id,
+      action: propertiesInteraction[id].action,
+      bulkId: propertiesInteraction[id].bulkId,
+    }));
+
+    const hoveredMarker = list.find((el) => el.action === "hovered");
 
     if (hoveredMarker) {
-      list.push({ [hoveredMarker]: "hovered" });
-      const property = data.assessments.data.find((el) => (el.isBulked ? el.data.id === hoveredMarker : el.data.id === hoveredMarker));
+      const property = data.assessments.data.find((el) => el.data.id === (hoveredMarker.bulkId ? hoveredMarker.bulkId : hoveredMarker.id));
 
       if (property) {
         openTooltip({
@@ -407,33 +386,13 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       });
     }
 
-    if (openPopupMarker) {
-      list.push({ [openPopupMarker]: "selected" });
-      const property = data.assessments.data.find((el) => (el.isBulked ? el.data.id === openPopupMarker : el.data.id === openPopupMarker));
-
-      if (property) {
-        ref._popups.forEach((popup) => {
-          // popup.remove();
-        });
-        // openPopup({
-        //   lat: property.isBulked ? property.data.properties[0].latitude : property.data.latitude,
-        //   lng: property.isBulked ? property.data.properties[0].longitude : property.data.longitude,
-        //   popupRef,
-        //   onClose: () => {
-        //     onPopupClose();
-        //   },
-        // });
-      }
-    }
-
     if (list.length) {
       const markerIconFilters = list.map((el) => {
-        const [key, value] = [Object.keys(el)[0], Object.values(el)[0]];
         // eslint-disable-next-line no-nested-ternary
-        const markerType = value === "default" ? "markerSize" : value === "hovered" ? "hoveredMarkerIcon" : "selectedMarkerIcon";
+        const markerType = el.action === "hovered" ? "hoveredMarkerIcon" : "selectedMarkerIcon";
 
         return [
-          ["==", ["get", key.includes("multiple") ? "bulkId" : "parcelNumberNoFormatting"], key],
+          ["==", ["get", el.bulkId ? "bulkId" : "id"], el.bulkId ? el.bulkId : el.id],
           ["get", markerType],
         ];
       });
@@ -445,23 +404,16 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ]);
 
       ///
-      const symbolSortFilters = list.map((el) => {
-        const [key, value] = [Object.keys(el)[0], Object.values(el)[0]];
-        // eslint-disable-next-line no-nested-ternary
-
-        return [["==", ["get", key.includes("multiple") ? "bulkId" : "parcelNumberNoFormatting"], key], 2];
-      });
+      const symbolSortFilters = list.map((el) => [["==", ["get", el.bulkId ? "bulkId" : "id"], el.bulkId ? el.bulkId : el.id], 2]);
 
       ref.setLayoutProperty(mapData.layers.markersLayer, "symbol-sort-key", ["case", ...symbolSortFilters.flat(), 1]);
       ///
 
       const markerSizeFilters = list.map((el) => {
-        const [key, value] = [Object.keys(el)[0], Object.values(el)[0]];
-        // eslint-disable-next-line no-nested-ternary
-        const markerSize = value === "default" ? "markerSize" : value === "hovered" ? "hoveredMarkerSize" : "selectedMarkerSize";
+        const markerSize = el.action === "hovered" ? "hoveredMarkerSize" : "selectedMarkerSize";
 
         return [
-          ["==", ["get", key.includes("multiple") ? "bulkId" : "parcelNumberNoFormatting"], key],
+          ["==", ["get", el.bulkId ? "bulkId" : "id"], el.bulkId ? el.bulkId : el.id],
           ["get", markerSize],
         ];
       });

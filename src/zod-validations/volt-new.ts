@@ -293,7 +293,7 @@ export const PropertyDataSchema = z
       },
       acreage: {
         value: acrage,
-        formattedString: acrage.toFixed(),
+        formattedString: acrage.toFixed(2),
       },
       price: {
         value: subscribed ? price : null,
