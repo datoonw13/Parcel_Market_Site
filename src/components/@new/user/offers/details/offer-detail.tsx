@@ -19,8 +19,7 @@ const OfferDetail = ({ data }: { data: OfferModel }) => (
           <p className="font-semibold truncate">{data.sellingProperty.title}</p>
           <p className="flex items-center gap-1.5 text-grey-600 text-xs">
             <LocationIcon1 className="!w-3 !h-3.5" color="primary-main" />
-            {getState(data.sellingProperty.state)?.label};{" "}
-            {getCounty(data.sellingProperty.county, data.sellingProperty.state)?.label}
+            {getState(data.sellingProperty.state)?.label}; {getCounty(data.sellingProperty.county, data.sellingProperty.state)?.label}
           </p>
         </div>
         <div className="flex sm:flex-col justify-between items-center sm:items-end">
