@@ -14,8 +14,7 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
-
-    const data = await PropertyDataSchema.safeParseAsync(req);
+    const data = await PropertyDataSchema.safeParseAsync({ ...req, subscribed: true });
 
     return {
       errorMessage: null,
@@ -39,7 +38,6 @@ const INITIAL_FILTERS = {
 } as z.infer<typeof voltDetailsFiltersValidations>;
 
 const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams: { [key: string]: string }; params: { id: string } }) => {
-  const user = await getUserAction();
   const filtersValidation = await voltDetailsFiltersValidations.safeParseAsync({
     ...searchParams,
   });
@@ -61,10 +59,7 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   const data = filtersValidation.data ? await getData(queryParams.toString()) : null;
   const propertyTypes = await fetcher<Array<{ id: number; group: "vacant-land" | "other"; value: string }>>("properties/propertyTypes");
 
-  return (
-    filtersValidation.data &&
-    data?.data && <VoltDetailsLayout isSubscribed={!!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data} />
-  );
+  return filtersValidation.data && data?.data && <VoltDetailsLayout isSubscribed propertyTypes={propertyTypes} data={data.data} />;
 };
 
 export default VoltPropertyDetailsPage;
