@@ -419,7 +419,10 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                   Acreage: <span className="text-sm font-medium text-black">{data?.acreage.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  State/County: <span className="text-sm font-medium text-black">ae</span>
+                  State/County:{" "}
+                  <span className="text-sm font-medium text-black">
+                    {data.state.label}/{data.county.label}
+                  </span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                   Volt Value: <span className="text-sm font-medium text-black">{data?.price.formattedString}</span>
