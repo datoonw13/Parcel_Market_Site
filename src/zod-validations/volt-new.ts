@@ -72,7 +72,7 @@ const AssessmentBaseSchema = z
     latitude: z.coerce.number(),
     longitude: z.coerce.number(),
     state: z.string(),
-    county: z.string(),
+    county: z.string().nullable().optional(),
     isMainProperty: z.boolean().nullable(),
   })
   .transform(({ arcage, parselId, lastSalesPrice, lastSalesDate, id, state, county, ...input }) => ({
@@ -91,7 +91,7 @@ const AssessmentBaseSchema = z
     county: {
       value: "",
       label: "",
-      ...(getCounty(county, state) || {}),
+      ...(getCounty(county || "", state) || {}),
     },
   }));
 
@@ -101,7 +101,7 @@ const BulkAssessmentBaseSchema = z
     price: z.number(),
     pricePerAcreage: z.number(),
     state: z.string(),
-    county: z.string(),
+    county: z.string().nullable().optional(),
     properties: z.array(AssessmentBaseSchema),
     isMedianValid: z.boolean().optional(),
     group: z.string(),
@@ -208,7 +208,7 @@ export const PropertyDataSchema = z
             county: {
               value: "",
               label: "",
-              ...(getCounty(county, state) || {}),
+              ...(getCounty(county || "", state) || {}),
             },
             properties: properties.map((property) => ({
               ...property,
