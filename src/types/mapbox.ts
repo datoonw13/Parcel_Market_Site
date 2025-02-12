@@ -2,7 +2,7 @@ import { Geometry, FeatureCollection } from "geojson";
 
 export interface IGeneratedFeatureProperties {
   id: string;
-  // parcelNumber: string;
+  parcelNumber: string;
   parcelNumberNoFormatting: string;
   lng: number;
   lat: number;

@@ -39,6 +39,7 @@ const VoltSearchResultsMap = () => {
             coordinates: [feature.lon, feature.lat],
           },
           properties: {
+            id: feature.id.toString(),
             owner: feature.owner,
             parcelNumberNoFormatting: feature.parcelNumberNoFormatting,
             parcelNumber: feature.parcelNumber,
@@ -137,7 +138,7 @@ const VoltSearchResultsMap = () => {
 
           setPopupDetails({
             owner: feature.properties.owner || "",
-            acreage: Number(feature.properties.acreage.toFixed(2)),
+            acreage: Number(feature.properties.acreage),
             parcelNumberNoFormatting: feature.properties.parcelNumberNoFormatting,
           });
         }

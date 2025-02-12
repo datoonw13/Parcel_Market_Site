@@ -564,6 +564,7 @@ import { MapGeoJson } from "@/types/mapbox";
 import { mapDefaultMarkers } from "@/lib/map";
 import { center } from "@turf/center";
 import * as turf from "@turf/turf";
+import { uuid } from "short-uuid";
 import { Button } from "../ui/button";
 
 const MapComponent = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
@@ -636,6 +637,7 @@ const VoltMap: FC<VoltMapProps> = ({
             coordinates: [feature.lon, feature.lat],
           },
           properties: {
+            id: uuid(),
             owner: feature.owner,
             parcelNumberNoFormatting: feature.parcelNumberNoFormatting,
             parcelNumber: feature.parcelNumber,
@@ -727,7 +729,7 @@ const VoltMap: FC<VoltMapProps> = ({
           if (step === VoltSteps.SEARCH_RESULTS) {
             setSearchResultPopupDetails({
               owner: feature.properties.owner || "",
-              acreage: feature.properties.acreage,
+              acreage: Number(feature.properties.acreage),
               parcelNumberNoFormatting: feature.properties.parcelNumberNoFormatting,
             });
           }

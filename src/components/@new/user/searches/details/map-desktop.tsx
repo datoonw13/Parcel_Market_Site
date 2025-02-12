@@ -75,7 +75,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
     async (styleChange?: boolean) => {
       if (ref) {
         const { lat, lon, parcelNumberNoFormatting, acreage, parcelNumber, price, pricePerAcreage } = data;
-        const geoJsonInit: MapGeoJson = {
+        const geoJsonInit: any = {
           type: "FeatureCollection",
           features: [],
         };

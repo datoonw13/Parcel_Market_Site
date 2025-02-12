@@ -71,8 +71,7 @@ const ReceivedOfferItem: FC<ReceivedOfferItemProps> = ({ data }) => {
             <div className="flex items-center gap-1.5">
               <LocationIcon1 color="white" className="w-3 h-3.5 fill-white sm:fill-grey-600" />
               <h6 className="text-xs text-white sm:text-grey-600">
-                {getState(data.sellingProperty.state)?.label};{" "}
-                {getCounty(data.sellingProperty.county, data.sellingProperty.state)?.label}
+                {getState(data.sellingProperty.state)?.label}; {getCounty(data.sellingProperty.county, data.sellingProperty.state)?.label}
               </h6>
             </div>
           </div>

@@ -105,6 +105,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         },
         properties: {
           id: data.id,
+          parcelNumber: data.parcelNumber.formattedString,
           parcelNumberNoFormatting: data.parcelNumber.formattedString,
           lng: data.lon,
           lat: data.lat,
@@ -148,6 +149,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 properties: {
                   id: childEl.id,
                   parcelNumberNoFormatting: childEl.parcelNumber.formattedString,
+                  parcelNumber: childEl.parcelNumber.formattedString,
                   lng: childEl.longitude,
                   lat: childEl.latitude,
                   type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
@@ -180,6 +182,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
             properties: {
               id: el.data.id,
               parcelNumberNoFormatting: el.data.parcelNumber.formattedString,
+              parcelNumber: el.data.parcelNumber.formattedString,
               lng: el.data.longitude,
               lat: el.data.latitude,
               type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
