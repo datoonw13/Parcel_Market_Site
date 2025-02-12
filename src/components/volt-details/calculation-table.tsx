@@ -311,12 +311,10 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county.label}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.formattedString}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        <span className={cn("relative z-0", !isSubscribed && "blur-[2px]")}>{assessment.data.price.formattedString}</span>
+                        <span>-</span>
                       </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        <span className={cn("relative z-0", !isSubscribed && "blur-[2px]")}>
-                          {assessment.data.pricePerAcreage.formattedString}
-                        </span>
+                        <span>-</span>
                       </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         {moment(assessment.data.lastSaleDate).format("MM-DD-YYYY")}
