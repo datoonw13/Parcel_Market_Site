@@ -15,6 +15,7 @@ import { z } from "zod";
 import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "@radix-ui/react-tooltip";
 import { IPropertiesInteraction } from "@/types/volt";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import NoDataIcon from "../@new/icons/no-data";
 
 const HEADERS = {
   parcelNumber: {
@@ -183,6 +184,16 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
           </tr>
         </thead>
         <tbody>
+          {assessments.length === 0 && (
+            <tr>
+              <td colSpan={7}>
+                <div className="w-full h-60 flex justify-center items-center flex-col py-10">
+                  <NoDataIcon className="size-52" />
+                  <h2 className="font-semibold">No result found</h2>
+                </div>
+              </td>
+            </tr>
+          )}
           {assessments.map((assessment) => {
             const { hovered, popup } = getState(assessment.data.id, propertiesInteraction);
 
