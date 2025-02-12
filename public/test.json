@@ -31,11 +31,6 @@
        "medianLowerBound":"1663.40",
        "medianUpperBound":"9980.37",
        "averagePricePerAcreValidMedians":"3987.90",
-       "radius":"10",
-       "soldWithin":null,
-       "acreageMin":"3",
-       "acreageMax":"100",
-       "propertyTypes":null,
        "assessments":[
           {
              "isBulked":false,
@@ -1082,7 +1077,7 @@
                 "isValid":true,
                 "isMedianValid":true,
                 "bulkGroupId":"48000-2023-02-03",
-                "bulkGroupKey":"A",
+                "group":"a",
                 "properties":[
                    {
                       "id":317887,
@@ -1155,7 +1150,7 @@
                 "isValid":true,
                 "isMedianValid":true,
                 "bulkGroupId":"23000-2024-01-24",
-                "bulkGroupKey":"B",
+                "group":"b",
                 "properties":[
                    {
                       "id":317891,
@@ -1209,7 +1204,7 @@
                 "isValid":true,
                 "isMedianValid":false,
                 "bulkGroupId":"310000-2024-07-02",
-                "bulkGroupKey":"C",
+                "group":"c",
                 "properties":[
                    {
                       "id":317925,
@@ -1263,7 +1258,7 @@
                 "isValid":true,
                 "isMedianValid":false,
                 "bulkGroupId":"43000-2024-02-12",
-                "bulkGroupKey":"D",
+                "group":"d",
                 "properties":[
                    {
                       "id":317928,

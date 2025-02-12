@@ -9,6 +9,7 @@ import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
 import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
 import { Map as MapBoX, Popup } from "mapbox-gl";
+import { IPropertiesInteraction } from "@/types/volt";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -26,14 +27,9 @@ const mapData = {
 interface VoltDetailsMapProps {
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
-  onMarkerInteraction: (data: { id: string; action: "hovered" | "popup"; bulkId?: string | null }) => void;
+  onMarkerInteraction: (data: Partial<IPropertiesInteraction>) => void;
   onMouseLeave: () => void;
-  propertiesInteraction: {
-    [key: string]: {
-      action: "hovered" | "popup";
-      bulkId?: string | null;
-    };
-  };
+  propertiesInteraction: IPropertiesInteraction;
   selectedLayer: string;
 }
 
@@ -319,7 +315,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     ref?.on("mousemove", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
       if (feature) {
-        onMarkerInteraction({ id: feature.id, action: "hovered", bulkId: feature?.bulkId || null });
+        onMarkerInteraction({
+          hover: { clickId: feature.id, isBulked: !!feature.bulkId, openId: feature.bulkId ? feature.bulkId : feature.id },
+        });
       }
     });
 
@@ -329,9 +327,12 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
     ref?.on("click", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
+      console.log(feature, 22);
 
       if (feature) {
-        onMarkerInteraction({ id: feature.id, action: "popup", bulkId: feature?.bulkId || null });
+        onMarkerInteraction({
+          popup: { clickId: feature.id, isBulked: !!feature.bulkId, openId: feature.bulkId ? feature.bulkId : feature.id },
+        });
       }
     });
   }, [onMarkerInteraction, onMouseLeave, ref]);
@@ -363,21 +364,41 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   const highlightMarkers = useCallback(() => {
     if (!ref || !ref.getLayer(mapData.layers.markersLayer)) return;
 
-    const list = Object.keys(propertiesInteraction).map((id) => ({
-      id,
-      action: propertiesInteraction[id].action,
-      bulkId: propertiesInteraction[id].bulkId,
-    }));
+    const list: Array<{
+      id: string;
+      action: any;
+      bulkId: any;
+    }> = [];
 
-    const hoveredMarker = list.find((el) => el.action === "hovered");
+    if (propertiesInteraction.hover) {
+      list.push({
+        action: "hovered",
+        id: propertiesInteraction.hover.openId,
+        bulkId: propertiesInteraction.hover.isBulked && propertiesInteraction.hover.openId,
+      });
+    }
 
-    if (hoveredMarker) {
-      const property = data.assessments.data.find((el) => el.data.id === (hoveredMarker.bulkId ? hoveredMarker.bulkId : hoveredMarker.id));
+    if (propertiesInteraction.popup) {
+      list.push({
+        action: "popup",
+        id: propertiesInteraction.popup.openId,
+        bulkId: propertiesInteraction.popup.isBulked && propertiesInteraction.popup.openId,
+      });
+    }
+    // const hoveredMarker = list.find((el) => el.action === "hovered");
+
+    if (propertiesInteraction.hover) {
+      const property = data.assessments.data.find((el) => el.data.id === propertiesInteraction.hover?.openId);
 
       if (property) {
+        const lat = property.isBulked ? property.data.properties[0].latitude : property.data.latitude;
+        const lng = property.isBulked ? property.data.properties[0].longitude : property.data.longitude;
+        if (propertiesInteraction.popup && propertiesInteraction.popup.openId === property.data.id) {
+          return;
+        }
         openTooltip({
-          lat: property.isBulked ? property.data.properties[0].latitude : property.data.latitude,
-          lng: property.isBulked ? property.data.properties[0].longitude : property.data.longitude,
+          lat,
+          lng,
           popupRef: tooltipRef,
         });
       }
@@ -464,11 +485,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
   return (
     <>
-      {/* <div style={{ display: "none" }}>
-        <div className="" ref={popupRef}>
-          {openPopupDetails && <VoltDetailsMapPopup data={openPopupDetails} />}
-        </div>
-      </div> */}
       <div style={{ display: "none" }}>
         <div className="" ref={tooltipRef}>
           <ul>

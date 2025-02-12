@@ -8,25 +8,14 @@ import { moneyFormatter } from "@/helpers/common";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import Image from "next/image";
+import { IPropertiesInteraction } from "@/types/volt";
 import { Tooltip } from "../ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface VoltDetailsProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
-  setPropertiesInteraction: Dispatch<
-    SetStateAction<{
-      [key: string]: {
-        action: "hovered" | "popup";
-        bulkId?: string | null;
-      };
-    }>
-  >;
-  propertiesInteraction: {
-    [key: string]: {
-      action: "hovered" | "popup";
-      bulkId?: string | null;
-    };
-  };
+  setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
+  propertiesInteraction: IPropertiesInteraction;
   isNonValidMedianHighlighted: boolean;
   isSubscribed: boolean;
 }
@@ -64,21 +53,9 @@ const getPin = (
   return group ? `red-${group}` : "red-default";
 };
 
-const getState = (
-  id: string,
-  propertiesInteraction: {
-    [key: string]: {
-      action: "hovered" | "popup";
-      bulkId?: string | null;
-    };
-  }
-) => {
-  const hovered =
-    propertiesInteraction[id]?.action === "hovered" ||
-    Object.values(propertiesInteraction).find((el) => el.bulkId === id)?.action === "hovered";
-  const popup =
-    propertiesInteraction[id]?.action === "popup" ||
-    Object.values(propertiesInteraction).find((el) => el.bulkId === id)?.action === "popup";
+const getState = (id: string, propertiesInteraction: IPropertiesInteraction) => {
+  const hovered = propertiesInteraction.hover?.openId === id;
+  const popup = propertiesInteraction.popup?.openId === id;
 
   return {
     hovered,
@@ -167,7 +144,7 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
           {assessments.map((property) => {
             const { hovered, isActive, popup } = getState(property.data.id, propertiesInteraction);
             return (
-              <Popover key={property.data.id} open={propertiesInteraction[property.data.id]?.action === "hovered"}>
+              <Popover key={property.data.id} open={propertiesInteraction.hover?.openId === property.data.id}>
                 <PopoverTrigger className={cn("")} asChild>
                   <div
                     style={{
@@ -180,19 +157,16 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                         if (!popup) {
                           setPropertiesInteraction((prev) => ({
                             ...prev,
-                            [property.data.id]: { action: "hovered", bulkId: property.data.id },
+                            hover: {
+                              clickId: property.data.id,
+                              isBulked: property.isBulked,
+                              openId: property.isBulked ? property.data.id : property.data.id,
+                            },
                           }));
                         }
                       }}
                       onMouseLeave={() => {
-                        setPropertiesInteraction((prev) => {
-                          if (prev && prev[property.data.id].action !== "popup") {
-                            const newData = { ...prev };
-                            delete newData[property.data.id];
-                            return newData;
-                          }
-                          return prev;
-                        });
+                        setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
                       }}
                       onDoubleClick={() => {
                         if (!property.isBulked) {
@@ -204,18 +178,14 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                         }
                       }}
                       onClick={() => {
-                        const newData = { ...propertiesInteraction };
-                        Object.keys(newData).forEach((key) => {
-                          if (newData[key]?.action === "popup" && key !== property.data.id) {
-                            delete newData[key];
-                          }
-                        });
-
-                        newData[property.data.id] = {
-                          action: "popup",
-                          bulkId: property.data.id,
-                        };
-                        setPropertiesInteraction({ ...newData });
+                        setPropertiesInteraction((prev) => ({
+                          ...prev,
+                          popup: {
+                            clickId: property.data.id,
+                            isBulked: property.isBulked,
+                            openId: property.isBulked ? property.data.id : property.data.id,
+                          },
+                        }));
                       }}
                       key={property.data.id}
                       className={cn(

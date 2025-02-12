@@ -8,10 +8,10 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { moneyFormatter } from "@/helpers/common";
 import moment from "moment";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IoMdClose } from "react-icons/io";
+import { IPropertiesInteraction } from "@/types/volt";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
 import VoltDetailsProgressLine from "./progress-line";
@@ -87,12 +87,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   isSubscribed,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [propertiesInteraction, setPropertiesInteraction] = useState<{
-    [key: string]: {
-      action: "hovered" | "popup";
-      bulkId?: string | null;
-    };
-  }>({});
+  const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [backDrop, setBackDrop] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
   const tableRef = useRef<HTMLDivElement>(null);
@@ -100,54 +95,17 @@ const VoltDetails: FC<VoltDetailsProps> = ({
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
 
-  const onMarkerInteraction = useCallback((data: { id: string; action: "hovered" | "popup"; bulkId?: string | null }) => {
-    setPropertiesInteraction((prev) => {
-      if (data.action === "hovered") {
-        const newData = { ...prev };
-        Object.keys(newData).forEach((key) => {
-          if (newData[data.id]?.action === "hovered") {
-            delete newData[key];
-          }
-        });
-
-        if (newData[data.id]?.action !== "popup") {
-          newData[data.id] = {
-            action: "hovered",
-            bulkId: data.bulkId,
-          };
-        }
-        return { ...newData };
-      }
-      return {
-        [data.id]: {
-          action: data.action,
-          bulkId: data.bulkId,
-        },
-      };
-    });
+  const onMarkerInteraction = useCallback((data: Partial<IPropertiesInteraction>) => {
+    setPropertiesInteraction((prev) => ({ ...prev, ...data }));
   }, []);
 
   const onMouseLeave = useCallback(() => {
-    setPropertiesInteraction((prev) => {
-      const newData = { ...prev };
-      Object.keys(newData).forEach((key) => {
-        if (newData[key].action === "hovered") {
-          delete newData[key];
-        }
-      });
-      return newData;
-    });
+    setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
   }, []);
 
   const onPopupClose = useCallback(() => {
-    const newData = { ...propertiesInteraction };
-    Object.keys(newData).forEach((key) => {
-      if (newData[key].action === "popup") {
-        delete newData[key];
-      }
-    });
-    setPropertiesInteraction({ ...newData });
-  }, [propertiesInteraction]);
+    setPropertiesInteraction((prev) => ({ ...prev, popup: null }));
+  }, []);
 
   const handleResize = useCallback(() => {
     const el = document.getElementById("volt-progress-line");
@@ -158,7 +116,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   }, []);
 
   const openPopupDetails = useMemo(() => {
-    const id = Object.keys(propertiesInteraction).find((key) => propertiesInteraction[key].action === "popup");
+    const id = propertiesInteraction.popup?.openId;
 
     if (!id) {
       return null;
@@ -213,9 +171,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
       return details;
     }
 
-    const property = propertiesInteraction[id]?.bulkId
-      ? data.assessments.data.find((el) => el.data.id === propertiesInteraction[id].bulkId)
-      : data.assessments.data.find((el) => el.data.id === id);
+    const property = data.assessments.data.find((el) => el.data.id === id);
 
     if (!property) {
       return null;
@@ -317,7 +273,11 @@ const VoltDetails: FC<VoltDetailsProps> = ({
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
-      if (mapPopupRef.current && !mapPopupRef.current.contains(event.target as Node)) {
+      if (
+        mapPopupRef.current &&
+        (event.target as Element).classList.contains("mapboxgl-canvas") &&
+        !mapPopupRef.current.contains(event.target as Node)
+      ) {
         onPopupClose();
       }
     },

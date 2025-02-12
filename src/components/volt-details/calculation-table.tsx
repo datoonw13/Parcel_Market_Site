@@ -13,6 +13,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { z } from "zod";
 import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "@radix-ui/react-tooltip";
+import { IPropertiesInteraction } from "@/types/volt";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const HEADERS = {
@@ -88,21 +89,9 @@ const generateClasses = (data: {
   return cn(classNames);
 };
 
-const getState = (
-  id: string,
-  propertiesInteraction: {
-    [key: string]: {
-      action: "hovered" | "popup";
-      bulkId?: string | null;
-    };
-  }
-) => {
-  const hovered =
-    propertiesInteraction[id]?.action === "hovered" ||
-    Object.values(propertiesInteraction).find((el) => el.bulkId === id)?.action === "hovered";
-  const popup =
-    propertiesInteraction[id]?.action === "popup" ||
-    Object.values(propertiesInteraction).find((el) => el.bulkId === id)?.action === "popup";
+const getState = (id: string, propertiesInteraction: IPropertiesInteraction) => {
+  const hovered = propertiesInteraction.hover?.openId === id;
+  const popup = propertiesInteraction.popup?.openId === id;
 
   return {
     hovered,
@@ -113,20 +102,8 @@ const getState = (
 
 interface VoltDetailsCalculationTableProps {
   data: z.infer<typeof PropertyDataSchema>;
-  setPropertiesInteraction: Dispatch<
-    SetStateAction<{
-      [key: string]: {
-        action: "hovered" | "popup";
-        bulkId?: string | null;
-      };
-    }>
-  >;
-  propertiesInteraction: {
-    [key: string]: {
-      action: "hovered" | "popup";
-      bulkId?: string | null;
-    };
-  };
+  setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
+  propertiesInteraction: IPropertiesInteraction;
   isNonValidMedianHighlighted: boolean;
   isSubscribed: boolean;
 }
@@ -223,37 +200,32 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                     })
                   )}
                   onClick={() => {
-                    const newData = { ...propertiesInteraction };
-
-                    Object.keys(newData).forEach((key) => {
-                      if (newData[key]?.action === "popup" && key !== assessment.data.id) {
-                        delete newData[key];
-                      }
-                    });
-
-                    newData[assessment.data.id] = {
-                      action: "popup",
-                      bulkId: assessment.data.id,
-                    };
-                    setPropertiesInteraction({ ...newData });
+                    setPropertiesInteraction((prev) => ({
+                      ...prev,
+                      popup:
+                        prev.popup?.openId !== assessment.data.id
+                          ? {
+                              clickId: assessment.data.id,
+                              isBulked: assessment.isBulked,
+                              openId: assessment.data.id,
+                            }
+                          : null,
+                    }));
                   }}
                   onMouseEnter={() => {
                     if (!popup) {
                       setPropertiesInteraction((prev) => ({
                         ...prev,
-                        [assessment.data.id]: { action: "hovered", bulkId: assessment.data.id },
+                        hover: {
+                          clickId: assessment.data.id,
+                          isBulked: assessment.isBulked,
+                          openId: assessment.data.id,
+                        },
                       }));
                     }
                   }}
                   onMouseLeave={() => {
-                    setPropertiesInteraction((prev) => {
-                      if (prev && prev[assessment.data.id]?.action !== "popup") {
-                        const newData = { ...prev };
-                        delete newData[assessment.data.id];
-                        return newData;
-                      }
-                      return prev;
-                    });
+                    setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
                   }}
                 >
                   <td className="text-grey-800 text-xs">Multiple</td>
@@ -360,35 +332,29 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   isNonValidMedianHighlighted,
                 })}
                 onClick={() => {
-                  const newData = { ...propertiesInteraction };
-                  Object.keys(newData).forEach((key) => {
-                    if (newData[key]?.action === "popup" && key !== assessment.data.id) {
-                      delete newData[key];
-                    }
-                  });
-
-                  newData[assessment.data.id] = {
-                    action: "popup",
-                  };
-                  setPropertiesInteraction({ ...newData });
+                  setPropertiesInteraction((prev) => ({
+                    ...prev,
+                    popup: {
+                      clickId: assessment.data.id,
+                      isBulked: assessment.isBulked,
+                      openId: assessment.data.id,
+                    },
+                  }));
                 }}
                 onMouseEnter={() => {
                   if (!popup) {
                     setPropertiesInteraction((prev) => ({
                       ...prev,
-                      [assessment.data.id]: { action: "hovered", bulkId: assessment.data.id },
+                      hover: {
+                        clickId: assessment.data.id,
+                        isBulked: assessment.isBulked,
+                        openId: assessment.data.id,
+                      },
                     }));
                   }
                 }}
                 onMouseLeave={() => {
-                  setPropertiesInteraction((prev) => {
-                    if (prev && prev[assessment.data.id]?.action !== "popup") {
-                      const newData = { ...prev };
-                      delete newData[assessment.data.id];
-                      return newData;
-                    }
-                    return prev;
-                  });
+                  setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
                 }}
               >
                 <td className="text-grey-800 text-xs">{assessment.data.parcelNumber.formattedString}</td>

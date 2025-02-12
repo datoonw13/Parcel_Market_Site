@@ -194,3 +194,16 @@ export interface IPropertyData {
   propertyTypes: string | null;
   assessments: IAssessment[];
 }
+
+export interface IPropertiesInteraction {
+  hover: {
+    clickId: string;
+    openId: string;
+    isBulked: boolean;
+  } | null;
+  popup: {
+    clickId: string;
+    openId: string;
+    isBulked: boolean;
+  } | null;
+}
