@@ -138,8 +138,6 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
     return orderBy(data.assessments.data, [`data.${sortKey}.value`], [sortValue]);
   }, [data.assessments, sortKey, sortValue]);
 
-  console.log(sort, 22);
-
   return (
     <div className="w-full mb-0.5">
       <table
