@@ -116,5 +116,5 @@ export const voltDetailsFiltersValidations = z.object({
     .default(2),
   acreageMin: z.coerce.number().nullable().optional().catch(null),
   acreageMax: z.coerce.number().nullable().optional().catch(null),
-  propertyTypes: z.string().nullable().optional().catch(null),
+  propertyTypes: z.array(z.number()).nullable().optional().catch(null),
 });

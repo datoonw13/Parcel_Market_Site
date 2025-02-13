@@ -13,11 +13,10 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     searchParams.set("getAll", "true");
     const user = await getUserAction();
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
-    const data = await PropertyDataSchema.safeParseAsync({ ...req, subscribed: !!user?.isSubscribed });
-
+    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...req, subscribed: !!user?.isSubscribed });
     return {
       errorMessage: null,
-      data: data.data!,
+      data,
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
@@ -40,6 +39,7 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
     }),
     {}
   );
+
   const queryParams = new URLSearchParams(queryParamsObj);
   queryParams.set("propertyId", params.id);
   const data = await getData(queryParams.toString());

@@ -147,6 +147,19 @@ export const PropertyDataSchema = z
     medianUpperBound: z.coerce.number(),
     averagePricePerAcreValidMedians: z.coerce.number(),
     assessments: z.array(AssessmentSchema),
+    filters: z.object({
+      radius: z.coerce.number(),
+      soldWithin: z.coerce.number(),
+      acreageMin: z.coerce.number(),
+      acreageMax: z.coerce.number(),
+      propertyTypes: z.string().nullable(),
+    }),
+    acreageRange: z
+      .object({
+        min: z.number().default(1).optional().catch(1),
+        max: z.number().default(2).optional().catch(2),
+      })
+      .optional(),
   })
   .transform(({ acrage, subscribed, price, parcelNumber, assessments, ...input }) => {
     const axisPositionInPercent = (price: number, min: number, max: number) => ((price - min) / (max - min)) * 100;

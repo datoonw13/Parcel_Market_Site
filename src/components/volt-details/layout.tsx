@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useTransition } from "react";
+import { FC, useEffect, useState, useTransition } from "react";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,11 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   const [isFetching, startFetchingTransition] = useTransition();
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
   const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
-  const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({ ...validatedFilters.data! });
+  const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({
+    acreageMin: data.acreageRange!.min,
+    acreageMax: data.acreageRange!.max,
+    ...validatedFilters.data!,
+  });
 
   return (
     <>
