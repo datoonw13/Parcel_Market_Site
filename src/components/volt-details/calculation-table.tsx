@@ -283,7 +283,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             {hasSellingProperty(data.id, assessment) ? (
-                              <div className="relative min-w-5 min-h-5 h-5 z-10">
+                              <div className="relative z-0 min-w-5 min-h-5 h-5">
                                 <Image
                                   alt=""
                                   src={`/map/pins/green-${assessment.data.group}.svg`}
@@ -293,7 +293,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="relative min-w-5 min-h-5 h-5 z-10">
+                              <div className="relative min-w-5 min-h-5 h-5 z-0">
                                 <Image
                                   alt=""
                                   src={`/map/pins/${isNonValidMedianHighlighted && !assessment.data.isMedianValid ? "yellow" : "red"}-${
@@ -351,7 +351,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                         <div className="flex items-center gap-2 justify-end">
                           <MdKeyboardArrowUp className="size-5 opacity-0" />
                           {hasSellingProperty(data.id, { isBulked: false, data: childAssessment }) && (
-                            <FaLocationDot className="text-primary-dark size-4" />
+                            <FaLocationDot className="text-primary-dark size-4 relative z-0" />
                           )}
                         </div>
                       </td>
@@ -412,7 +412,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <td className="text-grey-800 text-xs !pl-7 ">
                   <div className="flex items-center gap-2 justify-end">
                     <MdKeyboardArrowUp className="size-5 opacity-0" />
-                    {hasSellingProperty(data.id, assessment) && <FaLocationDot className="text-primary-dark size-4" />}
+                    {hasSellingProperty(data.id, assessment) && <FaLocationDot className="text-primary-dark size-4 relative z-0" />}
                   </div>
                 </td>
               </tr>
