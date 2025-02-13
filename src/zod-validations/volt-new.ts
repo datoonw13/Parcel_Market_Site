@@ -206,7 +206,7 @@ export const PropertyDataSchema = z
               value: acreage,
               formattedString: acreage.toFixed(2),
             },
-            price: {
+            lastSalePrice: {
               value: subscribed ? price : null,
               formattedString: subscribed ? moneyFormatter.format(price) : hideString(moneyFormatter.format(price)),
             },

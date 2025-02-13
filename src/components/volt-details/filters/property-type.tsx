@@ -25,8 +25,8 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
               <Checkbox
                 className="items-start [&>button]:mt-1"
                 onCheckedChange={() => {
-                  const isChecked = selected?.split(",")?.includes(propertyType.id.toString());
-                  let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
+                  const isChecked = selected?.includes(propertyType.id);
+                  let newSelected: any = [...(selected || [])].map((el) => Number(el));
                   if (isChecked) {
                     newSelected = newSelected.filter((el: any) => el !== Number(propertyType.id));
                   } else {
@@ -41,7 +41,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
                   }
                   onChange(newSelected.length ? newSelected.join(",") : null);
                 }}
-                checked={!!selected?.split(",")?.includes(propertyType.id.toString()) || selected?.length === 0 || !selected}
+                checked={!!selected?.includes(propertyType.id) || selected?.length === 0 || !selected}
                 label={<span className="font-medium text-xs">{propertyType.value}</span>}
                 key={propertyType.id}
                 id={propertyType.id.toString()}
@@ -60,8 +60,8 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
               <Checkbox
                 className="items-start [&>button]:mt-1"
                 onCheckedChange={() => {
-                  const isChecked = selected?.split(",")?.includes(propertyType.id.toString());
-                  let newSelected: any = [...(selected?.split(",") || [])].map((el) => Number(el));
+                  const isChecked = selected?.includes(propertyType.id);
+                  let newSelected: any = [...(selected || [])].map((el) => Number(el));
 
                   if (!selected) {
                     newSelected = propertyTypes
@@ -77,7 +77,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
                   }
                   onChange(newSelected.length ? newSelected.join(",") : null);
                 }}
-                checked={!!selected?.split(",")?.includes(propertyType.id.toString())}
+                checked={!!selected?.includes(propertyType.id)}
                 label={<span className="font-medium text-xs">{propertyType.value}</span>}
                 key={propertyType.id}
                 id={propertyType.id.toString()}

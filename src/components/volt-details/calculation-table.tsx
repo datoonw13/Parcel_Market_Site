@@ -20,7 +20,7 @@ import NoDataIcon from "../@new/icons/no-data";
 const HEADERS = {
   acreage: {
     label: "Acreage",
-    sort: false,
+    sort: true,
   },
   parcelNumber: {
     label: "Parcel ID",
@@ -34,9 +34,9 @@ const HEADERS = {
     label: "Property Type",
     sort: false,
   },
-  soldPrice: {
+  lastSalePrice: {
     label: "Last Sale Price",
-    sort: false,
+    sort: true,
   },
   pricePerAcreage: {
     label: "Price Per Acre",
@@ -122,7 +122,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  const [sort, setSort] = useState<Partial<{ [key in keyof typeof HEADERS]: "asc" | "desc" }>>({ pricePerAcreage: "asc" });
+  const [sort, setSort] = useState<Partial<{ [key in keyof typeof HEADERS]: "asc" | "desc" }>>({ acreage: "asc" });
   const sortKey = Object.keys(sort)[0] as keyof typeof HEADERS;
   const sortValue = Object.values(sort)[0];
   const assessments = useMemo(() => {
@@ -135,8 +135,10 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
           : new Date(date2).getTime() - new Date(date1).getTime();
       });
     }
-    return orderBy(data.assessments.data, [`data.${sortKey === "pricePerAcreage" ? "pricePerAcreage.value" : sortKey}`], [sortValue]);
+    return orderBy(data.assessments.data, [`data.${sortKey}.value`], [sortValue]);
   }, [data.assessments, sortKey, sortValue]);
+
+  console.log(sort, 22);
 
   return (
     <div className="w-full mb-0.5">
@@ -167,11 +169,22 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   onClick={() => {
                     setSort({ [key]: sort[key as keyof typeof HEADERS] === "desc" ? "asc" : "desc" });
                   }}
-                  className={cn("flex items-center gap-2", HEADERS[key as keyof typeof HEADERS].sort && "cursor-pointer")}
+                  className={cn(
+                    "flex items-center gap-2",
+                    HEADERS[key as keyof typeof HEADERS].sort && "cursor-pointer",
+                    ["pricePerAcreage", "lastSalePrice"].includes(key) && !isSubscribed && "cursor-not-allowed pointer-events-none"
+                  )}
                 >
                   {HEADERS[key as keyof typeof HEADERS].label}
                   {HEADERS[key as keyof typeof HEADERS].sort && (
-                    <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                      className={cn(["pricePerAcreage", "lastSalePrice"].includes(key) && !isSubscribed && "opacity-60 cursor-not-allowed")}
+                      width="16"
+                      height="20"
+                      viewBox="0 0 16 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
                         d="M14.2929 14.0406C14.6834 14.4311 15.3166 14.4311 15.7071 14.0406C16.0976 13.6501 16.0976 13.0169 15.7071 12.6264L11.7071 8.62639C11.5196 8.43885 11.2652 8.3335 11 8.3335C10.7348 8.3335 10.4804 8.43885 10.2929 8.62639L6.29289 12.6264C5.90237 13.0169 5.90237 13.6501 6.29289 14.0406C6.68342 14.4311 7.31658 14.4311 7.70711 14.0406L10 11.7477V18.3335C10 18.8858 10.4477 19.3335 11 19.3335C11.5523 19.3335 12 18.8858 12 18.3335V11.7477L14.2929 14.0406Z"
                         fill={sort[key as keyof typeof HEADERS] && sort[key as keyof typeof HEADERS] === "asc" ? "#222222" : "#828282"}
@@ -255,7 +268,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       : `${assessment.data.uniquePropertyTypes} Property Types`}
                   </td>
                   <td className="text-grey-800 text-xs">
-                    <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.price.formattedString}</span>
+                    <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.lastSalePrice.formattedString}</span>
                   </td>
                   <td className="text-grey-800 text-xs">
                     <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>
@@ -387,7 +400,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   {assessment.data.state.label}/{assessment.data.county.label}
                 </td>
                 <td className="text-grey-800 text-xs">
-                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.propertyType}</span>
+                  <span>{assessment.data.propertyType}</span>
                 </td>
                 <td className="text-grey-800 text-xs">
                   <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.lastSalePrice.formattedString}</span>

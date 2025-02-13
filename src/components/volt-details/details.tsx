@@ -200,7 +200,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
           },
           lastSalePrice: {
             label: "Last Sale Price",
-            value: property.data.price.formattedString,
+            value: property.data.lastSalePrice.formattedString,
             blur: !isSubscribed,
           },
           lastSaleDate: {

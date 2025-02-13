@@ -36,7 +36,11 @@ const getAcreageLabel = (min: number | null, max: number | null) => {
 
 const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit, onFilterToggle, propertyTypes }) => {
   const [localFilters, setLocalFilters] = useState(filters);
-
+  console.log(
+    filters.propertyTypes?.length,
+    propertyTypes.filter((el) => el.group === "vacant-land"),
+    22
+  );
   return (
     <div className="flex gap-2">
       <VoltDetailsFiltersDropDown
@@ -153,7 +157,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
       <VoltDetailsFiltersDropDown
         buttonClassName="shadow-6 border-0"
         onOpen={() => onFilterToggle && onFilterToggle(true)}
-        value={`Selected (${filters.propertyTypes?.split(",")?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
+        value={`Selected (${filters.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
         label="Property Type"
         onClose={() => {
           setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));

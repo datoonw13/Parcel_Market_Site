@@ -86,7 +86,7 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
               >
                 <div>
                   <p className="text-start leading-none text-primary-main font-medium text-xs">
-                    Selected ({filters.propertyTypes?.split(",").length || 0})
+                    Selected ({filters.propertyTypes?.length || 0})
                   </p>
                   <p className="text-start leading-none text-black font-medium text-sm pt-1">Property Type</p>
                 </div>
