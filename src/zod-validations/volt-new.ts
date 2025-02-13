@@ -111,6 +111,7 @@ const BulkAssessmentBaseSchema = z
     id: uuid(),
     isMedianValid: input.isMedianValid === undefined ? true : input.isMedianValid,
     lastSaleDate: input.properties[0].lastSaleDate,
+    propertyType: input.properties[0].propertyType,
   }));
 
 const AssessmentSchema = z.discriminatedUnion("isBulked", [
@@ -189,7 +190,11 @@ export const PropertyDataSchema = z
 
     const formattedAssessments = assessments.map((el) => {
       if (el.isBulked) {
-        const { id, acreage, county, isMedianValid, pricePerAcreage, state, group, price, properties, lastSaleDate } = el.data;
+        const { acreage, county, isMedianValid, pricePerAcreage, state, group, price, properties, lastSaleDate, propertyType } = el.data;
+        const uniqueCounties = new Set(el.data.properties.map((el) => el.county.value));
+        const uniquePropertyTypes = new Set(el.data.properties.map((el) => el.propertyType));
+        const totalProperties = el.data.properties.length;
+
         return {
           ...el,
           data: {
@@ -253,6 +258,10 @@ export const PropertyDataSchema = z
                   : hideString(removeParcelNumberFormatting(property.parcelNumber)),
               },
             })),
+            uniqueCounties: uniqueCounties.size,
+            uniquePropertyTypes: uniquePropertyTypes.size,
+            totalProperties,
+            propertyType,
           },
         };
       }

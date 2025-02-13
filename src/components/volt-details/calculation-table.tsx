@@ -18,20 +18,24 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import NoDataIcon from "../@new/icons/no-data";
 
 const HEADERS = {
-  parcelNumber: {
-    label: "Parcel ID",
-    sort: false,
-  },
-  county: {
-    label: "County",
-    sort: false,
-  },
   acreage: {
     label: "Acreage",
     sort: false,
   },
+  parcelNumber: {
+    label: "Parcel ID",
+    sort: false,
+  },
+  stateCounty: {
+    label: "State/County",
+    sort: false,
+  },
+  propertyType: {
+    label: "Property Type",
+    sort: false,
+  },
   soldPrice: {
-    label: "Sold Price",
+    label: "Last Sale Price",
     sort: false,
   },
   pricePerAcreage: {
@@ -239,9 +243,17 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                     setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
                   }}
                 >
-                  <td className="text-grey-800 text-xs">Multiple</td>
-                  <td className="text-grey-800 text-xs">{assessment.data.county.label}</td>
                   <td className="text-grey-800 text-xs">{assessment.data.acreage.formattedString}</td>
+                  <td className="text-grey-800 text-xs">{assessment.data.totalProperties} Parcels</td>
+                  <td className="text-grey-800 text-xs">
+                    {assessment.data.state.label}/
+                    {assessment.data.uniqueCounties > 1 ? `${assessment.data.uniqueCounties} Counties` : assessment.data.county.label}
+                  </td>
+                  <td className="text-grey-800 text-xs">
+                    {assessment.data.uniquePropertyTypes === 1
+                      ? assessment.data.propertyType
+                      : `${assessment.data.uniquePropertyTypes} Property Types`}
+                  </td>
                   <td className="text-grey-800 text-xs">
                     <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.price.formattedString}</span>
                   </td>
@@ -307,9 +319,12 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 {popup &&
                   assessment.data.properties.map((childAssessment) => (
                     <tr key={childAssessment.id} className={cn("border-t")}>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.acreage.formattedString}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumber.formattedString}</td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.county.label}</td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.acreage.formattedString}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
+                        {assessment.data.state.label}/{assessment.data.county.label}
+                      </td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.propertyType}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         <span>-</span>
                       </td>
@@ -366,9 +381,14 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
                 }}
               >
-                <td className="text-grey-800 text-xs">{assessment.data.parcelNumber.formattedString}</td>
-                <td className="text-grey-800 text-xs">{assessment.data.county.label}</td>
                 <td className="text-grey-800 text-xs">{assessment.data.acreage.formattedString}</td>
+                <td className="text-grey-800 text-xs">{assessment.data.parcelNumber.formattedString}</td>
+                <td className="text-grey-800 text-xs">
+                  {assessment.data.state.label}/{assessment.data.county.label}
+                </td>
+                <td className="text-grey-800 text-xs">
+                  <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.propertyType}</span>
+                </td>
                 <td className="text-grey-800 text-xs">
                   <span className={cn(!isSubscribed && "blur-[2px] relative z-0")}>{assessment.data.lastSalePrice.formattedString}</span>
                 </td>
