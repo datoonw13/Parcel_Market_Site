@@ -100,30 +100,21 @@ const schema = z.union([
 ]);
 
 export const voltDetailsFiltersValidations = z.object({
-  radius: z.union([
-    z.coerce.number().refine((val) => val === 5),
-    z.coerce.number().refine((val) => val === 10),
-    z.coerce.number().refine((val) => val === 15),
-  ]),
-  soldWithin: z.union([
-    z.coerce.number().refine((val) => val === 1),
-    z.coerce.number().refine((val) => val === 2),
-    z.coerce.number().refine((val) => val === 3),
-  ]),
-  acreageMin: z.coerce.number().nullable().optional(),
-  acreageMax: z.coerce.number().nullable().optional(),
-  propertyTypes: z
-    .string()
-    // .refine(
-    //   (data) => {
-    //     const types = data.split(",").map((el) => Number(el));
-    //     const isValid = types.every((el) => PropertyTypesEnum[el]);
-    //     return isValid;
-    //   },
-    //   {
-    //     message: "Invalid property type",
-    //   }
-    // )
-    .nullable()
-    .optional(),
+  radius: z
+    .union([
+      z.coerce.number().refine((val) => val === 5),
+      z.coerce.number().refine((val) => val === 10),
+      z.coerce.number().refine((val) => val === 15),
+    ])
+    .default(5),
+  soldWithin: z
+    .union([
+      z.coerce.number().refine((val) => val === 1),
+      z.coerce.number().refine((val) => val === 2),
+      z.coerce.number().refine((val) => val === 3),
+    ])
+    .default(2),
+  acreageMin: z.coerce.number().nullable().optional().catch(null),
+  acreageMax: z.coerce.number().nullable().optional().catch(null),
+  propertyTypes: z.string().nullable().optional().catch(null),
 });
