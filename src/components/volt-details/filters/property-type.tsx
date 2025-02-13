@@ -39,7 +39,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
                       .filter((el) => el.id !== propertyType.id)
                       .map((el) => el.id);
                   }
-                  onChange(newSelected.length ? newSelected.join(",") : null);
+                  onChange(newSelected.length ? newSelected : null);
                 }}
                 checked={!!selected?.includes(propertyType.id) || selected?.length === 0 || !selected}
                 label={<span className="font-medium text-xs">{propertyType.value}</span>}
@@ -75,7 +75,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
                   } else {
                     newSelected = [...newSelected, propertyType.id];
                   }
-                  onChange(newSelected.length ? newSelected.join(",") : null);
+                  onChange(newSelected.length ? newSelected : null);
                 }}
                 checked={!!selected?.includes(propertyType.id)}
                 label={<span className="font-medium text-xs">{propertyType.value}</span>}
