@@ -6,6 +6,8 @@ import { ResponseModel } from "@/types/common";
 import VoltDetailsLayout from "@/components/volt-details/layout";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { getUserAction } from "@/server-actions/user/actions";
+import { redirect } from "next/navigation";
+import routes from "@/helpers/routes";
 
 const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {
@@ -19,7 +21,10 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
       errorMessage: null,
       data,
     };
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.digest as any) {
+      delete error.digest;
+    }
     const errorData = error as ErrorResponse;
     return {
       errorMessage: errorData.message,
@@ -47,8 +52,12 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   const propertyTypes = await fetcher<Array<{ id: number; group: "vacant-land" | "other"; value: string }>>("properties/propertyTypes");
   const user = await getUserAction();
 
-  if (data.errorMessage) {
-    throw new Error(data.errorMessage);
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT !== "development" && data.errorMessage) {
+    redirect(routes.volt.fullUrl);
+  }
+
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT === "development" && data.errorMessage) {
+    return <div className="p-5 bg-error-400 rounded-2xl">{data.errorMessage}</div>;
   }
 
   return <VoltDetailsLayout isSubscribed={!!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data!} />;
