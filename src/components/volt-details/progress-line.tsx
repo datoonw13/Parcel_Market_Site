@@ -186,6 +186,13 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                             openId: property.isBulked ? property.data.id : property.data.id,
                           },
                         }));
+                        if (!property.isBulked) {
+                          window.map.setZoom(10);
+                          window.map.setCenter([property.data.longitude, property.data.latitude]);
+                        } else {
+                          window.map.setZoom(10);
+                          window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
+                        }
                       }}
                       key={property.data.id}
                       className={cn(
