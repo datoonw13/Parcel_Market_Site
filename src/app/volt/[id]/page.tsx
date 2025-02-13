@@ -46,6 +46,10 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
   const propertyTypes = await fetcher<Array<{ id: number; group: "vacant-land" | "other"; value: string }>>("properties/propertyTypes");
   const user = await getUserAction();
 
+  if (data.errorMessage) {
+    throw new Error(data.errorMessage);
+  }
+
   return <VoltDetailsLayout isSubscribed={!!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data!} />;
 };
 
