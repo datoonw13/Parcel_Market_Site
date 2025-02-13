@@ -21,8 +21,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
   const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
   const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({
-    acreageMin: data.acreageRange!.min,
-    acreageMax: data.acreageRange!.max,
+    acreageMin: data.filters.acreageMin,
+    acreageMax: data.filters.acreageMax,
     ...validatedFilters.data!,
   });
 

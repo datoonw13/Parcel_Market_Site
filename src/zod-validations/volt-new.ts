@@ -155,12 +155,6 @@ export const PropertyDataSchema = z
       acreageMax: z.coerce.number(),
       propertyTypes: z.string().nullable(),
     }),
-    acreageRange: z
-      .object({
-        min: z.number().default(1).optional().catch(1),
-        max: z.number().default(2).optional().catch(2),
-      })
-      .optional(),
   })
   .transform(({ acrage, subscribed, price, parcelNumber, assessments, ...input }) => {
     const axisPositionInPercent = (price: number, min: number, max: number) => ((price - min) / (max - min)) * 100;
