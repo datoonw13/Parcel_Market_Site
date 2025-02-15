@@ -8,6 +8,7 @@ export interface ResponseType<T> {
 export interface ResponseModel<T> {
   data: T;
   errorMessage: string | null;
+  responseCreated?: Date;
 }
 
 export interface IPagination {

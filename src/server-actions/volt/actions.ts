@@ -65,12 +65,14 @@ export const getPropertiesAction = async (
     return {
       data: formattedData,
       errorMessage: null,
+      responseCreated: new Date(),
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
     return {
       data: null,
       errorMessage: errorData.message,
+      responseCreated: new Date(),
     };
   }
 };

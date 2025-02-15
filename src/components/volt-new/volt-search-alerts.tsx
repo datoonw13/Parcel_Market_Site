@@ -3,7 +3,13 @@
 import { Alert } from "@/components/ui/alert";
 import routes from "@/helpers/routes";
 import Link from "next/link";
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
+
+interface VoltSearchAlertsProps {
+  error: "limit" | "notFound" | null;
+  setError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
+  // showUnauthorizedUserAlert: boolean;
+}
 
 const errors = {
   unauthorized: {
@@ -42,27 +48,20 @@ const errors = {
   },
 };
 
-const error = "notFound" as const;
-
-const VoltSearchAlerts = () => {
-  const [show, setShow] = useState(true);
-  return (
-    show && (
-      <div className="flex flex-col gap-6">
-        {/* {showUnauthorizedUserAlert && (
-        <Alert variant="warning" title={errors.unauthorized.title} description={errors.unauthorized.description} />
-      )} */}
-        {error && (
-          <Alert
-            handleClose={error === "notFound" ? () => setShow(false) : undefined}
-            variant="warning"
-            title={errors[error].title}
-            description={errors[error].description}
-          />
-        )}
-      </div>
-    )
-  );
-};
+const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError }) => (
+  <div className="flex flex-col gap-6">
+    {/* {showUnauthorizedUserAlert && (
+      <Alert variant="warning" title={errors.unauthorized.title} description={errors.unauthorized.description} />
+    )} */}
+    {error && (
+      <Alert
+        handleClose={error === "notFound" ? () => setError(null) : undefined}
+        variant="warning"
+        title={errors[error].title}
+        description={errors[error].description}
+      />
+    )}
+  </div>
+);
 
 export default VoltSearchAlerts;

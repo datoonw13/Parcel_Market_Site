@@ -14,35 +14,37 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, Dr
 
 interface VoltItemMultiProps {
   data: IBulkPropertiesUsedForCalculation;
-  onMouseEnter: (parcelNumberNoFormatting: string) => void;
+  onHover: (parcelNumberNoFormatting: string) => void;
   onMouseLeave: (parcelNumberNoFormatting: string) => void;
   onSelect: (parcelNumberNoFormatting: string) => void;
-  highlightedPropertyParcelNumber: string | null;
-  selectedPropertyParcelNumber: string | null;
+  highlightedItemParcelNumber: string | null;
+  selectedItemParcelNumber: string | null;
+  selected?: boolean;
 }
 
 const VoltItemMulti: FC<VoltItemMultiProps> = ({
   data,
-  onMouseEnter,
+  onHover,
   onMouseLeave,
   onSelect,
-  highlightedPropertyParcelNumber,
-  selectedPropertyParcelNumber,
+  highlightedItemParcelNumber,
+  selectedItemParcelNumber,
+  selected,
 }) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.sm));
   return (
     <div
       className={cn(
         "rounded-2xl border border-[#D5D3D3] cursor-pointer transition-all duration-100",
-        selectedPropertyParcelNumber &&
-          data.data.parcelNumberNoFormatting.includes(selectedPropertyParcelNumber) &&
+        selectedItemParcelNumber &&
+          data.data.parcelNumberNoFormatting.includes(selectedItemParcelNumber) &&
           "!border-primary-main-400 !bg-primary-main-50",
-        highlightedPropertyParcelNumber &&
-          data.data.parcelNumberNoFormatting.includes(highlightedPropertyParcelNumber) &&
+        highlightedItemParcelNumber &&
+          data.data.parcelNumberNoFormatting.includes(highlightedItemParcelNumber) &&
           "bg-grey-50 border-[#D5D3D3]",
         "hover:bg-grey-50 hover:border-[#D5D3D3]"
       )}
-      onMouseEnter={() => onMouseEnter(data.data.parcelNumberNoFormatting)}
+      onMouseEnter={() => onHover(data.data.parcelNumberNoFormatting)}
       onMouseLeave={() => onMouseLeave(data.data.parcelNumberNoFormatting)}
       onClick={() => {
         onSelect(data.data.parcelNumberNoFormatting);
