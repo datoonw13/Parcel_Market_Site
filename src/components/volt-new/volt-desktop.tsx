@@ -1,8 +1,8 @@
 "use client";
 
 import { IDecodedAccessToken } from "@/types/auth";
-import { FC, useEffect, useState, useTransition } from "react";
-import { VoltSearchModel } from "@/types/volt";
+import { Dispatch, FC, SetStateAction, useEffect, useState, useTransition } from "react";
+import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,11 @@ interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
   form: UseFormReturn<VoltSearchModel>;
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
+  propertiesInteraction: IPropertiesInteraction;
+  setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
 }
 
-const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data }) => {
+const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction }) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [isPending, startTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
@@ -65,7 +67,13 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data }) => {
                         />
                         <VoltSearchAlerts error={searchError} setError={setSearchError} />
                       </div>
-                      {data?.data && <VoltSearchResult data={data.data} />}
+                      {data?.data && (
+                        <VoltSearchResult
+                          data={data.data}
+                          propertiesInteraction={propertiesInteraction}
+                          setPropertiesInteraction={setPropertiesInteraction}
+                        />
+                      )}
 
                       {isPending && (
                         <div id="loader" className="space-y-4">

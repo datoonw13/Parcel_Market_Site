@@ -1,19 +1,19 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-import { VoltWrapperValuesModel } from "@/types/volt";
+import { IPropertiesInteraction } from "@/types/volt";
 import { cn, isElementVisible } from "@/lib/utils";
-import { MapInteractionModel } from "@/types/common";
-import { removeParcelNumberFormatting } from "@/helpers/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {
   className?: string;
   data: IMainPropertyBaseInfo[];
+  propertiesInteraction: IPropertiesInteraction;
+  setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
 }
 
-const VoltSearchResult: FC<VoltSearchResultProps> = ({ className, data }) => {
+const VoltSearchResult: FC<VoltSearchResultProps> = ({ className, data, propertiesInteraction, setPropertiesInteraction }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -22,13 +22,33 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ className, data }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (mapInteraction.hoveredParcelNumber && !isElementVisible(`search-result-${mapInteraction.hoveredParcelNumber}`, "volt-scroll")) {
-  //     document
-  //       .getElementById(`calculation-${mapInteraction.hoveredParcelNumber}`)
-  //       ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  //   }
-  // }, [mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber]);
+  useEffect(() => {
+    if (propertiesInteraction.hover?.openId && !isElementVisible(`search-result-${propertiesInteraction.hover.openId}`, "volt-scroll")) {
+      document
+        .getElementById(`calculation-${propertiesInteraction.hover?.openId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [propertiesInteraction]);
+
+  useEffect(
+    () => () => {
+      setPropertiesInteraction({ hover: null, popup: null });
+    },
+    [setPropertiesInteraction]
+  );
+
+  useEffect(() => {
+    if (data.length === 1) {
+      setPropertiesInteraction((prevData) => ({
+        ...prevData,
+        popup: {
+          clickId: data[0].parcelNumberNoFormatting,
+          isBulked: false,
+          openId: data[0].parcelNumberNoFormatting,
+        },
+      }));
+    }
+  }, [data, setPropertiesInteraction]);
 
   return (
     <div ref={ref} className={cn("space-y-4", className)}>
@@ -44,35 +64,36 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ className, data }) => {
             key={item.id}
             data={item}
             onHover={(property) => {
-              // setMpaInteraction((prevData) => ({
-              //   ...prevData,
-              //   hoveredParcelNumber: removeParcelNumberFormatting(property.parcelNumberNoFormatting),
-              //   zoom: values.searchResult!.length > 1,
-              // }));
+              setPropertiesInteraction((prevData) => ({
+                ...prevData,
+                hover: {
+                  clickId: property.parcelNumberNoFormatting,
+                  isBulked: false,
+                  openId: property.parcelNumberNoFormatting,
+                },
+              }));
             }}
             onMouseLeave={() => {
-              // setMpaInteraction((prevData) => ({
-              //   ...prevData,
-              //   hoveredParcelNumber: null,
-              //   zoom: false,
-              // }));
+              setPropertiesInteraction((prevData) => ({
+                ...prevData,
+                hover: null,
+              }));
             }}
-            // selected={item.parcelNumberNoFormatting === values.selectedItem?.parcelNumberNoFormatting}
+            selected={item.parcelNumberNoFormatting === propertiesInteraction.popup?.openId}
             onSelect={(property) => {
-              // const item = values.searchResult?.find((el) => el.parcelNumberNoFormatting === property.parcelNumberNoFormatting);
-              // if (item) {
-              //   setValues((prev) => ({ ...prev, selectedItem: item }));
-              // }
-              // setMpaInteraction((prevData) => ({
-              //   ...prevData,
-              //   openPopperParcelNumber: property.parcelNumberNoFormatting,
-              //   zoom: true,
-              // }));
+              setPropertiesInteraction((prevData) => ({
+                ...prevData,
+                popup: {
+                  clickId: property.parcelNumberNoFormatting,
+                  isBulked: false,
+                  openId: property.parcelNumberNoFormatting,
+                },
+              }));
             }}
-            // isHighlighted={
-            //   mapInteraction.hoveredParcelNumber === item.parcelNumberNoFormatting ||
-            //   mapInteraction.openPopperParcelNumber === item.parcelNumberNoFormatting
-            // }
+            isHighlighted={
+              propertiesInteraction.hover?.openId === item.parcelNumberNoFormatting ||
+              propertiesInteraction.popup?.openId === item.parcelNumberNoFormatting
+            }
           />
         ))}
       </div>

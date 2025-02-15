@@ -1,10 +1,9 @@
 "use client";
 
-import { cn, hideNumber } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
-import { Dispatch, FC, SetStateAction, useMemo, useRef } from "react";
-import { moneyFormatter } from "@/helpers/common";
+import { Dispatch, FC, SetStateAction } from "react";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import Image from "next/image";

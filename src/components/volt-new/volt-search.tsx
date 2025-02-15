@@ -4,25 +4,19 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { LuInfo } from "react-icons/lu";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import Link from "next/link";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { getAllStates, getCounties, getCounty, getState } from "@/helpers/states";
-import { Dispatch, FC, SetStateAction, TransitionStartFunction, useEffect, useMemo, useState } from "react";
-import { IDecodedAccessToken } from "@/types/auth";
+import { UseFormReturn } from "react-hook-form";
+import { getState } from "@/helpers/states";
+import { FC, TransitionStartFunction } from "react";
 import { cn } from "@/lib/utils";
-import { getPropertiesAction } from "@/server-actions/volt/actions";
-import { VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { VoltSearchModel } from "@/types/volt";
+import { usePathname, useRouter } from "next/navigation";
 import routes from "@/helpers/routes";
 import useStates from "@/hooks/useStates";
-import { searchType } from "@/zod-validations/volt-new";
-import { voltSearchSchema } from "../../zod-validations/volt";
 import { Tooltip } from "../ui/tooltip";
 import { RadioGroupItem } from "../ui/radio-group";
 import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { AutoComplete } from "../ui/autocomplete";
-import VoltSearchAlerts from "./volt-search-alerts";
 
 interface VoltSearchProps {
   className?: string;
@@ -33,7 +27,6 @@ interface VoltSearchProps {
 }
 
 const VoltSearch: FC<VoltSearchProps> = ({ className, form, startTransition, isPending, isSearchLimitError }) => {
-  const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const {
@@ -55,6 +48,7 @@ const VoltSearch: FC<VoltSearchProps> = ({ className, form, startTransition, isP
     setValue("searchType", type, { shouldValidate: true, shouldDirty: true });
     if (isSubmitted) {
       trigger();
+      reset({}, { keepValues: true });
     }
   };
 
