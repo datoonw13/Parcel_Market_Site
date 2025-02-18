@@ -4,9 +4,11 @@ import { Alert } from "@/components/ui/alert";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import React, { Dispatch, FC, SetStateAction } from "react";
+import { RiCloseFill } from "react-icons/ri";
+import { Button } from "../ui/button";
 
 interface VoltSearchAlertsProps {
-  error: "limit" | "notFound" | null;
+  error: "limit" | "notFound";
   setError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
   // showUnauthorizedUserAlert: boolean;
 }
@@ -50,17 +52,18 @@ const errors = {
 
 const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError }) => (
   <div className="flex flex-col gap-6">
-    {/* {showUnauthorizedUserAlert && (
-      <Alert variant="warning" title={errors.unauthorized.title} description={errors.unauthorized.description} />
-    )} */}
-    {error && (
-      <Alert
-        handleClose={error === "notFound" ? () => setError(null) : undefined}
-        variant="warning"
-        title={errors[error].title}
-        description={errors[error].description}
-      />
-    )}
+    <div className="bg-warning-100 py-3 px-4 rounded-xl space-y-2">
+      <div className="flex justify-between gap-4">
+        <div className="space-y-0.5">
+          <h1 className="font-semibold text-sm">{errors[error].title}</h1>
+          <h2 className="text-grey-800 text-xs">
+            Please check your information and try again or do you want to search on th map instead?{" "}
+          </h2>
+        </div>
+        <RiCloseFill onClick={() => setError(null)} className="min-w-6 w-6 min-h-6 h-6 text-grey-600 cursor-pointer" />
+      </div>
+      <Button className="w-full bg-warning/90 hover:bg-warning">Search on map</Button>
+    </div>
   </div>
 );
 

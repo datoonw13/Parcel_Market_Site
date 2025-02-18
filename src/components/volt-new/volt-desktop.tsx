@@ -35,10 +35,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
     if (data?.errorMessage) {
       setSearchError(data.errorMessage === "Search limit exceeded for this month." ? "limit" : "notFound");
     }
-    if (searchError && !data?.errorMessage) {
-      setSearchError(null);
-    }
-  }, [data, searchError, isPending]);
+  }, [data, isPending]);
 
   return (
     <>
@@ -62,13 +59,14 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                   <div className={cn("h-full flex flex-col px-8 xl:px-11 gap-12 relative pb-6")}>
                     <div className="overflow-auto flex flex-col gap-8">
                       <div className="space-y-6">
+                        {!isPending && searchError && <VoltSearchAlerts error={searchError} setError={setSearchError} />}
+
                         <VoltSearch
                           isSearchLimitError={searchError === "limit"}
                           isPending={isPending}
                           form={form}
                           startTransition={startTransition}
                         />
-                        {!isPending && <VoltSearchAlerts error={searchError} setError={setSearchError} />}
                       </div>
                       {data?.data && (
                         <VoltSearchResult
