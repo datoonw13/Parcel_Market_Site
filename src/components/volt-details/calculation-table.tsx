@@ -35,7 +35,7 @@ const HEADERS = {
     sort: false,
   },
   lastSalePrice: {
-    label: "Last Sale Price",
+    label: "Sold Price",
     sort: true,
   },
   pricePerAcreage: {
