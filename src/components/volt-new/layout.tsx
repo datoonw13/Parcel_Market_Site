@@ -26,7 +26,7 @@ const VoltLayout = ({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
       ...initialParams,
-      searchType: "fullName",
+      searchType: initialParams?.searchType || "fullName",
     },
   });
 

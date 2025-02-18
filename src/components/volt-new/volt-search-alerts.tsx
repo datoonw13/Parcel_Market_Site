@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 interface VoltSearchAlertsProps {
   error: "limit" | "notFound";
   setError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
+  onOk: () => void;
   // showUnauthorizedUserAlert: boolean;
 }
 
@@ -50,7 +51,7 @@ const errors = {
   },
 };
 
-const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError }) => (
+const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError, onOk }) => (
   <div className="flex flex-col gap-6">
     <div className="bg-warning-100 py-3 px-4 rounded-xl space-y-2">
       <div className="flex justify-between gap-4">
@@ -62,7 +63,9 @@ const VoltSearchAlerts: FC<VoltSearchAlertsProps> = ({ error, setError }) => (
         </div>
         <RiCloseFill onClick={() => setError(null)} className="min-w-6 w-6 min-h-6 h-6 text-grey-600 cursor-pointer" />
       </div>
-      <Button className="w-full bg-warning/90 hover:bg-warning">Search on map</Button>
+      <Button onClick={onOk} className="w-full bg-warning/90 hover:bg-warning">
+        Search on map
+      </Button>
     </div>
   </div>
 );

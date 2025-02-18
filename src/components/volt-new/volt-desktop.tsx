@@ -1,7 +1,7 @@
 "use client";
 
 import { IDecodedAccessToken } from "@/types/auth";
-import { Dispatch, FC, SetStateAction, useEffect, useState, useTransition } from "react";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState, useTransition } from "react";
 import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,11 +12,16 @@ import Logo from "@/icons/Logo";
 import { UseFormReturn } from "react-hook-form";
 import { ResponseModel } from "@/types/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
+import dynamic from "next/dynamic";
+import useMap from "@/hooks/useMap";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
 import VoltSearchAlerts from "./volt-search-alerts";
 import VoltSearchResult from "./volt-search-result";
+import VoltSearchResultsMap from "./search-results-map";
+
+const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
 interface VoltDesktopProps {
   user: IDecodedAccessToken | null;
@@ -30,6 +35,18 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [isPending, startTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
+  const { ref, setRef } = useMap();
+
+  const onMarkerInteraction = useCallback(
+    (data: Partial<IPropertiesInteraction>) => {
+      setPropertiesInteraction((prev) => ({ ...prev, ...data }));
+    },
+    [setPropertiesInteraction]
+  );
+
+  const onMouseLeave = useCallback(() => {
+    setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
+  }, [setPropertiesInteraction]);
 
   useEffect(() => {
     if (data?.errorMessage) {
@@ -38,6 +55,14 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
       setSearchError(null);
     }
   }, [data?.errorMessage, isPending]);
+
+  useEffect(() => {
+    if (ref) {
+      ref.dragPan.disable();
+      ref.doubleClickZoom.disable();
+      ref.scrollZoom.disable();
+    }
+  }, [ref]);
 
   return (
     <>
@@ -61,16 +86,16 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                   <div className={cn("h-full flex flex-col px-8 xl:px-11 gap-12 relative pb-6")}>
                     <div className="overflow-auto flex flex-col gap-8">
                       <div className="space-y-6">
-                        {!isPending && searchError && <VoltSearchAlerts error={searchError} setError={setSearchError} />}
-
                         <VoltSearch
                           isSearchLimitError={searchError === "limit"}
                           isPending={isPending}
                           form={form}
                           startTransition={startTransition}
+                          searchError={searchError}
+                          setSearchError={setSearchError}
                         />
                       </div>
-                      {data?.data && (
+                      {data?.data && !isPending && (
                         <VoltSearchResult
                           data={data.data}
                           propertiesInteraction={propertiesInteraction}
@@ -91,7 +116,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                     <VoltFooter className="flex-col items-start mt-auto" />
                   </div>
                 </ScrollArea>
-                {false && (
+                {!!data?.data && !isPending && (
                   <div className="bg-white px-8 xl:px-11 pt-6 pb-8 xl:pb-11 border-t border-t-grey-100">
                     <Button
                       id="volt-get-value-button"
@@ -102,7 +127,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                         //   setShowCalculationTerms(true);
                         // }
                       }}
-                      // disabled={!values.selectedItem}
+                      disabled={!propertiesInteraction.popup}
                       className="w-full"
                     >
                       Get Data
@@ -112,7 +137,15 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full">
-              Map
+              {!data?.data && <Map setRef={setRef} ref={ref} />}
+              {data?.data && (
+                <VoltSearchResultsMap
+                  data={data.data}
+                  onMarkerInteraction={onMarkerInteraction}
+                  onMouseLeave={onMouseLeave}
+                  propertiesInteraction={propertiesInteraction}
+                />
+              )}
             </td>
           </tr>
         </tbody>
