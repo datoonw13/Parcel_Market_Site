@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import VoltDetailsDesktop from "./details-desktop";
+import VoltDetailsDesktop from "./desktop/details-desktop";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 import { breakPoints } from "../../../tailwind.config";
-import VoltDetailsMobile from "./details-mobile";
+import VoltDetailsMobile from "./mobile/details-mobile";
 
 interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;

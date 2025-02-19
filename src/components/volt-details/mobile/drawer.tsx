@@ -10,7 +10,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import moment from "moment";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
 import VoltItemMulti from "./volt-item-multi";
 

@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { CiFilter } from "react-icons/ci";
-import { Tooltip } from "../ui/tooltip";
-import { Switch } from "../ui/switch";
+import { Tooltip } from "../../ui/tooltip";
+import { Switch } from "../../ui/switch";
 
 interface VoltDetailsMobileHeaderProps {
   startFetchingTransition: TransitionStartFunction;

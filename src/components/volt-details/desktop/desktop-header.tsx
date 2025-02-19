@@ -14,9 +14,9 @@ import { CiSearch } from "react-icons/ci";
 import { BiSearch } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import { AnimatePresence, motion } from "framer-motion";
-import VoltDetailsFiltersWrapper from "./filters/wrapper";
-import { Tooltip } from "../ui/tooltip";
-import { Switch } from "../ui/switch";
+import VoltDetailsFiltersWrapper from "../filters/wrapper";
+import { Tooltip } from "../../ui/tooltip";
+import { Switch } from "../../ui/switch";
 
 interface VoltDetailsDesktopHeaderProps {
   startFetchingTransition: TransitionStartFunction;

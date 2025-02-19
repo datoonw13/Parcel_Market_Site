@@ -10,9 +10,9 @@ import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { IPropertiesInteraction } from "@/types/volt";
-import { Tooltip } from "../ui/tooltip";
-import { breakPoints } from "../../../tailwind.config";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/dialogs/drawer";
+import { Tooltip } from "../../ui/tooltip";
+import { breakPoints } from "../../../../tailwind.config";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../ui/dialogs/drawer";
 
 type IItem = z.infer<typeof PropertyDataSchema>["assessments"]["data"][0] & { isBulked: true };
 

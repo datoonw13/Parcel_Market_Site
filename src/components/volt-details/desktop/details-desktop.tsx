@@ -12,15 +12,15 @@ import moment from "moment";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IoMdClose } from "react-icons/io";
 import { IPropertiesInteraction } from "@/types/volt";
-import { AutoComplete } from "../ui/autocomplete";
-import { Button } from "../ui/button";
+import { AutoComplete } from "../../ui/autocomplete";
+import { Button } from "../../ui/button";
 import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
-import VoltDetailsMap from "./map/map";
-import VoltDetailsFiltersDropDown from "./filters/dropdown";
-import { ScrollArea } from "../ui/scroll-area";
+import VoltDetailsMap from "../map/map";
+import VoltDetailsFiltersDropDown from "../filters/dropdown";
+import { ScrollArea } from "../../ui/scroll-area";
 import VoltDetailsDesktopHeader from "./desktop-header";
-import VoltDetailsMapPopup from "./map/map-popup";
+import VoltDetailsMapPopup from "../map/map-popup";
 
 interface VoltDetailsDesktopProps {
   data: z.infer<typeof PropertyDataSchema>;

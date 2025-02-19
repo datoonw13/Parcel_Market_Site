@@ -14,8 +14,8 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { z } from "zod";
 import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "@radix-ui/react-tooltip";
 import { IPropertiesInteraction } from "@/types/volt";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import NoDataIcon from "../@new/icons/no-data";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import NoDataIcon from "../../@new/icons/no-data";
 
 const HEADERS = {
   acreage: {

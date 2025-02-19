@@ -8,8 +8,8 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import Image from "next/image";
 import { IPropertiesInteraction } from "@/types/volt";
-import { Tooltip } from "../ui/tooltip";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Tooltip } from "../../ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
 interface VoltDetailsMobileProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
