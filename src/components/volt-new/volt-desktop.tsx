@@ -14,12 +14,13 @@ import { ResponseModel } from "@/types/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import dynamic from "next/dynamic";
 import useMap from "@/hooks/useMap";
+import { Map as MapBoX } from "mapbox-gl";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
-import VoltSearchAlerts from "./volt-search-alerts";
 import VoltSearchResult from "./volt-search-result";
 import VoltSearchResultsMap from "./search-results-map";
+import VoltSearchOnMap from "./search-on-map";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -36,6 +37,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
   const [isPending, startTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
   const { ref, setRef } = useMap();
+  const [searchMapRef, setSearchMapRef] = useState<MapBoX | null>(null);
 
   const onMarkerInteraction = useCallback(
     (data: Partial<IPropertiesInteraction>) => {
@@ -93,6 +95,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                           startTransition={startTransition}
                           searchError={searchError}
                           setSearchError={setSearchError}
+                          searchMapRef={searchMapRef}
                         />
                       </div>
                       {data?.data && !isPending && (
@@ -136,9 +139,10 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                 )}
               </div>
             </td>
-            <td rowSpan={1} className="bg-primary-main-100 h-full">
-              {!data?.data && <Map setRef={setRef} ref={ref} />}
-              {data?.data && (
+            <td rowSpan={1} className="bg-primary-main-100 h-full relative">
+              {form.watch("searchType") === "map" && <VoltSearchOnMap mapRef={searchMapRef} setMapRef={setSearchMapRef} />}
+              {!data?.data && form.watch("searchType") !== "map" && <Map setRef={setRef} ref={ref} />}
+              {data?.data && form.watch("searchType") !== "map" && (
                 <VoltSearchResultsMap
                   data={data.data}
                   onMarkerInteraction={onMarkerInteraction}

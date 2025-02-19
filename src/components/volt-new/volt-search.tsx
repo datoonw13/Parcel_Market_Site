@@ -27,6 +27,7 @@ interface VoltSearchProps {
   isSearchLimitError: boolean;
   searchError: "limit" | "notFound" | null;
   setSearchError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
+  searchMapRef: any | null;
 }
 
 const VoltSearch: FC<VoltSearchProps> = ({
@@ -37,6 +38,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
   isSearchLimitError,
   searchError,
   setSearchError,
+  searchMapRef,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -68,16 +70,28 @@ const VoltSearch: FC<VoltSearchProps> = ({
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    startTransition(async () => {
-      const newParams = new URLSearchParams(
-        Object.keys(data).reduce(
-          (acc, cur) => ({ ...acc, ...(data[cur as keyof typeof data] && { [cur]: data[cur as keyof typeof data] }) }),
-          {}
-        )
-      );
-      router.push(`${pathname}?${newParams.toString()}`);
-      reset(data);
-    });
+    if (data.searchType === "map") {
+      if (searchMapRef && form.watch("state") && form.watch("county")) {
+        const county = getCounty(form.watch("state"), form.watch("county"));
+        if (county) {
+          searchMapRef.dragPan.enable();
+          searchMapRef.doubleClickZoom.enable();
+          searchMapRef.scrollZoom.enable();
+          searchMapRef.flyTo({ center: [county.full.lng, county.full.lat], zoom: 14 });
+        }
+      }
+    } else {
+      startTransition(async () => {
+        const newParams = new URLSearchParams(
+          Object.keys(data).reduce(
+            (acc, cur) => ({ ...acc, ...(data[cur as keyof typeof data] && { [cur]: data[cur as keyof typeof data] }) }),
+            {}
+          )
+        );
+        router.push(`${pathname}?${newParams.toString()}`);
+        reset(data);
+      });
+    }
   });
 
   return (
@@ -212,7 +226,13 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 disabled={!watch("state") || disableSearch}
               />
             </div>
-            <Button id="volt-search-btn" onClick={onSubmit} loading={isPending} disabled={!isDirty} className="mt-1">
+            <Button
+              id="volt-search-btn"
+              onClick={onSubmit}
+              loading={isPending || (form.watch("searchType") === "map" && !searchMapRef)}
+              disabled={!isDirty || (form.watch("searchType") === "map" && !searchMapRef)}
+              className="mt-1"
+            >
               {form.watch("searchType") === "map" ? "Search on Map" : "Search"}
             </Button>
           </div>
