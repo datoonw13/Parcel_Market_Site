@@ -6,6 +6,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { IPropertiesInteraction } from "@/types/volt";
+import { FaLocationDot } from "react-icons/fa6";
 
 type IItem = z.infer<typeof PropertyDataSchema>["assessments"]["data"][0] & { isBulked: false };
 
@@ -17,21 +18,15 @@ interface VoltItemProps {
   sellingPropertyId: string;
 }
 
-const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
-  if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
-  }
-  return data.data.id === sellingPropertyId;
-};
-
 const generateClasses = (data: {
   selected: boolean;
   hovered: boolean;
   isMedianValid: boolean;
-  hasSellingProperty: boolean;
+  isSellingProperty: boolean;
   isNonValidMedianHighlighted: boolean;
 }) => {
-  const { hasSellingProperty, hovered, isMedianValid, isNonValidMedianHighlighted, selected } = data;
+  const { isSellingProperty, hovered, isMedianValid, isNonValidMedianHighlighted, selected } = data;
+  console.log(data);
   let classNames = "border";
 
   if (isMedianValid || (!isMedianValid && !isNonValidMedianHighlighted)) {
@@ -53,9 +48,9 @@ const generateClasses = (data: {
     }
   }
 
-  if (hasSellingProperty) {
-    classNames = `${classNames} outline outline-primary-main outline-1`;
-  }
+  // if (isSellingProperty) {
+  //   classNames = `${classNames} outline outline-primary-main outline-1`;
+  // }
   return cn(classNames);
 };
 
@@ -84,7 +79,7 @@ const VoltItem: FC<VoltItemProps> = ({
       className={cn(
         "p-2 rounded-2xl",
         generateClasses({
-          hasSellingProperty: hasSellingProperty(sellingPropertyId, data),
+          isSellingProperty: data.data.isSellingProperty,
           hovered,
           selected: popup,
           isMedianValid: data.data.isMedianValid,
@@ -123,7 +118,7 @@ const VoltItem: FC<VoltItemProps> = ({
     >
       <div className="text-start [&>svg]:hidden py-0">
         <div className="w-full space-y-2 ">
-          <div className="w-full flex justify-between items-center gap-6">
+          <div className="w-full flex justify-between items-start gap-6">
             <div className="w-full space-y-0.5">
               <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] justify-between items-center w-full gap-6">
                 <p className="text-xs text-grey-600 font-medium">State/County</p>
@@ -136,6 +131,7 @@ const VoltItem: FC<VoltItemProps> = ({
                 <p className="text-sm font-medium truncate">{data.data.parcelNumber.formattedString}</p>
               </div>
             </div>
+            {data.data.isSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0 mt-1" />}
           </div>
           <hr className="bg-gray-100" />
           <div className="flex gap-2 justify-between">
@@ -152,8 +148,7 @@ const VoltItem: FC<VoltItemProps> = ({
             <div className="space-y-1">
               {data.data.pricePerAcreage && (
                 <p className="text-xs text-grey-600">
-                  {hasSellingProperty(sellingPropertyId, data) ? "VOLT Value Per Acreage" : "Sold Price Per Acre"}:{" "}
-                  <span className="text-black font-medium">{data.data.pricePerAcreage.formattedString}</span>
+                  Sold Price Per Acre <span className="text-black font-medium">{data.data.pricePerAcreage.formattedString}</span>
                 </p>
               )}
               {data.data.lastSaleDate && (

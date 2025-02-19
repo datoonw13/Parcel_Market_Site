@@ -227,7 +227,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="h-[90px]" />
+              <div className="h-[110px]" />
             </div>
             <div />
           </div>

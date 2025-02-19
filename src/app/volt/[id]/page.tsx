@@ -8,6 +8,7 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { getUserAction } from "@/server-actions/user/actions";
 import { redirect } from "next/navigation";
 import routes from "@/helpers/routes";
+// import x from "../../../../public/test.json";
 
 const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {

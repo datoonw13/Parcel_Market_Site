@@ -251,11 +251,15 @@ export const PropertyDataSchema = z
                   ? removeParcelNumberFormatting(property.parcelNumber)
                   : hideString(removeParcelNumberFormatting(property.parcelNumber)),
               },
+              isSellingProperty: removeParcelNumberFormatting(property.parcelNumber) === removeParcelNumberFormatting(parcelNumber),
             })),
             uniqueCounties: uniqueCounties.size,
             uniquePropertyTypes: uniquePropertyTypes.size,
             totalProperties,
             propertyType,
+            hasSellingProperty: !!properties.find(
+              (el) => removeParcelNumberFormatting(el.parcelNumber) === removeParcelNumberFormatting(parcelNumber)
+            ),
           },
         };
       }
@@ -290,6 +294,7 @@ export const PropertyDataSchema = z
               ? removeParcelNumberFormatting(el.data.parcelNumber)
               : hideString(removeParcelNumberFormatting(el.data.parcelNumber)),
           },
+          isSellingProperty: removeParcelNumberFormatting(el.data.parcelNumber) === removeParcelNumberFormatting(parcelNumber),
         },
       };
     });

@@ -161,7 +161,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
           {assessments.map((property) => {
             const { hovered, isActive, popup } = getState(property.data.id, propertiesInteraction);
             return (
-              <Popover key={property.data.id} open={propertiesInteraction.hover?.openId === property.data.id}>
+              <Popover key={property.data.id} open={false}>
                 <PopoverTrigger className={cn("")} asChild>
                   <div
                     style={{

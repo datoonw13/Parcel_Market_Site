@@ -4,7 +4,7 @@ import { moneyFormatter } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import moment from "moment";
 import React, { Dispatch, FC, SetStateAction } from "react";
-import { FaCircleInfo } from "react-icons/fa6";
+import { FaCircleInfo, FaLocationDot } from "react-icons/fa6";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
@@ -24,12 +24,12 @@ interface VoltItemMultiProps {
   sellingPropertyId: string;
 }
 
-const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
-  if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
-  }
-  return data.data.id === sellingPropertyId;
-};
+// const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
+//   if (data.isBulked) {
+//     return !!data.data.properties.find((el) => el.id === sellingPropertyId);
+//   }
+//   return data.data.id === sellingPropertyId;
+// };
 
 const generateClasses = (data: {
   selected: boolean;
@@ -60,9 +60,9 @@ const generateClasses = (data: {
     }
   }
 
-  if (hasSellingProperty) {
-    classNames = `${classNames} outline outline-primary-main outline-1`;
-  }
+  // if (hasSellingProperty) {
+  //   classNames = `${classNames} outline outline-primary-main outline-1`;
+  // }
   return cn(classNames);
 };
 
@@ -92,7 +92,7 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
       className={cn(
         "rounded-2xl",
         generateClasses({
-          hasSellingProperty: hasSellingProperty(sellingPropertyId, data),
+          hasSellingProperty: data.data.hasSellingProperty,
           hovered,
           selected: popup,
           isMedianValid: data.data.isMedianValid,
@@ -130,11 +130,12 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
       id={`calculation-${data.data.id}`}
     >
       <div className="space-y-3 px-5 py-4">
-        <div className="flex justify-between items-center gap-6 pb-3 border-b border-[#D5D3D3]">
+        <div className="flex justify-between items-start gap-6 pb-3 border-b border-[#D5D3D3]">
           <h1 className="font-semibold">
             Multiple Parcel Sale /{" "}
             <span className="font-medium text-xs text-grey-800">{moment(data.data.lastSaleDate).format("MM/DD/YYYY")}</span>
           </h1>
+          {data.data.hasSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0 mt-1" />}
         </div>
         <ul className="grid grid-cols-2 gap-1">
           <li className="text-xs text-grey-600">

@@ -17,13 +17,6 @@ interface VoltItemProps {
   sellingPropertyId: string;
 }
 
-const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
-  if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
-  }
-  return data.data.id === sellingPropertyId;
-};
-
 const generateClasses = (data: {
   selected: boolean;
   hovered: boolean;
@@ -84,7 +77,7 @@ const VoltItem: FC<VoltItemProps> = ({
       className={cn(
         "p-2 rounded-2xl",
         generateClasses({
-          hasSellingProperty: hasSellingProperty(sellingPropertyId, data),
+          hasSellingProperty: data.data.isSellingProperty,
           hovered,
           selected: popup,
           isMedianValid: data.data.isMedianValid,
@@ -152,7 +145,7 @@ const VoltItem: FC<VoltItemProps> = ({
             <div className="space-y-1">
               {data.data.pricePerAcreage && (
                 <p className="text-xs text-grey-600">
-                  {hasSellingProperty(sellingPropertyId, data) ? "VOLT Value Per Acreage" : "Sold Price Per Acre"}:{" "}
+                  {data.data.isSellingProperty ? "VOLT Value Per Acreage" : "Sold Price Per Acre"}:{" "}
                   <span className="text-black font-medium">{data.data.pricePerAcreage.formattedString}</span>
                 </p>
               )}
