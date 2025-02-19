@@ -30,6 +30,8 @@ const VoltLayout = ({
     },
   });
 
+  console.log("aqaa");
+
   if (detecting) return null;
 
   return isSm ? (

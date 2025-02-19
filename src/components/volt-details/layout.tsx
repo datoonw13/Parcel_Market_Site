@@ -6,8 +6,11 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import VoltDetails from "./details";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import VoltDetailsDesktop from "./details-desktop";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
+import { breakPoints } from "../../../tailwind.config";
+import VoltDetailsMobile from "./details-mobile";
 
 interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -18,6 +21,8 @@ interface VoltDetailsLayoutProps {
 const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, isSubscribed }) => {
   const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
+  const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
+
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
   const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
   const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({
@@ -68,18 +73,33 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
           </div>
         </div>
       )}
-      <div id="details" className={cn("w-full h-full overflow-hidden relative")}>
-        <VoltDetails
-          data={data}
-          propertyTypes={propertyTypes}
-          isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-          startFetchingTransition={startFetchingTransition}
-          setNonValidMedianHighlighted={setNonValidMedianHighlighted}
-          filters={filters}
-          setFilters={setFilters}
-          isSubscribed={isSubscribed}
-        />
-      </div>
+      {!detecting && (
+        <div id="details" className={cn("w-full h-full overflow-hidden relative")}>
+          {isSm ? (
+            <VoltDetailsMobile
+              data={data}
+              propertyTypes={propertyTypes}
+              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+              startFetchingTransition={startFetchingTransition}
+              setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+              filters={filters}
+              setFilters={setFilters}
+              isSubscribed={isSubscribed}
+            />
+          ) : (
+            <VoltDetailsDesktop
+              data={data}
+              propertyTypes={propertyTypes}
+              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+              startFetchingTransition={startFetchingTransition}
+              setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+              filters={filters}
+              setFilters={setFilters}
+              isSubscribed={isSubscribed}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 };

@@ -11,7 +11,7 @@ import { IPropertiesInteraction } from "@/types/volt";
 import { Tooltip } from "../ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-interface VoltDetailsProgressLineProps {
+interface VoltDetailsMobileProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   propertiesInteraction: IPropertiesInteraction;
@@ -63,7 +63,7 @@ const getState = (id: string, propertiesInteraction: IPropertiesInteraction) => 
   };
 };
 
-const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
+const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
   data,
   propertiesInteraction,
   setPropertiesInteraction,
@@ -73,45 +73,63 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   const assessments = isNonValidMedianHighlighted ? data.assessments.data.filter((el) => el.data.isMedianValid) : data.assessments.data;
 
   return (
-    <div
-      id="volt-progress-line"
-      className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  border-t-0 space-y-8 relative z-10 shadow-3 -translate-y-0.5"
-    >
-      <div className="flex items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
-        <div className="flex gap-4 items-center">
-          <div className="flex items-center gap-2">
-            <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
-              <div className="size-5 border-2 rounded-full border-primary-main" />
-              <div className="size-3 bg-primary-main rounded-full absolute" />
-            </div>
-            <div className="flex items-center gap-2">
-              <p className="font-semibold text-xs">
-                <span className={cn(!isSubscribed && "blur-[2px]")}>
-                  {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
-                </span>{" "}
-                <span className="text-grey-600">- Average PPA</span>
-              </p>
-              <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
-            </div>
+    <div id="volt-progress-line" className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  space-y-8 relative z-10 rounded-2xl">
+      <div className="grid grid-cols-2 items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
+        <div className="flex items-center gap-2">
+          <div className={cn(`bg-white size-6 rounded-full flex items-center justify-center relative`)}>
+            <div className="size-4 border-2 rounded-full border-primary-main" />
+            <div className="size-2 bg-primary-main rounded-full absolute" />
           </div>
           <div className="flex items-center gap-2">
-            <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
-              <div className="size-5 border-2 rounded-full border-warning" />
-              <div className="size-3 bg-warning rounded-full absolute" />
-            </div>
-            <div className="flex items-center gap-2">
-              <p className="font-semibold text-xs">
-                <span className={cn(!isSubscribed && "blur-[2px]")}>{data.pricePerAcreage.formattedString}</span>{" "}
-                <span className="text-grey-600">- VOLT PPA</span>
-              </p>
-              <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
-            </div>
+            <p className="font-semibold text-xs text-grey-600 table-fixed table w-full">
+              <span
+                style={{
+                  display: "table-cell",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+                className={cn(!isSubscribed && "blur-[2px]")}
+              >
+                {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
+              </span>{" "}
+              <span className="text-grey-600 text-xs">- APPA</span>
+            </p>
+            <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <FaLocationDot className="text-primary-dark size-5" />
-          <p className="text-primary-main text-xs font-medium">Subject Land</p>
-          <Tooltip renderButton={<IoInformationCircleOutline className="size-6 text-primary-dark" />} renderContent="Some text." />
+          <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
+            <div className="size-4 border-2 rounded-full border-warning" />
+            <div className="size-2 bg-warning rounded-full absolute" />
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="font-semibold text-xs text-grey-600 table-fixed table w-full">
+              <span
+                style={{
+                  display: "table-cell",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+                className={cn(!isSubscribed && "blur-[2px]")}
+              >
+                {data.pricePerAcreage.formattedString}
+              </span>{" "}
+              <span
+                style={{
+                  display: "table-cell",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+                className="text-grey-600 text-xs"
+              >
+                - VOLT PPA
+              </span>
+            </p>
+            <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+          </div>
         </div>
       </div>
 
@@ -250,10 +268,10 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
                   .formattedString
               }
             </span>{" "}
-            <span className="text-grey-600 font-semibold text-sm">- Lowest sale reported per acre</span>
+            <span className="text-grey-600 font-semibold text-xs">- LPPA</span>
           </p>
-          <p className="font-semibold text-sm">
-            <span className="text-grey-600 font-semibold text-xs">Highest sale reported per acre - </span>{" "}
+          <p className="font-semibold text-xs">
+            <span className="text-grey-600 font-semibold text-xs">HPPA - </span>{" "}
             <span className={cn(!isSubscribed && "blur-[2px]")}>
               {
                 data.assessments.calculations[`${isNonValidMedianHighlighted ? "maxPriceOfValidAssessments" : "maxPriceOfAllAssessments"}`]
@@ -267,4 +285,4 @@ const VoltDetailsProgressLine: FC<VoltDetailsProgressLineProps> = ({
   );
 };
 
-export default VoltDetailsProgressLine;
+export default VoltDetailsMobileProgressLine;

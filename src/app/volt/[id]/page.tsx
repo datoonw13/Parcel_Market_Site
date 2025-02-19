@@ -60,7 +60,7 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
     return <div className="p-5 bg-error-400 rounded-2xl">{data.errorMessage}</div>;
   }
 
-  return <VoltDetailsLayout isSubscribed={!!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data!} />;
+  return <VoltDetailsLayout isSubscribed={true} propertyTypes={propertyTypes} data={data.data!} />;
 };
 
 export default VoltPropertyDetailsPage;

@@ -57,7 +57,7 @@ export const propertySearchTypeValidation = z
 
 // Define the schema for an individual assessment
 
-const AssessmentBaseSchema = z
+export const AssessmentBaseSchema = z
   .object({
     id: z.number(),
     owner: z.string().nullable(),

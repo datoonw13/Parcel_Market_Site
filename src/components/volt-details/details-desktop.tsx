@@ -14,15 +14,15 @@ import { IoMdClose } from "react-icons/io";
 import { IPropertiesInteraction } from "@/types/volt";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
-import VoltDetailsProgressLine from "./progress-line";
+import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
 import VoltDetailsCalculationTable from "./calculation-table";
 import VoltDetailsMap from "./map/map";
 import VoltDetailsFiltersDropDown from "./filters/dropdown";
 import { ScrollArea } from "../ui/scroll-area";
-import VoltDetailsHeader from "./header";
+import VoltDetailsDesktopHeader from "./desktop-header";
 import VoltDetailsMapPopup from "./map/map-popup";
 
-interface VoltDetailsProps {
+interface VoltDetailsDesktopProps {
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
@@ -76,7 +76,7 @@ const mapLayers = [
   },
 ];
 
-const VoltDetails: FC<VoltDetailsProps> = ({
+const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   data,
   isNonValidMedianHighlighted,
   propertyTypes,
@@ -313,7 +313,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
             <div className="h-full relative">
               <div className="absolute h-[calc(100%-60px)] w-full">
-                <VoltDetailsHeader
+                <VoltDetailsDesktopHeader
                   data={data}
                   startFetchingTransition={startFetchingTransition}
                   isNonValidMedianHighlighted={isNonValidMedianHighlighted}
@@ -374,7 +374,7 @@ const VoltDetails: FC<VoltDetailsProps> = ({
                 });
               }}
             >
-              <VoltDetailsProgressLine
+              <VoltDetailsDesktopProgressLine
                 data={data}
                 propertiesInteraction={propertiesInteraction}
                 setPropertiesInteraction={setPropertiesInteraction}
@@ -530,4 +530,4 @@ const VoltDetails: FC<VoltDetailsProps> = ({
   );
 };
 
-export default VoltDetails;
+export default VoltDetailsDesktop;

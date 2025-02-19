@@ -18,7 +18,7 @@ import VoltDetailsFiltersWrapper from "./filters/wrapper";
 import { Tooltip } from "../ui/tooltip";
 import { Switch } from "../ui/switch";
 
-interface VoltDetailsHeaderProps {
+interface VoltDetailsDesktopHeaderProps {
   startFetchingTransition: TransitionStartFunction;
   data: z.infer<typeof PropertyDataSchema>;
   isNonValidMedianHighlighted: boolean;
@@ -29,7 +29,7 @@ interface VoltDetailsHeaderProps {
   isSubscribed: boolean;
 }
 
-const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
+const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   startFetchingTransition,
   data,
   isNonValidMedianHighlighted,
@@ -140,4 +140,4 @@ const VoltDetailsHeader: FC<VoltDetailsHeaderProps> = ({
   );
 };
 
-export default VoltDetailsHeader;
+export default VoltDetailsDesktopHeader;
