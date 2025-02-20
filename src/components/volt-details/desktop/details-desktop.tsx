@@ -438,7 +438,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               //   router.push(`${pathname}?${searchParams.toString()}`);
               // }
             }}
-            placeholder="Layers"
+            placeholder="BaseMap"
             selectedValue={selectedLayer}
           />
           <AutoComplete
@@ -451,7 +451,8 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               //   router.push(`${pathname}?${searchParams.toString()}`);
               // }
             }}
-            placeholder="BaseMap"
+            disabled
+            placeholder="Layovers"
             selectedValue={null}
           />
           <Button variant="secondary" className="w-full !text-primary-main [&>span]:flex [&>span]:items-center [&>span]:gap-2">

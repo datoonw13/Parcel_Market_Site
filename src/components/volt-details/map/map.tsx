@@ -205,11 +205,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
             },
           })
           .on("dblclick", (e) => {
-            // console.log(ref.getSource(mapData.m))
             const property = ref.queryRenderedFeatures(e.point)[0] as any;
             if (property) {
               e.preventDefault();
-              ref.setZoom(14);
+              ref.setZoom(16);
               ref.setCenter([property.properties.lng, property.properties.lat]);
             }
           });
@@ -444,8 +443,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
     ref?.on("click", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
-      console.log(feature, 22);
-
       if (feature) {
         onMarkerInteraction({
           popup: { clickId: feature.id, isBulked: !!feature.bulkId, openId: feature.bulkId ? feature.bulkId : feature.id },
