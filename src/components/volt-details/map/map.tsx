@@ -289,7 +289,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         type: "line",
         source: parcelCreateData.id,
         "source-layer": parcelCreateData.id,
-        minzoom: 10,
+        minzoom: 15,
         maxzoom: 21,
         layout: {
           visibility: "visible",
@@ -309,7 +309,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         type: "fill",
         source: parcelCreateData.id,
         "source-layer": parcelCreateData.id,
-        minzoom: 12,
+        minzoom: 15,
         maxzoom: 21,
         layout: {
           visibility: "visible",
@@ -344,6 +344,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         type: "symbol",
         source: parcelCreateData.id,
         "source-layer": parcelCreateData.id,
+        minzoom: 15,
+        maxzoom: 21,
         layout: {
           "text-field": ["get", "owner"], // Ensure 'name' matches your GeoJSON property
           "text-size": 12,
