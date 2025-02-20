@@ -114,7 +114,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
                 }}
                 className={cn(!isSubscribed && "blur-[2px]")}
               >
-                {data.pricePerAcreage.formattedString}
+                {data.voltPricePerAcreage.formattedString}
               </span>{" "}
               <span
                 style={{
@@ -150,7 +150,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             </div>
           </div>
           <div
-            style={{ left: `calc(${data.pricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
+            style={{ left: `calc(${data.voltPricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
