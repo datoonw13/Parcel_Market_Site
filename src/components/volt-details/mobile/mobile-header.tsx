@@ -45,10 +45,7 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
               textOverflow: "ellipsis",
             }}
           >
-            Avg:{" "}
-            <span className={cn(!isSubscribed && "blur-[2px]")}>
-              {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
-            </span>
+            Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
           </div>
           <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
         </div>

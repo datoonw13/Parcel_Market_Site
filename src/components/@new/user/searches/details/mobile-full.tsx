@@ -239,7 +239,7 @@ const SearchItemDetailsMobileMapFull = ({
               <h1 className="text-lg font-semibold">Recent Sales</h1>
               <h2 className="text-grey-800 text-sm">Vacant parcels sold over the past 2 years, within 10 miles, and similar acreage.</h2>
             </div>
-            {user && user.isSubscribed && (
+            {/* {user && user.isSubscribed && (
               <>
                 <div className="bg-grey-50 border border-grey-100 rounded-xl p-3 space-y-4 lg:hidden">
                   <p className="text-grey-800 text-sm">If you need additional data for your research, you can switch to another mode.</p>
@@ -318,7 +318,7 @@ const SearchItemDetailsMobileMapFull = ({
                   )}
                 </div>
               </>
-            )}
+            )} */}
             {(!user || !user.isSubscribed) && (
               <div className="py-6 px-4 rounded-xl border border-primary-main-400 space-y-4 flex flex-col justify-center items-center">
                 <div className="relative size-16 ">

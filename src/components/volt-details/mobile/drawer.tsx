@@ -168,7 +168,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                       </li>
                       <li>
                         <p className="text-sm font-medium text-grey-600">Price per acreage:</p>
-                        <p className="text-sm">{data.pricePerAcreage.formattedString}</p>
+                        <p className="text-sm">{data.voltPricePerAcreage.formattedString}</p>
                       </li>
                       <li>
                         <p className="text-sm font-medium text-grey-600">State/county:</p>
@@ -182,7 +182,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                       </li>
                       <li>
                         <p className="text-sm font-medium text-grey-600">Volt Value:</p>
-                        <p className="text-sm">{data.price.formattedString}</p>
+                        <p className="text-sm">{data.voltPrice.formattedString}</p>
                       </li>
                       <li>
                         <p className="text-sm font-medium text-grey-600">Search date:</p>
