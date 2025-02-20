@@ -101,7 +101,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                <span className={cn(!isSubscribed && "blur-[2px]")}>{data.pricePerAcreage.formattedString}</span>{" "}
+                <span className={cn(!isSubscribed && "blur-[2px]")}>{data.voltPricePerAcreage.formattedString}</span>{" "}
                 <span className="text-grey-600">- VOLT PPA</span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
@@ -132,7 +132,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             </div>
           </div>
           <div
-            style={{ left: `calc(${data.pricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
+            style={{ left: `calc(${data.voltPricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
             <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>

@@ -159,7 +159,7 @@ export const PropertyDataSchema = z
   .transform(({ acrage, subscribed, price, parcelNumber, assessments, ...input }) => {
     const axisPositionInPercent = (price: number, min: number, max: number) => ((price - min) / (max - min)) * 100;
 
-    const getAssessmentsAllPrices = () => {
+    const getAssessmentsPrices = () => {
       const allPrices: number[] = [];
       const validPrices: number[] = [];
       assessments.forEach((el) => {
@@ -173,7 +173,7 @@ export const PropertyDataSchema = z
         validPrices,
       };
     };
-    const { allPrices, validPrices } = getAssessmentsAllPrices();
+    const { allPrices, validPrices } = getAssessmentsPrices();
     const minPriceOfAllAssessments = Math.min(...allPrices);
     const maxPriceOfAllAssessments = Math.max(...allPrices);
     const avgPriceOfAllAssessments = allPrices.reduce((acc, cur) => acc + cur, 0) / allPrices.length;
@@ -316,17 +316,23 @@ export const PropertyDataSchema = z
         value: acrage,
         formattedString: acrage.toFixed(2),
       },
-      price: {
+      voltPrice: {
         value: subscribed ? price : null,
         formattedString: subscribed ? moneyFormatter.format(price) : hideNumber(moneyFormatter.format(price)),
       },
-      pricePerAcreage: {
+      voltPricePerAcreage: {
         value: subscribed ? price / acrage : null,
         formattedString: subscribed ? moneyFormatter.format(price / acrage) : hideNumber(moneyFormatter.format(price / acrage)),
         axis: {
           all: axisPositionInPercent(price / acrage, minPriceOfAllAssessments, maxPriceOfAllAssessments),
           valid: axisPositionInPercent(price / acrage, minPriceOfValidAssessments, maxPriceOfValidAssessments),
         },
+      },
+      nonVoltPrice: {
+        value: subscribed ? allPrices.reduce((acc, cur) => acc + cur, 0) * acrage : null,
+        formattedString: subscribed
+          ? moneyFormatter.format(avgPriceOfAllAssessments * acrage)
+          : hideNumber(moneyFormatter.format(avgPriceOfAllAssessments * acrage)),
       },
       parcelNumber: {
         value: parcelNumber,

@@ -146,12 +146,12 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
           },
           voltValue: {
             label: "Volt Value",
-            value: data.price.formattedString,
+            value: data.voltPrice.formattedString,
             blur: !isSubscribed,
           },
           pricePerAcreage: {
             label: "Price Per Acreage",
-            value: data.price.formattedString,
+            value: data.voltPrice.formattedString,
             blur: !isSubscribed,
           },
         },
@@ -253,10 +253,10 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
     data.lon,
     data.owner,
     data.parcelNumber.formattedString,
-    data.price.formattedString,
     data.state.label,
+    data.voltPrice.formattedString,
     isSubscribed,
-    propertiesInteraction,
+    propertiesInteraction.popup?.openId,
   ]);
 
   const handleClickOutside = useCallback(
@@ -413,10 +413,10 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                   </span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Volt Value: <span className="text-sm font-medium text-black">{data?.price.formattedString}</span>
+                  Volt Value: <span className="text-sm font-medium text-black">{data?.voltPrice.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Price Per Acreage: <span className="text-sm font-medium text-black">{data.pricePerAcreage.formattedString}</span>
+                  Price Per Acreage: <span className="text-sm font-medium text-black">{data.voltPricePerAcreage.formattedString}</span>
                 </li>
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                   Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>

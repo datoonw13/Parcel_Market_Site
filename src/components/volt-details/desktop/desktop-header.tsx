@@ -75,10 +75,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
             <div className="grid grid-cols-2 gap-2">
               <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
                 <p className="text-sm font-medium">
-                  Avg:{" "}
-                  <span className={cn(!isSubscribed && "blur-[2px]")}>
-                    {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
-                  </span>
+                  Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
                 </p>
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
               </div>
@@ -86,7 +83,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
                 <div className="p-3 border-r flex items-center gap-2">
                   <p className="text-sm font-medium">
                     VOLT:
-                    <span className={cn(!isSubscribed && "blur-[2px]")}>{data.price.formattedString}</span>
+                    <span className={cn(!isSubscribed && "blur-[2px]")}>{data.voltPrice.formattedString}</span>
                   </p>
                   <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
                 </div>
