@@ -35,44 +35,32 @@ interface VoltDetailsDesktopProps {
 
 const mapLayers = [
   {
-    label: "Navigation Day",
-    value: "mapbox://styles/mapbox/navigation-day-v1",
-  },
-  {
-    label: "Standart",
-    value: "mapbox://styles/mapbox/standard",
-  },
-  {
-    label: "Standard Satellite",
-    value: "mapbox://styles/mapbox/standard-satellite",
-  },
-  {
-    label: "Streets",
-    value: "mapbox://styles/mapbox/streets-v12",
-  },
-  {
     label: "Outdoors",
-    value: "mapbox://styles/mapbox/outdoors-v12",
-  },
-  {
-    label: "Light",
-    value: "mapbox://styles/mapbox/light-v11",
-  },
-  {
-    label: "Dark",
-    value: "mapbox://styles/mapbox/dark-v11",
-  },
-  {
-    label: "Satellite",
-    value: "mapbox://styles/mapbox/satellite-v9",
-  },
-  {
-    label: "Satellite Streets",
-    value: "mapbox://styles/mapbox/satellite-streets-v12",
+    value: "mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h",
   },
   {
     label: "Navigation Night",
-    value: "mapbox://styles/mapbox/navigation-night-v1",
+    value: "mapbox://styles/mrzippo123/cm7daisum00a301sid550cdss",
+  },
+  {
+    label: "Navigation Day",
+    value: "mapbox://styles/mrzippo123/cm7damch7000001r39j4c5ism",
+  },
+  {
+    label: "Satellite Streets",
+    value: "mapbox://styles/mrzippo123/cm7daobqv009b01ryfy0857dy",
+  },
+  {
+    label: "Streets",
+    value: "mapbox://styles/mrzippo123/cm7dapd3x00a501sicvyy4sjb",
+  },
+  {
+    label: "Monochrome Light",
+    value: "mapbox://styles/mrzippo123/cm7darmad00af01r7f24rftjr",
+  },
+  {
+    label: "Monochrome Dark",
+    value: "mapbox://styles/mrzippo123/cm7dasuwp00ag01r760s6gosr",
   },
 ];
 
@@ -89,7 +77,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [backDrop, setBackDrop] = useState(false);
-  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h");
   const tableRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<ReturnType<typeof setTimeout>>();
 

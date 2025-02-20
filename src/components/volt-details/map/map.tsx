@@ -44,24 +44,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   const [ref, setRef] = useState<MapBoX | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const addMarkerImages = useCallback(
-    (data: Record<string, string>) =>
-      Promise.all(
-        Object.keys(data).map(
-          (key) =>
-            new Promise((resolve) => {
-              const img = createMarkerImage(data[key]);
-              img.onload = (e) => {
-                ref?.loadImage(data[key], () => {
-                  ref!.addImage(key, img);
-                  resolve(img);
-                });
-              };
-            })
-        )
-      ),
-    [ref]
-  );
   const setInitialData = useCallback(async () => {
     if (ref) {
       Object.values(mapData.layers).forEach((el) => {
@@ -86,7 +68,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       });
 
       window.map = ref;
-      await addMarkerImages(mapDefaultMarkers);
+      // await addMarkerImages(mapDefaultMarkers);
 
       const mainLandBulkGroup = data.assessments.data.find((el) => el.isBulked && el.data.properties.find((el) => el.id === data.id));
       const geoJsonInit: MapGeoJson = {
@@ -222,6 +204,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           },
         })
         .on("dblclick", (e) => {
+          // console.log(ref.getSource(mapData.m))
           const property = ref.queryRenderedFeatures(e.point)[0] as any;
           if (property) {
             e.preventDefault();
@@ -258,7 +241,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       ref.setCenter([data.lon, data.lat]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addMarkerImages, data.acreage, data.assessments, data.lat, data.lon, data.parcelNumber, data.price, ref]);
+  }, [data.acreage, data.assessments, data.lat, data.lon, data.parcelNumber, data.price, ref]);
 
   const showRegridTiles = useCallback(async () => {
     if (!ref) {
@@ -300,72 +283,81 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       promoteId: "fid",
     });
 
-    ref.addLayer({
-      id: "parcels",
-      type: "line",
-      source: parcelCreateData.id,
-      "source-layer": parcelCreateData.id,
-      minzoom: 10,
-      maxzoom: 21,
-      layout: {
-        visibility: "visible",
+    ref.addLayer(
+      {
+        id: "parcels",
+        type: "line",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        minzoom: 10,
+        maxzoom: 21,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "line-color": "#649d8d",
+          "line-width": 1.7,
+        },
       },
-      paint: {
-        "line-color": "#649d8d",
-        "line-width": 1.7,
-      },
-    });
+      mapData.layers.markersLayer
+    );
 
     // We need a transparent but 'filled' helper layer to catch click events
-    ref.addLayer({
-      id: "parcel-assist",
-      type: "fill",
-      source: parcelCreateData.id,
-      "source-layer": parcelCreateData.id,
-      minzoom: 12,
-      maxzoom: 21,
-      layout: {
-        visibility: "visible",
+    ref.addLayer(
+      {
+        id: "parcel-assist",
+        type: "fill",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        minzoom: 12,
+        maxzoom: 21,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "fill-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#649d8d", // Turns parcel green when clicked
+            ["boolean", ["feature-state", "hover"], false],
+            "#649d8d", // Turns green when hovered
+            "#fff", // Default color
+          ],
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            0.9, // Almost fully opaque when selected
+            ["boolean", ["feature-state", "hover"], false],
+            0.5, // Half transparent when hovered
+            0.1, // Default color
+          ],
+        },
       },
-      paint: {
-        "fill-color": [
-          "case",
-          ["boolean", ["feature-state", "selected"], false],
-          "#649d8d", // Turns parcel green when clicked
-          ["boolean", ["feature-state", "hover"], false],
-          "#649d8d", // Turns green when hovered
-          "#fff", // Default color
-        ],
-        "fill-opacity": [
-          "case",
-          ["boolean", ["feature-state", "selected"], false],
-          0.9, // Almost fully opaque when selected
-          ["boolean", ["feature-state", "hover"], false],
-          0.5, // Half transparent when hovered
-          0.1, // Default color
-        ],
-      },
-    });
+      mapData.layers.markersLayer
+    );
 
     // show parcel num
 
-    ref.addLayer({
-      id: "polygon-labels",
-      type: "symbol",
-      source: parcelCreateData.id,
-      "source-layer": parcelCreateData.id,
-      layout: {
-        "text-field": ["get", "owner"], // Ensure 'name' matches your GeoJSON property
-        "text-size": 12,
-        "text-offset": [0, 0.5],
-        "text-anchor": "center",
+    ref.addLayer(
+      {
+        id: "polygon-labels",
+        type: "symbol",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        layout: {
+          "text-field": ["get", "owner"], // Ensure 'name' matches your GeoJSON property
+          "text-size": 12,
+          "text-offset": [0, 0.5],
+          "text-anchor": "center",
+        },
+        paint: {
+          "text-color": "#000000",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 1,
+        },
       },
-      paint: {
-        "text-color": "#000000",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1,
-      },
-    });
+      mapData.layers.markersLayer
+    );
   }, [ref]);
 
   const updateMarkerColor = useCallback(() => {
