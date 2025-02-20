@@ -260,6 +260,114 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addMarkerImages, data.acreage, data.assessments, data.lat, data.lon, data.parcelNumber, data.price, ref]);
 
+  const showRegridTiles = useCallback(async () => {
+    if (!ref) {
+      return;
+    }
+    const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: {
+          parcel: true,
+        },
+        fields: {
+          parcel: [
+            "usedesc",
+            "parcelnumb_no_formatting",
+            "parcelnumb",
+            "state2",
+            "county",
+            "city",
+            "zoning_description",
+            "owner",
+            "lat",
+            "lon",
+            "gisacre",
+            "ll_gisacre",
+          ],
+        },
+      }),
+    });
+    const parcelCreateData = await createTiles.json();
+
+    // Register the parcel source using the tile URL we just got
+    ref.addSource(parcelCreateData.id, {
+      type: "vector",
+      tiles: parcelCreateData.vector,
+      promoteId: "fid",
+    });
+
+    ref.addLayer({
+      id: "parcels",
+      type: "line",
+      source: parcelCreateData.id,
+      "source-layer": parcelCreateData.id,
+      minzoom: 10,
+      maxzoom: 21,
+      layout: {
+        visibility: "visible",
+      },
+      paint: {
+        "line-color": "#649d8d",
+        "line-width": 1.7,
+      },
+    });
+
+    // We need a transparent but 'filled' helper layer to catch click events
+    ref.addLayer({
+      id: "parcel-assist",
+      type: "fill",
+      source: parcelCreateData.id,
+      "source-layer": parcelCreateData.id,
+      minzoom: 12,
+      maxzoom: 21,
+      layout: {
+        visibility: "visible",
+      },
+      paint: {
+        "fill-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          "#649d8d", // Turns parcel green when clicked
+          ["boolean", ["feature-state", "hover"], false],
+          "#649d8d", // Turns green when hovered
+          "#fff", // Default color
+        ],
+        "fill-opacity": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          0.9, // Almost fully opaque when selected
+          ["boolean", ["feature-state", "hover"], false],
+          0.5, // Half transparent when hovered
+          0.1, // Default color
+        ],
+      },
+    });
+
+    // show parcel num
+
+    ref.addLayer({
+      id: "polygon-labels",
+      type: "symbol",
+      source: parcelCreateData.id,
+      "source-layer": parcelCreateData.id,
+      layout: {
+        "text-field": ["get", "owner"], // Ensure 'name' matches your GeoJSON property
+        "text-size": 12,
+        "text-offset": [0, 0.5],
+        "text-anchor": "center",
+      },
+      paint: {
+        "text-color": "#000000",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1,
+      },
+    });
+  }, [ref]);
+
   const updateMarkerColor = useCallback(() => {
     if (!ref) return;
     if (isNonValidMedianHighlighted) {
@@ -454,7 +562,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [data.assessments, openTooltip, propertiesInteraction, ref]);
 
   useEffect(() => {
-    setInitialData();
+    // setInitialData();
   }, [setInitialData]);
 
   useEffect(() => {
@@ -468,6 +576,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   useEffect(() => {
     highlightMarkers();
   }, [highlightMarkers]);
+
+  useEffect(() => {
+    showRegridTiles();
+  }, [showRegridTiles]);
 
   useEffect(() => {
     if (ref) {
