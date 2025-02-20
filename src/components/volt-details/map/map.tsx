@@ -562,7 +562,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [data.assessments, openTooltip, propertiesInteraction, ref]);
 
   useEffect(() => {
-    // setInitialData();
+    setInitialData();
   }, [setInitialData]);
 
   useEffect(() => {
