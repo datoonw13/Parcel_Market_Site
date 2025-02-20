@@ -591,9 +591,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     if (ref) {
       ref.on("style.load", () => {
         setInitialData({ resetZoomAndCenter: false });
+        showRegridTiles();
       });
     }
-  }, [ref, setInitialData]);
+  }, [ref, setInitialData, showRegridTiles]);
 
   useEffect(() => {
     if (ref && selectedLayer) {

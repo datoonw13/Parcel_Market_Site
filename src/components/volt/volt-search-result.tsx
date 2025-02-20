@@ -4,8 +4,6 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { VoltWrapperValuesModel } from "@/types/volt";
 import { cn, isElementVisible } from "@/lib/utils";
 import { MapInteractionModel } from "@/types/common";
-import { removeParcelNumberFormatting } from "@/helpers/common";
-import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
