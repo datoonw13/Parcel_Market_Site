@@ -31,38 +31,11 @@ interface VoltDetailsDesktopProps {
   filters: z.infer<typeof voltDetailsFiltersValidations>;
   setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
   isSubscribed: boolean;
+  mapLayers: {
+    label: string;
+    value: string;
+  }[];
 }
-
-const mapLayers = [
-  {
-    label: "Outdoors",
-    value: "mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h",
-  },
-  {
-    label: "Navigation Night",
-    value: "mapbox://styles/mrzippo123/cm7daisum00a301sid550cdss",
-  },
-  {
-    label: "Navigation Day",
-    value: "mapbox://styles/mrzippo123/cm7damch7000001r39j4c5ism",
-  },
-  {
-    label: "Satellite Streets",
-    value: "mapbox://styles/mrzippo123/cm7daobqv009b01ryfy0857dy",
-  },
-  {
-    label: "Streets",
-    value: "mapbox://styles/mrzippo123/cm7dapd3x00a501sicvyy4sjb",
-  },
-  {
-    label: "Monochrome Light",
-    value: "mapbox://styles/mrzippo123/cm7darmad00af01r7f24rftjr",
-  },
-  {
-    label: "Monochrome Dark",
-    value: "mapbox://styles/mrzippo123/cm7dasuwp00ag01r760s6gosr",
-  },
-];
 
 const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   data,
@@ -73,6 +46,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   filters,
   setFilters,
   isSubscribed,
+  mapLayers,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });

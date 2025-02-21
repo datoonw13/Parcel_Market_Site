@@ -21,6 +21,10 @@ interface VoltDetailsMobileProps {
   filters: z.infer<typeof voltDetailsFiltersValidations>;
   setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
   isSubscribed: boolean;
+  mapLayers: {
+    label: string;
+    value: string;
+  }[];
 }
 
 const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
@@ -32,11 +36,12 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   setFilters,
   setNonValidMedianHighlighted,
   startFetchingTransition,
+  mapLayers,
 }) => {
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
-  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mapbox/navigation-day-v1");
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7damch7000001r39j4c5ism");
 
   return (
     <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
@@ -53,6 +58,9 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
           setFilters={setFilters}
           startFetchingTransition={startFetchingTransition}
           setNonValidMedianHighlighted={setNonValidMedianHighlighted}
+          mapLayers={mapLayers}
+          setSelectedLayer={setSelectedLayer}
+          selectedLayer={selectedLayer}
         />
         {!isSubscribed && (
           <Link

@@ -18,6 +18,37 @@ interface VoltDetailsLayoutProps {
   isSubscribed: boolean;
 }
 
+const mapLayers = [
+  {
+    label: "Outdoors",
+    value: "mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h",
+  },
+  {
+    label: "Navigation Night",
+    value: "mapbox://styles/mrzippo123/cm7daisum00a301sid550cdss",
+  },
+  {
+    label: "Navigation Day",
+    value: "mapbox://styles/mrzippo123/cm7damch7000001r39j4c5ism",
+  },
+  {
+    label: "Satellite Streets",
+    value: "mapbox://styles/mrzippo123/cm7daobqv009b01ryfy0857dy",
+  },
+  {
+    label: "Streets",
+    value: "mapbox://styles/mrzippo123/cm7dapd3x00a501sicvyy4sjb",
+  },
+  {
+    label: "Monochrome Light",
+    value: "mapbox://styles/mrzippo123/cm7darmad00af01r7f24rftjr",
+  },
+  {
+    label: "Monochrome Dark",
+    value: "mapbox://styles/mrzippo123/cm7dasuwp00ag01r760s6gosr",
+  },
+];
+
 const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, isSubscribed }) => {
   const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
@@ -85,6 +116,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               filters={filters}
               setFilters={setFilters}
               isSubscribed={isSubscribed}
+              mapLayers={mapLayers}
             />
           ) : (
             <VoltDetailsDesktop
@@ -96,6 +128,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               filters={filters}
               setFilters={setFilters}
               isSubscribed={isSubscribed}
+              mapLayers={mapLayers}
             />
           )}
         </div>

@@ -291,6 +291,18 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     const parcelCreateData = await createTiles.json();
 
     // Register the parcel source using the tile URL we just got
+    if (ref.getLayer("parcels")) {
+      ref.removeLayer("parcels");
+    }
+    if (ref.getLayer("parcel-assist")) {
+      ref.removeLayer("parcel-assist");
+    }
+    if (ref.getLayer("polygon-labels")) {
+      ref.removeLayer("polygon-labels");
+    }
+    if (ref.getSource(parcelCreateData.id)) {
+      ref.removeSource(parcelCreateData.id);
+    }
     ref.addSource(parcelCreateData.id, {
       type: "vector",
       tiles: parcelCreateData.vector,

@@ -15,9 +15,23 @@ interface VoltDetailsFiltersWrapperProps {
   filters: z.infer<typeof voltDetailsFiltersValidations>;
   setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
   startFetchingTransition: TransitionStartFunction;
+  mapLayers: {
+    label: string;
+    value: string;
+  }[];
+  setSelectedLayer: Dispatch<SetStateAction<string>>;
+  selectedLayer: string;
 }
 
-const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ propertyTypes, filters, setFilters, startFetchingTransition }) => {
+const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
+  propertyTypes,
+  filters,
+  setFilters,
+  startFetchingTransition,
+  mapLayers,
+  selectedLayer,
+  setSelectedLayer,
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -51,7 +65,15 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ propert
             />
           )}
           {isSmallDevice && (
-            <VoltMobileFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} propertyTypes={propertyTypes} />
+            <VoltMobileFilters
+              mapLayers={mapLayers}
+              onSubmit={updateQueryParams}
+              filters={filters}
+              setFilters={setFilters}
+              propertyTypes={propertyTypes}
+              setSelectedLayer={setSelectedLayer}
+              selectedLayer={selectedLayer}
+            />
           )}
         </div>
       )}

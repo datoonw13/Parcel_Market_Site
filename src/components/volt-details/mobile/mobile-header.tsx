@@ -20,6 +20,12 @@ interface VoltDetailsMobileHeaderProps {
   filters: z.infer<typeof voltDetailsFiltersValidations>;
   setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
   isSubscribed: boolean;
+  mapLayers: {
+    label: string;
+    value: string;
+  }[];
+  setSelectedLayer: Dispatch<SetStateAction<string>>;
+  selectedLayer: string;
 }
 
 const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
@@ -31,6 +37,9 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
   filters,
   setFilters,
   isSubscribed,
+  mapLayers,
+  selectedLayer,
+  setSelectedLayer,
 }) => {
   // Show warnig
   console.log("ae");
@@ -84,6 +93,9 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
         propertyTypes={propertyTypes}
         setFilters={setFilters}
         startFetchingTransition={startFetchingTransition}
+        mapLayers={mapLayers}
+        setSelectedLayer={setSelectedLayer}
+        selectedLayer={selectedLayer}
       />
     </div>
   );

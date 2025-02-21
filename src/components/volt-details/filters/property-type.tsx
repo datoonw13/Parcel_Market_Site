@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { PropertyTypesEnum } from "@/types/volt-details";
+import { cn } from "@/lib/utils";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { FC } from "react";
 import { z } from "zod";
@@ -11,10 +11,11 @@ interface VoltDetailsPropertyTypeFiltersProps {
   selected: z.infer<typeof voltDetailsFiltersValidations>["propertyTypes"];
   onChange: (value: z.infer<typeof voltDetailsFiltersValidations>["propertyTypes"]) => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
+  className?: string;
 }
 
-const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = ({ onChange, selected, propertyTypes }) => (
-  <div className="flex gap-16 h-96 overflow-hidden">
+const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = ({ onChange, selected, propertyTypes, className }) => (
+  <div className={cn("flex gap-16 h-96 overflow-hidden", className)}>
     <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
       <div className="flex flex-col max-w-72">
         <p className="bg-white sticky top-0 z-10 mr-2 text-sm font-medium pb-2">Vacant Land</p>
