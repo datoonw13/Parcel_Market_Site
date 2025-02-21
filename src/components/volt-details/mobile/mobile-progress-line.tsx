@@ -91,7 +91,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
                 }}
                 className={cn(!isSubscribed && "blur-[2px]")}
               >
-                {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
+                {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
               </span>{" "}
               <span className="text-grey-600 text-xs">- APPA</span>
             </p>
@@ -136,19 +136,21 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
       <div className="relative">
         <div className="relative">
           <hr className="w-full h-1.5 rounded-lg" style={{ background: "linear-gradient(90deg, #16DB65 8%, #05471C 95.44%)" }} />
-          <div
-            style={{
-              left: `calc(${
-                data.assessments.calculations.avgPriceOfAllAssessments.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]
-              }%)`,
-            }}
-            className="absolute top-[50%] -translate-y-[50%]"
-          >
-            <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
-              <div className="size-5 border-2 rounded-full border-primary-main" />
-              <div className="size-3 bg-primary-main rounded-full absolute" />
+          {!isNonValidMedianHighlighted && (
+            <div
+              style={{
+                left: `calc(${
+                  data.assessments.calculations.avgPriceOfAssessments[`${isNonValidMedianHighlighted ? "valid" : "all"}`].axis
+                }%)`,
+              }}
+              className="absolute top-[50%] -translate-y-[50%]"
+            >
+              <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
+                <div className="size-5 border-2 rounded-full border-primary-main" />
+                <div className="size-3 bg-primary-main rounded-full absolute" />
+              </div>
             </div>
-          </div>
+          )}
           <div
             style={{ left: `calc(${data.voltPricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"

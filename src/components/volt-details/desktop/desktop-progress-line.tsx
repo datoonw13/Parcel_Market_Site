@@ -87,7 +87,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
                 <span className={cn(!isSubscribed && "blur-[2px]")}>
-                  {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
+                  {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
                 </span>{" "}
                 <span className="text-grey-600">- Average PPA</span>
               </p>
@@ -121,7 +121,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
           <div
             style={{
               left: `calc(${
-                data.assessments.calculations.avgPriceOfAllAssessments.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]
+                data.assessments.calculations.avgPriceOfAssessments[`${isNonValidMedianHighlighted ? "valid" : "all"}`].axis
               }%)`,
             }}
             className="absolute top-[50%] -translate-y-[50%]"

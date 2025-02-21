@@ -17,7 +17,7 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const user = await getUserAction();
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
 
-    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...req, subscribed: !!user?.isSubscribed });
+    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...req, subscribed: !user?.isSubscribed });
     return {
       errorMessage: null,
       data,
@@ -61,7 +61,7 @@ const VoltPropertyDetailsPage = async ({ searchParams, params }: { searchParams:
     return <div className="p-5 bg-error-400 rounded-2xl">{data.errorMessage}</div>;
   }
 
-  return <VoltDetailsLayout isSubscribed={!!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data!} />;
+  return <VoltDetailsLayout isSubscribed={!user?.isSubscribed} propertyTypes={propertyTypes} data={data.data!} />;
 };
 
 export default VoltPropertyDetailsPage;

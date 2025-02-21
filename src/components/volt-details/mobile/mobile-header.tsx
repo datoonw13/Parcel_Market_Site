@@ -67,7 +67,7 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
             >
               VOLT:{" "}
               <span className={cn(!isSubscribed && "blur-[2px]")}>
-                {data.assessments.calculations.avgPriceOfAllAssessments.formattedString}
+                {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
               </span>
             </div>
             <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />

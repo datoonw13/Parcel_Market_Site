@@ -352,14 +352,20 @@ export const PropertyDataSchema = z
               ? moneyFormatter.format(maxPriceOfAllAssessments)
               : hideNumber(moneyFormatter.format(maxPriceOfAllAssessments)),
           },
-          avgPriceOfAllAssessments: {
-            value: subscribed ? avgPriceOfAllAssessments : null,
-            formattedString: subscribed
-              ? moneyFormatter.format(avgPriceOfAllAssessments)
-              : hideNumber(moneyFormatter.format(avgPriceOfAllAssessments)),
-            axis: {
-              all: axisPositionInPercent(avgPriceOfAllAssessments, minPriceOfAllAssessments, maxPriceOfAllAssessments),
-              valid: axisPositionInPercent(avgPriceOfAllAssessments, minPriceOfValidAssessments, maxPriceOfValidAssessments),
+          avgPriceOfAssessments: {
+            all: {
+              value: subscribed ? avgPriceOfAllAssessments : null,
+              formattedString: subscribed
+                ? moneyFormatter.format(avgPriceOfAllAssessments)
+                : hideNumber(moneyFormatter.format(avgPriceOfAllAssessments)),
+              axis: axisPositionInPercent(avgPriceOfAllAssessments, minPriceOfAllAssessments, maxPriceOfAllAssessments),
+            },
+            valid: {
+              value: subscribed ? avgPriceOfValidAssessments : null,
+              formattedString: subscribed
+                ? moneyFormatter.format(avgPriceOfValidAssessments)
+                : hideNumber(moneyFormatter.format(avgPriceOfValidAssessments)),
+              axis: axisPositionInPercent(avgPriceOfValidAssessments, minPriceOfAllAssessments, maxPriceOfAllAssessments),
             },
           },
           minPriceOfValidAssessments: {
@@ -373,16 +379,6 @@ export const PropertyDataSchema = z
             formattedString: subscribed
               ? moneyFormatter.format(maxPriceOfValidAssessments)
               : hideNumber(moneyFormatter.format(maxPriceOfValidAssessments)),
-          },
-          avgPriceOfValidAssessments: {
-            value: subscribed ? avgPriceOfValidAssessments : null,
-            formattedString: subscribed
-              ? moneyFormatter.format(avgPriceOfValidAssessments)
-              : hideNumber(moneyFormatter.format(avgPriceOfValidAssessments)),
-            axis: {
-              all: axisPositionInPercent(avgPriceOfValidAssessments, minPriceOfAllAssessments, maxPriceOfAllAssessments),
-              valid: axisPositionInPercent(avgPriceOfValidAssessments, minPriceOfValidAssessments, maxPriceOfValidAssessments),
-            },
           },
         },
         data: formattedAssessments,
