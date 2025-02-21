@@ -137,7 +137,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                 >
                   <div>
                     <p className="text-start leading-none text-primary-main font-medium text-xs">
-                      {mapLayers.find((el) => el.value === localSelectedLayer)?.label}
+                      {mapLayers?.find((el) => el.value === localSelectedLayer)?.label}
                     </p>
                     <p className="text-start leading-none text-black font-medium text-sm pt-1">Basemap</p>
                   </div>

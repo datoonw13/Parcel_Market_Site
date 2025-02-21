@@ -41,7 +41,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
-  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7damch7000001r39j4c5ism");
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h");
 
   return (
     <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
