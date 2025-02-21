@@ -25,6 +25,8 @@ interface VoltDetailsMobileProps {
     label: string;
     value: string;
   }[];
+  setSelectedLayer: Dispatch<SetStateAction<string>>;
+  selectedLayer: string;
 }
 
 const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
@@ -37,11 +39,12 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   setNonValidMedianHighlighted,
   startFetchingTransition,
   mapLayers,
+  selectedLayer,
+  setSelectedLayer,
 }) => {
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
-  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h");
 
   return (
     <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>

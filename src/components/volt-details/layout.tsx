@@ -53,6 +53,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
   const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h");
 
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
   const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
@@ -117,6 +118,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               setFilters={setFilters}
               isSubscribed={isSubscribed}
               mapLayers={mapLayers}
+              selectedLayer={selectedLayer}
+              setSelectedLayer={setSelectedLayer}
             />
           ) : (
             <VoltDetailsDesktop
@@ -129,6 +132,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               setFilters={setFilters}
               isSubscribed={isSubscribed}
               mapLayers={mapLayers}
+              selectedLayer={selectedLayer}
+              setSelectedLayer={setSelectedLayer}
             />
           )}
         </div>

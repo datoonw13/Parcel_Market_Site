@@ -206,7 +206,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           })
           .on("dblclick", (e) => {
             const property = ref.queryRenderedFeatures(e.point)[0] as any;
-            if (property) {
+            if (property && property.properties.lng && property.properties.lat) {
               e.preventDefault();
               ref.setZoom(16);
               ref.setCenter([property.properties.lng, property.properties.lat]);

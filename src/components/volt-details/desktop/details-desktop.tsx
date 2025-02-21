@@ -35,6 +35,8 @@ interface VoltDetailsDesktopProps {
     label: string;
     value: string;
   }[];
+  setSelectedLayer: Dispatch<SetStateAction<string>>;
+  selectedLayer: string;
 }
 
 const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
@@ -47,11 +49,12 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   setFilters,
   isSubscribed,
   mapLayers,
+  selectedLayer,
+  setSelectedLayer,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [backDrop, setBackDrop] = useState(false);
-  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h");
   const tableRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<ReturnType<typeof setTimeout>>();
 
