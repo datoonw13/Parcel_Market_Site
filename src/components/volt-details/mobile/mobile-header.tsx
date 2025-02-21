@@ -8,7 +8,6 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { Tooltip } from "../../ui/tooltip";
 import { Switch } from "../../ui/switch";
-import VoltMobileFilters from "./volt-mobile-filters";
 import VoltDetailsFiltersWrapper from "../filters/wrapper";
 
 interface VoltDetailsMobileHeaderProps {
@@ -40,65 +39,60 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
   mapLayers,
   selectedLayer,
   setSelectedLayer,
-}) => {
-  // Show warnig
-  console.log("ae");
-
-  return (
-    <div className="grid grid-cols-[1fr_minmax(0,_max-content)] gap-2 border-y bg-grey-30 p-3">
-      <div className="grid grid-cols-2 gap-2">
-        <div className="border rounded-xl py-2 px-3 h-9 bg-white text-xs font-medium flex items-center justify-between gap-2">
+}) => (
+  <div className="grid grid-cols-[1fr_minmax(0,_max-content)] gap-2 border-y bg-grey-30 p-3">
+    <div className="grid grid-cols-2 gap-2">
+      <div className="border rounded-xl py-2 px-3 h-9 bg-white text-xs font-medium flex items-center justify-between gap-2">
+        <div
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
+        </div>
+        <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+      </div>
+      <div className="border rounded-xl py-2 px-3 h-9 bg-white text-xs font-medium flex items-center justify-between gap-2">
+        <div
+          className="flex items-center gap-2 justify-between"
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
           <div
             style={{
-              whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
             }}
           >
-            Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
+            VOLT:{" "}
+            <span className={cn(!isSubscribed && "blur-[2px]")}>
+              {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
+            </span>
           </div>
           <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
         </div>
-        <div className="border rounded-xl py-2 px-3 h-9 bg-white text-xs font-medium flex items-center justify-between gap-2">
-          <div
-            className="flex items-center gap-2 justify-between"
-            style={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            <div
-              style={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              VOLT:{" "}
-              <span className={cn(!isSubscribed && "blur-[2px]")}>
-                {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
-              </span>
-            </div>
-            <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
-          </div>
-          <Switch
-            checked={isNonValidMedianHighlighted}
-            onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
-            className="[&:has([data-state=checked])]:bg-warning"
-          />
-        </div>
+        <Switch
+          checked={isNonValidMedianHighlighted}
+          onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
+          className="[&:has([data-state=checked])]:bg-warning"
+        />
       </div>
-      <VoltDetailsFiltersWrapper
-        filters={filters}
-        propertyTypes={propertyTypes}
-        setFilters={setFilters}
-        startFetchingTransition={startFetchingTransition}
-        mapLayers={mapLayers}
-        setSelectedLayer={setSelectedLayer}
-        selectedLayer={selectedLayer}
-      />
     </div>
-  );
-};
+    <VoltDetailsFiltersWrapper
+      filters={filters}
+      propertyTypes={propertyTypes}
+      setFilters={setFilters}
+      startFetchingTransition={startFetchingTransition}
+      mapLayers={mapLayers}
+      setSelectedLayer={setSelectedLayer}
+      selectedLayer={selectedLayer}
+    />
+  </div>
+);
 
 export default VoltDetailsMobileHeader;
