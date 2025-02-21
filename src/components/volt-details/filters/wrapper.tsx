@@ -1,14 +1,14 @@
 "use client";
 
-import React, { Dispatch, FC, TransitionStartFunction, useCallback, useEffect, useState, useTransition } from "react";
+import React, { Dispatch, FC, TransitionStartFunction, useCallback } from "react";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { LoadingIcon2 } from "@/components/@new/icons/LoadingIcons";
 import { SetStateAction } from "jotai";
 import VoltDetailsDesktopFilters from "./desktop";
 import VoltMobileFilters from "../mobile/volt-mobile-filters";
+import VoltDetailsTabletFilters from "./tablet";
 
 interface VoltDetailsFiltersWrapperProps {
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
@@ -35,7 +35,8 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
+  const { detecting: detectingSm, targetReached: isSm } = useMediaQuery(1024);
+  const { detecting: detectingMd, targetReached: isMd } = useMediaQuery(1440);
 
   const updateQueryParams = useCallback(() => {
     const newQueryParams = new URLSearchParams(params.toString());
@@ -54,9 +55,9 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
 
   return (
     <>
-      {!detecting && (
+      {!detectingSm && !detectingMd && (
         <div>
-          {!isSmallDevice && (
+          {!isSm && !isMd && (
             <VoltDetailsDesktopFilters
               onSubmit={updateQueryParams}
               filters={filters}
@@ -64,7 +65,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
               propertyTypes={propertyTypes}
             />
           )}
-          {isSmallDevice && (
+          {isSm && (
             <VoltMobileFilters
               mapLayers={mapLayers}
               onSubmit={updateQueryParams}
@@ -73,6 +74,15 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
               propertyTypes={propertyTypes}
               setSelectedLayer={setSelectedLayer}
               selectedLayer={selectedLayer}
+            />
+          )}
+          {isMd && !isSm && (
+            <VoltDetailsTabletFilters
+              onSubmit={updateQueryParams}
+              filters={filters}
+              setFilters={setFilters}
+              propertyTypes={propertyTypes}
+              resetFilters={() => {}}
             />
           )}
         </div>

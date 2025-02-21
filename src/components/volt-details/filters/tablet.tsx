@@ -17,7 +17,7 @@ import VoltDetailsPropertyTypeFilters from "./property-type";
 
 type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
 
-interface IVoltDetailsMobileFilters {
+interface IVoltDetailsTabletFilters {
   filters: IFilters;
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
@@ -25,7 +25,7 @@ interface IVoltDetailsMobileFilters {
   propertyTypes: any;
 }
 
-const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setFilters, onSubmit, resetFilters, propertyTypes }) => {
+const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({ filters, setFilters, onSubmit, resetFilters, propertyTypes }) => {
   const [showPropertyFilters, setPropertyFilter] = useState(false);
   const [propertyLocalFilter, setPropertyLocalFilter] = useState(filters.propertyTypes);
   const params = useSearchParams();
@@ -160,4 +160,4 @@ const VoltDetailsMobileFilters: FC<IVoltDetailsMobileFilters> = ({ filters, setF
   );
 };
 
-export default VoltDetailsMobileFilters;
+export default VoltDetailsTabletFilters;
