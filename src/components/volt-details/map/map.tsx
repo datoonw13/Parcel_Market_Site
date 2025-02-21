@@ -7,7 +7,6 @@ import { FC, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
-import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import { IPropertiesInteraction } from "@/types/volt";
 
@@ -54,13 +53,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           }
         });
 
-        Object.keys(mapDefaultMarkers).forEach((img) => {
-          const image = ref.hasImage(img);
-          if (image) {
-            ref.removeImage(img);
-          }
-        });
-
         Object.values(mapData.sources).forEach((el) => {
           const source = ref.getSource(el);
           if (source) {
@@ -69,7 +61,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         });
 
         window.map = ref;
-        // await addMarkerImages(mapDefaultMarkers);
 
         const mainLandBulkGroup = data.assessments.data.find((el) => el.isBulked && el.data.properties.find((el) => el.id === data.id));
         const geoJsonInit: MapGeoJson = {
