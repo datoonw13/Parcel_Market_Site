@@ -6,9 +6,10 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import { cn } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { CiFilter } from "react-icons/ci";
 import { Tooltip } from "../../ui/tooltip";
 import { Switch } from "../../ui/switch";
+import VoltMobileFilters from "./volt-mobile-filters";
+import VoltDetailsFiltersWrapper from "../filters/wrapper";
 
 interface VoltDetailsMobileHeaderProps {
   startFetchingTransition: TransitionStartFunction;
@@ -78,9 +79,12 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
           />
         </div>
       </div>
-      <div className="border rounded-xl size-9 bg-white flex items-center justify-center">
-        <CiFilter className="size-6" />
-      </div>
+      <VoltDetailsFiltersWrapper
+        filters={filters}
+        propertyTypes={propertyTypes}
+        setFilters={setFilters}
+        startFetchingTransition={startFetchingTransition}
+      />
     </div>
   );
 };

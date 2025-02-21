@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState, useTransition } from "react";
+import { FC, useState, useTransition } from "react";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { cn } from "@/lib/utils";
@@ -34,8 +34,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   return (
     <>
       {isFetching && (
-        <div className="fixed z-30 w-full h-full top-0 left-0 bg-black-1000/70 flex items-center justify-center">
-          <div className="rounded-2xl bg-white p-6 shadow-3 max-w-md space-y-4">
+        <div className="fixed z-[99] w-full h-full top-0 left-0 bg-black-1000/70 flex items-center justify-center">
+          <div className="rounded-2xl bg-white p-6 shadow-3 space-y-4 max-w-[90%] lg:max-w-md">
             <div className="relative w-fit mx-auto">
               <svg
                 className="absolute -top-[-50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
@@ -60,7 +60,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               </svg>
               <LoadingIcon2 className="animate-spin size-12 text-primary-main" />
             </div>
-            <p className="text-grey-800">
+            <p className="text-grey-800 text-center">
               Fetching{" "}
               {(filters.acreageMin || filters.acreageMax) && (
                 <>

@@ -26,7 +26,6 @@ const generateClasses = (data: {
   isNonValidMedianHighlighted: boolean;
 }) => {
   const { isSellingProperty, hovered, isMedianValid, isNonValidMedianHighlighted, selected } = data;
-  console.log(data);
   let classNames = "border";
 
   if (isMedianValid || (!isMedianValid && !isNonValidMedianHighlighted)) {

@@ -8,6 +8,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { LoadingIcon2 } from "@/components/@new/icons/LoadingIcons";
 import { SetStateAction } from "jotai";
 import VoltDetailsDesktopFilters from "./desktop";
+import VoltMobileFilters from "../mobile/volt-mobile-filters";
 
 interface VoltDetailsFiltersWrapperProps {
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
@@ -49,15 +50,9 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({ propert
               propertyTypes={propertyTypes}
             />
           )}
-          {/* {isSmallDevice && (
-          <VoltDetailsMobileFilters
-            propertyTypes={propertyTypes}
-            resetFilters={resetFilters}
-            onSubmit={updateQueryParams}
-            filters={filters}
-            setFilters={setFilters}
-          />
-        )} */}
+          {isSmallDevice && (
+            <VoltMobileFilters onSubmit={updateQueryParams} filters={filters} setFilters={setFilters} propertyTypes={propertyTypes} />
+          )}
         </div>
       )}
     </>

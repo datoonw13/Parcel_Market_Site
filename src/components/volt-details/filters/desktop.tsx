@@ -77,7 +77,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         label="Sold Within"
         onClose={() => {
           onFilterToggle && onFilterToggle(false);
-          setLocalFilters((prev) => ({ ...prev, radius: filters.radius }));
+          setLocalFilters((prev) => ({ ...prev, soldWithin: filters.soldWithin }));
         }}
         renderContent={(close) => (
           <>
