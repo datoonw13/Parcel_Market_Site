@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, FC, TransitionStartFunction, useCallback } from "react";
+import React, { Dispatch, FC, TransitionStartFunction, useCallback, useMemo, useState } from "react";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -37,6 +37,21 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   const params = useSearchParams();
   const { detecting: detectingSm, targetReached: isSm } = useMediaQuery(1024);
   const { detecting: detectingMd, targetReached: isMd } = useMediaQuery(1440);
+  const partialFiltersSchema = voltDetailsFiltersValidations.partial();
+  const validateFilters = partialFiltersSchema.safeParse(Object.fromEntries(new URLSearchParams(params.toString()))).data;
+
+  const selectedFilters = useMemo(() => {
+    if (!validateFilters) {
+      return 0;
+    }
+    // Property type is always selected. If value is null this means that, default values of property types are selected
+    const cnt =
+      Object.keys(validateFilters)
+        .filter((el) => (el as keyof typeof validateFilters) !== "propertyTypes" || validateFilters[el as keyof typeof validateFilters])
+        .reduce((acc, cur) => acc + 1, 0) + 1;
+
+    return cnt;
+  }, [validateFilters]);
 
   const updateQueryParams = useCallback(() => {
     const newQueryParams = new URLSearchParams(params.toString());
@@ -83,6 +98,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
               setFilters={setFilters}
               propertyTypes={propertyTypes}
               resetFilters={() => {}}
+              selectedFilters={selectedFilters}
             />
           )}
         </div>

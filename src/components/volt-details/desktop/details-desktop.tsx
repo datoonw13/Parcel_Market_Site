@@ -287,6 +287,9 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                   filters={filters}
                   setFilters={setFilters}
                   isSubscribed={isSubscribed}
+                  mapLayers={mapLayers}
+                  selectedLayer={selectedLayer}
+                  setSelectedLayer={setSelectedLayer}
                 />
               </div>
               <VoltDetailsMap

@@ -27,6 +27,12 @@ interface VoltDetailsDesktopHeaderProps {
   filters: z.infer<typeof voltDetailsFiltersValidations>;
   setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
   isSubscribed: boolean;
+  mapLayers: {
+    label: string;
+    value: string;
+  }[];
+  setSelectedLayer: Dispatch<SetStateAction<string>>;
+  selectedLayer: string;
 }
 
 const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
@@ -38,6 +44,9 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   filters,
   setFilters,
   isSubscribed,
+  mapLayers,
+  selectedLayer,
+  setSelectedLayer,
 }) => {
   const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
   const [openWarning, setWarning] = useState(false);
@@ -63,15 +72,18 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   }, [data.assessments]);
   return (
     !detecting && (
-      <div className="sticky top-0 bottom-8 w-full z-10">
+      <div className="sticky top-0 bottom-8 w-full z-20">
         <div className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] py-1.5 px-2 ", isSmallDevice ? " gap-8" : "gap-14")}>
           <VoltDetailsFiltersWrapper
             startFetchingTransition={startFetchingTransition}
             filters={filters}
             setFilters={setFilters}
             propertyTypes={propertyTypes}
+            mapLayers={mapLayers}
+            selectedLayer={selectedLayer}
+            setSelectedLayer={setSelectedLayer}
           />
-          <div className="relative">
+          <div className="relative z-20">
             <div className="grid grid-cols-2 gap-2">
               <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
                 <p className="text-sm font-medium">

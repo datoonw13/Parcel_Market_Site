@@ -1,11 +1,10 @@
 "use client";
 
-import { DialogOverlay } from "@/components/ui/dialogs/dialog";
-import { DrawerOverlay } from "@/components/ui/dialogs/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { ReactNode, useState } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
+import { AnimatePresence, motion } from "framer-motion";
 
 const VoltDetailsFiltersDropDown = ({
   renderContent,
@@ -18,6 +17,7 @@ const VoltDetailsFiltersDropDown = ({
   className,
   buttonClassName,
   onOpen,
+  onToggle,
 }: {
   renderContent: (close: () => void) => ReactNode;
   renderContentAdditionalContent?: (close: () => void) => ReactNode;
@@ -29,6 +29,7 @@ const VoltDetailsFiltersDropDown = ({
   side?: any;
   className?: string;
   buttonClassName?: string;
+  onToggle?: (open: boolean) => void;
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -44,6 +45,7 @@ const VoltDetailsFiltersDropDown = ({
           if (onOpen && value) {
             onOpen();
           }
+          onToggle && onToggle(value);
         }}
       >
         <PopoverTrigger className={cn("w-full", className)}>
@@ -57,15 +59,29 @@ const VoltDetailsFiltersDropDown = ({
             {icon || <MdArrowForwardIos className={cn("text-[#1E1E1E] transition-all", open ? "-rotate-90" : "rotate-90")} />}
           </div>
         </PopoverTrigger>
-        <PopoverContent side={side} align="start" className="flex gap-2 !outline-none">
-          <div className="min-w-[--radix-popper-anchor-width] bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
-            {renderContent(() => setOpen(false))}
-          </div>
-          {renderContentAdditionalContent && (
-            <div className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
-              {renderContentAdditionalContent(() => setOpen(false))}
-            </div>
-          )}
+        <PopoverContent forceMount side={side} align="start" className="flex gap-2 !outline-none">
+          <AnimatePresence>
+            <motion.div
+              onAnimationStart={() => {
+                const el = document.querySelector<HTMLElement>("[data-radix-popper-content-wrapper]");
+                if (el) {
+                  el.style.setProperty("--radix-popper-zIndex", "30");
+                }
+              }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.1 }}
+            >
+              <div className="min-w-[--radix-popper-anchor-width] bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
+                {renderContent(() => setOpen(false))}
+              </div>
+              {renderContentAdditionalContent && (
+                <div className="min-w-36 bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
+                  {renderContentAdditionalContent(() => setOpen(false))}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </PopoverContent>
       </Popover>
     </>

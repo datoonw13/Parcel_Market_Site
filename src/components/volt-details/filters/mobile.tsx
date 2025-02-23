@@ -8,8 +8,8 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IPropertiesInteraction } from "@/types/volt";
 import { Button } from "../../ui/button";
-import VoltDetailsDrawer from "./drawer";
-import VoltDetailsMobileHeader from "./mobile-header";
+import VoltDetailsDrawer from "../mobile/drawer";
+import VoltDetailsMobileHeader from "../mobile/mobile-header";
 import VoltDetailsMap from "../map/map";
 
 interface VoltDetailsMobileProps {
