@@ -77,7 +77,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
           searchMapRef.dragPan.enable();
           searchMapRef.doubleClickZoom.enable();
           searchMapRef.scrollZoom.enable();
-          searchMapRef.flyTo({ center: [county.full.lng, county.full.lat], zoom: 14 });
+          searchMapRef.flyTo({ center: [county.full.lng, county.full.lat], zoom: 11 });
         }
       }
     } else {

@@ -8,151 +8,138 @@ import { Map as MapBoX, Popup } from "mapbox-gl";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
-const mapData = {
-  sources: {
-    markersSource: "markersSource",
-  },
-  layers: {
-    markersLayer: "markersLayer",
-    markerClusterCountLayer: "markers-cluster-count-layer",
-    markerClusterLayer: "markers-cluster-layer",
-  },
-};
-
 const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapRef: Dispatch<SetStateAction<MapBoX | null>> }) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hoveredFeatureId = useRef<string | null | number>(null);
   const clickedFeatureProperty = useRef<string | null | number>(null);
-  const setInitialData = useCallback(async () => {
-    if (mapRef) {
-      Object.values(mapData.layers).forEach((el) => {
-        const layer = mapRef.getLayer(el);
-        if (layer) {
-          mapRef.removeLayer(layer.id);
-        }
-      });
 
-      Object.values(mapData.sources).forEach((el) => {
-        const source = mapRef.getSource(el);
-        if (source) {
-          mapRef.removeSource(el);
-        }
-      });
-
-      mapRef.dragPan.disable();
-      mapRef.doubleClickZoom.disable();
-      mapRef.scrollZoom.disable();
-      window.searchMap = mapRef;
-
-      const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: {
-            parcel: true,
-          },
-          fields: {
-            parcel: [
-              "usedesc",
-              "parcelnumb_no_formatting",
-              "parcelnumb",
-              "state2",
-              "county",
-              "city",
-              "zoning_description",
-              "owner",
-              "lat",
-              "lon",
-              "gisacre",
-              "ll_gisacre",
-            ],
-          },
-        }),
-      });
-      const parcelCreateData = await createTiles.json();
-      mapRef!.addSource(parcelCreateData.id, {
-        type: "vector",
-        tiles: parcelCreateData.vector,
-        promoteId: "fid",
-      });
-
-      mapRef.addLayer({
-        id: "parcels",
-        type: "line",
-        source: parcelCreateData.id,
-        "source-layer": parcelCreateData.id,
-        minzoom: 10,
-        maxzoom: 21,
-        layout: {
-          visibility: "visible",
-        },
-        paint: {
-          "line-color": "#649d8d",
-        },
-      });
-      mapRef.addLayer({
-        id: "parcel-assist",
-        type: "fill",
-        source: parcelCreateData.id,
-        "source-layer": parcelCreateData.id,
-        minzoom: 12,
-        maxzoom: 21,
-        layout: {
-          visibility: "visible",
-        },
-        paint: {
-          "fill-color": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            "#649d8d", // Turns parcel green when clicked
-            ["boolean", ["feature-state", "hover"], false],
-            "#649d8d", // Turns green when hovered
-            "#fff", // Default color
-          ],
-          "fill-opacity": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            0.9, // Almost fully opaque when selected
-            ["boolean", ["feature-state", "hover"], false],
-            0.5, // Half transparent when hovered
-            0.1, // Default color
-          ],
-        },
-      });
-
-      mapRef.on("mousemove", "parcel-assist", (e) => {
-        const features = mapRef.queryRenderedFeatures(e.point, { layers: ["parcel-assist"] });
-
-        if (features.length > 0) {
-          const feature = features[0] as any;
-          const { fid }: { fid: number } = feature.properties;
-
-          if (hoveredFeatureId.current !== fid) {
-            mapRef.setFeatureState(
-              { source: parcelCreateData.id, sourceLayer: "parcels", id: hoveredFeatureId.current! },
-              { hover: false }
-            );
-            hoveredFeatureId.current = fid;
-
-            mapRef.setFeatureState({ source: parcelCreateData.id, sourceLayer: "parcels", id: hoveredFeatureId.current }, { hover: true });
-            mapRef.triggerRepaint();
-          }
-        }
-      });
-      mapRef.on("mouseleave", "parcel-assist", () => {
-        if (hoveredFeatureId.current !== null && hoveredFeatureId.current !== clickedFeatureProperty.current) {
-          mapRef.setFeatureState(
-            { source: parcelCreateData.id, sourceLayer: parcelCreateData.id, id: hoveredFeatureId.current },
-            { hover: false }
-          );
-        }
-        hoveredFeatureId.current = null;
-      });
-      // map.on("click", "parcel-assist", handleClick);
+  const showRegridTiles = useCallback(async () => {
+    if (!mapRef) {
+      return;
     }
+    const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: {
+          parcel: true,
+        },
+        fields: {
+          parcel: [
+            "usedesc",
+            "parcelnumb_no_formatting",
+            "parcelnumb",
+            "state2",
+            "county",
+            "city",
+            "zoning_description",
+            "owner",
+            "lat",
+            "lon",
+            "gisacre",
+            "ll_gisacre",
+          ],
+        },
+      }),
+    });
+    const parcelCreateData = await createTiles.json();
+
+    // Register the parcel source using the tile URL we just got
+    if (mapRef.getLayer("parcels")) {
+      mapRef.removeLayer("parcels");
+    }
+    if (mapRef.getLayer("parcel-assist")) {
+      mapRef.removeLayer("parcel-assist");
+    }
+    if (mapRef.getLayer("polygon-labels")) {
+      mapRef.removeLayer("polygon-labels");
+    }
+    if (mapRef.getSource(parcelCreateData.id)) {
+      mapRef.removeSource(parcelCreateData.id);
+    }
+    mapRef.addSource(parcelCreateData.id, {
+      type: "vector",
+      tiles: parcelCreateData.vector,
+      promoteId: "fid",
+    });
+
+    mapRef.addLayer({
+      id: "parcels",
+      type: "line",
+      source: parcelCreateData.id,
+      "source-layer": parcelCreateData.id,
+      minzoom: 10,
+      maxzoom: 21,
+      layout: {
+        visibility: "visible",
+      },
+      paint: {
+        "line-color": "#649d8d",
+        "line-width": 1.7,
+      },
+    });
+
+    // We need a transparent but 'filled' helper layer to catch click events
+    mapRef.addLayer({
+      id: "parcel-assist",
+      type: "fill",
+      source: parcelCreateData.id,
+      "source-layer": parcelCreateData.id,
+      minzoom: 10,
+      maxzoom: 21,
+      layout: {
+        visibility: "visible",
+      },
+      paint: {
+        "fill-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          "#649d8d", // Turns parcel green when clicked
+          ["boolean", ["feature-state", "hover"], false],
+          "#649d8d", // Turns green when hovered
+          "#fff", // Default color
+        ],
+        "fill-opacity": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          0.9, // Almost fully opaque when selected
+          ["boolean", ["feature-state", "hover"], false],
+          0.5, // Half transparent when hovered
+          0.1, // Default color
+        ],
+      },
+    });
+
+    // show parcel num
+
+    mapRef.addLayer({
+      id: "polygon-labels",
+      type: "symbol",
+      source: parcelCreateData.id,
+      "source-layer": parcelCreateData.id,
+      minzoom: 10,
+      maxzoom: 21,
+      layout: {
+        "text-field": ["get", "owner"], // Ensure 'name' matches your GeoJSON property
+        "text-size": 12,
+        "text-offset": [0, 0.5],
+        "text-anchor": "center",
+      },
+      paint: {
+        "text-color": "#000000",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1,
+      },
+    });
   }, [mapRef]);
+
+  // const setInitialData = useCallback(async () => {
+  //   if (mapRef) {
+  //     showRegridTiles();
+  //   }
+  // }, [mapRef]);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -181,16 +168,19 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
   );
 
   useEffect(() => {
-    setInitialData();
-  }, [setInitialData]);
-
-  useEffect(() => {
     if (mapRef) {
-      mapRef.on("style.load", () => {
-        setInitialData();
-      });
+      showRegridTiles();
+      window.map = mapRef;
     }
-  }, [mapRef, setInitialData]);
+  }, [showRegridTiles, mapRef]);
+
+  // useEffect(() => {
+  //   if (mapRef) {
+  //     mapRef.on("style.load", () => {
+  //       setInitialData();
+  //     });
+  //   }
+  // }, [mapRef, setInitialData]);
 
   return (
     <>

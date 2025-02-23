@@ -561,7 +561,6 @@ import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import { MapGeoJson } from "@/types/mapbox";
-import { mapDefaultMarkers } from "@/lib/volt";
 import { center } from "@turf/center";
 import * as turf from "@turf/turf";
 import { uuid } from "short-uuid";
@@ -590,8 +589,7 @@ const VoltMap: FC<VoltMapProps> = ({
   values,
   showAdditionalData,
 }) => {
-  const { ref, setRef, addMarkerImages, setGeoJson, showRegridTiles, showMarkers, openPopup, geoJson, highlightFeatures, loaded } =
-    useMap();
+  const { ref, setRef, setGeoJson, showRegridTiles, showMarkers, openPopup, geoJson, highlightFeatures, loaded } = useMap();
 
   const searchResultPopupRef = useRef<HTMLDivElement>(null);
   const [searchResultPopupDetails, setSearchResultPopupDetails] = useState<{
@@ -759,12 +757,6 @@ const VoltMap: FC<VoltMapProps> = ({
   //     }
   //   }
   // }, [ref, step, toggleMapOptions]);
-
-  useEffect(() => {
-    if (ref) {
-      addMarkerImages(mapDefaultMarkers);
-    }
-  }, [ref, addMarkerImages]);
 
   useEffect(() => {
     showSearchResult();
