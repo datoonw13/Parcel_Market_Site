@@ -14,7 +14,7 @@ import { IoMdClose } from "react-icons/io";
 import { IPropertiesInteraction } from "@/types/volt";
 import { Tooltip } from "@/components/ui/tooltip";
 import { IDecodedAccessToken } from "@/types/auth";
-import { exportToExcel } from "@/lib/volt";
+import { exportToExcel, exportToKml } from "@/lib/volt";
 import { AutoComplete } from "../../ui/autocomplete";
 import { Button } from "../../ui/button";
 import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
@@ -62,6 +62,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   const tableRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<ReturnType<typeof setTimeout>>();
   const sortedAssessments = useRef<z.infer<typeof PropertyDataSchema>["assessments"]["data"]>([]);
+  const [exportMapPending, setExportMapPending] = useState(false);
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
 
@@ -366,8 +367,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               isNonValidMedianHighlighted={isNonValidMedianHighlighted}
               isSubscribed={isSubscribed}
               onSortChange={(data) => {
-                console.log(data, 22);
-
                 sortedAssessments.current = data;
               }}
             />
@@ -485,6 +484,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                     </div>
                   </Button>
                 }
+                buttonClassName="w-full"
                 renderContent="You cannot export this data with the free plan"
               />
 
@@ -497,6 +497,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                     </div>
                   </Button>
                 }
+                buttonClassName="w-full"
                 renderContent="You cannot export this data with the free plan"
               />
             </>
@@ -505,8 +506,14 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               <Button
                 className="w-full"
                 variant="secondary"
-                onClick={() => {
-                  // exportToKml(data);
+                loading={exportMapPending}
+                onClick={async () => {
+                  setExportMapPending(true);
+                  await exportToKml(
+                    { ...data, assessments: { ...data.assessments, data: sortedAssessments.current } },
+                    isNonValidMedianHighlighted
+                  );
+                  setExportMapPending(false);
                 }}
               >
                 <div className="flex flex-row items-center gap-3">

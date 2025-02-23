@@ -358,3 +358,25 @@ export const hideString = (item: string): string => {
   }
   return value.join("");
 };
+
+export const getBase64 = async (url: string) => {
+  function blobToBase64(blob: Blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const base64 = await blobToBase64(blob);
+  return base64;
+};

@@ -7,11 +7,13 @@ import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IPropertiesInteraction } from "@/types/volt";
-import { IoChevronBack } from "react-icons/io5";
+import { IoChevronBack, IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import Logo from "@/icons/Logo";
 import HeaderMenu from "@/components/landing/header/menu";
 import { IDecodedAccessToken } from "@/types/auth";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
+import { exportToExcel, exportToKml } from "@/lib/volt";
+import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "../../ui/button";
 import VoltDetailsDrawer from "./drawer";
 import VoltDetailsMobileHeader from "./mobile-header";
@@ -52,6 +54,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
+  const [exportMapPending, setExportMapPending] = useState(false);
 
   return (
     <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
@@ -114,8 +117,65 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
           isSubscribed={isSubscribed}
         />
         <div className="flex gap-3 border-t pb-6 pt-4 fixed bottom-0 bg-white z-50 w-full px-4">
-          <Button className="w-full">Test</Button>
-          <Button className="w-full">Test</Button>
+          {user?.isSubscribed ? (
+            <>
+              <Tooltip
+                buttonClassName="w-full"
+                contentClasses="w-full"
+                renderButton={
+                  <Button disabled className="w-full" variant="secondary">
+                    <div className="flex flex-row items-center gap-3">
+                      <IoEarthSharp className="size-4 text-info" />
+                      Export Map
+                    </div>
+                  </Button>
+                }
+                renderContent="You cannot export this data with the free plan"
+              />
+
+              <Tooltip
+                buttonClassName="w-full"
+                renderButton={
+                  <Button disabled className="w-full">
+                    <div className="flex flex-row items-center gap-3">
+                      <IoCloudDownloadOutline className="size-4" />
+                      Export Data
+                    </div>
+                  </Button>
+                }
+                renderContent="You cannot export this data with the free plan"
+              />
+            </>
+          ) : (
+            <>
+              <Button
+                className="w-full"
+                variant="secondary"
+                loading={exportMapPending}
+                onClick={async () => {
+                  setExportMapPending(true);
+                  await exportToKml(data, isNonValidMedianHighlighted);
+                  setExportMapPending(false);
+                }}
+              >
+                <div className="flex flex-row items-center gap-3">
+                  <IoEarthSharp className="size-4 text-info" />
+                  Export Map
+                </div>
+              </Button>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  exportToExcel(data, isNonValidMedianHighlighted);
+                }}
+              >
+                <div className="flex flex-row items-center gap-3">
+                  <IoCloudDownloadOutline className="size-4" />
+                  Export Data
+                </div>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

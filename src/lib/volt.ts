@@ -2,6 +2,8 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import moment from "moment";
 import XLSX from "sheetjs-style";
 import { z } from "zod";
+import { saveAs } from "file-saver";
+import { getBase64 } from "./utils";
 
 export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonValidMedianHighlighted?: boolean) => {
   const wb = XLSX.utils.book_new();
@@ -307,4 +309,208 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
   XLSX.utils.book_append_sheet(wb, ws, "sheet1");
 
   XLSX.writeFile(wb, `${data.state.label}/${data.county.label}/${data.acreage.formattedString}/${data.voltPrice.formattedString}.xlsx`);
+};
+
+export const exportToKml = async (data: z.infer<typeof PropertyDataSchema>, isNonValidMedianHighlighted?: boolean) => {
+  const allProperties = data.assessments.data.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
+  const mainLandSaleHistory = allProperties.filter((el) => el.parcelNumber.formattedString === data.parcelNumber.formattedString);
+  const mainLandGroup = data.assessments.data.find((el) => el.isBulked && el.data.hasSellingProperty);
+  const origin = window.origin.includes("localhost") ? "https://test.parcelmarket.com" : window.origin;
+
+  const mainLandKml = `
+     <Placemark>
+        <name>Subject property</name>
+        <styleUrl>#selling-property-polygon</styleUrl>
+        <description>
+          <![CDATA[
+            <p style='color:black; font-size:16px; font-weight:600;font-family:sans-serif'>Subject property details:<p/>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Owner: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${data.owner}</span>
+            </p>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Acreage: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${data.acreage.formattedString}</span>
+            </p>
+            <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>VOLT Value Per Acre: 
+            <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${
+              data.voltPricePerAcreage.formattedString
+            }</span>
+            </p>
+            ${mainLandSaleHistory.length > 0 ? "<br/>" : ""}
+            ${
+              mainLandSaleHistory.length > 0
+                ? "<p style='color:black; font-size:16px; font-weight:600;font-family:sans-serif'>Sales history:<p/>"
+                : ""
+            }
+            ${mainLandSaleHistory.map(
+              (el) => `
+                <div>
+                  <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Last Sale Date: 
+                  <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moment(el.lastSaleDate).format(
+                    "MM-DD-YYYY"
+                  )}</span></p>
+                  <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Sold Price Per Acre: 
+                   <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${
+                     el.pricePerAcreage.formattedString
+                   }</span>
+                  </p>
+                </div>
+                <hr />
+                `
+            )}
+          ]]>
+        </description>
+        <Style>
+            <IconStyle>
+                <scale>1.6</scale>
+                <Icon>
+                    <href>${await getBase64(
+                      `${origin}/map/pins/green-highlighted-${mainLandGroup ? mainLandGroup.data.group : "default"}.svg`
+                    )}</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <LabelStyle>
+            <color>ffffffff</color>
+            <scale>0.2</scale>
+        </LabelStyle>
+        <Point>
+            <altitudeMode>clampToGround</altitudeMode>
+            <extrude>0</extrude>
+            <coordinates>${data.lon},${data.lat},0</coordinates>
+        </Point>
+      </Placemark>
+  `;
+
+  const kmlContent: string[] = [mainLandKml];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const item of data.assessments.data) {
+    if (item.isBulked) {
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const childItem of item.data.properties) {
+        const kmlItem = `
+        <Placemark>
+           <description>
+             <![CDATA[
+               <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Parcel Number:
+               <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${
+                 childItem.parcelNumber.formattedString
+               }</span>
+               </p>
+               <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Acreage:
+               <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${childItem.acreage.formattedString}</span>
+               </p>
+               <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Last Sale Date:
+               <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moment(childItem.lastSaleDate).format(
+                 "MM-DD-YYYY"
+               )}</span>
+               </p>
+                 <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Sold Price Per Acreage:
+               <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${
+                 childItem.pricePerAcreage.formattedString
+               }</span>
+               </p>
+             ]]>
+           </description>
+           <Style>
+               <IconStyle>
+                   <scale>1</scale>
+                   <Icon>
+                        // eslint-disable-next-line no-await-in-loop
+                        <href>${await getBase64(
+                          `${origin}/map/pins/${isNonValidMedianHighlighted && !item.data.isMedianValid ? "yellow" : "red"}-highlighted-${
+                            item.data.group
+                          }.svg`
+                        )}</href>
+                   </Icon>
+               </IconStyle>
+           </Style>
+           <LabelStyle>
+               <color>ffffffff</color>
+               <scale>0.2</scale>
+           </LabelStyle>
+           <Point>
+               <altitudeMode>clampToGround</altitudeMode>
+               <extrude>0</extrude>
+               <coordinates>${childItem.longitude},${childItem.latitude},0</coordinates>
+           </Point>
+         </Placemark>
+     `;
+        kmlContent.push(kmlItem);
+      }
+    } else {
+      //  <name>${item.isBulked ? `Bulk Sale - ${moment(item.lastSaleDate).format("MM-DD-YYYY")}` : ""}</name>
+      const kmlItem = `
+      <Placemark>
+         <description>
+           <![CDATA[
+             <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Parcel Number:
+             <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${
+               item.data.parcelNumber.formattedString
+             }</span>
+             </p>
+             <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Acreage:
+             <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${item.data.acreage.formattedString}</span>
+             </p>
+             <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Last Sale Date:
+             <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${moment(item.data.lastSaleDate).format(
+               "MM-DD-YYYY"
+             )}</span>
+             </p>
+               <p style='color:black; font-size:14px; font-weight:400;font-family:sans-serif'>Sold Price Per Acreage:
+             <span style='color:black; font-size:14px; font-weight:600;font-family:sans-serif'>${
+               item.data.pricePerAcreage.formattedString
+             }</span>
+             </p>
+           ]]>
+         </description>
+         <Style>
+             <IconStyle>
+                 <scale>1</scale>
+                 <Icon>
+                      // eslint-disable-next-line no-await-in-loop
+                      <href>${await getBase64(
+                        `${origin}/map/pins/${
+                          isNonValidMedianHighlighted && !item.data.isMedianValid ? "yellow" : "red"
+                        }-highlighted-default.svg`
+                      )}</href>
+                 </Icon>
+             </IconStyle>
+         </Style>
+         <LabelStyle>
+             <color>ffffffff</color>
+             <scale>0.2</scale>
+         </LabelStyle>
+         <Point>
+             <altitudeMode>clampToGround</altitudeMode>
+             <extrude>0</extrude>
+             <coordinates>${item.data.longitude},${item.data.latitude},0</coordinates>
+         </Point>
+       </Placemark>
+   `;
+      kmlContent.push(kmlItem);
+    }
+  }
+
+  const kml = `<?xml version="1.0" encoding="utf-8"?>
+    <kml xmlns="http://www.opengis.net/kml/2.2">
+      <Document>
+       <Style id="mainLandPin">
+          <IconStyle>
+            <scale>1.3</scale>
+            <Icon>
+                <href>${origin}/map/pins/red-default.svg</href>
+            </Icon>
+            <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+          </IconStyle>
+          
+        </Style>
+        ${kmlContent.join("")}
+      </Document>
+    </kml>
+  `;
+
+  const blob = new Blob([kml], { type: "text/plain" });
+
+  saveAs(blob, `${data.state.label}/${data.county.label}/${data.acreage.formattedString}/${data.voltPrice.formattedString}.kml`);
 };
