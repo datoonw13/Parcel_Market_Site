@@ -73,7 +73,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
   const assessments = isNonValidMedianHighlighted ? data.assessments.data.filter((el) => el.data.isMedianValid) : data.assessments.data;
 
   return (
-    <div id="volt-progress-line" className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  space-y-8 relative z-10 rounded-2xl">
+    <div id="volt-progress-line" className="border border-primary-main-400 bg-[#FAFFFB] p-3 space-y-8 relative z-10 rounded-2xl">
       <div className="grid grid-cols-2 items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
         <div className="flex items-center gap-2">
           <div className={cn(`bg-white size-6 rounded-full flex items-center justify-center relative`)}>

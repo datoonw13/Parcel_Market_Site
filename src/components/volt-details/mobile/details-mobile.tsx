@@ -116,7 +116,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
           isNonValidMedianHighlighted={isNonValidMedianHighlighted}
           isSubscribed={isSubscribed}
         />
-        <div className="flex gap-3 border-t pb-6 pt-4 fixed bottom-0 bg-white z-50 w-full px-4">
+        <div className="flex gap-3 border-t pb-6 pt-4 fixed bottom-0 bg-white z-50 w-full px-3">
           {user?.isSubscribed ? (
             <>
               <Tooltip

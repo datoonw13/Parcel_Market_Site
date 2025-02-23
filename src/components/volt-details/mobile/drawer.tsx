@@ -118,7 +118,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
           >
             <Drawer.Title className="w-44 h-2 rounded-xl mx-auto bg-white hidden" />
             <div className={cn(snap === 1 ? "overflow-auto" : "overflow-hidden", "grid")} id="drawer-content">
-              <div className={cn("z-10 px-5 space-y-4", snap === 1 ? "overflow-auto" : "overflow-hidden")} id="drawer-wrapper">
+              <div className={cn("z-10 px-3 space-y-4", snap === 1 ? "overflow-auto" : "overflow-hidden")} id="drawer-wrapper">
                 <div ref={setFirstSectionRef} className={cn("z-10")}>
                   <div className={cn("w-44 h-2 rounded-xl mx-auto bg-grey-100 my-3")} />
                   <VoltDetailsMobileProgressLine
