@@ -41,17 +41,16 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   const validateFilters = partialFiltersSchema.safeParse(Object.fromEntries(new URLSearchParams(params.toString()))).data;
 
   const selectedFilters = useMemo(() => {
-    if (!validateFilters) {
+    if (!filters) {
       return 0;
     }
-    // Property type is always selected. If value is null this means that, default values of property types are selected
     const cnt =
-      Object.keys(validateFilters)
-        .filter((el) => (el as keyof typeof validateFilters) !== "propertyTypes" || validateFilters[el as keyof typeof validateFilters])
+      Object.keys(filters)
+        .filter((el) => (el as keyof typeof filters) !== "propertyTypes" || filters[el as keyof typeof filters])
         .reduce((acc, cur) => acc + 1, 0) + 1;
 
     return cnt;
-  }, [validateFilters]);
+  }, [filters]);
 
   const updateQueryParams = useCallback(() => {
     const newQueryParams = new URLSearchParams(params.toString());
