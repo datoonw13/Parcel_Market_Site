@@ -58,7 +58,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
 
   return (
     <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
-      <Popover modal>
+      <Popover>
         <PopoverAnchor className="qdqwdqwd">
           <div className="h-14 flex items-center justify-between px-5" id="header">
             <Link href={routes.volt.fullUrl}>
@@ -67,7 +67,15 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
             <Link href={routes.volt.fullUrl}>
               <Logo className="!h-6 w-full" />
             </Link>
-            <HeaderMenu user={user} />
+            <HeaderMenu
+              user={user}
+              onAnimationStart={() => {
+                const el = document.querySelector<HTMLElement>("[data-radix-popper-content-wrapper]");
+                if (el) {
+                  el.style.setProperty("--radix-popper-zIndex", "99");
+                }
+              }}
+            />
           </div>
         </PopoverAnchor>
       </Popover>

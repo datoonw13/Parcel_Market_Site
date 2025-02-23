@@ -22,9 +22,10 @@ import UserMenu from "./user-menu";
 
 interface HeaderMenuProps {
   user: IDecodedAccessToken | null;
+  onAnimationStart?: () => void;
 }
 
-const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
+const HeaderMenu: FC<HeaderMenuProps> = ({ user, onAnimationStart }) => {
   const burgerIconRef = useRef<HTMLButtonElement>(null);
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
   const pathname = usePathname();
@@ -46,7 +47,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                   e.preventDefault();
                 }
               }}
-              className="outline-none w-screen relative -translate-y-1 z-[9999]"
+              className="outline-none w-screen relative -translate-y-1"
             >
               <motion.div
                 initial={{ opacity: 0 }}
@@ -61,6 +62,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.1 }}
                 className="bg-white w-screen !outline-none p-5 border-t border-t-grey-100 flex flex-col rounded-b-xl"
+                onAnimationStart={onAnimationStart}
               >
                 <Link href={routes.volt.fullUrl} className="text-sm hover:text-primary-main py-1.5 transition-all duration-100">
                   Value of land tool

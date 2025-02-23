@@ -8,6 +8,7 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import Image from "next/image";
 import { IPropertiesInteraction } from "@/types/volt";
+import { moneyFormatter } from "@/helpers/common";
 import { Tooltip } from "../../ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
@@ -74,61 +75,41 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
 
   return (
     <div id="volt-progress-line" className="border border-primary-main-400 bg-[#FAFFFB] p-3 space-y-8 relative z-10 rounded-2xl">
-      <div className="grid grid-cols-2 items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
-        <div className="flex items-center gap-2">
-          <div className={cn(`bg-white size-6 rounded-full flex items-center justify-center relative`)}>
-            <div className="size-4 border-2 rounded-full border-primary-main" />
-            <div className="size-2 bg-primary-main rounded-full absolute" />
+      <div className="grid grid-cols-2 items-center justify-between gap-2.5 border-b border-b-[#C3EBD3] pb-3">
+        <div className="flex items-center gap-1">
+          <div className={cn(`bg-white min-w-3.5 w-3.5 min-h-3.5 h-3.5 rounded-full flex items-center justify-center relative`)}>
+            <div className="min-w-3 w-3 min-h-3 h-3 border-2 rounded-full border-primary-main" />
+            <div className="min-w-1 w-1 min-h-1 h-1 bg-primary-main rounded-full absolute" />
           </div>
-          <div className="flex items-center gap-2">
-            <p className="font-semibold text-xs text-grey-600 table-fixed table w-full">
+          <div className="flex items-center gap-1">
+            <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
               <span
-                style={{
-                  display: "table-cell",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                }}
-                className={cn(!isSubscribed && "blur-[2px]")}
+                // style={{
+                //   display: "table-cell",
+                //   whiteSpace: "nowrap",
+                //   textOverflow: "ellipsis",
+                //   overflow: "hidden",
+                // }}
+                className={cn(!isSubscribed && "blur-[2px]", "text-[11px]")}
               >
                 {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
               </span>{" "}
-              <span className="text-grey-600 text-xs">- APPA</span>
+              <span className="text-grey-600 text-[11px]">- APPA</span>
             </p>
-            <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+            <Tooltip renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />} renderContent="Some text." />
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
-            <div className="size-4 border-2 rounded-full border-warning" />
-            <div className="size-2 bg-warning rounded-full absolute" />
+        <div className="flex items-center gap-1">
+          <div className={cn(`bg-white min-w-3.5 w-3.5 min-h-3.5 h-3.5 rounded-full flex items-center justify-center relative`)}>
+            <div className="min-w-3 w-3 min-h-3 h-3 border-2 rounded-full border-warning" />
+            <div className="min-w-1 w-1 min-h-1 h-1 bg-warning rounded-full absolute" />
           </div>
-          <div className="flex items-center gap-2">
-            <p className="font-semibold text-xs text-grey-600 table-fixed table w-full">
-              <span
-                style={{
-                  display: "table-cell",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                }}
-                className={cn(!isSubscribed && "blur-[2px]")}
-              >
-                {data.voltPricePerAcreage.formattedString}
-              </span>{" "}
-              <span
-                style={{
-                  display: "table-cell",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                }}
-                className="text-grey-600 text-xs"
-              >
-                - VOLT PPA
-              </span>
+          <div className="flex items-center gap-1">
+            <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
+              <span className={cn(!isSubscribed && "blur-[2px]", "text-[11px]")}>{data.voltPricePerAcreage.formattedString}</span>{" "}
+              <span className="text-grey-600 text-[11px]">- VPPA</span>
             </p>
-            <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+            <Tooltip renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />} renderContent="Some text." />
           </div>
         </div>
       </div>
