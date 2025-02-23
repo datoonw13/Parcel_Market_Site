@@ -376,6 +376,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
       <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-auto  shadow-2 relative z-10">
         <div id="map-options" className="flex flex-col gap-4 px-4">
           <VoltDetailsFiltersDropDown
+            align="end"
             onClose={() => {}}
             onOpen={() => {}}
             label={`${data.acreage.formattedString} Acre, ${data.propertyType || "N/A"}`}

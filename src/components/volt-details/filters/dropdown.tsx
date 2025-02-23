@@ -18,6 +18,7 @@ const VoltDetailsFiltersDropDown = ({
   buttonClassName,
   onOpen,
   onToggle,
+  align,
 }: {
   renderContent: (close: () => void) => ReactNode;
   renderContentAdditionalContent?: (close: () => void) => ReactNode;
@@ -30,6 +31,7 @@ const VoltDetailsFiltersDropDown = ({
   triggerClassName?: string;
   buttonClassName?: string;
   onToggle?: (open: boolean) => void;
+  align?: "center" | "end" | "start";
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -59,7 +61,7 @@ const VoltDetailsFiltersDropDown = ({
             {icon || <MdArrowForwardIos className={cn("text-[#1E1E1E] transition-all", open ? "-rotate-90" : "rotate-90")} />}
           </div>
         </PopoverTrigger>
-        <PopoverContent forceMount side={side} align="start" className="flex gap-2 !outline-none">
+        <PopoverContent forceMount side={side} align={align} className="flex gap-2 !outline-none">
           <AnimatePresence>
             <motion.div
               onAnimationStart={() => {
