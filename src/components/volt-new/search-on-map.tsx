@@ -4,7 +4,6 @@
 
 import dynamic from "next/dynamic";
 import { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { createMarkerImage, mapDefaultMarkers } from "@/lib/volt";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
@@ -30,13 +29,6 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
         const layer = mapRef.getLayer(el);
         if (layer) {
           mapRef.removeLayer(layer.id);
-        }
-      });
-
-      Object.keys(mapDefaultMarkers).forEach((img) => {
-        const image = mapRef.hasImage(img);
-        if (image) {
-          mapRef.removeImage(img);
         }
       });
 

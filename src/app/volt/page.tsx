@@ -1,11 +1,12 @@
-import VoltWrapper from "@/components/volt/volt-wrapper";
-import { getUserAction } from "@/server-actions/user/actions";
+import VoltLayout from "@/components/volt-new/layout";
+import { getPropertiesAction } from "@/server-actions/volt/actions";
+import { voltSearchSchema } from "@/zod-validations/volt";
 
-export const maxDuration = 250;
+const Volt = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+  const validateParams = await voltSearchSchema.safeParseAsync(searchParams);
+  const data = validateParams.success ? await getPropertiesAction(validateParams.data) : null;
 
-const VoltPage = async () => {
-  const user = await getUserAction();
-  return <VoltWrapper user={user} />;
+  return <VoltLayout data={data} initialParams={validateParams.data || null} />;
 };
 
-export default VoltPage;
+export default Volt;

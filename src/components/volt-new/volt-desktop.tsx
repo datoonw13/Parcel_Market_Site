@@ -15,6 +15,9 @@ import { IMainPropertyBaseInfo } from "@/types/property";
 import dynamic from "next/dynamic";
 import useMap from "@/hooks/useMap";
 import { Map as MapBoX } from "mapbox-gl";
+import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
+import { useRouter } from "next/navigation";
+import useNotification from "@/hooks/useNotification";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
@@ -38,6 +41,9 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
   const { ref, setRef } = useMap();
   const [searchMapRef, setSearchMapRef] = useState<MapBoX | null>(null);
+  const router = useRouter();
+  const [calculationPending, setCalculationPending] = useState(false);
+  const { notify } = useNotification();
 
   const onMarkerInteraction = useCallback(
     (data: Partial<IPropertiesInteraction>) => {
@@ -45,6 +51,36 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
     },
     [setPropertiesInteraction]
   );
+
+  const calculatePrice = async () => {
+    const property = data?.data?.find((el) => el.id === propertiesInteraction.popup?.openId);
+    if (!property) {
+      return;
+    }
+    setCalculationPending(true);
+
+    const res = await calculateLandPriceAction2({
+      county: property.county.value,
+      state: property.state.value,
+      parcelNumber: property.parcelNumber,
+      owner: property.owner,
+      propertyType: property.propertyType,
+      coordinates: JSON.stringify(property.polygon),
+      locality: "",
+      acrage: property.acreage.toString(),
+      lat: property.lat.toString(),
+      lon: property.lon.toString(),
+    });
+
+    if (res.data) {
+      router.push(`/volt/${res.data}`);
+    }
+
+    if (res?.errorMessage || !res?.data) {
+      notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
+    }
+    setCalculationPending(false);
+  };
 
   const onMouseLeave = useCallback(() => {
     setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
@@ -123,13 +159,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                   <div className="bg-white px-8 xl:px-11 pt-6 pb-8 xl:pb-11 border-t border-t-grey-100">
                     <Button
                       id="volt-get-value-button"
-                      onClick={() => {
-                        // if (user) {
-                        //   calculatePrice();
-                        // } else {
-                        //   setShowCalculationTerms(true);
-                        // }
-                      }}
+                      loading={calculationPending}
+                      onClick={calculatePrice}
                       disabled={!propertiesInteraction.popup}
                       className="w-full"
                     >

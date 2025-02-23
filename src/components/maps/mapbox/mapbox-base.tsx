@@ -8,7 +8,7 @@ import usaOutline from "../../../../public/map/usa-outline.json";
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
 
 interface MapboxBaseProps {
-  style?: string;
+  mapStyle?: string;
   center?: LngLatLike;
   zoom?: number;
   setRef: (ref: mapboxgl.Map | null) => void;
@@ -16,14 +16,14 @@ interface MapboxBaseProps {
 }
 
 const MapboxBase: FC<MapboxBaseProps> = (props) => {
-  const { center, style, zoom, setRef, ref } = props;
+  const { center, mapStyle, zoom, setRef, ref } = props;
   const mapContainerRef = useRef(null);
 
   const initializeMap = useCallback(() => {
     if (mapContainerRef.current) {
       const newRef = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: style || "mapbox://styles/mapbox/navigation-day-v1",
+        style: mapStyle || "mapbox://styles/mapbox/navigation-day-v1",
         center: center || [-97.7431, 30.2672],
         zoom: zoom || 3.5,
         dragRotate: false,
@@ -57,7 +57,7 @@ const MapboxBase: FC<MapboxBaseProps> = (props) => {
         setRef(newRef);
       });
     }
-  }, [center, setRef, style, zoom]);
+  }, [center, setRef, mapStyle, zoom]);
 
   useEffect(() => {
     initializeMap();

@@ -137,6 +137,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               mapLayers={mapLayers}
               selectedLayer={selectedLayer}
               setSelectedLayer={setSelectedLayer}
+              user={user}
             />
           )}
         </div>

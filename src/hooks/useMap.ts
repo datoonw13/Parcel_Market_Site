@@ -2,7 +2,6 @@
 
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { GeoJSONFeature, Map as MapBoX, Popup } from "mapbox-gl";
-import { createMarkerImage } from "@/lib/volt";
 import { MapGeoJson } from "@/types/mapbox";
 
 const MAP_ITEMS_IDS = {
@@ -25,20 +24,6 @@ const useMap = () => {
   const setGeoJson = useCallback((data: MapGeoJson) => {
     geoJson.current = data;
   }, []);
-
-  const addMarkerImages = useCallback(
-    (data: Record<string, string>) => {
-      if (ref) {
-        Object.keys(data).forEach((key) => {
-          const img = createMarkerImage(data[key]);
-          img.onload = (e) => {
-            ref.addImage(key, img);
-          };
-        });
-      }
-    },
-    [ref]
-  );
 
   const showMarkers = useCallback(
     ({
@@ -385,7 +370,6 @@ const useMap = () => {
     ref,
     setRef,
     setGeoJson,
-    addMarkerImages,
     showMarkers,
     highlightFeatures,
     showRegridTiles,

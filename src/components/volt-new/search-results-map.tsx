@@ -5,7 +5,6 @@
 import dynamic from "next/dynamic";
 import { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MapGeoJson } from "@/types/mapbox";
-import { createMarkerImage, mapDefaultMarkers } from "@/lib/volt";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import { IPropertiesInteraction } from "@/types/volt";
 import { IMainPropertyBaseInfo } from "@/types/property";
@@ -41,37 +40,12 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
     [data, propertiesInteraction.popup]
   );
 
-  const addMarkerImages = useCallback(
-    (data: Record<string, string>) =>
-      Promise.all(
-        Object.keys(data).map(
-          (key) =>
-            new Promise((resolve) => {
-              const img = createMarkerImage(data[key]);
-              img.onload = (e) => {
-                ref?.loadImage(data[key], () => {
-                  ref!.addImage(key, img);
-                  resolve(img);
-                });
-              };
-            })
-        )
-      ),
-    [ref]
-  );
   const setInitialData = useCallback(async () => {
     if (ref) {
       Object.values(mapData.layers).forEach((el) => {
         const layer = ref.getLayer(el);
         if (layer) {
           ref.removeLayer(layer.id);
-        }
-      });
-
-      Object.keys(mapDefaultMarkers).forEach((img) => {
-        const image = ref.hasImage(img);
-        if (image) {
-          ref.removeImage(img);
         }
       });
 
@@ -83,7 +57,6 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
       });
 
       window.map = ref;
-      await addMarkerImages(mapDefaultMarkers);
       setImagesLoaded(true);
       const geoJsonInit: MapGeoJson = {
         type: "FeatureCollection",
@@ -171,7 +144,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
       ref.setZoom(8);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addMarkerImages, ref]);
+  }, [ref]);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -367,7 +340,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
         </div>
       </div>
       <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>
-        <Map setRef={setRef} ref={ref} />
+        <Map mapStyle="mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h" setRef={setRef} ref={ref} />
       </Suspense>
     </>
   );

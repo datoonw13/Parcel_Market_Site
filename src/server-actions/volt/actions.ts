@@ -234,8 +234,6 @@ export const calculateLandPriceAction2 = async (payload: {
       errorMessage: null,
     };
   } catch (error) {
-    console.log(error, 22);
-
     const errorData = error as ErrorResponse;
     return {
       data: null,
