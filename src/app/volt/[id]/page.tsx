@@ -17,7 +17,7 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const user = await getUserAction();
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
 
-    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...x, subscribed: !user?.isSubscribed });
+    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...req, subscribed: !user?.isSubscribed });
     return {
       errorMessage: null,
       data,
