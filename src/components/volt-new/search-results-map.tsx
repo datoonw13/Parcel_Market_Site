@@ -141,7 +141,6 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
       const center = turf.center(features);
       ref.setCenter(center.geometry.coordinates as any);
       ref.setZoom(8);
-      ref.setZoom(8);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
