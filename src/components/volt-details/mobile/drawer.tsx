@@ -22,6 +22,7 @@ interface VoltDetailsDrawerProps {
   isSubscribed: boolean;
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   propertiesInteraction: IPropertiesInteraction;
+  contentClassName?: string;
 }
 
 const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
@@ -32,6 +33,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
   isSubscribed,
   propertiesInteraction,
   setPropertiesInteraction,
+  contentClassName,
 }) => {
   const [snap, setSnap] = useState<number | string | null>(0);
   const [snapPoints, setSnapPoints] = useState<Array<string | number>>([0, 1]);
@@ -98,10 +100,14 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
       />
       <Drawer.Portal>
         <Drawer.Content
+          onInteractOutside={() => {
+            setSnap(snapPoints[0]);
+          }}
           ref={setDrawerContentRef}
           className={cn(
             "w-0 z-10 overflow-hidden fixed flex outline-none  flex-col border-b-none bottom-0 left-0 right-0 h-full mx-[-1px]",
-            (!container || !drawerContentRef || !firstSectionRef) && "hidden"
+            (!container || !drawerContentRef || !firstSectionRef) && "hidden",
+            contentClassName
           )}
         >
           <div

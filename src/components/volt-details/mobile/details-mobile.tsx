@@ -2,11 +2,16 @@
 
 import routes from "@/helpers/routes";
 import Link from "next/link";
-import { Dispatch, FC, SetStateAction, TransitionStartFunction, useEffect, useRef, useState } from "react";
+import { Dispatch, FC, SetStateAction, TransitionStartFunction, useState } from "react";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IPropertiesInteraction } from "@/types/volt";
+import { IoChevronBack } from "react-icons/io5";
+import Logo from "@/icons/Logo";
+import HeaderMenu from "@/components/landing/header/menu";
+import { IDecodedAccessToken } from "@/types/auth";
+import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { Button } from "../../ui/button";
 import VoltDetailsDrawer from "./drawer";
 import VoltDetailsMobileHeader from "./mobile-header";
@@ -27,6 +32,7 @@ interface VoltDetailsMobileProps {
   }[];
   setSelectedLayer: Dispatch<SetStateAction<string>>;
   selectedLayer: string;
+  user: IDecodedAccessToken | null;
 }
 
 const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
@@ -41,6 +47,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   mapLayers,
   selectedLayer,
   setSelectedLayer,
+  user,
 }) => {
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
@@ -48,9 +55,19 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
 
   return (
     <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
-      <div className="h-14" id="header">
-        Header
-      </div>
+      <Popover modal>
+        <PopoverAnchor className="qdqwdqwd">
+          <div className="h-14 flex items-center justify-between px-5" id="header">
+            <Link href={routes.volt.fullUrl}>
+              <IoChevronBack className="size-6" />
+            </Link>
+            <Link href={routes.volt.fullUrl}>
+              <Logo className="!h-6 w-full" />
+            </Link>
+            <HeaderMenu user={user} />
+          </div>
+        </PopoverAnchor>
+      </Popover>
       <div className="h-full flex flex-col">
         <VoltDetailsMobileHeader
           data={data}

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { IDecodedAccessToken } from "@/types/auth";
 import VoltDetailsDesktop from "./desktop/details-desktop";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 import { breakPoints } from "../../../tailwind.config";
@@ -16,6 +17,7 @@ interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   isSubscribed: boolean;
+  user: IDecodedAccessToken | null;
 }
 
 const mapLayers = [
@@ -49,7 +51,7 @@ const mapLayers = [
   },
 ];
 
-const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, isSubscribed }) => {
+const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, isSubscribed, user }) => {
   const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
   const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
@@ -120,6 +122,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               mapLayers={mapLayers}
               selectedLayer={selectedLayer}
               setSelectedLayer={setSelectedLayer}
+              user={user}
             />
           ) : (
             <VoltDetailsDesktop
