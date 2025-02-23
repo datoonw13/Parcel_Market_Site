@@ -175,7 +175,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
         formattedData.push({
           "Parcel ID": {
             s: {
-              fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf7e0" : "f6f6f6" } },
+              fill: { fgColor: { rgb: "f6f6f6" } },
               border: {
                 top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
                 bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
@@ -187,7 +187,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
           },
           County: {
             s: {
-              fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf7e0" : "f6f6f6" } },
+              fill: { fgColor: { rgb: "f6f6f6" } },
               border: {
                 top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
                 bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
@@ -199,7 +199,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
           },
           Acreage: {
             s: {
-              fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf7e0" : "f6f6f6" } },
+              fill: { fgColor: { rgb: "f6f6f6" } },
               border: {
                 top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
                 bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
@@ -211,7 +211,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
           },
           "Sold price": {
             s: {
-              fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf7e0" : "f6f6f6" } },
+              fill: { fgColor: { rgb: "f6f6f6" } },
               border: {
                 top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
                 bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
@@ -223,7 +223,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
           },
           "Sold price per acre": {
             s: {
-              fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf7e0" : "f6f6f6" } },
+              fill: { fgColor: { rgb: "f6f6f6" } },
               border: {
                 top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
                 bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
@@ -235,7 +235,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
           },
           "Last sale date": {
             s: {
-              fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf7e0" : "f6f6f6" } },
+              fill: { fgColor: { rgb: "f6f6f6" } },
               border: {
                 top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
                 bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
@@ -253,6 +253,20 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
   const headers = ["Parcel ID", "County", "Acreage", "Sold price", "Sold price per acre", "Last sale date"];
   const ws = XLSX.utils.json_to_sheet(formattedData, {
     header: headers,
+  });
+
+  ["A1", "B1", "C1", "D1", "E1", "F1"].forEach((key) => {
+    ws[key].s = {
+      fill: {
+        patternType: "solid",
+        fgColor: { rgb: "f8f8f8" },
+      },
+      font: {
+        sz: 13,
+        color: { rgb: "#FF000000" },
+        bold: true,
+      },
+    };
   });
 
   const flattenData = list.map((el) => (el.isBulked ? el.data.properties : el.data)).flat();
