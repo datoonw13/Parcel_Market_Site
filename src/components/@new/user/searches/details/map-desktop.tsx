@@ -13,7 +13,7 @@ import { moneyFormatter } from "@/helpers/common";
 import { AutoComplete } from "@/components/ui/autocomplete";
 import { MapGeoJson } from "@/types/mapbox";
 import { FeatureCollection } from "geojson";
-import { mapDefaultMarkers } from "@/lib/map";
+import { mapDefaultMarkers } from "@/lib/volt";
 import {
   IBulkPropertiesUsedForCalculation,
   IPropertyBaseInfo,

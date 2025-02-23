@@ -4,7 +4,7 @@
 
 import dynamic from "next/dynamic";
 import { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
+import { createMarkerImage, mapDefaultMarkers } from "@/lib/volt";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });

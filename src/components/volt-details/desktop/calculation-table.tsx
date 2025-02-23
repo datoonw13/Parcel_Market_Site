@@ -1,20 +1,16 @@
 "use client";
 
-import { moneyFormatter } from "@/helpers/common";
-import { cn, hideNumber } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { orderBy } from "lodash";
 import moment from "moment";
 import Image from "next/image";
-import { Dispatch, FC, Fragment, SetStateAction, useMemo, useRef, useState } from "react";
+import { Dispatch, FC, Fragment, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
-import { LuArrowUpDown } from "react-icons/lu";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { RiArrowUpDownFill } from "react-icons/ri";
 import { z } from "zod";
 import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "@radix-ui/react-tooltip";
 import { IPropertiesInteraction } from "@/types/volt";
-import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import NoDataIcon from "../../@new/icons/no-data";
 
 const HEADERS = {
@@ -50,13 +46,6 @@ const HEADERS = {
     label: "",
     sort: false,
   },
-};
-
-const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
-  if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
-  }
-  return data.data.id === sellingPropertyId;
 };
 
 const generateClasses = (data: {
@@ -111,6 +100,7 @@ interface VoltDetailsCalculationTableProps {
   propertiesInteraction: IPropertiesInteraction;
   isNonValidMedianHighlighted: boolean;
   isSubscribed: boolean;
+  onSortChange: (data: z.infer<typeof PropertyDataSchema>["assessments"]["data"]) => void;
 }
 
 const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
@@ -119,6 +109,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
   setPropertiesInteraction,
   isNonValidMedianHighlighted,
   isSubscribed,
+  onSortChange,
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
@@ -137,6 +128,12 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
     }
     return orderBy(data.assessments.data, [`data.${sortKey}.value`], [sortValue]);
   }, [data.assessments, sortKey, sortValue]);
+
+  useEffect(() => {
+    onSortChange(assessments);
+  }, [assessments, onSortChange]);
+
+  console.log(data);
 
   return (
     <div className="w-full mb-0.5">
@@ -218,7 +215,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   className={cn(
                     "cursor-pointer border-t  transition-all",
                     generateClasses({
-                      hasSellingProperty: hasSellingProperty(data.id, assessment),
+                      hasSellingProperty: assessment.data.hasSellingProperty,
                       hovered,
                       selected: popup,
                       isMedianValid: assessment.data.isMedianValid,
@@ -280,7 +277,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            {hasSellingProperty(data.id, assessment) ? (
+                            {assessment.data.hasSellingProperty ? (
                               <div className="relative z-0 min-w-5 min-h-5 h-5">
                                 <Image
                                   alt=""
@@ -348,9 +345,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         <div className="flex items-center gap-2 justify-end">
                           <MdKeyboardArrowUp className="size-5 opacity-0" />
-                          {hasSellingProperty(data.id, { isBulked: false, data: childAssessment }) && (
-                            <FaLocationDot className="text-primary-dark size-4 relative z-0" />
-                          )}
+                          {childAssessment.isSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0" />}
                         </div>
                       </td>
                     </tr>
@@ -360,7 +355,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
               <tr
                 key={assessment.data.id}
                 className={generateClasses({
-                  hasSellingProperty: hasSellingProperty(data.id, assessment),
+                  hasSellingProperty: assessment.data.isSellingProperty,
                   hovered,
                   selected: popup,
                   isMedianValid: assessment.data.isMedianValid,
@@ -410,7 +405,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <td className="text-grey-800 text-xs !pl-7 ">
                   <div className="flex items-center gap-2 justify-end">
                     <MdKeyboardArrowUp className="size-5 opacity-0" />
-                    {hasSellingProperty(data.id, assessment) && <FaLocationDot className="text-primary-dark size-4 relative z-0" />}
+                    {assessment.data.isSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0" />}
                   </div>
                 </td>
               </tr>

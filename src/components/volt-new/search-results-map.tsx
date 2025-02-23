@@ -5,7 +5,7 @@
 import dynamic from "next/dynamic";
 import { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MapGeoJson } from "@/types/mapbox";
-import { createMarkerImage, mapDefaultMarkers } from "@/lib/map";
+import { createMarkerImage, mapDefaultMarkers } from "@/lib/volt";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import { IPropertiesInteraction } from "@/types/volt";
 import { IMainPropertyBaseInfo } from "@/types/property";

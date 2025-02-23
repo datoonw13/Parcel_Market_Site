@@ -8,7 +8,7 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { getUserAction } from "@/server-actions/user/actions";
 import { redirect } from "next/navigation";
 import routes from "@/helpers/routes";
-// import x from "../../../../public/test.json";
+import x from "../../../../public/test.json";
 
 const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {
@@ -17,7 +17,7 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const user = await getUserAction();
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
 
-    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...req, subscribed: !user?.isSubscribed });
+    const data = await PropertyDataSchema.parseAsync({ acreageRange: { min: 1, max: 5 }, ...x, subscribed: !user?.isSubscribed });
     return {
       errorMessage: null,
       data,

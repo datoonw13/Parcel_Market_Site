@@ -93,6 +93,7 @@ export const AssessmentBaseSchema = z
       label: "",
       ...(getCounty(county || "", state) || {}),
     },
+    isSellingProperty: false,
   }));
 
 const BulkAssessmentBaseSchema = z
@@ -112,6 +113,7 @@ const BulkAssessmentBaseSchema = z
     isMedianValid: input.isMedianValid === undefined ? true : input.isMedianValid,
     lastSaleDate: input.properties[0].lastSaleDate,
     propertyType: input.properties[0].propertyType,
+    hasSellingProperty: false,
   }));
 
 const AssessmentSchema = z.discriminatedUnion("isBulked", [

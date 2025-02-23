@@ -12,6 +12,9 @@ import moment from "moment";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { IoMdClose } from "react-icons/io";
 import { IPropertiesInteraction } from "@/types/volt";
+import { Tooltip } from "@/components/ui/tooltip";
+import { IDecodedAccessToken } from "@/types/auth";
+import { exportToExcel } from "@/lib/volt";
 import { AutoComplete } from "../../ui/autocomplete";
 import { Button } from "../../ui/button";
 import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
@@ -37,6 +40,7 @@ interface VoltDetailsDesktopProps {
   }[];
   setSelectedLayer: Dispatch<SetStateAction<string>>;
   selectedLayer: string;
+  user: IDecodedAccessToken | null;
 }
 
 const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
@@ -51,12 +55,13 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   mapLayers,
   selectedLayer,
   setSelectedLayer,
+  user,
 }) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
-  const [backDrop, setBackDrop] = useState(false);
   const tableRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<ReturnType<typeof setTimeout>>();
+  const sortedAssessments = useRef<z.infer<typeof PropertyDataSchema>["assessments"]["data"]>([]);
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
 
@@ -360,6 +365,11 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               setPropertiesInteraction={setPropertiesInteraction}
               isNonValidMedianHighlighted={isNonValidMedianHighlighted}
               isSubscribed={isSubscribed}
+              onSortChange={(data) => {
+                console.log(data, 22);
+
+                sortedAssessments.current = data;
+              }}
             />
           </ScrollArea>
         </div>
@@ -367,12 +377,8 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
       <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-auto  shadow-2 relative z-10">
         <div id="map-options" className="flex flex-col gap-4 px-4">
           <VoltDetailsFiltersDropDown
-            onClose={() => {
-              setBackDrop(false);
-            }}
-            onOpen={() => {
-              setBackDrop(true);
-            }}
+            onClose={() => {}}
+            onOpen={() => {}}
             label={`${data.acreage.formattedString} Acre, ${data.propertyType || "N/A"}`}
             value="Subject Parcel"
             renderContent={() => (
@@ -408,7 +414,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             )}
           />
           <AutoComplete
-            onOpenChange={setBackDrop}
             options={mapLayers}
             onValueChange={(item) => {
               setSelectedLayer(item || "");
@@ -422,7 +427,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             selectedValue={selectedLayer}
           />
           <AutoComplete
-            onOpenChange={setBackDrop}
             options={["BaseMap 1", "BaseMap 2", "BaseMap 3", "BaseMap 4", "BaseMap 5"].map((el) => ({ label: el, value: el }))}
             onValueChange={(item) => {
               // if (item) {
@@ -469,30 +473,63 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
           </div>
         </div>
         <div className="px-4 py-3 border rounded-2xl mx-4 flex flex-col gap-3">
-          <Button
-            onClick={() => {
-              // exportToKml(data);
-            }}
-            className="w-full"
-            variant="secondary"
-          >
-            <div className="flex flex-row items-center gap-3">
-              <IoEarthSharp className="size-4 text-info" />
-              Export Map
-            </div>
-          </Button>
-          <Button
-            className="w-full"
-            onClick={() => {
-              // exportToExcel(data, additionalDataResult);
-              // setExcelWarning(true);
-            }}
-          >
-            <div className="flex flex-row items-center gap-3">
-              <IoCloudDownloadOutline className="size-4" />
-              Export Data
-            </div>
-          </Button>
+          {user?.isSubscribed ? (
+            <>
+              <Tooltip
+                contentClasses="w-full"
+                renderButton={
+                  <Button disabled className="w-full" variant="secondary">
+                    <div className="flex flex-row items-center gap-3">
+                      <IoEarthSharp className="size-4 text-info" />
+                      Export Map
+                    </div>
+                  </Button>
+                }
+                renderContent="You cannot export this data with the free plan"
+              />
+
+              <Tooltip
+                renderButton={
+                  <Button disabled className="w-full">
+                    <div className="flex flex-row items-center gap-3">
+                      <IoCloudDownloadOutline className="size-4" />
+                      Export Data
+                    </div>
+                  </Button>
+                }
+                renderContent="You cannot export this data with the free plan"
+              />
+            </>
+          ) : (
+            <>
+              <Button
+                className="w-full"
+                variant="secondary"
+                onClick={() => {
+                  // exportToKml(data);
+                }}
+              >
+                <div className="flex flex-row items-center gap-3">
+                  <IoEarthSharp className="size-4 text-info" />
+                  Export Map
+                </div>
+              </Button>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  exportToExcel(
+                    { ...data, assessments: { ...data.assessments, data: sortedAssessments.current } },
+                    isNonValidMedianHighlighted
+                  );
+                }}
+              >
+                <div className="flex flex-row items-center gap-3">
+                  <IoCloudDownloadOutline className="size-4" />
+                  Export Data
+                </div>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

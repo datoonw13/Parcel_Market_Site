@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { GeoJSONFeature, Map as MapBoX, Popup } from "mapbox-gl";
-import { createMarkerImage } from "@/lib/map";
+import { createMarkerImage } from "@/lib/volt";
 import { MapGeoJson } from "@/types/mapbox";
 
 const MAP_ITEMS_IDS = {

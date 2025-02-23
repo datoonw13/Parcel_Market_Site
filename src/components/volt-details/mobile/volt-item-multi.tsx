@@ -24,13 +24,6 @@ interface VoltItemMultiProps {
   sellingPropertyId: string;
 }
 
-// const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
-//   if (data.isBulked) {
-//     return !!data.data.properties.find((el) => el.id === sellingPropertyId);
-//   }
-//   return data.data.id === sellingPropertyId;
-// };
-
 const generateClasses = (data: {
   selected: boolean;
   hovered: boolean;

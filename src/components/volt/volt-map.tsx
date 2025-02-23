@@ -561,7 +561,7 @@ import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import { MapGeoJson } from "@/types/mapbox";
-import { mapDefaultMarkers } from "@/lib/map";
+import { mapDefaultMarkers } from "@/lib/volt";
 import { center } from "@turf/center";
 import * as turf from "@turf/turf";
 import { uuid } from "short-uuid";

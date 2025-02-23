@@ -19,13 +19,6 @@ interface VoltDetailsDesktopProgressLineProps {
   isSubscribed: boolean;
 }
 
-const hasSellingProperty = (sellingPropertyId: string, data: z.infer<typeof PropertyDataSchema>["assessments"]["data"][0]) => {
-  if (data.isBulked) {
-    return !!data.data.properties.find((el) => el.id === sellingPropertyId);
-  }
-  return data.data.id === sellingPropertyId;
-};
-
 const getPin = (
   hasSellingProperty: boolean,
   isMedianValid: boolean,
@@ -202,7 +195,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
                       <Image
                         alt=""
                         src={`/map/pins/${getPin(
-                          hasSellingProperty(data.id, property),
+                          property.isBulked ? property.data.hasSellingProperty : property.data.isSellingProperty,
                           property.data.isMedianValid,
                           isActive,
                           isNonValidMedianHighlighted,
