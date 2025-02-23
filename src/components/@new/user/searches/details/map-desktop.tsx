@@ -7,13 +7,11 @@ import { IDecodedAccessToken } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import useMap from "@/hooks/useMap";
 import { GeoJSONFeature, Popup, Map as MapBoX } from "mapbox-gl";
-import { swapPolygonCoordinates } from "@/lib/utils";
 import moment from "moment";
 import { moneyFormatter } from "@/helpers/common";
 import { AutoComplete } from "@/components/ui/autocomplete";
 import { MapGeoJson } from "@/types/mapbox";
 import { FeatureCollection } from "geojson";
-import { mapDefaultMarkers } from "@/lib/volt";
 import {
   IBulkPropertiesUsedForCalculation,
   IPropertyBaseInfo,
@@ -45,7 +43,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
 }) => {
   const popupRef = useRef<HTMLDivElement>(null);
 
-  const { ref, setRef, setGeoJson, addMarkerImages, showMarkers, highlightFeatures, showRegridTiles, openPopup, geoJson } = useMap();
+  const { ref, setRef, setGeoJson, showMarkers, highlightFeatures, showRegridTiles, openPopup, geoJson } = useMap();
 
   function clearMap() {
     if (!ref) return;
@@ -242,7 +240,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
               });
             }
           });
-        addMarkerImages(mapDefaultMarkers);
         setGeoJson(geoJsonInit);
         showMarkers({
           onMarkerMouseEnter: (parcelNumberNoFormatting) => {
@@ -367,7 +364,7 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         ref?.setZoom(8);
       }
     },
-    [data, additionalDataResult?.propertiesUsedForCalculation, addMarkerImages, setGeoJson, showMarkers, showRegridTiles, ref]
+    [data, additionalDataResult?.propertiesUsedForCalculation, setGeoJson, showMarkers, showRegridTiles, ref]
   );
 
   const handleMarkerInteractions = useCallback(() => {
@@ -409,41 +406,9 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
     mapInteraction.hoveredParcelNumber,
     mapInteraction.openPopperParcelNumber,
     openPopup,
+    ref,
     setMpaInteraction,
   ]);
-
-  // const openPopupDetails = useMemo(() => {
-  //   if (mapInteraction.openPopperParcelNumber === data.parcelNumberNoFormatting) {
-  //     const sales = [
-  //       ...data.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)),
-  //       ...(additionalDataResult?.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)) || []),
-  //     ]
-  //       .flat()
-  //       .filter((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting);
-
-  //     return {
-
-  //       type: "selling",
-  //       owner: data.owner,
-  //       parcelNumberNoFormatting: data.parcelNumberNoFormatting,
-  //       acreage: data.acreage,
-  //       sales,
-  //     };
-  //   }
-  //   const property = [...data.propertiesUsedForCalculation, ...(additionalDataResult?.propertiesUsedForCalculation || [])].find(
-  //     (el) => el.data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
-  //   );
-
-  //   return property ? { type: "other", ...property } : null;
-  // }, [
-  //   additionalDataResult?.propertiesUsedForCalculation,
-  //   data.acreage,
-  //   data.owner,
-  //   data.parcelNumberNoFormatting,
-  //   data.propertiesUsedForCalculation,
-  //   mapInteraction.openPopperParcelNumber,
-  // ]);
-
   const openPopupDetails = useMemo(() => {
     interface IBasePopupData {
       parcelNumberNoFormatting: string;
@@ -530,52 +495,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
   return (
     <>
       <div ref={popupRef} />
-      {/* <div style={{ display: "none" }}>
-        <div ref={popupRef}>
-          {openParcelData && (
-            <ul className="">
-              {openParcelData?.type === PropertyTypeEnum.primary ? (
-                ""
-              ) : (
-                <>
-                  <li className="text-xs text-grey-800 py-0.5">
-                    Parcel Number: <span className="text-black font-semibold">{openParcelData?.parcelNumberNoFormatting}</span>
-                  </li>
-                  <li className="text-xs text-grey-800 py-0.5">
-                    Acreage: <span className="text-black font-semibold">{openParcelData.acreage}</span>
-                  </li>
-                  <li className="text-xs text-grey-800 py-0.5">
-                    Last Sale Date:{" "}
-                    <span className="text-black font-semibold">{moment(openParcelData?.lastSaleDate).format("MM/DD/YYYY")}</span>
-                  </li>
-                  <li className="text-xs text-grey-800 py-0.5">
-                    Sold Price Per Acre:{" "}
-                    <span className="text-black font-semibold">{moneyFormatter.format(openParcelData.pricePerAcreage)}</span>
-                  </li>
-                </>
-              )}
-            </ul>
-          )}
-        </div>
-      </div>
-      <div className="w-full h-full relative">
-        <div className="absolute left-0 top-0 z-50">
-          <AutoComplete
-            selectedValue={null}
-            options={styles.map((el) => ({ label: el, value: el }))}
-            placeholder="State"
-            onValueChange={(value) => {
-              if (value) {
-                console.log(value, ref);
-
-                ref?.setStyle(value);
-              }
-              // setValue("state", value || "", { shouldValidate: true });
-              // setValue("county", "", { shouldValidate: true });
-            }}
-            // disabled={disableSearch}
-          />
-        </div> */}
       <div className="fixed right-0 top-0 z-50">
         <AutoComplete
           selectedValue={null}
@@ -654,7 +573,6 @@ const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
         </div>
       </div>
       <MapComponent ref={ref} setRef={setRef} />
-      {/* </div> */}
     </>
   );
 };
