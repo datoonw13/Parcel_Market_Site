@@ -133,8 +133,6 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
     onSortChange(assessments);
   }, [assessments, onSortChange]);
 
-  console.log(data);
-
   return (
     <div className="w-full mb-0.5">
       <table
