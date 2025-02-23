@@ -14,7 +14,7 @@ const VoltDetailsFiltersDropDown = ({
   onClose,
   icon,
   side,
-  className,
+  triggerClassName,
   buttonClassName,
   onOpen,
   onToggle,
@@ -27,7 +27,7 @@ const VoltDetailsFiltersDropDown = ({
   onOpen?: () => void;
   icon?: ReactNode;
   side?: any;
-  className?: string;
+  triggerClassName?: string;
   buttonClassName?: string;
   onToggle?: (open: boolean) => void;
 }) => {
@@ -48,7 +48,7 @@ const VoltDetailsFiltersDropDown = ({
           onToggle && onToggle(value);
         }}
       >
-        <PopoverTrigger className={cn("w-full", className)}>
+        <PopoverTrigger className={cn("w-full", triggerClassName)}>
           <div
             className={cn("border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4", buttonClassName)}
           >
@@ -71,6 +71,7 @@ const VoltDetailsFiltersDropDown = ({
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.1 }}
+              className="flex gap-2"
             >
               <div className="min-w-[--radix-popper-anchor-width] bg-white p-0 shadow-4 rounded-xl !w-full !max-w-max border border-grey-100">
                 {renderContent(() => setOpen(false))}

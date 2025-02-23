@@ -10,7 +10,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import VoltDetailsDesktop from "./desktop/details-desktop";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 import { breakPoints } from "../../../tailwind.config";
-import VoltDetailsMobile from "./filters/mobile";
+import VoltDetailsMobile from "./mobile/details-mobile";
 
 interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;

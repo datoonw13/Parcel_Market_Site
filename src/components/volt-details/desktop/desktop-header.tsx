@@ -48,7 +48,6 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   selectedLayer,
   setSelectedLayer,
 }) => {
-  const { detecting, targetReached: isSmallDevice } = useMediaQuery(1440);
   const [openWarning, setWarning] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -70,82 +69,81 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
       setWarning(true);
     }
   }, [data.assessments]);
+
   return (
-    !detecting && (
-      <div className="sticky top-0 bottom-8 w-full z-20">
-        <div className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] py-1.5 px-2 ", isSmallDevice ? " gap-8" : "gap-14")}>
-          <VoltDetailsFiltersWrapper
-            startFetchingTransition={startFetchingTransition}
-            filters={filters}
-            setFilters={setFilters}
-            propertyTypes={propertyTypes}
-            mapLayers={mapLayers}
-            selectedLayer={selectedLayer}
-            setSelectedLayer={setSelectedLayer}
-          />
-          <div className="relative z-20">
-            <div className="grid grid-cols-2 gap-2">
-              <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
+    <div className="sticky top-0 bottom-8 w-full z-20">
+      <div className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] py-1.5 px-2 gap-8 xl:gap-14")}>
+        <VoltDetailsFiltersWrapper
+          startFetchingTransition={startFetchingTransition}
+          filters={filters}
+          setFilters={setFilters}
+          propertyTypes={propertyTypes}
+          mapLayers={mapLayers}
+          selectedLayer={selectedLayer}
+          setSelectedLayer={setSelectedLayer}
+        />
+        <div className="relative z-20">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
+              <p className="text-sm font-medium">
+                Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
+              </p>
+              <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+            </div>
+            <div className="shadow-6 border border-grey-100 bg-white flex justify-between items-center rounded-xl h-full">
+              <div className="p-3 border-r flex items-center gap-2">
                 <p className="text-sm font-medium">
-                  Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
+                  VOLT:
+                  <span className={cn(!isSubscribed && "blur-[2px]")}>{data.voltPrice.formattedString}</span>
                 </p>
-                <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+                <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
               </div>
-              <div className="shadow-6 border border-grey-100 bg-white flex justify-between items-center rounded-xl h-full">
-                <div className="p-3 border-r flex items-center gap-2">
-                  <p className="text-sm font-medium">
-                    VOLT:
-                    <span className={cn(!isSubscribed && "blur-[2px]")}>{data.voltPrice.formattedString}</span>
-                  </p>
-                  <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
-                </div>
-                <div className="p-3 flex">
-                  <Switch
-                    checked={isNonValidMedianHighlighted}
-                    onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
-                    className="[&:has([data-state=checked])]:bg-warning"
-                  />
-                </div>
+              <div className="p-3 flex">
+                <Switch
+                  checked={isNonValidMedianHighlighted}
+                  onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
+                  className="[&:has([data-state=checked])]:bg-warning"
+                />
               </div>
             </div>
-            {!isSubscribed && (
-              <Link
-                className="bg-white shadow-5 w-full text-center block absolute rounded-lg p-3 translate-y-2 font-medium underline text-primary-main"
-                href={routes.user.subscription.fullUrl}
-              >
-                Subscribe to see prices
-              </Link>
-            )}
           </div>
-        </div>
-
-        <AnimatePresence>
-          {openWarning && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: "linear" }}
+          {!isSubscribed && (
+            <Link
+              className="bg-white shadow-5 w-full text-center block absolute rounded-lg p-3 translate-y-2 font-medium underline text-primary-main"
+              href={routes.user.subscription.fullUrl}
             >
-              <div className="bg-white w-fit mx-2 fle items-center px-6 py-8 rounded-2xl shadow-4 flex gap-4 mt-4">
-                <div className="size-16 bg-error-100 flex items-center justify-center rounded-full">
-                  <BiSearch className="size-10 text-[#F44D61]" />
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="space-y-1">
-                    <h1 className="font-semibold">No result found</h1>
-                    <h1 className="text-grey-800 text-sm max-w-96">
-                      We couldn’t find any property under selected filters. You can extend the filters and try again.
-                    </h1>
-                  </div>
-                  <IoMdClose onClick={() => setWarning(false)} className="size-5 cursor-pointer" />
-                </div>
-              </div>
-            </motion.div>
+              Subscribe to see prices
+            </Link>
           )}
-        </AnimatePresence>
+        </div>
       </div>
-    )
+
+      <AnimatePresence>
+        {openWarning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "linear" }}
+          >
+            <div className="bg-white w-fit mx-2 fle items-center px-6 py-8 rounded-2xl shadow-4 flex gap-4 mt-4">
+              <div className="size-16 bg-error-100 flex items-center justify-center rounded-full">
+                <BiSearch className="size-10 text-[#F44D61]" />
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="space-y-1">
+                  <h1 className="font-semibold">No result found</h1>
+                  <h1 className="text-grey-800 text-sm max-w-96">
+                    We couldn’t find any property under selected filters. You can extend the filters and try again.
+                  </h1>
+                </div>
+                <IoMdClose onClick={() => setWarning(false)} className="size-5 cursor-pointer" />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

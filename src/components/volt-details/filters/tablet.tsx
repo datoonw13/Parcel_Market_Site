@@ -9,6 +9,7 @@ import { MdArrowForwardIos } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { PopoverClose } from "@radix-ui/react-popover";
 import VoltDetailsFiltersDropDown from "./dropdown";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
@@ -49,7 +50,7 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
       </AnimatePresence>
       <VoltDetailsFiltersDropDown
         buttonClassName="shadow-6"
-        className="z-20 relative"
+        triggerClassName="z-20 relative max-w-sm"
         value={`${selectedFilters} Selected`}
         label="Filter"
         onToggle={setBackDrop}
@@ -58,7 +59,7 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
           setPropertyFilter(false);
         }}
         icon={<IoFilter />}
-        renderContent={(close) => (
+        renderContent={() => (
           <div className="flex flex-col justify-between h-full">
             <div className="bg-white py-5 space-y-5 rounded-t-2xl">
               <div className="px-5">
@@ -110,25 +111,27 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
               </div>
             </div>
             <div className="p-4 grid grid-cols-[1fr_1.5fr] gap-4">
-              <Button
-                variant="secondary"
-                className="w-full"
-                onClick={() => {
-                  close();
-                  resetFilters();
-                }}
-              >
-                Clear
-              </Button>
-              <Button
-                className="w-full"
-                onClick={() => {
-                  close();
-                  onSubmit();
-                }}
-              >
-                Done
-              </Button>
+              <PopoverClose>
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => {
+                    resetFilters();
+                  }}
+                >
+                  Clear
+                </Button>
+              </PopoverClose>
+              <PopoverClose>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    onSubmit();
+                  }}
+                >
+                  Done
+                </Button>
+              </PopoverClose>
             </div>
           </div>
         )}

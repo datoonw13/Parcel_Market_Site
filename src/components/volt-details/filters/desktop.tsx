@@ -6,6 +6,7 @@ import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validat
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { AnimatePresence, motion } from "framer-motion";
+import { PopoverClose } from "@radix-ui/react-popover";
 import VoltDetailsFiltersDropDown from "./dropdown";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
@@ -55,7 +56,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
           onClose={() => {
             setLocalFilters((prev) => ({ ...prev, radius: filters.radius }));
           }}
-          renderContent={(close) => (
+          renderContent={() => (
             <>
               <div className="bg-grey-30 p-4 rounded-t-xl border-b border-b-grey-100">
                 <VoltDetailsRadiusFilters
@@ -64,15 +65,16 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 />
               </div>
               <div className="px-4 py-3">
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    close();
-                    setFilters((prev) => ({ ...prev, radius: localFilters.radius }));
-                  }}
-                >
-                  Done
-                </Button>
+                <PopoverClose className="w-full">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setFilters((prev) => ({ ...prev, radius: localFilters.radius }));
+                    }}
+                  >
+                    Done
+                  </Button>
+                </PopoverClose>
               </div>
             </>
           )}
@@ -85,9 +87,8 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
           onClose={() => {
             setLocalFilters((prev) => ({ ...prev, soldWithin: filters.soldWithin }));
           }}
-          renderContent={(close) => (
+          renderContent={() => (
             <>
-              {" "}
               <div className="bg-grey-30 p-4 rounded-t-xl border-b border-b-grey-100">
                 <VoltDetailsSoldWithinFilters
                   value={localFilters.soldWithin}
@@ -95,15 +96,16 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 />
               </div>
               <div className="px-4 py-3">
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    close();
-                    setFilters((prev) => ({ ...prev, soldWithin: localFilters.soldWithin }));
-                  }}
-                >
-                  Done
-                </Button>
+                <PopoverClose className="w-full">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setFilters((prev) => ({ ...prev, soldWithin: localFilters.soldWithin }));
+                    }}
+                  >
+                    Done
+                  </Button>
+                </PopoverClose>
               </div>
             </>
           )}
@@ -116,7 +118,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
           onClose={() => {
             setLocalFilters((prev) => ({ ...prev, acreageMin: filters.acreageMin, acreageMax: filters.acreageMax }));
           }}
-          renderContent={(close) => (
+          renderContent={() => (
             <>
               <div className="bg-grey-30 p-4 rounded-t-xl border-b border-b-grey-100">
                 <VoltDetailsAcreageFilters
@@ -139,15 +141,16 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 />
               </div>
               <div className="px-4 py-3">
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    close();
-                    setFilters((prev) => ({ ...prev, acreageMin: localFilters.acreageMin, acreageMax: localFilters.acreageMax }));
-                  }}
-                >
-                  Done
-                </Button>
+                <PopoverClose className="w-full">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setFilters((prev) => ({ ...prev, acreageMin: localFilters.acreageMin, acreageMax: localFilters.acreageMax }));
+                    }}
+                  >
+                    Done
+                  </Button>
+                </PopoverClose>
               </div>
             </>
           )}
@@ -173,25 +176,27 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                 />
               </div>
               <div className="px-4 py-3 flex justify-end gap-4">
-                <Button
-                  className="w-full max-w-[150px]"
-                  variant="secondary"
-                  onClick={() => {
-                    close();
-                    setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
-                  }}
-                >
-                  Close
-                </Button>
-                <Button
-                  className="w-full max-w-[150px]"
-                  onClick={() => {
-                    close();
-                    setFilters((prev) => ({ ...prev, propertyTypes: localFilters.propertyTypes }));
-                  }}
-                >
-                  Done
-                </Button>
+                <PopoverClose className="w-full max-w-[150px]">
+                  <Button
+                    className="w-full max-w-[150px]"
+                    variant="secondary"
+                    onClick={() => {
+                      setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
+                    }}
+                  >
+                    Close
+                  </Button>
+                </PopoverClose>
+                <PopoverClose className="w-full max-w-[150px]">
+                  <Button
+                    className="w-full max-w-[150px]"
+                    onClick={() => {
+                      setFilters((prev) => ({ ...prev, propertyTypes: localFilters.propertyTypes }));
+                    }}
+                  >
+                    Done
+                  </Button>
+                </PopoverClose>
               </div>
             </>
           )}

@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { SetStateAction } from "jotai";
 import VoltDetailsDesktopFilters from "./desktop";
-import VoltMobileFilters from "../mobile/volt-mobile-filters";
+import VoltMobileFilters from "./mobile";
 import VoltDetailsTabletFilters from "./tablet";
 
 interface VoltDetailsFiltersWrapperProps {
@@ -36,7 +36,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   const pathname = usePathname();
   const params = useSearchParams();
   const { detecting: detectingSm, targetReached: isSm } = useMediaQuery(1024);
-  const { detecting: detectingMd, targetReached: isMd } = useMediaQuery(1440);
+  const { detecting: detectingMd, targetReached: isMd } = useMediaQuery(1500);
   const partialFiltersSchema = voltDetailsFiltersValidations.partial();
   const validateFilters = partialFiltersSchema.safeParse(Object.fromEntries(new URLSearchParams(params.toString()))).data;
 
