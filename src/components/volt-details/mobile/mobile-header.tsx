@@ -5,7 +5,6 @@ import { z } from "zod";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { cn } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
-import { moneyFormatter } from "@/helpers/common";
 import { Tooltip } from "../../ui/tooltip";
 import { Switch } from "../../ui/switch";
 
@@ -22,24 +21,19 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
   setNonValidMedianHighlighted,
   isSubscribed,
 }) => (
-  <div className="grid grid-cols-[minmax(0,_max-content)_1fr] gap-2 py-3 px-2.5 border-y">
+  <div className="grid grid-cols-[1fr_1.2fr] gap-2 py-3 px-2.5 border-y">
     <div className="border rounded-xl py-2 px-1.5 h-9 bg-white text-xs font-medium flex items-center justify-between gap-1.5">
       <div>
-        Avg:{" "}
-        <span className={cn(!isSubscribed && "blur-[2px]")}>
-          {/* {data.nonVoltPrice.formattedString} */}
-          {moneyFormatter.format(1000000)}
-        </span>
+        Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
       </div>
       <Tooltip renderButton={<IoInformationCircleOutline className="size-4 text-grey-600" />} renderContent="Some text." />
     </div>
     <div className="border rounded-xl py-2 px-1.5 h-9 bg-white text-xs font-medium flex items-center justify-between gap-0.5">
-      <div className="flex items-center gap-1 justify-between border-r pr-0.5 mr-0.5">
+      <div className="flex items-center gap-1 justify-between border-r pr-1 mr-1">
         <div className="flex items-center gap-1">
           VOLT:
           <span className={cn(!isSubscribed && "blur-[2px]")}>
-            {/* {data.assessments.calculations.avgPriceOfAssessments.all.formattedString} */}
-            {moneyFormatter.format(1000000)}
+            {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
           </span>
         </div>
         <Tooltip renderButton={<IoInformationCircleOutline className="size-4 text-grey-600" />} renderContent="Some text." />
