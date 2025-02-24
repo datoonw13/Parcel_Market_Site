@@ -473,7 +473,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
           </div>
         </div>
         <div className="px-4 py-3 border rounded-2xl mx-4 flex flex-col gap-3">
-          {user?.isSubscribed ? (
+          {!user?.isSubscribed ? (
             <>
               <Tooltip
                 contentClasses="w-full"

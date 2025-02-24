@@ -125,7 +125,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
           isSubscribed={isSubscribed}
         />
         <div className="flex gap-3 border-t pb-6 pt-4 fixed bottom-0 bg-white z-50 w-full px-3">
-          {user?.isSubscribed ? (
+          {!user?.isSubscribed ? (
             <>
               <Tooltip
                 buttonClassName="w-full"
