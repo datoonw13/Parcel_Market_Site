@@ -18,6 +18,7 @@ import { Button } from "../../ui/button";
 import VoltDetailsDrawer from "./drawer";
 import VoltDetailsMobileHeader from "./mobile-header";
 import VoltDetailsMap from "../map/map";
+import VoltDetailsFiltersWrapper from "../filters/wrapper";
 
 interface VoltDetailsMobileProps {
   startFetchingTransition: TransitionStartFunction;
@@ -82,16 +83,9 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
       <div className="h-full flex flex-col">
         <VoltDetailsMobileHeader
           data={data}
-          filters={filters}
           isNonValidMedianHighlighted={isNonValidMedianHighlighted}
           isSubscribed={isSubscribed}
-          propertyTypes={propertyTypes}
-          setFilters={setFilters}
-          startFetchingTransition={startFetchingTransition}
           setNonValidMedianHighlighted={setNonValidMedianHighlighted}
-          mapLayers={mapLayers}
-          setSelectedLayer={setSelectedLayer}
-          selectedLayer={selectedLayer}
         />
         {!isSubscribed && (
           <Link
@@ -103,7 +97,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
         )}
         <div className="h-full" id="map">
           {drawerInitialHeight && (
-            <div className="map-wrapper" style={{ height: `calc(100% - ${drawerInitialHeight}px)` }}>
+            <div className="map-wrapper relative" style={{ height: `calc(103% - ${drawerInitialHeight}px)` }}>
               <VoltDetailsMap
                 propertiesInteraction={propertiesInteraction}
                 onMouseLeave={() => {}}
@@ -111,6 +105,15 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
                 data={data}
                 isNonValidMedianHighlighted={isNonValidMedianHighlighted}
                 selectedLayer={selectedLayer}
+              />
+              <VoltDetailsFiltersWrapper
+                filters={filters}
+                mapLayers={mapLayers}
+                propertyTypes={propertyTypes}
+                selectedLayer={selectedLayer}
+                setFilters={setFilters}
+                setSelectedLayer={setSelectedLayer}
+                startFetchingTransition={startFetchingTransition}
               />
             </div>
           )}

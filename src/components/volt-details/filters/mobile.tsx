@@ -11,6 +11,7 @@ import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validat
 import { cn } from "@/lib/utils";
 import { MdArrowForwardIos } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
+import { IoFilterOutline } from "react-icons/io5";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
 import VoltDetailsAcreageFilters from "./acreage";
@@ -22,7 +23,6 @@ interface VoltMobileFiltersProps {
   filters: IFilters;
   setFilters: Dispatch<SetStateAction<IFilters>>;
   onSubmit: () => void;
-  onFilterToggle?: (value: boolean) => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   mapLayers: {
     label: string;
@@ -36,7 +36,6 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
   filters,
   setFilters,
   onSubmit,
-  onFilterToggle,
   propertyTypes,
   mapLayers,
   selectedLayer,
@@ -51,8 +50,9 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
   return (
     <Drawer onOpenChange={setOpen} open={open}>
       <DrawerTrigger asChild>
-        <div className="border rounded-xl size-9 bg-white flex items-center justify-center">
-          <CiFilter className="size-6" />
+        <div className="border rounded-3xl py-1.5 px-4 shadow-5 bg-white flex items-center justify-center absolute z-10 right-2 bottom-12 text-sm font-medium gap-2">
+          <IoFilterOutline className="size-5" />
+          Filter
         </div>
       </DrawerTrigger>
       <DrawerContent
