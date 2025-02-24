@@ -407,9 +407,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                 <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
                   Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>
                 </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Search Date: <span className="text-sm font-medium text-black">{moment(data.dateCreated).format("MM-DD-YYYY")}</span>
-                </li>
               </ul>
             )}
           />
