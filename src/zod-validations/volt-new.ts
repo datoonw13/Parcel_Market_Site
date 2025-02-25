@@ -155,7 +155,7 @@ export const PropertyDataSchema = z
       soldWithin: z.coerce.number(),
       acreageMin: z.coerce.number(),
       acreageMax: z.coerce.number(),
-      propertyTypes: z.string().nullable(),
+      propertyTypes: z.coerce.string().nullable(),
     }),
   })
   .transform(({ acrage, subscribed, price, parcelNumber, assessments, ...input }) => {
