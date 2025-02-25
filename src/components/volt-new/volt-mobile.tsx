@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import routes from "@/helpers/routes";
 import { IoChevronBack } from "react-icons/io5";
+import SignInForm from "@/app/auth/sign-in/sign-in";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
@@ -29,6 +30,7 @@ import VoltSearchOnMap from "./search-on-map";
 import { Popover, PopoverAnchor } from "../ui/popover";
 import HeaderMenu from "../landing/header/menu";
 import VoltDrawer from "./drawer";
+import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -143,11 +145,12 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
               propertiesInteraction={propertiesInteraction}
               setPropertiesInteraction={setPropertiesInteraction}
               setDrawerInitialHeight={setDrawerInitialHeight}
+              user={user}
             />
           </div>
         )}
         <div className={cn("absolute bottom-0 w-full invisible h-[calc(100%-56px)]", showMap && "visible")}>
-          <VoltSearchOnMap mapRef={searchMapRef} setMapRef={setSearchMapRef} />
+          <VoltSearchOnMap user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />
         </div>
       </div>
     </>

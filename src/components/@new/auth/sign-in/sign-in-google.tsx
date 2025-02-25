@@ -10,7 +10,7 @@ import { decode, JwtPayload } from "jsonwebtoken";
 import { IDecodedAccessToken } from "@/types/auth";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
-const SignInGoogle = () => {
+const SignInGoogle = ({ onSuccess }: { onSuccess?: () => void }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams as any);
@@ -25,6 +25,10 @@ const SignInGoogle = () => {
           `${routes.auth.signUp.fullUrl}?access_token=${data.access_token}&firstName=${googleCredentials.given_name}&lastName=${googleCredentials.family_name}&email=${googleCredentials.email}`
         );
       } else {
+        if (onSuccess) {
+          onSuccess();
+          return;
+        }
         if (params.get("redirect_uri") && params.get("redirect_uri") === routes.volt.fullUrl) {
           const redirectUri = params.get("from");
           const newLocation = `${redirectUri}?resume=true`;

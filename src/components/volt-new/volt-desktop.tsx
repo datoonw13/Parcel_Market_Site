@@ -1,7 +1,7 @@
 "use client";
 
 import { IDecodedAccessToken } from "@/types/auth";
-import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState, useTransition } from "react";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,12 +18,16 @@ import { Map as MapBoX } from "mapbox-gl";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
+import SignInForm from "@/app/auth/sign-in/sign-in";
+import { IoMdClose } from "react-icons/io";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltSearchResultsMap from "./search-results-map";
 import VoltSearchOnMap from "./search-on-map";
+import Modal from "../@new/shared/modals/Modal";
+import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -45,6 +49,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
   const router = useRouter();
   const [calculationPending, setCalculationPending] = useState(false);
   const { notify } = useNotification();
+  const lastFetchedId = useRef<number | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const onMarkerInteraction = useCallback(
     (data: Partial<IPropertiesInteraction>) => {
@@ -73,14 +79,19 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
       lon: property.lon.toString(),
     });
 
-    if (res.data) {
-      startGetDataTransition(() => {
-        router.push(`/volt/${res.data}`);
-      });
-    }
-
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
+    }
+
+    if (res.data) {
+      if (user) {
+        startGetDataTransition(() => {
+          router.push(`/volt/${res.data}`);
+        });
+      } else {
+        lastFetchedId.current = res.data;
+        setShowLoginModal(true);
+      }
     }
     setCalculationPending(false);
   };
@@ -107,6 +118,19 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
 
   return (
     <>
+      <Modal open={showLoginModal} onModalClose={() => setShowLoginModal(false)} className="">
+        <div className="bg-white max-w-2xl w-full rounded-2xl [&>div:last-child]:pt-4 ">
+          <div className="flex justify-end p-5">
+            <IoMdClose className="text-grey-800" />
+          </div>
+          <SignInForm
+            searchParams={{}}
+            onSuccess={() => {
+              router.push(`/volt/${lastFetchedId.current}`);
+            }}
+          />
+        </div>
+      </Modal>
       <table className="w-full h-full">
         <thead>
           <tr>
@@ -174,7 +198,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full relative">
-              {form.watch("searchType") === "map" && <VoltSearchOnMap mapRef={searchMapRef} setMapRef={setSearchMapRef} />}
+              {form.watch("searchType") === "map" && <VoltSearchOnMap user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />}
               {!data?.data && form.watch("searchType") !== "map" && <Map setRef={setRef} ref={ref} />}
               {data?.data && form.watch("searchType") !== "map" && (
                 <VoltSearchResultsMap

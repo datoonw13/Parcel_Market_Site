@@ -9,6 +9,7 @@ import { voltSearchSchema } from "@/zod-validations/volt";
 import { ResponseModel } from "@/types/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import { z } from "zod";
+import { IDecodedAccessToken } from "@/types/auth";
 import VoltDesktop from "./volt-desktop";
 import { breakPoints } from "../../../tailwind.config";
 import VoltMobile from "./volt-mobile";
@@ -16,9 +17,11 @@ import VoltMobile from "./volt-mobile";
 const VoltLayout = ({
   data,
   initialParams,
+  user,
 }: {
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
   initialParams: z.infer<typeof voltSearchSchema> | null;
+  user: IDecodedAccessToken | null;
 }) => {
   const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
@@ -61,7 +64,7 @@ const VoltLayout = ({
     <VoltMobile
       data={data}
       form={form}
-      user={null}
+      user={user}
       propertiesInteraction={propertiesInteraction}
       setPropertiesInteraction={setPropertiesInteraction}
     />
@@ -69,7 +72,7 @@ const VoltLayout = ({
     <VoltDesktop
       data={data}
       form={form}
-      user={null}
+      user={user}
       propertiesInteraction={propertiesInteraction}
       setPropertiesInteraction={setPropertiesInteraction}
     />

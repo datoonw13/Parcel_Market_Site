@@ -9,7 +9,10 @@ import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import SignInForm from "@/app/auth/sign-in/sign-in";
+import { IDecodedAccessToken } from "@/types/auth";
 import { Button } from "../ui/button";
+import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -31,7 +34,15 @@ type IProperty = {
   acreage: number;
 };
 
-const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapRef: Dispatch<SetStateAction<MapBoX | null>> }) => {
+const VoltSearchOnMap = ({
+  mapRef,
+  setMapRef,
+  user,
+}: {
+  mapRef: MapBoX | null;
+  setMapRef: Dispatch<SetStateAction<MapBoX | null>>;
+  user: IDecodedAccessToken | null;
+}) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const clickedFeatureProperty = useRef<string | number | null>(null);
   const hoveredFeatureProperty = useRef<string | number | null>(null);
@@ -41,6 +52,8 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
   const router = useRouter();
   const { notify } = useNotification();
   const [isTransitioning, startTransition] = useTransition();
+  const lastFetchedId = useRef<number | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -239,9 +252,14 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
     });
 
     if (res.data) {
-      startTransition(() => {
-        router.push(`/volt/${res.data}`);
-      });
+      if (user) {
+        startTransition(() => {
+          router.push(`/volt/${res.data}`);
+        });
+      } else {
+        lastFetchedId.current = res.data;
+        setShowLoginModal(true);
+      }
     }
 
     if (res?.errorMessage || !res?.data) {
@@ -259,6 +277,21 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
 
   return (
     <>
+      <ResponsiveModal
+        dialogContentClassName="max-w-2xl w-full"
+        mediaQuery="lg"
+        open={showLoginModal}
+        closeModal={() => setShowLoginModal(false)}
+      >
+        <div className="bg-white max-w-2xl w-full rounded-2xl [&>div:last-child]:pt-4 ">
+          <SignInForm
+            searchParams={{}}
+            onSuccess={() => {
+              router.push(`/volt/${lastFetchedId.current}`);
+            }}
+          />
+        </div>
+      </ResponsiveModal>
       <div style={{ display: "none" }}>
         <div ref={tooltipRef}>
           {openProperty && (

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState, useTransition } from "react";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Drawer } from "vaul";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
@@ -13,10 +13,13 @@ import { IMainPropertyBaseInfo } from "@/types/property";
 import { useRouter } from "next/navigation";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
+import SignInForm from "@/app/auth/sign-in/sign-in";
+import { IDecodedAccessToken } from "@/types/auth";
 import VoltItem from "./volt-item";
 import VoltItemMulti from "./volt-item-multi";
 import VoltSearchResult from "./volt-search-result";
 import { Button } from "../ui/button";
+import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
 interface VoltDrawerProps {
   data: IMainPropertyBaseInfo[];
@@ -25,6 +28,7 @@ interface VoltDrawerProps {
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   propertiesInteraction: IPropertiesInteraction;
   contentClassName?: string;
+  user: IDecodedAccessToken | null;
 }
 
 const VoltDrawer: FC<VoltDrawerProps> = ({
@@ -34,6 +38,7 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
   propertiesInteraction,
   setPropertiesInteraction,
   contentClassName,
+  user,
 }) => {
   const [snap, setSnap] = useState<number | string | null>(0);
   const [snapPoints, setSnapPoints] = useState<Array<string | number>>([0, 1]);
@@ -45,6 +50,8 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
   const [isGetDataPending, startGetDataTransition] = useTransition();
   const router = useRouter();
   const { notify } = useNotification();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const lastFetchedId = useRef<number | null>(null);
 
   const setDrawerContentDimension = useCallback(() => {
     const headerEl = document.getElementById("header");
@@ -92,9 +99,14 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
     });
 
     if (res.data) {
-      startGetDataTransition(() => {
-        router.push(`/volt/${res.data}`);
-      });
+      if (user) {
+        startGetDataTransition(() => {
+          router.push(`/volt/${res.data}`);
+        });
+      } else {
+        lastFetchedId.current = res.data;
+        setShowLoginModal(true);
+      }
     }
 
     if (res?.errorMessage || !res?.data) {
@@ -112,72 +124,84 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
   }, [setDrawerContentDimension]);
 
   return (
-    <Drawer.Root
-      snapPoints={snapPoints}
-      activeSnapPoint={snap}
-      setActiveSnapPoint={setSnap}
-      fadeFromIndex={1}
-      open
-      snapToSequentialPoint
-      onRelease={(e) => {
-        setDragging(false);
-      }}
-      onDrag={(e, x) => {
-        setDragging(true);
-        if (x >= 1) {
-          e.currentTarget.style.transform = "";
-        }
-      }}
-    >
-      <Drawer.Overlay
-        ref={setOverlayRef}
-        className={cn("absolute inset-0 bg-black/40 !hidden", isDragging || snap === 1 ? "block" : "hidden")}
-      />
-      <Drawer.Portal>
-        <Drawer.Content
-          onInteractOutside={() => {
-            setSnap(snapPoints[0]);
-          }}
-          ref={setDrawerContentRef}
-          className={cn(
-            "w-0 z-10 overflow-hidden fixed flex outline-none  flex-col border-b-none bottom-0 left-0 right-0 h-full mx-[-1px]",
-            (!container || !drawerContentRef || !firstSectionRef) && "hidden",
-            contentClassName
-          )}
-        >
-          <div
+    <>
+      <ResponsiveModal open={showLoginModal} closeModal={() => setShowLoginModal(false)}>
+        <div className="py-5">
+          <SignInForm
+            searchParams={{}}
+            onSuccess={() => {
+              router.push(`/volt/${lastFetchedId.current}`);
+            }}
+          />
+        </div>
+      </ResponsiveModal>
+      <Drawer.Root
+        snapPoints={snapPoints}
+        activeSnapPoint={snap}
+        setActiveSnapPoint={setSnap}
+        fadeFromIndex={1}
+        open
+        snapToSequentialPoint
+        onRelease={(e) => {
+          setDragging(false);
+        }}
+        onDrag={(e, x) => {
+          setDragging(true);
+          if (x >= 1) {
+            e.currentTarget.style.transform = "";
+          }
+        }}
+      >
+        <Drawer.Overlay
+          ref={setOverlayRef}
+          className={cn("absolute inset-0 bg-black/40 !hidden", isDragging || snap === 1 ? "block" : "hidden")}
+        />
+        <Drawer.Portal>
+          <Drawer.Content
+            onInteractOutside={() => {
+              setSnap(snapPoints[0]);
+            }}
+            ref={setDrawerContentRef}
             className={cn(
-              "flex flex-col mx-auto w-full h-full !overflow-hidden shadow-5 bg-white rounded-t-2xl border",
-              snap === 1 && "rounded-none"
+              "w-0 z-10 overflow-hidden fixed flex outline-none  flex-col border-b-none bottom-0 left-0 right-0 h-full mx-[-1px]",
+              (!container || !drawerContentRef || !firstSectionRef) && "hidden",
+              contentClassName
             )}
           >
-            <Drawer.Title className="w-44 h-2 rounded-xl mx-auto bg-white hidden" />
-            <div className={cn(snap === 1 ? "overflow-auto" : "overflow-hidden", "grid")} id="drawer-content">
-              <div className={cn("z-10 px-3 space-y-4", snap === 1 ? "overflow-auto" : "overflow-hidden")} id="drawer-wrapper">
-                <div ref={setFirstSectionRef} className={cn("z-10")}>
-                  <div className={cn("w-44 h-2 rounded-xl mx-auto bg-grey-100 my-3")} />
+            <div
+              className={cn(
+                "flex flex-col mx-auto w-full h-full !overflow-hidden shadow-5 bg-white rounded-t-2xl border",
+                snap === 1 && "rounded-none"
+              )}
+            >
+              <Drawer.Title className="w-44 h-2 rounded-xl mx-auto bg-white hidden" />
+              <div className={cn(snap === 1 ? "overflow-auto" : "overflow-hidden", "grid")} id="drawer-content">
+                <div className={cn("z-10 px-3 space-y-4", snap === 1 ? "overflow-auto" : "overflow-hidden")} id="drawer-wrapper">
+                  <div ref={setFirstSectionRef} className={cn("z-10")}>
+                    <div className={cn("w-44 h-2 rounded-xl mx-auto bg-grey-100 my-3")} />
+                  </div>
+                  <VoltSearchResult
+                    data={data}
+                    propertiesInteraction={propertiesInteraction}
+                    setPropertiesInteraction={setPropertiesInteraction}
+                  />
+                  <Button
+                    id="volt-get-value-button"
+                    loading={calculationPending || isGetDataPending}
+                    onClick={calculatePrice}
+                    disabled={!propertiesInteraction.popup}
+                    className="w-full"
+                  >
+                    Get Data
+                  </Button>
                 </div>
-                <VoltSearchResult
-                  data={data}
-                  propertiesInteraction={propertiesInteraction}
-                  setPropertiesInteraction={setPropertiesInteraction}
-                />
-                <Button
-                  id="volt-get-value-button"
-                  loading={calculationPending || isGetDataPending}
-                  onClick={calculatePrice}
-                  disabled={!propertiesInteraction.popup}
-                  className="w-full"
-                >
-                  Get Data
-                </Button>
               </div>
+              <div />
             </div>
-            <div />
-          </div>
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    </>
   );
 };
 export default VoltDrawer;
