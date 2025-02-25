@@ -38,6 +38,7 @@ interface VoltDesktopProps {
 const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction }) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [isPending, startTransition] = useTransition();
+  const [isGetDataPending, startGetDataTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
   const { ref, setRef } = useMap();
   const [searchMapRef, setSearchMapRef] = useState<MapBoX | null>(null);
@@ -73,7 +74,9 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
     });
 
     if (res.data) {
-      router.push(`/volt/${res.data}`);
+      startGetDataTransition(() => {
+        router.push(`/volt/${res.data}`);
+      });
     }
 
     if (res?.errorMessage || !res?.data) {
@@ -159,7 +162,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                   <div className="bg-white px-8 xl:px-11 pt-6 pb-8 xl:pb-11 border-t border-t-grey-100">
                     <Button
                       id="volt-get-value-button"
-                      loading={calculationPending}
+                      loading={calculationPending || isGetDataPending}
                       onClick={calculatePrice}
                       disabled={!propertiesInteraction.popup}
                       className="w-full"

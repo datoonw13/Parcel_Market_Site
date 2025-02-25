@@ -3,7 +3,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
@@ -40,6 +40,7 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
   const [calculationPending, setCalculationPending] = useState(false);
   const router = useRouter();
   const { notify } = useNotification();
+  const [isTransitioning, startTransition] = useTransition();
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -238,7 +239,9 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
     });
 
     if (res.data) {
-      router.push(`/volt/${res.data}`);
+      startTransition(() => {
+        router.push(`/volt/${res.data}`);
+      });
     }
 
     if (res?.errorMessage || !res?.data) {
@@ -270,7 +273,7 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
                 <li className="text-xs text-grey-800 py-0.5">
                   Acreage <span className="text-black font-semibold">{(openProperty.gisacre || openProperty.ll_gisacre)?.toFixed(2)}</span>
                 </li>
-                <Button className="w-full mt-6" loading={calculationPending} onClick={calculatePrice}>
+                <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
                   Get Data
                 </Button>
               </>
