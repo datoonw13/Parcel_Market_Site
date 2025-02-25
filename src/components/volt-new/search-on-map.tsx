@@ -131,7 +131,7 @@ const VoltSearchOnMap = ({ mapRef, setMapRef }: { mapRef: MapBoX | null; setMapR
       type: "fill",
       source: data.id,
       "source-layer": data.id,
-      minzoom: 12,
+      minzoom: 10,
       maxzoom: 21,
       layout: {
         visibility: "visible",
