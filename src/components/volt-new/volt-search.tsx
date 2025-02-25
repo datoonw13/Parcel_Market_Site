@@ -111,7 +111,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
         <div className="flex flex-col gap-6">
           <h1 className="font-semibold text-lg">Let’s locate your property using some basic information</h1>
           <div className="space-y-2.5">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-ma">
               <p className="text-grey-800 text-sm font-medium">Search By</p>
               <Tooltip
                 renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
@@ -121,12 +121,12 @@ const VoltSearch: FC<VoltSearchProps> = ({
             <RadioGroup
               onValueChange={(value) => onSearchTypeChange(value as VoltSearchModel["searchType"])}
               value={watch("searchType")}
-              className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] sm:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] lg:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] gap-x-4 gap-y-3"
+              className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] sm:grid-cols-[minmax(0,_max-content)_,minmax(0,_max-content)_,minmax(0,_max-content)_,minmax(0,_max-content)] lg:grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] gap-x-4 gap-y-3"
             >
               <RadioGroupItem
                 value="parcelNumber"
                 label={
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-ma">
                     <p>Parcel Number</p>
                     <Tooltip
                       renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
@@ -138,7 +138,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
               <RadioGroupItem
                 value="fullName"
                 label={
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-ma">
                     <p>Full Name</p>
                     <Tooltip
                       renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
@@ -150,7 +150,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
               <RadioGroupItem
                 value="entityName"
                 label={
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-ma">
                     <p>Legal Entity</p>
                     <Tooltip
                       renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
@@ -162,7 +162,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
               <RadioGroupItem
                 value="map"
                 label={
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-ma">
                     <p>Search by Map</p>
                     <Tooltip renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />} renderContent="Some info." />
                   </div>
@@ -226,15 +226,26 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 disabled={!watch("state") || disableSearch}
               />
             </div>
-            <Button
-              id="volt-search-btn"
-              onClick={onSubmit}
-              loading={isPending || (form.watch("searchType") === "map" && !searchMapRef)}
-              disabled={!isDirty || (form.watch("searchType") === "map" && !searchMapRef)}
-              className="mt-1"
-            >
-              {form.watch("searchType") === "map" ? "Search on Map" : "Search"}
-            </Button>
+            <div className="w-full lg:mt-1 fixed bottom-0 left-0 border-t p-4 bg-grey-30 sm:border-0 sm:p-0 sm:bg-transparent sm:static">
+              <Button
+                id="volt-search-btn"
+                onClick={onSubmit}
+                loading={isPending || (form.watch("searchType") === "map" && !searchMapRef)}
+                disabled={!isDirty || (form.watch("searchType") === "map" && !searchMapRef)}
+                className=" w-full"
+              >
+                {form.watch("searchType") === "map" ? "Search on Map" : "Search"}
+              </Button>
+            </div>
+          </div>
+          <div className="rounded-2xl space-y-3 md:hidden">
+            <div className="bg-grey-50 rounded-2xl" style={{ aspectRatio: "3/1.5" }}>
+              VIDEO
+            </div>
+            <h2 className="text-sm px-2">
+              To see the full capabilities of the Parcel Market visit the website with a{" "}
+              <span className="font-semibold">Desktop device</span> or <span className="font-semibold">watch the video</span>
+            </h2>
           </div>
           <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-3">
             <LuInfo className="size-6 text-gray-800" />

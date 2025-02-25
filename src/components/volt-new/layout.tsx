@@ -1,7 +1,7 @@
 "use client";
 
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +11,7 @@ import { IMainPropertyBaseInfo } from "@/types/property";
 import { z } from "zod";
 import VoltDesktop from "./volt-desktop";
 import { breakPoints } from "../../../tailwind.config";
+import VoltMobile from "./volt-mobile";
 
 const VoltLayout = ({
   data,
@@ -30,10 +31,22 @@ const VoltLayout = ({
     },
   });
 
+  useEffect(() => {
+    if (initialParams) {
+      form.reset(initialParams);
+    }
+  }, [form, initialParams]);
+
   if (detecting) return null;
 
   return isSm ? (
-    "mobile"
+    <VoltMobile
+      data={data}
+      form={form}
+      user={null}
+      propertiesInteraction={propertiesInteraction}
+      setPropertiesInteraction={setPropertiesInteraction}
+    />
   ) : (
     <VoltDesktop
       data={data}
