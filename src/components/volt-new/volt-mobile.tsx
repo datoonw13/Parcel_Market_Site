@@ -28,6 +28,7 @@ import VoltSearchResultsMap from "./search-results-map";
 import VoltSearchOnMap from "./search-on-map";
 import { Popover, PopoverAnchor } from "../ui/popover";
 import HeaderMenu from "../landing/header/menu";
+import VoltDrawer from "./drawer";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -40,57 +41,12 @@ interface VoltMobileProps {
 }
 
 const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction }) => {
-  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [isPending, startTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
-  const { ref, setRef } = useMap();
   const [searchMapRef, setSearchMapRef] = useState<MapBoX | null>(null);
-  const router = useRouter();
-  const [calculationPending, setCalculationPending] = useState(false);
-  const { notify } = useNotification();
-
-  const onMarkerInteraction = useCallback(
-    (data: Partial<IPropertiesInteraction>) => {
-      setPropertiesInteraction((prev) => ({ ...prev, ...data }));
-    },
-    [setPropertiesInteraction]
-  );
-
-  const calculatePrice = async () => {
-    const property = data?.data?.find((el) => el.id === propertiesInteraction.popup?.openId);
-    if (!property) {
-      return;
-    }
-    setCalculationPending(true);
-
-    const res = await calculateLandPriceAction2({
-      county: property.county.value,
-      state: property.state.value,
-      parcelNumber: property.parcelNumber,
-      owner: property.owner,
-      propertyType: property.propertyType,
-      coordinates: JSON.stringify(property.polygon),
-      locality: "",
-      acrage: property.acreage.toString(),
-      lat: property.lat.toString(),
-      lon: property.lon.toString(),
-    });
-
-    if (res.data) {
-      startTransition(() => {
-        router.push(`/volt/${res.data}`);
-      });
-    }
-
-    if (res?.errorMessage || !res?.data) {
-      notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    }
-    setCalculationPending(false);
-  };
-
-  const onMouseLeave = useCallback(() => {
-    setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
-  }, [setPropertiesInteraction]);
+  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
+  const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     if (data?.errorMessage) {
@@ -101,22 +57,35 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
   }, [data?.errorMessage, isPending]);
 
   useEffect(() => {
-    if (ref) {
-      ref.dragPan.disable();
-      ref.doubleClickZoom.disable();
-      ref.scrollZoom.disable();
+    if (data?.data && data?.data.length === 1) {
+      setPropertiesInteraction((prevData) => ({
+        ...prevData,
+        popup: {
+          clickId: data.data![0].parcelNumberNoFormatting,
+          isBulked: false,
+          openId: data.data![0].parcelNumberNoFormatting,
+        },
+      }));
+    } else {
+      setPropertiesInteraction((prevData) => ({
+        ...prevData,
+        popup: null,
+      }));
     }
-  }, [ref]);
+  }, [data, setPropertiesInteraction]);
 
   return (
     <>
-      <div className="h-full flex flex-col overflow-auto w-full">
+      <div className="grid grid-rows-[minmax(0,_max-content)_1fr] overflow-auto w-full h-dvh relative" ref={setContainerRef}>
         <Popover>
-          <PopoverAnchor>
+          <PopoverAnchor className="h-fit">
             <div className="h-14 flex items-center justify-between px-5 border-b" id="header">
-              <Link href={routes.volt.fullUrl}>
-                <IoChevronBack className="size-6" />
-              </Link>
+              {data?.data && (
+                <Link href={routes.volt.fullUrl}>
+                  <IoChevronBack className="size-6" />
+                </Link>
+              )}
+              {showMap && <IoChevronBack onClick={() => setShowMap(false)} className="size-6" />}
               <Link href={routes.volt.fullUrl}>
                 <Logo className="!h-6 w-full" />
               </Link>
@@ -132,25 +101,54 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
             </div>
           </PopoverAnchor>
         </Popover>
-        <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll" aria-hidden>
-          <div className={cn("h-full py-4 px-5")}>
-            <div className="overflow-auto flex flex-col gap-8">
-              <div className="space-y-6">
-                <VoltSearch
-                  isSearchLimitError={searchError === "limit"}
-                  isPending={isPending}
-                  form={form}
-                  startTransition={startTransition}
-                  searchError={searchError}
-                  setSearchError={setSearchError}
-                  searchMapRef={searchMapRef}
+        {(!data?.data || isPending) && !showMap && (
+          <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll" aria-hidden>
+            <div className={cn("h-full py-4 px-5")}>
+              <div className="overflow-auto flex flex-col gap-8">
+                <div className="space-y-6">
+                  <VoltSearch
+                    isSearchLimitError={searchError === "limit"}
+                    isPending={isPending}
+                    form={form}
+                    startTransition={startTransition}
+                    searchError={searchError}
+                    setSearchError={setSearchError}
+                    searchMapRef={searchMapRef}
+                    showMobileMap={() => {
+                      setShowMap(true);
+                    }}
+                  />
+                </div>
+              </div>
+
+              <VoltFooter className="flex-col mt-auto pb-20 sm:pb-0 pt-6 justify-center gap-6" />
+            </div>
+          </ScrollArea>
+        )}
+        {data?.data && !isPending && (
+          <div className="w-full">
+            {drawerInitialHeight && (
+              <div className="map-wrapper relative w-full" style={{ height: `calc(103% - ${drawerInitialHeight}px)` }}>
+                <VoltSearchResultsMap
+                  data={data.data}
+                  onMarkerInteraction={() => {}}
+                  onMouseLeave={() => {}}
+                  propertiesInteraction={propertiesInteraction}
                 />
               </div>
-            </div>
-
-            <VoltFooter className="flex-col mt-auto pb-20 sm:pb-0 pt-6 justify-center gap-6" />
+            )}
+            <VoltDrawer
+              container={containerRef}
+              data={data.data}
+              propertiesInteraction={propertiesInteraction}
+              setPropertiesInteraction={setPropertiesInteraction}
+              setDrawerInitialHeight={setDrawerInitialHeight}
+            />
           </div>
-        </ScrollArea>
+        )}
+        <div className={cn("absolute bottom-0 w-full invisible h-[calc(100%-56px)]", showMap && "visible")}>
+          <VoltSearchOnMap mapRef={searchMapRef} setMapRef={setSearchMapRef} />
+        </div>
       </div>
     </>
   );

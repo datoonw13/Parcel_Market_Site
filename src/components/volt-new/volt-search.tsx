@@ -28,6 +28,7 @@ interface VoltSearchProps {
   searchError: "limit" | "notFound" | null;
   setSearchError: Dispatch<SetStateAction<"limit" | "notFound" | null>>;
   searchMapRef: any | null;
+  showMobileMap?: () => void;
 }
 
 const VoltSearch: FC<VoltSearchProps> = ({
@@ -39,6 +40,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
   searchError,
   setSearchError,
   searchMapRef,
+  showMobileMap,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -79,6 +81,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
           searchMapRef.scrollZoom.enable();
           searchMapRef.flyTo({ center: [county.full.lng, county.full.lat], zoom: 11 });
         }
+        showMobileMap && showMobileMap();
       }
     } else {
       startTransition(async () => {
@@ -231,7 +234,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 id="volt-search-btn"
                 onClick={onSubmit}
                 loading={isPending || (form.watch("searchType") === "map" && !searchMapRef)}
-                disabled={!isDirty || (form.watch("searchType") === "map" && !searchMapRef)}
+                disabled={form.watch("searchType") === "map" && !searchMapRef}
                 className=" w-full"
               >
                 {form.watch("searchType") === "map" ? "Search on Map" : "Search"}

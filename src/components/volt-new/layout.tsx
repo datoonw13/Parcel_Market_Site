@@ -34,6 +34,24 @@ const VoltLayout = ({
   useEffect(() => {
     if (initialParams) {
       form.reset(initialParams);
+
+      // Manually mark all fields as dirty
+      Object.keys(initialParams).forEach((fieldName) => {
+        form.setValue(fieldName as keyof VoltSearchModel, initialParams[fieldName as keyof VoltSearchModel], { shouldDirty: true });
+      });
+
+      // Trigger validation if needed
+      form.trigger();
+    } else {
+      const values = form.getValues();
+      form.reset();
+      // Manually mark all fields as dirty
+      Object.keys(values).forEach((fieldName) => {
+        form.setValue(fieldName as keyof VoltSearchModel, values[fieldName as keyof VoltSearchModel], { shouldDirty: true });
+      });
+
+      // Trigger validation if needed
+      form.trigger();
     }
   }, [form, initialParams]);
 
