@@ -39,11 +39,14 @@ const AccountActivation = ({
         duration: 3500,
         id: "activation-toast",
       });
+      console.log(data, localStorage.getItem("voltLastFetchedId"));
+
       signInUserManuallyAction(data);
-      if (sessionStorage.getItem("voltLastFetchedId")) {
-        router.push(`${routes.volt.fullUrl}/${sessionStorage.getItem("voltLastFetchedId")}`);
+      if (localStorage.getItem("voltLastFetchedId")) {
+        router.push(`${routes.volt.fullUrl}/${localStorage.getItem("voltLastFetchedId")}`);
+        localStorage.removeItem("voltLastFetchedId");
       } else {
-        router.push(routes.auth.signIn.fullUrl);
+        router.push(routes.home.fullUrl);
       }
     }
   }, []);

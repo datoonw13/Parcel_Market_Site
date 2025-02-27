@@ -134,7 +134,7 @@ const VoltLayout = ({
               }}
               onEmailSignUpFinish={() => {
                 if (lastFetchedId.current) {
-                  sessionStorage.setItem("voltLastFetchedId", lastFetchedId.current.toString());
+                  localStorage.setItem("voltLastFetchedId", lastFetchedId.current.toString());
                 }
               }}
             />
