@@ -10,9 +10,9 @@ const PlanList = async () => {
   const userActiveSubscription = userSubscriptions.data?.find((el) => el.status === "active" || el.status === "trialing");
 
   const showPlan = (plan: SubscriptionType) => {
-    if (plan !== SubscriptionType.Trial) {
-      return true;
-    }
+    // if (plan !== SubscriptionType.Trial) {
+    //   return true;
+    // }
 
     if (!user?.planSelected) {
       return true;
@@ -24,7 +24,7 @@ const PlanList = async () => {
   };
 
   return (
-    <div className={clsx("grid gap-4 grid-cols-1 sm:grid-cols-2", !user?.planSelected && "lg:grid-cols-3")}>
+    <div className={clsx("grid gap-4 grid-cols-1 sm:grid-cols-2")}>
       {Object.keys(SubscriptionType).map(
         (type) =>
           showPlan(type as any) && <PlanItem key={type} type={type as SubscriptionType} userActiveSubscription={userActiveSubscription} />
