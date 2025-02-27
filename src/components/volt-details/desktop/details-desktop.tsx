@@ -15,6 +15,7 @@ import { IPropertiesInteraction } from "@/types/volt";
 import { Tooltip } from "@/components/ui/tooltip";
 import { IDecodedAccessToken } from "@/types/auth";
 import { exportToExcel, exportToKml } from "@/lib/volt";
+import routes from "@/helpers/routes";
 import { AutoComplete } from "../../ui/autocomplete";
 import { Button } from "../../ui/button";
 import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
@@ -439,9 +440,11 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
           <Button variant="secondary" className="w-full !text-primary-main [&>span]:flex [&>span]:items-center [&>span]:gap-2">
             Data Dashboard <RiExternalLinkFill className="!text-primary-main size-5" />
           </Button>
-          <Button variant="default" className="w-full ">
-            Subscribe to see price
-          </Button>
+          <Link href={routes.user.subscription.fullUrl}>
+            <Button variant="default" className="w-full ">
+              Subscribe to see price
+            </Button>
+          </Link>
           <Link className="underline text-primary-main font-medium text-center" href="/">
             Search another land
           </Link>

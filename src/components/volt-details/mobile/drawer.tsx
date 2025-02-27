@@ -9,6 +9,8 @@ import { IPropertiesInteraction } from "@/types/volt";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import moment from "moment";
+import routes from "@/helpers/routes";
+import Link from "next/link";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
 import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
@@ -130,7 +132,11 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                   />
                 </div>
                 <div className="bg-grey-50 border rounded-2xl border-grey-100 flex flex-col gap-3 p-4">
-                  {!isSubscribed && <Button className="rounded-2xl">Subscribe to see prices</Button>}
+                  {!isSubscribed && (
+                    <Link href={routes.user.subscription.fullUrl}>
+                      <Button className="rounded-2xl">Subscribe to see prices</Button>
+                    </Link>
+                  )}
                   <Button variant="secondary" className="!bg-white text-primary-main rounded-2xl">
                     <div className="flex items-center gap-3">
                       Data Dashboard <FaExternalLinkAlt />
