@@ -2,14 +2,24 @@
 
 import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
-import { resendSignUpVerificationCodeAction } from "@/server-actions/user/actions";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { resendSignUpVerificationCodeAction, signInUserManuallyAction } from "@/server-actions/user/actions";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const AccountActivation = ({ email, errorMessage }: { email: string; errorMessage?: string | null }) => {
+const AccountActivation = ({
+  email,
+  errorMessage,
+  data,
+}: {
+  email: string;
+  errorMessage?: string | null;
+  data: {
+    access_token: string;
+    refresh_token: string;
+  } | null;
+}) => {
   const router = useRouter();
-  const toastId = useRef(null);
   const [resendLoading, setResendLoading] = useState(false);
 
   const resendEmail = async () => {
@@ -24,14 +34,20 @@ const AccountActivation = ({ email, errorMessage }: { email: string; errorMessag
   };
 
   useEffect(() => {
-    if (!errorMessage) {
+    if (!errorMessage && data) {
       toast.success("Your email address has been successfully confirmed, now sign into your account", {
         duration: 3500,
         id: "activation-toast",
       });
-      router.push(routes.auth.signIn.fullUrl);
+      signInUserManuallyAction(data);
+      if (sessionStorage.getItem("voltLastFetchedId")) {
+        router.push(`${routes.volt.fullUrl}/${sessionStorage.getItem("voltLastFetchedId")}`);
+      } else {
+        router.push(routes.auth.signIn.fullUrl);
+      }
     }
   }, []);
+
   return (
     errorMessage && (
       <div className="sm:p-16">

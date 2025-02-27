@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import SignInForm from "@/app/auth/sign-in/sign-in";
 import { IoMdClose } from "react-icons/io";
+import SignUpForm from "@/app/auth/sign-up/sign-up";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
@@ -37,9 +38,10 @@ interface VoltDesktopProps {
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
   propertiesInteraction: IPropertiesInteraction;
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
+  setAuthModal: (id: number) => void;
 }
 
-const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction }) => {
+const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction, setAuthModal }) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [isPending, startTransition] = useTransition();
   const [isGetDataPending, startGetDataTransition] = useTransition();
@@ -49,8 +51,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
   const router = useRouter();
   const [calculationPending, setCalculationPending] = useState(false);
   const { notify } = useNotification();
-  const lastFetchedId = useRef<number | null>(null);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const onMarkerInteraction = useCallback(
     (data: Partial<IPropertiesInteraction>) => {
@@ -89,8 +89,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
           router.push(`/volt/${res.data}`);
         });
       } else {
-        lastFetchedId.current = res.data;
-        setShowLoginModal(true);
+        setAuthModal(res.data);
       }
     }
     setCalculationPending(false);
@@ -118,19 +117,6 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
 
   return (
     <>
-      <Modal open={showLoginModal} onModalClose={() => setShowLoginModal(false)} className="">
-        <div className="bg-white max-w-2xl w-full rounded-2xl [&>div:last-child]:pt-4 ">
-          <div className="flex justify-end p-5">
-            <IoMdClose className="text-grey-800" />
-          </div>
-          <SignInForm
-            searchParams={{}}
-            onSuccess={() => {
-              router.push(`/volt/${lastFetchedId.current}`);
-            }}
-          />
-        </div>
-      </Modal>
       <table className="w-full h-full">
         <thead>
           <tr>

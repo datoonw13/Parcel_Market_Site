@@ -10,7 +10,7 @@ import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IDecodedAccessToken, IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/actions";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import { subscribeAction } from "@/server-actions/common-actions";
 import { NumberInput, TextInput } from "@/components/ui/input";
@@ -25,9 +25,14 @@ interface SignUpProps {
   onBack: () => void;
   registrationReasons: IUserSignUp["registrationReasons"];
   onFinish: (errorMessage?: string, email?: string) => void;
+  onSignInClick?: () => void;
+  googleAuth: {
+    redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
+    onSuccessFinish: () => void;
+  };
 }
 
-const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
+const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSignInClick, googleAuth }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
@@ -41,6 +46,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
   const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
+  const pathname = usePathname();
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -72,6 +78,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       if (errorMessage) {
         notify({ title: errorMessage }, { variant: "error" });
       } else {
+        if (googleAuth.onSuccessFinish) {
+          googleAuth.onSuccessFinish();
+          return;
+        }
         if (params.get("from")) {
           const fromUrl = params.get("from");
           params.delete("from");
@@ -99,6 +109,16 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
     }
   });
 
+  const onGoogleAuthRedirectSignup = (data: { email: string; firstName: string; lastName: string; accessToken: string }) => {
+    if (googleAuth.redirectOnSignUp) {
+      googleAuth.redirectOnSignUp(data);
+    } else {
+      router.push(
+        `${routes.auth.signUp.fullUrl}?access_token=${data.accessToken}&firstName=${data.firstName}&lastName=${data.lastName}&email=${data.email}`
+      );
+    }
+  };
+
   useEffect(() => {
     if (isGoogleUser) {
       reset({ ...getValues(), email, firstName, lastName });
@@ -114,7 +134,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
       </div>
       <div className="w-full max-w-72 flex">
-        <GoogleAuthProvider />
+        <GoogleAuthProvider redirectOnSignUp={onGoogleAuthRedirectSignup} onSuccessFinish={() => {}} />
       </div>
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col gap-4">
@@ -279,9 +299,19 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish }) => {
       <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
         <p className="text-center font-medium text-sm">
           Already have an account?{" "}
-          <Link id="sign-up-signin-redirect-button" href={routes.auth.signIn.url}>
-            <span className="underline text-primary-main font-medium text-sm">Sign In</span>
-          </Link>
+          <span
+            id="sign-up-signin-redirect-button"
+            className="underline text-primary-main font-medium text-sm cursor-pointer"
+            onClick={() => {
+              if (onSignInClick) {
+                onSignInClick();
+              } else {
+                router.push(routes.auth.signIn.fullUrl);
+              }
+            }}
+          >
+            Sign In
+          </span>
         </p>
         <div className="flex gap-3 flex-col-reverse sm:flex-row w-full sm:w-fit items-center sm:items-end">
           <Button id="sign-up-back-input" className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={onBack}>

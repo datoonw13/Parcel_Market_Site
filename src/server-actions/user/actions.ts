@@ -95,6 +95,36 @@ export const signInUserAction = async (
   }
 };
 
+export const signInUserManuallyAction = async (
+  data: { access_token: string; refresh_token: string },
+  remember?: boolean
+): Promise<ResponseModel<null>> => {
+  try {
+    // set jwt tokens in cookie
+    const decodedToken = jwtDecode(data.refresh_token) as { exp: number };
+    const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+    cookies().set({
+      name: "jwt-refresh",
+      value: data.refresh_token,
+      httpOnly: true,
+      secure: true,
+      ...(remember && { maxAge: maxAgeInSeconds }),
+    });
+    cookies().set({
+      name: "jwt",
+      value: data.access_token,
+      httpOnly: true,
+      secure: true,
+    });
+    return { data: null, errorMessage: null };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).message,
+      data: null,
+    };
+  }
+};
+
 export const googleSignInUserAction = async (token: string): Promise<ResponseModel<ISignInResponse | null>> => {
   try {
     const data = await fetcher<ISignInResponse>("user/auth/google", {
@@ -262,14 +292,24 @@ export const getUserChatInfo = async (
   }
 };
 
-export const activateUserAccountAction = async (token?: string): Promise<ResponseModel<null>> => {
+export const activateUserAccountAction = async (
+  token?: string
+): Promise<
+  ResponseModel<{
+    access_token: string;
+    refresh_token: string;
+  } | null>
+> => {
   if (!token) {
     redirect(`/${routes.home.url}`);
   }
   try {
-    await fetcher(`user/activate/${token}`, { method: "POST" });
+    const req = await fetcher<{
+      access_token: string;
+      refresh_token: string;
+    }>(`user/activate/${token}`, { method: "POST" });
     return {
-      data: null,
+      data: req,
       errorMessage: null,
     };
   } catch (error) {

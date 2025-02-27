@@ -40,9 +40,10 @@ interface VoltMobileProps {
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
   propertiesInteraction: IPropertiesInteraction;
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
+  setAuthModal: (id: number) => void;
 }
 
-const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction }) => {
+const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction, setAuthModal }) => {
   const [isPending, startTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
   const [searchMapRef, setSearchMapRef] = useState<MapBoX | null>(null);
@@ -146,6 +147,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
               setPropertiesInteraction={setPropertiesInteraction}
               setDrawerInitialHeight={setDrawerInitialHeight}
               user={user}
+              setAuthModal={setAuthModal}
             />
           </div>
         )}

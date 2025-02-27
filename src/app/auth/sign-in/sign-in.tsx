@@ -1,13 +1,11 @@
 "use client";
 
-import { forwardRef, useRef, useState } from "react";
+import { FC, forwardRef, useRef, useState } from "react";
 import { EyeIcon1, EyeIcon2 } from "@/components/@new/icons/EyeIcons";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import routes from "@/helpers/routes";
-import useEnterClick from "@/hooks/useEnterClick";
-import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import toast from "react-hot-toast";
 import { signInUserAction } from "@/server-actions/user/actions";
@@ -19,7 +17,17 @@ import { decode } from "jsonwebtoken";
 import { IDecodedAccessToken } from "@/types/auth";
 import { JwtPayload } from "jwt-decode";
 
-const SignInForm = ({ searchParams, onSuccess }: { searchParams: { [key: string]: string }; onSuccess?: () => void }) => {
+interface SignInFormProps {
+  searchParams: { [key: string]: string };
+  onSignUpClick?: () => void;
+  onSuccessFinish?: () => void;
+  googleAuth: {
+    onSuccessFinish?: () => void;
+    redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
+  };
+}
+
+const SignInForm: FC<SignInFormProps> = ({ searchParams, googleAuth, onSignUpClick, onSuccessFinish }) => {
   const router = useRouter();
   const ref = useRef<HTMLButtonElement | null>(null);
   const params = new URLSearchParams(searchParams);
@@ -32,8 +40,8 @@ const SignInForm = ({ searchParams, onSuccess }: { searchParams: { [key: string]
     if (request.errorMessage) {
       toast.error(request.errorMessage);
     } else {
-      if (onSuccess) {
-        onSuccess();
+      if (onSuccessFinish) {
+        onSuccessFinish();
         return;
       }
       if (params.get("redirect_uri") && params.get("redirect_uri") === routes.volt.fullUrl) {
@@ -47,6 +55,27 @@ const SignInForm = ({ searchParams, onSuccess }: { searchParams: { [key: string]
         decodeAccessToken && typeof decodeAccessToken === "object" && (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
 
       router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+    }
+  };
+
+  const onGoogleAuthSuccessFinish = (accessToken: string) => {
+    if (googleAuth.onSuccessFinish) {
+      googleAuth.onSuccessFinish();
+    } else {
+      const decodeAccessToken = decode(accessToken);
+      const planSelected =
+        decodeAccessToken && typeof decodeAccessToken === "object" && (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
+      router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+    }
+  };
+
+  const onGoogleAuthRedirectSignup = (data: { email: string; firstName: string; lastName: string; accessToken: string }) => {
+    if (googleAuth.redirectOnSignUp) {
+      googleAuth.redirectOnSignUp(data);
+    } else {
+      router.push(
+        `${routes.auth.signUp.fullUrl}?access_token=${data.accessToken}&firstName=${data.firstName}&lastName=${data.lastName}&email=${data.email}`
+      );
     }
   };
 
@@ -75,12 +104,22 @@ const SignInForm = ({ searchParams, onSuccess }: { searchParams: { [key: string]
         <SubmitButton ref={ref} />
       </form>
       <Divider label="OR" className="my-3" />
-      <GoogleAuthProvider onSuccess={onSuccess} />
+      <GoogleAuthProvider onSuccessFinish={onGoogleAuthSuccessFinish} redirectOnSignUp={onGoogleAuthRedirectSignup} />
       <p className="font-medium text-sm mt-auto">
         Don&apos;t have an account?{" "}
-        <Link id="sign-in-no-account-button" href={`/${routes.auth.url}/${routes.auth.signUp.url}`}>
-          <span className="font-medium text-sm text-primary-main underline">Sign Up</span>
-        </Link>
+        <span
+          id="sign-in-no-account-button"
+          onClick={(e) => {
+            if (onSignUpClick) {
+              e.preventDefault();
+              onSignUpClick();
+            } else {
+              router.push(`/${routes.auth.url}/${routes.auth.signUp.url}`);
+            }
+          }}
+        >
+          <span className="font-medium text-sm text-primary-main underline cursor-pointer">Sign Up</span>
+        </span>
       </p>
     </div>
   );

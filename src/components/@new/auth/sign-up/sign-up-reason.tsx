@@ -2,14 +2,21 @@
 
 import React, { useState } from "react";
 import { IUserSignUp } from "@/types/auth";
-import Link from "next/link";
 import routes from "@/helpers/routes";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { UnwrapArray } from "@/types/common";
+import { useRouter } from "next/navigation";
 import Button from "../../shared/forms/Button";
 
-const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReasons"]) => void }) => {
+const SignUpReason = ({
+  onNext,
+  onSignInClick,
+}: {
+  onNext: (type: IUserSignUp["registrationReasons"]) => void;
+  onSignInClick?: () => void;
+}) => {
+  const router = useRouter();
   const [value, setValue] = useState<IUserSignUp["registrationReasons"]>([]);
 
   const handleChange = (item: UnwrapArray<IUserSignUp["registrationReasons"]>) => {
@@ -29,7 +36,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
       <div className="flex flex-col max-w-fit w-full gap-3">
         <Checkbox
           className={cn(
-            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            "border p-4 lg:p-6 font-medium rounded-2xl hover:shadow-4 text-sm lg:text-base gap-2",
             value.includes("LandOwner") && "bg-primary-main-100 border-primary-main-400"
           )}
           id="LandOwner"
@@ -39,7 +46,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         />
         <Checkbox
           className={cn(
-            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            "border p-4 lg:p-6 font-medium rounded-2xl hover:shadow-4 text-sm lg:text-base gap-2",
             value.includes("CertifiedAppraiser") && "bg-primary-main-100 border-primary-main-400"
           )}
           id="CertifiedAppraiser"
@@ -49,7 +56,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         />
         <Checkbox
           className={cn(
-            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            "border p-4 lg:p-6 font-medium rounded-2xl hover:shadow-4 text-sm lg:text-base gap-2",
             value.includes("LicensedAgent") && "bg-primary-main-100 border-primary-main-400"
           )}
           id="LicensedAgent"
@@ -59,7 +66,7 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
         />
         <Checkbox
           className={cn(
-            "border p-6 font-medium rounded-2xl hover:shadow-4",
+            "border p-4 lg:p-6 font-medium rounded-2xl hover:shadow-4 text-sm lg:text-base gap-2",
             value.includes("LandInvestor") && "bg-primary-main-100 border-primary-main-400"
           )}
           id="LandInvestor"
@@ -71,10 +78,20 @@ const SignUpReason = ({ onNext }: { onNext: (type: IUserSignUp["registrationReas
           Create Account
         </Button>
         <p className="mt-3 text-center font-medium text-sm">
-          Already have an account?{" "}
-          <Link href={routes.auth.signIn.url}>
-            <span className="underline text-primary-main font-medium text-sm">Sign In</span>
-          </Link>
+          Already have an account? {/* <Link href={routes.auth.signIn.url}> */}
+          <span
+            onClick={() => {
+              if (onSignInClick) {
+                onSignInClick();
+              } else {
+                router.push(routes.auth.signIn.fullUrl);
+              }
+            }}
+            className="underline text-primary-main font-medium text-sm cursor-pointer"
+          >
+            Sign In
+          </span>
+          {/* </Link> */}
         </p>
       </div>
     </>

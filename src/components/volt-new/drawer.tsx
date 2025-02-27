@@ -3,20 +3,14 @@
 import { cn } from "@/lib/utils";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Drawer } from "vaul";
-import { PropertyDataSchema } from "@/zod-validations/volt-new";
-import { z } from "zod";
 import { IPropertiesInteraction } from "@/types/volt";
-import { FaExternalLinkAlt } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
-import moment from "moment";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import { useRouter } from "next/navigation";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import SignInForm from "@/app/auth/sign-in/sign-in";
 import { IDecodedAccessToken } from "@/types/auth";
-import VoltItem from "./volt-item";
-import VoltItemMulti from "./volt-item-multi";
+import SignUpForm from "@/app/auth/sign-up/sign-up";
 import VoltSearchResult from "./volt-search-result";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
@@ -29,6 +23,7 @@ interface VoltDrawerProps {
   propertiesInteraction: IPropertiesInteraction;
   contentClassName?: string;
   user: IDecodedAccessToken | null;
+  setAuthModal: (id: number) => void;
 }
 
 const VoltDrawer: FC<VoltDrawerProps> = ({
@@ -39,6 +34,7 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
   setPropertiesInteraction,
   contentClassName,
   user,
+  setAuthModal,
 }) => {
   const [snap, setSnap] = useState<number | string | null>(0);
   const [snapPoints, setSnapPoints] = useState<Array<string | number>>([0, 1]);
@@ -50,8 +46,6 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
   const [isGetDataPending, startGetDataTransition] = useTransition();
   const router = useRouter();
   const { notify } = useNotification();
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const lastFetchedId = useRef<number | null>(null);
 
   const setDrawerContentDimension = useCallback(() => {
     const headerEl = document.getElementById("header");
@@ -104,8 +98,7 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
           router.push(`/volt/${res.data}`);
         });
       } else {
-        lastFetchedId.current = res.data;
-        setShowLoginModal(true);
+        setAuthModal(res.data);
       }
     }
 
@@ -125,16 +118,6 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
 
   return (
     <>
-      <ResponsiveModal open={showLoginModal} closeModal={() => setShowLoginModal(false)}>
-        <div className="py-5">
-          <SignInForm
-            searchParams={{}}
-            onSuccess={() => {
-              router.push(`/volt/${lastFetchedId.current}`);
-            }}
-          />
-        </div>
-      </ResponsiveModal>
       <Drawer.Root
         snapPoints={snapPoints}
         activeSnapPoint={snap}
