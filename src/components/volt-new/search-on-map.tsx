@@ -8,9 +8,10 @@ import { Map as MapBoX, Popup } from "mapbox-gl";
 import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SignInForm from "@/app/auth/sign-in/sign-in";
 import { IDecodedAccessToken } from "@/types/auth";
+import SignUpForm from "@/app/auth/sign-up/sign-up";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
@@ -53,7 +54,9 @@ const VoltSearchOnMap = ({
   const { notify } = useNotification();
   const [isTransitioning, startTransition] = useTransition();
   const lastFetchedId = useRef<number | null>(null);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [authModal, setAuthModal] = useState<"sign-in" | "sign-up" | null>(null);
+  const params = useSearchParams();
+  const pathname = usePathname();
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -258,7 +261,7 @@ const VoltSearchOnMap = ({
         });
       } else {
         lastFetchedId.current = res.data;
-        setShowLoginModal(true);
+        setAuthModal("sign-in");
       }
     }
 
@@ -278,18 +281,62 @@ const VoltSearchOnMap = ({
   return (
     <>
       <ResponsiveModal
-        dialogContentClassName="max-w-2xl w-full"
-        mediaQuery="lg"
-        open={showLoginModal}
-        closeModal={() => setShowLoginModal(false)}
+        dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:pt-2"
+        drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
+        open={!!authModal}
+        closeModal={() => setAuthModal(null)}
       >
-        <div className="bg-white max-w-2xl w-full rounded-2xl [&>div:last-child]:pt-4 ">
-          {/* <SignInForm
-            searchParams={{}}
-            onSuccess={() => {
-              router.push(`/volt/${lastFetchedId.current}`);
-            }}
-          /> */}
+        <div className="py-5">
+          {authModal === "sign-in" ? (
+            <SignInForm
+              searchParams={{}}
+              onSignUpClick={() => {
+                setAuthModal("sign-up");
+              }}
+              onSuccessFinish={() => {
+                router.push(`/volt/${lastFetchedId.current}`);
+              }}
+              googleAuth={{
+                onSuccessFinish: () => {
+                  router.push(`/volt/${lastFetchedId.current}`);
+                },
+                redirectOnSignUp: (data) => {
+                  const newParams = new URLSearchParams(params.toString());
+                  newParams.set("access_token", data.accessToken);
+                  newParams.set("firstName", data.firstName);
+                  newParams.set("lastName", data.lastName);
+                  newParams.set("email", data.email);
+                  router.push(`${pathname}?${newParams.toString()}`);
+                  setAuthModal("sign-up");
+                },
+              }}
+            />
+          ) : (
+            <SignUpForm
+              onSignInClick={() => {
+                setAuthModal("sign-in");
+              }}
+              googleAuth={{
+                onSuccessFinish: () => {
+                  router.push(`/volt/${lastFetchedId.current}`);
+                },
+                redirectOnSignUp: (data) => {
+                  const newParams = new URLSearchParams(params.toString());
+                  newParams.set("access_token", data.accessToken);
+                  newParams.set("firstName", data.firstName);
+                  newParams.set("lastName", data.lastName);
+                  newParams.set("email", data.email);
+                  router.push(`${pathname}?${newParams.toString()}`);
+                  setAuthModal("sign-up");
+                },
+              }}
+              onEmailSignUpFinish={() => {
+                if (lastFetchedId.current) {
+                  localStorage.setItem("voltLastFetchedId", lastFetchedId.current.toString());
+                }
+              }}
+            />
+          )}
         </div>
       </ResponsiveModal>
       <div style={{ display: "none" }}>
