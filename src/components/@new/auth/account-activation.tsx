@@ -32,6 +32,7 @@ const AccountActivation = ({
     }
     setResendLoading(false);
   };
+  console.log(data, localStorage.getItem("voltLastFetchedId"));
 
   useEffect(() => {
     if (!errorMessage && data) {
@@ -39,7 +40,6 @@ const AccountActivation = ({
         duration: 3500,
         id: "activation-toast",
       });
-      console.log(data, localStorage.getItem("voltLastFetchedId"));
 
       signInUserManuallyAction(data);
       if (localStorage.getItem("voltLastFetchedId")) {
