@@ -32,8 +32,6 @@ const AccountActivation = ({
     }
     setResendLoading(false);
   };
-  console.log(data, localStorage.getItem("voltLastFetchedId"));
-
   useEffect(() => {
     if (!errorMessage && data) {
       toast.success("Your email address has been successfully confirmed, now sign into your account", {
