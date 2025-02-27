@@ -284,12 +284,12 @@ const VoltSearchOnMap = ({
         closeModal={() => setShowLoginModal(false)}
       >
         <div className="bg-white max-w-2xl w-full rounded-2xl [&>div:last-child]:pt-4 ">
-          <SignInForm
+          {/* <SignInForm
             searchParams={{}}
             onSuccess={() => {
               router.push(`/volt/${lastFetchedId.current}`);
             }}
-          />
+          /> */}
         </div>
       </ResponsiveModal>
       <div style={{ display: "none" }}>

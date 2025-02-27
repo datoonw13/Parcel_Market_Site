@@ -26,7 +26,7 @@ interface SignUpProps {
   registrationReasons: IUserSignUp["registrationReasons"];
   onFinish: (errorMessage?: string, email?: string) => void;
   onSignInClick?: () => void;
-  googleAuth: {
+  googleAuth?: {
     redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
     onSuccessFinish: () => void;
   };
@@ -78,8 +78,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
       if (errorMessage) {
         notify({ title: errorMessage }, { variant: "error" });
       } else {
-        if (googleAuth.onSuccessFinish) {
-          googleAuth.onSuccessFinish();
+        if (googleAuth?.onSuccessFinish) {
+          googleAuth?.onSuccessFinish();
           return;
         }
         if (params.get("from")) {
@@ -110,8 +110,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
   });
 
   const onGoogleAuthRedirectSignup = (data: { email: string; firstName: string; lastName: string; accessToken: string }) => {
-    if (googleAuth.redirectOnSignUp) {
-      googleAuth.redirectOnSignUp(data);
+    if (googleAuth?.redirectOnSignUp) {
+      googleAuth?.redirectOnSignUp(data);
     } else {
       router.push(
         `${routes.auth.signUp.fullUrl}?access_token=${data.accessToken}&firstName=${data.firstName}&lastName=${data.lastName}&email=${data.email}`

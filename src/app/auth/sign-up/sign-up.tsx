@@ -15,7 +15,7 @@ enum SignUpSteps {
 interface SignUpFormProps {
   onSignInClick?: () => void;
   // onSuccess: () => void;
-  googleAuth: {
+  googleAuth?: {
     redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
     onSuccessFinish: () => void;
   };

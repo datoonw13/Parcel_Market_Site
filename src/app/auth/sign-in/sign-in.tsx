@@ -21,7 +21,7 @@ interface SignInFormProps {
   searchParams: { [key: string]: string };
   onSignUpClick?: () => void;
   onSuccessFinish?: () => void;
-  googleAuth: {
+  googleAuth?: {
     onSuccessFinish?: () => void;
     redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
   };
@@ -59,8 +59,8 @@ const SignInForm: FC<SignInFormProps> = ({ searchParams, googleAuth, onSignUpCli
   };
 
   const onGoogleAuthSuccessFinish = (accessToken: string) => {
-    if (googleAuth.onSuccessFinish) {
-      googleAuth.onSuccessFinish();
+    if (googleAuth?.onSuccessFinish) {
+      googleAuth?.onSuccessFinish();
     } else {
       const decodeAccessToken = decode(accessToken);
       const planSelected =
@@ -70,8 +70,8 @@ const SignInForm: FC<SignInFormProps> = ({ searchParams, googleAuth, onSignUpCli
   };
 
   const onGoogleAuthRedirectSignup = (data: { email: string; firstName: string; lastName: string; accessToken: string }) => {
-    if (googleAuth.redirectOnSignUp) {
-      googleAuth.redirectOnSignUp(data);
+    if (googleAuth?.redirectOnSignUp) {
+      googleAuth?.redirectOnSignUp(data);
     } else {
       router.push(
         `${routes.auth.signUp.fullUrl}?access_token=${data.accessToken}&firstName=${data.firstName}&lastName=${data.lastName}&email=${data.email}`
