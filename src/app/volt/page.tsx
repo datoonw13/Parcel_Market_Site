@@ -7,7 +7,6 @@ const Volt = async ({ searchParams }: { searchParams: { [key: string]: string } 
   const validateParams = await voltSearchSchema.safeParseAsync(searchParams);
   const data = validateParams.success ? await getPropertiesAction(validateParams.data) : null;
   const user = await getUserAction();
-  console.log(JSON.stringify(data));
 
   return <VoltLayout user={user} data={data} initialParams={validateParams.data || null} />;
 };
