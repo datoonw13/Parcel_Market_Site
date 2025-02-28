@@ -69,14 +69,14 @@ const VoltLayout = ({
 
   useEffect(() => {
     if (!authModal) {
-      const newParams = new URLSearchParams(params.toString());
-      newParams.delete("access_token");
-      newParams.delete("firstName");
-      newParams.delete("lastName");
-      newParams.delete("email");
-      router.push(`${pathname}?${newParams.toString()}`);
+      const newParams = new URLSearchParams(initialParams || "");
+      // newParams.delete("access_token");
+      // newParams.delete("firstName");
+      // newParams.delete("lastName");
+      // newParams.delete("email");
+      // router.push(`${pathname}?${newParams.toString()}`);
     }
-  }, [authModal, params, pathname, router]);
+  }, [authModal, initialParams, params, pathname, router]);
 
   if (detecting) return null;
 
