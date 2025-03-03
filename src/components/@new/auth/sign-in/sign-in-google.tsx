@@ -8,25 +8,30 @@ import { thirdPartyAuthAction } from "@/server-actions/auth/auth";
 import { UserSource } from "@/types/common";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
-const SignInGoogle = () => {
+const SignInGoogle = ({
+  onSuccess,
+}: {
+  onSuccess: (data: {
+    authAccessToken: string;
+    authFirstName: string;
+    authLastName: string;
+    authEmail: string;
+    userSource: UserSource;
+  }) => void;
+}) => {
   const [loading, setLoading] = useState(false);
-  const { thirdPartyAuth } = useAuth();
 
   const login = useGoogleLogin({
     onSuccess: async (data) => {
-      const { data: requestData, errorMessage } = await thirdPartyAuthAction(data.access_token, UserSource.Google);
-      if (errorMessage) {
-        const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
-        const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
-        thirdPartyAuth.error({
-          authAccessToken: data.access_token,
-          authFirstName: googleCredentials.given_name,
-          authLastName: googleCredentials.family_name,
-          authEmail: googleCredentials.email,
-        });
-        return;
-      }
-      thirdPartyAuth.success(requestData?.decodedAccessToken.planSelected);
+      const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
+      const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
+      onSuccess({
+        authAccessToken: data.access_token,
+        authFirstName: googleCredentials.given_name,
+        authLastName: googleCredentials.family_name,
+        authEmail: googleCredentials.email,
+        userSource: UserSource.Google,
+      });
     },
     onError: () => {
       setLoading(false);

@@ -11,10 +11,13 @@ import Button from "../../shared/forms/Button";
 
 const SignUpReason = ({
   onNext,
-  onSignInClick,
+  modal,
 }: {
   onNext: (type: IUserSignUp["registrationReasons"]) => void;
-  onSignInClick?: () => void;
+  modal?: {
+    showSignIn: () => void;
+    onRegister: () => void;
+  };
 }) => {
   const router = useRouter();
   const [value, setValue] = useState<IUserSignUp["registrationReasons"]>([]);
@@ -81,8 +84,8 @@ const SignUpReason = ({
           Already have an account? {/* <Link href={routes.auth.signIn.url}> */}
           <span
             onClick={() => {
-              if (onSignInClick) {
-                onSignInClick();
+              if (modal?.showSignIn) {
+                modal?.showSignIn();
               } else {
                 router.push(routes.auth.signIn.fullUrl);
               }

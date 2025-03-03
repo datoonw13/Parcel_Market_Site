@@ -1,6 +1,5 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -18,22 +17,18 @@ import { Map as MapBoX } from "mapbox-gl";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
-import SignInForm from "@/app/auth/sign-in/sign-in";
-import { IoMdClose } from "react-icons/io";
-import SignUpForm from "@/app/auth/sign-up/sign-up";
+import { IUserBaseInfo } from "@/types/auth";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltSearchResultsMap from "./search-results-map";
 import VoltSearchOnMap from "./search-on-map";
-import Modal from "../@new/shared/modals/Modal";
-import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
 interface VoltDesktopProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   form: UseFormReturn<VoltSearchModel>;
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
   propertiesInteraction: IPropertiesInteraction;
@@ -79,19 +74,19 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
       lon: property.lon.toString(),
     });
 
-    // if (res?.errorMessage || !res?.data) {
-    //   notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    // }
+    if (res?.errorMessage || !res?.data) {
+      notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
+    }
 
-    // if (res.data) {
-    //   if (user) {
-    //     startGetDataTransition(() => {
-    //       router.push(`/volt/${res.data}`);
-    //     });
-    //   } else {
-    //     setAuthModal(res.data);
-    //   }
-    // }
+    if (res.data) {
+      if (user) {
+        startGetDataTransition(() => {
+          router.push(`/volt/${res.data}`);
+        });
+      } else {
+        setAuthModal(res.data);
+      }
+    }
     setCalculationPending(false);
   };
 

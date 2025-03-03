@@ -36,12 +36,12 @@ const useAuth = () => {
         router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     },
-    error: (data: { authAccessToken: string; authFirstName: string; authLastName: string; authEmail: string }) => {
+    error: (data: { authAccessToken: string; authFirstName: string; authLastName: string; authEmail: string; userSource: UserSource }) => {
       const newSearchParams = new URLSearchParams(params.toString());
       Object.keys(data).forEach((key) => {
         newSearchParams.set(key, data[key as keyof typeof data]);
       });
-      newSearchParams.set("authSource", UserSource.Google);
+      newSearchParams.set("userSource", data.userSource);
       router.push(`${pathname === routes.auth.signIn.fullUrl ? routes.auth.signUp.fullUrl : pathname}?${newSearchParams.toString()}`);
     },
   };
@@ -55,7 +55,7 @@ const useAuth = () => {
 
   const removeThirdPartyKeys = () => {
     const newSearchParams = new URLSearchParams(params.toString());
-    ["authAccessToken", "authFirstName", "authLastName", "authEmail", "authSource"].forEach((key) => {
+    ["authAccessToken", "authFirstName", "authLastName", "authEmail", "userSource"].forEach((key) => {
       const formattedKey = `auth${key[0].toLocaleUpperCase()}${key.slice(1)}`;
       newSearchParams.delete(formattedKey);
     });

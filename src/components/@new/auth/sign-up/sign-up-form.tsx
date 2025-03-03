@@ -15,6 +15,7 @@ import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
 import { UserSource } from "@/types/common";
 import { signUpUserAction } from "@/server-actions/auth/auth";
 import useAuth from "@/hooks/useAuth";
+import useNotification from "@/hooks/useNotification";
 import Button from "../../shared/forms/Button";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 import GoogleAuthProvider from "../sign-in/google-auth-provider";
@@ -22,20 +23,26 @@ import GoogleAuthProvider from "../sign-in/google-auth-provider";
 interface SignUpProps {
   onBack: () => void;
   registrationReasons: IUserSignUp["registrationReasons"];
-  onFinish: (errorMessage?: string, email?: string) => void;
-  onSignInClick?: () => void;
+  modal?: {
+    showSignIn: () => void;
+    onRegister: () => void;
+    onAuth: () => void;
+  };
+  setErrorMessage: (val: string | null) => void;
+  setEmail: (value: string) => void;
+  setFinishStep: () => void;
 }
 
-const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSignInClick }) => {
+const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorMessage, setEmail, setFinishStep }) => {
   const router = useRouter();
+  const { notify } = useNotification();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const [openTermsDialog, setTermsDialog] = useState(false);
   const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
-  const isThirdPartyAuth = params.get("authSource") === UserSource.Facebook || params.get("authSource") === UserSource.Google;
-  const { thirdPartyAuth } = useAuth();
+  const isThirdPartyAuth = params.get("userSource") === UserSource.Facebook || params.get("userSource") === UserSource.Google;
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -62,17 +69,22 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
   const onSubmit = handleSubmit(async (data) => {
     const request = await signUpUserAction({ ...data, userSource: params.get("userSource") || UserSource.System });
     if (request?.errorMessage) {
-      onFinish(request.errorMessage);
+      setErrorMessage(request?.errorMessage);
     }
     if (request.data) {
-      thirdPartyAuth.success(request.data?.decodedAccessToken?.planSelected);
+      if (modal?.onAuth) {
+        modal?.onAuth();
+        return;
+      }
+      router.replace(request?.data?.decodedAccessToken?.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
     } else {
-      onFinish(undefined, watch("email"));
+      setEmail(getValues("email"));
+      setFinishStep();
     }
   });
 
   useEffect(() => {
-    if (params.get("authSource") && params.get("authSource") !== UserSource.System) {
+    if (params.get("userSource") && params.get("userSource") !== UserSource.System) {
       const email = params.get("authEmail");
       const firstName = params.get("authFirstName");
       const lastName = params.get("authLastName");
@@ -95,9 +107,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
         <h1 className="font-semibold text-2xl md:text-5xl text-center">Sign Up</h1>
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
       </div>
-      <div className="w-full max-w-72 flex">
-        <GoogleAuthProvider />
-      </div>
+      {/* <div className="w-full max-w-72 flex"><GoogleAuthProvider onSuccess={} /></div> */}
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col gap-4">
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -265,8 +275,8 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
             id="sign-up-signin-redirect-button"
             className="underline text-primary-main font-medium text-sm cursor-pointer"
             onClick={() => {
-              if (onSignInClick) {
-                onSignInClick();
+              if (modal?.showSignIn) {
+                modal?.showSignIn();
               } else {
                 router.push(routes.auth.signIn.fullUrl);
               }

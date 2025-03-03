@@ -9,10 +9,11 @@ import { voltSearchSchema } from "@/zod-validations/volt";
 import { ResponseModel } from "@/types/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import { z } from "zod";
-import { IDecodedAccessToken } from "@/types/auth";
 import SignInForm from "@/app/auth/sign-in/sign-in";
 import SignUpForm from "@/app/auth/sign-up/sign-up";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import routes from "@/helpers/routes";
+import { IUserBaseInfo } from "@/types/auth";
 import VoltDesktop from "./volt-desktop";
 import { breakPoints } from "../../../tailwind.config";
 import VoltMobile from "./volt-mobile";
@@ -25,7 +26,7 @@ const VoltLayout = ({
 }: {
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
   initialParams: z.infer<typeof voltSearchSchema> | null;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }) => {
   const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
@@ -91,51 +92,21 @@ const VoltLayout = ({
         <div className="py-5">
           {authModal === "sign-in" ? (
             <SignInForm
-              searchParams={{}}
-              onSignUpClick={() => {
-                setAuthModal("sign-up");
-              }}
-              onSuccessFinish={() => {
-                router.push(`/volt/${lastFetchedId.current}`);
-              }}
-              googleAuth={{
-                onSuccessFinish: () => {
-                  router.push(`/volt/${lastFetchedId.current}`);
-                },
-                redirectOnSignUp: (data) => {
-                  const newParams = new URLSearchParams(params.toString());
-                  newParams.set("access_token", data.accessToken);
-                  newParams.set("firstName", data.firstName);
-                  newParams.set("lastName", data.lastName);
-                  newParams.set("email", data.email);
-                  router.push(`${pathname}?${newParams.toString()}`);
-                  setAuthModal("sign-up");
-                },
+              modal={{
+                showSignUp: () => setAuthModal("sign-up"),
+                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
               }}
             />
           ) : (
             <SignUpForm
-              onSignInClick={() => {
-                setAuthModal("sign-in");
-              }}
-              googleAuth={{
-                onSuccessFinish: () => {
-                  router.push(`/volt/${lastFetchedId.current}`);
+              modal={{
+                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
+                onRegister: () => {
+                  sessionStorage.setItem("voltLastFetchedId", lastFetchedId.current?.toString() || "");
                 },
-                redirectOnSignUp: (data) => {
-                  const newParams = new URLSearchParams(params.toString());
-                  newParams.set("access_token", data.accessToken);
-                  newParams.set("firstName", data.firstName);
-                  newParams.set("lastName", data.lastName);
-                  newParams.set("email", data.email);
-                  router.push(`${pathname}?${newParams.toString()}`);
-                  setAuthModal("sign-up");
+                showSignIn: () => {
+                  setAuthModal("sign-in");
                 },
-              }}
-              onEmailSignUpFinish={() => {
-                if (lastFetchedId.current) {
-                  localStorage.setItem("voltLastFetchedId", lastFetchedId.current.toString());
-                }
               }}
             />
           )}

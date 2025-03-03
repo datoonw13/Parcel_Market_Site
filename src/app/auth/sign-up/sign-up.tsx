@@ -13,11 +13,14 @@ enum SignUpSteps {
 }
 
 interface SignUpFormProps {
-  onSignInClick?: () => void;
-  onEmailSignUpFinish?: () => void;
+  modal?: {
+    showSignIn: () => void;
+    onRegister: () => void;
+    onAuth: () => void;
+  };
 }
 
-const SignUpForm: FC<SignUpFormProps> = ({ onSignInClick, onEmailSignUpFinish }) => {
+const SignUpForm: FC<SignUpFormProps> = ({ modal }) => {
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -38,17 +41,10 @@ const SignUpForm: FC<SignUpFormProps> = ({ onSignInClick, onEmailSignUpFinish })
             setRegistrationReasons(null);
             setStep(SignUpSteps.SELECT_REASONS);
           }}
-          onSignInClick={onSignInClick}
-          onFinish={(errorMessage, email) => {
-            setStep(SignUpSteps.FINISH);
-            if (errorMessage) {
-              setErrorMessage(errorMessage);
-            }
-            if (email) {
-              setEmail(email);
-              onEmailSignUpFinish && onEmailSignUpFinish();
-            }
-          }}
+          modal={modal}
+          setErrorMessage={setErrorMessage}
+          setEmail={setEmail}
+          setFinishStep={() => setStep(SignUpSteps.FINISH)}
         />
       )}
       {step === SignUpSteps.SELECT_REASONS && (
@@ -57,7 +53,7 @@ const SignUpForm: FC<SignUpFormProps> = ({ onSignInClick, onEmailSignUpFinish })
             setRegistrationReasons(value);
             setStep(SignUpSteps.USER_INFO);
           }}
-          onSignInClick={onSignInClick}
+          modal={modal}
         />
       )}
       {step === SignUpSteps.FINISH && (

@@ -6,7 +6,7 @@ import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import routes from "@/helpers/routes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import GoogleAuthProvider from "@/components/@new/auth/sign-in/google-auth-provider";
 import ForgotPasswordButton from "@/components/@new/user/profile/modals/forgot-password/forgot-password-button";
 import { TextInput } from "@/components/ui/input";
@@ -17,17 +17,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useAuth from "@/hooks/useAuth";
 import FacebookLogin from "@greatsumini/react-facebook-login";
 import SignInFacebook from "@/components/@new/auth/sign-in/sign-in-fb";
+import { UserSource } from "@/types/common";
+import { thirdPartyAuthAction } from "@/server-actions/auth/auth";
 
 interface SignInFormProps {
-  onSignUpClick?: () => void;
+  modal?: {
+    showSignUp: () => void;
+    onAuth: () => void;
+  };
 }
 
-const SignInForm: FC<SignInFormProps> = ({ onSignUpClick }) => {
+const SignInForm: FC<SignInFormProps> = ({ modal }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
-  const { defaultSignIn } = useAuth();
+  const { defaultSignIn, thirdPartyAuth } = useAuth();
   const {
     handleSubmit,
     formState: { isValid, isSubmitting },
@@ -37,6 +44,36 @@ const SignInForm: FC<SignInFormProps> = ({ onSignUpClick }) => {
   });
 
   const onSubmit = handleSubmit(async (data) => defaultSignIn(data, remember));
+
+  const onThirdPartyAuthSuccess = async (data: {
+    authAccessToken: string;
+    authFirstName: string;
+    authLastName: string;
+    authEmail: string;
+    userSource: UserSource;
+  }) => {
+    const { data: requestData, errorMessage } = await thirdPartyAuthAction(data.authAccessToken, data.userSource);
+    const params = new URLSearchParams(searchParams.toString());
+    Object.keys(data).forEach((key) => {
+      params.set(key, data[key as keyof typeof data]);
+    });
+    if (errorMessage) {
+      if (modal?.showSignUp) {
+        modal.showSignUp();
+        router.push(`${pathname}?${params.toString()}`);
+        return;
+      }
+      router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
+      return;
+    }
+
+    // on Success auth
+    if (modal?.onAuth) {
+      modal?.onAuth();
+      return;
+    }
+    router.replace(requestData?.decodedAccessToken.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+  };
 
   return (
     <div className="flex flex-col gap-8 justify-center items-center max-w-[296px] w-full m-auto sm:py-10 md:py-12 lg:py-14 xl:py-16 h-full">
@@ -63,16 +100,16 @@ const SignInForm: FC<SignInFormProps> = ({ onSignUpClick }) => {
         </Button>
       </div>
       <Divider label="OR" className="my-3" />
-      <GoogleAuthProvider />
-      <SignInFacebook />
+      <GoogleAuthProvider onSuccess={onThirdPartyAuthSuccess} />
+      <SignInFacebook onSuccess={onThirdPartyAuthSuccess} />
       <p className="font-medium text-sm mt-auto">
         Don&apos;t have an account?{" "}
         <span
           id="sign-in-no-account-button"
           onClick={(e) => {
-            if (onSignUpClick) {
+            if (modal?.showSignUp) {
               e.preventDefault();
-              onSignUpClick();
+              modal.showSignUp();
             } else {
               router.push(`/${routes.auth.url}/${routes.auth.signUp.url}`);
             }
