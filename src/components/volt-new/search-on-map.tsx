@@ -10,8 +10,9 @@ import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SignInForm from "@/app/auth/sign-in/sign-in";
-import { IDecodedAccessToken } from "@/types/auth";
 import SignUpForm from "@/app/auth/sign-up/sign-up";
+import routes from "@/helpers/routes";
+import { IUserBaseInfo } from "@/types/auth";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 
@@ -42,7 +43,7 @@ const VoltSearchOnMap = ({
 }: {
   mapRef: MapBoX | null;
   setMapRef: Dispatch<SetStateAction<MapBoX | null>>;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const clickedFeatureProperty = useRef<string | number | null>(null);
@@ -226,7 +227,7 @@ const VoltSearchOnMap = ({
           );
           setOpenProperty({
             ...(feature.properties as any),
-            coordinates: JSON.stringify(swapPolygonCoordinates(feature.geometry?.coordinates)),
+            coordinates: JSON.stringify(feature.geometry?.coordinates),
             acreage: Number(Number(feature.properties.gisacre || feature.properties.ll_gisacre).toFixed(2)),
           });
           openPopup(e.lngLat);
@@ -289,51 +290,21 @@ const VoltSearchOnMap = ({
         <div className="py-5">
           {authModal === "sign-in" ? (
             <SignInForm
-              searchParams={{}}
-              onSignUpClick={() => {
-                setAuthModal("sign-up");
-              }}
-              onSuccessFinish={() => {
-                router.push(`/volt/${lastFetchedId.current}`);
-              }}
-              googleAuth={{
-                onSuccessFinish: () => {
-                  router.push(`/volt/${lastFetchedId.current}`);
-                },
-                redirectOnSignUp: (data) => {
-                  const newParams = new URLSearchParams(params.toString());
-                  newParams.set("access_token", data.accessToken);
-                  newParams.set("firstName", data.firstName);
-                  newParams.set("lastName", data.lastName);
-                  newParams.set("email", data.email);
-                  router.push(`${pathname}?${newParams.toString()}`);
-                  setAuthModal("sign-up");
-                },
+              modal={{
+                showSignUp: () => setAuthModal("sign-up"),
+                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
               }}
             />
           ) : (
             <SignUpForm
-              onSignInClick={() => {
-                setAuthModal("sign-in");
-              }}
-              googleAuth={{
-                onSuccessFinish: () => {
-                  router.push(`/volt/${lastFetchedId.current}`);
+              modal={{
+                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
+                onRegister: () => {
+                  sessionStorage.setItem("voltLastFetchedId", lastFetchedId.current?.toString() || "");
                 },
-                redirectOnSignUp: (data) => {
-                  const newParams = new URLSearchParams(params.toString());
-                  newParams.set("access_token", data.accessToken);
-                  newParams.set("firstName", data.firstName);
-                  newParams.set("lastName", data.lastName);
-                  newParams.set("email", data.email);
-                  router.push(`${pathname}?${newParams.toString()}`);
-                  setAuthModal("sign-up");
+                showSignIn: () => {
+                  setAuthModal("sign-in");
                 },
-              }}
-              onEmailSignUpFinish={() => {
-                if (lastFetchedId.current) {
-                  localStorage.setItem("voltLastFetchedId", lastFetchedId.current.toString());
-                }
               }}
             />
           )}

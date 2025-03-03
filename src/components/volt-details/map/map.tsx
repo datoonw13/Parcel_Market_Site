@@ -15,11 +15,14 @@ const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr:
 const mapData = {
   sources: {
     markersSource: "markersSource",
+    mainLandPolygonSource: "mainLandPolygonSource",
   },
   layers: {
     markersLayer: "markersLayer",
     markerClusterCountLayer: "markers-cluster-count-layer",
     markerClusterLayer: "markers-cluster-layer",
+    parcelsPolygon: "parcelsPolygon",
+    parcelsPolygonAssist: "parcelsPolygonAssist",
   },
 };
 
@@ -173,6 +176,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           }
         });
 
+        // Markers
         ref.addSource(mapData.sources.markersSource, {
           type: "geojson",
           data: geoJsonInit,
@@ -203,6 +207,47 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
               ref.setCenter([property.properties.lng, property.properties.lat]);
             }
           });
+
+        // Main land polygon
+        ref.addSource(mapData.sources.mainLandPolygonSource, {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry: {
+              type: "Polygon",
+              coordinates: JSON.parse(data.coordinates),
+            },
+            properties: {},
+          },
+        });
+
+        ref.addLayer(
+          {
+            id: mapData.layers.parcelsPolygon,
+            type: "fill",
+            source: mapData.sources.mainLandPolygonSource,
+            layout: {},
+            paint: {
+              "fill-color": "#649d8d",
+              "fill-opacity": 0.6,
+            },
+          },
+          mapData.layers.markersLayer
+        );
+
+        ref.addLayer(
+          {
+            id: mapData.layers.parcelsPolygonAssist,
+            type: "line",
+            source: mapData.sources.mainLandPolygonSource,
+            layout: {},
+            paint: {
+              "line-color": "#649d8d",
+              "line-width": 2,
+            },
+          },
+          mapData.layers.markersLayer
+        );
 
         if (geoJsonInit.features.length > 50) {
           ref.addLayer({
@@ -238,6 +283,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     [
       data.acreage.formattedString,
       data.assessments.data,
+      data.coordinates,
       data.id,
       data.lat,
       data.lon,

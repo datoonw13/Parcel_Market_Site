@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
 import { NextRequest } from "next/server";
-import { DeletionAccountReason, IDecodedAccessToken, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
+import { DeletionAccountReason, ISignInResponse, IUser, IUserBaseInfo, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
 // export const setAuthToken = (token: string, remember?: boolean) => {
@@ -34,7 +34,7 @@ export const removeAccessToken = () => {
 
 export const generateAccessToken = async (): Promise<ResponseModel<string | null>> => {
   try {
-    const data = await fetcher<ISignInResponse>("user/token/refresh", { method: "POST" });
+    const data = await fetcher<ISignInResponse>("auth/token/refresh", { method: "POST" });
     return {
       data: data.access_token,
       errorMessage: null,
@@ -217,7 +217,7 @@ export const logOutUserAction = async () => {
   redirect(fullUrl);
 };
 
-export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
+export const getUserAction = async (): Promise<IUserBaseInfo | null> => {
   const refreshToken = cookies().get("jwt");
   let userString = cookies().get("jwt")?.value;
 
@@ -232,7 +232,7 @@ export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
     try {
       const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed, isGoogleUser, exp } = jwtDecode(
         refreshToken?.value!
-      ) as IDecodedAccessToken & { exp: number };
+      ) as IUserBaseInfo & { exp: number };
       const user = {
         id,
         sub,
