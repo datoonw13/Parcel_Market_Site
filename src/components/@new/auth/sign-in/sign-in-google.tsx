@@ -1,46 +1,23 @@
 "use client";
 
 import { useGoogleLogin } from "@react-oauth/google";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/helpers/common";
-import { googleSignInUserAction } from "@/server-actions/user/actions";
-import { useRouter, useSearchParams } from "next/navigation";
-import routes from "@/helpers/routes";
-import { decode, JwtPayload } from "jsonwebtoken";
-import { IDecodedAccessToken } from "@/types/auth";
+import useAuth from "@/hooks/useAuth";
+import { googleSignInAction } from "@/server-actions/auth/auth";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
-interface SignInGoogleProps {
-  onSuccessFinish: (accessToken: string) => void;
-  redirectOnSignUp: ({
-    firstName,
-    lastName,
-    accessToken,
-    email,
-  }: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    accessToken: string;
-  }) => void;
-}
-
-const SignInGoogle: FC<SignInGoogleProps> = ({ redirectOnSignUp, onSuccessFinish }) => {
-  const router = useRouter();
+const SignInGoogle = () => {
   const [loading, setLoading] = useState(false);
+  const { googleAuth } = useAuth();
+
   const login = useGoogleLogin({
     onSuccess: async (data) => {
-      const { data: requestData, errorMessage } = await googleSignInUserAction(data.access_token);
-      console.log(requestData, 22, errorMessage);
-
+      const { data: requestData, errorMessage } = await googleSignInAction(data.access_token, false);
       if (errorMessage) {
         const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
         const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
-        // router.push(
-        //   `${routes.auth.signUp.fullUrl}?access_token=${data.access_token}&firstName=${googleCredentials.given_name}&lastName=${googleCredentials.family_name}&email=${googleCredentials.email}`
-        // );
-
-        redirectOnSignUp({
+        googleAuth.error({
           accessToken: data.access_token,
           firstName: googleCredentials.given_name,
           lastName: googleCredentials.family_name,
@@ -48,8 +25,7 @@ const SignInGoogle: FC<SignInGoogleProps> = ({ redirectOnSignUp, onSuccessFinish
         });
         return;
       }
-
-      onSuccessFinish(requestData!.access_token);
+      googleAuth.success(requestData?.decodedAccessToken.planSelected);
     },
     onError: () => {
       setLoading(false);

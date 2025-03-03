@@ -11,11 +11,11 @@ import routes from "@/helpers/routes";
 import { GiCheckMark } from "react-icons/gi";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { useAuth } from "../shared/auth-session-provider";
+// import { useAuthUser } from "../shared/auth-session-provider";
 
 export default function Subscribe() {
   const { targetReached } = useMediaQuery(1024);
-  const { user } = useAuth();
+  // const { user } = useAuthUser();
   const [activeSlide, setActiveSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
   const settings = {
@@ -47,7 +47,7 @@ export default function Subscribe() {
     ],
   };
 
-  console.log(user, 22);
+  const user = null;
 
   return (
     <div className="space-y-6 md:space-y-8 lg:space-y-11" id="pricing">

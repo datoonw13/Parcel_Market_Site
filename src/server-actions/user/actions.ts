@@ -1,6 +1,6 @@
 "use server";
 
-import { updateUserInfoSchema, userSignInValidation } from "@/zod-validations/auth-validations";
+import { defaultSignInSchema, updateUserInfoSchema } from "@/zod-validations/auth-validations";
 import { ResponseModel, ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
@@ -56,7 +56,7 @@ export const signInUserAction = async (
     email: formData.get("email"),
     password: formData.get("password"),
   };
-  const validations = userSignInValidation.safeParse(values);
+  const validations = defaultSignInSchema.safeParse(values);
   if (!validations.success) {
     return {
       errorMessage: "Unauthorized",
@@ -218,7 +218,7 @@ export const logOutUserAction = async () => {
 };
 
 export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
-  const refreshToken = cookies().get("jwt-refresh");
+  const refreshToken = cookies().get("jwt");
   let userString = cookies().get("jwt")?.value;
 
   if (refreshToken && !userString) {
@@ -231,7 +231,7 @@ export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
   if (userString) {
     try {
       const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed, isGoogleUser, exp } = jwtDecode(
-        userString!
+        refreshToken?.value!
       ) as IDecodedAccessToken & { exp: number };
       const user = {
         id,

@@ -5,7 +5,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
 import { generateAccessToken, logOutUserAction } from "@/server-actions/user/actions";
-import { IDecodedAccessToken } from "@/types/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -14,7 +13,7 @@ import { HiOutlineBell } from "react-icons/hi2";
 import { IoIosLogOut } from "react-icons/io";
 import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
 
-const UserMenu = ({ user }: { user: IDecodedAccessToken }) => {
+const UserMenu = ({ user }: { user: any }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 

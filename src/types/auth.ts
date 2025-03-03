@@ -30,7 +30,7 @@ export enum DeletionAccountReason {
   TooExpensive = "TooExpensive",
 }
 
-export interface IDecodedAccessToken {
+export interface IUserBaseInfo {
   email: string;
   firstName: string;
   lastName: string;

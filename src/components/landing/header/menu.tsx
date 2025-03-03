@@ -13,7 +13,6 @@ import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { CiUser } from "react-icons/ci";
 import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
-import { IDecodedAccessToken } from "@/types/auth";
 import { HiOutlineBell } from "react-icons/hi2";
 import { usePathname } from "next/navigation";
 import { breakPoints } from "../../../../tailwind.config";
@@ -21,7 +20,7 @@ import HeaderNotifications from "./notifications";
 import UserMenu from "./user-menu";
 
 interface HeaderMenuProps {
-  user: IDecodedAccessToken | null;
+  user: any | null;
   onAnimationStart?: () => void;
 }
 

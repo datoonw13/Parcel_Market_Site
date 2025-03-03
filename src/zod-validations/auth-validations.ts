@@ -13,7 +13,7 @@ export const passwordSchema = z
 
 export const emailSchema = z.string().trim().email();
 
-export const userSignInValidation = z.object({
+export const defaultSignInSchema = z.object({
   email: emailSchema,
   password: z.string().trim().min(1),
 });

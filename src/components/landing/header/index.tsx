@@ -4,10 +4,9 @@ import Logo from "@/icons/Logo";
 import Link from "next/link";
 import routes from "@/helpers/routes";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
-import { IDecodedAccessToken } from "@/types/auth";
 import HeaderMenu from "./menu";
 
-const LandingHeader = ({ user }: { user: IDecodedAccessToken | null }) => (
+const LandingHeader = ({ user }: { user: any | null }) => (
   <Popover modal>
     <PopoverAnchor>
       <div

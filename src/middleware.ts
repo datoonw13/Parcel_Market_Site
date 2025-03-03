@@ -44,6 +44,7 @@ const checkAccessToken = async () => {
 
 export async function middleware(request: NextRequest) {
   const isAuthed = await checkAuth();
+  console.log("aqaa");
 
   let routeDetails: any = null;
 
@@ -57,31 +58,30 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  let response = NextResponse.next();
-  if (routeDetails?.protected && !isAuthed) {
-    response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
-  }
+  // if (routeDetails?.protected && !isAuthed) {
+  //   response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
+  // }
 
-  if (request.nextUrl.pathname.includes("auth") && isAuthed) {
-    response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
-  }
+  // if (request.nextUrl.pathname.includes("auth") && isAuthed) {
+  //   response = NextResponse.redirect(new URL(routes.home.url, request.nextUrl.origin));
+  // }
 
-  const checkAccessTokenResult = await checkAccessToken();
+  // const checkAccessTokenResult = await checkAccessToken();
 
-  if ((!isAuthed && cookies().has("jwt-refresh")) || checkAccessTokenResult.error) {
-    if (cookies().has("jwt")) {
-      response.cookies.delete("jwt");
-    }
-    if (cookies().has("jwt-refresh")) {
-      response.cookies.delete("jwt-refresh");
-    }
-  }
+  // if ((!isAuthed && cookies().has("jwt-refresh")) || checkAccessTokenResult.error) {
+  //   if (cookies().has("jwt")) {
+  //     response.cookies.delete("jwt");
+  //   }
+  //   if (cookies().has("jwt-refresh")) {
+  //     response.cookies.delete("jwt-refresh");
+  //   }
+  // }
 
-  if (checkAccessTokenResult.data) {
-    response.cookies.set("jwt", checkAccessTokenResult.data);
-  }
+  // if (checkAccessTokenResult.data) {
+  //   response.cookies.set("jwt", checkAccessTokenResult.data);
+  // }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {

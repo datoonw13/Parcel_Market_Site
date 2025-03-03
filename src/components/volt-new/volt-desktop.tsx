@@ -79,19 +79,19 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
       lon: property.lon.toString(),
     });
 
-    if (res?.errorMessage || !res?.data) {
-      notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    }
+    // if (res?.errorMessage || !res?.data) {
+    //   notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
+    // }
 
-    if (res.data) {
-      if (user) {
-        startGetDataTransition(() => {
-          router.push(`/volt/${res.data}`);
-        });
-      } else {
-        setAuthModal(res.data);
-      }
-    }
+    // if (res.data) {
+    //   if (user) {
+    //     startGetDataTransition(() => {
+    //       router.push(`/volt/${res.data}`);
+    //     });
+    //   } else {
+    //     setAuthModal(res.data);
+    //   }
+    // }
     setCalculationPending(false);
   };
 
