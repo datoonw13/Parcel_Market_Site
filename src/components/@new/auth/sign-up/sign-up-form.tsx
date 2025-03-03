@@ -1,22 +1,19 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
 import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import { getAllStates } from "@/helpers/states";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
-import { IDecodedAccessToken, IUserSignUp } from "@/types/auth";
+import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
-import { googleSignUpUserAction, signUpUserAction } from "@/server-actions/user/actions";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useNotification from "@/hooks/useNotification";
-import { subscribeAction } from "@/server-actions/common-actions";
+import { useRouter, useSearchParams } from "next/navigation";
 import { NumberInput, TextInput } from "@/components/ui/input";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
-import { decode, JwtPayload } from "jsonwebtoken";
+import { UserSource } from "@/types/common";
+import { signUpUserAction } from "@/server-actions/auth/auth";
 import Button from "../../shared/forms/Button";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 import GoogleAuthProvider from "../sign-in/google-auth-provider";
@@ -26,27 +23,17 @@ interface SignUpProps {
   registrationReasons: IUserSignUp["registrationReasons"];
   onFinish: (errorMessage?: string, email?: string) => void;
   onSignInClick?: () => void;
-  googleAuth?: {
-    redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
-    onSuccessFinish: () => void;
-  };
 }
 
-const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSignInClick, googleAuth }) => {
+const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSignInClick }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
-  const access_token = searchParams.get("access_token");
-  const firstName = searchParams.get("firstName");
-  const lastName = searchParams.get("lastName");
-  const email = searchParams.get("email");
-  const isGoogleUser = access_token && firstName && lastName && email;
-  const { notify } = useNotification();
+  const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const [openTermsDialog, setTermsDialog] = useState(false);
   const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
-  const pathname = usePathname();
+  const isThirdPartyAuth = params.get("authSource") === UserSource.Facebook || params.get("authSource") === UserSource.Google;
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -55,7 +42,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
     getValues,
     reset,
   } = useForm<IUserSignUp>({
-    resolver: zodResolver(userSignUpValidation(!!isGoogleUser)),
+    resolver: zodResolver(userSignUpValidation(isThirdPartyAuth)),
     defaultValues: {
       city: "",
       email: "",
@@ -66,64 +53,37 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
       streetName: "",
       unitNumber: "",
       registrationReasons,
-      agreeTerm: false,
       subscribeToEmail: false,
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    const source = document.referrer || searchParams.get("utm_source") || "no referrer";
-    if (isGoogleUser) {
-      const { data: requestData, errorMessage } = await googleSignUpUserAction({ ...data, source }, access_token);
-      if (errorMessage) {
-        notify({ title: errorMessage }, { variant: "error" });
-      } else {
-        if (googleAuth?.onSuccessFinish) {
-          googleAuth?.onSuccessFinish();
-          return;
-        }
-        if (params.get("from")) {
-          const fromUrl = params.get("from");
-          params.delete("from");
-          params.set("from", routes.auth.signIn.fullUrl);
-          const newLocation = `${fromUrl}?${params.toString()}`;
-          router.replace(newLocation);
-          return;
-        }
-
-        const decodeAccessToken = decode(requestData?.access_token || "");
-        const planSelected =
-          decodeAccessToken &&
-          typeof decodeAccessToken === "object" &&
-          (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
-
-        router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
-      }
+    // const source = document.referrer || searchParams.get("utm_source") || "no referrer";
+    const request = await signUpUserAction({ ...data, userSource: params.get("userSource") || UserSource.System });
+    if (request?.errorMessage) {
+      onFinish(request.errorMessage);
+    }
+    if (request.data) {
     } else {
-      const request = await signUpUserAction({ ...data, source });
-      if (request?.errorMessage) {
-        onFinish(request.errorMessage);
-      } else {
-        onFinish(undefined, watch("email"));
-      }
+      onFinish(undefined, watch("email"));
     }
   });
 
-  const onGoogleAuthRedirectSignup = (data: { email: string; firstName: string; lastName: string; accessToken: string }) => {
-    if (googleAuth?.redirectOnSignUp) {
-      googleAuth?.redirectOnSignUp(data);
-    } else {
-      router.push(
-        `${routes.auth.signUp.fullUrl}?access_token=${data.accessToken}&firstName=${data.firstName}&lastName=${data.lastName}&email=${data.email}`
-      );
-    }
-  };
-
   useEffect(() => {
-    if (isGoogleUser) {
-      reset({ ...getValues(), email, firstName, lastName });
+    if (params.get("authSource") && params.get("authSource") !== UserSource.System) {
+      const email = params.get("authEmail");
+      const firstName = params.get("authFirstName");
+      const lastName = params.get("authLastName");
+      if (email && firstName && lastName) {
+        reset({
+          ...getValues(),
+          email,
+          firstName,
+          lastName,
+        });
+      }
     }
-  }, [access_token, email, firstName, getValues, isGoogleUser, lastName, reset, searchParams]);
+  }, [getValues, params, reset, searchParams]);
 
   return (
     <>
@@ -134,7 +94,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
       </div>
       <div className="w-full max-w-72 flex">
-        <GoogleAuthProvider redirectOnSignUp={onGoogleAuthRedirectSignup} onSuccessFinish={() => {}} />
+        <GoogleAuthProvider />
       </div>
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col gap-4">
@@ -170,7 +130,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
             required
             className="w-full"
             label="Email Address"
-            disabled={!!isGoogleUser}
+            disabled={!!isThirdPartyAuth}
             value={watch("email")}
             error={!!errors.email}
             id="sign-up-email-input"
@@ -233,7 +193,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
             decimalScale={0}
             id="sign-up-postalCode-input"
           />
-          {!isGoogleUser && (
+          {!isThirdPartyAuth && (
             <>
               <div className="space-y-1">
                 <TextInput

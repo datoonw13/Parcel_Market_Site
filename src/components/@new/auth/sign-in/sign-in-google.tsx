@@ -4,7 +4,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { cn } from "@/helpers/common";
 import useAuth from "@/hooks/useAuth";
-import { googleSignInAction } from "@/server-actions/auth/auth";
+import { thirdPartyAuthAction } from "@/server-actions/auth/auth";
+import { UserSource } from "@/types/common";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
 const SignInGoogle = () => {
@@ -13,15 +14,15 @@ const SignInGoogle = () => {
 
   const login = useGoogleLogin({
     onSuccess: async (data) => {
-      const { data: requestData, errorMessage } = await googleSignInAction(data.access_token, false);
+      const { data: requestData, errorMessage } = await thirdPartyAuthAction(data.access_token, UserSource.Google);
       if (errorMessage) {
         const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
         const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
         googleAuth.error({
-          accessToken: data.access_token,
-          firstName: googleCredentials.given_name,
-          lastName: googleCredentials.family_name,
-          email: googleCredentials.email,
+          authAccessToken: data.access_token,
+          authFirstName: googleCredentials.given_name,
+          authLastName: googleCredentials.family_name,
+          authEmail: googleCredentials.email,
         });
         return;
       }

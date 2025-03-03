@@ -3,6 +3,7 @@ import { defaultSignInSchema } from "@/zod-validations/auth-validations";
 import { z } from "zod";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
+import { UserSource } from "@/types/common";
 import useNotification from "./useNotification";
 
 const useAuth = () => {
@@ -35,13 +36,13 @@ const useAuth = () => {
         router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
       }
     },
-    error: (data: { accessToken: string; firstName: string; lastName: string; email: string }) => {
+    error: (data: { authAccessToken: string; authFirstName: string; authLastName: string; authEmail: string }) => {
       const newSearchParams = new URLSearchParams(params.toString());
       Object.keys(data).forEach((key) => {
-        const formattedKey = `auth${key[0].toLocaleUpperCase()}${key.slice(1)}`;
-        newSearchParams.set(formattedKey, data[key as keyof typeof data]);
+        newSearchParams.set(key, data[key as keyof typeof data]);
       });
-      router.push(`${pathname}?${newSearchParams.toString()}`);
+      newSearchParams.set("authSource", UserSource.Google);
+      router.push(`${pathname === routes.auth.signIn.fullUrl ? routes.auth.signUp.fullUrl : pathname}?${newSearchParams.toString()}`);
     },
   };
 
@@ -50,6 +51,14 @@ const useAuth = () => {
     if (isExist) {
       sessionStorage.removeItem("auth-redirect-url");
     }
+  };
+
+  const removeThirdPartyKeys = () => {
+    const newSearchParams = new URLSearchParams(params.toString());
+    ["authAccessToken", "authFirstName", "authLastName", "authEmail", "authSource"].forEach((key) => {
+      const formattedKey = `auth${key[0].toLocaleUpperCase()}${key.slice(1)}`;
+      newSearchParams.delete(formattedKey);
+    });
   };
 
   return {

@@ -1,13 +1,13 @@
 "use server";
 
-import { defaultSignInSchema } from "@/zod-validations/auth-validations";
+import { defaultSignInSchema, userSignUpValidation } from "@/zod-validations/auth-validations";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { ISignInResponse, IUserBaseInfo } from "@/types/auth";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import { cookies } from "next/headers";
-import { ResponseModel } from "@/types/common";
+import { ITokens, ResponseModel, UserSource } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { fetcher } from "../fetcher";
 
@@ -33,9 +33,9 @@ const setAuthTokens = (refreshToken: string, accessToken: string, remember?: boo
 const defaultSignInAction = async (
   values: z.infer<typeof defaultSignInSchema>,
   remember: boolean
-): Promise<ResponseModel<(ISignInResponse & { decodedAccessToken: IUserBaseInfo }) | null>> => {
+): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
   try {
-    const request = await fetcher<ISignInResponse>("auth/login", {
+    const request = await fetcher<ITokens>("auth/login", {
       method: "POST",
       body: JSON.stringify(values),
     });
@@ -52,16 +52,16 @@ const defaultSignInAction = async (
   }
 };
 
-export const googleSignInAction = async (
+const thirdPartyAuthAction = async (
   token: string,
-  remember: boolean
-): Promise<ResponseModel<(ISignInResponse & { decodedAccessToken: IUserBaseInfo }) | null>> => {
+  userSource: UserSource
+): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
   try {
-    const request = await fetcher<ISignInResponse>("user/auth/google", {
+    const request = await fetcher<ITokens>("auth/login/token", {
       method: "POST",
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ token, userSource }),
     });
-    setAuthTokens(request.access_token, request.refresh_token, remember);
+    setAuthTokens(request.refresh_token, request.access_token);
     return { data: { ...request, decodedAccessToken: jwtDecode(request.access_token) }, errorMessage: null };
   } catch (error) {
     return {
@@ -71,4 +71,27 @@ export const googleSignInAction = async (
   }
 };
 
-export { defaultSignInAction };
+const signUpUserAction = async (values: z.infer<ReturnType<typeof userSignUpValidation>>): Promise<ResponseModel<ITokens | null>> => {
+  try {
+    const request = await fetcher<ITokens | null>("auth/register", {
+      method: "POST",
+      body: JSON.stringify(values),
+      cache: "no-cache",
+    });
+
+    if (request) {
+      setAuthTokens(request.refresh_token, request.access_token);
+    }
+    return {
+      data: request || null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).statusCode === 409 ? "Email already registered" : "Registration failed",
+      data: null,
+    };
+  }
+};
+
+export { defaultSignInAction, thirdPartyAuthAction, signUpUserAction };

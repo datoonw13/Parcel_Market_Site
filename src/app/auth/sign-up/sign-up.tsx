@@ -14,15 +14,10 @@ enum SignUpSteps {
 
 interface SignUpFormProps {
   onSignInClick?: () => void;
-  // onSuccess: () => void;
-  googleAuth?: {
-    redirectOnSignUp?: (data: { email: string; firstName: string; lastName: string; accessToken: string }) => void;
-    onSuccessFinish: () => void;
-  };
   onEmailSignUpFinish?: () => void;
 }
 
-const SignUpForm: FC<SignUpFormProps> = ({ onSignInClick, googleAuth, onEmailSignUpFinish }) => {
+const SignUpForm: FC<SignUpFormProps> = ({ onSignInClick, onEmailSignUpFinish }) => {
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -43,7 +38,6 @@ const SignUpForm: FC<SignUpFormProps> = ({ onSignInClick, googleAuth, onEmailSig
             setRegistrationReasons(null);
             setStep(SignUpSteps.SELECT_REASONS);
           }}
-          googleAuth={googleAuth}
           onSignInClick={onSignInClick}
           onFinish={(errorMessage, email) => {
             setStep(SignUpSteps.FINISH);
