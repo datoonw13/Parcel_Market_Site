@@ -71,7 +71,9 @@ const thirdPartyAuthAction = async (
   }
 };
 
-const signUpUserAction = async (values: z.infer<ReturnType<typeof userSignUpValidation>>): Promise<ResponseModel<ITokens | null>> => {
+const signUpUserAction = async (
+  values: z.infer<ReturnType<typeof userSignUpValidation>>
+): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo | null }) | null>> => {
   try {
     const request = await fetcher<ITokens | null>("auth/register", {
       method: "POST",
@@ -83,7 +85,12 @@ const signUpUserAction = async (values: z.infer<ReturnType<typeof userSignUpVali
       setAuthTokens(request.refresh_token, request.access_token);
     }
     return {
-      data: request || null,
+      data: request
+        ? {
+            ...request,
+            decodedAccessToken: jwtDecode(request!.access_token),
+          }
+        : null,
       errorMessage: null,
     };
   } catch (error) {

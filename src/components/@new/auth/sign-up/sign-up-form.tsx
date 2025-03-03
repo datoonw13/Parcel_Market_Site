@@ -14,6 +14,7 @@ import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
 import { UserSource } from "@/types/common";
 import { signUpUserAction } from "@/server-actions/auth/auth";
+import useAuth from "@/hooks/useAuth";
 import Button from "../../shared/forms/Button";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
 import GoogleAuthProvider from "../sign-in/google-auth-provider";
@@ -34,6 +35,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
   const isThirdPartyAuth = params.get("authSource") === UserSource.Facebook || params.get("authSource") === UserSource.Google;
+  const { thirdPartyAuth } = useAuth();
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -58,12 +60,12 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, onFinish, onSign
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    // const source = document.referrer || searchParams.get("utm_source") || "no referrer";
     const request = await signUpUserAction({ ...data, userSource: params.get("userSource") || UserSource.System });
     if (request?.errorMessage) {
       onFinish(request.errorMessage);
     }
     if (request.data) {
+      thirdPartyAuth.success(request.data?.decodedAccessToken?.planSelected);
     } else {
       onFinish(undefined, watch("email"));
     }

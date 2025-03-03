@@ -10,7 +10,7 @@ import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
 const SignInGoogle = () => {
   const [loading, setLoading] = useState(false);
-  const { googleAuth } = useAuth();
+  const { thirdPartyAuth } = useAuth();
 
   const login = useGoogleLogin({
     onSuccess: async (data) => {
@@ -18,7 +18,7 @@ const SignInGoogle = () => {
       if (errorMessage) {
         const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
         const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
-        googleAuth.error({
+        thirdPartyAuth.error({
           authAccessToken: data.access_token,
           authFirstName: googleCredentials.given_name,
           authLastName: googleCredentials.family_name,
@@ -26,7 +26,7 @@ const SignInGoogle = () => {
         });
         return;
       }
-      googleAuth.success(requestData?.decodedAccessToken.planSelected);
+      thirdPartyAuth.success(requestData?.decodedAccessToken.planSelected);
     },
     onError: () => {
       setLoading(false);

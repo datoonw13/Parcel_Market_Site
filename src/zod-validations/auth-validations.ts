@@ -24,7 +24,7 @@ export const userSignUpValidation = (isThirdPartyAuth?: boolean) =>
       email: emailSchema,
       mailingAddress: z.string().optional(),
       state: z.string().trim().min(1),
-      county: z.string().trim().min(1),
+      // county: z.string().trim().min(1),
       mobileNumber: z.string().trim().optional(),
       firstName: z.string().trim().min(1),
       lastName: z.string().trim().min(1),

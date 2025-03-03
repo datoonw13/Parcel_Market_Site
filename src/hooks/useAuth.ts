@@ -27,7 +27,7 @@ const useAuth = () => {
     }
   };
 
-  const googleAuth = {
+  const thirdPartyAuth = {
     success: (planSelected?: boolean) => {
       const isRedirectUrlExist = sessionStorage.getItem("auth-redirect-url");
       if (isRedirectUrlExist) {
@@ -64,7 +64,7 @@ const useAuth = () => {
   return {
     removeRedirectUrlFromSession,
     defaultSignIn,
-    googleAuth,
+    thirdPartyAuth,
   };
 };
 

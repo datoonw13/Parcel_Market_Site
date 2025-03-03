@@ -15,6 +15,8 @@ import { z } from "zod";
 import { defaultSignInSchema } from "@/zod-validations/auth-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAuth from "@/hooks/useAuth";
+import FacebookLogin from "@greatsumini/react-facebook-login";
+import SignInFacebook from "@/components/@new/auth/sign-in/sign-in-fb";
 
 interface SignInFormProps {
   onSignUpClick?: () => void;
@@ -62,6 +64,7 @@ const SignInForm: FC<SignInFormProps> = ({ onSignUpClick }) => {
       </div>
       <Divider label="OR" className="my-3" />
       <GoogleAuthProvider />
+      <SignInFacebook />
       <p className="font-medium text-sm mt-auto">
         Don&apos;t have an account?{" "}
         <span
