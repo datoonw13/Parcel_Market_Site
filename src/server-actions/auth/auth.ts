@@ -75,11 +75,16 @@ const signUpUserAction = async (
   values: z.infer<ReturnType<typeof userSignUpValidation>>
 ): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo | null }) | null>> => {
   try {
+    const zohoObject = cookies().get("zoho") ? JSON.parse(cookies().get("zoho")?.value || " ") : null;
     const request = await fetcher<ITokens | null>("auth/register", {
       method: "POST",
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, ...(zohoObject && { ...zohoObject }) }),
       cache: "no-cache",
     });
+
+    if (zohoObject) {
+      cookies().delete("zoho");
+    }
 
     if (request) {
       setAuthTokens(request.refresh_token, request.access_token);
