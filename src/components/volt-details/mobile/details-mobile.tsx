@@ -10,7 +10,7 @@ import { IPropertiesInteraction } from "@/types/volt";
 import { IoChevronBack, IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import Logo from "@/icons/Logo";
 import HeaderMenu from "@/components/landing/header/menu";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { exportToExcel, exportToKml } from "@/lib/volt";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -35,7 +35,7 @@ interface VoltDetailsMobileProps {
   }[];
   setSelectedLayer: Dispatch<SetStateAction<string>>;
   selectedLayer: string;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }
 
 const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({

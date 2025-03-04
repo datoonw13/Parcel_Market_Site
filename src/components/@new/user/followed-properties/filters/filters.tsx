@@ -1,7 +1,7 @@
 "use client";
 
 import { SortEnum } from "@/types/common";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { FC, useEffect, useState } from "react";
 import Sort from "@/components/@new/filters/sort";
 import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
@@ -21,7 +21,7 @@ interface UserFollowerPropertiesFilterProps {
   selectedFilters: Filters;
   onChange: <T extends keyof Filters>(data: { [key in T]: Filters[T] }) => void;
   totalItems: number;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }
 const UserFollowerPropertiesFilter: FC<UserFollowerPropertiesFilterProps> = ({ totalItems, user, selectedFilters, onChange }) => {
   const { notify } = useNotification();

@@ -1,6 +1,6 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState, useTransition } from "react";
 import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -35,7 +35,7 @@ import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
 interface VoltMobileProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   form: UseFormReturn<VoltSearchModel>;
   data: ResponseModel<IMainPropertyBaseInfo[] | null> | null;
   propertiesInteraction: IPropertiesInteraction;

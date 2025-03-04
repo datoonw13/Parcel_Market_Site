@@ -2,7 +2,7 @@
 
 import Button from "@/components/@new/shared/forms/Button";
 import { Dispatch, SetStateAction } from "react";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import ForgotPasswordModal from "./forgot-password-modal";
 
 const ForgotPasswordButton = ({
@@ -13,7 +13,7 @@ const ForgotPasswordButton = ({
 }: {
   openModal: boolean;
   setOpenModal: Dispatch<SetStateAction<boolean>>;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   id?: string;
 }) => (
   <>

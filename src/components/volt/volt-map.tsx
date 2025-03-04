@@ -5,7 +5,7 @@
 // import dynamic from "next/dynamic";
 // import { Dispatch, FC, ReactElement, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
 // import { moneyFormatter } from "@/helpers/common";
-// import { IDecodedAccessToken } from "@/types/auth";
+// import { IUserBaseInfo } from "@/types/auth";
 // import { MapInteractionModel } from "@/types/common";
 // import { IPropertyBaseInfo, IPropertyUsedForCalculation } from "@/types/property";
 // import moment from "moment";
@@ -40,7 +40,7 @@
 //   step: VoltSteps;
 //   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
 //   values: VoltWrapperValuesModel;
-//   user: IDecodedAccessToken | null;
+//   user: IUserBaseInfo | null;
 //   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
 //   mapInteraction: MapInteractionModel;
 //   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
@@ -558,7 +558,7 @@ import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, us
 import useMap from "@/hooks/useMap";
 import dynamic from "next/dynamic";
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import { MapGeoJson } from "@/types/mapbox";
 import { center } from "@turf/center";
@@ -572,7 +572,7 @@ interface VoltMapProps {
   step: VoltSteps;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
   values: VoltWrapperValuesModel;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;

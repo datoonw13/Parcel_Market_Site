@@ -1,11 +1,11 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { Session } from "@talkjs/react";
 import { ReactNode, useCallback } from "react";
 import Talk from "talkjs";
 
-const ChatSession = ({ user, children }: { user: IDecodedAccessToken | null; children: ReactNode }) => {
+const ChatSession = ({ user, children }: { user: IUserBaseInfo | null; children: ReactNode }) => {
   const syncUser = useCallback(
     () =>
       new Talk.User({

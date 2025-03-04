@@ -1,7 +1,7 @@
 "use client";
 
 import { SortEnum } from "@/types/common";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { FC, useEffect, useRef } from "react";
 import TextField from "@/components/@new/shared/forms/text-field";
 import { IoSearchOutline } from "react-icons/io5";
@@ -15,7 +15,7 @@ interface MarketPlaceFiltersProps {
   selectedFilters: IMarketplaceFilters;
   onChange: <T extends keyof IMarketplaceFilters>(data: { [key in T]: IMarketplaceFilters[T] }) => void;
   totalCount: number;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }
 const MarketPlaceFilters: FC<MarketPlaceFiltersProps> = ({ totalCount, user, selectedFilters, onChange }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();

@@ -4,7 +4,7 @@ import LandingHeader from "@/components/landing/header";
 import VoltPriceCalculationAxis from "@/components/volt/volt-calculation-axis";
 import VoltItem from "@/components/volt/volt-item";
 import { moneyFormatter } from "@/helpers/common";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import { IUserRecentSearches } from "@/types/user";
 import moment from "moment";
@@ -69,7 +69,7 @@ const SearchItemDetailsMobileMapFull = ({
 }: {
   data: IUserRecentSearches;
   additionalDataResult: IUserRecentSearches;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   isUserSubscriptionTrial: boolean;
 }) => {
   const [subscriptionWarning, setSubscriptionWarning] = useState(false);

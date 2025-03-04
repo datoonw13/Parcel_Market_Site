@@ -1,6 +1,6 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -33,7 +33,7 @@ import SearchItemDetailsDesktopMap from "../@new/user/searches/details/map-deskt
 const MapBox = dynamic(() => import("./mapbox"), { ssr: false });
 
 interface VoltDesktopProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   step: VoltSteps;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import SignInForm from "@/app/auth/sign-in/sign-in";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import SignUpForm from "@/app/auth/sign-up/sign-up";
 import VoltSearchResult from "./volt-search-result";
 import { Button } from "../ui/button";
@@ -22,7 +22,7 @@ interface VoltDrawerProps {
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   propertiesInteraction: IPropertiesInteraction;
   contentClassName?: string;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   setAuthModal: (id: number) => void;
 }
 

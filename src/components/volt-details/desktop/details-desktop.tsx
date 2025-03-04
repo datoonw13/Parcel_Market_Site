@@ -13,7 +13,7 @@ import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validat
 import { IoMdClose } from "react-icons/io";
 import { IPropertiesInteraction } from "@/types/volt";
 import { Tooltip } from "@/components/ui/tooltip";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { exportToExcel, exportToKml } from "@/lib/volt";
 import routes from "@/helpers/routes";
 import { AutoComplete } from "../../ui/autocomplete";
@@ -41,7 +41,7 @@ interface VoltDetailsDesktopProps {
   }[];
   setSelectedLayer: Dispatch<SetStateAction<string>>;
   selectedLayer: string;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }
 
 const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({

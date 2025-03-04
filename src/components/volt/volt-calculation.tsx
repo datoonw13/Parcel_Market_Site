@@ -1,7 +1,7 @@
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import React, { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import Image from "next/image";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 import { MapInteractionModel } from "@/types/common";
@@ -15,7 +15,7 @@ import { breakPoints } from "../../../tailwind.config";
 
 interface VoltCalculationProps {
   values: VoltWrapperValuesModel;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
   showAdditionalData?: boolean;

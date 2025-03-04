@@ -8,7 +8,7 @@ import { cn, maskEmail } from "@/helpers/common";
 import useEnterClick from "@/hooks/useEnterClick";
 import useNotification from "@/hooks/useNotification";
 import { sendResetPasswordVerificationCodeAction, setResetPasswordNewPasswordAction } from "@/server-actions/user/actions";
-import { IDecodedAccessToken, IUser } from "@/types/auth";
+import { IUserBaseInfo, IUser } from "@/types/auth";
 import { emailSchema, passwordSchema } from "@/zod-validations/auth-validations";
 import { FC, useCallback, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
@@ -22,7 +22,7 @@ enum ForgotPasswordSteps {
 interface ForgotPasswordModalProps {
   open: boolean;
   closeModal: () => void;
-  user: IDecodedAccessToken | IUser | null;
+  user: IUserBaseInfo | IUser | null;
 }
 
 const renderModalHeader = (step: ForgotPasswordSteps, email?: string) => {

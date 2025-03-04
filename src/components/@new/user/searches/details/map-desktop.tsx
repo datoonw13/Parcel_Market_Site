@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { IUserRecentSearches } from "@/types/user";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import useMap from "@/hooks/useMap";
 import { GeoJSONFeature, Popup, Map as MapBoX } from "mapbox-gl";
@@ -26,7 +26,7 @@ const MapComponent = dynamic(() => import("@/components/maps/mapbox/mapbox-base"
 
 interface VoltDesktopProps {
   data: IUserRecentSearches;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   openWarningModal: () => void;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;

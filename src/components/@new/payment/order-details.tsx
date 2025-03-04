@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SubscriptionType } from "@/types/subscriptions";
 import { useState } from "react";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import Popper from "../shared/Popper";
 import { ArrowIconDown1, ArrowIconUp1 } from "../icons/ArrowIcons";
@@ -30,7 +30,7 @@ const getPlanDetails = (plan: SubscriptionType) => {
   }
 };
 
-const OrderDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
+const OrderDetails = ({ user }: { user: IUserBaseInfo | null }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -67,7 +67,7 @@ const OrderDetails = ({ user }: { user: IDecodedAccessToken | null }) => {
                       <div
                         className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
                         onClick={() => {
-                          params.set("plan", SubscriptionType.Trial);
+                          // params.set("plan", SubscriptionType.Trial);
                           router.replace(`${pathname}?${params.toString()}`);
                           setReferenceElement(null);
                         }}
