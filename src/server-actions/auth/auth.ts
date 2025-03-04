@@ -86,16 +86,17 @@ const signUpUserAction = async (
       cookies().delete("zoho");
     }
 
-    if (request) {
+    if (request && request.refresh_token && request.access_token) {
       setAuthTokens(request.refresh_token, request.access_token);
     }
     return {
-      data: request
-        ? {
-            ...request,
-            decodedAccessToken: jwtDecode(request!.access_token),
-          }
-        : null,
+      data:
+        request && request.refresh_token && request.access_token
+          ? {
+              ...request,
+              decodedAccessToken: jwtDecode(request!.access_token),
+            }
+          : null,
       errorMessage: null,
     };
   } catch (error) {
