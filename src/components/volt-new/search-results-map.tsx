@@ -9,6 +9,7 @@ import { Map as MapBoX, Popup } from "mapbox-gl";
 import { IPropertiesInteraction } from "@/types/volt";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import * as turf from "@turf/turf";
+import { swapPolygonCoordinates } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
@@ -16,11 +17,14 @@ const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr:
 const mapData = {
   sources: {
     markersSource: "markersSource",
+    mainLandPolygonSource: "mainLandPolygonSource",
   },
   layers: {
     markersLayer: "markersLayer",
     markerClusterCountLayer: "markers-cluster-count-layer",
     markerClusterLayer: "markers-cluster-layer",
+    parcelsPolygon: "parcelsPolygon",
+    parcelsPolygonAssist: "parcelsPolygonAssist",
   },
 };
 
@@ -93,11 +97,6 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
         type: "geojson",
         data: geoJsonInit,
         generateId: true,
-        ...(geoJsonInit.features.length > 50 && {
-          cluster: true,
-          clusterMaxZoom: 8,
-          clusterRadius: 50,
-        }),
       });
 
       ref.addLayer({
@@ -110,6 +109,70 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
           "icon-allow-overlap": true,
         },
       });
+
+      const polygonsGeoJson: MapGeoJson = {
+        type: "FeatureCollection",
+        features: [],
+      };
+      data.forEach((el) => {
+        polygonsGeoJson.features.push({
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: swapPolygonCoordinates(el.polygon as any),
+          },
+          properties: {
+            id: el.id.toString(),
+            parcelNumberNoFormatting: el.parcelNumberNoFormatting,
+            parcelNumber: el.parcelNumberNoFormatting,
+            lng: el.lon,
+            lat: el.lat,
+            type: "selling",
+            markerIcon: data.length === 1 ? "green-highlighted-default" : "green-default",
+            hoveredMarkerIcon: "green-highlighted-default",
+            selectedMarkerIcon: "green-highlighted-default",
+            markerSize: 1,
+            hoveredMarkerSize: 1,
+            selectedMarkerSize: 1,
+            acreage: el.acreage,
+            polygonLineColor: "#05471C",
+            polygonFillColor: "#05471C",
+          },
+        });
+      });
+
+      ref.addSource(mapData.sources.mainLandPolygonSource, {
+        type: "geojson",
+        data: polygonsGeoJson,
+      });
+
+      ref.addLayer(
+        {
+          id: mapData.layers.parcelsPolygon,
+          type: "fill",
+          source: mapData.sources.mainLandPolygonSource,
+          layout: {},
+          paint: {
+            "fill-color": "#649d8d",
+            "fill-opacity": 0.6,
+          },
+        },
+        mapData.layers.markersLayer
+      );
+
+      ref.addLayer(
+        {
+          id: mapData.layers.parcelsPolygonAssist,
+          type: "line",
+          source: mapData.sources.mainLandPolygonSource,
+          layout: {},
+          paint: {
+            "line-color": "#649d8d",
+            "line-width": 2,
+          },
+        },
+        mapData.layers.markersLayer
+      );
 
       if (geoJsonInit.features.length > 50) {
         ref.addLayer({
