@@ -11,7 +11,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     ...options,
     headers: {
       "Content-Type": "application/json",
-      "X-Device-Type": headers().get("user-agent") || "",
+      "X-Device-Type": cookies().get("device")?.value || "desktop",
       cookie: cookies().toString(),
     },
   });

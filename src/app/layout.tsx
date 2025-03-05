@@ -16,6 +16,7 @@ import Chat from "@/components/shared/chat";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import Script from "next/script";
 import Image from "next/image";
+import DeviceDetect from "@/components/shared/DeviceDetect";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -107,6 +108,7 @@ export default async function RootLayout({
             closeOnClick
             closeButton={false}
           />
+          <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
             {children}
