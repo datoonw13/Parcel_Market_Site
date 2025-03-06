@@ -1,24 +1,20 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
-import AutoComplete from "@/components/@new/shared/forms/AutoComplete";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
-import { getAllStates } from "@/helpers/states";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { useRouter, useSearchParams } from "next/navigation";
-import { NumberInput, TextInput } from "@/components/ui/input";
+import { TextInput } from "@/components/ui/input";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
 import { UserSource } from "@/types/common";
 import { signUpUserAction } from "@/server-actions/auth/auth";
-import useAuth from "@/hooks/useAuth";
 import useNotification from "@/hooks/useNotification";
 import Button from "../../shared/forms/Button";
 import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
-import GoogleAuthProvider from "../sign-in/google-auth-provider";
 
 interface SignUpProps {
   onBack: () => void;
@@ -53,14 +49,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
   } = useForm<IUserSignUp>({
     resolver: zodResolver(userSignUpValidation(isThirdPartyAuth)),
     defaultValues: {
-      city: "",
       email: "",
       firstName: "",
       lastName: "",
-      postalCode: "",
-      state: "",
-      streetName: "",
-      unitNumber: "",
       registrationReasons,
       subscribeToEmail: false,
     },
@@ -146,64 +137,6 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
             value={watch("email")}
             error={!!errors.email}
             id="sign-up-email-input"
-          />
-          <TextInput
-            onChange={(e) => setValue("streetName", e.target.value, { shouldValidate: isSubmitted })}
-            required
-            className="w-full"
-            label="Street Address"
-            value={watch("streetName")}
-            error={!!errors.streetName}
-            id="sign-up-streetName-input"
-          />
-          <TextInput
-            onChange={(e) => setValue("unitNumber", e.target.value, { shouldValidate: isSubmitted })}
-            className="w-full"
-            label="Unit Number"
-            value={watch("unitNumber")}
-            error={!!errors.unitNumber}
-            id="sign-up-unitNumber-input"
-          />
-          <AutoComplete
-            id="sign-up-state-input"
-            options={getAllStates()}
-            getOptionLabel={(item) => item.label}
-            getOptionKey={(item) => item.value}
-            onChange={(item) => {
-              setValue("state", item?.value ?? "", { shouldValidate: isSubmitted });
-            }}
-            placeholder="State"
-            value={getAllStates().find((el) => el.value === watch("state")) || null}
-            onFilter={(searchValue, items) =>
-              items.filter((item) => item.label.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
-            }
-            required
-            getSelectedOption={(item) => item.value === watch("state")}
-            error={!!errors.state}
-          />
-          <TextInput
-            required
-            className="w-full row-start-6 sm:row-start-auto"
-            label="City"
-            onChange={(e) => {
-              if (/^[a-zA-Z]+$/.test(e.target.value) || e.target.value === "") {
-                setValue("city", e.target.value, { shouldValidate: isSubmitted });
-              }
-            }}
-            value={watch("city")}
-            error={!!errors.city}
-            id="sign-up-city-input"
-          />
-          <NumberInput
-            required
-            className="w-full"
-            label="Postal Code"
-            onValueChange={(e) => setValue("postalCode", e.value, { shouldValidate: isSubmitted })}
-            value={watch("postalCode")}
-            error={!!errors.postalCode}
-            thousandSeparator={false}
-            decimalScale={0}
-            id="sign-up-postalCode-input"
           />
           {!isThirdPartyAuth && (
             <>

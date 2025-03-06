@@ -22,16 +22,8 @@ export const userSignUpValidation = (isThirdPartyAuth?: boolean) =>
   z
     .object({
       email: emailSchema,
-      mailingAddress: z.string().optional(),
-      state: z.string().trim().min(1),
-      // county: z.string().trim().min(1),
-      mobileNumber: z.string().trim().optional(),
       firstName: z.string().trim().min(1),
       lastName: z.string().trim().min(1),
-      streetName: z.string().trim().min(1),
-      unitNumber: z.string().trim(),
-      city: z.string().trim().min(1),
-      postalCode: z.string().trim().min(1).max(5),
       password: isThirdPartyAuth ? z.undefined() : passwordSchema,
       registrationReasons: z.array(z.enum(["LandOwner", "CertifiedAppraiser", "LicensedAgent", "LandInvestor"])),
       subscribeToEmail: z.boolean(),
