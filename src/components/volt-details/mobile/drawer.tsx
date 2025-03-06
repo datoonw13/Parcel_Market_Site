@@ -196,10 +196,6 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         <p className="text-sm font-medium text-grey-600">Volt Value:</p>
                         <p className="text-sm">{data.voltPrice.formattedString}</p>
                       </li>
-                      <li>
-                        <p className="text-sm font-medium text-grey-600">Search date:</p>
-                        <p className="text-sm">{moment(data.dateCreated).format("MM-DD-YYYY")}</p>
-                      </li>
                     </ul>
                   </div>
                 </div>
