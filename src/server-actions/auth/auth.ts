@@ -37,7 +37,7 @@ const defaultSignInAction = async (
 ): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
   try {
     const request = await fetcher<ITokens>("auth/login", {
-      method: "POST",
+      method: "post",
       body: JSON.stringify(values),
     });
     setAuthTokens(request.refresh_token, request.access_token, remember);

@@ -58,8 +58,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
 
   const onSubmit = handleSubmit(async (data) => {
     const request = await signUpUserAction({ ...data, userSource: params.get("userSource") || UserSource.System });
+
     if (request?.errorMessage) {
       setErrorMessage(request?.errorMessage);
+      setFinishStep(request.data);
     } else {
       setEmail(getValues("email"));
       setFinishStep(request.data);
