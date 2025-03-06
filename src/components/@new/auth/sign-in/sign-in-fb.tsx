@@ -36,7 +36,7 @@ const SignInFacebook = ({
 
   return (
     <FacebookLogin
-      appId="1270724550695755"
+      appId={process.env.NEXT_PUBLIC_FB_ID || ""}
       onSuccess={async (data) => {
         setSuccessData(data);
       }}
