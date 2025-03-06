@@ -293,6 +293,7 @@ const VoltSearchOnMap = ({
               modal={{
                 showSignUp: () => setAuthModal("sign-up"),
                 onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
+                closeModal: () => setAuthModal(null),
               }}
             />
           ) : (
@@ -305,6 +306,7 @@ const VoltSearchOnMap = ({
                 showSignIn: () => {
                   setAuthModal("sign-in");
                 },
+                closeModal: () => setAuthModal(null),
               }}
             />
           )}

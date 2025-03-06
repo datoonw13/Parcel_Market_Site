@@ -33,8 +33,6 @@ const VoltLayout = ({
   const [authModal, setAuthModal] = useState<"sign-in" | "sign-up" | null>(null);
   const lastFetchedId = useRef<number | null>(null);
   const router = useRouter();
-  const params = useSearchParams();
-  const pathname = usePathname();
 
   const form = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
@@ -68,23 +66,12 @@ const VoltLayout = ({
     }
   }, [form, initialParams]);
 
-  useEffect(() => {
-    if (!authModal) {
-      const newParams = new URLSearchParams(initialParams || "");
-      // newParams.delete("access_token");
-      // newParams.delete("firstName");
-      // newParams.delete("lastName");
-      // newParams.delete("email");
-      // router.push(`${pathname}?${newParams.toString()}`);
-    }
-  }, [authModal, initialParams, params, pathname, router]);
-
   if (detecting) return null;
 
   return (
     <>
       <ResponsiveModal
-        dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:pt-2"
+        dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
         drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
         open={!!authModal}
         closeModal={() => setAuthModal(null)}
@@ -95,6 +82,7 @@ const VoltLayout = ({
               modal={{
                 showSignUp: () => setAuthModal("sign-up"),
                 onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
+                closeModal: () => setAuthModal(null),
               }}
             />
           ) : (
@@ -107,6 +95,7 @@ const VoltLayout = ({
                 showSignIn: () => {
                   setAuthModal("sign-in");
                 },
+                closeModal: () => setAuthModal(null),
               }}
             />
           )}

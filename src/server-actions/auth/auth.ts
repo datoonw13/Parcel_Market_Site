@@ -11,7 +11,7 @@ import { ITokens, ResponseModel, UserSource } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { fetcher } from "../fetcher";
 
-const setAuthTokens = (refreshToken: string, accessToken: string, remember?: boolean) => {
+export const setAuthTokens = (refreshToken: string, accessToken: string, remember?: boolean) => {
   const decodedToken = jwtDecode(refreshToken) as { exp: number };
   const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
   cookies().set({
@@ -27,6 +27,7 @@ const setAuthTokens = (refreshToken: string, accessToken: string, remember?: boo
     httpOnly: true,
     secure: true,
   });
+
   revalidatePath("/");
 };
 
@@ -86,9 +87,6 @@ const signUpUserAction = async (
       cookies().delete("zoho");
     }
 
-    if (request && request.refresh_token && request.access_token) {
-      setAuthTokens(request.refresh_token, request.access_token);
-    }
     return {
       data:
         request && request.refresh_token && request.access_token

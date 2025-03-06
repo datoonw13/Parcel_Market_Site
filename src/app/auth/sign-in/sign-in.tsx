@@ -24,6 +24,7 @@ interface SignInFormProps {
   modal?: {
     showSignUp: () => void;
     onAuth: () => void;
+    closeModal: () => void;
   };
 }
 

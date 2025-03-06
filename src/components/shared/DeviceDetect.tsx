@@ -7,8 +7,6 @@ const DeviceDetect = () => {
   const deviceType = isMobile() ? "mobile" : "desktop";
 
   useEffect(() => {
-    console.log("aqaa");
-
     document.cookie = `device=${deviceType};`;
   }, [deviceType]);
 

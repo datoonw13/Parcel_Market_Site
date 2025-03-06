@@ -42,15 +42,10 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
 
   const resetForm = useCallback(() => {
     reset({
-      city: user.city,
       firstName: user.firstName,
       lastName: user.lastName,
-      postalCode: user.postalCode,
-      state: user.state,
-      streetName: user.streetName,
-      unitNumber: user.unitNumber || "",
     });
-  }, [reset, user.city, user.firstName, user.lastName, user.postalCode, user.state, user.streetName, user.unitNumber]);
+  }, [reset, user.firstName, user.lastName]);
 
   const onSubmit = handleSubmit(async (data) => {
     const { errorMessage } = await updateUserInfoAction(data);

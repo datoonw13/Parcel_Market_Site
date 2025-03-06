@@ -174,7 +174,7 @@ const routes = {
 export const getAllRoutes = (
   obj?: { [key: string]: any },
   prevUrl: string = "",
-  prevUrls: { [key: string]: { protected: boolean } } = {}
+  prevUrls: { [key: string]: { protected: boolean; url: string } } = {}
 ) => {
   const urls = prevUrls;
   if (!obj) {
@@ -184,7 +184,7 @@ export const getAllRoutes = (
     let url = prevUrl;
     if (typeof obj[key] === "object" && obj[key] !== null) {
       url += `${url ? "/" : ""}${obj[key].url}`;
-      urls[`/${url}`] = { protected: obj[key].protected };
+      urls[`/${url}`] = { protected: obj[key].protected, url };
       return getAllRoutes(obj[key], url, prevUrls);
     }
     return null;

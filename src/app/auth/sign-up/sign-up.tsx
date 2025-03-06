@@ -5,6 +5,8 @@ import SignUpReason from "@/components/@new/auth/sign-up/sign-up-reason";
 import SignUpFinish from "@/components/@new/auth/sign-up/sign-up-finish";
 import { IUserSignUp } from "@/types/auth";
 import { FC, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { ITokens, UserSource } from "@/types/common";
 
 enum SignUpSteps {
   SELECT_REASONS,
@@ -17,14 +19,18 @@ interface SignUpFormProps {
     showSignIn: () => void;
     onRegister: () => void;
     onAuth: () => void;
+    closeModal: () => void;
   };
 }
 
 const SignUpForm: FC<SignUpFormProps> = ({ modal }) => {
+  const params = useSearchParams();
+  const userSource = (params.get("userSource") as UserSource) || UserSource.System;
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [tokens, setTokens] = useState<null | ITokens>(null);
 
   useEffect(() => {
     if (step === SignUpSteps.SELECT_REASONS) {
@@ -44,7 +50,10 @@ const SignUpForm: FC<SignUpFormProps> = ({ modal }) => {
           modal={modal}
           setErrorMessage={setErrorMessage}
           setEmail={setEmail}
-          setFinishStep={() => setStep(SignUpSteps.FINISH)}
+          setFinishStep={(tokens) => {
+            setTokens(tokens);
+            setStep(SignUpSteps.FINISH);
+          }}
         />
       )}
       {step === SignUpSteps.SELECT_REASONS && (
@@ -66,8 +75,9 @@ const SignUpForm: FC<SignUpFormProps> = ({ modal }) => {
                   setStep(SignUpSteps.SELECT_REASONS);
                   setErrorMessage(null);
                 },
+                userSource,
               }
-            : { variant: "success", email: email! })}
+            : { variant: "success", email: email!, userSource, tokens })}
         />
       )}
     </div>

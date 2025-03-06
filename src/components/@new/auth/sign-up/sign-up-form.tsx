@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TextInput } from "@/components/ui/input";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
-import { UserSource } from "@/types/common";
+import { ITokens, UserSource } from "@/types/common";
 import { signUpUserAction } from "@/server-actions/auth/auth";
 import useNotification from "@/hooks/useNotification";
 import Button from "../../shared/forms/Button";
@@ -26,12 +26,11 @@ interface SignUpProps {
   };
   setErrorMessage: (val: string | null) => void;
   setEmail: (value: string) => void;
-  setFinishStep: () => void;
+  setFinishStep: (data: ITokens | null) => void;
 }
 
 const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorMessage, setEmail, setFinishStep }) => {
   const router = useRouter();
-  const { notify } = useNotification();
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const [openTermsDialog, setTermsDialog] = useState(false);
@@ -61,16 +60,9 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
     const request = await signUpUserAction({ ...data, userSource: params.get("userSource") || UserSource.System });
     if (request?.errorMessage) {
       setErrorMessage(request?.errorMessage);
-    }
-    if (request.data) {
-      if (modal?.onAuth) {
-        modal?.onAuth();
-        return;
-      }
-      router.replace(request?.data?.decodedAccessToken?.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
     } else {
       setEmail(getValues("email"));
-      setFinishStep();
+      setFinishStep(request.data);
     }
   });
 
