@@ -11,6 +11,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { z } from "zod";
 import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip } from "@radix-ui/react-tooltip";
 import { IPropertiesInteraction } from "@/types/volt";
+import { motion } from "framer-motion";
 import NoDataIcon from "../../@new/icons/no-data";
 
 const HEADERS = {
@@ -343,7 +344,37 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         <div className="flex items-center gap-2 justify-end">
                           <MdKeyboardArrowUp className="size-5 opacity-0" />
-                          {childAssessment.isSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0" />}
+                          {childAssessment.isSellingProperty && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div className="relative z-0 min-w-5 min-h-5 h-5">
+                                    <Image
+                                      alt=""
+                                      src="/map/pins/green-default.svg"
+                                      fill
+                                      loading="eager"
+                                      className="w-full h-full  object-cover"
+                                    />
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <div
+                                    className="p-0.5"
+                                    style={{
+                                      background: "linear-gradient(99.77deg, #17DC66 -8.11%, #06481D 182.53%)",
+                                      borderRadius: 12,
+                                      boxShadow: "0px 4px 12px 0px #0000001F",
+                                    }}
+                                  >
+                                    <div style={{ borderRadius: 10 }} className="bg-white p-3">
+                                      <p className="font-medium text-xs max-w-44">Subject Land</p>
+                                    </div>
+                                  </div>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -403,7 +434,49 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                 <td className="text-grey-800 text-xs !pl-7 ">
                   <div className="flex items-center gap-2 justify-end">
                     <MdKeyboardArrowUp className="size-5 opacity-0" />
-                    {assessment.data.isSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0" />}
+                    {assessment.data.isSellingProperty && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="relative z-0 min-w-5 min-h-5 h-5">
+                              <Image
+                                alt=""
+                                src="/map/pins/green-default.svg"
+                                fill
+                                loading="eager"
+                                className="w-full h-full  object-cover"
+                              />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent className="!z-20">
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.1 }}
+                              onAnimationStart={() => {
+                                const el = document.querySelector<HTMLElement>("[data-radix-popper-content-wrapper]");
+                                if (el) {
+                                  el.style.setProperty("--radix-popper-zIndex", "20");
+                                }
+                              }}
+                            >
+                              <div
+                                className="p-0.5"
+                                style={{
+                                  background: "linear-gradient(99.77deg, #17DC66 -8.11%, #06481D 182.53%)",
+                                  borderRadius: 12,
+                                  boxShadow: "0px 4px 12px 0px #0000001F",
+                                }}
+                              >
+                                <div style={{ borderRadius: 10 }} className="bg-white p-3">
+                                  <p className="font-medium text-xs max-w-44">Subject Land</p>
+                                </div>
+                              </div>
+                            </motion.div>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                   </div>
                 </td>
               </tr>
