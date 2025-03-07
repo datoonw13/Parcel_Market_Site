@@ -86,7 +86,10 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <div className="shadow-6 border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 h-full">
               <p className="text-sm font-medium">
-                Avg: <span className={cn(!isSubscribed && "blur-[2px]")}>{data.nonVoltPrice.formattedString}</span>
+                Avg:{" "}
+                <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
+                  {data.assessments.data.length <= 1 ? "NaN" : data.nonVoltPrice.formattedString}
+                </span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
             </div>
@@ -94,15 +97,23 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
               <div className="p-3 border-r flex items-center gap-2">
                 <p className="text-sm font-medium">
                   VOLT:
-                  <span className={cn(!isSubscribed && "blur-[2px]")}>{data.voltPrice.formattedString}</span>
+                  <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]")}>
+                    {data.assessments.data.length < 3 ? " NaN" : data.voltPrice.formattedString}
+                  </span>
                 </p>
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
               </div>
               <div className="p-3 flex">
-                <Switch
-                  checked={isNonValidMedianHighlighted}
-                  onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
-                  className="[&:has([data-state=checked])]:bg-warning"
+                <Tooltip
+                  renderButton={
+                    <Switch
+                      checked={isNonValidMedianHighlighted}
+                      onCheckedChange={() => setNonValidMedianHighlighted(!isNonValidMedianHighlighted)}
+                      className="[&:has([data-state=checked])]:bg-warning"
+                      disabled={data.assessments.data.length < 3}
+                    />
+                  }
+                  renderContent={data.assessments.data.length < 3 ? "VOLT works only for more than 2 properties." : ""}
                 />
               </div>
             </div>

@@ -39,7 +39,6 @@ const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassNam
           onClick={(e) => {
             setOpen(!open);
           }}
-          asChild
           className={cn("cursor-pointer", buttonClassName)}
         >
           <div>{renderButton}</div>

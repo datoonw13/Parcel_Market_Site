@@ -71,7 +71,10 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
   isNonValidMedianHighlighted,
   isSubscribed,
 }) => {
-  const assessments = isNonValidMedianHighlighted ? data.assessments.data.filter((el) => el.data.isMedianValid) : data.assessments.data;
+  const assessments =
+    isNonValidMedianHighlighted || data.assessments.data.length < 3
+      ? data.assessments.data.filter((el) => el.data.isMedianValid)
+      : data.assessments.data;
 
   return (
     <div id="volt-progress-line" className="border border-primary-main-400 bg-[#FAFFFB] p-3 space-y-8 relative z-10 rounded-2xl">
@@ -83,16 +86,8 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
           </div>
           <div className="flex items-center gap-1">
             <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
-              <span
-                // style={{
-                //   display: "table-cell",
-                //   whiteSpace: "nowrap",
-                //   textOverflow: "ellipsis",
-                //   overflow: "hidden",
-                // }}
-                className={cn(!isSubscribed && "blur-[2px]", "text-[11px]")}
-              >
-                {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
+              <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]", "text-[11px]")}>
+                {data.assessments.data.length <= 1 ? "NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
               </span>{" "}
               <span className="text-grey-600 text-[11px]">- APPA</span>
             </p>
@@ -106,7 +101,9 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
           </div>
           <div className="flex items-center gap-1">
             <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
-              <span className={cn(!isSubscribed && "blur-[2px]", "text-[11px]")}>{data.voltPricePerAcreage.formattedString}</span>{" "}
+              <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]", "text-[11px]")}>
+                {data.assessments.data.length < 3 ? "NaN " : data.voltPricePerAcreage.formattedString}
+              </span>{" "}
               <span className="text-grey-600 text-[11px]">- VPPA</span>
             </p>
             <Tooltip renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />} renderContent="Some text." />
@@ -126,20 +123,24 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
               }}
               className="absolute top-[50%] -translate-y-[50%]"
             >
-              <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
-                <div className="size-5 border-2 rounded-full border-primary-main" />
-                <div className="size-3 bg-primary-main rounded-full absolute" />
-              </div>
+              {data.assessments.data.length > 1 && (
+                <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
+                  <div className="size-5 border-2 rounded-full border-primary-main" />
+                  <div className="size-3 bg-primary-main rounded-full absolute" />
+                </div>
+              )}
             </div>
           )}
           <div
             style={{ left: `calc(${data.voltPricePerAcreage.axis[`${isNonValidMedianHighlighted ? "valid" : "all"}`]}%)` }}
             className="absolute top-[50%] -translate-y-[50%]"
           >
-            <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
-              <div className="size-5 border-2 rounded-full border-warning" />
-              <div className="size-3 bg-warning rounded-full absolute" />
-            </div>
+            {data.assessments.data.length > 2 && (
+              <div className={cn(`bg-white size-6  rounded-full flex items-center justify-center relative`)}>
+                <div className="size-5 border-2 rounded-full border-warning" />
+                <div className="size-3 bg-warning rounded-full absolute" />
+              </div>
+            )}
           </div>
           {assessments.map((property) => {
             const { hovered, isActive, popup } = getState(property.data.id, propertiesInteraction);
@@ -245,21 +246,23 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
         </div>
         <div className="flex items-center justify-between mt-2">
           <p className="font-semibold text-xs">
-            <span className={cn(!isSubscribed && "blur-[2px]")}>
-              {
-                data.assessments.calculations[`${isNonValidMedianHighlighted ? "minPriceOfValidAssessments" : "minPriceOfAllAssessments"}`]
-                  .formattedString
-              }
+            <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
+              {data.assessments.data.length <= 1
+                ? "NaN"
+                : data.assessments.calculations[
+                    `${isNonValidMedianHighlighted ? "minPriceOfValidAssessments" : "minPriceOfAllAssessments"}`
+                  ].formattedString}
             </span>{" "}
             <span className="text-grey-600 font-semibold text-xs">- LPPA</span>
           </p>
           <p className="font-semibold text-xs">
             <span className="text-grey-600 font-semibold text-xs">HPPA - </span>{" "}
-            <span className={cn(!isSubscribed && "blur-[2px]")}>
-              {
-                data.assessments.calculations[`${isNonValidMedianHighlighted ? "maxPriceOfValidAssessments" : "maxPriceOfAllAssessments"}`]
-                  .formattedString
-              }
+            <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
+              {data.assessments.data.length <= 1
+                ? "NaN"
+                : data.assessments.calculations[
+                    `${isNonValidMedianHighlighted ? "maxPriceOfValidAssessments" : "maxPriceOfAllAssessments"}`
+                  ].formattedString}
             </span>
           </p>
         </div>
