@@ -123,8 +123,10 @@ const AutoComplete: FC<AutoCompleteProps> = ({
               setOpen(false);
             }}
             value={search || ""}
+            autoComplete="new-password"
           >
             <Input
+              autoComplete="new-password"
               endIcon={
                 <>
                   <div className="flex items-center">
