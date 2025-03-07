@@ -437,9 +437,11 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             placeholder="Layovers"
             selectedValue={null}
           />
-          <Button variant="secondary" className="w-full !text-primary-main [&>span]:flex [&>span]:items-center [&>span]:gap-2">
-            Data Dashboard <RiExternalLinkFill className="!text-primary-main size-5" />
-          </Button>
+          <Link href={routes.user.recentSearches.fullUrl}>
+            <Button variant="secondary" className="w-full !text-primary-main [&>span]:flex [&>span]:items-center [&>span]:gap-2">
+              Data Dashboard <RiExternalLinkFill className="!text-primary-main size-5" />
+            </Button>
+          </Link>
           <Link href={routes.user.subscription.fullUrl}>
             <Button variant="default" className="w-full ">
               Subscribe to see price

@@ -133,15 +133,17 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                 </div>
                 <div className="bg-grey-50 border rounded-2xl border-grey-100 flex flex-col gap-3 p-4">
                   {!isSubscribed && (
-                    <Link href={routes.user.subscription.fullUrl}>
-                      <Button className="rounded-2xl">Subscribe to see prices</Button>
+                    <Link className="w-full" href={routes.user.subscription.fullUrl}>
+                      <Button className="rounded-2xl w-full">Subscribe to see prices</Button>
                     </Link>
                   )}
-                  <Button variant="secondary" className="!bg-white text-primary-main rounded-2xl">
-                    <div className="flex items-center gap-3">
-                      Data Dashboard <FaExternalLinkAlt />
-                    </div>
-                  </Button>
+                  <Link className="w-full" href={routes.user.recentSearches.fullUrl}>
+                    <Button variant="secondary" className="w-full !bg-white text-primary-main rounded-2xl">
+                      <div className="flex items-center gap-3">
+                        Data Dashboard <FaExternalLinkAlt />
+                      </div>
+                    </Button>
+                  </Link>
                 </div>
                 {showVideo && (
                   <div className="rounded-2xl">
