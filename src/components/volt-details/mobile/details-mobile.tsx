@@ -2,7 +2,7 @@
 
 import routes from "@/helpers/routes";
 import Link from "next/link";
-import { Dispatch, FC, SetStateAction, TransitionStartFunction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
@@ -61,6 +61,10 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [exportMapPending, setExportMapPending] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
+
+  const onMarkerInteraction = useCallback((data: Partial<IPropertiesInteraction>) => {
+    setPropertiesInteraction((prev) => ({ ...prev, ...data }));
+  }, []);
 
   useEffect(() => {
     if (data.assessments.data.length === 0) {
@@ -142,7 +146,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
                 <VoltDetailsMap
                   propertiesInteraction={propertiesInteraction}
                   onMouseLeave={() => {}}
-                  onMarkerInteraction={() => {}}
+                  onMarkerInteraction={onMarkerInteraction}
                   data={data}
                   isNonValidMedianHighlighted={isNonValidMedianHighlighted}
                   selectedLayer={selectedLayer}

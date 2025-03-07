@@ -9,6 +9,7 @@ import { z } from "zod";
 import { MapGeoJson } from "@/types/mapbox";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import { IPropertiesInteraction } from "@/types/volt";
+import isMobile from "is-mobile";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -477,14 +478,16 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [isNonValidMedianHighlighted, ref]);
 
   const handleMarkerInteraction = useCallback(() => {
-    ref?.on("mousemove", mapData.layers.markersLayer, (e) => {
-      const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
-      if (feature) {
-        onMarkerInteraction({
-          hover: { clickId: feature.id, isBulked: !!feature.bulkId, openId: feature.bulkId ? feature.bulkId : feature.id },
-        });
-      }
-    });
+    if (!isMobile()) {
+      ref?.on("mousemove", mapData.layers.markersLayer, (e) => {
+        const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
+        if (feature) {
+          onMarkerInteraction({
+            hover: { clickId: feature.id, isBulked: !!feature.bulkId, openId: feature.bulkId ? feature.bulkId : feature.id },
+          });
+        }
+      });
+    }
 
     ref?.on("mouseleave", mapData.layers.markersLayer, (e) => {
       onMouseLeave();
