@@ -1,6 +1,7 @@
 import HomeHeaderWrapper from "@/components/home-new/header/header-wrapper";
 import ScheduleDemo from "@/components/home-new/schedule-demo";
 import SlideShow from "@/components/home-new/slideshow/slideshow";
+import VoltEffort from "@/components/home-new/vol-effort";
 import VoltDescription from "@/components/home-new/volt-description/volt-description";
 import VoltVideo from "@/components/home-new/volt-video";
 import { getUserAction } from "@/server-actions/user/actions";
@@ -20,6 +21,7 @@ const HomePage = async () => {
       <VoltVideo />
       <ScheduleDemo />
       <VoltFeatures />
+      <VoltEffort />
       <div className="mt-20">qwd</div>
     </div>
   );
