@@ -11,7 +11,7 @@ import { IMainPropertyBaseInfo } from "@/types/property";
 import { z } from "zod";
 import SignInForm from "@/app/auth/sign-in/sign-in";
 import SignUpForm from "@/app/auth/sign-up/sign-up";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
 import VoltDesktop from "./volt-desktop";
@@ -33,6 +33,7 @@ const VoltLayout = ({
   const [authModal, setAuthModal] = useState<"sign-in" | "sign-up" | null>(null);
   const lastFetchedId = useRef<number | null>(null);
   const router = useRouter();
+  const params = useSearchParams();
 
   const form = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
@@ -65,6 +66,18 @@ const VoltLayout = ({
       form.trigger();
     }
   }, [form, initialParams]);
+
+  useEffect(() => {
+    const isFromHome = params.get("fromHome");
+    const state = params.get("state");
+    const county = params.get("county");
+    if (isFromHome && state && county) {
+      form.setValue("county", county, { shouldDirty: true, shouldValidate: true });
+      form.setValue("state", state, { shouldDirty: true, shouldValidate: true });
+      router.replace(routes.volt.fullUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (detecting) return null;
 

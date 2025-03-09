@@ -1,0 +1,101 @@
+"use client";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import routes from "@/helpers/routes";
+import Logo from "@/icons/Logo";
+import { cn } from "@/lib/utils";
+import { logOutUserAction } from "@/server-actions/user/actions";
+import { IUserBaseInfo } from "@/types/auth";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { FC, useState } from "react";
+import { CiUser } from "react-icons/ci";
+import { HiOutlineBell } from "react-icons/hi2";
+import { IoIosLogOut } from "react-icons/io";
+import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
+import { IconType } from "react-icons/lib";
+import HeaderNotifications from "./notifications";
+
+interface HomeDesktopHeaderProps {
+  menuList: Array<{ label: string; icon: IconType; path: string }>;
+  user: IUserBaseInfo | null;
+}
+
+const HomeDesktopHeader: FC<HomeDesktopHeaderProps> = ({ user, menuList }) => {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="justify-between py-7 max-w-6xl mx-auto px-8 xl:px-0 w-full hidden md:flex">
+      <Logo className="size-36 h-10" />
+      {user ? (
+        <div className="flex gap-4 items-center">
+          {user && (
+            <>
+              <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
+                <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
+              </Link>
+              <HeaderNotifications />
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Avatar className="group cursor-pointer" id="header-user-icon">
+                    <AvatarFallback className=" border border-grey-100 bg-grey-30 hover:bg-grey-50 hover:border-primary-main-200 text-sm font-medium group-data-[state=open]:bg-primary-main-200">
+                      {`${user.firstName[0]}${user.lastName[0]}`}
+                    </AvatarFallback>
+                  </Avatar>
+                </PopoverTrigger>
+                <PopoverContent className="outline-none translate-y-2">
+                  <div className="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80">
+                    <Avatar className="group cursor-pointer w-16 h-16">
+                      <AvatarFallback className="bg-primary-main-200">{`${user.firstName[0]}${user.lastName[0]}`}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium mb-1 text-center">{`${user.firstName} ${user.lastName}`}</p>
+                      <p className="text-xs text-grey-600 text-center">{user.email}</p>
+                    </div>
+                    <div className="bg-grey-30 rounded-xl w-full p-4">
+                      <ul>
+                        {menuList.map((item) => (
+                          <Link href={item.path} key={item.path}>
+                            <li
+                              className={cn(
+                                "flex gap-3 items-center text-xs hover:text-primary-main cursor-pointer py-1.5",
+                                pathname === item.path && "text-primary-main"
+                              )}
+                            >
+                              <item.icon className="size-4" /> {item.label}
+                            </li>
+                          </Link>
+                        ))}
+                        <li
+                          className="flex gap-3 items-center text-xs text-error cursor-pointer py-1.5"
+                          onClick={async () => {
+                            await logOutUserAction();
+                          }}
+                        >
+                          <IoIosLogOut className="size-4" /> Log Out
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </>
+          )}
+          <Link id="header-volt-button" href={routes.volt.fullUrl}>
+            <Button>VOLT</Button>
+          </Link>
+        </div>
+      ) : (
+        <div className="flex gap-4 justify-between items-center">
+          <Button>Value of the land tool</Button>
+          <Button variant="secondary">Sign In</Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default HomeDesktopHeader;
