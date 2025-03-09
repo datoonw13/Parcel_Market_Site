@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 
 const ScheduleDemo = () => (
   <div className="mt-14 sm:mt-16 md:mt-24 lg:mt-28 xl:mt-32 max-w-6xl mx-auto px-4 lg:px-8 xl:px-20 relative rounded-2xl w-full">
-    <div className="relative h-full flex gap-6 flex-col sm:flex-row justify-between items-center w-full p-6">
+    <div className="relative h-full flex gap-6 flex-col sm:flex-row justify-between items-center w-full p-10">
       <div className="absolute w-full h-full left-0 top-0">
         <div className="w-full h-full relative">
           <svg
@@ -292,7 +292,7 @@ const ScheduleDemo = () => (
         <h1 className="text-white text-2xl font-extrabold">Schedule a Demo</h1>
         <h2 className="text-white text-sm">Get a detailed demo from our experts and get all your questions answered with clarity.</h2>
       </div>
-      <Button className="bg-grey-30 hover:bg-grey-50 text-black md:px-16">Get a Demo</Button>
+      <Button className="bg-grey-30 hover:bg-grey-50 text-black md:px-16 mr-auto sm:mr-0">Get a Demo</Button>
     </div>
   </div>
 );
