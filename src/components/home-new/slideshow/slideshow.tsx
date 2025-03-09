@@ -14,9 +14,11 @@ import { useMemo, useState } from "react";
 import { getAllStates, getCounties, getCounty } from "@/helpers/states";
 import routes from "@/helpers/routes";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { AutoComplete } from "../ui/autocomplete";
-import { Button } from "../ui/button";
-import { breakPoints } from "../../../tailwind.config";
+import { cn } from "@/lib/utils";
+import { AutoComplete } from "../../ui/autocomplete";
+import { Button } from "../../ui/button";
+import { breakPoints } from "../../../../tailwind.config";
+import styles from "./styles.module.css";
 
 const images = ["/bg2.jpg", "/bg2.jpg", "/bg2.jpg", "/bg2.jpg"];
 
@@ -43,9 +45,17 @@ const SlideShow = () => {
         spaceBetween={30}
         effect="fade"
         navigation
-        {...(!isSm && { pagination: { clickable: true } })}
+        {...(!isSm && {
+          pagination: {
+            clickable: true,
+            bulletClass: styles["swiper-bullet-custom"],
+            bulletActiveClass: styles["swiper-bullet-custom-active"],
+          },
+        })}
         modules={isSm ? [EffectFade, Autoplay] : [EffectFade, Autoplay, Pagination]}
-        className="mySwiper [&>.swiper-pagination]:!absolute [&>.swiper-pagination]:justify-center [&>.swiper-pagination]:!bottom-10"
+        className={cn(
+          "mySwiper [&>.swiper-pagination]:!absolute [&>.swiper-pagination]:justify-center [&>.swiper-pagination]:!bottom-10 [&>.swiper-pagination]:flex"
+        )}
       >
         {images.map((el, elI) => (
           <SwiperSlide key={el + elI.toString()}>
