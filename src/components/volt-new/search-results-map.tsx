@@ -154,7 +154,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
           layout: {},
           paint: {
             "fill-color": "#649d8d",
-            "fill-opacity": 0.6,
+            "fillOpacity": 0.6,
           },
         },
         mapData.layers.markersLayer

@@ -74,7 +74,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
         <CancelPlanDialog closeDialog={() => setOpenCancelModal(false)} userActiveSubscription={userActiveSubscription} />
       )}
       <div className={cn("bg-white rounded-2xl p-8 flex flex-col border", isActive && "border-success")}>
-        <div className="gap-3 font-semibold text-sm text-primary-main min-h-14 flex items-start">
+        <div className="gap-3 font-semibold text-sm text-primary-main flex items-start">
           {isActive ? (
             <div className="flex items-center gap-3">
               <div className="h-3 w-3 rounded-full bg-success" />{" "}

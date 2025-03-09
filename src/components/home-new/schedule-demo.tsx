@@ -68,12 +68,12 @@ const ScheduleDemo = () => (
             </g>
             <defs>
               <linearGradient id="paint0_linear_3750_30021" x1="0" y1="88.51" x2="343" y2="88.51" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#157DD1" />
-                <stop offset="1" stop-color="#16DB65" />
+                <stop stopColor="#157DD1" />
+                <stop offset="1" stopColor="#16DB65" />
               </linearGradient>
               <linearGradient id="paint1_linear_3750_30021" x1="0" y1="88.51" x2="343" y2="88.51" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint2_linear_3750_30021"
@@ -83,8 +83,8 @@ const ScheduleDemo = () => (
                 y2="88.5085"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#9FD1B3" />
-                <stop offset="1" stop-color="#0E8B40" />
+                <stop stopColor="#9FD1B3" />
+                <stop offset="1" stopColor="#0E8B40" />
               </linearGradient>
               <linearGradient
                 id="paint3_linear_3750_30021"
@@ -94,8 +94,8 @@ const ScheduleDemo = () => (
                 y2="-213.645"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint4_linear_3750_30021"
@@ -105,8 +105,8 @@ const ScheduleDemo = () => (
                 y2="-194.315"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint5_linear_3750_30021"
@@ -116,8 +116,8 @@ const ScheduleDemo = () => (
                 y2="-174.987"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint6_linear_3750_30021"
@@ -127,8 +127,8 @@ const ScheduleDemo = () => (
                 y2="-155.662"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint7_linear_3750_30021"
@@ -138,8 +138,8 @@ const ScheduleDemo = () => (
                 y2="-136.34"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint8_linear_3750_30021"
@@ -149,8 +149,8 @@ const ScheduleDemo = () => (
                 y2="-117.009"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
             </defs>
           </svg>
@@ -178,52 +178,52 @@ const ScheduleDemo = () => (
               <path
                 d="M-208.729 186.262C-176.049 114.099 -40.382 -22.6526 240.845 7.64087C592.378 45.5077 829.118 184.74 1114.77 -33.1363C1343.3 -207.437 1427.89 -294.124 1441.62 -315.679"
                 stroke="url(#paint3_linear_3750_22414)"
-                stroke-opacity="0.6"
-                stroke-width="0.632111"
+                strokeOpacity="0.6"
+                strokeWidth="0.632111"
               />
               <path
                 d="M-211.744 202.861C-179.064 130.698 -43.3975 -6.05332 237.829 24.2402C589.363 62.1071 826.102 201.339 1111.76 -16.537C1340.29 -190.838 1424.87 -277.525 1438.6 -299.08"
                 stroke="url(#paint4_linear_3750_22414)"
-                stroke-opacity="0.6"
-                stroke-width="0.632111"
+                strokeOpacity="0.6"
+                strokeWidth="0.632111"
               />
               <path
                 d="M-214.761 219.459C-182.081 147.297 -46.4141 10.5451 234.813 40.8386C586.346 78.7055 823.086 217.938 1108.74 0.0614303C1337.27 -174.24 1421.86 -260.926 1435.59 -282.482"
                 stroke="url(#paint5_linear_3750_22414)"
-                stroke-opacity="0.6"
-                stroke-width="0.632111"
+                strokeOpacity="0.6"
+                strokeWidth="0.632111"
               />
               <path
                 d="M-217.777 236.055C-185.097 163.893 -49.4298 27.141 231.797 57.4345C583.331 95.3014 820.07 234.534 1105.73 16.6574C1334.25 -157.644 1418.84 -244.33 1432.57 -265.886"
                 stroke="url(#paint6_linear_3750_22414)"
-                stroke-opacity="0.6"
-                stroke-width="0.632111"
+                strokeOpacity="0.6"
+                strokeWidth="0.632111"
               />
               <path
                 d="M-220.793 252.648C-188.113 180.486 -52.4464 43.734 228.78 74.0275C580.314 111.894 817.053 251.127 1102.71 33.2504C1331.24 -141.051 1415.82 -227.737 1429.55 -249.293"
                 stroke="url(#paint7_linear_3750_22414)"
-                stroke-opacity="0.6"
-                stroke-width="0.632111"
+                strokeOpacity="0.6"
+                strokeWidth="0.632111"
               />
               <path
                 d="M-223.809 269.249C-191.129 197.086 -55.462 60.3346 225.765 90.6281C577.298 128.495 814.038 267.727 1099.69 49.851C1328.22 -124.45 1412.81 -211.137 1426.54 -232.692"
                 stroke="url(#paint8_linear_3750_22414)"
-                stroke-opacity="0.6"
-                stroke-width="0.632111"
+                strokeOpacity="0.6"
+                strokeWidth="0.632111"
               />
             </g>
             <defs>
               <linearGradient id="paint0_linear_3750_22414" x1="0" y1="76.6174" x2="1180" y2="76.6174" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#157DD1" />
-                <stop offset="1" stop-color="#16DB65" />
+                <stop stopColor="#157DD1" />
+                <stop offset="1" stopColor="#16DB65" />
               </linearGradient>
               <linearGradient id="paint1_linear_3750_22414" x1="0" y1="76.6174" x2="1180" y2="76.6174" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient id="paint2_linear_3750_22414" x1="1" y1="76.6157" x2="1179" y2="76.6157" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#9FD1B3" />
-                <stop offset="1" stop-color="#0E8B40" />
+                <stop stopColor="#9FD1B3" />
+                <stop offset="1" stopColor="#0E8B40" />
               </linearGradient>
               <linearGradient
                 id="paint3_linear_3750_22414"
@@ -233,8 +233,8 @@ const ScheduleDemo = () => (
                 y2="117.89"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint4_linear_3750_22414"
@@ -244,8 +244,8 @@ const ScheduleDemo = () => (
                 y2="134.49"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint5_linear_3750_22414"
@@ -255,8 +255,8 @@ const ScheduleDemo = () => (
                 y2="151.088"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint6_linear_3750_22414"
@@ -266,12 +266,12 @@ const ScheduleDemo = () => (
                 y2="167.684"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient id="paint7_linear_3750_22414" x1="-158.525" y1="-90" x2="1350.76" y2="184.277" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
               <linearGradient
                 id="paint8_linear_3750_22414"
@@ -281,8 +281,8 @@ const ScheduleDemo = () => (
                 y2="200.878"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#16DB65" />
-                <stop offset="1" stop-color="#157DD1" />
+                <stop stopColor="#16DB65" />
+                <stop offset="1" stopColor="#157DD1" />
               </linearGradient>
             </defs>
           </svg>

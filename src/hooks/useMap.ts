@@ -321,7 +321,7 @@ const useMap = () => {
           maxzoom: 20,
           paint: {
             "fill-color": ["case", ...fillColorFilters.flat(), "transparent"],
-            "fill-opacity": ["case", ...fillColorOpacity.flat(), 0],
+            "fillOpacity": ["case", ...fillColorOpacity.flat(), 0],
           },
         },
         "markers-layer"

@@ -230,7 +230,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
             layout: {},
             paint: {
               "fill-color": "#649d8d",
-              "fill-opacity": 0.6,
+              "fillOpacity": 0.6,
             },
           },
           mapData.layers.markersLayer
@@ -387,7 +387,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
             "#649d8d", // Turns green when hovered
             "#fff", // Default color
           ],
-          "fill-opacity": [
+          "fillOpacity": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
             0.9, // Almost fully opaque when selected

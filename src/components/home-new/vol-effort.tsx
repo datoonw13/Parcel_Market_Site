@@ -10,7 +10,7 @@ const VoltEffort = () => (
     <div className="flex gap-5 flex-col sm:flex-row">
       <div className="border border-success relative flex flex-col gap-4 shadow-[0px_20px_80px_0px_rgba(0,0,0,0.08)] rounded-3xl p-4 md:p-6">
         <div className="space-y-2 relative z-20">
-          <h1 className="font-extrabold text-xl md:text-2xl text-primary-main">Save Time with Instant Data Access</h1>
+          <h1 className="font-extrabold text-xl lg:text-2xl text-primary-main">Save Time with Instant Data Access</h1>
           <h2>No more manual research on county websites—get comparable sales and property data in seconds.</h2>
         </div>
         <Link href={routes.volt.fullUrl}>
@@ -23,7 +23,7 @@ const VoltEffort = () => (
       </div>
       <div className="border border-success relative flex flex-col gap-4 shadow-[0px_20px_80px_0px_rgba(0,0,0,0.08)] rounded-3xl p-4 md:p-6">
         <div className="space-y-2 relative z-20">
-          <h1 className="font-extrabold text-xl md:text-2xl text-primary-main">Make Smarter Investment Decisions</h1>
+          <h1 className="font-extrabold text-xl lg:text-2xl text-primary-main">Make Smarter Investment Decisions</h1>
           <h2>Accurate sales data and automated calculations help you evaluate properties with confidence.</h2>
         </div>
         <Link href={routes.volt.fullUrl}>
