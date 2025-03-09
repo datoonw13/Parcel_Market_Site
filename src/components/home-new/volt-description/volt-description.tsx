@@ -28,7 +28,7 @@ const VoltDescription = () => {
 
   return (
     <div className="relative ">
-      <div className="max-w-6xl mx-auto lg:px-20 pt-8 md:pt-12 lg:pt-16 px-4 pb-4 shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] lg:shadow-none rounded-b-2xl space-y-8">
+      <div className="max-w-7xl mx-auto lg:px-20 pt-8 md:pt-12 lg:pt-16 px-4 pb-4 shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] lg:shadow-none rounded-b-2xl space-y-8">
         <div className="px-2 space-y-2">
           <h1 className="text-center font-extrabold text-2xl">VOLT - Value of Land Tool</h1>
           <h2 className="text-center font-light">

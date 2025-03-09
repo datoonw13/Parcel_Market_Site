@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 
 const ScheduleDemo = () => (
-  <div className="mt-14 sm:mt-16 md:mt-24 lg:mt-28 xl:mt-32 max-w-6xl mx-auto px-4 lg:px-8 xl:px-20 relative rounded-2xl w-full">
+  <div className="mt-14 sm:mt-16 md:mt-24 lg:mt-28 xl:mt-32 max-w-7xl mx-auto px-4 lg:px-8 xl:px-20 relative rounded-2xl w-full">
     <div className="relative h-full flex gap-6 flex-col sm:flex-row justify-between items-center w-full p-10">
       <div className="absolute w-full h-full left-0 top-0">
         <div className="w-full h-full relative">

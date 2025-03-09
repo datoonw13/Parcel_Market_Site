@@ -28,7 +28,7 @@ const HomeDesktopHeader: FC<HomeDesktopHeaderProps> = ({ user, menuList }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="justify-between py-7 max-w-6xl mx-auto px-8 xl:px-0 w-full hidden md:flex">
+    <div className="justify-between py-7 max-w-7xl mx-auto px-8 xl:px-0 w-full hidden md:flex">
       <Logo className="size-36 h-10" />
       {user ? (
         <div className="flex gap-4 items-center">
