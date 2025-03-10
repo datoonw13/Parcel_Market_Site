@@ -93,7 +93,7 @@ const MapboxComponent = () => {
               "#649d8d", // Turns green when hovered
               "#fff", // Default color
             ],
-            "fillOpacity": [
+            "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "selected"], false],
               0.9, // Almost fully opaque when selected
