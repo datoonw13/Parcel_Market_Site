@@ -367,7 +367,7 @@ const VoltFeatures = () => {
 export default VoltFeatures;
 
 const Item = ({ item }: { item: typeof list[0] }) => (
-  <div className="bg-white border border-primary-main-600 p-5 rounded-2xl h-full">
+  <div className="bg-white border border-primary-main-600 p-5 rounded-2xl h-full transition-all hover:bg-primary-main-50 cursor-pointer">
     <div className="min-h-12 h-12 min-w-12 w-12 rounded-full bg-primary-main-100 border border-primary-main-400 flex items-center justify-center">
       <item.icon className=" size-6 text-primary-main" />
     </div>
