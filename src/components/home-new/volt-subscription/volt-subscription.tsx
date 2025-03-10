@@ -1,20 +1,18 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Autoplay, EffectFade, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { cn } from "@/lib/utils";
-import { SubscriptionType } from "@/types/subscriptions";
+import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 import PlanItem from "@/components/@new/subscription/plans/plan-item";
 import { GiCheckMark } from "react-icons/gi";
 import Image from "next/image";
+import { IUserBaseInfo } from "@/types/auth";
 import PlanList from "../../@new/subscription/plans/plan-list";
 import styles from "./styles.module.css";
 
-const VoltSubscription = ({ userActiveSubscription }: { userActiveSubscription: any }) => {
-  const navigationPrevRef = useRef<HTMLButtonElement>(null);
-  const navigationNextRef = useRef<HTMLButtonElement>(null);
-  const paginationRef = useRef<HTMLButtonElement>(null);
+const VoltSubscription = ({ user, subscriptionType }: { user: IUserBaseInfo | null; subscriptionType: ISubscription | null }) => {
   const swiperRef = useRef<SwiperRef | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   return (
@@ -71,16 +69,16 @@ const VoltSubscription = ({ userActiveSubscription }: { userActiveSubscription: 
             <div className="h-full">
               <div className="flex items-center h-full w-full md:transition-all md:duration-100">
                 <div className="flex flex-col h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
-                  {false && <h2 className="font-medium text-xs text-primary-main h-10 uppercase">Risk Free! No Payment Info Required</h2>}
-                  {true && (
+                  {!user && (
+                    <h2 className="font-medium text-xs text-primary-main text-start uppercase">Risk Free! No Payment Info Required</h2>
+                  )}
+                  {user && !subscriptionType && (
                     <div className="flex items-center gap-2">
                       <div className="size-5 rounded-full bg-success" />
                       <p className="text-success font-medium">Active</p>
                     </div>
                   )}
-                  <h1 className="text-5xl font-bold mb-7 md:mb-4 text-start mt-2">
-                    Free <span className="text-base font-normal">/ 5 Days</span>
-                  </h1>
+                  <h1 className="text-5xl font-bold mb-7 md:mb-4 text-start mt-2">Free Plan</h1>
                   <ul className="list-disc list-outside pl-4 mt-auto">
                     <li className="text-sm text-start">included all except pricing and the data export</li>
                   </ul>
@@ -90,7 +88,7 @@ const VoltSubscription = ({ userActiveSubscription }: { userActiveSubscription: 
           </SwiperSlide>
           {Object.keys(SubscriptionType).map((type) => (
             <SwiperSlide className="[&>*]:text-black !h-[249px] [&>div]:h-full" key={type}>
-              <PlanItem key={type} type={type as SubscriptionType} userActiveSubscription={userActiveSubscription} />
+              <PlanItem key={type} type={type as SubscriptionType} userActiveSubscription={subscriptionType || undefined} />
             </SwiperSlide>
           ))}
         </Swiper>

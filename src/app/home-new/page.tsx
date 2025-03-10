@@ -1,40 +1,16 @@
-"use client";
-
-import HomeHeaderWrapper from "@/components/home-new/header/header-wrapper";
-import ScheduleDemo from "@/components/home-new/schedule-demo";
-import SlideShow from "@/components/home-new/slideshow/slideshow";
-import VoltEffort from "@/components/home-new/volt-effort";
-import VoltDescription from "@/components/home-new/volt-description/volt-description";
-import VoltPeopleFeedback from "@/components/home-new/volt-people-feedback";
-import VoltQuestions from "@/components/home-new/volt-questions";
-import VoltVideo from "@/components/home-new/volt-video";
+import HomeSectionsWrapper from "@/components/home-new/wrapper";
+import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import { getUserAction } from "@/server-actions/user/actions";
-import dynamic from "next/dynamic";
-import VoltSupport from "@/components/home-new/volt-support";
-import HomeUpdatesSection from "@/components/home-new/updates";
-import HomeFooterSection from "@/components/home-new/footer";
+import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 
-const VoltFeatures = dynamic(() => import("@/components/home-new/volt-features"), { ssr: false });
-const VoltSubscription = dynamic(() => import("@/components/home-new/volt-subscription/volt-subscription"), { ssr: false });
+const HomePage = async () => {
+  const user = await getUserAction();
+  const userSubscriptions = await getUserSubscriptions();
+  let subscriptionType: ISubscription | null = null;
 
-const HomePage = () => (
-  // const user = await getUserAction();
-  <div className="bg-[#fdfdfd]">
-    <div className="h-screen lg:h-[76.5vh] flex flex-col">
-      <HomeHeaderWrapper user={null} />
-      <SlideShow />
-    </div>
-    <VoltDescription />
-    <VoltVideo />
-    <ScheduleDemo />
-    <VoltFeatures />
-    <VoltEffort />
-    <VoltSubscription userActiveSubscription={undefined} />
-    <VoltQuestions />
-    <VoltPeopleFeedback />
-    <VoltSupport />
-    <HomeUpdatesSection />
-    <HomeFooterSection />
-  </div>
-);
+  if (userSubscriptions.data) {
+    subscriptionType = userSubscriptions.data.find((el) => el.status === "active") || null;
+  }
+  return <HomeSectionsWrapper user={user} subscriptionType={subscriptionType} />;
+};
 export default HomePage;
