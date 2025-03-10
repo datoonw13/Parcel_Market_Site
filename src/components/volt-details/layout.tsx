@@ -62,6 +62,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({
     acreageMin: data.filters.acreageMin,
     acreageMax: data.filters.acreageMax,
+    radius: data.filters.radius || (10 as any),
+    soldWithin: data.filters.soldWithin || (2 as any),
     ...validatedFilters.data!,
   });
 

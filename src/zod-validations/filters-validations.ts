@@ -106,14 +106,14 @@ export const voltDetailsFiltersValidations = z.object({
       z.coerce.number().refine((val) => val === 10),
       z.coerce.number().refine((val) => val === 15),
     ])
-    .default(5),
+    .optional(),
   soldWithin: z
     .union([
       z.coerce.number().refine((val) => val === 1),
       z.coerce.number().refine((val) => val === 2),
       z.coerce.number().refine((val) => val === 3),
     ])
-    .default(2),
+    .optional(),
   acreageMin: z.coerce.number().nullable().optional().catch(null),
   acreageMax: z.coerce.number().nullable().optional().catch(null),
   propertyTypes: z.array(z.number()).nullable().optional().catch(null),
