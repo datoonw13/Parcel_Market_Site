@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { SubscriptionType } from "@/types/subscriptions";
 import PlanItem from "@/components/@new/subscription/plans/plan-item";
 import { GiCheckMark } from "react-icons/gi";
+import Image from "next/image";
 import PlanList from "../../@new/subscription/plans/plan-list";
 import styles from "./styles.module.css";
 
@@ -25,7 +26,9 @@ const VoltSubscription = ({ userActiveSubscription }: { userActiveSubscription: 
         </h2>
       </div>
 
-      <div className="max-w-7xl w-full mx-auto pl-4 lg:px-8 xl:px-20 mb-8 lg:mb-11 lg:p-6 lg:bg-error-100 lg:rounded-2xl">
+      <div className="relative max-w-7xl w-full mx-auto pl-4 lg:px-8 xl:px-20 mb-8 lg:mb-11 lg:p-6 lg:bg-[#F9F9F9] border border-[rgba(219, 219, 219, 0.1)]  lg:rounded-2xl">
+        <Image src="/dots.svg" fill className="w-full h-full absolute object-cover rounded-2xl hidden lg:block" alt="" />
+
         <Swiper
           ref={swiperRef}
           autoplay={{
@@ -110,6 +113,7 @@ const VoltSubscription = ({ userActiveSubscription }: { userActiveSubscription: 
         </ul>
         <ul
           className={`
+                relative
                 border border-primary-main rounded-2xl 
                 bg-[#ECF6F0]
                 p-5
