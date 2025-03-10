@@ -12,6 +12,7 @@ import { getUserAction } from "@/server-actions/user/actions";
 import dynamic from "next/dynamic";
 import VoltSupport from "@/components/home-new/volt-support";
 import HomeUpdatesSection from "@/components/home-new/updates";
+import HomeFooterSection from "@/components/home-new/footer";
 
 const VoltFeatures = dynamic(() => import("@/components/home-new/volt-features"), { ssr: false });
 const VoltSubscription = dynamic(() => import("@/components/home-new/volt-subscription/volt-subscription"), { ssr: false });
@@ -33,7 +34,7 @@ const HomePage = () => (
     <VoltPeopleFeedback />
     <VoltSupport />
     <HomeUpdatesSection />
-    <div className="mt-20">qwd</div>
+    <HomeFooterSection />
   </div>
 );
 export default HomePage;
