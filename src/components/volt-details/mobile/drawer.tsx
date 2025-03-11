@@ -11,6 +11,7 @@ import { IoClose } from "react-icons/io5";
 import moment from "moment";
 import routes from "@/helpers/routes";
 import Link from "next/link";
+import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
 import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
@@ -25,6 +26,7 @@ interface VoltDetailsDrawerProps {
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   propertiesInteraction: IPropertiesInteraction;
   contentClassName?: string;
+  filters: z.infer<typeof voltDetailsFiltersValidations>;
 }
 
 const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
@@ -36,6 +38,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
   propertiesInteraction,
   setPropertiesInteraction,
   contentClassName,
+  filters,
 }) => {
   const [snap, setSnap] = useState<number | string | null>(0);
   const [snapPoints, setSnapPoints] = useState<Array<string | number>>([0, 1]);
@@ -206,8 +209,8 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                   <div>
                     <h1 className="text-lg font-semibold">Recent Sales</h1>
                     <h2 className="text-grey-800 text-sm">
-                      These are vacant land parcels that have sold in the past two years, within 10 miles of the subject parcel and are of
-                      similar acreage.
+                      These are vacant land parcels that have sold in the past {filters.soldWithin} years, within {filters.radius} miles of
+                      the subject parcel and are of similar acreage.
                     </h2>
                   </div>
                   <div className="flex flex-col gap-2">

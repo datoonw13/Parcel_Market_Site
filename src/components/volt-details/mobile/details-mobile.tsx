@@ -61,7 +61,6 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [exportMapPending, setExportMapPending] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
-
   const onMarkerInteraction = useCallback((data: Partial<IPropertiesInteraction>) => {
     setPropertiesInteraction((prev) => ({ ...prev, ...data }));
   }, []);
@@ -171,6 +170,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
             data={data}
             isNonValidMedianHighlighted={isNonValidMedianHighlighted}
             isSubscribed={isSubscribed}
+            filters={filters}
           />
           <div className="flex gap-3 border-t pb-6 pt-4 fixed bottom-0 bg-white z-50 w-full px-3">
             {!user?.isSubscribed ? (
