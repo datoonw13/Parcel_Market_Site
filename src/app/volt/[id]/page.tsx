@@ -15,8 +15,9 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const searchParams = new URLSearchParams();
     searchParams.set("getAll", "true");
     const user = await getUserAction();
-    const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
-    const data = await PropertyDataSchema.parseAsync({ ...req, subscribed: !!user?.isSubscribed });
+    // const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
+    x.assessments = [x.assessments[0]];
+    const data = await PropertyDataSchema.parseAsync({ ...x, subscribed: !!user?.isSubscribed });
 
     return {
       errorMessage: null,

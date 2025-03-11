@@ -26,7 +26,7 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
       <div>
         Avg:{" "}
         <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
-          {data.assessments.data.length <= 1 ? "NaN" : data.nonVoltPrice.formattedString}
+          {data.assessments.data.length <= 1 ? "$ NaN" : data.nonVoltPrice.formattedString}
         </span>
       </div>
       <Tooltip renderButton={<IoInformationCircleOutline className="size-4 text-grey-600" />} renderContent="Some text." />
@@ -36,7 +36,7 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
         <div className="flex items-center gap-1">
           VOLT:
           <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]")}>
-            {data.assessments.data.length < 3 ? " NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
+            {data.assessments.data.length < 3 ? " $ NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
           </span>
         </div>
         <Tooltip renderButton={<IoInformationCircleOutline className="size-4 text-grey-600" />} renderContent="Some text." />

@@ -88,7 +88,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
               <p className="text-sm font-medium">
                 Avg:{" "}
                 <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
-                  {data.assessments.data.length <= 1 ? "NaN" : data.nonVoltPrice.formattedString}
+                  {data.assessments.data.length <= 1 ? "$ NaN" : data.nonVoltPrice.formattedString}
                 </span>
               </p>
               <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
@@ -98,7 +98,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
                 <p className="text-sm font-medium">
                   VOLT:
                   <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]")}>
-                    {data.assessments.data.length < 3 ? " NaN" : data.voltPrice.formattedString}
+                    {data.assessments.data.length < 3 ? " $ NaN" : data.voltPrice.formattedString}
                   </span>
                 </p>
                 <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />

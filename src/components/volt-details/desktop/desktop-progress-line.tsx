@@ -82,8 +82,8 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             </div>
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
-                <span className={cn(!isSubscribed && "blur-[2px]")}>
-                  {data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
+                <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
+                  {data.assessments.data.length <= 1 ? "$ NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
                 </span>{" "}
                 <span className="text-grey-600">- Average PPA</span>
               </p>
@@ -98,7 +98,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             <div className="flex items-center gap-2">
               <p className="font-semibold text-xs">
                 <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]")}>
-                  {data.assessments.data.length < 3 ? " NaN" : data.voltPricePerAcreage.formattedString}
+                  {data.assessments.data.length < 3 ? " $ NaN" : data.voltPricePerAcreage.formattedString}
                 </span>{" "}
                 <span className="text-grey-600">- VOLT PPA</span>
               </p>
@@ -246,7 +246,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
           <p className="font-semibold text-xs">
             <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
               {data.assessments.data.length <= 1
-                ? "NaN"
+                ? "$ NaN"
                 : data.assessments.calculations[
                     `${isNonValidMedianHighlighted ? "minPriceOfValidAssessments" : "minPriceOfAllAssessments"}`
                   ].formattedString}
@@ -257,7 +257,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             <span className="text-grey-600 font-semibold text-xs">Highest sale reported per acre - </span>{" "}
             <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]")}>
               {data.assessments.data.length <= 1
-                ? "NaN"
+                ? "$ NaN"
                 : data.assessments.calculations[
                     `${isNonValidMedianHighlighted ? "maxPriceOfValidAssessments" : "maxPriceOfAllAssessments"}`
                   ].formattedString}
