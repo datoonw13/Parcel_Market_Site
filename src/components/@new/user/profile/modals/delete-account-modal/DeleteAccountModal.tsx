@@ -9,6 +9,7 @@ import { DeletionAccountReason } from "@/types/auth";
 import { logOutUserAction, removeUserAccountAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import TextField from "@/components/@new/shared/forms/text-field";
+import useNotification from "@/hooks/useNotification";
 import ProfileModalContentWrapper from "../ProfileModalContentWrapper";
 
 const ResponsiveModal = dynamic(() => import("../../../../shared/modals/ResponsiveModal"), { ssr: false });
@@ -39,8 +40,12 @@ const generateModalMeta = (step: AccountRemoveSteps) => {
       };
     default:
       return {
-        title: "Delete Account",
-        description: "For your security, please re-enter your password to continue",
+        title: "Deleting your account",
+        description: (
+          <span>
+            For security reasons, please type <span className="font-extrabold">DELETE</span> in the field below to proceed.
+          </span>
+        ),
       };
   }
 };
@@ -51,16 +56,20 @@ const DeleteAccountModalContent: FC<Pick<DeleteAccountModalProps, "handleClose">
     password: "",
     deletionResult: null,
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [removePending, setRemovePending] = useState(false);
+  const { notify } = useNotification();
 
   const handleNext = async () => {
     if (step !== AccountRemoveSteps.CONFIRM_DELETE) {
+      if (step === AccountRemoveSteps.TYPE_PASSWORD && values.password.toLocaleLowerCase() !== "delete") {
+        notify({ title: "Error", description: "Please type 'DELETE' exactly as instructed to continue." }, { variant: "error" });
+        return;
+      }
       setStep(step + 1);
     } else {
       setRemovePending(true);
       if (values.deletionResult && values.password) {
-        const { errorMessage } = await removeUserAccountAction({ deletionResult: values.deletionResult, password: values.password });
+        const { errorMessage } = await removeUserAccountAction({ deletionResult: values.deletionResult });
         if (errorMessage) {
           toast.error(errorMessage);
           setRemovePending(false);
@@ -88,13 +97,8 @@ const DeleteAccountModalContent: FC<Pick<DeleteAccountModalProps, "handleClose">
       <div className="flex justify-between flex-col h-full">
         {step === AccountRemoveSteps.TYPE_PASSWORD && (
           <TextField
-            placeholder="Enter Your Password"
-            type={showPassword ? "text" : "password"}
-            endIcon={
-              <div className="cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeIcon1 /> : <EyeIcon2 />}
-              </div>
-            }
+            placeholder="Type here"
+            type="text"
             value={values.password}
             onChange={(password) => setValues({ ...values, password })}
           />

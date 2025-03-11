@@ -22,7 +22,7 @@ const VoltPeopleFeedback = dynamic(() => import("@/components/home-new/volt-peop
 const HomeSectionsWrapper = ({ user, subscriptionType }: { user: IUserBaseInfo | null; subscriptionType: ISubscription | null }) => (
   <div className="bg-[#fdfdfd]">
     <div className="h-screen lg:h-[76.5vh] flex flex-col">
-      <HomeHeaderWrapper user={null} />
+      <HomeHeaderWrapper user={user} />
       <SlideShow />
     </div>
     <VoltDescription />

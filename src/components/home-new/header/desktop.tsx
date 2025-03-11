@@ -90,8 +90,12 @@ const HomeDesktopHeader: FC<HomeDesktopHeaderProps> = ({ user, menuList }) => {
         </div>
       ) : (
         <div className="flex gap-4 justify-between items-center">
-          <Button>Value of the land tool</Button>
-          <Button variant="secondary">Sign In</Button>
+          <Link id="header-volt-button" href={routes.volt.fullUrl}>
+            <Button>Value of the land tool</Button>
+          </Link>
+          <Link id="header-volt-button" href={routes.auth.signIn.fullUrl}>
+            <Button variant="secondary">Sign In</Button>
+          </Link>
         </div>
       )}
     </div>

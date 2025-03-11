@@ -370,10 +370,7 @@ export const setNewPasswordAction = async (values: { code: string; newPassword: 
   }
 };
 
-export const removeUserAccountAction = async (values: {
-  password: string;
-  deletionResult: DeletionAccountReason;
-}): Promise<ResponseModel<null>> => {
+export const removeUserAccountAction = async (values: { deletionResult: DeletionAccountReason }): Promise<ResponseModel<null>> => {
   try {
     await fetcher<ResponseType<null>>("user/profile", {
       method: "DELETE",
