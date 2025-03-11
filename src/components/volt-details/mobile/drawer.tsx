@@ -187,7 +187,8 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                       <li>
                         <p className="text-sm font-medium text-grey-600">State/county:</p>
                         <p className="text-sm">
-                          {data.state.label}/{data.county.label}
+                          <span>{data.state.label} / </span>
+                          <span>{data.county.label}</span>
                         </p>
                       </li>
                       <li>
