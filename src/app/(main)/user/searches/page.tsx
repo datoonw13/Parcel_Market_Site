@@ -10,7 +10,7 @@ const UserSearches = async ({ searchParams }: { searchParams: Record<string, str
   return (
     filters.success && (
       <Suspense>
-        <SearchesWrapper hasEntries={hasEntries} filters={filters.data} viewId={Number(searchParams.viewId) || null} />
+        <SearchesWrapper hasEntries={hasEntries} filters={filters.data} />
       </Suspense>
     )
   );

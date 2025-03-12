@@ -18,7 +18,7 @@ const getData = async (params: string): Promise<ResponseModel<z.infer<typeof Pro
     const req = await fetcher<Promise<z.infer<typeof PropertyDataSchema>>>(`properties/saleData?${params}`);
     // x.assessments = [x.assessments[0]];
     const data = await PropertyDataSchema.parseAsync({ ...req, subscribed: !!user?.isSubscribed });
-
+    console.log(JSON.stringify(data.assessments.data.map((el) => el.data.group).filter(Boolean)));
     return {
       errorMessage: null,
       data,
