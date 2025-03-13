@@ -363,9 +363,7 @@ export const exportToKml = async (data: z.infer<typeof PropertyDataSchema>, isNo
             <IconStyle>
                 <scale>1.6</scale>
                 <Icon>
-                    <href>${await getBase64(
-                      `${origin}/map/pins/green-highlighted-${mainLandGroup ? mainLandGroup.data.group : "default"}.svg`
-                    )}</href>
+                    <href>${origin}/map/pins/png/green-highlighted-${mainLandGroup ? mainLandGroup.data.group : "default"}.png</href>
                 </Icon>
             </IconStyle>
         </Style>
@@ -416,12 +414,9 @@ export const exportToKml = async (data: z.infer<typeof PropertyDataSchema>, isNo
                <IconStyle>
                    <scale>1</scale>
                    <Icon>
-                        // eslint-disable-next-line no-await-in-loop
-                        <href>${await getBase64(
-                          `${origin}/map/pins/${isNonValidMedianHighlighted && !item.data.isMedianValid ? "yellow" : "red"}-highlighted-${
-                            item.data.group
-                          }.svg`
-                        )}</href>
+                        <href>${origin}/map/pins/png/${
+          isNonValidMedianHighlighted && !item.data.isMedianValid ? "yellow" : "red"
+        }-highlighted-${item.data.group}.png</href>
                    </Icon>
                </IconStyle>
            </Style>
@@ -468,12 +463,10 @@ export const exportToKml = async (data: z.infer<typeof PropertyDataSchema>, isNo
              <IconStyle>
                  <scale>1</scale>
                  <Icon>
-                      // eslint-disable-next-line no-await-in-loop
-                      <href>${await getBase64(
-                        `${origin}/map/pins/${
-                          isNonValidMedianHighlighted && !item.data.isMedianValid ? "yellow" : "red"
-                        }-highlighted-default.svg`
-                      )}</href>
+                      <href>
+                      ${origin}/map/pins/png/${
+        isNonValidMedianHighlighted && !item.data.isMedianValid ? "yellow" : "red"
+      }-highlighted-default.png</href>
                  </Icon>
              </IconStyle>
          </Style>
