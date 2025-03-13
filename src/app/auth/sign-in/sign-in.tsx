@@ -54,7 +54,7 @@ const SignInForm: FC<SignInFormProps> = ({ modal }) => {
     if (modal?.onAuth) {
       modal?.onAuth();
     } else {
-      router.replace(req.data.decodedAccessToken.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+      router.replace(routes.volt.fullUrl);
     }
   };
 
@@ -87,7 +87,7 @@ const SignInForm: FC<SignInFormProps> = ({ modal }) => {
       modal?.onAuth();
       return;
     }
-    router.replace(requestData?.decodedAccessToken.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+    router.replace(routes.volt.fullUrl);
   };
 
   return (

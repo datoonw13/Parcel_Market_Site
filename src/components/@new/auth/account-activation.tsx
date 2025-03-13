@@ -44,10 +44,10 @@ const AccountActivation = ({
         router.push(`${routes.volt.fullUrl}/${localStorage.getItem("voltLastFetchedId")}`);
         localStorage.removeItem("voltLastFetchedId");
       } else {
-        router.push(routes.home.fullUrl);
+        router.push(routes.volt.fullUrl);
       }
     }
-  }, []);
+  }, [data, errorMessage, router]);
 
   return (
     errorMessage && (
