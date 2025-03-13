@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, isLowercase } from "@/lib/utils";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { orderBy } from "lodash";
 import moment from "moment";
@@ -287,7 +287,12 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                                 />
                               </div>
                             ) : (
-                              <div className="relative min-w-5 min-h-5 h-5 z-0">
+                              <div
+                                className={cn(
+                                  "relative min-w-[20px] min-h-[20px] h-[20px] z-0",
+                                  isLowercase(assessment.data.group) && "min-w-[21.5px] min-h-[21.5px] h-[21.5px]"
+                                )}
+                              >
                                 <Image
                                   alt=""
                                   src={`/map/pins/${isNonValidMedianHighlighted && !assessment.data.isMedianValid ? "yellow" : "red"}-${

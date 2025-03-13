@@ -380,3 +380,8 @@ export const getBase64 = async (url: string) => {
   const base64 = await blobToBase64(blob);
   return base64;
 };
+
+export const isLowercase = (chat: string) => {
+  const lowercaseOnly = /^[a-z]+$/g;
+  return lowercaseOnly.test(chat);
+};

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, isLowercase } from "@/lib/utils";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { Dispatch, FC, SetStateAction } from "react";
@@ -196,7 +196,17 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
                       key={property.data.id}
                       className={cn(
                         `cursor-pointer transition-all duration-100 relative `,
-                        isActive ? "min-w-7 min-h-7 h-7" : "min-w-5 min-h-5 h-5"
+                        isActive
+                          ? `${
+                              property.data.group && isLowercase(property.data.group)
+                                ? "min-w-[31.5px] min-h-[31.5px] h-[31.5px]"
+                                : "min-w-[30px] min-h-[30px] h-[30px]"
+                            }`
+                          : `${
+                              property.data.group && isLowercase(property.data.group)
+                                ? "min-w-[21.5px] min-h-[21.5px] h-[21.5px]"
+                                : "min-w-[20px] min-h-[20px] h-[20px]"
+                            }`
                       )}
                     >
                       <Image
