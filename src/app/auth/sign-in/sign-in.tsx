@@ -14,11 +14,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { defaultSignInSchema } from "@/zod-validations/auth-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAuth from "@/hooks/useAuth";
-import FacebookLogin from "@greatsumini/react-facebook-login";
 import SignInFacebook from "@/components/@new/auth/sign-in/sign-in-fb";
 import { UserSource } from "@/types/common";
-import { thirdPartyAuthAction } from "@/server-actions/auth/auth";
+import { defaultSignInAction, thirdPartyAuthAction } from "@/server-actions/auth/auth";
+import useNotification from "@/hooks/useNotification";
 
 interface SignInFormProps {
   modal?: {
@@ -32,10 +31,11 @@ const SignInForm: FC<SignInFormProps> = ({ modal }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { notify } = useNotification();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
-  const { defaultSignIn, thirdPartyAuth } = useAuth();
   const {
     handleSubmit,
     formState: { isValid, isSubmitting },
@@ -43,6 +43,20 @@ const SignInForm: FC<SignInFormProps> = ({ modal }) => {
   } = useForm<z.infer<typeof defaultSignInSchema>>({
     resolver: zodResolver(defaultSignInSchema),
   });
+
+  const defaultSignIn = async (values: z.infer<typeof defaultSignInSchema>, remember: boolean) => {
+    const req = await defaultSignInAction(values, remember);
+
+    if (req.errorMessage || !req.data) {
+      notify({ title: "Auth", description: req.errorMessage }, { variant: "error" });
+      return;
+    }
+    if (modal?.onAuth) {
+      modal?.onAuth();
+    } else {
+      router.replace(req.data.decodedAccessToken.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
+    }
+  };
 
   const onSubmit = handleSubmit(async (data) => defaultSignIn(data, remember));
 
