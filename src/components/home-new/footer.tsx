@@ -4,6 +4,7 @@ import React from "react";
 import { BiLogoFacebook } from "react-icons/bi";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { RiTwitterXFill } from "react-icons/ri";
+import routes from "@/helpers/routes";
 import { Button } from "../ui/button";
 
 const HomeFooterSection = () => (
@@ -29,31 +30,31 @@ const HomeFooterSection = () => (
       </div>
     </div>
     <ul className="[&>a]:text-grey-800 [&>a]:text-sm [&>a]:w-max gap-y-2 gap-x-9 grid grid-cols-2 sm:grid-cols-3 lg:flex lg:justify-between lg:[&>a]:px-2 lg:gap-2 lg:items-center border-b pb-5">
-      <Link href="/" className="!border-l-0 !pl-0">
+      <Link href={routes.aboutUs.fullUrl} className="!border-l-0 !pl-0">
         <li>About Us</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="/">
+      <Link href="#subscription">
         <li>Pricing</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="/">
+      <Link href={routes.privacyPolicy.fullUrl}>
         <li>Privacy Policy</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="/">
+      <Link href={routes.user.recentSearches.fullUrl}>
         <li>My recent search</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="/">
+      <Link href={routes.volt.fullUrl}>
         <li>Value of the land tool</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="/">
+      <Link href={routes.investing.fullUrl}>
         <li>Investing</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="/">
+      <Link href={routes.termsConditions.fullUrl}>
         <li>Terms of use</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />

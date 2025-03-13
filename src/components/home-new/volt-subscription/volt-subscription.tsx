@@ -16,7 +16,7 @@ const VoltSubscription = ({ user, subscriptionType }: { user: IUserBaseInfo | nu
   const swiperRef = useRef<SwiperRef | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <div className="mt-16 sm:mt-20 lg:mt-28 xl:mt-32 flex flex-col">
+    <div className="mt-16 sm:mt-20 lg:mt-28 xl:mt-32 flex flex-col" id="subscription">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 xl:px-20 mb-8 lg:mb-11">
         <h1 className="lg:text-center text-start font-extrabold text-2xl">How Valuable is your time?</h1>
         <h2 className="lg:text-center text-start font-light">
