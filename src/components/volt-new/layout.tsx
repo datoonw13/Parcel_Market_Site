@@ -105,7 +105,13 @@ const VoltLayout = ({
         dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
         drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
         open={!!authModal}
-        closeModal={() => setAuthModal(null)}
+        closeModal={() => {
+          setAuthModal(null);
+          setSignUpEmail(null);
+          setSignUpTokens(null);
+          setSignUpErrorMessage(null);
+          setStep(SignUpSteps.SELECT_REASONS);
+        }}
       >
         <div className="py-5">
           {authModal === "sign-in" ? (
@@ -253,6 +259,9 @@ const VoltLayout = ({
                   onSuccess: (result) => {
                     setSignUpEmail(data.email);
                     setStep(SignUpSteps.FINISH);
+                    if (lastFetchedId.current) {
+                      localStorage.setItem("voltLastFetchedId", lastFetchedId.current.toString());
+                    }
                     if (result.data?.access_token && result.data?.refresh_token) {
                       setSignUpTokens({ access_token: result.data.access_token, refresh_token: result.data.refresh_token });
                     }
