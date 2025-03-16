@@ -5,6 +5,7 @@ import { ISubscription, SubscriptionType } from "@/types/subscriptions";
 
 const HomePage = async () => {
   const user = await getUserAction();
+
   const userSubscriptions = await getUserSubscriptions();
   let subscriptionType: ISubscription | null = null;
 

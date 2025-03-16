@@ -27,7 +27,8 @@ export const setAuthTokens = (refreshToken: string, accessToken: string, remembe
     httpOnly: true,
     secure: true,
   });
-  revalidatePath("/");
+
+  revalidatePath("/", "layout");
 };
 
 const defaultSignInAction = async (data: {
