@@ -25,7 +25,7 @@ const SignInPage = () => {
           },
           onSuccess: () => {
             startAuthTransition(() => {
-              router.push(routes.home.fullUrl);
+              router.push(routes.volt.fullUrl);
             });
           },
         });
@@ -42,7 +42,7 @@ const SignInPage = () => {
                 userSource: UserSource.Google,
                 remember: false,
                 onSuccess: () => {
-                  router.push(routes.home.fullUrl);
+                  router.push(routes.volt.fullUrl);
                 },
                 onError: () => {
                   const params = new URLSearchParams({ userSource: UserSource.Google, accessToken: token });
@@ -58,7 +58,7 @@ const SignInPage = () => {
                 userSource: UserSource.Facebook,
                 remember: false,
                 onSuccess: () => {
-                  router.push(routes.home.fullUrl);
+                  router.push(routes.volt.fullUrl);
                 },
                 onError: () => {
                   const params = new URLSearchParams({ userSource: UserSource.Facebook, accessToken: token });
