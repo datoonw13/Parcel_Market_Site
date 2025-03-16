@@ -6,6 +6,7 @@ import SignInForm from "@/components/auth/sign-in";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import AuthClient from "@/lib/auth-client";
+import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
@@ -35,6 +36,22 @@ const SignInPage = () => {
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">
           <GoogleAuthProvider
+            onSuccess={async (token) => {
+              await AuthClient.thirdPartyAuth({
+                token,
+                userSource: UserSource.Google,
+                remember: false,
+                onSuccess: () => {
+                  router.push(routes.home.fullUrl);
+                },
+                onError: () => {
+                  const params = new URLSearchParams({ userSource: UserSource.Google, accessToken: token });
+                  router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
+                },
+              });
+            }}
+          />
+          {/* <FacebookAuthProvider
             onSuccess={async (data) => {
               const request = await AuthClient.thirdPartyAuth({
                 token: data.authAccessToken,
@@ -49,23 +66,7 @@ const SignInPage = () => {
                 },
               });
             }}
-          />
-          <FacebookAuthProvider
-            onSuccess={async (data) => {
-              const request = await AuthClient.thirdPartyAuth({
-                token: data.authAccessToken,
-                userSource: data.authUserSource,
-                remember: false,
-                onSuccess: () => {
-                  router.push(routes.home.fullUrl);
-                },
-                onError: () => {
-                  const params = new URLSearchParams(data);
-                  router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
-                },
-              });
-            }}
-          />
+          /> */}
         </div>
       )}
       className="sm:py-10 md:py-12 lg:py-14 xl:py-16 max-w-72 mx-auto"

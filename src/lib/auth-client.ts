@@ -83,15 +83,22 @@ class AuthClient {
    * @param data - Registration data and callbacks.
    */
   static async signUp(
-    data: IUserSignUp & { userSource: UserSource; onError: (errorMessage: string) => void; onSuccess: () => void }
+    data: IUserSignUp & {
+      userSource: UserSource;
+      onError: (errorMessage: string) => void;
+      onSuccess: (data: Awaited<ReturnType<typeof signUpUserAction>>) => void;
+    }
   ): Promise<void> {
     const { onError, onSuccess, ...rest } = data;
-    const request = await signUpUserAction({ ...data, userSource: data.userSource });
+    console.log(rest, data.userSource);
+    const request = await signUpUserAction({ ...rest, userSource: data.userSource });
+    console.log(request, 22);
+
     if (request.data) {
-      data.onSuccess();
-      if (request.data.decodedAccessToken) {
-        setAuthTokens(request.data.refresh_token, request.data.access_token, false);
-      }
+      data.onSuccess(request);
+      // if (request.data.decodedAccessToken) {
+      //   setAuthTokens(request.data.refresh_token, request.data.access_token, false);
+      // }
     } else {
       data.onError(request.errorMessage!);
     }

@@ -1,36 +1,46 @@
-import { FC, ReactElement, useEffect, useMemo, useState } from "react";
+import { FC, ReactElement, useCallback, useEffect, useMemo, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { TextInput } from "@/components/ui/input";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
 import { UserSource } from "@/types/common";
-import { signUpUserAction } from "@/server-actions/auth/auth";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SignUpFormProps {
   goBack: () => void;
   registrationReasons: IUserSignUp["registrationReasons"];
   showSignIn: () => void;
-  onFinish: (data: { isError: true; errorMessage: string } | { isError: false; email: string }) => void;
   authProviders?: () => ReactElement;
-  onSubmit: (data: IUserSignUp & { userSource: UserSource }) => void;
+  onSubmit: (data: IUserSignUp & { userSource: UserSource; token?: string }) => void;
+  isTransitioning?: boolean;
 }
 
-const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSignIn, onFinish, authProviders: AuthProviders, onSubmit }) => {
+const SignUpForm: FC<SignUpFormProps> = ({
+  registrationReasons,
+  goBack,
+  showSignIn,
+  authProviders: AuthProviders,
+  onSubmit,
+  isTransitioning,
+}) => {
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
+  const pathname = usePathname();
+  const router = useRouter();
+  const [thirdPartyTokenChecking, setThirdPartyTokenChecking] = useState(false);
   const [openTermsDialog, setTermsDialog] = useState(false);
   const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
-  const isThirdPartyAuth = params.get("authUserSource") === UserSource.Facebook || params.get("authUserSource") === UserSource.Google;
+  const [thirdPartyAuthToken, setThirdPartyAuthToken] = useState<null | string>(null);
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -39,7 +49,7 @@ const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSign
     getValues,
     reset,
   } = useForm<IUserSignUp>({
-    resolver: zodResolver(userSignUpValidation(isThirdPartyAuth)),
+    resolver: zodResolver(userSignUpValidation(!!thirdPartyAuthToken)),
     defaultValues: {
       email: "",
       firstName: "",
@@ -49,23 +59,40 @@ const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSign
     },
   });
 
-  const onClick = handleSubmit((data) => onSubmit({ ...data, userSource: (params.get("userSource") as UserSource) || UserSource.System }));
+  const onClick = handleSubmit((data) => {
+    onSubmit({
+      ...data,
+      userSource: (params.get("userSource") as UserSource) || UserSource.System,
+      ...(thirdPartyAuthToken && { token: thirdPartyAuthToken }),
+    });
+  });
 
-  useEffect(() => {
-    if (params.get("authUserSource") && params.get("authUserSource") !== UserSource.System) {
-      const email = params.get("authEmail");
-      const firstName = params.get("authFirstName");
-      const lastName = params.get("authLastName");
-      if (email && firstName && lastName) {
+  const getDetailsFromToken = useCallback(async () => {
+    setThirdPartyTokenChecking(true);
+    if (params.get("userSource") === UserSource.Google && params.get("accessToken")) {
+      const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${params.get("accessToken")!}`);
+      const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
+      if (googleCredentials) {
+        setThirdPartyAuthToken(params.get("accessToken"));
         reset({
           ...getValues(),
-          email,
-          firstName,
-          lastName,
+          email: googleCredentials.email,
+          firstName: googleCredentials.given_name,
+          lastName: googleCredentials.family_name,
         });
+        const newParams = new URLSearchParams(params.toString());
+        newParams.delete("accessToken");
+        newParams.delete("userSource");
+        router.push(`${pathname}/?${newParams.toString()}`);
       }
     }
-  }, [getValues, params, reset, searchParams]);
+    setThirdPartyTokenChecking(false);
+    return null;
+  }, [getValues, params, pathname, reset, router]);
+
+  useEffect(() => {
+    getDetailsFromToken();
+  }, [getDetailsFromToken, getValues, params, reset, searchParams]);
 
   return (
     <>
@@ -77,7 +104,7 @@ const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSign
       </div>
       {AuthProviders && <AuthProviders />}
       <Divider label="OR" className="my-1.5" />
-      <div className="w-full flex flex-col gap-4">
+      <div className={cn("w-full flex flex-col gap-4", thirdPartyTokenChecking && "opacity-65 pointer-events-none")}>
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextInput
             onChange={(e) => {
@@ -110,12 +137,12 @@ const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSign
             required
             className="w-full"
             label="Email Address"
-            disabled={!!isThirdPartyAuth}
+            disabled={!!thirdPartyAuthToken}
             value={watch("email")}
             error={!!errors.email}
             id="sign-up-email-input"
           />
-          {!isThirdPartyAuth && (
+          {!thirdPartyAuthToken && (
             <>
               <div className="space-y-1">
                 <TextInput
@@ -154,29 +181,31 @@ const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSign
             </>
           )}
         </div>
-        <CheckBox
-          onChange={() => setValue("subscribeToEmail", !watch("subscribeToEmail"))}
-          label="Click here to receive news and updates from Parcel Market."
-          className="col-span-2"
-        />
-        <CheckBox
-          error={!!errors.agreeTerm}
-          checked={watch("agreeTerm")}
-          onChange={() => setValue("agreeTerm", !watch("agreeTerm"), { shouldValidate: isSubmitted })}
-          label={
-            <p>
-              Yes, I understand and agree to the Parcel Market
-              <span onClick={() => setTermsDialog(true)} className="underline text-primary-main cursor-pointer px-1">
-                Terms of Service
-              </span>
-              and
-              <span onClick={() => setPrivacyDialog(true)} className="underline text-primary-main cursor-pointer px-1">
-                Privacy Policy.
-              </span>
-            </p>
-          }
-          className="col-span-2"
-        />
+        <div className="flex flex-col gap-1">
+          <CheckBox
+            onChange={() => setValue("subscribeToEmail", !watch("subscribeToEmail"))}
+            label="Click here to receive news and updates from Parcel Market."
+            className="col-span-2"
+          />
+          <CheckBox
+            error={!!errors.agreeTerm}
+            checked={watch("agreeTerm")}
+            onChange={() => setValue("agreeTerm", !watch("agreeTerm"), { shouldValidate: isSubmitted })}
+            label={
+              <p>
+                Yes, I understand and agree to the Parcel Market
+                <span onClick={() => setTermsDialog(true)} className="underline text-primary-main cursor-pointer px-1">
+                  Terms of Service
+                </span>
+                and
+                <span onClick={() => setPrivacyDialog(true)} className="underline text-primary-main cursor-pointer px-1">
+                  Privacy Policy.
+                </span>
+              </p>
+            }
+            className="col-span-2"
+          />
+        </div>
       </div>
       <div className="w-full flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
         <p className="text-center font-medium text-sm">
@@ -197,7 +226,7 @@ const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSign
             id="sign-up-accept-input"
             className="w-full max-w-96 sm:w-fit"
             onClick={onClick}
-            loading={isSubmitting}
+            loading={isSubmitting || isTransitioning}
             disabled={!watch("agreeTerm")}
           >
             Create Account

@@ -2,8 +2,7 @@
 
 import React, { FC, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import routes from "@/helpers/routes";
+import { useRouter, useSearchParams } from "next/navigation";
 import { resendSignUpVerificationCodeAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import { ITokens, UserSource } from "@/types/common";
@@ -16,10 +15,11 @@ interface SignUpFinishPropsProps {
   errorMessage: string | null;
   email: string | null;
   resetSignUp: () => void;
+  tokens?: ITokens;
+  onSuccessRedirect: () => void;
 }
 
-// variant = "success", errorMessage, resetSignUp, email, userSource, modal, tokens
-const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSignUp }) => {
+const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSignUp, tokens, onSuccessRedirect }) => {
   const router = useRouter();
   const params = useSearchParams();
   const [resendLoading, setResendLoading] = useState(false);
@@ -36,49 +36,18 @@ const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSi
     setResendLoading(false);
   };
 
-  const handleClick = () => {
-    // if (variant === "error") {
-    //   resetSignUp!();
-    //   return;
-    // }
-    // if (variant === "success" && !(userSource === UserSource.System || userSource === UserSource.Unknown)) {
-    //   setAuthTokens((tokens as ITokens).refresh_token, (tokens as ITokens).access_token);
-    //   if (modal) {
-    //     modal.closeModal();
-    //     modal.onAuth();
-    //     return;
-    //   }
-    //   router.push(routes.home.fullUrl);
-    //   return;
-    // }
-    // resendEmail();
-  };
+  useEffect(() => {
+    if (tokens) {
+      timerRef.current = setTimeout(() => {
+        setAuthTokens((tokens as ITokens).refresh_token, (tokens as ITokens).access_token);
+        onSuccessRedirect();
+      }, 5000);
+    }
 
-  // useEffect();
-  // () => () => {
-  //   if (variant === "success" && tokens) {
-  //     setAuthTokens((tokens as ITokens).refresh_token, (tokens as ITokens).access_token);
-  //   }
-  // },
-  // [tokens, variant]
-
-  // useEffect(() => {
-  //   if (variant === "success" && !(userSource === UserSource.System || userSource === UserSource.Unknown)) {
-  //     timerRef.current = setTimeout(() => {
-  //       setAuthTokens((tokens as ITokens).refresh_token, (tokens as ITokens).access_token);
-  //       if (modal) {
-  //         modal.closeModal();
-  //         modal.onAuth();
-  //         return;
-  //       }
-  //       router.push(routes.home.fullUrl);
-  //     }, 5000);
-  //   }
-
-  //   return () => {
-  //     window.clearTimeout(timerRef.current);
-  //   };
-  // }, [modal, router, tokens, userSource, variant]);
+    return () => {
+      window.clearTimeout(timerRef.current);
+    };
+  }, [onSuccessRedirect, router, tokens]);
 
   if (errorMessage) {
     return (
@@ -117,7 +86,17 @@ const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSi
         </h2>
       </div>
       <div className="flex justify-center">
-        <Button onClick={handleClick} loading={resendLoading}>
+        <Button
+          onClick={() => {
+            if (params.get("userSource") === UserSource.System || params.get("userSource") === UserSource.Unknown) {
+              resendEmail();
+              return;
+            }
+            setAuthTokens((tokens as ITokens).refresh_token, (tokens as ITokens).access_token);
+            onSuccessRedirect();
+          }}
+          loading={resendLoading}
+        >
           {params.get("userSource") === UserSource.System || params.get("userSource") === UserSource.Unknown ? "Resend Email" : "Continue"}
         </Button>
       </div>

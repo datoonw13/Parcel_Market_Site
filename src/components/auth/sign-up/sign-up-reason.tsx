@@ -72,7 +72,7 @@ const SignUpReason = ({ onNext, showSignIn }: { onNext: (type: IUserSignUp["regi
           Create Account
         </Button>
         <p className="mt-3 text-center font-medium text-sm">
-          Already have an account?
+          Already have an account?{" "}
           <span onClick={showSignIn} className="underline text-primary-main font-medium text-sm cursor-pointer">
             Sign In
           </span>

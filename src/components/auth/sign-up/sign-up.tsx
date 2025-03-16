@@ -1,8 +1,9 @@
 "use client";
 
 import { IUserSignUp } from "@/types/auth";
-import { FC, ReactElement, useEffect, useState } from "react";
+import { Dispatch, FC, ReactElement, SetStateAction, useEffect, useState } from "react";
 import { UserSource } from "@/types/common";
+import { cn } from "@/lib/utils";
 import SignUpForm from "./sign-up-form";
 import SignUpReason from "./sign-up-reason";
 import SignUpFinish from "./sign-up-finish";
@@ -16,23 +17,42 @@ enum SignUpSteps {
 interface SignUpProps {
   showSignIn: () => void;
   authProviders?: () => ReactElement;
-  onSubmit: (data: IUserSignUp & { userSource: UserSource }) => void;
+  onSubmit: (data: IUserSignUp & { userSource: UserSource; token?: string }) => void;
+  className?: string;
+  isTransitioning?: boolean;
+  step: SignUpSteps;
+  setStep: Dispatch<SetStateAction<SignUpSteps>>;
+  errorMessage: string | null;
+  setErrorMessage: Dispatch<SetStateAction<string | null>>;
+  email: string | null;
+  setEmail: Dispatch<SetStateAction<string | null>>;
+  redirectAfterSuccessPage: () => void;
 }
 
-const SignUp: FC<SignUpProps> = ({ showSignIn, authProviders, onSubmit }) => {
-  const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
+const SignUp: FC<SignUpProps> = ({
+  showSignIn,
+  authProviders,
+  onSubmit,
+  className,
+  isTransitioning,
+  email,
+  errorMessage,
+  setEmail,
+  setErrorMessage,
+  setStep,
+  step,
+  redirectAfterSuccessPage,
+}) => {
   const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
     if (step === SignUpSteps.SELECT_REASONS) {
       setErrorMessage(null);
     }
-  }, [step]);
+  }, [setErrorMessage, step]);
 
   return (
-    <div className="flex flex-col gap-8 items-center w-full m-auto sm:p-10 md:p-12 lg:p-14 xl:p-16 h-full">
+    <div className={cn("flex flex-col gap-8 items-center w-full h-full", className)}>
       {step === SignUpSteps.SELECT_REASONS && (
         <SignUpReason
           onNext={(value) => {
@@ -50,16 +70,9 @@ const SignUp: FC<SignUpProps> = ({ showSignIn, authProviders, onSubmit }) => {
             setRegistrationReasons(null);
             setStep(SignUpSteps.SELECT_REASONS);
           }}
-          onFinish={(data) => {
-            if (data.isError) {
-              setErrorMessage(data.errorMessage);
-            } else {
-              setEmail(data.email);
-            }
-            setStep(SignUpSteps.FINISH);
-          }}
           showSignIn={showSignIn}
           onSubmit={onSubmit}
+          isTransitioning={isTransitioning}
         />
       )}
       {step === SignUpSteps.FINISH && (
@@ -71,6 +84,7 @@ const SignUp: FC<SignUpProps> = ({ showSignIn, authProviders, onSubmit }) => {
             setErrorMessage(null);
             setEmail(null);
           }}
+          onSuccessRedirect={redirectAfterSuccessPage}
         />
       )}
     </div>
