@@ -3,9 +3,9 @@
 import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
-import { resendSignUpVerificationCodeAction, signInUserManuallyAction } from "@/server-actions/user/actions";
+import { getUserAction, resendSignUpVerificationCodeAction, signInUserManuallyAction } from "@/server-actions/user/actions";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const AccountActivation = ({
@@ -35,19 +35,27 @@ const AccountActivation = ({
     }
     setResendLoading(false);
   };
+
+  const redirectToParcel = useCallback(async () => {
+    const user = await getUserAction();
+    if (user) {
+      router.push(`${routes.volt.fullUrl}/${localStorage.getItem("voltLastFetchedId")}`);
+      localStorage.removeItem("voltLastFetchedId");
+    }
+  }, [router]);
+
   useEffect(() => {
     if (!errorMessage && data) {
       notify({ title: "Success", description: "Your email address has been successfully activate. Now you are logged in." });
 
       signInUserManuallyAction(data);
       if (localStorage.getItem("voltLastFetchedId")) {
-        router.push(`${routes.volt.fullUrl}/${localStorage.getItem("voltLastFetchedId")}`);
-        localStorage.removeItem("voltLastFetchedId");
+        redirectToParcel();
       } else {
         router.push(routes.volt.fullUrl);
       }
     }
-  }, [data, errorMessage, notify, router]);
+  }, [data, errorMessage, notify, redirectToParcel, router]);
 
   return (
     errorMessage && (

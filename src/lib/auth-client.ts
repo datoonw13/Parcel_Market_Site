@@ -90,17 +90,11 @@ class AuthClient {
     }
   ): Promise<void> {
     const { onError, onSuccess, ...rest } = data;
-    console.log(rest, data.userSource);
     const request = await signUpUserAction({ ...rest, userSource: data.userSource });
-    console.log(request, 22);
-
-    if (request.data) {
-      data.onSuccess(request);
-      // if (request.data.decodedAccessToken) {
-      //   setAuthTokens(request.data.refresh_token, request.data.access_token, false);
-      // }
-    } else {
+    if (request.errorMessage) {
       data.onError(request.errorMessage!);
+    } else {
+      data.onSuccess(request);
     }
   }
 }
