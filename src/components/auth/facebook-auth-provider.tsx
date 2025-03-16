@@ -6,30 +6,14 @@ import FacebookLogin, { ProfileSuccessResponse, SuccessResponse } from "@greatsu
 import { FaFacebookF } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
-const FacebookAuthProvider = ({
-  onSuccess,
-}: {
-  onSuccess: (data: {
-    authAccessToken: string;
-    authFirstName: string;
-    authLastName: string;
-    authEmail: string;
-    authUserSource: UserSource;
-  }) => void;
-}) => {
+const FacebookAuthProvider = ({ onSuccess }: { onSuccess: (token: string) => void }) => {
   const [successData, setSuccessData] = useState<SuccessResponse | null>(null);
   const [profileSuccess, setProfileSuccess] = useState<ProfileSuccessResponse | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCallback(async () => {
     if (successData && profileSuccess) {
-      onSuccess({
-        authAccessToken: successData.accessToken,
-        authFirstName: profileSuccess.name?.split(" ")[0]!,
-        authLastName: profileSuccess.name?.split(" ")[1]!,
-        authEmail: profileSuccess.email!,
-        authUserSource: UserSource.Facebook,
-      });
+      onSuccess(successData.accessToken);
     }
   }, [onSuccess, profileSuccess, successData]);
 

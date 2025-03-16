@@ -8,8 +8,6 @@ const GoogleAuthButton = ({ onSuccess }: { onSuccess: (token: string) => void })
 
   const login = useGoogleLogin({
     onSuccess: async (data) => {
-      // const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
-      // const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
       onSuccess(data.access_token);
     },
     onError: () => {

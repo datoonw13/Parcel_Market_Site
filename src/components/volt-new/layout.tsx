@@ -1,23 +1,34 @@
 "use client";
 
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { IPropertiesInteraction, VoltSearchModel } from "@/types/volt";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { voltSearchSchema } from "@/zod-validations/volt";
-import { ResponseModel } from "@/types/common";
+import { ITokens, ResponseModel, UserSource } from "@/types/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import { z } from "zod";
-// import SignInForm from "@/app/auth/sign-in/sign-in";
-import SignUpForm from "@/components/auth/sign-up/sign-up";
-import { useRouter, useSearchParams } from "next/navigation";
+import SignUp from "@/components/auth/sign-up/sign-up";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
+import AuthClient from "@/lib/auth-client";
+import useNotification from "@/hooks/useNotification";
+import { getUserAction } from "@/server-actions/user/actions";
 import VoltDesktop from "./volt-desktop";
 import { breakPoints } from "../../../tailwind.config";
 import VoltMobile from "./volt-mobile";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
+import GoogleAuthProvider from "../auth/google-auth-provider/google-auth-provider";
+import SignInForm from "../auth/sign-in";
+import FacebookAuthProvider from "../auth/facebook-auth-provider";
+
+enum SignUpSteps {
+  SELECT_REASONS,
+  USER_INFO,
+  FINISH,
+}
 
 const VoltLayout = ({
   data,
@@ -34,6 +45,13 @@ const VoltLayout = ({
   const lastFetchedId = useRef<number | null>(null);
   const router = useRouter();
   const params = useSearchParams();
+  const pathname = usePathname();
+  const { notify } = useNotification();
+  const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
+  const [signUpErrorMessage, setSignUpErrorMessage] = useState<string | null>(null);
+  const [signUpEmail, setSignUpEmail] = useState<string | null>(null);
+  const [signUTokens, setSignUpTokens] = useState<ITokens | null>(null);
+  const [isTransitioning, startAuthTransition] = useTransition();
 
   const form = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
@@ -91,25 +109,169 @@ const VoltLayout = ({
       >
         <div className="py-5">
           {authModal === "sign-in" ? (
-            <div>aee</div>
+            <SignInForm
+              defaultSignIn={async (data) => {
+                await AuthClient.defaultAuth({
+                  ...data,
+                  onError: (errorMessage) => {
+                    notify({ title: "Error", description: errorMessage }, { variant: "error" });
+                  },
+                  onSuccess: async () => {
+                    const user = await getUserAction();
+                    if (user) {
+                      startAuthTransition(() => {
+                        router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                      });
+                    }
+                  },
+                });
+              }}
+              onSignUp={() => setAuthModal("sign-up")}
+              ForgotPasswordButton={undefined}
+              authPending={isTransitioning}
+              authProviders={() => (
+                <div className="flex flex-col gap-3 w-full">
+                  <GoogleAuthProvider
+                    onSuccess={async (token) => {
+                      await AuthClient.thirdPartyAuth({
+                        token,
+                        userSource: UserSource.Google,
+                        remember: false,
+                        onSuccess: async () => {
+                          const user = await getUserAction();
+                          if (user) {
+                            startAuthTransition(() => {
+                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            });
+                          }
+                        },
+                        onError: async () => {
+                          const newParams = new URLSearchParams(params.toString());
+                          newParams.append("userSource", UserSource.Google);
+                          newParams.append("accessToken", token);
+                          router.push(`${pathname}?${newParams.toString()}`);
+                          setAuthModal("sign-up");
+                        },
+                      });
+                    }}
+                  />
+                  <FacebookAuthProvider
+                    onSuccess={async (token) => {
+                      await AuthClient.thirdPartyAuth({
+                        token,
+                        userSource: UserSource.Facebook,
+                        remember: false,
+                        onSuccess: async () => {
+                          const user = await getUserAction();
+                          if (user) {
+                            startAuthTransition(() => {
+                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            });
+                          }
+                        },
+                        onError: async () => {
+                          const newParams = new URLSearchParams(params.toString());
+                          newParams.append("userSource", UserSource.Facebook);
+                          newParams.append("accessToken", token);
+                          router.push(`${pathname}?${newParams.toString()}`);
+                          setAuthModal("sign-up");
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              )}
+              className="sm:py-10 md:py-12 lg:py-14 xl:py-16 max-w-72 mx-auto"
+            />
           ) : (
-            // <SignInForm
-            //   modal={{
-            //     showSignUp: () => setAuthModal("sign-up"),
-            //     onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
-            //     closeModal: () => setAuthModal(null),
-            //   }}
-            // />
-            <SignUpForm
-              modal={{
-                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
-                onRegister: () => {
-                  sessionStorage.setItem("voltLastFetchedId", lastFetchedId.current?.toString() || "");
-                },
-                showSignIn: () => {
-                  setAuthModal("sign-in");
-                },
-                closeModal: () => setAuthModal(null),
+            <SignUp
+              step={step}
+              setStep={setStep}
+              authProviders={() => (
+                <div className="flex flex-col gap-3 w-full">
+                  <GoogleAuthProvider
+                    onSuccess={async (token) => {
+                      await AuthClient.thirdPartyAuth({
+                        token,
+                        userSource: UserSource.Google,
+                        remember: false,
+                        onSuccess: async () => {
+                          const user = await getUserAction();
+                          if (user) {
+                            startAuthTransition(() => {
+                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            });
+                          }
+                        },
+                        onError: async () => {
+                          const newParams = new URLSearchParams(params.toString());
+                          newParams.append("userSource", UserSource.Google);
+                          newParams.append("accessToken", token);
+                          router.push(`${pathname}?${newParams.toString()}`);
+                          setAuthModal("sign-up");
+                        },
+                      });
+                    }}
+                  />
+                  <FacebookAuthProvider
+                    onSuccess={async (token) => {
+                      await AuthClient.thirdPartyAuth({
+                        token,
+                        userSource: UserSource.Facebook,
+                        remember: false,
+                        onSuccess: async () => {
+                          const user = await getUserAction();
+                          if (user) {
+                            startAuthTransition(() => {
+                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            });
+                          }
+                        },
+                        onError: async () => {
+                          const newParams = new URLSearchParams(params.toString());
+                          newParams.append("userSource", UserSource.Facebook);
+                          newParams.append("accessToken", token);
+                          router.push(`${pathname}?${newParams.toString()}`);
+                          setAuthModal("sign-up");
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              )}
+              errorMessage={signUpErrorMessage}
+              setErrorMessage={setSignUpErrorMessage}
+              email={signUpEmail}
+              setEmail={setSignUpEmail}
+              tokens={signUTokens}
+              showSignIn={() => {
+                setAuthModal("sign-in");
+              }}
+              onSubmit={async (data) => {
+                await AuthClient.signUp({
+                  ...data,
+                  onSuccess: (result) => {
+                    setSignUpEmail(data.email);
+                    setStep(SignUpSteps.FINISH);
+                    if (result.data?.access_token && result.data?.refresh_token) {
+                      setSignUpTokens({ access_token: result.data.access_token, refresh_token: result.data.refresh_token });
+                    }
+                  },
+                  onError: (errorMessage) => {
+                    setSignUpErrorMessage(errorMessage);
+                    setStep(SignUpSteps.FINISH);
+                  },
+                });
+              }}
+              isTransitioning={false}
+              className="m-auto sm:p-10 md:p-12 lg:p-14 xl:p-16"
+              redirectAfterSuccessPage={async () => {
+                const user = await getUserAction();
+                if (user) {
+                  startAuthTransition(() => {
+                    router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                  });
+                }
               }}
             />
           )}

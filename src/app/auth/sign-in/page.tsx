@@ -51,22 +51,22 @@ const SignInPage = () => {
               });
             }}
           />
-          {/* <FacebookAuthProvider
-            onSuccess={async (data) => {
+          <FacebookAuthProvider
+            onSuccess={async (token) => {
               const request = await AuthClient.thirdPartyAuth({
-                token: data.authAccessToken,
-                userSource: data.authUserSource,
+                token,
+                userSource: UserSource.Facebook,
                 remember: false,
                 onSuccess: () => {
                   router.push(routes.home.fullUrl);
                 },
                 onError: () => {
-                  const params = new URLSearchParams(data);
+                  const params = new URLSearchParams({ userSource: UserSource.Facebook, accessToken: token });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 },
               });
             }}
-          /> */}
+          />
         </div>
       )}
       className="sm:py-10 md:py-12 lg:py-14 xl:py-16 max-w-72 mx-auto"

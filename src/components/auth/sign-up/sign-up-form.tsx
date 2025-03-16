@@ -92,6 +92,26 @@ const SignUpForm: FC<SignUpFormProps> = ({
         router.push(`${pathname}/?${newParams.toString()}`);
       }
     }
+    if (params.get("userSource") === UserSource.Facebook && params.get("accessToken")) {
+      const fbCredentialsReq = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${params.get("accessToken")!}`);
+      const fbCredentials = (await fbCredentialsReq.json()) as { email: string; name: string };
+      if (fbCredentials) {
+        setThirdPartyAuthToken({
+          source: params.get("userSource") as any,
+          token: params.get("accessToken")!,
+        });
+        reset({
+          ...getValues(),
+          email: fbCredentials.email,
+          firstName: fbCredentials.name.split(" ")[0],
+          lastName: fbCredentials.name.split(" ")[1],
+        });
+        const newParams = new URLSearchParams(params.toString());
+        newParams.delete("accessToken");
+        newParams.delete("userSource");
+        router.push(`${pathname}/?${newParams.toString()}`);
+      }
+    }
     setThirdPartyTokenChecking(false);
     return null;
   }, [getValues, params, pathname, reset, router]);
