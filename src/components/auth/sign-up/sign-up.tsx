@@ -2,7 +2,7 @@
 
 import { IUserSignUp } from "@/types/auth";
 import { Dispatch, FC, ReactElement, SetStateAction, useEffect, useState } from "react";
-import { UserSource } from "@/types/common";
+import { ITokens, UserSource } from "@/types/common";
 import { cn } from "@/lib/utils";
 import SignUpForm from "./sign-up-form";
 import SignUpReason from "./sign-up-reason";
@@ -17,7 +17,7 @@ enum SignUpSteps {
 interface SignUpProps {
   showSignIn: () => void;
   authProviders?: () => ReactElement;
-  onSubmit: (data: IUserSignUp & { userSource: UserSource; token?: string }) => void;
+  onSubmit: (data: IUserSignUp & { userSource: UserSource; token?: string }) => Promise<void>;
   className?: string;
   isTransitioning?: boolean;
   step: SignUpSteps;
@@ -27,6 +27,7 @@ interface SignUpProps {
   email: string | null;
   setEmail: Dispatch<SetStateAction<string | null>>;
   redirectAfterSuccessPage: () => void;
+  tokens: ITokens | null;
 }
 
 const SignUp: FC<SignUpProps> = ({
@@ -42,6 +43,7 @@ const SignUp: FC<SignUpProps> = ({
   setStep,
   step,
   redirectAfterSuccessPage,
+  tokens,
 }) => {
   const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
 
@@ -77,6 +79,7 @@ const SignUp: FC<SignUpProps> = ({
       )}
       {step === SignUpSteps.FINISH && (
         <SignUpFinish
+          tokens={tokens}
           errorMessage={errorMessage}
           email={email}
           resetSignUp={() => {

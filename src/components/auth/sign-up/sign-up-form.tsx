@@ -19,7 +19,7 @@ interface SignUpFormProps {
   registrationReasons: IUserSignUp["registrationReasons"];
   showSignIn: () => void;
   authProviders?: () => ReactElement;
-  onSubmit: (data: IUserSignUp & { userSource: UserSource; token?: string }) => void;
+  onSubmit: (data: IUserSignUp & { userSource: UserSource; token?: string }) => Promise<void>;
   isTransitioning?: boolean;
 }
 
@@ -40,7 +40,10 @@ const SignUpForm: FC<SignUpFormProps> = ({
   const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
-  const [thirdPartyAuthToken, setThirdPartyAuthToken] = useState<null | string>(null);
+  const [thirdPartyAuthToken, setThirdPartyAuthToken] = useState<null | {
+    token: string;
+    source: UserSource;
+  }>(null);
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -59,11 +62,11 @@ const SignUpForm: FC<SignUpFormProps> = ({
     },
   });
 
-  const onClick = handleSubmit((data) => {
-    onSubmit({
+  const onClick = handleSubmit(async (data) => {
+    await onSubmit({
       ...data,
-      userSource: (params.get("userSource") as UserSource) || UserSource.System,
-      ...(thirdPartyAuthToken && { token: thirdPartyAuthToken }),
+      userSource: thirdPartyAuthToken?.source || UserSource.System,
+      token: thirdPartyAuthToken?.token,
     });
   });
 
@@ -73,7 +76,10 @@ const SignUpForm: FC<SignUpFormProps> = ({
       const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${params.get("accessToken")!}`);
       const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
       if (googleCredentials) {
-        setThirdPartyAuthToken(params.get("accessToken"));
+        setThirdPartyAuthToken({
+          source: params.get("userSource") as any,
+          token: params.get("accessToken")!,
+        });
         reset({
           ...getValues(),
           email: googleCredentials.email,

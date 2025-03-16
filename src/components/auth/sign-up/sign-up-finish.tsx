@@ -15,8 +15,8 @@ interface SignUpFinishPropsProps {
   errorMessage: string | null;
   email: string | null;
   resetSignUp: () => void;
-  tokens?: ITokens;
   onSuccessRedirect: () => void;
+  tokens: ITokens | null;
 }
 
 const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSignUp, tokens, onSuccessRedirect }) => {
@@ -74,13 +74,9 @@ const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSi
         <FaCheck className="text-white size-5" />
       </div>
       <div className="space-y-1 mb-8 md:mb-6">
-        <h1 className="text-center text-lg font-medium">
-          {params.get("userSource") === UserSource.System || params.get("userSource") === UserSource.Unknown
-            ? "Your request has been sent"
-            : "Registration Successfully"}
-        </h1>
+        <h1 className="text-center text-lg font-medium">{!tokens ? "Your request has been sent" : "Registration Successfully"}</h1>
         <h2 className="text-center text-sm text-grey-800">
-          {params.get("userSource") === UserSource.System || params.get("userSource") === UserSource.Unknown
+          {!tokens
             ? "Please check your email and confirm your email address"
             : "Welcome to Parcel Market. You are now registered and ready to explore"}
         </h2>
@@ -88,7 +84,7 @@ const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSi
       <div className="flex justify-center">
         <Button
           onClick={() => {
-            if (params.get("userSource") === UserSource.System || params.get("userSource") === UserSource.Unknown) {
+            if (!tokens) {
               resendEmail();
               return;
             }
@@ -97,7 +93,7 @@ const SignUpFinish: FC<SignUpFinishPropsProps> = ({ email, errorMessage, resetSi
           }}
           loading={resendLoading}
         >
-          {params.get("userSource") === UserSource.System || params.get("userSource") === UserSource.Unknown ? "Resend Email" : "Continue"}
+          {!tokens ? "Resend Email" : "Continue"}
         </Button>
       </div>
     </div>

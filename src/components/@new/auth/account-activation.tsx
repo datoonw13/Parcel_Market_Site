@@ -2,6 +2,7 @@
 
 import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
+import useNotification from "@/hooks/useNotification";
 import { resendSignUpVerificationCodeAction, signInUserManuallyAction } from "@/server-actions/user/actions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -21,23 +22,22 @@ const AccountActivation = ({
 }) => {
   const router = useRouter();
   const [resendLoading, setResendLoading] = useState(false);
+  const { notify } = useNotification();
 
   const resendEmail = async () => {
     setResendLoading(true);
     const { errorMessage } = await resendSignUpVerificationCodeAction(email!);
     if (errorMessage) {
       toast.error(errorMessage);
+      notify({ title: "Error", description: errorMessage });
     } else {
-      toast.success("Verification code sent successfully");
+      notify({ title: "Success", description: "Verification code sent successfully" });
     }
     setResendLoading(false);
   };
   useEffect(() => {
     if (!errorMessage && data) {
-      toast.success("Your email address has been successfully confirmed, now sign into your account", {
-        duration: 3500,
-        id: "activation-toast",
-      });
+      notify({ title: "Success", description: "Your email address has been successfully activate. Now you are logged in." });
 
       signInUserManuallyAction(data);
       if (localStorage.getItem("voltLastFetchedId")) {
@@ -47,7 +47,7 @@ const AccountActivation = ({
         router.push(routes.volt.fullUrl);
       }
     }
-  }, [data, errorMessage, router]);
+  }, [data, errorMessage, notify, router]);
 
   return (
     errorMessage && (
