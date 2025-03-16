@@ -9,8 +9,8 @@ import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import SignInForm from "@/app/auth/sign-in/sign-in";
-import SignUpForm from "@/app/auth/sign-up/sign-up";
+// import SignInForm from "@/app/auth/sign-in/sign-in";
+import SignUpForm from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
 import { Button } from "../ui/button";
@@ -289,13 +289,14 @@ const VoltSearchOnMap = ({
       >
         <div className="py-5">
           {authModal === "sign-in" ? (
-            <SignInForm
-              modal={{
-                showSignUp: () => setAuthModal("sign-up"),
-                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
-                closeModal: () => setAuthModal(null),
-              }}
-            />
+            // <SignInForm
+            //   modal={{
+            //     showSignUp: () => setAuthModal("sign-up"),
+            //     onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
+            //     closeModal: () => setAuthModal(null),
+            //   }}
+            // />
+            <div>ae</div>
           ) : (
             <SignUpForm
               modal={{

@@ -1,43 +1,36 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, ReactElement, useEffect, useMemo, useState } from "react";
 import Divider from "@/components/@new/shared/Divider";
 import CheckBox from "@/components/@new/shared/forms/CheckBox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { IUserSignUp } from "@/types/auth";
-import routes from "@/helpers/routes";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { TextInput } from "@/components/ui/input";
 import { TermsConditionsDialog } from "@/components/shared/terms-conditions";
 import { PrivacyPolicyDialog } from "@/components/shared/privacy-policy";
-import { ITokens, UserSource } from "@/types/common";
+import { UserSource } from "@/types/common";
 import { signUpUserAction } from "@/server-actions/auth/auth";
-import useNotification from "@/hooks/useNotification";
-import Button from "../../shared/forms/Button";
-import { EyeIcon1, EyeIcon2 } from "../../icons/EyeIcons";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
 
-interface SignUpProps {
-  onBack: () => void;
+interface SignUpFormProps {
+  goBack: () => void;
   registrationReasons: IUserSignUp["registrationReasons"];
-  modal?: {
-    showSignIn: () => void;
-    onRegister: () => void;
-    onAuth: () => void;
-  };
-  setErrorMessage: (val: string | null) => void;
-  setEmail: (value: string) => void;
-  setFinishStep: (data: ITokens | null) => void;
+  showSignIn: () => void;
+  onFinish: (data: { isError: true; errorMessage: string } | { isError: false; email: string }) => void;
+  authProviders?: () => ReactElement;
+  onSubmit: (data: IUserSignUp & { userSource: UserSource }) => void;
 }
 
-const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorMessage, setEmail, setFinishStep }) => {
-  const router = useRouter();
+const SignUpForm: FC<SignUpFormProps> = ({ registrationReasons, goBack, showSignIn, onFinish, authProviders: AuthProviders, onSubmit }) => {
   const searchParams = useSearchParams();
   const params = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const [openTermsDialog, setTermsDialog] = useState(false);
   const [openPrivacyDialog, setPrivacyDialog] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visibleRepeatPassword, setVisibleRepeatPassword] = useState(false);
-  const isThirdPartyAuth = params.get("userSource") === UserSource.Facebook || params.get("userSource") === UserSource.Google;
+  const isThirdPartyAuth = params.get("authUserSource") === UserSource.Facebook || params.get("authUserSource") === UserSource.Google;
   const {
     handleSubmit,
     formState: { isSubmitted, errors, isSubmitting },
@@ -56,20 +49,10 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
     },
   });
 
-  const onSubmit = handleSubmit(async (data) => {
-    const request = await signUpUserAction({ ...data, userSource: params.get("userSource") || UserSource.System });
-
-    if (request?.errorMessage) {
-      setErrorMessage(request?.errorMessage);
-      setFinishStep(request.data);
-    } else {
-      setEmail(getValues("email"));
-      setFinishStep(request.data);
-    }
-  });
+  const onClick = handleSubmit((data) => onSubmit({ ...data, userSource: (params.get("userSource") as UserSource) || UserSource.System }));
 
   useEffect(() => {
-    if (params.get("userSource") && params.get("userSource") !== UserSource.System) {
+    if (params.get("authUserSource") && params.get("authUserSource") !== UserSource.System) {
       const email = params.get("authEmail");
       const firstName = params.get("authFirstName");
       const lastName = params.get("authLastName");
@@ -92,7 +75,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
         <h1 className="font-semibold text-2xl md:text-5xl text-center">Sign Up</h1>
         <h3 className="text-grey-800 mt-3 text-center">Create account</h3>
       </div>
-      {/* <div className="w-full max-w-72 flex"><GoogleAuthProvider onSuccess={} /></div> */}
+      {AuthProviders && <AuthProviders />}
       <Divider label="OR" className="my-1.5" />
       <div className="w-full flex flex-col gap-4">
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -143,7 +126,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
                   type={visiblePassword ? "text" : "password"}
                   endIcon={
                     <div className="cursor-pointer" onClick={() => setVisiblePassword(!visiblePassword)}>
-                      {visiblePassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                      {visiblePassword ? <FaRegEye /> : <FaRegEyeSlash />}
                     </div>
                   }
                   error={!!errors.password}
@@ -160,7 +143,7 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
                   type={visibleRepeatPassword ? "text" : "password"}
                   endIcon={
                     <div className="cursor-pointer" onClick={() => setVisibleRepeatPassword(!visibleRepeatPassword)}>
-                      {visibleRepeatPassword ? <EyeIcon1 /> : <EyeIcon2 />}
+                      {visibleRepeatPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                     </div>
                   }
                   error={!!errors.repeatPassword}
@@ -201,25 +184,19 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
           <span
             id="sign-up-signin-redirect-button"
             className="underline text-primary-main font-medium text-sm cursor-pointer"
-            onClick={() => {
-              if (modal?.showSignIn) {
-                modal?.showSignIn();
-              } else {
-                router.push(routes.auth.signIn.fullUrl);
-              }
-            }}
+            onClick={showSignIn}
           >
             Sign In
           </span>
         </p>
         <div className="flex gap-3 flex-col-reverse sm:flex-row w-full sm:w-fit items-center sm:items-end">
-          <Button id="sign-up-back-input" className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={onBack}>
+          <Button id="sign-up-back-input" className="w-full max-w-96 sm:w-fit" variant="secondary" onClick={goBack}>
             Back
           </Button>
           <Button
             id="sign-up-accept-input"
             className="w-full max-w-96 sm:w-fit"
-            onClick={onSubmit}
+            onClick={onClick}
             loading={isSubmitting}
             disabled={!watch("agreeTerm")}
           >
@@ -231,4 +208,4 @@ const SignUp: FC<SignUpProps> = ({ registrationReasons, onBack, modal, setErrorM
   );
 };
 
-export default SignUp;
+export default SignUpForm;

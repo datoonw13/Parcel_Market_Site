@@ -7,65 +7,10 @@ import { UserSource } from "@/types/common";
 import useNotification from "./useNotification";
 
 const useAuth = () => {
-  const { notify } = useNotification();
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
+  const defaultSignIn = (data: { email: string; password: string; remember?: boolean }) => {};
+  const thirdPartySignIn = (data: { token: string; userSource: UserSource }) => {};
 
-  const defaultSignIn = async (values: z.infer<typeof defaultSignInSchema>, remember: boolean) => {
-    const req = await defaultSignInAction(values, remember);
-
-    if (req.errorMessage || !req.data) {
-      notify({ title: "Auth", description: req.errorMessage }, { variant: "error" });
-      return;
-    }
-    const isRedirectUrlExist = sessionStorage.getItem("auth-redirect-url");
-    if (isRedirectUrlExist) {
-      router.replace(sessionStorage.getItem("auth-redirect-url")!);
-    } else {
-      router.replace(req.data.decodedAccessToken.planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
-    }
-  };
-
-  const thirdPartyAuth = {
-    success: (planSelected?: boolean) => {
-      const isRedirectUrlExist = sessionStorage.getItem("auth-redirect-url");
-      if (isRedirectUrlExist) {
-        router.replace(sessionStorage.getItem("auth-redirect-url")!);
-      } else {
-        router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
-      }
-    },
-    error: (data: { authAccessToken: string; authFirstName: string; authLastName: string; authEmail: string; userSource: UserSource }) => {
-      const newSearchParams = new URLSearchParams(params.toString());
-      Object.keys(data).forEach((key) => {
-        newSearchParams.set(key, data[key as keyof typeof data]);
-      });
-      newSearchParams.set("userSource", data.userSource);
-      router.push(`${pathname === routes.auth.signIn.fullUrl ? routes.auth.signUp.fullUrl : pathname}?${newSearchParams.toString()}`);
-    },
-  };
-
-  const removeRedirectUrlFromSession = () => {
-    const isExist = sessionStorage.getItem("auth-redirect-url");
-    if (isExist) {
-      sessionStorage.removeItem("auth-redirect-url");
-    }
-  };
-
-  const removeThirdPartyKeys = () => {
-    const newSearchParams = new URLSearchParams(params.toString());
-    ["authAccessToken", "authFirstName", "authLastName", "authEmail", "userSource"].forEach((key) => {
-      const formattedKey = `auth${key[0].toLocaleUpperCase()}${key.slice(1)}`;
-      newSearchParams.delete(formattedKey);
-    });
-  };
-
-  return {
-    removeRedirectUrlFromSession,
-    defaultSignIn,
-    thirdPartyAuth,
-  };
+  return null;
 };
 
 export default useAuth;

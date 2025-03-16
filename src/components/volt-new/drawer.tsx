@@ -10,7 +10,7 @@ import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import SignInForm from "@/app/auth/sign-in/sign-in";
 import { IUserBaseInfo } from "@/types/auth";
-import SignUpForm from "@/app/auth/sign-up/sign-up";
+import SignUpForm from "@/components/auth/sign-up/sign-up";
 import VoltSearchResult from "./volt-search-result";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";

@@ -7,18 +7,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { UnwrapArray } from "@/types/common";
 import { useRouter } from "next/navigation";
-import Button from "../../shared/forms/Button";
+import { Button } from "@/components/ui/button";
 
-const SignUpReason = ({
-  onNext,
-  modal,
-}: {
-  onNext: (type: IUserSignUp["registrationReasons"]) => void;
-  modal?: {
-    showSignIn: () => void;
-    onRegister: () => void;
-  };
-}) => {
+const SignUpReason = ({ onNext, showSignIn }: { onNext: (type: IUserSignUp["registrationReasons"]) => void; showSignIn: () => void }) => {
   const router = useRouter();
   const [value, setValue] = useState<IUserSignUp["registrationReasons"]>([]);
 
@@ -81,20 +72,10 @@ const SignUpReason = ({
           Create Account
         </Button>
         <p className="mt-3 text-center font-medium text-sm">
-          Already have an account? {/* <Link href={routes.auth.signIn.url}> */}
-          <span
-            onClick={() => {
-              if (modal?.showSignIn) {
-                modal?.showSignIn();
-              } else {
-                router.push(routes.auth.signIn.fullUrl);
-              }
-            }}
-            className="underline text-primary-main font-medium text-sm cursor-pointer"
-          >
+          Already have an account?
+          <span onClick={showSignIn} className="underline text-primary-main font-medium text-sm cursor-pointer">
             Sign In
           </span>
-          {/* </Link> */}
         </p>
       </div>
     </>

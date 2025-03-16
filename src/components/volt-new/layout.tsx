@@ -9,8 +9,8 @@ import { voltSearchSchema } from "@/zod-validations/volt";
 import { ResponseModel } from "@/types/common";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import { z } from "zod";
-import SignInForm from "@/app/auth/sign-in/sign-in";
-import SignUpForm from "@/app/auth/sign-up/sign-up";
+// import SignInForm from "@/app/auth/sign-in/sign-in";
+import SignUpForm from "@/components/auth/sign-up/sign-up";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
@@ -91,14 +91,15 @@ const VoltLayout = ({
       >
         <div className="py-5">
           {authModal === "sign-in" ? (
-            <SignInForm
-              modal={{
-                showSignUp: () => setAuthModal("sign-up"),
-                onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
-                closeModal: () => setAuthModal(null),
-              }}
-            />
+            <div>aee</div>
           ) : (
+            // <SignInForm
+            //   modal={{
+            //     showSignUp: () => setAuthModal("sign-up"),
+            //     onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),
+            //     closeModal: () => setAuthModal(null),
+            //   }}
+            // />
             <SignUpForm
               modal={{
                 onAuth: () => router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`),

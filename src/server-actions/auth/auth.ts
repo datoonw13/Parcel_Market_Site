@@ -1,9 +1,9 @@
 "use server";
 
-import { defaultSignInSchema, userSignUpValidation } from "@/zod-validations/auth-validations";
+import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { ISignInResponse, IUserBaseInfo } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { jwtDecode } from "jwt-decode";
 import moment from "moment";
 import { cookies } from "next/headers";
@@ -31,16 +31,15 @@ export const setAuthTokens = (refreshToken: string, accessToken: string, remembe
   revalidatePath("/");
 };
 
-const defaultSignInAction = async (
-  values: z.infer<typeof defaultSignInSchema>,
-  remember: boolean
-): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
+const defaultSignInAction = async (data: {
+  email: string;
+  password: string;
+}): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
   try {
     const request = await fetcher<ITokens>("auth/login", {
       method: "post",
-      body: JSON.stringify(values),
+      body: JSON.stringify(data),
     });
-    setAuthTokens(request.refresh_token, request.access_token, remember);
     return {
       data: {
         ...request,
@@ -53,16 +52,15 @@ const defaultSignInAction = async (
   }
 };
 
-const thirdPartyAuthAction = async (
-  token: string,
-  userSource: UserSource
-): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
+const thirdPartyAuthAction = async (data: {
+  token: string;
+  userSource: UserSource;
+}): Promise<ResponseModel<(ITokens & { decodedAccessToken: IUserBaseInfo }) | null>> => {
   try {
     const request = await fetcher<ITokens>("auth/login/token", {
       method: "POST",
-      body: JSON.stringify({ token, userSource }),
+      body: JSON.stringify({ token: data.token, userSource: data.userSource }),
     });
-    setAuthTokens(request.refresh_token, request.access_token);
     return { data: { ...request, decodedAccessToken: jwtDecode(request.access_token) }, errorMessage: null };
   } catch (error) {
     return {
