@@ -23,31 +23,31 @@ interface VoltDetailsLayoutProps {
 const mapLayers = [
   {
     label: "Outdoors",
-    value: "mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h",
+    value: "mapbox://styles/parcelmarket/cm86y2kkf008k01sb2993ex03",
   },
   {
     label: "Navigation Night",
-    value: "mapbox://styles/mrzippo123/cm7daisum00a301sid550cdss",
+    value: "mapbox://styles/parcelmarket/cm86y2rmn008j01s99rkha0en",
   },
   {
     label: "Navigation Day",
-    value: "mapbox://styles/mrzippo123/cm7damch7000001r39j4c5ism",
+    value: "mapbox://styles/parcelmarket/cm86y2ytc008u01qzf3ltegnv",
   },
   {
     label: "Satellite Streets",
-    value: "mapbox://styles/mrzippo123/cm7daobqv009b01ryfy0857dy",
+    value: "mapbox://styles/parcelmarket/cm86y2bl6008t01seee1m3bov",
   },
   {
     label: "Streets",
-    value: "mapbox://styles/mrzippo123/cm7dapd3x00a501sicvyy4sjb",
+    value: "mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg",
   },
   {
     label: "Monochrome Light",
-    value: "mapbox://styles/mrzippo123/cm7darmad00af01r7f24rftjr",
+    value: "mapbox://styles/parcelmarket/cm86y32m8008w01sievakedk8",
   },
   {
     label: "Monochrome Dark",
-    value: "mapbox://styles/mrzippo123/cm7dasuwp00ag01r760s6gosr",
+    value: "mapbox://styles/parcelmarket/cm86y36bq006i01s8hbp4hv5h",
   },
 ];
 

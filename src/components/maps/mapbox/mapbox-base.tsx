@@ -23,7 +23,7 @@ const MapboxBase: FC<MapboxBaseProps> = (props) => {
     if (mapContainerRef.current) {
       const newRef = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: mapStyle || "mapbox://styles/mapbox/navigation-day-v1",
+        style: mapStyle || "mapbox://styles/parcelmarket/cm86y2ytc008u01qzf3ltegnv",
         center: center || [-97.7431, 30.2672],
         zoom: zoom || 3.5,
         dragRotate: false,
