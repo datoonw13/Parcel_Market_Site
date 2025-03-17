@@ -184,7 +184,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                       setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
                     }}
                   >
-                    Close
+                    Clear
                   </Button>
                 </PopoverClose>
                 <PopoverClose className="w-full max-w-[150px]">
