@@ -188,6 +188,7 @@ export const PropertyDataSchema = z
       if (el.isBulked) {
         const { acreage, county, isMedianValid, pricePerAcreage, state, group, price, properties, lastSaleDate, propertyType } = el.data;
         const uniqueCounties = new Set(el.data.properties.map((el) => el.county.value));
+        const uniqueStates = new Set(el.data.properties.map((el) => el.state.value));
         const uniquePropertyTypes = new Set(el.data.properties.map((el) => el.propertyType));
         const totalProperties = el.data.properties.length;
 
@@ -256,6 +257,7 @@ export const PropertyDataSchema = z
               isSellingProperty: removeParcelNumberFormatting(property.parcelNumber) === removeParcelNumberFormatting(parcelNumber),
             })),
             uniqueCounties: uniqueCounties.size,
+            uniqueStates: uniqueStates.size,
             uniquePropertyTypes: uniquePropertyTypes.size,
             totalProperties,
             propertyType,

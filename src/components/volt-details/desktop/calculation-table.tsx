@@ -253,7 +253,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                   <td className="text-grey-800 text-xs">{assessment.data.acreage.formattedString}</td>
                   <td className="text-grey-800 text-xs">{assessment.data.totalProperties} Parcels</td>
                   <td className="text-grey-800 text-xs">
-                    {assessment.data.state.label}/
+                    {assessment.data.uniqueStates > 1 ? `${assessment.data.uniqueStates} States` : assessment.data.state.label}/
                     {assessment.data.uniqueCounties > 1 ? `${assessment.data.uniqueCounties} Counties` : assessment.data.county.label}
                   </td>
                   <td className="text-grey-800 text-xs">

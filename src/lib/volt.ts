@@ -3,7 +3,6 @@ import moment from "moment";
 import XLSX from "sheetjs-style";
 import { z } from "zod";
 import { saveAs } from "file-saver";
-import { getBase64 } from "./utils";
 
 export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonValidMedianHighlighted?: boolean) => {
   const wb = XLSX.utils.book_new();
