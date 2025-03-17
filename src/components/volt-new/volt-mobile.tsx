@@ -137,6 +137,8 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
                   onMarkerInteraction={() => {}}
                   onMouseLeave={() => {}}
                   propertiesInteraction={propertiesInteraction}
+                  user={user}
+                  setAuthModal={setAuthModal}
                 />
               </div>
             )}

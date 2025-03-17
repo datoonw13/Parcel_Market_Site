@@ -3,13 +3,29 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  Suspense,
+  TransitionFunction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { MapGeoJson } from "@/types/mapbox";
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import { IPropertiesInteraction } from "@/types/volt";
 import { IMainPropertyBaseInfo } from "@/types/property";
 import * as turf from "@turf/turf";
 import { swapPolygonCoordinates } from "@/lib/utils";
+import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
+import useNotification from "@/hooks/useNotification";
+import { IUserBaseInfo } from "@/types/auth";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
@@ -33,11 +49,24 @@ interface VoltSearchResultsMapProps {
   onMarkerInteraction: (data: Partial<IPropertiesInteraction>) => void;
   onMouseLeave: () => void;
   propertiesInteraction: IPropertiesInteraction;
+  setAuthModal: (id: number) => void;
+  user: IUserBaseInfo | null;
 }
 
-const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInteraction, onMouseLeave, propertiesInteraction }) => {
+const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
+  data,
+  onMarkerInteraction,
+  onMouseLeave,
+  propertiesInteraction,
+  setAuthModal,
+  user,
+}) => {
+  const router = useRouter();
   const [ref, setRef] = useState<MapBoX | null>(null);
+  const [isGetDataPending, startGetDataTransition] = useTransition();
   const [isImagesLoaded, setImagesLoaded] = useState(false);
+  const [calculationPending, setCalculationPending] = useState(false);
+  const { notify } = useNotification();
   const tooltipRef = useRef<HTMLDivElement>(null);
   const openPropertyDetails = useMemo(
     () => data.find((el) => el.id === propertiesInteraction.popup?.openId),
@@ -330,6 +359,42 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
     }
   }, [isImagesLoaded, propertiesInteraction.hover, propertiesInteraction.popup, ref]);
 
+  const calculatePrice = async (id: string) => {
+    const property = data.find((el) => el.id === id);
+    if (!property) {
+      return;
+    }
+    setCalculationPending(true);
+
+    const res = await calculateLandPriceAction2({
+      county: property.county.value,
+      state: property.state.value,
+      parcelNumber: property.parcelNumber,
+      owner: property.owner,
+      propertyType: property.propertyType,
+      coordinates: JSON.stringify(property.polygon),
+      locality: "",
+      acrage: property.acreage.toString(),
+      lat: property.lat.toString(),
+      lon: property.lon.toString(),
+    });
+
+    if (res?.errorMessage || !res?.data) {
+      notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
+    }
+
+    if (res.data) {
+      if (user) {
+        startGetDataTransition(() => {
+          router.push(`/volt/${res.data}`);
+        });
+      } else {
+        setAuthModal(res.data);
+      }
+    }
+    setCalculationPending(false);
+  };
+
   useEffect(() => {
     setInitialData();
   }, [setInitialData]);
@@ -365,7 +430,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
       <div style={{ display: "none" }}>
         <div ref={tooltipRef}>
           {openPropertyDetails && (
-            <ul className="">
+            <ul className="blur-0">
               <>
                 <li className="text-xs text-grey-800 py-0.5">
                   Parcel Number <span className="text-black font-semibold">{openPropertyDetails.parcelNumberNoFormatting}</span>
@@ -378,22 +443,13 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({ data, onMarkerInt
                 </li>
                 {data && data?.length > 1 && (
                   <Button
+                    loading={calculationPending || isGetDataPending}
                     className="py-1 h-auto !px-6 ml-auto flex mt-4"
                     onClick={() => {
-                      if (openPropertyDetails.id === propertiesInteraction.popup?.openId) {
-                        onMarkerInteraction({ popup: null });
-                      } else {
-                        onMarkerInteraction({
-                          popup: {
-                            clickId: openPropertyDetails.id.toString(),
-                            openId: openPropertyDetails.id.toString(),
-                            isBulked: false,
-                          },
-                        });
-                      }
+                      calculatePrice(openPropertyDetails.id.toString());
                     }}
                   >
-                    {openPropertyDetails.id === propertiesInteraction.popup?.openId ? "Remove" : "Select"}
+                    Get Data
                   </Button>
                 )}
               </>

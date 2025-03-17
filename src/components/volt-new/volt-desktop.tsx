@@ -187,6 +187,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
                   onMarkerInteraction={onMarkerInteraction}
                   onMouseLeave={onMouseLeave}
                   propertiesInteraction={propertiesInteraction}
+                  user={user}
+                  setAuthModal={setAuthModal}
                 />
               )}
             </td>
