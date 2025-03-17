@@ -35,7 +35,7 @@ const HomeDesktopHeader: FC<HomeDesktopHeaderProps> = ({ user, menuList }) => {
           {user && (
             <>
               <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
-                <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
+                <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">Data Dashboard</p>
               </Link>
               <HeaderNotifications />
               <Popover open={open} onOpenChange={setOpen}>
