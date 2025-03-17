@@ -334,9 +334,9 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.acreage.formattedString}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.parcelNumber.formattedString}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        {assessment.data.state.label}/{assessment.data.county.label}
+                        {childAssessment.state.label}/{childAssessment.county.label}
                       </td>
-                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{assessment.data.propertyType}</td>
+                      <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">{childAssessment.propertyType}</td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         <span>-</span>
                       </td>
@@ -344,7 +344,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                         <span>-</span>
                       </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
-                        {moment(assessment.data.lastSaleDate).format("MM-DD-YYYY")}
+                        {moment(childAssessment.lastSaleDate).format("MM-DD-YYYY")}
                       </td>
                       <td className="text-grey-800 bg-grey-50 text-xs !pl-7 ">
                         <div className="flex items-center gap-2 justify-end">
