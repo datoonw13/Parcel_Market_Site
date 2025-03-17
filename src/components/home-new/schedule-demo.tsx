@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "../ui/button";
 
 const ScheduleDemo = () => (
@@ -292,7 +293,9 @@ const ScheduleDemo = () => (
         <h1 className="text-white text-2xl font-extrabold">Schedule a Demo</h1>
         <h2 className="text-white text-sm">Get a detailed demo from our experts and get all your questions answered with clarity.</h2>
       </div>
-      <Button className="bg-grey-30 hover:bg-grey-50 text-black md:px-16 mr-auto sm:mr-0">Get a Demo</Button>
+      <Link href="https://calendly.com/admin-parcelmarket/30min" target="_blank">
+        <Button className="bg-grey-30 hover:bg-grey-50 text-black md:px-16 mr-auto sm:mr-0">Get a Demo</Button>
+      </Link>
     </div>
   </div>
 );
