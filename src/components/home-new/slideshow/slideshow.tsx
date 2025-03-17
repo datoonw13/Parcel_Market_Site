@@ -68,7 +68,7 @@ const SlideShow = () => {
       <div className="absolute top-[50%] -translate-y-[60%] left-[50%] -translate-x-[50%] z-10 px-5 w-full">
         <div className="space-y-2 px-2">
           <h1 className="text-3xl text-center text-white font-bold">Revolutionize Land Evaluation!</h1>
-          <h2 className="text-white font-semibold text-center">Find, Analyze, and compare Land Data Instantly</h2>
+          <h2 className="text-white font-semibold text-center lg:hidden">Find, Analyze, and compare Land Data Instantly</h2>
         </div>
         <div className="bg-white mt-6 md:mt-8 mb-4 rounded-xl p-4 grid md:grid-flow-col gap-3 max-w-3xl w-full mx-auto">
           <AutoComplete
