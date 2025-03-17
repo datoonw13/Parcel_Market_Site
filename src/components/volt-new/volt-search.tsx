@@ -49,7 +49,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
     handleSubmit,
     setValue,
     trigger,
-    formState: { isSubmitted, isDirty },
+    formState: { isSubmitted, isDirty, errors },
     reset,
   } = form;
   const { states, getCountiesByState, getCounty } = useStates();
@@ -180,6 +180,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 onChange={(e) => setValue("parcelNumber", e.target.value || undefined, { shouldValidate: true, shouldDirty: true })}
                 label="Enter Parcel ID"
                 disabled={disableSearch}
+                error={!!errors.parcelNumber}
               />
             )}
             {watch("searchType") === "fullName" && (
@@ -190,6 +191,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                   rootClassName="w-full"
                   label="First Name"
                   disabled={disableSearch}
+                  error={!!errors.firstName}
                 />
                 <TextInput
                   value={watch("lastName") || ""}
@@ -197,6 +199,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                   rootClassName="w-full"
                   label="Last Name"
                   disabled={disableSearch}
+                  error={!!errors.lastName}
                 />
               </div>
             )}
@@ -206,6 +209,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 onChange={(e) => setValue("entityName", e.target.value || undefined, { shouldValidate: true, shouldDirty: true })}
                 label="Enter name of the entity"
                 disabled={disableSearch}
+                error={!!errors.entityName}
               />
             )}
             <div className="flex flex-col sm:flex-row gap-3 w-full">
@@ -218,6 +222,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                   setValue("county", "", { shouldValidate: true, shouldDirty: true });
                 }}
                 disabled={disableSearch}
+                error={!!errors.state}
               />
               <AutoComplete
                 options={counties || []}
@@ -227,6 +232,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 }}
                 selectedValue={getCounty(selectedState, watch("county"))?.short.value || null}
                 disabled={!watch("state") || disableSearch}
+                error={!!errors.county}
               />
             </div>
             <div className="w-full lg:mt-1 fixed bottom-0 left-0 border-t p-4 bg-grey-30 sm:border-0 sm:p-0 sm:bg-transparent sm:static">
