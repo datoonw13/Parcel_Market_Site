@@ -51,18 +51,18 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   const [openWarning, setWarning] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  useEffect(() => {
-    if (openWarning) {
-      timerRef.current = setTimeout(() => {
-        setWarning(false);
-      }, 2500);
-    } else {
-      window.clearTimeout(timerRef.current);
-    }
-    return () => {
-      window.clearTimeout(timerRef.current);
-    };
-  }, [openWarning]);
+  // useEffect(() => {
+  //   if (openWarning) {
+  //     timerRef.current = setTimeout(() => {
+  //       setWarning(false);
+  //     }, 2500);
+  //   } else {
+  //     window.clearTimeout(timerRef.current);
+  //   }
+  //   return () => {
+  //     window.clearTimeout(timerRef.current);
+  //   };
+  // }, [openWarning]);
 
   useEffect(() => {
     if (data.assessments.data.length === 0) {
