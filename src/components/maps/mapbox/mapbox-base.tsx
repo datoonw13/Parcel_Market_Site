@@ -5,7 +5,7 @@ import mapboxgl, { LngLatLike } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import usaOutline from "../../../../public/map/usa-outline.json";
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
+// mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
 
 interface MapboxBaseProps {
   mapStyle?: string;
@@ -23,10 +23,11 @@ const MapboxBase: FC<MapboxBaseProps> = (props) => {
     if (mapContainerRef.current) {
       const newRef = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: mapStyle || "mapbox://styles/parcelmarket/cm86y2ytc008u01qzf3ltegnv",
+        style: "mapbox://styles/parcelmarket/cm86y2ytc008u01qzf3ltegnv",
         center: center || [-97.7431, 30.2672],
         zoom: zoom || 3.5,
         dragRotate: false,
+        accessToken: process.env.NEXT_PUBLIC_MAPBOX_KEY || "",
       });
 
       newRef?.on("load", () => {
