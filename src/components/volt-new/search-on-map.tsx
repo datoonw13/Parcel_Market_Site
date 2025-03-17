@@ -20,6 +20,7 @@ import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import SignInForm from "../auth/sign-in";
 import FacebookAuthProvider from "../auth/facebook-auth-provider";
 import GoogleAuthProvider from "../auth/google-auth-provider/google-auth-provider";
+import ForgotPasswordButton from "../@new/user/profile/modals/forgot-password/forgot-password-button";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -74,6 +75,7 @@ const VoltSearchOnMap = ({
   const [signUpEmail, setSignUpEmail] = useState<string | null>(null);
   const [signUTokens, setSignUpTokens] = useState<ITokens | null>(null);
   const [isAuthTransitioning, startAuthTransition] = useTransition();
+  const [openModal, setOpenModal] = useState(false);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -323,7 +325,7 @@ const VoltSearchOnMap = ({
                 });
               }}
               onSignUp={() => setAuthModal("sign-up")}
-              ForgotPasswordButton={undefined}
+              forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={user} />}
               authPending={isAuthTransitioning}
               authProviders={() => (
                 <div className="flex flex-col gap-3 w-full">

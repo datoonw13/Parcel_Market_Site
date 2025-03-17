@@ -16,13 +16,13 @@ interface SignInFormProps {
   authProviders?: () => ReactElement;
   onSignUp: () => void;
   defaultSignIn: (data: z.infer<typeof defaultSignInSchema> & { remember: boolean }) => Promise<void>;
-  ForgotPasswordButton?: ElementType;
+  forgotPasswordButton?: ElementType;
   className?: string;
   authPending?: boolean;
 }
 
 const SignInForm: FC<SignInFormProps> = ({
-  ForgotPasswordButton,
+  forgotPasswordButton: ForgotPasswordButton,
   onSignUp,
   defaultSignIn,
   className,

@@ -1,19 +1,30 @@
 "use client";
 
+import ForgotPasswordButton from "@/components/@new/user/profile/modals/forgot-password/forgot-password-button";
 import FacebookAuthProvider from "@/components/auth/facebook-auth-provider";
 import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-auth-provider";
 import SignInForm from "@/components/auth/sign-in";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import AuthClient from "@/lib/auth-client";
+import { getUserAction } from "@/server-actions/user/actions";
+import { IUserBaseInfo } from "@/types/auth";
 import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 const SignInPage = () => {
   const router = useRouter();
   const { notify } = useNotification();
   const [authPending, startAuthTransition] = useTransition();
+  const [openModal, setOpenModal] = useState(false);
+  const [user, setUser] = useState<IUserBaseInfo | null>(null);
+
+  useEffect(() => {
+    getUserAction().then((data) => {
+      setUser(data);
+    });
+  }, []);
 
   return (
     <SignInForm
@@ -32,7 +43,7 @@ const SignInPage = () => {
       }}
       authPending={authPending}
       onSignUp={() => router.push(routes.auth.signUp.fullUrl)}
-      ForgotPasswordButton={undefined}
+      forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={user} />}
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">
           <GoogleAuthProvider

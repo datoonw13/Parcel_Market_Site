@@ -23,6 +23,7 @@ import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import GoogleAuthProvider from "../auth/google-auth-provider/google-auth-provider";
 import SignInForm from "../auth/sign-in";
 import FacebookAuthProvider from "../auth/facebook-auth-provider";
+import ForgotPasswordButton from "../@new/user/profile/modals/forgot-password/forgot-password-button";
 
 enum SignUpSteps {
   SELECT_REASONS,
@@ -52,6 +53,7 @@ const VoltLayout = ({
   const [signUpEmail, setSignUpEmail] = useState<string | null>(null);
   const [signUTokens, setSignUpTokens] = useState<ITokens | null>(null);
   const [isTransitioning, startAuthTransition] = useTransition();
+  const [openModal, setOpenModal] = useState(false);
 
   const form = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
@@ -133,7 +135,7 @@ const VoltLayout = ({
                 });
               }}
               onSignUp={() => setAuthModal("sign-up")}
-              ForgotPasswordButton={undefined}
+              forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={user} />}
               authPending={isTransitioning}
               authProviders={() => (
                 <div className="flex flex-col gap-3 w-full">
