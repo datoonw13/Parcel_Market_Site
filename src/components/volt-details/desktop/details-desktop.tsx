@@ -442,11 +442,13 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               Data Dashboard <RiExternalLinkFill className="!text-primary-main size-5" />
             </Button>
           </Link>
-          <Link href={routes.user.subscription.fullUrl}>
-            <Button variant="default" className="w-full ">
-              Subscribe to see price
-            </Button>
-          </Link>
+          {!isSubscribed && (
+            <Link href={routes.user.subscription.fullUrl}>
+              <Button variant="default" className="w-full ">
+                Subscribe to see price
+              </Button>
+            </Link>
+          )}
           <Link className="underline text-primary-main font-medium text-center" href="/">
             Search another land
           </Link>
