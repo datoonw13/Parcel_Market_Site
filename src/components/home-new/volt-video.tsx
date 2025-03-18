@@ -5,7 +5,7 @@ import routes from "@/helpers/routes";
 import { Button } from "../ui/button";
 
 const VoltVideo = () => (
-  <div className="items-center pt-8 md:pt-0 mt-16 sm:mt-20 md:mt-28 lg:mt-40 xl:mt-44 flex flex-col lg:grid lg:grid-cols-[1.4fr_1fr] gap-6 max-w-7xl mx-auto lg:px-8 xl:px-20">
+  <div className="items-center pt-8 md:pt-0 mt-16 sm:mt-20 flex flex-col lg:grid lg:grid-cols-[1.4fr_1fr] gap-6 max-w-7xl mx-auto lg:px-8 xl:px-20">
     <div className="mx-4 px-2 space-y-3 lg:order-2">
       <h1 className="text-center lg:text-start font-extrabold text-2xl">How Does Volt work?</h1>
       <h2 className="text-center lg:text-start font-light">

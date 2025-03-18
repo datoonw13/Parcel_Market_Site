@@ -65,7 +65,7 @@ const VoltFeatures = () => {
     ],
   };
   return (
-    <div className="mt-11 sm:mt-12 md:mt-16 lg:mt-20 xl:mt-[84px] flex flex-col gap-8 relative py-10 sm:py-12 md:py-16">
+    <div className="flex flex-col gap-8 relative py-10 sm:py-12 md:py-16">
       <div className="absolute w-full h-full left-0 top-0">
         <div className="w-full h-full relative">
           <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 894" fill="none" xmlns="http://www.w3.org/2000/svg">
