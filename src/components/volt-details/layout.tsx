@@ -55,7 +55,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   const params = useSearchParams();
   const [isFetching, startFetchingTransition] = useTransition();
   const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
-  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h");
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg");
 
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
   const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));

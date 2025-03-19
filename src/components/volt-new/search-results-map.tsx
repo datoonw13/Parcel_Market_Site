@@ -458,7 +458,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
         </div>
       </div>
       <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>
-        <Map mapStyle="mapbox://styles/mrzippo123/cm7dab21800au01r3hoz6311h" setRef={setRef} ref={ref} />
+        <Map mapStyle="mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg" setRef={setRef} ref={ref} />
       </Suspense>
     </>
   );
