@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 import routes from "@/helpers/routes";
 import x from "../../../../public/test.json";
 
+export const maxDuration = 800;
+
 const getData = async (params: string): Promise<ResponseModel<z.infer<typeof PropertyDataSchema> | null>> => {
   try {
     const searchParams = new URLSearchParams();
