@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { AnimatePresence, motion } from "framer-motion";
 import { PopoverClose } from "@radix-ui/react-popover";
@@ -38,6 +38,11 @@ const getAcreageLabel = (min: number | null, max: number | null) => {
 const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit, propertyTypes }) => {
   const [localFilters, setLocalFilters] = useState(filters);
   const [backDrop, setBackDrop] = useState(false);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
   return (
     <>
       <AnimatePresence>
