@@ -306,22 +306,34 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                             )}
                           </TooltipTrigger>
                           <TooltipContent>
-                            <div
-                              className="p-0.5"
-                              style={{
-                                background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
-                                borderRadius: 12,
-                                boxShadow: "0px 4px 12px 0px #0000001F",
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.2 }}
+                              onAnimationStart={() => {
+                                const el = document.querySelector<HTMLElement>("[data-radix-popper-content-wrapper]");
+                                if (el) {
+                                  el.style.setProperty("--radix-popper-zIndex", "20");
+                                }
                               }}
                             >
-                              <div style={{ borderRadius: 10 }} className="bg-white p-3">
-                                <p className="font-medium text-xs max-w-44">
-                                  Lands marked with{" "}
-                                  <span className="font-semibold text-[#F44D61]">({assessment.data.group.toLocaleUpperCase()})</span> where
-                                  sold together
-                                </p>
+                              <div
+                                className="p-0.5"
+                                style={{
+                                  background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                                  borderRadius: 12,
+                                  boxShadow: "0px 4px 12px 0px #0000001F",
+                                }}
+                              >
+                                <div style={{ borderRadius: 10 }} className="bg-white p-3">
+                                  <p className="font-medium text-xs max-w-44">
+                                    Lands marked with{" "}
+                                    <span className="font-semibold text-[#F44D61]">({assessment.data.group.toLocaleUpperCase()})</span>{" "}
+                                    where sold together
+                                  </p>
+                                </div>
                               </div>
-                            </div>
+                            </motion.div>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
