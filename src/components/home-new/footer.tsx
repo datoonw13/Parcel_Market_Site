@@ -63,11 +63,9 @@ const HomeFooterSection = () => (
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
     </ul>
-    <div className="space-y-6 flex justify-center items-center flex-col pb-7">
-      <Link href="mailto:support@parcelmarket.com" target="_blank">
-        <Button variant="secondary" className="w-fit bg-grey-30 hover:bg-grey-50 hover:text-black">
-          Support to: support@parcelmarket.com
-        </Button>
+    <div className="flex items-center flex-col gap-6 sm:flex-row justify-between pb-7">
+      <Link className="text-sm font-medium text-grey-600" href="mailto:support@parcelmarket.com" target="_blank">
+        Support Email
       </Link>
       <p className="text-xs font-medium text-grey-600">©{new Date().getFullYear()} Parcel Market. All rights reserved.</p>
     </div>
