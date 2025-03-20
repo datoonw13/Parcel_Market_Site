@@ -142,7 +142,7 @@ const SearchesDesktopFilters = ({ startTransition }: { startTransition: Transiti
         />
         <MinmaxDropdown
           inputPrefix="$"
-          placeholder="VOLT Price"
+          placeholder="VOLT Value"
           selectedValue={{
             min: filters.voltPriceMin === null ? null : filters.voltPriceMin,
             max: filters.voltPriceMax === null ? null : filters.voltPriceMax,

@@ -75,7 +75,7 @@ const UserFollowedPropertiesDesktopFilters = ({
           });
         }}
         selectedValue={{ min: selectedFilters.voltPriceMin, max: selectedFilters.voltPriceMax }}
-        placeHolder="VOLT Price"
+        placeHolder="VOLT Value"
         getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
       />
     </div>

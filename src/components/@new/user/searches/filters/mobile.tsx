@@ -220,7 +220,7 @@ const SearchesMobileFilters = ({ startTransition }: { startTransition: Transitio
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="voltPrice">
-                <AccordionTrigger>VOLT Price</AccordionTrigger>
+                <AccordionTrigger>VOLT Value</AccordionTrigger>
                 <AccordionContent>
                   <MinmaxDropdownContent
                     error={voltPriceError}

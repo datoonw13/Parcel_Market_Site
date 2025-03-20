@@ -104,7 +104,7 @@ const UserFollowedPropertiesMobileFilters: FC<UserFollowedPropertiesMobileFilter
       <MobileFilterItem
         open={open === "voltPrice"}
         toggleFilter={() => setOpen(open === "voltPrice" ? null : "voltPrice")}
-        filterName="VOLT Price"
+        filterName="VOLT Value"
       >
         <MinMaxMobileFilter
           options={priceFilters}

@@ -69,7 +69,7 @@ const LandsDesktopFilters: FC<LandsDesktopFiltersProps> = ({ filters, setFilters
         options={priceFilters}
         value={{ min: filters.priceMin, max: filters.priceMax }}
         onChange={(volt) => setFilters({ ...filters, priceMin: volt.min, priceMax: volt.max })}
-        placeHolder="VOLT Price"
+        placeHolder="VOLT Value"
         getOptionLabel={(item) => getPriceLabel(Number(item.min), Number(item.max))}
       />
     </div>
