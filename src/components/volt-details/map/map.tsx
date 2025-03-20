@@ -66,7 +66,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
         window.map = ref;
 
-        const mainLandBulkGroup = data.assessments.data.find((el) => el.isBulked && el.data.properties.find((el) => el.id === data.id));
+        const mainLandBulkGroup = data.assessments.data.find(
+          (el) => el.isBulked && el.data.properties.find((el) => el.parcelNumber.formattedString === data.parcelNumber.formattedString)
+        );
         const geoJsonInit: MapGeoJson = {
           type: "FeatureCollection",
           features: [],
@@ -113,7 +115,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         data.assessments.data.forEach((el) => {
           if (el.isBulked) {
             el.data.properties.forEach((childEl) => {
-              if (childEl.id !== data.id) {
+              if (childEl.id !== data.id && childEl.parcelNumber.formattedString !== data.parcelNumber.formattedString) {
                 geoJsonInit.features.push({
                   type: "Feature",
                   geometry: {
@@ -146,7 +148,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 });
               }
             });
-          } else if (el.data.id !== data.id) {
+          } else if (el.data.id !== data.id && el.data.parcelNumber.formattedString !== data.parcelNumber.formattedString) {
             geoJsonInit.features.push({
               type: "Feature",
               geometry: {
