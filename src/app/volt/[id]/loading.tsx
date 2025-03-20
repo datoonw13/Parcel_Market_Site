@@ -1,8 +1,8 @@
 import { LoadingIcon2 } from "@/components/@new/icons/LoadingIcons";
 
 const Loading = () => (
-  <div className="fixed w-full h-full top-0 left-0 bg-black-1000/10 z-20 flex items-center justify-center">
-    <div className="rounded-2xl bg-transparent p-6 max-w-md space-y-4">
+  <div className="fixed z-[99] w-full h-full top-0 left-0 bg-black-1000/40 flex items-center justify-center">
+    <div className="rounded-2xl bg-white p-6 shadow-3 space-y-4 max-w-[90%] lg:max-w-md">
       <div className="relative w-fit mx-auto">
         <svg
           className="absolute -top-[-50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
@@ -27,6 +27,9 @@ const Loading = () => (
         </svg>
         <LoadingIcon2 className="animate-spin size-12 text-primary-main" />
       </div>
+      <p className="text-grey-800 text-center">
+        Fetching lands sold in last <span className="font-bold">2</span> years in <span className="font-bold">10</span> mile radius
+      </p>
     </div>
   </div>
 );
