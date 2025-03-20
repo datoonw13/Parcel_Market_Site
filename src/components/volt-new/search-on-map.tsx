@@ -478,7 +478,7 @@ const VoltSearchOnMap = ({
       <div style={{ display: "none" }}>
         <div ref={tooltipRef}>
           {openProperty && (
-            <ul className="">
+            <ul className="max-w-sm">
               <>
                 <li className="text-xs text-grey-800 py-0.5">
                   Parcel Number <span className="text-black font-semibold">{openProperty.parcelnumb_no_formatting}</span>
