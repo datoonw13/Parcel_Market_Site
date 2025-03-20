@@ -449,7 +449,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               </Button>
             </Link>
           )}
-          <Link className="underline text-primary-main font-medium text-center" href="/">
+          <Link className="underline text-primary-main font-medium text-center" href={routes.volt.fullUrl}>
             Search another land
           </Link>
         </div>
