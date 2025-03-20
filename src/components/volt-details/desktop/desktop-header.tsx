@@ -67,6 +67,8 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   useEffect(() => {
     if (data.assessments.data.length === 0) {
       setWarning(true);
+    } else {
+      setWarning(false);
     }
   }, [data.assessments]);
 
