@@ -76,6 +76,7 @@ const VoltSearchOnMap = ({
   const [signUTokens, setSignUpTokens] = useState<ITokens | null>(null);
   const [isAuthTransitioning, startAuthTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
+  const [isPolygonPending, setPolygonPending] = useState(false);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -139,11 +140,22 @@ const VoltSearchOnMap = ({
     });
     const data = await req.json();
 
-    mapRef.addSource(data.id, {
-      type: "vector",
-      tiles: data.vector,
-      promoteId: "parcelnumb",
-    });
+    mapRef
+      .addSource(data.id, {
+        type: "vector",
+        tiles: data.vector,
+        promoteId: "parcelnumb",
+      })
+      .on("idle", () => {
+        if (mapRef.getZoom() > 11) {
+          setPolygonPending(false);
+        }
+      })
+      .on("moveend", () => {
+        if (mapRef.getZoom() > 11) {
+          setPolygonPending(true);
+        }
+      });
 
     // Add parcel outlines to the map with basic styles
     mapRef.addLayer({
@@ -497,6 +509,20 @@ const VoltSearchOnMap = ({
           )}
         </div>
       </div>
+      {isPolygonPending && (
+        <div className="bg-white rounded-xl py-2 px-3 absolute top-2 left-2 z-10">
+          <p
+            style={{
+              backgroundImage: "linear-gradient(90deg, #05471C 0%, #16DB65 100%)",
+              color: "transparent",
+              backgroundClip: "text",
+            }}
+            className="text-xs font-bold"
+          >
+            Land polygons are loading
+          </p>
+        </div>
+      )}
       <Suspense fallback={<div className="w-full h-[full] bg-primary-main-800 animate-pulse" />}>
         <Map setRef={setMapRef} ref={mapRef} />
       </Suspense>
