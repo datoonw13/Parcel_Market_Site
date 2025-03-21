@@ -203,6 +203,9 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         <p className="text-sm">{data.voltPrice.formattedString}</p>
                       </li>
                     </ul>
+                    {data.usedForCalculation && (
+                      <li className="text-sm font-semibold text-grey-800 list-disc">The subject land was sold with other lands</li>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-4">

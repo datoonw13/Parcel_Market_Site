@@ -387,5 +387,9 @@ export const PropertyDataSchema = z
         },
         data: formattedAssessments,
       },
+      usedForCalculation: !!assessments
+        .map((el) => (el.isBulked ? el.data.properties : el.data))
+        .flat()
+        .find((el) => removeParcelNumberFormatting(el.parcelNumber) === removeParcelNumberFormatting(parcelNumber)),
     };
   });
