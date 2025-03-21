@@ -105,7 +105,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
           </PopoverAnchor>
         </Popover>
         {(!data?.data || isPending) && !showMap && (
-          <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll" aria-hidden>
+          <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-search-result-scroll" aria-hidden>
             <div className={cn("h-full py-4 px-5")}>
               <div className="overflow-auto flex flex-col gap-8">
                 <div className="space-y-6">

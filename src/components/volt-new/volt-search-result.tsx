@@ -23,12 +23,12 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ className, data, properti
   }, []);
 
   useEffect(() => {
-    if (propertiesInteraction.hover?.openId && !isElementVisible(`search-result-${propertiesInteraction.hover.openId}`, "volt-scroll")) {
+    if (propertiesInteraction.popup?.openId && !isElementVisible(`search-result-${propertiesInteraction.popup.openId}`, "volt-scroll")) {
       document
-        .getElementById(`calculation-${propertiesInteraction.hover?.openId}`)
+        .getElementById(`search-result-${propertiesInteraction.popup?.openId}`)
         ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  }, [propertiesInteraction]);
+  }, [propertiesInteraction.popup]);
 
   useEffect(
     () => () => {
