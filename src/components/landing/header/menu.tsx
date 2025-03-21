@@ -118,7 +118,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user, onAnimationStart }) => {
             {!!user && (
               <>
                 <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
-                  <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
+                  <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">Data Dashboard</p>
                 </Link>
                 <HeaderNotifications />
                 <UserMenu user={user} />
@@ -158,7 +158,7 @@ const list = [
     path: routes.user.subscription.fullUrl,
   },
   {
-    label: "My Recent Searches",
+    label: "Data Dashboard",
     icon: PiClockCountdown,
     path: routes.user.recentSearches.fullUrl,
   },

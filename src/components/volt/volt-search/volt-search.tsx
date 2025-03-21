@@ -263,7 +263,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
               href={routes.user.recentSearches.fullUrl}
               className="underline text-sm font-medium text-primary-main"
             >
-              My Recent Searches
+              Data Dashboard
             </Link>
           </p>
         </div>

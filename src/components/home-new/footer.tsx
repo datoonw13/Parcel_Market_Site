@@ -43,7 +43,7 @@ const HomeFooterSection = () => (
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
       <Link href={routes.user.recentSearches.fullUrl}>
-        <li>Data dashboard</li>
+        <li>Data Dashboard</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
       <Link href={routes.volt.fullUrl}>

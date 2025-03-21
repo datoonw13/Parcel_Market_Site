@@ -83,7 +83,7 @@ const list = [
     path: routes.user.subscription.fullUrl,
   },
   {
-    label: "My Recent Searches",
+    label: "Data Dashboard",
     icon: PiClockCountdown,
     path: routes.user.recentSearches.fullUrl,
   },
