@@ -26,6 +26,18 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
           },
           v: property.data.parcelNumber.formattedString,
         },
+        State: {
+          s: {
+            ...(isNonValidMedianHighlighted && !property.data.isMedianValid && { fill: { fgColor: { rgb: "fdf5d8" } } }),
+            border: {
+              top: { style: "thin", color: { rgb: property.data.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
+              bottom: { style: "thin", color: { rgb: property.data.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
+              left: { style: "thin", color: { rgb: "#e5e7eb" } },
+              right: { style: "thin", color: { rgb: "#e5e7eb" } },
+            },
+          },
+          v: property.data.state.label,
+        },
         County: {
           s: {
             ...(isNonValidMedianHighlighted && !property.data.isMedianValid && { fill: { fgColor: { rgb: "fdf5d8" } } }),
@@ -105,6 +117,19 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
             },
           },
           v: `${property.data.totalProperties} Parcels`,
+        },
+        State: {
+          s: {
+            fill: { fgColor: { rgb: isNonValidMedianHighlighted && !property.data.isMedianValid ? "fdf5d8" : "f4f4f4" } },
+            font: { bold: true },
+            border: {
+              top: { style: "thin", color: { rgb: property.data.hasSellingProperty ? "0e8b40" : "#e5e7eb" } },
+              bottom: { style: "thin", color: { rgb: property.data.hasSellingProperty ? "0e8b40" : "#e5e7eb" } },
+              left: { style: "thin", color: { rgb: "#e5e7eb" } },
+              right: { style: "thin", color: { rgb: "#e5e7eb" } },
+            },
+          },
+          v: `${property.data.uniqueStates > 1 ? `${property.data.uniqueStates} States` : property.data.state.label}`,
         },
         County: {
           s: {
@@ -186,6 +211,18 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
             },
             v: `    ${childProperty.parcelNumber.formattedString}`,
           },
+          State: {
+            s: {
+              fill: { fgColor: { rgb: "f6f6f6" } },
+              border: {
+                top: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
+                bottom: { style: "thin", color: { rgb: childProperty.isSellingProperty ? "0e8b40" : "#e5e7eb" } },
+                left: { style: "thin", color: { rgb: "#e5e7eb" } },
+                right: { style: "thin", color: { rgb: "#e5e7eb" } },
+              },
+            },
+            v: `    ${childProperty.state.label}`,
+          },
           County: {
             s: {
               fill: { fgColor: { rgb: "f6f6f6" } },
@@ -251,7 +288,7 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
     }
   });
 
-  const headers = ["Parcel ID", "County", "Acreage", "Sold price", "Sold price per acre", "Last sale date"];
+  const headers = ["Parcel ID", "State", "County", "Acreage", "Sold price", "Sold price per acre", "Last sale date"];
   const ws = XLSX.utils.json_to_sheet(formattedData, {
     header: headers,
   });
@@ -277,29 +314,30 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
         .formattedString.length,
       headers[0].length
     ),
+    state: Math.max([...flattenData].sort((a, b) => b.state.label.length - a.state.label.length)[0].state.label.length, headers[1].length),
     county: Math.max(
       [...flattenData].sort((a, b) => b.county.label.length - a.county.label.length)[0].county.label.length,
-      headers[1].length
+      headers[2].length
     ),
     acreage: Math.max(
       [...flattenData].sort((a, b) => b.acreage.toString().length - a.acreage.toString().length)[0].acreage.toString().length,
-      headers[2].length
+      headers[3].length
     ),
     lastSalePrice: Math.max(
       [...flattenData].sort((a, b) => b.lastSalePrice!.toString().length - a.lastSalePrice!.toString().length)[0].lastSalePrice!.toString()
         .length,
-      headers[3].length
+      headers[4].length
     ),
     pricePerAcre: Math.max(
       [...flattenData]
         .sort((a, b) => b.pricePerAcreage.toString().length - a.pricePerAcreage.toString().length)[0]
         .pricePerAcreage.toString().length,
-      headers[4].length
+      headers[5].length
     ),
     lastSaleDate: Math.max(
       [...flattenData].sort((a, b) => b.lastSaleDate!.toString().length - a.lastSaleDate!.toString().length)[0].lastSaleDate!.toString()
         .length,
-      headers[5].length
+      headers[6].length
     ),
   };
 
