@@ -184,6 +184,11 @@ const routes = {
     protected: false,
     fullUrl: "/investing",
   },
+  "subscription-update-success": {
+    url: "subscription-update-success",
+    protected: true,
+    fullUrl: "/subscription-update-success",
+  },
 };
 
 export const getAllRoutes = (

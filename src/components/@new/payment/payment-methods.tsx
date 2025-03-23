@@ -7,9 +7,10 @@ import { getUserSubscriptions, revalidateAllPath, updateSubscriptionAction } fro
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { removeAccessToken } from "@/server-actions/user/actions";
+import { generateAccessToken, removeAccessToken } from "@/server-actions/user/actions";
 import LoadingCircle from "@/icons/LoadingCircle";
 import moment from "moment";
+import { setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
 import RadioButton from "../shared/forms/RadioButton";
 import Stripe from "./stripe/stripe";
 import Button from "../shared/forms/Button";
@@ -64,7 +65,19 @@ const PaymentMethods = ({
       const { errorMessage } = await updateSubscriptionAction(params.get("plan") as SubscriptionType, paymentMethod);
       setUpdatePending(false);
       if (!errorMessage) {
-        removeAccessToken();
+        const token = await generateAccessToken();
+
+        if (!token.data) {
+          return;
+        }
+
+        setAuthTokensAction([
+          {
+            token: token.data,
+            tokenName: "jwt",
+            remember: false,
+          },
+        ]);
         revalidateAllPath();
         router.push(`${routes.user.subscription.fullUrl}`);
       } else {
@@ -84,7 +97,19 @@ const PaymentMethods = ({
       }
 
       if (isUpdated) {
-        removeAccessToken();
+        const token = await generateAccessToken();
+
+        if (!token.data) {
+          return;
+        }
+
+        setAuthTokensAction([
+          {
+            token: token.data,
+            tokenName: "jwt",
+            remember: false,
+          },
+        ]);
         revalidateAllPath();
         router.replace(routes.home.fullUrl);
         window.clearInterval(intervalRef.current);

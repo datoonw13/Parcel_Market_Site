@@ -4,6 +4,7 @@ import { createContext, memo, ReactNode, useCallback, useContext, useEffect, use
 import { getAuthedUserDataAction, refreshTokenAction } from "@/server-actions/new-auth/new-auth";
 import moment from "moment";
 import { usePathname } from "next/navigation";
+import { revalidateAllPath } from "@/server-actions/subscription/actions";
 
 const AuthContext = createContext<{
   user: Awaited<ReturnType<typeof getAuthedUserDataAction>>;
@@ -40,14 +41,22 @@ const AuthContextProvide = ({
 
   const startSession = useCallback(async () => {
     const authedUser = await getAuthedUserDataAction();
+
     if (intervalRef.current) {
       window.clearInterval(intervalRef.current);
+    }
+
+    if (authedUser.isAuthed && !authedUser.data) {
+      await refreshTokenAction();
+      revalidateAllPath();
+      startSession();
     }
 
     if (authedUser?.data) {
       const duration = moment.duration(moment(authedUser.data!.sessionValidUntil).diff(moment()));
       const seconds = duration.asSeconds() - 5;
       const ms = seconds * 1000;
+
       intervalRef.current = setInterval(async () => {
         const request = await refreshTokenAction();
         if (request.errorMessage) {
@@ -71,13 +80,6 @@ const AuthContextProvide = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authedUser, pathname]);
-
-  useEffect(
-    () => () => {
-      console.log("un");
-    },
-    []
-  );
 
   return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
 };
