@@ -16,6 +16,8 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { IUserBaseInfo } from "@/types/auth";
 import { exportToExcel, exportToKml } from "@/lib/volt";
 import routes from "@/helpers/routes";
+import { usePathname } from "next/navigation";
+import { SubscriptionType } from "@/types/subscriptions";
 import { AutoComplete } from "../../ui/autocomplete";
 import { Button } from "../../ui/button";
 import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
@@ -64,6 +66,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   const timeRef = useRef<ReturnType<typeof setTimeout>>();
   const sortedAssessments = useRef<z.infer<typeof PropertyDataSchema>["assessments"]["data"]>([]);
   const [exportMapPending, setExportMapPending] = useState(false);
+  const pathname = usePathname();
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
 
@@ -448,7 +451,11 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             </Button>
           </Link>
           {!isSubscribed && (
-            <Link href={routes.user.subscription.fullUrl}>
+            <Link
+              href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
+                SubscriptionType.Annual
+              }`}
+            >
               <Button variant="default" className="w-full ">
                 Subscribe to see price
               </Button>

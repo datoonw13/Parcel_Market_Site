@@ -18,6 +18,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialogs/dialog";
 import { AlertDialog } from "@/components/ui/dialogs/alert-dialog";
 import { cn } from "@/lib/utils";
 import { LuSearch } from "react-icons/lu";
+import { SubscriptionType } from "@/types/subscriptions";
+import { usePathname } from "next/navigation";
 import { Button } from "../../ui/button";
 import VoltDetailsDrawer from "./drawer";
 import VoltDetailsMobileHeader from "./mobile-header";
@@ -61,6 +63,8 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [exportMapPending, setExportMapPending] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
+  const pathname = usePathname();
+
   const onMarkerInteraction = useCallback((data: Partial<IPropertiesInteraction>) => {
     setPropertiesInteraction((prev) => ({ ...prev, ...data }));
   }, []);
@@ -133,8 +137,9 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
           />
           {!isSubscribed && (
             <Link
-              className="border-b border-b-primary-main-200 bg-white w-full text-center block px-3 py-2 font-semibold text-xs underline text-primary-main"
-              href={routes.user.subscription.fullUrl}
+              href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
+                SubscriptionType.Annual
+              }`}
             >
               Subscribe to see prices
             </Link>
