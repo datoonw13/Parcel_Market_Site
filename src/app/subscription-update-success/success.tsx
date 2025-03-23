@@ -41,11 +41,11 @@ const SubscriptionSuccess = ({ redirectUrl }: { redirectUrl: string }) => {
       },
     ]);
     await revalidateAllPathAction();
-    startTransition(() => {
-      setTimeout(() => {
+    setTimeout(() => {
+      startTransition(() => {
         router.push(redirectUrl);
-      }, 500);
-    });
+      });
+    }, 500);
   }, [redirectUrl, router]);
 
   const startPolling = async () => {
