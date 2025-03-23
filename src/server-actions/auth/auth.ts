@@ -25,7 +25,7 @@ export const setAuthTokens = (refreshToken: string, accessToken: string, remembe
     name: "jwt",
     value: accessToken,
     httpOnly: true,
-    secure: true,
+    secure: false,
   });
 
   revalidatePath("/", "layout");

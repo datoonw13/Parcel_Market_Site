@@ -17,6 +17,8 @@ import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import Script from "next/script";
 import Image from "next/image";
 import DeviceDetect from "@/components/shared/DeviceDetect";
+import AuthContextProvide from "@/lib/auth/auth-context";
+import { getAuthedUserDataAction } from "@/server-actions/new-auth/new-auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,6 +58,7 @@ export default async function RootLayout({
 }>) {
   const user = await getUserAction();
   const userSubscriptions = user ? await getUserSubscriptions() : null;
+  const authedUser = await getAuthedUserDataAction();
 
   return (
     <>
@@ -111,7 +114,7 @@ export default async function RootLayout({
           <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-            {children}
+            <AuthContextProvide authedUser={authedUser}>{children}</AuthContextProvide>
           </Provider>
           <Chat />
         </body>
