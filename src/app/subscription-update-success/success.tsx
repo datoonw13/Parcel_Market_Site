@@ -40,12 +40,10 @@ const SubscriptionSuccess = ({ redirectUrl }: { redirectUrl: string }) => {
         remember: false,
       },
     ]);
-    await revalidateAllPathAction();
-    setTimeout(() => {
-      startTransition(() => {
-        router.push(redirectUrl);
-      });
-    }, 1000);
+    revalidateAllPathAction();
+    startTransition(() => {
+      router.push(redirectUrl);
+    });
   }, [redirectUrl, router]);
 
   const startPolling = async () => {
