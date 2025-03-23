@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, memo, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { getAuthedUserDataAction, refreshTokenAction } from "@/server-actions/new-auth/new-auth";
 import moment from "moment";
+import { usePathname } from "next/navigation";
 
 const AuthContext = createContext<{
   user: Awaited<ReturnType<typeof getAuthedUserDataAction>>;
@@ -20,6 +21,7 @@ const AuthContextProvide = ({
   children: ReactNode;
   authedUser: Awaited<ReturnType<typeof getAuthedUserDataAction>>;
 }) => {
+  const pathname = usePathname();
   const [user, setUser] = useState<Awaited<ReturnType<typeof getAuthedUserDataAction>>>({
     isAuthed: false,
     data: null,
@@ -55,8 +57,10 @@ const AuthContextProvide = ({
   }, [stopSession]);
 
   useEffect(() => {
-    setUser(authedUser);
-  }, [authedUser]);
+    if (user !== authedUser) {
+      setUser(authedUser);
+    }
+  }, [authedUser, user]);
 
   useEffect(() => {
     if (authedUser?.isAuthed) {
@@ -65,12 +69,12 @@ const AuthContextProvide = ({
       stopSession();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authedUser]);
+  }, [authedUser, pathname]);
 
   return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
 };
 
-export default AuthContextProvide;
+export default memo(AuthContextProvide);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

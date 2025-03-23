@@ -1,77 +1,48 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import routes from "@/helpers/routes";
 import { setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPath } from "@/server-actions/subscription/actions";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { FaCheck } from "react-icons/fa6";
 
 const channel = new BroadcastChannel("sign-up");
 
-const SignUpSuccess = () => {
-  const params = useSearchParams();
+const SignUpSuccess = ({ jwt, jwtRefresh, redirectUrl }: { jwt: string; jwtRefresh: string; redirectUrl: string }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [data, setData] = useState<{ jwt: string; jwtRefresh: string; redirectUrl: string } | null>(null);
   const [timer, setTimer] = useState(5);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
   const handleRedirect = useCallback(() => {
-    if (!data) {
-      return;
-    }
-    window.clearTimeout(timerRef.current);
     revalidateAllPath();
     channel.postMessage({
-      message: "Activation",
-      redirectUrl: data.redirectUrl,
+      message: "success-registration",
+      redirectUrl,
     });
     startTransition(() => {
-      router.replace(data?.redirectUrl);
+      router.replace(redirectUrl);
     });
-  }, [data, router]);
+  }, [redirectUrl, router]);
 
-  useEffect(() => {
-    const jwt = params.get("jwt");
-    const jwtRefresh = params.get("jwtRefresh");
-    const redirectUrl = params.get("redirectUrl");
-    if (jwt && jwtRefresh && redirectUrl) {
-      setData({
-        jwt,
-        jwtRefresh,
-        redirectUrl,
-      });
-      router.replace(routes.auth.signUp.success.fullUrl);
-    }
-  }, [params, router]);
-
-  useEffect(() => {
-    const jwt = params.get("jwt");
-    const jwtRefresh = params.get("jwtRefresh");
-    if (!(jwt && jwtRefresh) && !data) {
-      router.replace(routes.auth.signIn.fullUrl);
-    }
-  }, [params, router, data]);
-
-  useEffect(() => {
-    if (data) {
-      setAuthTokensAction([
-        {
-          token: data.jwt,
-          tokenName: "jwt",
-          remember: false,
-        },
-        {
-          token: data.jwtRefresh,
-          tokenName: "jwt-refresh",
-          remember: true,
-        },
-      ]);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (timer < 3) {
+  //     setAuthTokensAction([
+  //       {
+  //         token: jwt,
+  //         tokenName: "jwt",
+  //         remember: false,
+  //       },
+  //       {
+  //         token: jwtRefresh,
+  //         tokenName: "jwt-refresh",
+  //         remember: true,
+  //       },
+  //     ]);
+  //   }
+  // }, [jwt, jwtRefresh, timer]);
 
   useEffect(() => {
     timerRef.current = setTimeout(() => {

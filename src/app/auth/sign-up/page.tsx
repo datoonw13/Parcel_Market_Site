@@ -2,8 +2,8 @@
 
 import SignUp from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
-import AuthClient from "@/lib/auth/auth-client";
-import { ITokens } from "@/types/common";
+import { signUpUserAction } from "@/server-actions/new-auth/new-auth";
+import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,12 +13,13 @@ enum SignUpSteps {
   FINISH,
 }
 
+const REDIRECT_URL_AFTER_SUCCESS_PAGE = routes.volt.fullUrl;
+
 const SignUpPage = () => {
   const router = useRouter();
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [tokens, setTokens] = useState<ITokens | null>(null);
 
   return (
     <SignUp
@@ -28,31 +29,26 @@ const SignUpPage = () => {
       setErrorMessage={setErrorMessage}
       email={email}
       setEmail={setEmail}
-      tokens={tokens}
       showSignIn={() => {
         router.push(routes.auth.signIn.fullUrl);
       }}
       onSubmit={async (data) => {
-        await AuthClient.signUp({
-          ...data,
-          onSuccess: (result) => {
-            setEmail(data.email);
-            setStep(SignUpSteps.FINISH);
-            if (result.data?.access_token && result.data?.refresh_token) {
-              setTokens({ access_token: result.data.access_token, refresh_token: result.data.refresh_token });
-            }
-          },
-          onError: (errorMessage) => {
-            setErrorMessage(errorMessage);
-            setStep(SignUpSteps.FINISH);
-          },
-        });
+        const request = await signUpUserAction({ ...data });
+        if (request.errorMessage) {
+          setErrorMessage(request.errorMessage);
+          setStep(SignUpSteps.FINISH);
+        } else if (data.userSource === UserSource.Google || data.userSource === UserSource.Facebook) {
+          const params = new URLSearchParams();
+          params.set("jwt", request.data!.access_token);
+          params.set("jwtRefresh", request.data!.refresh_token);
+          params.set("redirectUrl", REDIRECT_URL_AFTER_SUCCESS_PAGE);
+          router.push(`${routes.auth.signUp.success.fullUrl}?${params.toString()}`);
+        } else {
+          setStep(SignUpSteps.FINISH);
+        }
       }}
       isTransitioning={false}
       className="m-auto sm:p-10 md:p-12 lg:p-14 xl:p-16"
-      redirectAfterSuccessPage={() => {
-        router.push(routes.volt.fullUrl);
-      }}
     />
   );
 };

@@ -8,6 +8,8 @@ import { cookies, headers } from "next/headers";
 import moment from "moment";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { userSignUpValidation } from "@/zod-validations/auth-validations";
+import { z } from "zod";
 import { fetcher } from "../fetcher";
 
 interface DecodedUser {
@@ -142,6 +144,38 @@ export const authWithSocialNetworkAction = async (data: {
   } catch (error) {
     return {
       errorMessage: (error as ErrorResponse)?.message || "some",
+      data: null,
+    };
+  }
+};
+
+export const signUpUserAction = async (
+  values: z.infer<ReturnType<typeof userSignUpValidation>>
+): Promise<ResponseModel<ITokens | null>> => {
+  try {
+    const zohoObject = cookies().get("zoho") ? JSON.parse(cookies().get("zoho")?.value || " ") : null;
+    const request = await fetcher<ITokens | null>("auth/register", {
+      method: "POST",
+      body: JSON.stringify({ ...values, ...(zohoObject && { ...zohoObject }) }),
+      cache: "no-cache",
+    });
+
+    if (zohoObject) {
+      cookies().delete("zoho");
+    }
+
+    return {
+      data:
+        request && request.refresh_token && request.access_token
+          ? {
+              ...request,
+            }
+          : null,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).statusCode === 409 ? "Email already registered" : "Registration failed",
       data: null,
     };
   }

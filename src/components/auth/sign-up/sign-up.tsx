@@ -26,8 +26,6 @@ interface SignUpProps {
   setErrorMessage: Dispatch<SetStateAction<string | null>>;
   email: string | null;
   setEmail: Dispatch<SetStateAction<string | null>>;
-  redirectAfterSuccessPage: () => void;
-  tokens: ITokens | null;
 }
 
 const SignUp: FC<SignUpProps> = ({
@@ -42,8 +40,6 @@ const SignUp: FC<SignUpProps> = ({
   setErrorMessage,
   setStep,
   step,
-  redirectAfterSuccessPage,
-  tokens,
 }) => {
   const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
 
@@ -79,7 +75,6 @@ const SignUp: FC<SignUpProps> = ({
       )}
       {step === SignUpSteps.FINISH && (
         <SignUpFinish
-          tokens={tokens}
           errorMessage={errorMessage}
           email={email}
           resetSignUp={() => {
@@ -87,7 +82,6 @@ const SignUp: FC<SignUpProps> = ({
             setErrorMessage(null);
             setEmail(null);
           }}
-          onSuccessRedirect={redirectAfterSuccessPage}
         />
       )}
     </div>

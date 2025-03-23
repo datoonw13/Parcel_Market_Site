@@ -1,9 +1,15 @@
-"use client";
+import { redirect } from "next/navigation";
+import routes from "@/helpers/routes";
+import SignUpSuccess from "./success";
 
-import dynamic from "next/dynamic";
+const SuccessPage = ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+  const { jwt, jwtRefresh, redirectUrl } = searchParams;
 
-const Success = dynamic(() => import("./success"), { ssr: false });
+  if (!jwt || !jwtRefresh || !redirectUrl) {
+    redirect(routes.auth.signIn.fullUrl);
+  }
 
-const SuccessPage = () => <Success />;
+  return <SignUpSuccess jwt={jwt} jwtRefresh={jwtRefresh} redirectUrl={redirectUrl} />;
+};
 
 export default SuccessPage;
