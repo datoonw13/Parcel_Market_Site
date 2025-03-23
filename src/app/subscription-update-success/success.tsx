@@ -45,7 +45,7 @@ const SubscriptionSuccess = ({ redirectUrl }: { redirectUrl: string }) => {
       startTransition(() => {
         router.push(redirectUrl);
       });
-    }, 500);
+    }, 1000);
   }, [redirectUrl, router]);
 
   const startPolling = async () => {
