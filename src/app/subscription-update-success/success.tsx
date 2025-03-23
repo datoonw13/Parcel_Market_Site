@@ -41,7 +41,7 @@ const SubscriptionSuccess = ({ redirectUrl }: { redirectUrl: string }) => {
       },
     ]);
     revalidateAllPathAction();
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     startTransition(() => {
       router.push(redirectUrl);
     });
