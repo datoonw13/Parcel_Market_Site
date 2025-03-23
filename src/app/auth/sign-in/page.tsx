@@ -12,6 +12,8 @@ import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
+const REDIRECT_URL = routes.volt.fullUrl;
+
 const SignInPage = () => {
   const router = useRouter();
   const { notify } = useNotification();
@@ -44,7 +46,7 @@ const SignInPage = () => {
           ]);
           revalidateAllPath();
           startAuthTransition(() => {
-            router.push(routes.volt.fullUrl);
+            router.push(REDIRECT_URL);
           });
         }
       }}
@@ -61,7 +63,11 @@ const SignInPage = () => {
               const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
               if (request.errorMessage) {
                 startAuthTransition(() => {
-                  const params = new URLSearchParams({ userSource: UserSource.Google, accessToken: token });
+                  const params = new URLSearchParams({
+                    userSource: UserSource.Google,
+                    accessToken: token,
+                    onSuccessRedirectUrl: REDIRECT_URL,
+                  });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 });
               } else {
@@ -79,7 +85,7 @@ const SignInPage = () => {
                 ]);
                 revalidateAllPath();
                 startAuthTransition(() => {
-                  router.push(routes.volt.fullUrl);
+                  router.push(REDIRECT_URL);
                 });
               }
             }}
@@ -88,10 +94,15 @@ const SignInPage = () => {
             pending={userSource === UserSource.Facebook && (authPending || requestPending)}
             onSuccess={async (token) => {
               setUserSource(UserSource.Facebook);
+              setRequestPending(true);
               const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
               if (request.errorMessage) {
                 startAuthTransition(() => {
-                  const params = new URLSearchParams({ userSource: UserSource.Facebook, accessToken: token });
+                  const params = new URLSearchParams({
+                    userSource: UserSource.Facebook,
+                    accessToken: token,
+                    onSuccessRedirectUrl: REDIRECT_URL,
+                  });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 });
               } else {
@@ -109,7 +120,7 @@ const SignInPage = () => {
                 ]);
                 revalidateAllPath();
                 startAuthTransition(() => {
-                  router.push(routes.volt.fullUrl);
+                  router.push(REDIRECT_URL);
                 });
               }
             }}
