@@ -13,7 +13,7 @@ enum SignUpSteps {
   FINISH,
 }
 
-const REDIRECT_URL_AFTER_SUCCESS_PAGE = routes.home.fullUrl;
+const REDIRECT_URL_AFTER_SUCCESS_PAGE = routes.volt.fullUrl;
 
 const SignUpPage = () => {
   const router = useRouter();

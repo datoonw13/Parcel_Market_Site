@@ -44,7 +44,7 @@ const SignInPage = () => {
               remember: data.remember,
             },
           ]);
-          revalidateAllPath();
+          await revalidateAllPath();
           startAuthTransition(() => {
             router.push(REDIRECT_URL);
           });
