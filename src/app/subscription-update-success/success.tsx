@@ -3,8 +3,8 @@
 import { LoadingIcon2 } from "@/components/@new/icons/LoadingIcons";
 import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
+import { revalidateAllPathAction } from "@/server-actions/common-actions";
 import { setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
-import { revalidateAllPath } from "@/server-actions/subscription/actions";
 import { generateAccessToken } from "@/server-actions/user/actions";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -40,7 +40,7 @@ const SubscriptionSuccess = ({ redirectUrl }: { redirectUrl: string }) => {
         remember: false,
       },
     ]);
-    revalidateAllPath();
+    await revalidateAllPathAction();
     startTransition(() => {
       setTimeout(() => {
         router.push(redirectUrl);
