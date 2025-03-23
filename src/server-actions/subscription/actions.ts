@@ -221,6 +221,6 @@ export const updateSubscriptionAction = async (
   }
 };
 
-export const revalidateAllPath = () => {
-  revalidatePath("/");
+export const revalidateAllPath = async () => {
+  await revalidatePath("/");
 };

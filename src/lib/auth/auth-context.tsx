@@ -26,6 +26,7 @@ const AuthContextProvide = ({
     isAuthed: false,
     data: null,
   });
+
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
   const stopSession = useCallback(() => {
@@ -71,6 +72,7 @@ const AuthContextProvide = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authedUser, pathname]);
 
+  console.log(user)
   return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
 };
 

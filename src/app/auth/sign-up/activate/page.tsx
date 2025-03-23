@@ -1,11 +1,10 @@
 import routes from "@/helpers/routes";
 import { activateUserAccountAction } from "@/server-actions/user/actions";
 import { redirect } from "next/navigation";
-import toast from "react-hot-toast";
 import AccountActivation from "./account-activation";
 
 const AccountActivationPage = async ({ searchParams }: { searchParams: { token?: string; email?: string; redirectUrl?: string } }) => {
-  searchParams.redirectUrl = "/volt";
+  searchParams.redirectUrl = routes.home.fullUrl;
 
   if (!searchParams.email || !searchParams.token || !searchParams.redirectUrl) {
     redirect(routes.auth.signIn.fullUrl);

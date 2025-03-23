@@ -16,33 +16,28 @@ const SignUpSuccess = ({ jwt, jwtRefresh, redirectUrl }: { jwt: string; jwtRefre
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
-  const handleRedirect = useCallback(() => {
-    revalidateAllPath();
+  const handleRedirect = useCallback(async () => {
     channel.postMessage({
       message: "success-registration",
       redirectUrl,
     });
+    setAuthTokensAction([
+      {
+        token: jwt,
+        tokenName: "jwt",
+        remember: false,
+      },
+      {
+        token: jwtRefresh,
+        tokenName: "jwt-refresh",
+        remember: true,
+      },
+    ]);
+    await revalidateAllPath();
     startTransition(() => {
       router.replace(redirectUrl);
     });
-  }, [redirectUrl, router]);
-
-  // useEffect(() => {
-  //   if (timer < 3) {
-  //     setAuthTokensAction([
-  //       {
-  //         token: jwt,
-  //         tokenName: "jwt",
-  //         remember: false,
-  //       },
-  //       {
-  //         token: jwtRefresh,
-  //         tokenName: "jwt-refresh",
-  //         remember: true,
-  //       },
-  //     ]);
-  //   }
-  // }, [jwt, jwtRefresh, timer]);
+  }, [jwt, jwtRefresh, redirectUrl, router]);
 
   useEffect(() => {
     timerRef.current = setTimeout(() => {
