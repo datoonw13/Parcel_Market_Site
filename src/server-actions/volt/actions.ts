@@ -3,7 +3,7 @@
 import { ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { PropertySellReq, IMainPropertyBaseInfo } from "@/types/property";
 import { voltSearchSchema } from "@/zod-validations/volt";
 import { removeParcelNumberFormatting } from "@/helpers/common";
@@ -13,6 +13,7 @@ import { fetcher } from "../fetcher";
 import { userListingsTag } from "../user-listings/tags";
 import { marketplaceTag } from "../marketplace/tags";
 import { userSearchesTag } from "../user-searches/tags";
+import { isAuthenticatedAction } from "../new-auth/new-auth";
 
 export const getPropertiesAction = async (
   values: z.infer<typeof voltSearchSchema>
@@ -223,12 +224,8 @@ export const calculateLandPriceAction2 = async (payload: {
     const request = await fetcher<{ propertyId: number }>(`properties`, {
       method: "POST",
       body: JSON.stringify(payload),
-      next: {
-        revalidate: 3600,
-      },
     });
 
-    revalidateTag(userSearchesTag);
     return {
       data: request.propertyId,
       errorMessage: null,

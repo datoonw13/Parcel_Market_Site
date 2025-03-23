@@ -72,6 +72,13 @@ const AuthContextProvide = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authedUser, pathname]);
 
+  useEffect(
+    () => () => {
+      console.log("un");
+    },
+    []
+  );
+
   return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
 };
 

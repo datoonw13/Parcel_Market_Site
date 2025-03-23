@@ -7,14 +7,18 @@ import { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useRef, use
 import { Map as MapBoX, Popup } from "mapbox-gl";
 import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
-import { swapPolygonCoordinates } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
 import { ITokens, UserSource } from "@/types/common";
-import AuthClient from "@/lib/auth/auth-client";
-import { getUserAction } from "@/server-actions/user/actions";
 import SignUp from "@/components/auth/sign-up/sign-up";
+import {
+  authWithCredentialsAction,
+  authWithSocialNetworkAction,
+  setAuthTokensAction,
+  signUpUserAction,
+} from "@/server-actions/new-auth/new-auth";
+import { revalidateAllPathAction } from "@/server-actions/common-actions";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import SignInForm from "../auth/sign-in";
@@ -77,6 +81,8 @@ const VoltSearchOnMap = ({
   const [isAuthTransitioning, startAuthTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
   const [isPolygonPending, setPolygonPending] = useState(false);
+  const [userSource, setUserSource] = useState(UserSource.System);
+  const [requestPending, setRequestPending] = useState(false);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -315,78 +321,115 @@ const VoltSearchOnMap = ({
         dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
         drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
         open={!!authModal}
-        closeModal={() => setAuthModal(null)}
+        closeModal={() => {
+          setAuthModal(null);
+          setSignUpEmail(null);
+          setSignUpTokens(null);
+          setSignUpErrorMessage(null);
+          setStep(SignUpSteps.SELECT_REASONS);
+        }}
       >
         <div className="py-5">
           {authModal === "sign-in" ? (
             <SignInForm
               defaultSignIn={async (data) => {
-                await AuthClient.defaultAuth({
-                  ...data,
-                  onError: (errorMessage) => {
-                    notify({ title: "Error", description: errorMessage }, { variant: "error" });
-                  },
-                  onSuccess: async () => {
-                    const user = await getUserAction();
-                    if (user) {
-                      startAuthTransition(() => {
-                        router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                      });
-                    }
-                  },
-                });
+                setUserSource(UserSource.System);
+                setRequestPending(true);
+                const request = await authWithCredentialsAction(data);
+                if (request.errorMessage) {
+                  notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                  setRequestPending(false);
+                } else {
+                  setAuthTokensAction([
+                    {
+                      token: request.data!.access_token,
+                      tokenName: "jwt",
+                      remember: false,
+                    },
+                    {
+                      token: request.data!.refresh_token,
+                      tokenName: "jwt-refresh",
+                      remember: data.remember,
+                    },
+                  ]);
+                  await revalidateAllPathAction();
+                  setTimeout(() => {
+                    router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                  }, 500);
+                }
               }}
-              onSignUp={() => setAuthModal("sign-up")}
-              forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={user} />}
-              authPending={isAuthTransitioning}
+              authWithCredentialsPending={userSource === UserSource.System && (isTransitioning || requestPending)}
+              onSignUp={() => {
+                setAuthModal("sign-up");
+              }}
+              forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={null} />}
               authProviders={() => (
                 <div className="flex flex-col gap-3 w-full">
                   <GoogleAuthProvider
+                    pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
                     onSuccess={async (token) => {
-                      await AuthClient.thirdPartyAuth({
-                        token,
-                        userSource: UserSource.Google,
-                        remember: false,
-                        onSuccess: async () => {
-                          const user = await getUserAction();
-                          if (user) {
-                            startAuthTransition(() => {
-                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                            });
-                          }
-                        },
-                        onError: async () => {
-                          const newParams = new URLSearchParams(params.toString());
-                          newParams.append("userSource", UserSource.Google);
-                          newParams.append("accessToken", token);
-                          router.push(`${pathname}?${newParams.toString()}`);
-                          setAuthModal("sign-up");
-                        },
-                      });
+                      setUserSource(UserSource.Google);
+                      setRequestPending(true);
+                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+                      if (request.errorMessage) {
+                        const newParams = new URLSearchParams(params.toString());
+                        newParams.set("userSource", UserSource.Google);
+                        newParams.set("accessToken", token);
+                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        router.push(`${pathname}?${newParams.toString()}`);
+                        setAuthModal("sign-up");
+                      } else {
+                        setAuthTokensAction([
+                          {
+                            token: request.data!.access_token,
+                            tokenName: "jwt",
+                            remember: false,
+                          },
+                          {
+                            token: request.data!.refresh_token,
+                            tokenName: "jwt-refresh",
+                            remember: false,
+                          },
+                        ]);
+                        revalidateAllPathAction();
+                        setTimeout(() => {
+                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        }, 500);
+                      }
                     }}
                   />
                   <FacebookAuthProvider
+                    pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
                     onSuccess={async (token) => {
-                      await AuthClient.thirdPartyAuth({
-                        token,
-                        userSource: UserSource.Facebook,
-                        remember: false,
-                        onSuccess: async () => {
-                          const user = await getUserAction();
-                          if (user) {
-                            startAuthTransition(() => {
-                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                            });
-                          }
-                        },
-                        onError: async () => {
-                          const newParams = new URLSearchParams(params.toString());
-                          newParams.append("userSource", UserSource.Facebook);
-                          newParams.append("accessToken", token);
-                          router.push(`${pathname}?${newParams.toString()}`);
-                          setAuthModal("sign-up");
-                        },
-                      });
+                      setUserSource(UserSource.Facebook);
+                      setRequestPending(true);
+                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+                      if (request.errorMessage) {
+                        const newParams = new URLSearchParams(params.toString());
+                        newParams.set("userSource", UserSource.Google);
+                        newParams.set("accessToken", token);
+                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        startAuthTransition(() => {
+                          router.push(`${pathname}?${params.toString()}`);
+                        });
+                      } else {
+                        setAuthTokensAction([
+                          {
+                            token: request.data!.access_token,
+                            tokenName: "jwt",
+                            remember: false,
+                          },
+                          {
+                            token: request.data!.refresh_token,
+                            tokenName: "jwt-refresh",
+                            remember: false,
+                          },
+                        ]);
+                        revalidateAllPathAction();
+                        setTimeout(() => {
+                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        }, 500);
+                      }
                     }}
                   />
                 </div>
@@ -397,92 +440,101 @@ const VoltSearchOnMap = ({
             <SignUp
               step={step}
               setStep={setStep}
-              authProviders={() => (
-                <div className="flex flex-col gap-3 w-full">
-                  <GoogleAuthProvider
-                    onSuccess={async (token) => {
-                      await AuthClient.thirdPartyAuth({
-                        token,
-                        userSource: UserSource.Google,
-                        remember: false,
-                        onSuccess: async () => {
-                          const user = await getUserAction();
-                          if (user) {
-                            startAuthTransition(() => {
-                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                            });
-                          }
-                        },
-                        onError: async () => {
-                          const newParams = new URLSearchParams(params.toString());
-                          newParams.append("userSource", UserSource.Google);
-                          newParams.append("accessToken", token);
-                          router.push(`${pathname}?${newParams.toString()}`);
-                          setAuthModal("sign-up");
-                        },
-                      });
-                    }}
-                  />
-                  <FacebookAuthProvider
-                    onSuccess={async (token) => {
-                      await AuthClient.thirdPartyAuth({
-                        token,
-                        userSource: UserSource.Facebook,
-                        remember: false,
-                        onSuccess: async () => {
-                          const user = await getUserAction();
-                          if (user) {
-                            startAuthTransition(() => {
-                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                            });
-                          }
-                        },
-                        onError: async () => {
-                          const newParams = new URLSearchParams(params.toString());
-                          newParams.append("userSource", UserSource.Facebook);
-                          newParams.append("accessToken", token);
-                          router.push(`${pathname}?${newParams.toString()}`);
-                          setAuthModal("sign-up");
-                        },
-                      });
-                    }}
-                  />
-                </div>
-              )}
               errorMessage={signUpErrorMessage}
               setErrorMessage={setSignUpErrorMessage}
               email={signUpEmail}
               setEmail={setSignUpEmail}
-              tokens={signUTokens}
               showSignIn={() => {
-                setAuthModal("sign-in");
+                setAuthModal("sign-up");
               }}
+              authProviders={() => (
+                <div className="flex flex-col gap-3 w-full">
+                  <GoogleAuthProvider
+                    pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
+                    onSuccess={async (token) => {
+                      setUserSource(UserSource.Google);
+                      setRequestPending(true);
+                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+                      if (request.errorMessage) {
+                        const newParams = new URLSearchParams(params.toString());
+                        newParams.set("userSource", UserSource.Google);
+                        newParams.set("accessToken", token);
+                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        router.push(`${pathname}?${newParams.toString()}`);
+                        setAuthModal("sign-up");
+                      } else {
+                        setAuthTokensAction([
+                          {
+                            token: request.data!.access_token,
+                            tokenName: "jwt",
+                            remember: false,
+                          },
+                          {
+                            token: request.data!.refresh_token,
+                            tokenName: "jwt-refresh",
+                            remember: false,
+                          },
+                        ]);
+                        revalidateAllPathAction();
+                        setTimeout(() => {
+                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        }, 500);
+                      }
+                    }}
+                  />
+                  <FacebookAuthProvider
+                    pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
+                    onSuccess={async (token) => {
+                      setUserSource(UserSource.Facebook);
+                      setRequestPending(true);
+                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+                      if (request.errorMessage) {
+                        const newParams = new URLSearchParams(params.toString());
+                        newParams.set("userSource", UserSource.Google);
+                        newParams.set("accessToken", token);
+                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        startAuthTransition(() => {
+                          router.push(`${pathname}?${params.toString()}`);
+                        });
+                      } else {
+                        setAuthTokensAction([
+                          {
+                            token: request.data!.access_token,
+                            tokenName: "jwt",
+                            remember: false,
+                          },
+                          {
+                            token: request.data!.refresh_token,
+                            tokenName: "jwt-refresh",
+                            remember: false,
+                          },
+                        ]);
+                        revalidateAllPathAction();
+                        setTimeout(() => {
+                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        }, 500);
+                      }
+                    }}
+                  />
+                </div>
+              )}
               onSubmit={async (data) => {
-                await AuthClient.signUp({
-                  ...data,
-                  onSuccess: (result) => {
-                    setSignUpEmail(data.email);
-                    setStep(SignUpSteps.FINISH);
-                    if (result.data?.access_token && result.data?.refresh_token) {
-                      setSignUpTokens({ access_token: result.data.access_token, refresh_token: result.data.refresh_token });
-                    }
-                  },
-                  onError: (errorMessage) => {
-                    setSignUpErrorMessage(errorMessage);
-                    setStep(SignUpSteps.FINISH);
-                  },
-                });
+                const request = await signUpUserAction({ ...data });
+                if (request.errorMessage) {
+                  setSignUpErrorMessage(request.errorMessage);
+                  setStep(SignUpSteps.FINISH);
+                } else if (data.userSource === UserSource.Google || data.userSource === UserSource.Facebook) {
+                  const params = new URLSearchParams();
+                  params.set("jwt", request.data!.access_token);
+                  params.set("jwtRefresh", request.data!.refresh_token);
+                  params.set("redirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                  router.push(`${routes.auth.signUp.success.fullUrl}?${params.toString()}`);
+                } else {
+                  setStep(SignUpSteps.FINISH);
+                }
               }}
               isTransitioning={false}
               className="m-auto sm:p-10 md:p-12 lg:p-14 xl:p-16"
-              redirectAfterSuccessPage={async () => {
-                const user = await getUserAction();
-                if (user) {
-                  startAuthTransition(() => {
-                    router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                  });
-                }
-              }}
             />
           )}
         </div>
