@@ -143,9 +143,11 @@ const VoltLayout = ({
                     },
                   ]);
                   await revalidateAllPath();
-                  setTimeout(() => {
-                    router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                  }, 500);
+                  startAuthTransition(() => {
+                    setTimeout(() => {
+                      router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                    }, 500);
+                  });
                 }
               }}
               authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
@@ -182,9 +184,11 @@ const VoltLayout = ({
                           },
                         ]);
                         revalidateAllPath();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        startAuthTransition(() => {
+                          setTimeout(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          }, 500);
+                        });
                       }
                     }}
                   />
@@ -216,9 +220,11 @@ const VoltLayout = ({
                           },
                         ]);
                         revalidateAllPath();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        startAuthTransition(() => {
+                          setTimeout(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          }, 500);
+                        });
                       }
                     }}
                   />
