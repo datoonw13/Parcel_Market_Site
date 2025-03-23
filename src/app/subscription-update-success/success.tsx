@@ -42,9 +42,9 @@ const SubscriptionSuccess = ({ redirectUrl }: { redirectUrl: string }) => {
     ]);
     revalidateAllPath();
     startTransition(() => {
-      // setTimeout(() => {
-      router.push(redirectUrl);
-      // }, 500);
+      setTimeout(() => {
+        router.push(redirectUrl);
+      }, 500);
     });
   }, [redirectUrl, router]);
 
