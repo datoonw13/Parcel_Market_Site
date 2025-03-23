@@ -77,8 +77,6 @@ const VoltSearchOnMap = ({
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [signUpErrorMessage, setSignUpErrorMessage] = useState<string | null>(null);
   const [signUpEmail, setSignUpEmail] = useState<string | null>(null);
-  const [signUTokens, setSignUpTokens] = useState<ITokens | null>(null);
-  const [isAuthTransitioning, startAuthTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
   const [isPolygonPending, setPolygonPending] = useState(false);
   const [userSource, setUserSource] = useState(UserSource.System);
@@ -324,7 +322,6 @@ const VoltSearchOnMap = ({
         closeModal={() => {
           setAuthModal(null);
           setSignUpEmail(null);
-          setSignUpTokens(null);
           setSignUpErrorMessage(null);
           setStep(SignUpSteps.SELECT_REASONS);
         }}
@@ -409,9 +406,7 @@ const VoltSearchOnMap = ({
                         newParams.set("userSource", UserSource.Google);
                         newParams.set("accessToken", token);
                         newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        startAuthTransition(() => {
-                          router.push(`${pathname}?${params.toString()}`);
-                        });
+                        router.push(`${pathname}?${params.toString()}`);
                       } else {
                         setAuthTokensAction([
                           {
@@ -493,9 +488,7 @@ const VoltSearchOnMap = ({
                         newParams.set("userSource", UserSource.Google);
                         newParams.set("accessToken", token);
                         newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        startAuthTransition(() => {
-                          router.push(`${pathname}?${params.toString()}`);
-                        });
+                        router.push(`${pathname}?${params.toString()}`);
                       } else {
                         setAuthTokensAction([
                           {
