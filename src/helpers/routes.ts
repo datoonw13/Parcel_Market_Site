@@ -32,6 +32,11 @@ const routes = {
       url: "sign-up",
       fullUrl: "/auth/sign-up",
       protected: false,
+      success: {
+        url: "success",
+        fullUrl: "/auth/sign-up/success",
+        protected: false,
+      },
     },
   },
   user: {
