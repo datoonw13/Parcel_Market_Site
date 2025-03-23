@@ -35,9 +35,9 @@ const SignUpSuccess = ({ jwt, jwtRefresh, redirectUrl }: { jwt: string; jwtRefre
     ]);
     await revalidateAllPath();
     startTransition(() => {
-      setTimeout(() => {
-        router.push(redirectUrl);
-      }, 500);
+      // setTimeout(() => {
+      router.push(redirectUrl);
+      // }, 500);
     });
   }, [jwt, jwtRefresh, redirectUrl, router]);
 
