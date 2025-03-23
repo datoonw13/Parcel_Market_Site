@@ -46,7 +46,9 @@ const SignInPage = () => {
           ]);
           await revalidateAllPath();
           startAuthTransition(() => {
-            router.push(REDIRECT_URL);
+            setTimeout(() => {
+              router.push(REDIRECT_URL);
+            }, 500);
           });
         }
       }}
