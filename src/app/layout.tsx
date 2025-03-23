@@ -56,8 +56,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const user = await getUserAction();
-  const userSubscriptions = user ? await getUserSubscriptions() : null;
+  // const user = await getUserAction();
+  // const userSubscriptions = user ? await getUserSubscriptions() : null;
   const authedUser = await getAuthedUserDataAction();
 
   return (

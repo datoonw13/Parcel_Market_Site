@@ -6,7 +6,7 @@ import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-au
 import SignInForm from "@/components/auth/sign-in";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
-import AuthClient from "@/lib/auth-client";
+import AuthClient from "@/lib/auth/auth-client";
 import { getUserAction } from "@/server-actions/user/actions";
 import { IUserBaseInfo } from "@/types/auth";
 import { UserSource } from "@/types/common";

@@ -13,7 +13,7 @@ import SignUp from "@/components/auth/sign-up/sign-up";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
-import AuthClient from "@/lib/auth-client";
+import AuthClient from "@/lib/auth/auth-client";
 import useNotification from "@/hooks/useNotification";
 import { getUserAction } from "@/server-actions/user/actions";
 import VoltDesktop from "./volt-desktop";

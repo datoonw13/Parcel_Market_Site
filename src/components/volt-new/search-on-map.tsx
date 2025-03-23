@@ -12,7 +12,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { IUserBaseInfo } from "@/types/auth";
 import { ITokens, UserSource } from "@/types/common";
-import AuthClient from "@/lib/auth-client";
+import AuthClient from "@/lib/auth/auth-client";
 import { getUserAction } from "@/server-actions/user/actions";
 import SignUp from "@/components/auth/sign-up/sign-up";
 import { Button } from "../ui/button";

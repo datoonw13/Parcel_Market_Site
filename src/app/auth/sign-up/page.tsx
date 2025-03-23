@@ -2,7 +2,7 @@
 
 import SignUp from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
-import AuthClient from "@/lib/auth-client";
+import AuthClient from "@/lib/auth/auth-client";
 import { ITokens } from "@/types/common";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
