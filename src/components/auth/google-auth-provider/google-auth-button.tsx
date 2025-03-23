@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from "@react-oauth/google";
 import { AiOutlineGooglePlus } from "react-icons/ai";
 
-const GoogleAuthButton = ({ onSuccess }: { onSuccess: (token: string) => void }) => {
+const GoogleAuthButton = ({ onSuccess, pending }: { onSuccess: (token: string) => void; pending: boolean }) => {
   const [loading, setLoading] = useState(false);
 
   const login = useGoogleLogin({
@@ -23,7 +23,7 @@ const GoogleAuthButton = ({ onSuccess }: { onSuccess: (token: string) => void })
         login();
         setLoading(true);
       }}
-      loading={loading}
+      loading={loading || pending}
       className="bg-error/70 hover:bg-error/80 w-full"
     >
       <div className="flex items-center gap-3">

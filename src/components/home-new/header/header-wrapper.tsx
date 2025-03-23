@@ -10,10 +10,10 @@ import HomeDesktopHeader from "./desktop";
 import HomeMobileHeader from "./mobile";
 import { breakPoints } from "../../../../tailwind.config";
 
-const HomeHeaderWrapper = ({ user }: { user: IUserBaseInfo | null }) => (
+const HomeHeaderWrapper = () => (
   <>
-    <HomeMobileHeader user={user} menuList={list} />
-    <HomeDesktopHeader user={user} menuList={list} />
+    <HomeMobileHeader menuList={list} />
+    <HomeDesktopHeader menuList={list} />
   </>
 );
 

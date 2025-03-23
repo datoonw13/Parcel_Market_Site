@@ -18,7 +18,7 @@ interface SignInFormProps {
   defaultSignIn: (data: z.infer<typeof defaultSignInSchema> & { remember: boolean }) => Promise<void>;
   forgotPasswordButton?: ElementType;
   className?: string;
-  authPending?: boolean;
+  authWithCredentialsPending?: boolean;
 }
 
 const SignInForm: FC<SignInFormProps> = ({
@@ -27,7 +27,7 @@ const SignInForm: FC<SignInFormProps> = ({
   defaultSignIn,
   className,
   authProviders: AuthProviders,
-  authPending,
+  authWithCredentialsPending,
 }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -107,7 +107,7 @@ const SignInForm: FC<SignInFormProps> = ({
           <CheckBox checked={remember} onChange={() => setRemember(!remember)} label="Remember me" name="sign-in-remember" />
           {ForgotPasswordButton && <ForgotPasswordButton />}
         </div>
-        <Button loading={isSubmitting || authPending} disabled={!isValid} onClick={onSubmit} className="mt-4" type="submit">
+        <Button loading={isSubmitting || authWithCredentialsPending} disabled={!isValid} onClick={onSubmit} className="mt-4" type="submit">
           Sign In
         </Button>
       </div>

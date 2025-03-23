@@ -6,7 +6,7 @@ import FacebookLogin, { ProfileSuccessResponse, SuccessResponse } from "@greatsu
 import { FaFacebookF } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
-const FacebookAuthProvider = ({ onSuccess }: { onSuccess: (token: string) => void }) => {
+const FacebookAuthProvider = ({ onSuccess, pending }: { pending: boolean; onSuccess: (token: string) => void }) => {
   const [successData, setSuccessData] = useState<SuccessResponse | null>(null);
   const [profileSuccess, setProfileSuccess] = useState<ProfileSuccessResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ const FacebookAuthProvider = ({ onSuccess }: { onSuccess: (token: string) => voi
             setLoading(true);
             onClick.onClick && onClick.onClick();
           }}
-          loading={!onClick.onClick || loading}
+          loading={!onClick.onClick || loading || pending}
           className="bg-blue-900/70 hover:bg-blue-900/80 w-full"
         >
           <div className="flex items-center gap-3">

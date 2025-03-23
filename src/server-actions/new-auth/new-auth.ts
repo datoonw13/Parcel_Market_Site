@@ -2,7 +2,7 @@
 
 import { ErrorResponse } from "@/helpers/error-response";
 import { ISignInResponse } from "@/types/auth";
-import { ResponseModel } from "@/types/common";
+import { ITokens, ResponseModel, UserSource } from "@/types/common";
 import { jwtDecode } from "jwt-decode";
 import { cookies, headers } from "next/headers";
 import moment from "moment";
@@ -30,16 +30,17 @@ interface AuthUser {
   sessionValidUntil: Date;
 }
 
-export const setAuthToken = (token: string, tokenName: string, remember?: boolean) => {
-  const decodedToken = jwtDecode(token) as { exp: number };
-  const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
-  // set jwt token in cookie
-  cookies().set({
-    name: tokenName,
-    value: token,
-    httpOnly: true,
-    secure: true,
-    ...(remember && { maxAge: maxAgeInSeconds }),
+export const setAuthTokensAction = (data: Array<{ token: string; tokenName: string; remember: boolean }>) => {
+  data.forEach(({ token, tokenName, remember }) => {
+    const decodedToken = jwtDecode(token) as { exp: number };
+    const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+    cookies().set({
+      name: tokenName,
+      value: token,
+      httpOnly: true,
+      secure: true,
+      ...(remember && { maxAge: maxAgeInSeconds }),
+    });
   });
 };
 
@@ -58,7 +59,7 @@ export const logOutUserAction = async () => {
 export const refreshTokenAction = async (): Promise<ResponseModel<string | null>> => {
   try {
     const data = await fetcher<ISignInResponse>("auth/token/refresh", { method: "POST" });
-    setAuthToken(data.access_token, "jwt");
+    setAuthTokensAction([{ token: data.access_token, tokenName: "jwt", remember: false }]);
     return {
       data: null,
       errorMessage: null,
@@ -72,10 +73,13 @@ export const refreshTokenAction = async (): Promise<ResponseModel<string | null>
   }
 };
 
-export const getAuthedUserDataAction = async (): Promise<{ user: AuthUser | null; isAuthed: boolean } | null> => {
+export const getAuthedUserDataAction = async (): Promise<{ data: AuthUser | null; isAuthed: boolean }> => {
   const refreshToken = cookies().get("jwt-refresh")?.value || null;
   if (!refreshToken) {
-    return null;
+    return {
+      isAuthed: false,
+      data: null,
+    };
   }
 
   const accessToken = cookies().get("jwt")?.value || null;
@@ -100,12 +104,45 @@ export const getAuthedUserDataAction = async (): Promise<{ user: AuthUser | null
   }
 
   return {
-    isAuthed: !!refreshToken,
-    user,
+    isAuthed: true,
+    data: user,
   };
 };
 
 export const isAuthenticatedAction = async (): Promise<boolean> => {
   const isAuthed = cookies().get("jwt-refresh")?.value;
   return !!isAuthed;
+};
+
+export const authWithCredentialsAction = async (data: { email: string; password: string }): Promise<ResponseModel<ITokens | null>> => {
+  try {
+    const request = await fetcher<ITokens>("auth/login", {
+      method: "post",
+      body: JSON.stringify(data),
+    });
+    return {
+      data: request,
+      errorMessage: null,
+    };
+  } catch (error) {
+    return { data: null, errorMessage: (error as ErrorResponse).message };
+  }
+};
+
+export const authWithSocialNetworkAction = async (data: {
+  token: string;
+  userSource: UserSource;
+}): Promise<ResponseModel<ITokens | null>> => {
+  try {
+    const request = await fetcher<ITokens>("auth/login/token", {
+      method: "POST",
+      body: JSON.stringify({ token: data.token, userSource: data.userSource }),
+    });
+    return { data: request, errorMessage: null };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse)?.message || "some",
+      data: null,
+    };
+  }
 };

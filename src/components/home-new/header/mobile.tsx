@@ -1,16 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Logo from "@/icons/Logo";
 import { IoMenuSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import routes from "@/helpers/routes";
-import { CiUser } from "react-icons/ci";
-import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
-import { HiOutlineBell } from "react-icons/hi2";
-import { IUserBaseInfo } from "@/types/auth";
 import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
@@ -18,14 +13,15 @@ import { logOutUserAction } from "@/server-actions/user/actions";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { IconType } from "react-icons/lib";
 import { FC } from "react";
+import { useAuth } from "@/lib/auth/auth-context";
 
 interface HomeMobileHeaderProps {
   menuList: Array<{ label: string; icon: IconType; path: string }>;
-  user: IUserBaseInfo | null;
 }
 
-const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ user, menuList }) => {
+const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
   const pathname = usePathname();
+  const { user } = useAuth();
 
   return (
     <Popover modal>
@@ -48,7 +44,7 @@ const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ user, menuList }) => {
             </PopoverClose>
             <div>
               <p className="text-grey-600 text-xs py-4">Personal</p>
-              {!user && (
+              {!user.data && (
                 <PopoverClose>
                   <Link href={routes.auth.signIn.fullUrl}>
                     <div className="flex items-center gap-1.5 cursor-pointer">
@@ -58,7 +54,7 @@ const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ user, menuList }) => {
                   </Link>
                 </PopoverClose>
               )}
-              {!!user && (
+              {!!user.data && (
                 <>
                   <ul className="flex flex-col">
                     {menuList.map((el) => (

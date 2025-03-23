@@ -6,76 +6,112 @@ import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-au
 import SignInForm from "@/components/auth/sign-in";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
-import AuthClient from "@/lib/auth/auth-client";
-import { getUserAction } from "@/server-actions/user/actions";
-import { IUserBaseInfo } from "@/types/auth";
+import { authWithCredentialsAction, authWithSocialNetworkAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
+import { revalidateAllPath } from "@/server-actions/subscription/actions";
 import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 
 const SignInPage = () => {
   const router = useRouter();
   const { notify } = useNotification();
   const [authPending, startAuthTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
-  const [user, setUser] = useState<IUserBaseInfo | null>(null);
-
-  useEffect(() => {
-    getUserAction().then((data) => {
-      setUser(data);
-    });
-  }, []);
+  const [userSource, setUserSource] = useState(UserSource.System);
+  const [requestPending, setRequestPending] = useState(false);
 
   return (
     <SignInForm
       defaultSignIn={async (data) => {
-        await AuthClient.defaultAuth({
-          ...data,
-          onError: (errorMessage) => {
-            notify({ title: "Error", description: errorMessage }, { variant: "error" });
-          },
-          onSuccess: () => {
-            startAuthTransition(() => {
-              router.push(routes.volt.fullUrl);
-            });
-          },
-        });
+        setUserSource(UserSource.System);
+        setRequestPending(true);
+        const request = await authWithCredentialsAction(data);
+        if (request.errorMessage) {
+          notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+          setRequestPending(false);
+        } else {
+          setAuthTokensAction([
+            {
+              token: request.data!.access_token,
+              tokenName: "jwt",
+              remember: false,
+            },
+            {
+              token: request.data!.refresh_token,
+              tokenName: "jwt-refresh",
+              remember: data.remember,
+            },
+          ]);
+          revalidateAllPath();
+          startAuthTransition(() => {
+            router.push(routes.volt.fullUrl);
+          });
+        }
       }}
-      authPending={authPending}
+      authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
       onSignUp={() => router.push(routes.auth.signUp.fullUrl)}
-      forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={user} />}
+      forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={null} />}
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">
           <GoogleAuthProvider
+            pending={userSource === UserSource.Google && (authPending || requestPending)}
             onSuccess={async (token) => {
-              await AuthClient.thirdPartyAuth({
-                token,
-                userSource: UserSource.Google,
-                remember: false,
-                onSuccess: () => {
-                  router.push(routes.volt.fullUrl);
-                },
-                onError: () => {
+              setUserSource(UserSource.Google);
+              setRequestPending(true);
+              const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+              if (request.errorMessage) {
+                startAuthTransition(() => {
                   const params = new URLSearchParams({ userSource: UserSource.Google, accessToken: token });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
-                },
-              });
+                });
+              } else {
+                setAuthTokensAction([
+                  {
+                    token: request.data!.access_token,
+                    tokenName: "jwt",
+                    remember: false,
+                  },
+                  {
+                    token: request.data!.refresh_token,
+                    tokenName: "jwt-refresh",
+                    remember: false,
+                  },
+                ]);
+                revalidateAllPath();
+                startAuthTransition(() => {
+                  router.push(routes.volt.fullUrl);
+                });
+              }
             }}
           />
           <FacebookAuthProvider
+            pending={userSource === UserSource.Facebook && (authPending || requestPending)}
             onSuccess={async (token) => {
-              const request = await AuthClient.thirdPartyAuth({
-                token,
-                userSource: UserSource.Facebook,
-                remember: false,
-                onSuccess: () => {
-                  router.push(routes.volt.fullUrl);
-                },
-                onError: () => {
+              setUserSource(UserSource.Facebook);
+              const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+              if (request.errorMessage) {
+                startAuthTransition(() => {
                   const params = new URLSearchParams({ userSource: UserSource.Facebook, accessToken: token });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
-                },
-              });
+                });
+              } else {
+                setAuthTokensAction([
+                  {
+                    token: request.data!.access_token,
+                    tokenName: "jwt",
+                    remember: false,
+                  },
+                  {
+                    token: request.data!.refresh_token,
+                    tokenName: "jwt-refresh",
+                    remember: false,
+                  },
+                ]);
+                revalidateAllPath();
+                startAuthTransition(() => {
+                  router.push(routes.volt.fullUrl);
+                });
+              }
             }}
           />
         </div>
