@@ -17,15 +17,10 @@ const getPlanDetails = (plan: SubscriptionType) => {
         label: "Monthly",
         price: "$20.00 USD",
       };
-    case SubscriptionType.Annual:
+    default:
       return {
         label: "Yearly",
         price: "$215.00 USD",
-      };
-    default:
-      return {
-        label: "Trial",
-        price: "$0.00 USD",
       };
   }
 };
@@ -63,18 +58,6 @@ const OrderDetails = ({ user }: { user: IUserBaseInfo | null }) => {
                 )}
                 renderContent={(setReferenceElement) => (
                   <div className="z-10 rounded-xl bg-white shadow-1">
-                    {!user?.planSelected && (
-                      <div
-                        className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
-                        onClick={() => {
-                          // params.set("plan", SubscriptionType.Trial);
-                          router.replace(`${pathname}?${params.toString()}`);
-                          setReferenceElement(null);
-                        }}
-                      >
-                        Trial
-                      </div>
-                    )}
                     <div
                       className="py-2 px-4 text-xs font-medium rounded-t-xl cursor-pointer transition-all duration-100 hover:bg-primary-main-50"
                       onClick={() => {

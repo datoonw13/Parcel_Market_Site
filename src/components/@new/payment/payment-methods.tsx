@@ -23,15 +23,10 @@ const getPlanDetails = (plan: SubscriptionType) => {
         label: "Monthly",
         price: "$20.00 USD",
       };
-    case SubscriptionType.Annual:
+    default:
       return {
         label: "Annual",
         price: "$215.00 USD",
-      };
-    default:
-      return {
-        label: "Trial",
-        price: "$0.00 USD",
       };
   }
 };
