@@ -245,7 +245,6 @@ const VoltSearchOnMap = ({
       if (features.length > 0) {
         const feature = features[0] as any;
         const { id } = feature as { id: string };
-
         if (id) {
           if (clickedFeatureProperty.current !== null && clickedFeatureProperty.current !== features[0].id) {
             mapRef.setFeatureState(
@@ -259,10 +258,11 @@ const VoltSearchOnMap = ({
             { source: data.id, sourceLayer: data.id, id: clickedFeatureProperty.current },
             { selected: true, hover: false }
           );
+
           setOpenProperty({
             ...(feature.properties as any),
             coordinates: JSON.stringify(feature.geometry?.coordinates),
-            acreage: Number(Number(feature.properties.gisacre || feature.properties.ll_gisacre).toFixed(2)),
+            acreage: Number(Math.max(Number(feature.properties.gisacre), Number(feature.properties.ll_gisacre)).toFixed(2)),
           });
           openPopup(e.lngLat);
         }
@@ -544,7 +544,7 @@ const VoltSearchOnMap = ({
                   Owner <span className="text-black font-semibold">{openProperty.owner}</span>
                 </li>
                 <li className="text-xs text-grey-800 py-0.5">
-                  Acreage <span className="text-black font-semibold">{(openProperty.gisacre || openProperty.ll_gisacre)?.toFixed(2)}</span>
+                  Acreage <span className="text-black font-semibold">{openProperty.acreage}</span>
                 </li>
                 <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
                   Get Data
