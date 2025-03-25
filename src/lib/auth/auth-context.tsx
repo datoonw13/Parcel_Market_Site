@@ -24,8 +24,8 @@ const AuthContextProvide = ({
 }) => {
   const pathname = usePathname();
   const [user, setUser] = useState<Awaited<ReturnType<typeof getAuthedUserDataAction>>>({
-    isAuthed: false,
     data: null,
+    isAuthed: false,
   });
 
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -41,36 +41,37 @@ const AuthContextProvide = ({
 
   const startSession = useCallback(async () => {
     const authedUser = await getAuthedUserDataAction();
-
-    if (intervalRef.current) {
-      window.clearInterval(intervalRef.current);
-    }
+    window.clearInterval(intervalRef.current);
 
     if (authedUser.isAuthed && !authedUser.data) {
       await refreshTokenAction();
       revalidateAllPath();
-      startSession();
+
+      return;
     }
 
     if (authedUser?.data) {
       const duration = moment.duration(moment(authedUser.data!.sessionValidUntil).diff(moment()));
       const seconds = duration.asSeconds() - 5;
-      const ms = seconds * 1000;
+      let ms = seconds * 1000;
+
+      ms = Math.max(ms, 10000);
 
       intervalRef.current = setInterval(async () => {
         const request = await refreshTokenAction();
         if (request.errorMessage) {
           stopSession();
         }
+        console.log(ms, 22);
       }, ms);
     }
   }, [stopSession]);
 
-  useEffect(() => {
-    if (user !== authedUser) {
-      setUser(authedUser);
-    }
-  }, [authedUser, user]);
+  // useEffect(() => {
+  //   if (user !== authedUser) {
+  //     setUser(authedUser);
+  //   }
+  // }, [authedUser, user]);
 
   useEffect(() => {
     if (authedUser?.isAuthed) {
@@ -81,10 +82,16 @@ const AuthContextProvide = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authedUser, pathname]);
 
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+  console.log("rerender");
+
+  return (
+    <AuthContext.Provider value={{ user: { ...authedUser } }}>
+      {authedUser.isAuthed && !authedUser.data ? "ae" : children}
+    </AuthContext.Provider>
+  );
 };
 
-export default memo(AuthContextProvide);
+export default AuthContextProvide;
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
