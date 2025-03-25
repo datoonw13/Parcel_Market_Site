@@ -21,35 +21,39 @@ interface HomeDesktopHeaderProps {
 
 const HomeDesktopHeader: FC<HomeDesktopHeaderProps> = ({ menuList }) => {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, isAuthed } = useAuth();
   const [open, setOpen] = useState(false);
   return (
     <div className="justify-between py-7 max-w-7xl mx-auto px-8 xl:px-0 w-full hidden md:flex">
       <Logo className="size-36 h-10" />
-      {user.isAuthed ? (
+      {isAuthed ? (
         <div className="flex gap-4 items-center">
-          {user.data && (
-            <>
-              <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
-                <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">Data Dashboard</p>
-              </Link>
-              <HeaderNotifications />
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
+          <>
+            <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
+              <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">Data Dashboard</p>
+            </Link>
+            <HeaderNotifications />
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                {user ? (
                   <Avatar className="group cursor-pointer" id="header-user-icon">
                     <AvatarFallback className=" border border-grey-100 bg-grey-30 hover:bg-grey-50 hover:border-primary-main-200 text-sm font-medium group-data-[state=open]:bg-primary-main-200">
-                      {`${user.data.firstName[0]}${user.data.lastName[0]}`}
+                      {`${user.firstName[0]}${user.lastName[0]}`}
                     </AvatarFallback>
                   </Avatar>
-                </PopoverTrigger>
-                <PopoverContent className="outline-none translate-y-2">
+                ) : (
+                  <div className="size-10 rounded-full animate-pulse bg-primary-main-100" />
+                )}
+              </PopoverTrigger>
+              <PopoverContent className="outline-none translate-y-2">
+                {user && (
                   <div className="z-10 rounded-xl bg-white shadow-1 p-6 flex flex-col items-center gap-4 min-w-80">
                     <Avatar className="group cursor-pointer w-16 h-16">
-                      <AvatarFallback className="bg-primary-main-200">{`${user.data.firstName[0]}${user.data.lastName[0]}`}</AvatarFallback>
+                      <AvatarFallback className="bg-primary-main-200">{`${user.firstName[0]}${user.lastName[0]}`}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium mb-1 text-center">{`${user.data.firstName} ${user.data.lastName}`}</p>
-                      <p className="text-xs text-grey-600 text-center">{user.data.email}</p>
+                      <p className="text-sm font-medium mb-1 text-center">{`${user.firstName} ${user.lastName}`}</p>
+                      <p className="text-xs text-grey-600 text-center">{user.email}</p>
                     </div>
                     <div className="bg-grey-30 rounded-xl w-full p-4">
                       <ul>
@@ -76,10 +80,10 @@ const HomeDesktopHeader: FC<HomeDesktopHeaderProps> = ({ menuList }) => {
                       </ul>
                     </div>
                   </div>
-                </PopoverContent>
-              </Popover>
-            </>
-          )}
+                )}
+              </PopoverContent>
+            </Popover>
+          </>
           <Link id="header-volt-button" href={routes.volt.fullUrl}>
             <Button>VOLT</Button>
           </Link>

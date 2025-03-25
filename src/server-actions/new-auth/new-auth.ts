@@ -61,13 +61,11 @@ export const logOutUserAction = async () => {
 export const refreshTokenAction = async (): Promise<ResponseModel<string | null>> => {
   try {
     const data = await fetcher<ISignInResponse>("auth/token/refresh", { method: "POST" });
-    setAuthTokensAction([{ token: data.access_token, tokenName: "jwt", remember: false }]);
     return {
-      data: null,
+      data: data.access_token,
       errorMessage: null,
     };
   } catch (error) {
-    logOutUserAction();
     return {
       errorMessage: (error as ErrorResponse).message,
       data: null,
@@ -75,15 +73,7 @@ export const refreshTokenAction = async (): Promise<ResponseModel<string | null>
   }
 };
 
-export const getAuthedUserDataAction = async (): Promise<{ data: AuthUser | null; isAuthed: boolean }> => {
-  const refreshToken = cookies().get("jwt-refresh")?.value || null;
-  if (!refreshToken) {
-    return {
-      isAuthed: false,
-      data: null,
-    };
-  }
-
+export const getAuthedUserDataAction = async (): Promise<AuthUser | null> => {
   const accessToken = cookies().get("jwt")?.value || null;
 
   let user: AuthUser | null = null;
@@ -105,10 +95,7 @@ export const getAuthedUserDataAction = async (): Promise<{ data: AuthUser | null
     } catch (error) {}
   }
 
-  return {
-    isAuthed: true,
-    data: user,
-  };
+  return user;
 };
 
 export const isAuthenticatedAction = async (): Promise<boolean> => {

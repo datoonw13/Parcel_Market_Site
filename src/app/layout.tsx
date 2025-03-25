@@ -18,7 +18,7 @@ import Script from "next/script";
 import Image from "next/image";
 import DeviceDetect from "@/components/shared/DeviceDetect";
 import AuthContextProvide from "@/lib/auth/auth-context";
-import { getAuthedUserDataAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
+import { getAuthedUserDataAction, isAuthenticatedAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
 import { fetcher } from "@/server-actions/fetcher";
 import { ISignInResponse } from "@/types/auth";
 
@@ -60,8 +60,7 @@ export default async function RootLayout({
 }>) {
   // const user = await getUserAction();
   // const userSubscriptions = user ? await getUserSubscriptions() : null;
-  const authedUser = await getAuthedUserDataAction();
-  console.log("reree", authedUser.isAuthed);
+  const isAuthed = await isAuthenticatedAction();
 
   return (
     <>
@@ -117,7 +116,7 @@ export default async function RootLayout({
           <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-            <AuthContextProvide authedUser={authedUser}>{children}</AuthContextProvide>
+            <AuthContextProvide isAuthed={isAuthed}>{children}</AuthContextProvide>
           </Provider>
           <Chat />
         </body>

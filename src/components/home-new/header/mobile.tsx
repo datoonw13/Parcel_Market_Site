@@ -44,7 +44,7 @@ const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
             </PopoverClose>
             <div>
               <p className="text-grey-600 text-xs py-4">Personal</p>
-              {!user.data && (
+              {!user && (
                 <PopoverClose>
                   <Link href={routes.auth.signIn.fullUrl}>
                     <div className="flex items-center gap-1.5 cursor-pointer">
@@ -54,7 +54,7 @@ const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
                   </Link>
                 </PopoverClose>
               )}
-              {!!user.data && (
+              {!!user && (
                 <>
                   <ul className="flex flex-col">
                     {menuList.map((el) => (
