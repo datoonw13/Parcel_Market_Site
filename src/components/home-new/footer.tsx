@@ -5,10 +5,10 @@ import { BiLogoFacebook } from "react-icons/bi";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { RiTwitterXFill } from "react-icons/ri";
 import routes from "@/helpers/routes";
-import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
-const HomeFooterSection = () => (
-  <div className="max-w-7xl mx-auto px-5 lg:px-8 xl:px-20 space-y-5 mt-11 md:mt-16">
+const HomeFooterSection = ({ className }: { className?: string }) => (
+  <div className={cn("max-w-7xl mx-auto px-5 lg:px-8 xl:px-20 space-y-5 mt-11 md:mt-16", className)}>
     <div className="flex items-center justify-between pb-5 border-b ">
       <Logo className="w-20 sm:w-24 md:w-28" />
       <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ const HomeFooterSection = () => (
         <li>About Us</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
-      <Link href="#subscription">
+      <Link href={`${routes.home.fullUrl}#subscription`}>
         <li>Pricing</li>
       </Link>
       <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
@@ -61,7 +61,6 @@ const HomeFooterSection = () => (
       <Link href="/">
         <li>New Feature requests</li>
       </Link>
-      <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
     </ul>
     <div className="flex items-center flex-col gap-6 sm:flex-row justify-between pb-7">
       <Link className="text-sm font-medium text-grey-600" href="mailto:support@parcelmarket.com" target="_blank">

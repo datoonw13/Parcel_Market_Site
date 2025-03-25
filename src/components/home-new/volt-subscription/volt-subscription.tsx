@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { cn } from "@/lib/utils";
@@ -12,9 +12,22 @@ import { IUserBaseInfo } from "@/types/auth";
 import PlanList from "../../@new/subscription/plans/plan-list";
 import styles from "./styles.module.css";
 
-const VoltSubscription = ({ user, subscriptionType }: { user: IUserBaseInfo | null; subscriptionType: ISubscription | null }) => {
+const VoltSubscription = ({
+  user,
+  subscriptionType,
+  setMounted,
+}: {
+  setMounted: () => void;
+  user: IUserBaseInfo | null;
+  subscriptionType: ISubscription | null;
+}) => {
   const swiperRef = useRef<SwiperRef | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    setMounted();
+  }, [setMounted]);
+
   return (
     <div className="mt-16 sm:mt-20 flex flex-col" id="subscription">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 xl:px-20 mb-8 lg:mb-11">
