@@ -244,6 +244,7 @@ const VoltSearchOnMap = ({
       const features = mapRef.queryRenderedFeatures(e.point, { layers: ["parcel-assist"] });
       if (features.length > 0) {
         const feature = features[0] as any;
+        console.log(feature, 22);
         const { id } = feature as { id: string };
         if (id) {
           if (clickedFeatureProperty.current !== null && clickedFeatureProperty.current !== features[0].id) {
@@ -262,7 +263,7 @@ const VoltSearchOnMap = ({
           setOpenProperty({
             ...(feature.properties as any),
             coordinates: JSON.stringify(feature.geometry?.coordinates),
-            acreage: Number(Math.max(Number(feature.properties.gisacre), Number(feature.properties.ll_gisacre)).toFixed(2)),
+            acreage: Number(Math.max(Number(feature.properties.gisacre) || 0, Number(feature.properties.ll_gisacre) || 0).toFixed(2)),
           });
           openPopup(e.lngLat);
         }
