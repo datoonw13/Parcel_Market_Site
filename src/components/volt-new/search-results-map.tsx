@@ -315,6 +315,12 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
         id: propertiesInteraction.popup.openId,
         bulkId: propertiesInteraction.popup.isBulked && propertiesInteraction.popup.openId,
       });
+
+      const property = data.find((el) => el.id === propertiesInteraction.popup?.openId);
+
+      if (property) {
+        ref.setCenter({ lat: property.lat, lon: property.lon });
+      }
     }
 
     if (list.length) {
