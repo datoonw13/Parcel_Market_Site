@@ -60,7 +60,7 @@ export default async function RootLayout({
 }>) {
   // const user = await getUserAction();
   // const userSubscriptions = user ? await getUserSubscriptions() : null;
-  const isAuthed = await isAuthenticatedAction();
+  const authOption = await isAuthenticatedAction();
 
   return (
     <>
@@ -116,7 +116,7 @@ export default async function RootLayout({
           <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-            <AuthContextProvide isAuthed={isAuthed}>{children}</AuthContextProvide>
+            <AuthContextProvide authOption={authOption}>{children}</AuthContextProvide>
           </Provider>
           <Chat />
         </body>

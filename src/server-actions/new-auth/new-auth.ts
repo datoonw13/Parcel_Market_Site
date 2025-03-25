@@ -46,6 +46,16 @@ export const setAuthTokensAction = (data: Array<{ token: string; tokenName: stri
   });
 };
 
+export const removeAuthTokensAction = () => {
+  const c = cookies();
+  if (c.get("jwt")) {
+    c.delete("jwt");
+  }
+  if (c.get("jwt-refresh")) {
+    c.delete("jwt-refresh");
+  }
+};
+
 export const logOutUserAction = async () => {
   const headersList = headers();
   // read the custom x-url header
@@ -98,9 +108,17 @@ export const getAuthedUserDataAction = async (): Promise<AuthUser | null> => {
   return user;
 };
 
-export const isAuthenticatedAction = async (): Promise<boolean> => {
-  const isAuthed = cookies().get("jwt-refresh")?.value;
-  return !!isAuthed;
+export const isAuthenticatedAction = async (): Promise<{ isAuthed: boolean; expiresIn: null | number }> => {
+  const token = cookies().get("jwt-refresh")?.value;
+  let expiresIn: number | null = null;
+
+  if (token) {
+    expiresIn = jwtDecode(token).exp || null;
+  }
+  return {
+    isAuthed: !!token,
+    expiresIn,
+  };
 };
 
 export const authWithCredentialsAction = async (data: { email: string; password: string }): Promise<ResponseModel<ITokens | null>> => {
