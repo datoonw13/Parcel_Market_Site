@@ -64,7 +64,7 @@ const HomeFooterSection = ({ className }: { className?: string }) => (
     </ul>
     <div className="flex items-center flex-col gap-6 sm:flex-row justify-between pb-7">
       <Link className="text-sm font-medium text-grey-600" href="mailto:support@parcelmarket.com" target="_blank">
-        Support Email
+        Support email: support@parcelmarket.com
       </Link>
       <p className="text-xs font-medium text-grey-600">©{new Date().getFullYear()} Parcel Market. All rights reserved.</p>
     </div>
