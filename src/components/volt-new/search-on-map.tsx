@@ -244,7 +244,6 @@ const VoltSearchOnMap = ({
       const features = mapRef.queryRenderedFeatures(e.point, { layers: ["parcel-assist"] });
       if (features.length > 0) {
         const feature = features[0] as any;
-        console.log(feature, 22);
         const { id } = feature as { id: string };
         if (id) {
           if (clickedFeatureProperty.current !== null && clickedFeatureProperty.current !== features[0].id) {
