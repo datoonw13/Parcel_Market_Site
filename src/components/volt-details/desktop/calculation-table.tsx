@@ -274,7 +274,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                     <div className="flex items-center gap-2 justify-end">
                       {popup ? <MdKeyboardArrowDown className="size-5" /> : <MdKeyboardArrowUp className="size-5" />}
                       <TooltipProvider>
-                        <Tooltip>
+                        <Tooltip delayDuration={0}>
                           <TooltipTrigger asChild>
                             {assessment.data.hasSellingProperty ? (
                               <div className="relative z-0 min-w-5 min-h-5 h-5">
@@ -305,7 +305,7 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
                               </div>
                             )}
                           </TooltipTrigger>
-                          <TooltipContent>
+                          <TooltipContent sideOffset={10}>
                             <motion.div
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
