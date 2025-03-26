@@ -44,6 +44,7 @@ const SignUpPage = () => {
           params.set("redirectUrl", REDIRECT_URL_AFTER_SUCCESS_PAGE);
           router.push(`${routes.auth.signUp.success.fullUrl}?${params.toString()}`);
         } else {
+          setEmail(data.email);
           setStep(SignUpSteps.FINISH);
         }
       }}
