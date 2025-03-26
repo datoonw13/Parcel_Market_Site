@@ -33,7 +33,7 @@ const SignUpPage = () => {
         router.push(routes.auth.signIn.fullUrl);
       }}
       onSubmit={async (data) => {
-        const request = await signUpUserAction({ ...data });
+        const request = await signUpUserAction({ ...data, redirectUrl: routes.home.fullUrl });
         if (request.errorMessage) {
           setErrorMessage(request.errorMessage);
           setStep(SignUpSteps.FINISH);
