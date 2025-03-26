@@ -512,7 +512,7 @@ const VoltSearchOnMap = ({
                 </div>
               )}
               onSubmit={async (data) => {
-                const request = await signUpUserAction({ ...data });
+                const request = await signUpUserAction({ ...data, redirectUrl: `${routes.volt.fullUrl}/${lastFetchedId.current}` });
                 if (request.errorMessage) {
                   setSignUpErrorMessage(request.errorMessage);
                   setStep(SignUpSteps.FINISH);

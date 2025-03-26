@@ -24,6 +24,7 @@ export const userSignUpValidation = (isThirdPartyAuth?: boolean) =>
       email: emailSchema,
       firstName: z.string().trim().min(1),
       lastName: z.string().trim().min(1),
+      redirectUrl: z.string().optional(),
       password: isThirdPartyAuth ? z.undefined() : passwordSchema,
       registrationReasons: z.array(z.enum(["LandOwner", "CertifiedAppraiser", "LicensedAgent", "LandInvestor"])),
       subscribeToEmail: z.boolean(),
