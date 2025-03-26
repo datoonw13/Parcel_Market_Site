@@ -77,8 +77,8 @@ const SearchesFilters = ({ startTransition }: { startTransition: TransitionStart
           }}
           defaultValue={searchParams.get("search") || ""}
         />
-        {/* <SearchesMobileFilters startTransition={startTransition} /> */}
-        {/* <SearchesDesktopFilters startTransition={startTransition} /> */}
+        <SearchesMobileFilters startTransition={startTransition} />
+        <SearchesDesktopFilters startTransition={startTransition} />
       </div>
     </>
   );

@@ -19,7 +19,7 @@ export const statesBlackList = [
 export const states = Object.keys(data)
   .map((el) => ({ value: el, label: data[el as keyof typeof data][0].stateName }))
   .sort((a, b) => a.label.localeCompare(b.label));
-export const counties = Object.values(data);
+export const counties = Object.values(data).flat();
 export const getCountiesByState = (stateId: string) =>
   stateId ? data?.[stateId as keyof typeof data].map((el) => ({ value: el.county, label: el.county })) || null : null;
 
