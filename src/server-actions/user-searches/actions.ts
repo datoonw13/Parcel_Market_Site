@@ -10,10 +10,6 @@ import { moneyFormatter, removeParcelNumberFormatting } from "@/helpers/common";
 import { getCounty, getState } from "@/helpers/states";
 import { IUserRecentSearches } from "@/types/user";
 import { PolygonProps } from "react-leaflet";
-import moment from "moment";
-import { cookies, headers } from "next/headers";
-import { jwtDecode } from "jwt-decode";
-import { decode } from "jsonwebtoken";
 import { userSearchesTag } from "./tags";
 import { fetcher } from "../fetcher";
 
@@ -40,7 +36,7 @@ export const getUserSearches = async (
 
     const data = request.data?.map((item) => {
       const state = getState(item.state)?.label || item.state.toLocaleLowerCase() || "";
-      const county = getCounty(item.county, item.state)?.label || item.county.toLocaleLowerCase() || "";
+      const county = getCounty(item.county, item.state)?.short.label || item.county.toLocaleLowerCase() || "";
       return {
         title: `${state}/${county}/${Number(item.acrage).toFixed(2)}/${moneyFormatter.format(item.price)}`,
         id: item.id,
@@ -74,7 +70,7 @@ export const getSearchDetails = async (id: number): Promise<ResponseModel<IUserR
       acreage: Number(request.acrage),
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCounty(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.state, request.county)?.short.label || request.county.toLocaleLowerCase() || "",
       },
       state: {
         value: request.state.toLocaleLowerCase() || "",
@@ -200,7 +196,7 @@ export const getAdditionalSearchDetails = async (id: number): Promise<ResponseMo
       acreage: Number(request.acrage),
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCounty(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.state, request.county)?.short.label || request.county.toLocaleLowerCase() || "",
       },
       state: {
         value: request.state.toLocaleLowerCase() || "",

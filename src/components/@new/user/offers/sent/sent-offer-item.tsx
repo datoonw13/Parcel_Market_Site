@@ -8,7 +8,7 @@ import { ResizeIcon1 } from "@/components/@new/icons/ResizeIcons";
 import Divider from "@/components/@new/shared/Divider";
 import Button from "@/components/@new/shared/forms/Button";
 import { moneyFormatter } from "@/helpers/common";
-import { getAllStates } from "@/helpers/states";
+import { states } from "@/helpers/states";
 import { OfferModel } from "@/types/offer";
 import moment from "moment";
 import clsx from "clsx";
@@ -28,10 +28,8 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
   const params = new URLSearchParams(searchParams.toString());
   const [sentOffersOptions, setSentOffersOption] = useAtom(sentOffersAtom);
 
-  const state = getAllStates().find((el) => el.value === data.sellingProperty.state.toLocaleLowerCase());
-  const county =
-    state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === data.sellingProperty.county.toLocaleLowerCase()) || "";
-
+  const states: any = [];
+  const counties: any = [];
   const handleSelect = () => {
     if (!sentOffersOptions.selecting) {
       return;
@@ -71,7 +69,7 @@ const SentOfferItem = ({ data }: { data: OfferModel }) => {
               <h1 className="font-semibold truncate">{data.sellingProperty.title}</h1>
             </Link>
             <h2 className="text-xs text-grey-600 flex items-center gap-1.5 text-ellipsis whitespace-nowrap overflow-hidden">
-              <LocationIcon1 /> {state?.label}; {county}
+              {/* <LocationIcon1 /> {state?.label}; {county} */}
             </h2>
           </div>
           <div className="space-y-3">

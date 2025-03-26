@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 import routes from "@/helpers/routes";
 import { getLendDetailsAction } from "@/server-actions/marketplace/action";
 import moment from "moment";
-import { getAllStates, getCounties } from "@/helpers/states";
 import clsx from "clsx";
 import { getUserSubscriptions } from "@/server-actions/subscription/actions";
 import { CiLocationOn } from "react-icons/ci";
 import { BiCalendar } from "react-icons/bi";
+import { getCountiesByState, getCounty, getState } from "@/helpers/states";
 import { EyeIcon1 } from "../../icons/EyeIcons";
 import LandDetails from "./details";
 import RecentSalesList from "./recent-sales-list";
@@ -21,8 +21,8 @@ const Land = async ({ sellingPropertyId }: { sellingPropertyId: string }) => {
     redirect(routes.marketplace.fullUrl);
   }
 
-  const state = getAllStates().find((state) => state.value === data.state.toLocaleLowerCase())?.label;
-  const county = getCounties(data.state.toLocaleLowerCase() || null).find((el) => el.value === data.county)?.label;
+  const state = getState(data.state.toLocaleLowerCase())?.label;
+  const county = getCounty(data.state.toLocaleLowerCase(), data.county)?.short.label;
 
   return (
     <>

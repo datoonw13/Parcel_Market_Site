@@ -1,6 +1,9 @@
-import { usaCities, usaStatesFull } from "typed-usa-states";
+"use client";
 
-const statesBlackList = [
+import { useCallback, useMemo } from "react";
+import data from "../../public/files/states_counties.json";
+
+export const statesBlackList = [
   "Louisiana",
   "Montana",
   "Texas",
@@ -16,55 +19,21 @@ const statesBlackList = [
   "Wyoming",
 ];
 
-export const getAllStates = (props?: { filterBlackList?: boolean }) =>
-  usaStatesFull
-    .filter((el) => (el.contiguous && props?.filterBlackList ? !statesBlackList.includes(el.name) : true))
-    .map((state) => ({ label: state.name, value: state.abbreviation.toLowerCase(), counties: state.counties }));
+export const states = Object.keys(data)
+  .map((el) => ({ value: el, label: data[el as keyof typeof data][0].stateName }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+export const counties = Object.values(data);
+export const getCountiesByState = (stateId: string) =>
+  stateId ? data?.[stateId as keyof typeof data].map((el) => ({ value: el.county, label: el.county })) || null : null;
 
-export const getState = (state: string | null) => {
-  if (!state) {
-    return null;
-  }
-  const result = getAllStates().find(
-    (el) => el.value.toLocaleLowerCase() === state.toLocaleLowerCase() || el.label.toLocaleLowerCase() === state.toLocaleLowerCase()
-  );
-  return result ? { label: result.label, value: result.value } : null;
+export const getState = (stateId: string) => states.find((el) => el.value === stateId) || null;
+export const getCounty = (stateId: string, county: string) => {
+  const res = data?.[stateId as keyof typeof data]?.find((x) => x.county.toLocaleLowerCase() === county.toLocaleLowerCase()) || null;
+  // eslint-disable-next-line no-nested-ternary
+  return !res
+    ? null
+    : {
+        short: { value: res.county, label: res.county },
+        full: res,
+      };
 };
-
-export const getCounties = (state: string | null) => {
-  if (!state) {
-    return [];
-  }
-  const selectedState = getState(state);
-
-  const counties =
-    getAllStates().find(({ value }) => value.toLocaleLowerCase() === selectedState?.value.toLocaleLowerCase())?.counties || [];
-  const formattedCounties = counties.map((el) => ({
-    label: el,
-    value: el
-      .replaceAll(",", "")
-      .split(" ")
-      .map((x) => x.toLocaleLowerCase())
-      .filter((el) => el !== "county")
-      .join("-"),
-  }));
-  return formattedCounties;
-};
-
-export const getCounty = (county: string | null, state: string | null) => {
-  if (!county || !state) {
-    return null;
-  }
-
-  return (
-    getCounties(state).find(
-      ({ value, label }) =>
-        value.toLocaleLowerCase().includes(county.toLocaleLowerCase()) || label.toLocaleLowerCase().includes(county.toLocaleLowerCase())
-    ) || null
-  );
-};
-
-export const getCitiesByState = (stateValue: string | null) =>
-  usaCities
-    .filter((el) => el.state === getAllStates().find((x) => x.value === stateValue)?.label)
-    .map((city) => ({ label: city.name, value: city.name }));

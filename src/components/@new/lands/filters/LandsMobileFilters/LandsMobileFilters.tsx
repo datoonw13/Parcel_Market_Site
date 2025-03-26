@@ -8,10 +8,10 @@ import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import RadioButton from "@/components/@new/shared/forms/RadioButton/";
-import { getAllStates, getCounties } from "@/helpers/states";
 import { ILandsFilters, SortBy } from "@/types/lands";
 import { RemoveIcon1 } from "@/components/@new/icons/RemoveIcons";
 import TextField from "@/components/@new/shared/forms/text-field";
+import useStates from "@/hooks/useStates";
 import { acreagesFilters, getAcreageLabel, getPriceLabel, priceFilters } from "../lands-filters-utils";
 
 interface LandsMobileFiltersProps {
@@ -27,6 +27,7 @@ interface LandsMobileFiltersProps {
 }
 
 const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, select, totalCount }) => {
+  const { states, getCountiesByState } = useStates({ hideBlackListedStated: true });
   const [openFilters, setOpenFilters] = useState(false);
   const [openSortBy, setOpenSortBy] = useState(false);
   const [collapsedFilter, setCollapsedFilter] = useState<"state" | "county" | "acreage" | "voltPrice" | null>(null);
@@ -106,7 +107,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, 
                 transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
                 <div className="border-b border-grey-100 pb-3 flex flex-col gap-4 mt-1">
-                  {getAllStates({ filterBlackList: true }).map((state) => (
+                  {states.map((state) => (
                     <RadioButton
                       key={state.value}
                       checked={localFilters.state === state.value}
@@ -144,7 +145,7 @@ const LandsMobileFilters: FC<LandsMobileFiltersProps> = ({ filters, setFilters, 
                 transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
                 <div className="border-b border-grey-100 pb-3 flex flex-col gap-4 mt-1">
-                  {getCounties(localFilters.state).map((county) => (
+                  {(getCountiesByState(localFilters.state || "") || []).map((county) => (
                     <RadioButton
                       key={county.value}
                       checked={localFilters.county === county.value}

@@ -11,10 +11,10 @@ import { Autoplay, EffectFade, Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { getAllStates, getCounties, getCounty } from "@/helpers/states";
 import routes from "@/helpers/routes";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
+import useStates from "@/hooks/useStates";
 import { AutoComplete } from "../../ui/autocomplete";
 import { Button } from "../../ui/button";
 import { breakPoints } from "../../../../tailwind.config";
@@ -32,8 +32,8 @@ const SlideShow = () => {
     state: null,
     county: null,
   });
-  const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => getCounties(values.state), [values.state]);
+
+  const { states, counties, getCounty, getCountiesByState } = useStates({ hideBlackListedStated: true });
 
   return (
     <div className="relative h-full w-full">
@@ -81,12 +81,12 @@ const SlideShow = () => {
             id="landing__state-autocomplete"
           />
           <AutoComplete
-            options={counties}
+            options={values.state ? getCountiesByState(values.state) || [] : []}
             placeholder="County"
             onValueChange={(county) => {
               setValues({ ...values, county });
             }}
-            selectedValue={getCounty(values.county, values.state)?.value || null}
+            selectedValue={getCounty(values.state || "", values.county || "")?.short.value || null}
             disabled={!values.state}
             id="landing__county-autocomplete"
           />

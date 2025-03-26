@@ -5,7 +5,6 @@ import MinMaxMobileFilter from "@/components/@new/filters/mobile/mobile-min-max-
 import { acreagesFilters, getAcreageLabel, priceFilters } from "@/components/@new/lands/filters/lands-filters-utils";
 import { getMinMaxFilterLabel } from "@/components/@new/shared/filters/filters-utils";
 import RadioButton from "@/components/@new/shared/forms/RadioButton";
-import { getAllStates, getCounties } from "@/helpers/states";
 import { IMarketplaceFilters } from "@/types/lands";
 import { uniqBy } from "lodash";
 
@@ -17,11 +16,8 @@ interface MarketplaceMobileFiltersProps {
 const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled, selectedFilters, onChange }) => {
   const [localFilters, setLocalFilters] = useState<IMarketplaceFilters | null>(null);
   const [open, setOpen] = useState<"states" | "counties" | "acreage" | "voltValue" | null>(null);
-  const states = useMemo(() => getAllStates(), []);
-  const counties = useMemo(() => {
-    const countiesList = selectedFilters.states?.map((state) => getCounties(state)) || [];
-    return uniqBy(countiesList.flat(), "value");
-  }, [selectedFilters.states]);
+  const states: any = [];
+  const counties: any = [];
 
   return (
     <MobileFiltersDrawer

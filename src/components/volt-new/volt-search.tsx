@@ -52,7 +52,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
     formState: { isSubmitted, isDirty, errors },
     reset,
   } = form;
-  const { states, getCountiesByState, getCounty } = useStates();
+  const { states, getCountiesByState, getCounty } = useStates({ hideBlackListedStated: false });
   const selectedState = watch("state");
   const counties = getCountiesByState(selectedState);
 
