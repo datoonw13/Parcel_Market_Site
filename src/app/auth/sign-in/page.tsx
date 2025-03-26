@@ -44,12 +44,14 @@ const SignInPage = () => {
               remember: data.remember,
             },
           ]);
-          await revalidateAllPath();
-          startAuthTransition(() => {
-            setTimeout(() => {
-              router.push(REDIRECT_URL);
-            }, 500);
-          });
+          router.push(REDIRECT_URL);
+
+          // await revalidateAllPath();
+          // startAuthTransition(() => {
+          //   setTimeout(() => {
+          //     // router.push(REDIRECT_URL);
+          //   }, 500);
+          // });
         }
       }}
       authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
