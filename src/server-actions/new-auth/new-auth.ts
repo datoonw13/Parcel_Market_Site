@@ -54,6 +54,9 @@ export const removeAuthTokensAction = () => {
   if (c.get("jwt-refresh")) {
     c.delete("jwt-refresh");
   }
+  if (c.get("user")) {
+    c.delete("user");
+  }
 };
 
 export const logOutUserAction = async () => {

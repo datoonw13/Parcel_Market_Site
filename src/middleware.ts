@@ -67,6 +67,7 @@ export async function middleware(request: NextRequest) {
       refreshToken = undefined;
       response.cookies.delete("jwt");
       response.cookies.delete("jwt-refresh");
+      response.cookies.delete("user");
     }
   }
 
@@ -91,6 +92,7 @@ export async function middleware(request: NextRequest) {
       const emergencyResponse = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
       emergencyResponse.cookies.delete("jwt");
       emergencyResponse.cookies.delete("jwt-refresh");
+      emergencyResponse.cookies.delete("user");
       return emergencyResponse;
     }
   }

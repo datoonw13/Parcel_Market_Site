@@ -21,6 +21,7 @@ import AuthContextProvide from "@/lib/auth/auth-context";
 import { getAuthedUserDataAction, isAuthenticatedAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
 import { fetcher } from "@/server-actions/fetcher";
 import { ISignInResponse } from "@/types/auth";
+import { cookies } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -61,6 +62,7 @@ export default async function RootLayout({
   // const user = await getUserAction();
   // const userSubscriptions = user ? await getUserSubscriptions() : null;
   const authOption = await isAuthenticatedAction();
+  const tempUser = cookies().get("user")?.value;
 
   return (
     <>
@@ -116,7 +118,9 @@ export default async function RootLayout({
           <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-            <AuthContextProvide authOption={authOption}>{children}</AuthContextProvide>
+            <AuthContextProvide tempUser={tempUser ? JSON.parse(tempUser) : null} authOption={authOption}>
+              {children}
+            </AuthContextProvide>
           </Provider>
           <Chat />
         </body>

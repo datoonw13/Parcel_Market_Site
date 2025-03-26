@@ -18,11 +18,13 @@ const AuthContext = createContext<{
 const AuthContextProvide = ({
   children,
   authOption,
+  tempUser,
 }: {
   children: ReactNode;
   authOption: { isAuthed: boolean; expiresIn: number | null };
+  tempUser: null | Awaited<ReturnType<typeof getAuthedUserDataAction>>;
 }) => {
-  const [user, setUser] = useState<Awaited<ReturnType<typeof getAuthedUserDataAction>>>(null);
+  const [user, setUser] = useState<Awaited<ReturnType<typeof getAuthedUserDataAction>>>(authOption.isAuthed ? tempUser : null);
 
   const timerRef = useRef<ReturnType<typeof setInterval>>();
 
@@ -56,6 +58,12 @@ const AuthContextProvide = ({
       window.clearTimeout(timerRef.current);
     };
   }, [authOption, user]);
+
+  useEffect(() => {
+    if (user) {
+      document.cookie = `user=${JSON.stringify(user)}`;
+    }
+  }, [user]);
 
   return <AuthContext.Provider value={{ isAuthed: authOption.isAuthed, user, logOut }}>{children}</AuthContext.Provider>;
 };
