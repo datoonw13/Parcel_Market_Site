@@ -11,6 +11,7 @@ import { IPropertiesInteraction } from "@/types/volt";
 import { moneyFormatter } from "@/helpers/common";
 import { Tooltip } from "../../ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { AvgPpaDescription, VoltPpaDescription } from "../tooltip-contents";
 
 interface VoltDetailsMobileProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -91,7 +92,24 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
               </span>{" "}
               <span className="text-grey-600 text-[11px]">- APPA</span>
             </p>
-            <Tooltip renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />} renderContent="Some text." />
+            <Tooltip
+              contentClasses="bg-transparent p-0 border-0 w-max max-w-xs"
+              renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />}
+              renderContent={
+                <div
+                  className="p-0.5"
+                  style={{
+                    background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                    borderRadius: 12,
+                    boxShadow: "0px 4px 12px 0px #0000001F",
+                  }}
+                >
+                  <div style={{ borderRadius: 10 }} className="bg-white">
+                    <AvgPpaDescription />
+                  </div>
+                </div>
+              }
+            />
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -106,7 +124,24 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
               </span>{" "}
               <span className="text-grey-600 text-[11px]">- VPPA</span>
             </p>
-            <Tooltip renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />} renderContent="Some text." />
+            <Tooltip
+              contentClasses="bg-transparent p-0 border-0 w-max max-w-xs"
+              renderButton={<IoInformationCircleOutline className="size-3.5 text-grey-600" />}
+              renderContent={
+                <div
+                  className="p-0.5"
+                  style={{
+                    background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                    borderRadius: 12,
+                    boxShadow: "0px 4px 12px 0px #0000001F",
+                  }}
+                >
+                  <div style={{ borderRadius: 10 }} className="bg-white max-h-96 overflow-auto">
+                    <VoltPpaDescription />
+                  </div>
+                </div>
+              }
+            />
           </div>
         </div>
       </div>

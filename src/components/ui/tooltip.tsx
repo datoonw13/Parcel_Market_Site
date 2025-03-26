@@ -27,9 +27,11 @@ interface TooltipProps {
   buttonClassName?: string;
   contentClasses?: string;
   id?: string;
+  sideOffset?: number;
+  alignOffset?: number;
 }
 
-const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses, id }) => {
+const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses, id, alignOffset, sideOffset }) => {
   const [open, setOpen] = useState(false);
   return (
     <TooltipPrimitive.Provider delayDuration={0}>
@@ -46,6 +48,8 @@ const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassNam
         {renderContent && (
           <TooltipPrimitive.Portal>
             <TooltipContent
+              sideOffset={sideOffset}
+              alignOffset={alignOffset}
               className={cn("bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium", contentClasses)}
             >
               {renderContent}

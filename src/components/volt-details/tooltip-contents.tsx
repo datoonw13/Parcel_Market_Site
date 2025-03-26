@@ -39,12 +39,12 @@ export const VoltDescription = () => (
     <div className="space-y-1">
       <p className="text-black text-start text-xs  px-4 font-bold">Parcel Color Indicators:</p>
       <li className="text-black text-start text-xs px-4 ml-6 flex items-center gap-2">
-        <div className="size-4 rounded-full bg-[#FF2F48]" /> <span className="font-bold pl-1">Red Parcels </span> - Included in the VOLT PPA
-        calculation.
+        <div className="min-w-4 min-h-4 size-4 rounded-full bg-[#FF2F48]" /> <span className="font-bold pl-1 w-max">Red Parcels </span> -
+        Included in the VOLT PPA calculation.
       </li>
       <li className="text-black text-start text-xs px-4 ml-6 flex items-center gap-2">
-        <div className="size-4 rounded-full bg-warning" /> <span className="font-bold pl-1">Yellow Parcels </span> - Excluded from the VOLT
-        PPA calculation.
+        <div className="min-w-4 min-h-4 size-4 rounded-full bg-warning" /> <span className="font-bold pl-1">Yellow Parcels </span> -
+        Excluded from the VOLT PPA calculation.
       </li>
     </div>
     <li className="text-black text-start text-xs px-4">
@@ -66,7 +66,7 @@ export const AvgPpaDescription = () => (
     <div className="space-y-1">
       <p className="text-black text-start text-xs px-4 font-bold">Formula:</p>
       <li className="text-black text-start text-xs px-4 ml-6">
-        📌 <span className="font-bold pl-1">Average PPA </span> = (Total sum of all parcel prices per acre) ÷ (Number of parcels)
+        📌 <span className="font-bold pl-1 w-max">Average PPA </span> = (Total sum of all parcel prices per acre) ÷ (Number of parcels)
       </li>
     </div>
     <li className="text-black text-start text-xs px-4">
@@ -84,19 +84,19 @@ export const VoltPpaDescription = () => (
     <div className="space-y-1">
       <p className="text-black text-start text-xs  px-4 font-bold">Parcel Color Indicators:</p>
       <li className="text-black text-start text-xs px-4 ml-6 flex items-center gap-2">
-        <div className="size-4 rounded-full bg-[#FF2F48]" /> <span className="font-bold pl-1">Red Parcels </span> - Included in the VOLT PPA
-        calculation.
+        <div className="min-w-4 min-h-4 size-4 rounded-full bg-[#FF2F48]" /> <span className="font-bold pl-1 w-max">Red Parcels </span> -
+        Included in the VOLT PPA calculation.
       </li>
       <li className="text-black text-start text-xs px-4 ml-6 flex items-center gap-2">
-        <div className="size-4 rounded-full bg-warning" /> <span className="font-bold pl-1">Yellow Parcels </span> - Excluded from the VOLT
-        PPA calculation.
+        <div className="min-w-4 min-h-4 size-4 rounded-full bg-warning" /> <span className="font-bold pl-1">Yellow Parcels </span> -
+        Excluded from the VOLT PPA calculation.
       </li>
     </div>
     <div className="space-y-1">
       <p className="text-black text-start text-xs px-4 font-bold">Formula:</p>
       <div>
         <li className="text-black text-start text-xs px-4 ml-6">
-          📌 <span className="font-bold pl-1">VOLT PPA </span> = (Total sum of red parcel prices per acre) ÷ (Number of red parcels)
+          📌 <span className="font-bold pl-1 w-max">VOLT PPA </span> = (Total sum of red parcel prices per acre) ÷ (Number of red parcels)
         </li>
         <li className="text-black text-start text-xs px-4 ml-12">
           This ensures a more <span className="font-bold pl-1">accurate and relevant</span> price per acre by filtering out parcels that may
@@ -107,12 +107,12 @@ export const VoltPpaDescription = () => (
     <div className="space-y-1">
       <p className="text-black text-start text-xs  px-4 font-bold">Parcel Color Indicators:</p>
       <li className="text-black text-start text-xs px-4 ml-6 flex items-center gap-2">
-        <div className="size-4 rounded-full bg-[#FF2F48]" /> <span className="font-bold pl-1">Red Parcels </span> - Included in the VOLT PPA
-        calculation.
+        <div className="min-w-4 min-h-4 size-4 rounded-full bg-[#FF2F48]" /> <span className="font-bold pl-1">Red Parcels </span> - Included
+        in the VOLT PPA calculation.
       </li>
       <li className="text-black text-start text-xs px-4 ml-6 flex items-center gap-2">
-        <div className="size-4 rounded-full bg-warning" /> <span className="font-bold pl-1">Yellow Parcels </span> - Excluded from the VOLT
-        PPA calculation.
+        <div className="min-w-4 min-h-4 size-4 rounded-full bg-warning" /> <span className="font-bold pl-1">Yellow Parcels </span> -
+        Excluded from the VOLT PPA calculation.
       </li>
     </div>
   </ul>
