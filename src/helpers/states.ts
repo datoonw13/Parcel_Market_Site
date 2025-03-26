@@ -30,7 +30,7 @@ export const getState = (stateId: string) =>
 
 export const getCounty = (stateId: string, county: string) => {
   const state = getState(stateId);
-  const countyId = county.toLocaleLowerCase().replace("county", "").trim();
+  const countyId = county?.toLocaleLowerCase()?.replace("county", "").trim();
 
   const res =
     data?.[state?.value as keyof typeof data]?.find(
