@@ -89,11 +89,11 @@ const UserFollowerPropertiesFilter: FC<UserFollowerPropertiesFilterProps> = ({ t
         okLabel="Unfollow"
       />
       <div className="hidden lg:flex">
-        <UserFollowedPropertiesDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
+        {/* <UserFollowedPropertiesDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} /> */}
       </div>
       <div className="flex items-center lg:justify-between gap-3">
         <div className="flex lg:hidden mr-auto">
-          <UserFollowedPropertiesMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} />
+          {/* <UserFollowedPropertiesMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} /> */}
         </div>
         <SelectButton
           selecting={userFollowedPropertiesOptions.selecting}

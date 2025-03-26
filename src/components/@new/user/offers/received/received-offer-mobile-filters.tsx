@@ -44,7 +44,7 @@ const ReceivedOffersMobileFilters = () => {
     getParcelNumbers();
   }, []);
 
-  return <FiltersDrawer data={filters} />;
+  return null;
 };
 
 export default ReceivedOffersMobileFilters;

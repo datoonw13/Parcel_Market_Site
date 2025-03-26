@@ -6,7 +6,7 @@ import { RadioGroup } from "@radix-ui/react-radio-group";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getAllStates, getCounties, getCounty, getState } from "@/helpers/states";
+import { getCounty, getState } from "@/helpers/states";
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IUserBaseInfo } from "@/types/auth";
 import { cn } from "@/lib/utils";
@@ -63,7 +63,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
       searchType: selectedSearchType,
     },
   });
-  const { states, getCountiesByState, getCounty } = useStates();
+  const { states, getCountiesByState, getCounty } = useStates({ hideBlackListedStated: false });
   const selectedState = watch("state");
   const counties = getCountiesByState(selectedState);
 

@@ -29,7 +29,7 @@ interface VoltSearchMapProps {
 
 const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, values }) => {
   const { notify } = useNotification();
-  const { getCounty, allStates, getState } = useStates();
+  const { getCounty, states, getState } = useStates({ hideBlackListedStated: false });
   const [mapRef, setMapRef] = useState<MapBoX | null>(null);
   const hoveredFeaturePropertyId = useRef<null | number>(null);
   const popupRef = useRef<HTMLDivElement>(null);

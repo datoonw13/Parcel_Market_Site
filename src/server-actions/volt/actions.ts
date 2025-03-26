@@ -50,7 +50,7 @@ export const getPropertiesAction = async (
       county: {
         value: property.properties.fields.county.toLocaleLowerCase(),
         label:
-          getCounty(property.properties.fields.county, property.properties.fields.state2)?.label ||
+          getCounty(property.properties.fields.county, property.properties.fields.state2)?.short.label ||
           property.properties.fields.county.toLocaleLowerCase(),
       },
       state: {
@@ -103,7 +103,7 @@ export const calculateLandPriceAction = async (
       },
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCounty(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.county, request.state)?.short.label || request.county.toLocaleLowerCase() || "",
       },
       city: request.locality,
       lat: Number(request.lat),

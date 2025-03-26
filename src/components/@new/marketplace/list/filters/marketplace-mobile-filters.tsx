@@ -34,7 +34,7 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
       }}
       disabled={disabled}
     >
-      <MobileFilterItem open={open === "states"} toggleFilter={() => setOpen(open === "states" ? null : "states")} filterName="States">
+      {/* <MobileFilterItem open={open === "states"} toggleFilter={() => setOpen(open === "states" ? null : "states")} filterName="States">
         {states.map((state) => (
           <RadioButton
             checked={!!localFilters?.states?.includes(state.value)}
@@ -80,7 +80,7 @@ const MarketplaceMobileFilters: FC<MarketplaceMobileFiltersProps> = ({ disabled,
             }}
           />
         ))}
-      </MobileFilterItem>
+      </MobileFilterItem> */}
       <MobileFilterItem open={open === "acreage"} toggleFilter={() => setOpen(open === "acreage" ? null : "acreage")} filterName="Acreage">
         <MinMaxMobileFilter
           options={acreagesFilters}

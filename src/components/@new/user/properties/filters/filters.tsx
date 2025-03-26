@@ -68,11 +68,11 @@ const UserPropertiesFilters: FC<UserPropertiesFiltersProps> = ({ totalItems, use
         onOk={onRemove}
       />
       <div className="hidden lg:flex">
-        <MarketplaceDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
+        {/* <MarketplaceDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} /> */}
       </div>
       <div className="flex items-center lg:justify-between gap-3">
         <div className="flex lg:hidden mr-auto">
-          <MarketplaceMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} />
+          {/* <MarketplaceMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} /> */}
         </div>
         <SelectButton
           selecting={userPropertiesOptions.selecting}
