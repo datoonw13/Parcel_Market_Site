@@ -17,6 +17,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import VoltDetailsFiltersWrapper from "../filters/wrapper";
 import { Tooltip } from "../../ui/tooltip";
 import { Switch } from "../../ui/switch";
+import { AvgDescription, VoltDescription } from "../tooltip-contents";
 
 interface VoltDetailsDesktopHeaderProps {
   startFetchingTransition: TransitionStartFunction;
@@ -73,7 +74,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   }, [data.assessments]);
 
   return (
-    <div className="sticky top-0 bottom-8 w-full z-20">
+    <div className="sticky top-0 bottom-8 w-full z-10">
       <div className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] py-1.5 px-2 gap-8 xl:gap-14")}>
         <VoltDetailsFiltersWrapper
           startFetchingTransition={startFetchingTransition}
@@ -93,7 +94,24 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
                   {data.assessments.data.length <= 1 ? "$ NaN" : data.nonVoltPrice.formattedString}
                 </span>
               </p>
-              <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+              <Tooltip
+                contentClasses="bg-transparent p-0 border-0 w-max max-w-2xl"
+                renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />}
+                renderContent={
+                  <div
+                    className="p-0.5"
+                    style={{
+                      background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                      borderRadius: 12,
+                      boxShadow: "0px 4px 12px 0px #0000001F",
+                    }}
+                  >
+                    <div style={{ borderRadius: 10 }} className="bg-white">
+                      <AvgDescription />
+                    </div>
+                  </div>
+                }
+              />
             </div>
             <div className="shadow-6 border border-grey-100 bg-white flex justify-between items-center rounded-xl h-full">
               <div className="p-3 border-r flex items-center gap-2">
@@ -103,7 +121,24 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
                     {data.assessments.data.length < 3 ? " $ NaN" : data.voltPrice.formattedString}
                   </span>
                 </p>
-                <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-warning" />} renderContent="Some text." />
+                <Tooltip
+                  contentClasses="bg-transparent p-0 border-0 w-max max-w-2xl z-30"
+                  renderButton={<IoInformationCircleOutline className="size-5 text-warning" />}
+                  renderContent={
+                    <div
+                      className="p-0.5"
+                      style={{
+                        background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                        borderRadius: 12,
+                        boxShadow: "0px 4px 12px 0px #0000001F",
+                      }}
+                    >
+                      <div style={{ borderRadius: 10 }} className="bg-white">
+                        <VoltDescription />
+                      </div>
+                    </div>
+                  }
+                />
               </div>
               <div className="p-3 flex">
                 <Tooltip

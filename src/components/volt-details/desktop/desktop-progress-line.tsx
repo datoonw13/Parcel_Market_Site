@@ -10,6 +10,7 @@ import Image from "next/image";
 import { IPropertiesInteraction } from "@/types/volt";
 import { Tooltip } from "../../ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { AvgPpaDescription, VoltPpaDescription } from "../tooltip-contents";
 
 interface VoltDetailsDesktopProgressLineProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -71,7 +72,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
   return (
     <div
       id="volt-progress-line"
-      className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  border-t-0 space-y-8 relative z-10 shadow-3 -translate-y-0.5"
+      className="border border-primary-main-400 bg-[#FAFFFB] py-3 px-4  border-t-0 space-y-8 relative shadow-3 -translate-y-0.5"
     >
       <div className="flex items-center justify-between gap-4 border-b border-b-[#C3EBD3] pb-3">
         <div className="flex gap-4 items-center">
@@ -87,7 +88,24 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
                 </span>{" "}
                 <span className="text-grey-600">- Average PPA</span>
               </p>
-              <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+              <Tooltip
+                contentClasses="bg-transparent p-0 border-0 w-max max-w-2xl"
+                renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />}
+                renderContent={
+                  <div
+                    className="p-0.5"
+                    style={{
+                      background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                      borderRadius: 12,
+                      boxShadow: "0px 4px 12px 0px #0000001F",
+                    }}
+                  >
+                    <div style={{ borderRadius: 10 }} className="bg-white">
+                      <AvgPpaDescription />
+                    </div>
+                  </div>
+                }
+              />
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -102,7 +120,24 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
                 </span>{" "}
                 <span className="text-grey-600">- VOLT PPA</span>
               </p>
-              <Tooltip renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />} renderContent="Some text." />
+              <Tooltip
+                contentClasses="bg-transparent p-0 border-0 w-max max-w-2xl"
+                renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />}
+                renderContent={
+                  <div
+                    className="p-0.5"
+                    style={{
+                      background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                      borderRadius: 12,
+                      boxShadow: "0px 4px 12px 0px #0000001F",
+                    }}
+                  >
+                    <div style={{ borderRadius: 10 }} className="bg-white">
+                      <VoltPpaDescription />
+                    </div>
+                  </div>
+                }
+              />
             </div>
           </div>
         </div>
