@@ -25,16 +25,16 @@ export const getCountiesByState = (stateId: string) =>
 
 export const getState = (stateId: string) =>
   states.find((el) => el.value === stateId) ||
-  states.find((el) => el.label.toLocaleLowerCase().includes(stateId.toLocaleLowerCase())) ||
+  states.find((el) => el.label.toLocaleLowerCase().includes(stateId?.toLocaleLowerCase())) ||
   null;
 
 export const getCounty = (stateId: string, county: string) => {
   const state = getState(stateId);
+  const countyId = county.toLocaleLowerCase().replace("county", "").trim();
+
   const res =
     data?.[state?.value as keyof typeof data]?.find(
-      (x) =>
-        x.county.toLocaleLowerCase() === county.toLocaleLowerCase() ||
-        x.county.toLocaleLowerCase().replaceAll(" ", "-") === county.toLocaleLowerCase()
+      (x) => x.county?.toLocaleLowerCase() === countyId || x.county?.toLocaleLowerCase()?.replaceAll(" ", "-") === countyId
     ) || null;
 
   // eslint-disable-next-line no-nested-ternary
