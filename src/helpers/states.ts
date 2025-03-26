@@ -1,6 +1,3 @@
-"use client";
-
-import { useCallback, useMemo } from "react";
 import data from "../../public/files/states_counties.json";
 
 export const statesBlackList = [
@@ -26,9 +23,20 @@ export const counties = Object.values(data);
 export const getCountiesByState = (stateId: string) =>
   stateId ? data?.[stateId as keyof typeof data].map((el) => ({ value: el.county, label: el.county })) || null : null;
 
-export const getState = (stateId: string) => states.find((el) => el.value === stateId) || null;
+export const getState = (stateId: string) =>
+  states.find((el) => el.value === stateId) ||
+  states.find((el) => el.label.toLocaleLowerCase().includes(stateId.toLocaleLowerCase())) ||
+  null;
+
 export const getCounty = (stateId: string, county: string) => {
-  const res = data?.[stateId as keyof typeof data]?.find((x) => x.county.toLocaleLowerCase() === county.toLocaleLowerCase()) || null;
+  const state = getState(stateId);
+  const res =
+    data?.[state?.value as keyof typeof data]?.find(
+      (x) =>
+        x.county.toLocaleLowerCase() === county.toLocaleLowerCase() ||
+        x.county.toLocaleLowerCase().replaceAll(" ", "-") === county.toLocaleLowerCase()
+    ) || null;
+
   // eslint-disable-next-line no-nested-ternary
   return !res
     ? null

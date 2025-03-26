@@ -92,7 +92,7 @@ export const AssessmentBaseSchema = z
     county: {
       value: "",
       label: "",
-      ...(getCounty(county || "", state) || {}),
+      ...(getCounty(state || "", county || "")?.short || {}),
     },
     isSellingProperty: false,
   }));
@@ -224,7 +224,7 @@ export const PropertyDataSchema = z
             county: {
               value: "",
               label: "",
-              ...(getCounty(county || "", state) || {}),
+              ...(getCounty(state || "", county || "")?.short || {}),
             },
             properties: properties.map((property) => ({
               ...property,
@@ -315,7 +315,7 @@ export const PropertyDataSchema = z
       county: {
         value: "",
         label: "",
-        ...(getCounty(input.county, input.state) || {}),
+        ...(getCounty(input.state, input.county)?.short || {}),
       },
       acreage: {
         value: acrage,
