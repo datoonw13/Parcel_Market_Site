@@ -45,7 +45,7 @@ const SignInPage = () => {
             },
           ]);
           router.push(REDIRECT_URL);
-
+          setRequestPending(false);
           // await revalidateAllPath();
           // startAuthTransition(() => {
           //   setTimeout(() => {
