@@ -12,6 +12,8 @@ import moment from "moment";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
+import { SubscriptionType } from "@/types/subscriptions";
+import { usePathname } from "next/navigation";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
 import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
@@ -40,6 +42,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
   contentClassName,
   filters,
 }) => {
+  const pathname = usePathname();
   const [snap, setSnap] = useState<number | string | null>(0);
   const [snapPoints, setSnapPoints] = useState<Array<string | number>>([0, 1]);
   const [drawerContentRef, setDrawerContentRef] = useState<HTMLDivElement | null>(null);
@@ -136,7 +139,12 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                 </div>
                 <div className="bg-grey-50 border rounded-2xl border-grey-100 flex flex-col gap-3 p-4">
                   {!isSubscribed && (
-                    <Link className="w-full" href={routes.user.subscription.fullUrl}>
+                    <Link
+                      className="w-full"
+                      href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
+                        SubscriptionType.Annual
+                      }`}
+                    >
                       <Button className="rounded-2xl w-full">Subscribe to see prices</Button>
                     </Link>
                   )}
