@@ -51,7 +51,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
         </div>
       </div>
     </ScrollArea>
-    <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
+    {/* <ScrollArea className="h-full [&>div>div:first-child]:h-full" id="volt-scroll">
       <div className="flex flex-col max-w-72">
         <p className="bg-white sticky top-0 z-10 mr-2 text-sm font-medium pb-2">Others</p>
         <div className="pr-1 flex flex-col gap-1">
@@ -86,7 +86,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
             ))}
         </div>
       </div>
-    </ScrollArea>
+    </ScrollArea> */}
   </div>
 );
 

@@ -5,6 +5,9 @@ import { hideNumber, hideString } from "@/lib/utils";
 import { uuid } from "short-uuid";
 import { z } from "zod";
 
+const acreageFormatter = (num: number) =>
+  new Intl.NumberFormat("en-US", { maximumFractionDigits: 3, minimumFractionDigits: 2 }).format(num);
+
 export const searchType = z.enum(["fullName", "entityName", "parcelNumber", "map"]);
 
 export const propertySearchTypeValidation = z
@@ -202,7 +205,7 @@ export const PropertyDataSchema = z
             group,
             acreage: {
               value: acreage,
-              formattedString: acreage.toFixed(2),
+              formattedString: acreageFormatter(acreage),
             },
             lastSalePrice: {
               value: subscribed ? price : null,
@@ -247,7 +250,7 @@ export const PropertyDataSchema = z
               },
               acreage: {
                 value: property.acreage,
-                formattedString: property.acreage.toFixed(2),
+                formattedString: acreageFormatter(property.acreage),
               },
               parcelNumber: {
                 value: subscribed ? property.parcelNumber : null,
@@ -291,7 +294,7 @@ export const PropertyDataSchema = z
           },
           acreage: {
             value: el.data.acreage,
-            formattedString: el.data.acreage.toFixed(2),
+            formattedString: acreageFormatter(el.data.acreage),
           },
           parcelNumber: {
             value: subscribed ? el.data.parcelNumber : null,
@@ -319,7 +322,7 @@ export const PropertyDataSchema = z
       },
       acreage: {
         value: acrage,
-        formattedString: acrage.toFixed(2),
+        formattedString: acreageFormatter(acrage),
       },
       voltPrice: {
         value: subscribed ? price : null,

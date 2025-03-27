@@ -74,10 +74,7 @@ const VoltItem: FC<VoltItemProps> = ({
           <div className="flex gap-2 justify-between">
             <div className="space-y-1">
               <p className="text-xs text-grey-600">
-                Acreage:{" "}
-                <span className="text-black font-medium">
-                  {data.acreage.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                </span>
+                Acreage: <span className="text-black font-medium">{data.acreage}</span>
               </p>
               {data.lastSalePrice && (
                 <p className="text-xs text-grey-600">

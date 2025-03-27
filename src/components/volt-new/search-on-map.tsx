@@ -262,7 +262,9 @@ const VoltSearchOnMap = ({
           setOpenProperty({
             ...(feature.properties as any),
             coordinates: JSON.stringify(feature.geometry?.coordinates),
-            acreage: Number(Math.max(Number(feature.properties.gisacre) || 0, Number(feature.properties.ll_gisacre) || 0).toFixed(2)),
+            acreage: new Intl.NumberFormat("en-US", { maximumFractionDigits: 3, minimumFractionDigits: 2 }).format(
+              Number(Math.max(Number(feature.properties.gisacre) || 0, Number(feature.properties.ll_gisacre) || 0))
+            ),
           });
           openPopup(e.lngLat);
         }

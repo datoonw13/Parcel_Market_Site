@@ -445,10 +445,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
                   Owner <span className="text-black font-semibold">{openPropertyDetails.owner}</span>
                 </li>
                 <li className="text-xs text-grey-800 py-0.5">
-                  Acreage{" "}
-                  <span className="text-black font-semibold">
-                    {openPropertyDetails.acreage.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                  </span>
+                  Acreage <span className="text-black font-semibold">{openPropertyDetails.acreage}</span>
                 </li>
                 {data && data?.length > 1 && (
                   <Button

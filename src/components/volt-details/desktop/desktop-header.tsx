@@ -74,7 +74,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   }, [data.assessments]);
 
   return (
-    <div className="sticky top-0 bottom-8 w-full z-10">
+    <div className="sticky top-0 bottom-8 w-full z-20">
       <div className={cn("grid w-full grid-cols-[1fr_minmax(0,_max-content)] py-1.5 px-2 gap-8 xl:gap-14")}>
         <VoltDetailsFiltersWrapper
           startFetchingTransition={startFetchingTransition}
