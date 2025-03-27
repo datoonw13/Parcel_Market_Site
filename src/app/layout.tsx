@@ -68,8 +68,9 @@ export default async function RootLayout({
     <>
       <html lang="en">
         {process.env.NODE_ENV === "production" && (
-          <Script id="fb-pixel" strategy="afterInteractive">
-            {`
+          <>
+            <Script id="fb-pixel" strategy="afterInteractive">
+              {`
                !function(f,b,e,v,n,t,s)
                 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
                 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -81,7 +82,18 @@ export default async function RootLayout({
                 fbq('init', '567998256023099');
                 fbq('track', 'PageView');
               `}
-          </Script>
+            </Script>
+            <Script id="twitter-tracking" strategy="afterInteractive">
+              {`
+            !function(e,t,n,s,u,a){
+              e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);},
+              s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+              a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))
+            }(window,document,'script');
+            twq('config','oz2z7');
+          `}
+            </Script>
+          </>
         )}
         <GoogleTagManager gtmId="GTM-P59N8LFM" />
         <GoogleAnalytics gaId="G-SBBPRZKYR6" />
