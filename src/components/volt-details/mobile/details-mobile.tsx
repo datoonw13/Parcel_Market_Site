@@ -135,8 +135,9 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
             isSubscribed={isSubscribed}
             setNonValidMedianHighlighted={setNonValidMedianHighlighted}
           />
-          {!isSubscribed && (
+          {!!isSubscribed && (
             <Link
+              className="underline text-primary-main bg-[#C3EBD3] text-xs font-semibold text-center py-2"
               href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
                 SubscriptionType.Annual
               }`}
