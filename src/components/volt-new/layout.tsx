@@ -70,8 +70,6 @@ const VoltLayout = ({
     },
   });
 
-  console.log(data, 22);
-
   useEffect(() => {
     // if (initialParams) {
     //   form.reset(initialParams);
