@@ -134,7 +134,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
         )} */}
         {isActive && (
           <Button
-            className="w-full mt-auto text-center  [&>div]:text-center flex items-center justify-center pointer-events-none"
+            className="subscribed w-full mt-auto text-center  [&>div]:text-center flex items-center justify-center pointer-events-none"
             loading={resumePending}
             variant="secondary"
           >

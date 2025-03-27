@@ -7,7 +7,7 @@ const UserProfileSubscription = async () => (
     <div className="flex justify-between flex-col sm:flex-row gap-6">
       <UserProfileSectionHeader title="Subscription" description="Manage your subscriptions and payments" />
     </div>
-    <PlanListWrapper className="sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sxl:grid-cols-2" />
+    <PlanListWrapper className="sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sxl:grid-cols-2 [&>*>button:not(.subscribed)]:!text-white [&>*>button:not(.subscribed)]:!bg-primary-main [&>*>button:not(.subscribed):hover]:!bg-primary-main-hover" />
     <PaymentDetails />
   </div>
 );
