@@ -79,7 +79,7 @@ html {
  div[data-radix-popper-content-wrapper] {
   display: flex;
   z-index: var(--radix-popper-zIndex) !important;
-  --radix-popper-zIndex: 10
+  --radix-popper-zIndex: 20
  }
 
 
