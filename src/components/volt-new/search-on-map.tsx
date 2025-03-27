@@ -151,12 +151,12 @@ const VoltSearchOnMap = ({
         promoteId: "parcelnumb",
       })
       .on("idle", () => {
-        if (mapRef.getZoom() > 11) {
+        if (mapRef.getZoom() >= 11) {
           setPolygonPending(false);
         }
       })
       .on("moveend", () => {
-        if (mapRef.getZoom() > 11) {
+        if (mapRef.getZoom() >= 11) {
           setPolygonPending(true);
         }
       });
