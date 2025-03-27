@@ -17,6 +17,7 @@ const GoogleAuthButton = ({ onSuccess, pending }: { onSuccess: (token: string) =
       setLoading(false);
     },
   });
+
   return (
     <Button
       onClick={() => {

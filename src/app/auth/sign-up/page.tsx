@@ -1,11 +1,14 @@
 "use client";
 
+import FacebookAuthProvider from "@/components/auth/facebook-auth-provider";
+import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-auth-provider";
 import SignUp from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
-import { signUpUserAction } from "@/server-actions/new-auth/new-auth";
+import { authWithSocialNetworkAction, setAuthTokensAction, signUpUserAction } from "@/server-actions/new-auth/new-auth";
+import { revalidateAllPath } from "@/server-actions/subscription/actions";
 import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 enum SignUpSteps {
   SELECT_REASONS,
@@ -20,6 +23,9 @@ const SignUpPage = () => {
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [authPending, startAuthTransition] = useTransition();
+  const [userSource, setUserSource] = useState(UserSource.System);
+  const [requestPending, setRequestPending] = useState(false);
 
   return (
     <SignUp
@@ -32,6 +38,82 @@ const SignUpPage = () => {
       showSignIn={() => {
         router.push(routes.auth.signIn.fullUrl);
       }}
+      authProviders={() => (
+        <div className="flex flex-col gap-3 w-full">
+          <GoogleAuthProvider
+            pending={userSource === UserSource.Google && (authPending || requestPending)}
+            onSuccess={async (token) => {
+              setUserSource(UserSource.Google);
+              setRequestPending(true);
+              const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+              if (request.errorMessage) {
+                startAuthTransition(() => {
+                  const params = new URLSearchParams({
+                    userSource: UserSource.Google,
+                    accessToken: token,
+                    onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
+                  });
+                  router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
+                });
+              } else {
+                setAuthTokensAction([
+                  {
+                    token: request.data!.access_token,
+                    tokenName: "jwt",
+                    remember: false,
+                  },
+                  {
+                    token: request.data!.refresh_token,
+                    tokenName: "jwt-refresh",
+                    remember: false,
+                  },
+                ]);
+                revalidateAllPath();
+                startAuthTransition(() => {
+                  router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                });
+              }
+              setRequestPending(false);
+            }}
+          />
+          <FacebookAuthProvider
+            pending={userSource === UserSource.Facebook && (authPending || requestPending)}
+            onSuccess={async (token) => {
+              setUserSource(UserSource.Facebook);
+              setRequestPending(true);
+              const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+              if (request.errorMessage) {
+                startAuthTransition(() => {
+                  const params = new URLSearchParams({
+                    userSource: UserSource.Facebook,
+                    accessToken: token,
+                    onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
+                  });
+                  router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
+                });
+              } else {
+                setAuthTokensAction([
+                  {
+                    token: request.data!.access_token,
+                    tokenName: "jwt",
+                    remember: false,
+                  },
+                  {
+                    token: request.data!.refresh_token,
+                    tokenName: "jwt-refresh",
+                    remember: false,
+                  },
+                ]);
+                revalidateAllPath();
+                startAuthTransition(() => {
+                  router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                });
+                setRequestPending(false);
+              }
+            }}
+          />
+        </div>
+      )}
       onSubmit={async (data) => {
         const request = await signUpUserAction({ ...data, redirectUrl: routes.home.fullUrl });
         if (request.errorMessage) {

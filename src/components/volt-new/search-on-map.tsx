@@ -355,6 +355,7 @@ const VoltSearchOnMap = ({
                   setTimeout(() => {
                     router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                   }, 500);
+                  setRequestPending(false);
                 }
               }}
               authWithCredentialsPending={userSource === UserSource.System && (isTransitioning || requestPending)}
@@ -394,6 +395,7 @@ const VoltSearchOnMap = ({
                         setTimeout(() => {
                           router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         }, 500);
+                        setRequestPending(false);
                       }
                     }}
                   />

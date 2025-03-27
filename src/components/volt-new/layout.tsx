@@ -148,6 +148,7 @@ const VoltLayout = ({
                       router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                     }, 500);
                   });
+                  setRequestPending(false);
                 }
               }}
               authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
@@ -189,6 +190,7 @@ const VoltLayout = ({
                             router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                           }, 500);
                         });
+                        setRequestPending(false);
                       }
                     }}
                   />
