@@ -367,13 +367,15 @@ const VoltFeatures = () => {
 export default VoltFeatures;
 
 const Item = ({ item }: { item: typeof list[0] }) => (
-  <div className="bg-white border border-primary-main-600 p-5 rounded-2xl h-full transition-all hover:bg-primary-main-50 cursor-pointer">
-    <div className="min-h-12 h-12 min-w-12 w-12 rounded-full bg-primary-main-100 border border-primary-main-400 flex items-center justify-center">
-      <item.icon className=" size-6 text-primary-main" />
+  <Link href={routes.volt.fullUrl}>
+    <div className="bg-white border border-primary-main-600 p-5 rounded-2xl h-full transition-all hover:bg-primary-main-50 cursor-pointer">
+      <div className="min-h-12 h-12 min-w-12 w-12 rounded-full bg-primary-main-100 border border-primary-main-400 flex items-center justify-center">
+        <item.icon className=" size-6 text-primary-main" />
+      </div>
+      <h1 className="font-bold text-primary-main mt-4 mb-1 text-start">{item.title}</h1>
+      {item.description}
     </div>
-    <h1 className="font-bold text-primary-main mt-4 mb-1 text-start">{item.title}</h1>
-    {item.description}
-  </div>
+  </Link>
 );
 
 const list = [
