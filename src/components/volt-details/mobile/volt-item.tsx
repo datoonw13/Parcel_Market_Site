@@ -7,6 +7,9 @@ import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { z } from "zod";
 import { IPropertiesInteraction } from "@/types/volt";
 import { FaLocationDot } from "react-icons/fa6";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Tooltip } from "@/components/ui/tooltip";
 
 type IItem = z.infer<typeof PropertyDataSchema>["assessments"]["data"][0] & { isBulked: false };
 
@@ -130,7 +133,43 @@ const VoltItem: FC<VoltItemProps> = ({
                 <p className="text-sm font-medium truncate">{data.data.parcelNumber.formattedString}</p>
               </div>
             </div>
-            {data.data.isSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0 mt-1" />}
+            {data.data.isSellingProperty && (
+              <Tooltip
+                renderButton={
+                  <div className="relative z-0 min-w-5 min-h-5 h-5">
+                    <Image alt="" src="/map/pins/green-default.svg" fill loading="eager" className="w-full h-full  object-cover" />
+                  </div>
+                }
+                renderContent={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.1 }}
+                    onAnimationStart={() => {
+                      const el = document.querySelector<HTMLElement>("[data-radix-popper-content-wrapper]");
+                      if (el) {
+                        el.style.setProperty("--radix-popper-zIndex", "20");
+                      }
+                    }}
+                  >
+                    <div
+                      className="p-0.5"
+                      style={{
+                        background: "linear-gradient(99.77deg, #17DC66 -8.11%, #06481D 182.53%)",
+                        borderRadius: 12,
+                        boxShadow: "0px 4px 12px 0px #0000001F",
+                      }}
+                    >
+                      <div style={{ borderRadius: 10 }} className="bg-white p-3">
+                        <p className="font-medium text-xs max-w-44">Subject Land</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                }
+                buttonClassName="sticky top-0"
+                contentClasses="bg-transparent border-0 p-0 text-black text-start"
+              />
+            )}
           </div>
           <hr className="bg-gray-100" />
           <div className="flex gap-2 justify-between">

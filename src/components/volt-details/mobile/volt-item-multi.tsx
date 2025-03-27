@@ -10,9 +10,12 @@ import { IoMdClose } from "react-icons/io";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { IPropertiesInteraction } from "@/types/volt";
-import { Tooltip } from "../../ui/tooltip";
+import { TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Tooltip } from "@/components/ui/tooltip";
+import { IoBookmarkOutline } from "react-icons/io5";
 import { breakPoints } from "../../../../tailwind.config";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../ui/dialogs/drawer";
 
 type IItem = z.infer<typeof PropertyDataSchema>["assessments"]["data"][0] & { isBulked: true };
 
@@ -128,7 +131,52 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
             Multiple Parcel Sale /{" "}
             <span className="font-medium text-xs text-grey-800">{moment(data.data.lastSaleDate).format("MM/DD/YYYY")}</span>
           </h1>
-          {data.data.hasSellingProperty && <FaLocationDot className="text-primary-dark size-4 relative z-0 mt-1" />}
+          <Tooltip
+            renderButton={
+              data.data.hasSellingProperty ? (
+                <div className="relative z-0 min-w-5 min-h-5 h-5">
+                  <Image
+                    alt=""
+                    src={`/map/pins/green-${data.data.group}.svg`}
+                    fill
+                    loading="eager"
+                    className="w-full h-full  object-cover"
+                  />
+                </div>
+              ) : (
+                <div className={cn("relative min-w-[20px] min-h-[20px] h-[20px] z-0")}>
+                  <Image
+                    alt=""
+                    src={`/map/pins/${isNonValidMedianHighlighted && !data.data.isMedianValid ? "yellow" : "red"}-${data.data.group}.svg`}
+                    fill
+                    loading="eager"
+                    className="w-full h-full  object-cover"
+                  />
+                </div>
+              )
+            }
+            renderContent={
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+                <div
+                  className="p-0.5"
+                  style={{
+                    background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                    borderRadius: 12,
+                    boxShadow: "0px 4px 12px 0px #0000001F",
+                  }}
+                >
+                  <div style={{ borderRadius: 10 }} className="bg-white p-3">
+                    <p className="font-medium text-xs max-w-44">
+                      Lands marked with <span className="font-semibold text-[#F44D61]">({data.data.group.toLocaleUpperCase()})</span> where
+                      sold together
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            }
+            buttonClassName="sticky top-0"
+            contentClasses="bg-transparent border-0 p-0 text-black text-start"
+          />
         </div>
         <ul className="grid grid-cols-2 gap-1">
           <li className="text-xs text-grey-600">
