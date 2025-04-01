@@ -190,8 +190,8 @@ const VoltLayout = ({
                             router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                           }, 500);
                         });
-                        setRequestPending(false);
                       }
+                      setRequestPending(false);
                     }}
                   />
                   <FacebookAuthProvider
@@ -228,6 +228,7 @@ const VoltLayout = ({
                           }, 500);
                         });
                       }
+                      setRequestPending(true);
                     }}
                   />
                 </div>
