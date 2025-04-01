@@ -24,6 +24,7 @@ import VoltSearch from "./volt-search";
 import VoltSearchResult from "./volt-search-result";
 import VoltSearchResultsMap from "./search-results-map";
 import VoltSearchOnMap from "./search-on-map";
+import { AutoComplete } from "../ui/autocomplete";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -34,9 +35,25 @@ interface VoltDesktopProps {
   propertiesInteraction: IPropertiesInteraction;
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   setAuthModal: (id: number) => void;
+  mapLayers: {
+    label: string;
+    value: string;
+  }[];
+  setSelectedLayer: Dispatch<SetStateAction<string>>;
+  selectedLayer: string;
 }
 
-const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction, setAuthModal }) => {
+const VoltDesktop: FC<VoltDesktopProps> = ({
+  user,
+  form,
+  data,
+  propertiesInteraction,
+  setPropertiesInteraction,
+  setAuthModal,
+  mapLayers,
+  selectedLayer,
+  setSelectedLayer,
+}) => {
   const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.xl));
   const [isPending, startTransition] = useTransition();
   const [isGetDataPending, startGetDataTransition] = useTransition();
@@ -179,10 +196,25 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, form, data, propertiesInterac
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full relative">
-              {form.watch("searchType") === "map" && <VoltSearchOnMap user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />}
+              <div className="absolute z-10 right-2 top-2">
+                {((data?.data && form.watch("searchType") !== "map") || form.watch("searchType") === "map") && (
+                  <AutoComplete
+                    options={mapLayers}
+                    onValueChange={(item) => {
+                      setSelectedLayer(item || "");
+                    }}
+                    placeholder="BaseMap"
+                    selectedValue={selectedLayer}
+                  />
+                )}
+              </div>
+              {form.watch("searchType") === "map" && (
+                <VoltSearchOnMap selectedLayer={selectedLayer} user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />
+              )}
               {!data?.data && form.watch("searchType") !== "map" && <Map setRef={setRef} ref={ref} />}
               {data?.data && form.watch("searchType") !== "map" && (
                 <VoltSearchResultsMap
+                  selectedLayer={selectedLayer}
                   data={data.data}
                   onMarkerInteraction={onMarkerInteraction}
                   onMouseLeave={onMouseLeave}

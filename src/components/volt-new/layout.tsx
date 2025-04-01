@@ -36,6 +36,37 @@ enum SignUpSteps {
   FINISH,
 }
 
+const mapLayers = [
+  {
+    label: "Outdoors",
+    value: "mapbox://styles/parcelmarket/cm86y2kkf008k01sb2993ex03",
+  },
+  {
+    label: "Navigation Night",
+    value: "mapbox://styles/parcelmarket/cm86y2rmn008j01s99rkha0en",
+  },
+  {
+    label: "Navigation Day",
+    value: "mapbox://styles/parcelmarket/cm86y2ytc008u01qzf3ltegnv",
+  },
+  {
+    label: "Satellite Streets",
+    value: "mapbox://styles/parcelmarket/cm86y2bl6008t01seee1m3bov",
+  },
+  {
+    label: "Streets",
+    value: "mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg",
+  },
+  {
+    label: "Monochrome Light",
+    value: "mapbox://styles/parcelmarket/cm86y32m8008w01sievakedk8",
+  },
+  {
+    label: "Monochrome Dark",
+    value: "mapbox://styles/parcelmarket/cm86y36bq006i01s8hbp4hv5h",
+  },
+];
+
 const VoltLayout = ({
   data,
   initialParams,
@@ -61,6 +92,7 @@ const VoltLayout = ({
   const [openModal, setOpenModal] = useState(false);
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
+  const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg");
 
   const form = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
@@ -361,6 +393,9 @@ const VoltLayout = ({
             setAuthModal("sign-in");
             lastFetchedId.current = id;
           }}
+          mapLayers={mapLayers}
+          selectedLayer={selectedLayer}
+          setSelectedLayer={setSelectedLayer}
         />
       )}
     </>

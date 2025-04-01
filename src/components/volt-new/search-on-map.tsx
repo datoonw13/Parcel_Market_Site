@@ -52,14 +52,30 @@ enum SignUpSteps {
   FINISH,
 }
 
+const mapData = {
+  sources: {
+    markersSource: "markersSource",
+    mainLandPolygonSource: "mainLandPolygonSource",
+  },
+  layers: {
+    markersLayer: "markersLayer",
+    markerClusterCountLayer: "markers-cluster-count-layer",
+    markerClusterLayer: "markers-cluster-layer",
+    parcelsPolygon: "parcelsPolygon",
+    parcelsPolygonAssist: "parcelsPolygonAssist",
+  },
+};
+
 const VoltSearchOnMap = ({
   mapRef,
   setMapRef,
   user,
+  selectedLayer,
 }: {
   mapRef: MapBoX | null;
   setMapRef: Dispatch<SetStateAction<MapBoX | null>>;
   user: IUserBaseInfo | null;
+  selectedLayer: string;
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const clickedFeatureProperty = useRef<string | number | null>(null);
@@ -115,6 +131,7 @@ const VoltSearchOnMap = ({
     if (!mapRef) {
       return;
     }
+
     const req = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
       method: "POST",
       headers: {
@@ -143,6 +160,20 @@ const VoltSearchOnMap = ({
       }),
     });
     const data = await req.json();
+
+    // Register the parcel source using the tile URL we just got
+    if (mapRef.getLayer("parcels")) {
+      mapRef.removeLayer("parcels");
+    }
+    if (mapRef.getLayer("parcel-assist")) {
+      mapRef.removeLayer("parcel-assist");
+    }
+    if (mapRef.getLayer("polygon-labels")) {
+      mapRef.removeLayer("polygon-labels");
+    }
+    if (mapRef.getSource(data.id)) {
+      mapRef.removeSource(data.id);
+    }
 
     mapRef
       .addSource(data.id, {
@@ -314,6 +345,21 @@ const VoltSearchOnMap = ({
       window.map = { ...mapRef };
     }
   }, [showRegridTiles, mapRef]);
+
+  useEffect(() => {
+    if (mapRef && selectedLayer) {
+      mapRef.setStyle(selectedLayer);
+    }
+  }, [mapRef, selectedLayer]);
+
+  useEffect(() => {
+    if (mapRef) {
+      mapRef.on("style.load", () => {
+        setPolygonPending(true);
+        showRegridTiles();
+      });
+    }
+  }, [mapRef, showRegridTiles]);
 
   return (
     <>

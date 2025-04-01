@@ -445,11 +445,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             options={mapLayers}
             onValueChange={(item) => {
               setSelectedLayer(item || "");
-              // if (item) {
-              //   searchParams.set("state", item);
-              //   searchParams.delete("county");
-              //   router.push(`${pathname}?${searchParams.toString()}`);
-              // }
             }}
             placeholder="BaseMap"
             selectedValue={selectedLayer}

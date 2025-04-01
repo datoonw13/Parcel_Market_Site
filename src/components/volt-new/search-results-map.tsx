@@ -51,6 +51,7 @@ interface VoltSearchResultsMapProps {
   propertiesInteraction: IPropertiesInteraction;
   setAuthModal: (id: number) => void;
   user: IUserBaseInfo | null;
+  selectedLayer: string;
 }
 
 const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
@@ -60,6 +61,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
   propertiesInteraction,
   setAuthModal,
   user,
+  selectedLayer,
 }) => {
   const router = useRouter();
   const [ref, setRef] = useState<MapBoX | null>(null);
@@ -72,6 +74,8 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
     () => data.find((el) => el.id === propertiesInteraction.popup?.openId),
     [data, propertiesInteraction.popup]
   );
+
+  console.log(selectedLayer, 22);
 
   const setInitialData = useCallback(async () => {
     if (ref) {
@@ -430,6 +434,12 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
       });
     }
   }, [openPopup, openPropertyDetails, ref]);
+
+  useEffect(() => {
+    if (ref && selectedLayer) {
+      ref.setStyle(selectedLayer);
+    }
+  }, [ref, selectedLayer]);
 
   return (
     <>
