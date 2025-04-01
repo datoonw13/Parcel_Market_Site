@@ -115,7 +115,7 @@ const SignUpPage = () => {
         </div>
       )}
       onSubmit={async (data) => {
-        const request = await signUpUserAction({ ...data, redirectUrl: routes.home.fullUrl });
+        const request = await signUpUserAction({ ...data, redirectUrl: routes.volt.fullUrl });
         if (request.errorMessage) {
           setErrorMessage(request.errorMessage);
           setStep(SignUpSteps.FINISH);
