@@ -119,20 +119,20 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
             Resume subscription
           </Button>
         )}
-        {/* {isActive && !userActiveSubscription?.cancelAtPeriodEnd && (
+        {isActive && !userActiveSubscription?.cancelAtPeriodEnd && (
           <Button
             onClick={async () => {
               setOpenCancelModal(true);
             }}
-            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+            className="w-full mt-auto transition-none font-semibold group-hover:text-white text-start justify-between"
             loading={resumePending}
             variant="secondary"
             endIcon={FaArrowRightLong}
           >
             Cancel subscription
           </Button>
-        )} */}
-        {isActive && (
+        )}
+        {/* {isActive && (
           <Button
             className="subscribed w-full mt-auto text-center  [&>div]:text-center flex items-center justify-center pointer-events-none"
             loading={resumePending}
@@ -140,7 +140,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
           >
             Subscribed
           </Button>
-        )}
+        )} */}
         {!isActive && (
           <Button
             onClick={async () => {
