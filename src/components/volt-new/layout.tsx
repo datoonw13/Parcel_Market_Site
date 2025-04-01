@@ -381,6 +381,7 @@ const VoltLayout = ({
             setAuthModal("sign-in");
             lastFetchedId.current = id;
           }}
+          selectedLayer={selectedLayer}
         />
       ) : (
         <VoltDesktop

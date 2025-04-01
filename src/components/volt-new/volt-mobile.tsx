@@ -41,9 +41,18 @@ interface VoltMobileProps {
   propertiesInteraction: IPropertiesInteraction;
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   setAuthModal: (id: number) => void;
+  selectedLayer: string;
 }
 
-const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteraction, setPropertiesInteraction, setAuthModal }) => {
+const VoltMobile: FC<VoltMobileProps> = ({
+  user,
+  form,
+  data,
+  propertiesInteraction,
+  setPropertiesInteraction,
+  setAuthModal,
+  selectedLayer,
+}) => {
   const [isPending, startTransition] = useTransition();
   const [searchError, setSearchError] = useState<"limit" | "notFound" | null>(null);
   const [searchMapRef, setSearchMapRef] = useState<MapBoX | null>(null);
@@ -133,6 +142,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
             {drawerInitialHeight && (
               <div className="map-wrapper relative w-full" style={{ height: `calc(103% - ${drawerInitialHeight}px)` }}>
                 <VoltSearchResultsMap
+                  selectedLayer=""
                   data={data.data}
                   onMarkerInteraction={() => {}}
                   onMouseLeave={() => {}}
@@ -154,7 +164,7 @@ const VoltMobile: FC<VoltMobileProps> = ({ user, form, data, propertiesInteracti
           </div>
         )}
         <div className={cn("absolute bottom-0 w-full invisible h-[calc(100%-56px)]", showMap && "visible")}>
-          <VoltSearchOnMap user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />
+          <VoltSearchOnMap selectedLayer={selectedLayer} user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />
         </div>
       </div>
     </>
