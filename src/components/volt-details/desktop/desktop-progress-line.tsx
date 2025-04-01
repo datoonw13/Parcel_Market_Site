@@ -142,7 +142,26 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <FaLocationDot className="text-primary-dark size-5" />
+          <FaLocationDot
+            className="text-primary-dark size-5 cursor-pointer"
+            onClick={() => {
+              const bulkId = data.assessments.data.find((el) => el.data.hasSellingProperty)?.data.id;
+              setPropertiesInteraction((prev) => ({
+                ...prev,
+                popup: {
+                  clickId: "data.id",
+                  isBulked: !!bulkId,
+                  openId: bulkId || data.id,
+                },
+              }));
+              window.map.setZoom(10);
+              window.map.setCenter([data.lon, data.lat]);
+            }}
+            onDoubleClick={() => {
+              window.map.setZoom(16);
+              window.map.setCenter([data.lon, data.lat]);
+            }}
+          />
           <p className="text-primary-main text-xs font-medium">Subject Land</p>
           <Tooltip renderButton={<IoInformationCircleOutline className="size-6 text-primary-dark" />} renderContent="Some text." />
         </div>
@@ -204,10 +223,10 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
                       }}
                       onDoubleClick={() => {
                         if (!property.isBulked) {
-                          window.map.setZoom(14);
+                          window.map.setZoom(16);
                           window.map.setCenter([property.data.longitude, property.data.latitude]);
                         } else {
-                          window.map.setZoom(12);
+                          window.map.setZoom(16);
                           window.map.setCenter([property.data.properties[0].longitude, property.data.properties[0].latitude]);
                         }
                       }}
