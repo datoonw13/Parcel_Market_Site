@@ -114,7 +114,9 @@ const VoltDetailsCalculationTable: FC<VoltDetailsCalculationTableProps> = ({
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  const [sort, setSort] = useState<Partial<{ [key in keyof typeof HEADERS]: "asc" | "desc" }>>({ pricePerAcreage: "asc" });
+  const [sort, setSort] = useState<Partial<{ [key in keyof typeof HEADERS]: "asc" | "desc" }>>({
+    [isSubscribed ? "pricePerAcreage" : "acreage"]: "asc",
+  });
   const sortKey = Object.keys(sort)[0] as keyof typeof HEADERS;
   const sortValue = Object.values(sort)[0];
   const assessments = useMemo(() => {
