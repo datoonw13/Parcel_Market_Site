@@ -156,6 +156,7 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
               }));
               window.map.setZoom(10);
               window.map.setCenter([data.lon, data.lat]);
+              window.subjectParcelPopupToggle(true);
             }}
             onDoubleClick={() => {
               window.map.setZoom(16);

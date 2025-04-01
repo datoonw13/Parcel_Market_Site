@@ -430,6 +430,9 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             align="end"
             label={`${data.acreage.formattedString} Acre, ${data.propertyType || "N/A"}`}
             value="Subject Parcel"
+            setStateHandler={(handler) => {
+              window.subjectParcelPopupToggle = handler;
+            }}
             renderContent={renderSubjectParcelContent}
           />
           <AutoComplete

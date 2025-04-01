@@ -2,10 +2,9 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { memo, ReactNode, useEffect, useState } from "react";
+import { Dispatch, memo, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
-import { IPropertiesInteraction } from "@/types/volt";
 
 const VoltDetailsFiltersDropDown = ({
   renderContent,
@@ -20,6 +19,7 @@ const VoltDetailsFiltersDropDown = ({
   onOpen,
   onToggle,
   align,
+  setStateHandler,
 }: {
   renderContent: (close: () => void) => ReactNode;
   renderContentAdditionalContent?: (close: () => void) => ReactNode;
@@ -33,9 +33,15 @@ const VoltDetailsFiltersDropDown = ({
   buttonClassName?: string;
   onToggle?: (open: boolean) => void;
   align?: "center" | "end" | "start";
+  setStateHandler?: (value: Dispatch<SetStateAction<boolean>>) => void;
 }) => {
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    if (setStateHandler) {
+      setStateHandler(setOpen);
+    }
+  }, [setStateHandler]);
   return (
     <>
       <Popover
@@ -62,7 +68,16 @@ const VoltDetailsFiltersDropDown = ({
             {icon || <MdArrowForwardIos className={cn("text-[#1E1E1E] transition-all", open ? "-rotate-90" : "rotate-90")} />}
           </div>
         </PopoverTrigger>
-        <PopoverContent forceMount side={side} align={align} className="flex gap-2 !outline-none">
+        <PopoverContent
+          onInteractOutside={(e) => {
+            if (e.type === "dismissableLayer.focusOutside") {
+              e.preventDefault();
+            }
+          }}
+          side={side}
+          align={align}
+          className="flex gap-2 !outline-none"
+        >
           <AnimatePresence>
             <motion.div
               onAnimationStart={() => {
