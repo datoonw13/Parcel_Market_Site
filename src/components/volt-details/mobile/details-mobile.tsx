@@ -2,7 +2,7 @@
 
 import routes from "@/helpers/routes";
 import Link from "next/link";
-import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useState } from "react";
 import { z } from "zod";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
@@ -14,10 +14,6 @@ import { IUserBaseInfo } from "@/types/auth";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { exportToExcel, exportToKml } from "@/lib/volt";
 import { Tooltip } from "@/components/ui/tooltip";
-import { Dialog, DialogContent } from "@/components/ui/dialogs/dialog";
-import { AlertDialog } from "@/components/ui/dialogs/alert-dialog";
-import { cn } from "@/lib/utils";
-import { LuSearch } from "react-icons/lu";
 import { SubscriptionType } from "@/types/subscriptions";
 import { usePathname } from "next/navigation";
 import { Button } from "../../ui/button";
@@ -62,50 +58,14 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   const [drawerInitialHeight, setDrawerInitialHeight] = useState<null | number>(null);
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [exportMapPending, setExportMapPending] = useState(false);
-  const [showWarningModal, setShowWarningModal] = useState(false);
   const pathname = usePathname();
 
   const onMarkerInteraction = useCallback((data: Partial<IPropertiesInteraction>) => {
     setPropertiesInteraction((prev) => ({ ...prev, ...data }));
   }, []);
 
-  useEffect(() => {
-    if (data.assessments.data.length === 0) {
-      setShowWarningModal(true);
-    }
-  }, [data]);
-
   return (
     <>
-      <Dialog open={showWarningModal}>
-        <DialogContent
-          className={cn("border-0 bg-white shadow-4 max-w-[90%] rounded-2xl")}
-          closeModal={() => {
-            setShowWarningModal(false);
-          }}
-        >
-          <div className="flex flex-col gap-2 items-center">
-            <div className="size-12 rounded-full bg-error-100 items-center justify-center flex mx-auto">
-              <LuSearch
-                onClick={() => {
-                  setShowWarningModal(false);
-                }}
-                className="text-error size-6"
-              />
-            </div>
-            <h1 className="text-center font-semibold pt-2">No result found</h1>
-            <h2 className="text-center text-sm">You can extend filters and try again.</h2>
-            <Button
-              onClick={() => {
-                setShowWarningModal(false);
-              }}
-              className="w-full mt-3 max-w-[80%]"
-            >
-              Extend Filters
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
       <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
         <Popover>
           <PopoverAnchor className="qdqwdqwd">
@@ -164,6 +124,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
                   setFilters={setFilters}
                   setSelectedLayer={setSelectedLayer}
                   startFetchingTransition={startFetchingTransition}
+                  isDataEmpty={data.assessments.data.length === 0}
                 />
               </div>
             )}

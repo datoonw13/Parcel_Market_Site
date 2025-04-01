@@ -84,6 +84,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
           mapLayers={mapLayers}
           selectedLayer={selectedLayer}
           setSelectedLayer={setSelectedLayer}
+          isDataEmpty={data.assessments.data.length === 0}
         />
         <div className="relative z-20">
           <div className="grid grid-cols-2 gap-2">

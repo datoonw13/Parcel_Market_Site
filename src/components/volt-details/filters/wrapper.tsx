@@ -21,6 +21,7 @@ interface VoltDetailsFiltersWrapperProps {
   }[];
   setSelectedLayer: Dispatch<SetStateAction<string>>;
   selectedLayer: string;
+  isDataEmpty: boolean;
 }
 
 const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
@@ -31,6 +32,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   mapLayers,
   selectedLayer,
   setSelectedLayer,
+  isDataEmpty,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -38,7 +40,6 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
   const { detecting: detectingSm, targetReached: isSm } = useMediaQuery(1024);
   const { detecting: detectingMd, targetReached: isMd } = useMediaQuery(1500);
   const partialFiltersSchema = voltDetailsFiltersValidations.partial();
-  const validateFilters = partialFiltersSchema.safeParse(Object.fromEntries(new URLSearchParams(params.toString()))).data;
 
   const selectedFilters = useMemo(() => {
     if (!filters) {
@@ -88,6 +89,7 @@ const VoltDetailsFiltersWrapper: FC<VoltDetailsFiltersWrapperProps> = ({
               propertyTypes={propertyTypes}
               setSelectedLayer={setSelectedLayer}
               selectedLayer={selectedLayer}
+              isDataEmpty={isDataEmpty}
             />
           )}
           {isMd && !isSm && (
