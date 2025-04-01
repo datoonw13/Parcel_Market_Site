@@ -328,6 +328,12 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
     []
   );
 
+  useEffect(() => {
+    if (propertiesInteraction.popup?.openId === data.id || propertiesInteraction.popup?.clickId === data.id) {
+      window.subjectParcelPopupToggle(true);
+    }
+  }, [data.id, propertiesInteraction]);
+
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
