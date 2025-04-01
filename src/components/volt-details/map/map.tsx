@@ -66,9 +66,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
 
         window.map = ref;
 
-        const mainLandBulkGroup = data.assessments.data.find(
-          (el) => el.isBulked && el.data.properties.find((el) => el.parcelNumber.formattedString === data.parcelNumber.formattedString)
-        );
+        const mainLandBulkGroup = data.assessments.data.find((el) => el.isBulked && el.data.hasSellingProperty);
         const geoJsonInit: MapGeoJson = {
           type: "FeatureCollection",
           features: [],
@@ -106,7 +104,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
             pricePerAcreage: data.voltPricePerAcreage.formattedString,
             polygonLineColor: "#05471C",
             polygonFillColor: "#05471C",
-            // bulkId: (mainLandBulkGroup?.isBulked && mainLandBulkGroup?.data.id) || null,
+            bulkId: (mainLandBulkGroup?.isBulked && mainLandBulkGroup?.data.id) || null,
             isBulkMedianValid: mainLandBulkGroup?.data.isMedianValid,
             group: mainLandBulkGroup?.isBulked ? mainLandBulkGroup?.data.group : undefined,
           },

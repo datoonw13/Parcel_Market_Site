@@ -259,6 +259,53 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
     [onPopupClose]
   );
 
+  const renderSubjectParcelContent = useCallback(
+    () => (
+      <ul className="min-w-[--radix-popper-anchor-width] p-4 space-y-4">
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          Owner: <span className="text-sm font-medium text-black">{data?.owner}</span>
+        </li>
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          Parcel ID: <span className="text-sm font-medium text-black">{data?.parcelNumber.formattedString}</span>
+        </li>
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          Acreage: <span className="text-sm font-medium text-black">{data?.acreage.formattedString}</span>
+        </li>
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          State/County:{" "}
+          <span className="text-sm font-medium text-black">
+            {data.state.label}/{data.county.label}
+          </span>
+        </li>
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          Volt Value: <span className="text-sm font-medium text-black">{data?.voltPrice.formattedString}</span>
+        </li>
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          Price Per Acreage: <span className="text-sm font-medium text-black">{data.voltPricePerAcreage.formattedString}</span>
+        </li>
+        <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
+          Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>
+        </li>
+        {data.usedForCalculation && (
+          <li className="text-grey-900 font-semibold text-sm ml-4 list-disc marker:text-primary-main-400">
+            The subject land was sold with other lands
+          </li>
+        )}
+      </ul>
+    ),
+    [
+      data?.acreage.formattedString,
+      data.county.label,
+      data?.owner,
+      data?.parcelNumber.formattedString,
+      data?.propertyType,
+      data.state.label,
+      data.usedForCalculation,
+      data?.voltPrice.formattedString,
+      data.voltPricePerAcreage.formattedString,
+    ]
+  );
+
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -381,43 +428,9 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
         <div id="map-options" className="flex flex-col gap-4 px-4">
           <VoltDetailsFiltersDropDown
             align="end"
-            onClose={() => {}}
-            onOpen={() => {}}
             label={`${data.acreage.formattedString} Acre, ${data.propertyType || "N/A"}`}
             value="Subject Parcel"
-            renderContent={() => (
-              <ul className="min-w-[--radix-popper-anchor-width] p-4 space-y-4">
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Owner: <span className="text-sm font-medium text-black">{data?.owner}</span>
-                </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Parcel ID: <span className="text-sm font-medium text-black">{data?.parcelNumber.formattedString}</span>
-                </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Acreage: <span className="text-sm font-medium text-black">{data?.acreage.formattedString}</span>
-                </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  State/County:{" "}
-                  <span className="text-sm font-medium text-black">
-                    {data.state.label}/{data.county.label}
-                  </span>
-                </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Volt Value: <span className="text-sm font-medium text-black">{data?.voltPrice.formattedString}</span>
-                </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Price Per Acreage: <span className="text-sm font-medium text-black">{data.voltPricePerAcreage.formattedString}</span>
-                </li>
-                <li className="text-grey-600 font-medium text-sm marker:text-primary-main-400  ml-4 list-disc">
-                  Property Type: <span className="text-sm font-medium text-black">{data?.propertyType || "N/A"}</span>
-                </li>
-                {data.usedForCalculation && (
-                  <li className="text-grey-900 font-semibold text-sm ml-4 list-disc marker:text-primary-main-400">
-                    The subject land was sold with other lands
-                  </li>
-                )}
-              </ul>
-            )}
+            renderContent={renderSubjectParcelContent}
           />
           <AutoComplete
             options={mapLayers}

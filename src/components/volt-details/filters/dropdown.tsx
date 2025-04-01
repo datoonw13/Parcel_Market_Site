@@ -2,9 +2,10 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { ReactNode, useState } from "react";
+import { memo, ReactNode, useEffect, useState } from "react";
 import { MdArrowForwardIos } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
+import { IPropertiesInteraction } from "@/types/volt";
 
 const VoltDetailsFiltersDropDown = ({
   renderContent,
@@ -50,7 +51,7 @@ const VoltDetailsFiltersDropDown = ({
           onToggle && onToggle(value);
         }}
       >
-        <PopoverTrigger className={cn("w-full", triggerClassName)}>
+        <PopoverTrigger asChild className={cn("w-full", triggerClassName)}>
           <div
             className={cn("border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4", buttonClassName)}
           >
@@ -91,4 +92,4 @@ const VoltDetailsFiltersDropDown = ({
   );
 };
 
-export default VoltDetailsFiltersDropDown;
+export default memo(VoltDetailsFiltersDropDown);
