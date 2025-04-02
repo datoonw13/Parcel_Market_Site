@@ -98,8 +98,8 @@ const VoltMobile: FC<VoltMobileProps> = ({
                 </Link>
               )}
               {showMap && <IoChevronBack onClick={() => setShowMap(false)} className="size-6" />}
-              <Link href={routes.volt.fullUrl}>
-                <Logo className="!h-6 w-full" />
+              <Link href={routes.home.fullUrl}>
+                <Logo className="!h-6" />
               </Link>
               <HeaderMenu
                 user={user}
