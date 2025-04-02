@@ -125,60 +125,38 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
       }}
       id={`calculation-${data.data.id}`}
     >
-      <div className="space-y-3 px-5 py-4">
-        <div className="flex justify-between items-start gap-6 pb-3 border-b border-[#D5D3D3]">
+      <div className="space-y-3 py-4">
+        <div className="flex justify-between items-start gap-6 pb-3 border-b border-[#D5D3D3] px-4">
           <h1 className="font-semibold">
             Multiple Parcel Sale /{" "}
             <span className="font-medium text-xs text-grey-800">{moment(data.data.lastSaleDate).format("MM/DD/YYYY")}</span>
           </h1>
-          <Tooltip
-            renderButton={
-              data.data.hasSellingProperty ? (
-                <div className="relative z-0 min-w-5 min-h-5 h-5">
-                  <Image
-                    alt=""
-                    src={`/map/pins/green-${data.data.group}.svg`}
-                    fill
-                    loading="eager"
-                    className="w-full h-full  object-cover"
-                  />
-                </div>
-              ) : (
-                <div className={cn("relative min-w-[20px] min-h-[20px] h-[20px] z-0")}>
-                  <Image
-                    alt=""
-                    src={`/map/pins/${isNonValidMedianHighlighted && !data.data.isMedianValid ? "yellow" : "red"}-${data.data.group}.svg`}
-                    fill
-                    loading="eager"
-                    className="w-full h-full  object-cover"
-                  />
-                </div>
-              )
-            }
-            renderContent={
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
-                <div
-                  className="p-0.5"
-                  style={{
-                    background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
-                    borderRadius: 12,
-                    boxShadow: "0px 4px 12px 0px #0000001F",
-                  }}
-                >
-                  <div style={{ borderRadius: 10 }} className="bg-white p-3">
-                    <p className="font-medium text-xs max-w-44">
-                      Lands marked with <span className="font-semibold text-[#F44D61]">({data.data.group.toLocaleUpperCase()})</span> where
-                      sold together
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            }
-            buttonClassName="sticky top-0"
-            contentClasses="bg-transparent border-0 p-0 text-black text-start"
-          />
         </div>
-        <ul className="grid grid-cols-2 gap-1">
+        <div className="border-[#D5D3D3] border-b flex px-4 !m-0 py-2 gap-3">
+          {data.data.hasSellingProperty ? (
+            <div className="relative z-0 min-w-5 min-h-5 h-5">
+              <Image alt="" src={`/map/pins/green-${data.data.group}.svg`} fill loading="eager" className="w-full h-full  object-cover" />
+            </div>
+          ) : (
+            <div className={cn("relative min-w-[20px] min-h-[20px] h-[20px] w-[20px] z-0")}>
+              <Image
+                alt=""
+                src={`/map/pins/${isNonValidMedianHighlighted && !data.data.isMedianValid ? "yellow" : "red"}-${data.data.group}.svg`}
+                fill
+                loading="eager"
+                className="w-full h-full  object-cover"
+              />
+            </div>
+          )}
+          <p className="text-xs font-medium">
+            Lands marked with{" "}
+            <span className={cn(isNonValidMedianHighlighted && !data.data.isMedianValid ? "text-warning" : "text-error")}>
+              ({data.data.group.toLocaleUpperCase()})
+            </span>{" "}
+            where sold together
+          </p>
+        </div>
+        <ul className="grid grid-cols-2 gap-1 px-4">
           <li className="text-xs text-grey-600">
             State: <span className="text-black font-medium">{data.data.state.label}</span>
           </li>
@@ -197,7 +175,7 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
       <div
         style={{ gridTemplateColumns: `repeat(${data.data.properties.length === 2 ? 2 : 12}, 1fr)` }}
         className={cn(
-          `p-3 gap-1 grid  rounded-b-2xl bg-grey-100 h-full py-3  `,
+          `p-3 gap-1 grid  rounded-b-2xl bg-grey-100 h-full py-3 `,
           data.data.properties.length > 2 && "[&>div]:col-[span_4/auto]",
           data.data.properties.length > 3 && data.data.properties.length % 3 === 1 && "[&>*:nth-last-child(-n+1)]:col-[span_12/auto]",
           data.data.properties.length > 3 && data.data.properties.length % 3 === 2 && "[&>*:nth-last-child(-n+2)]:col-[span_6/auto]"
