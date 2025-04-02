@@ -113,7 +113,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         data.assessments.data.forEach((el) => {
           if (el.isBulked) {
             el.data.properties.forEach((childEl) => {
-              if (childEl.id !== data.id && childEl.parcelNumber.formattedString !== data.parcelNumber.formattedString) {
+              if (childEl.id !== data.id && !childEl.isSellingProperty) {
                 geoJsonInit.features.push({
                   type: "Feature",
                   geometry: {
@@ -146,7 +146,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 });
               }
             });
-          } else if (el.data.id !== data.id && el.data.parcelNumber.formattedString !== data.parcelNumber.formattedString) {
+          } else if (el.data.id !== data.id && !el.data.isSellingProperty) {
             geoJsonInit.features.push({
               type: "Feature",
               geometry: {
