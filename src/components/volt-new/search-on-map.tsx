@@ -19,6 +19,7 @@ import {
   signUpUserAction,
 } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPathAction } from "@/server-actions/common-actions";
+import { MdClear } from "react-icons/md";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import SignInForm from "../auth/sign-in";
@@ -585,9 +586,15 @@ const VoltSearchOnMap = ({
       <div style={{ display: "none" }}>
         <div ref={tooltipRef}>
           {openProperty && (
-            <ul className="max-w-sm">
+            <ul className="max-w-sm relative">
               <>
-                <li className="text-xs text-grey-800 py-0.5">
+                <MdClear
+                  className="absolute right-0.5 top-0.5 size-5 cursor-pointer text-grey-600"
+                  onClick={() => {
+                    setOpenProperty(null);
+                  }}
+                />
+                <li className="text-xs text-grey-800 py-0.5 mr-12">
                   Parcel Number <span className="text-black font-semibold">{openProperty.parcelnumb_no_formatting}</span>
                 </li>
                 <li className="text-xs text-grey-800 py-0.5">
