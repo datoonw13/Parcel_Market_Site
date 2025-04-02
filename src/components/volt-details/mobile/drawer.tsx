@@ -141,9 +141,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                   {!isSubscribed && (
                     <Link
                       className="w-full"
-                      href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
-                        SubscriptionType.Annual
-                      }`}
+                      href={`${routes.user.subscription.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}`}
                     >
                       <Button className="rounded-2xl w-full">Subscribe to see prices</Button>
                     </Link>

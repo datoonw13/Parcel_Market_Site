@@ -14,6 +14,7 @@ import { CiSearch } from "react-icons/ci";
 import { BiSearch } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import { AnimatePresence, motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import VoltDetailsFiltersWrapper from "../filters/wrapper";
 import { Tooltip } from "../../ui/tooltip";
 import { Switch } from "../../ui/switch";
@@ -49,6 +50,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   selectedLayer,
   setSelectedLayer,
 }) => {
+  const pathname = usePathname();
   const [openWarning, setWarning] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -159,7 +161,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
           {!isSubscribed && (
             <Link
               className="bg-white shadow-5 w-full text-center block absolute rounded-lg p-3 translate-y-2 font-medium underline text-primary-main"
-              href={routes.user.subscription.fullUrl}
+              href={`${routes.user.subscription.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}`}
             >
               Subscribe to see prices
             </Link>

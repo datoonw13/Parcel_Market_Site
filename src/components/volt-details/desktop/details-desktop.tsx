@@ -468,11 +468,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             </Button>
           </Link>
           {!isSubscribed && (
-            <Link
-              href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
-                SubscriptionType.Annual
-              }`}
-            >
+            <Link href={`${routes.user.subscription.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}`}>
               <Button variant="default" className="w-full ">
                 Subscribe to see price
               </Button>

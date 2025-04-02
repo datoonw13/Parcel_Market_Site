@@ -98,9 +98,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
           {!isSubscribed && (
             <Link
               className="underline text-primary-main bg-primary-main-50 text-xs font-semibold text-center py-2"
-              href={`${routes.checkout.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}&plan=${
-                SubscriptionType.Annual
-              }`}
+              href={`${routes.user.subscription.fullUrl}?redirectUrl=${routes.volt.fullUrl}/${pathname.split("/")[2]}`}
             >
               Subscribe to see prices
             </Link>
