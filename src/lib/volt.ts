@@ -59,8 +59,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               left: { style: "thin", color: { rgb: "#e5e7eb" } },
               right: { style: "thin", color: { rgb: "#e5e7eb" } },
             },
+            alignment: {
+              horizontal: "left",
+            },
+            numFmt: "0.000",
           },
-          v: property.data.acreage.formattedString,
+          t: "n", // Explicitly set type to number
+          v: Number(property.data.acreage.value),
         },
         "Sold price": {
           s: {
@@ -71,8 +76,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               left: { style: "thin", color: { rgb: "#e5e7eb" } },
               right: { style: "thin", color: { rgb: "#e5e7eb" } },
             },
+            alignment: {
+              horizontal: "left",
+            },
+            numFmt: "$#,##0",
           },
-          v: property.data.lastSalePrice.formattedString,
+          t: "n", // Explicitly set type to number
+          v: Number(property.data.lastSalePrice.value),
         },
         "Sold price per acre": {
           s: {
@@ -83,8 +93,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               left: { style: "thin", color: { rgb: "#e5e7eb" } },
               right: { style: "thin", color: { rgb: "#e5e7eb" } },
             },
+            alignment: {
+              horizontal: "left",
+            },
+            numFmt: "$#,##0",
           },
-          v: property.data.pricePerAcreage.formattedString,
+          t: "n", // Explicitly set type to number
+          v: Number(property.data.pricePerAcreage.value),
         },
         "Last sale date": {
           s: {
@@ -154,8 +169,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               left: { style: "thin", color: { rgb: "#e5e7eb" } },
               right: { style: "thin", color: { rgb: "#e5e7eb" } },
             },
+            alignment: {
+              horizontal: "left",
+            },
+            numFmt: "0.000",
           },
-          v: property.data.acreage.formattedString,
+          t: "n", // Explicitly set type to number
+          v: Number(property.data.acreage.value),
         },
         "Sold price": {
           s: {
@@ -167,8 +187,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               left: { style: "thin", color: { rgb: "#e5e7eb" } },
               right: { style: "thin", color: { rgb: "#e5e7eb" } },
             },
+            alignment: {
+              horizontal: "left",
+            },
+            numFmt: "$#,##0",
           },
-          v: property.data.lastSalePrice.formattedString,
+          t: "n", // Explicitly set type to number
+          v: Number(property.data.lastSalePrice.value),
         },
         "Sold price per acre": {
           s: {
@@ -180,8 +205,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               left: { style: "thin", color: { rgb: "#e5e7eb" } },
               right: { style: "thin", color: { rgb: "#e5e7eb" } },
             },
+            alignment: {
+              horizontal: "left",
+            },
+            numFmt: "$#,##0",
           },
-          v: property.data.pricePerAcreage.formattedString,
+          t: "n", // Explicitly set type to number
+          v: Number(property.data.pricePerAcreage.value),
         },
         "Last sale date": {
           s: {
@@ -244,8 +274,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
                 left: { style: "thin", color: { rgb: "#e5e7eb" } },
                 right: { style: "thin", color: { rgb: "#e5e7eb" } },
               },
+              alignment: {
+                horizontal: "left",
+              },
+              numFmt: "   0.000",
             },
-            v: `    ${childProperty.acreage.formattedString}`,
+            t: "n", // Explicitly set type to number
+            v: `    ${Number(childProperty.acreage.value)}`,
           },
           "Sold price": {
             s: {
@@ -256,6 +291,10 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
                 left: { style: "thin", color: { rgb: "#e5e7eb" } },
                 right: { style: "thin", color: { rgb: "#e5e7eb" } },
               },
+              alignment: {
+                horizontal: "left",
+              },
+              numFmt: "$#,##0",
             },
             v: "",
           },
@@ -268,8 +307,13 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
                 left: { style: "thin", color: { rgb: "#e5e7eb" } },
                 right: { style: "thin", color: { rgb: "#e5e7eb" } },
               },
+              alignment: {
+                horizontal: "left",
+              },
+              numFmt: "   $#,##0",
             },
-            v: `    ${childProperty.pricePerAcreage.formattedString}`,
+            t: "n", // Explicitly set type to number
+            v: "",
           },
           "Last sale date": {
             s: {
