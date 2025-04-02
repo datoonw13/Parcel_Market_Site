@@ -45,10 +45,10 @@ const Searches: FC<SearchesProps> = ({ data, hasEntries, hasSearchResults, total
     <>
       <div className="space-y-4 md:space-y-6 relative">
         <div className="space-y-5 md:space-y-8">
-          <UserProfileSectionHeader title="Recent Searches" />
+          <UserProfileSectionHeader title="Data Dashboard" />
           <SearchesFilters startTransition={startFilterChangeTransition} />
         </div>
-        {!hasEntries && <NoResults errorMessage="No recent searches yet..." className="!mt-16" />}
+        {!hasEntries && <NoResults errorMessage="No data yet..." className="!mt-16" />}
         {hasEntries && !hasSearchResults && <NoResults errorMessage="No search results..." className="!mt-16" />}
         {hasEntries && hasSearchResults && (
           <>
