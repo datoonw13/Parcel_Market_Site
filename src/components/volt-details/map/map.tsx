@@ -347,6 +347,18 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
       promoteId: "fid",
     });
 
+    const layers = ref.getStyle()?.layers;
+    let firstSymbolId;
+    if (layers) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const layer of layers) {
+        if (layer.type === "symbol") {
+          firstSymbolId = layer.id;
+          break;
+        }
+      }
+    }
+
     ref.addLayer(
       {
         id: "parcels",
@@ -363,7 +375,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           "line-width": 1.7,
         },
       },
-      mapData.layers.markersLayer
+      firstSymbolId
     );
 
     // We need a transparent but 'filled' helper layer to catch click events
@@ -397,7 +409,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
           ],
         },
       },
-      mapData.layers.markersLayer
+      firstSymbolId
     );
 
     // show parcel num

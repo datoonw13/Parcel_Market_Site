@@ -193,52 +193,78 @@ const VoltSearchOnMap = ({
         }
       });
 
+    const layers = mapRef.getStyle()?.layers;
+    let firstSymbolId;
+    if (layers) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const layer of layers) {
+        if (layer.type === "symbol") {
+          firstSymbolId = layer.id;
+          break;
+        }
+      }
+    }
     // Add parcel outlines to the map with basic styles
-    mapRef.addLayer({
-      id: "parcels",
-      type: "line",
-      source: data.id,
-      "source-layer": data.id,
-      minzoom: 10,
-      maxzoom: 21,
-      layout: {
-        visibility: "visible",
+    mapRef.addLayer(
+      {
+        id: "parcels",
+        type: "line",
+        source: data.id,
+        "source-layer": data.id,
+        minzoom: 10,
+        maxzoom: 21,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "line-color": "#649d8d",
+        },
       },
-      paint: {
-        "line-color": "#649d8d",
-      },
-    });
-
+      firstSymbolId
+    );
+    //   [
+    //     firstSymbolId,
+    //     "settlement-minor-label",
+    //     "settlement-major-label",
+    //     "state-label",
+    //     "country-label",
+    //     "continent-label",
+    //     "parcels",
+    //     "parcel-assist"
+    // ]
     // We need a transparent but 'filled' helper layer to catch click events
-    mapRef.addLayer({
-      id: "parcel-assist",
-      type: "fill",
-      source: data.id,
-      "source-layer": data.id,
-      minzoom: 10,
-      maxzoom: 21,
-      layout: {
-        visibility: "visible",
+    mapRef.addLayer(
+      {
+        id: "parcel-assist",
+        type: "fill",
+        source: data.id,
+        "source-layer": data.id,
+        minzoom: 10,
+        maxzoom: 21,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "fill-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#649d8d", // Turns parcel green when clicked
+            ["boolean", ["feature-state", "hover"], false],
+            "#649d8d", // Turns green when hovered
+            "#fff", // Default color
+          ],
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            0.9, // Almost fully opaque when selected
+            ["boolean", ["feature-state", "hover"], false],
+            0.5, // Half transparent when hovered
+            0.1, // Default color
+          ],
+        },
       },
-      paint: {
-        "fill-color": [
-          "case",
-          ["boolean", ["feature-state", "selected"], false],
-          "#649d8d", // Turns parcel green when clicked
-          ["boolean", ["feature-state", "hover"], false],
-          "#649d8d", // Turns green when hovered
-          "#fff", // Default color
-        ],
-        "fill-opacity": [
-          "case",
-          ["boolean", ["feature-state", "selected"], false],
-          0.9, // Almost fully opaque when selected
-          ["boolean", ["feature-state", "hover"], false],
-          0.5, // Half transparent when hovered
-          0.1, // Default color
-        ],
-      },
-    });
+      firstSymbolId
+    );
 
     mapRef.on("mousemove", "parcel-assist", (e) => {
       const features = mapRef.queryRenderedFeatures(e.point, { layers: ["parcel-assist"] });
