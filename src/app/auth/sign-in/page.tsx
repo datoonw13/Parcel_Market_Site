@@ -7,8 +7,7 @@ import SignInForm from "@/components/auth/sign-in";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { useAuth } from "@/lib/auth/auth-context";
-import { authWithCredentialsAction, authWithSocialNetworkAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
-import { revalidateAllPath } from "@/server-actions/subscription/actions";
+import { authWithCredentialsAction, authWithSocialNetworkAction } from "@/server-actions/new-auth/new-auth";
 import { UserSource } from "@/types/common";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -34,22 +33,9 @@ const SignInPage = () => {
           notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
           setRequestPending(false);
         } else {
-          setAuthTokensAction([
-            {
-              token: request.data!.access_token,
-              tokenName: "jwt",
-              remember: false,
-            },
-            {
-              token: request.data!.refresh_token,
-              tokenName: "jwt-refresh",
-              remember: data.remember,
-            },
-          ]);
-          // router.push(REDIRECT_URL);
           signIn(request.data!, () => {
             startAuthTransition(() => {
-              router.push(routes.home.fullUrl);
+              router.push(REDIRECT_URL);
             });
           });
         }
@@ -78,23 +64,10 @@ const SignInPage = () => {
                 notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                 setRequestPending(false);
               } else {
-                setAuthTokensAction([
-                  {
-                    token: request.data!.access_token,
-                    tokenName: "jwt",
-                    remember: false,
-                  },
-                  {
-                    token: request.data!.refresh_token,
-                    tokenName: "jwt-refresh",
-                    remember: false,
-                  },
-                ]);
-                await revalidateAllPath();
-                startAuthTransition(() => {
-                  setTimeout(() => {
+                signIn(request.data!, () => {
+                  startAuthTransition(() => {
                     router.push(REDIRECT_URL);
-                  }, 500);
+                  });
                 });
               }
             }}
@@ -118,23 +91,10 @@ const SignInPage = () => {
                 notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                 setRequestPending(false);
               } else {
-                setAuthTokensAction([
-                  {
-                    token: request.data!.access_token,
-                    tokenName: "jwt",
-                    remember: false,
-                  },
-                  {
-                    token: request.data!.refresh_token,
-                    tokenName: "jwt-refresh",
-                    remember: false,
-                  },
-                ]);
-                await revalidateAllPath();
-                startAuthTransition(() => {
-                  setTimeout(() => {
+                signIn(request.data!, () => {
+                  startAuthTransition(() => {
                     router.push(REDIRECT_URL);
-                  }, 500);
+                  });
                 });
               }
             }}

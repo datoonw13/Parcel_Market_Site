@@ -5,6 +5,7 @@ import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-au
 import SignUp from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
+import { useAuth } from "@/lib/auth/auth-context";
 import { authWithSocialNetworkAction, setAuthTokensAction, signUpUserAction } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPath } from "@/server-actions/subscription/actions";
 import { UserSource } from "@/types/common";
@@ -22,6 +23,7 @@ const REDIRECT_URL_AFTER_SUCCESS_PAGE = routes.volt.fullUrl;
 const SignUpPage = () => {
   const router = useRouter();
   const { notify } = useNotification();
+  const { signIn } = useAuth();
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
@@ -61,24 +63,12 @@ const SignUpPage = () => {
                 notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                 setRequestPending(false);
               } else {
-                setAuthTokensAction([
-                  {
-                    token: request.data!.access_token,
-                    tokenName: "jwt",
-                    remember: false,
-                  },
-                  {
-                    token: request.data!.refresh_token,
-                    tokenName: "jwt-refresh",
-                    remember: false,
-                  },
-                ]);
-                revalidateAllPath();
-                startAuthTransition(() => {
-                  router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                signIn(request.data!, () => {
+                  startAuthTransition(() => {
+                    router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                  });
                 });
               }
-              setRequestPending(false);
             }}
           />
           <FacebookAuthProvider
@@ -100,23 +90,11 @@ const SignUpPage = () => {
                 notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                 setRequestPending(false);
               } else {
-                setAuthTokensAction([
-                  {
-                    token: request.data!.access_token,
-                    tokenName: "jwt",
-                    remember: false,
-                  },
-                  {
-                    token: request.data!.refresh_token,
-                    tokenName: "jwt-refresh",
-                    remember: false,
-                  },
-                ]);
-                revalidateAllPath();
-                startAuthTransition(() => {
-                  router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                signIn(request.data!, () => {
+                  startAuthTransition(() => {
+                    router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                  });
                 });
-                setRequestPending(false);
               }
             }}
           />
