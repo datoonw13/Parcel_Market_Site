@@ -73,7 +73,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
               <Link href={routes.volt.fullUrl}>
                 <IoChevronBack className="size-6" />
               </Link>
-              <Link href={routes.volt.fullUrl}>
+              <Link href={routes.home.fullUrl}>
                 <Logo className="!h-6 w-full" />
               </Link>
               <HeaderMenu
