@@ -444,13 +444,16 @@ const VoltSearchOnMap = ({
                       setUserSource(UserSource.Google);
                       setRequestPending(true);
                       const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-                      if (request.errorMessage) {
+                      if (request.errorMessage === "Invalid credentials") {
                         const newParams = new URLSearchParams(params.toString());
                         newParams.set("userSource", UserSource.Google);
                         newParams.set("accessToken", token);
                         newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         router.push(`${pathname}?${newParams.toString()}`);
                         setAuthModal("sign-up");
+                      } else if (request.errorMessage) {
+                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -478,12 +481,15 @@ const VoltSearchOnMap = ({
                       setUserSource(UserSource.Facebook);
                       setRequestPending(true);
                       const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-                      if (request.errorMessage) {
+                      if (request.errorMessage === "Invalid credentials") {
                         const newParams = new URLSearchParams(params.toString());
                         newParams.set("userSource", UserSource.Google);
                         newParams.set("accessToken", token);
                         newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         router.push(`${pathname}?${params.toString()}`);
+                      } else if (request.errorMessage) {
+                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -527,13 +533,16 @@ const VoltSearchOnMap = ({
                       setUserSource(UserSource.Google);
                       setRequestPending(true);
                       const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-                      if (request.errorMessage) {
+                      if (request.errorMessage === "Invalid credentials") {
                         const newParams = new URLSearchParams(params.toString());
                         newParams.set("userSource", UserSource.Google);
                         newParams.set("accessToken", token);
                         newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         router.push(`${pathname}?${newParams.toString()}`);
                         setAuthModal("sign-up");
+                      } else if (request.errorMessage) {
+                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -560,12 +569,15 @@ const VoltSearchOnMap = ({
                       setUserSource(UserSource.Facebook);
                       setRequestPending(true);
                       const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-                      if (request.errorMessage) {
+                      if (request.errorMessage === "Invalid credentials") {
                         const newParams = new URLSearchParams(params.toString());
                         newParams.set("userSource", UserSource.Google);
                         newParams.set("accessToken", token);
                         newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         router.push(`${pathname}?${params.toString()}`);
+                      } else if (request.errorMessage) {
+                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {

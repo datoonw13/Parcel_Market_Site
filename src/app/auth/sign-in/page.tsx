@@ -65,7 +65,7 @@ const SignInPage = () => {
               setUserSource(UserSource.Google);
               setRequestPending(true);
               const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-              if (request.errorMessage) {
+              if (request.errorMessage === "Invalid credentials") {
                 startAuthTransition(() => {
                   const params = new URLSearchParams({
                     userSource: UserSource.Google,
@@ -74,6 +74,9 @@ const SignInPage = () => {
                   });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 });
+              } else if (request.errorMessage) {
+                notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                setRequestPending(false);
               } else {
                 setAuthTokensAction([
                   {
@@ -100,7 +103,7 @@ const SignInPage = () => {
               setUserSource(UserSource.Facebook);
               setRequestPending(true);
               const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-              if (request.errorMessage) {
+              if (request.errorMessage === "Invalid credentials") {
                 startAuthTransition(() => {
                   const params = new URLSearchParams({
                     userSource: UserSource.Facebook,
@@ -109,6 +112,9 @@ const SignInPage = () => {
                   });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 });
+              } else if (request.errorMessage) {
+                notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                setRequestPending(false);
               } else {
                 setAuthTokensAction([
                   {

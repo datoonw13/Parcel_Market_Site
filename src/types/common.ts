@@ -8,6 +8,7 @@ export interface ResponseType<T> {
 export interface ResponseModel<T> {
   data: T;
   errorMessage: string | null;
+  statusCode?: number;
   responseCreated?: Date;
 }
 

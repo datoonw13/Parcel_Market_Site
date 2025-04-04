@@ -4,6 +4,7 @@ import FacebookAuthProvider from "@/components/auth/facebook-auth-provider";
 import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-auth-provider";
 import SignUp from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
+import useNotification from "@/hooks/useNotification";
 import { authWithSocialNetworkAction, setAuthTokensAction, signUpUserAction } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPath } from "@/server-actions/subscription/actions";
 import { UserSource } from "@/types/common";
@@ -20,6 +21,7 @@ const REDIRECT_URL_AFTER_SUCCESS_PAGE = routes.volt.fullUrl;
 
 const SignUpPage = () => {
   const router = useRouter();
+  const { notify } = useNotification();
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
@@ -46,7 +48,7 @@ const SignUpPage = () => {
               setUserSource(UserSource.Google);
               setRequestPending(true);
               const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-              if (request.errorMessage) {
+              if (request.errorMessage === "Invalid credentials") {
                 startAuthTransition(() => {
                   const params = new URLSearchParams({
                     userSource: UserSource.Google,
@@ -55,6 +57,9 @@ const SignUpPage = () => {
                   });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 });
+              } else if (request.errorMessage) {
+                notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                setRequestPending(false);
               } else {
                 setAuthTokensAction([
                   {
@@ -82,7 +87,7 @@ const SignUpPage = () => {
               setUserSource(UserSource.Facebook);
               setRequestPending(true);
               const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-              if (request.errorMessage) {
+              if (request.errorMessage === "Invalid credentials") {
                 startAuthTransition(() => {
                   const params = new URLSearchParams({
                     userSource: UserSource.Facebook,
@@ -91,6 +96,9 @@ const SignUpPage = () => {
                   });
                   router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                 });
+              } else if (request.errorMessage) {
+                notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                setRequestPending(false);
               } else {
                 setAuthTokensAction([
                   {

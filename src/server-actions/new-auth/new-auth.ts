@@ -152,6 +152,7 @@ export const authWithSocialNetworkAction = async (data: {
   } catch (error) {
     return {
       errorMessage: (error as ErrorResponse)?.message || "some",
+      statusCode: (error as ErrorResponse)?.statusCode,
       data: null,
     };
   }
