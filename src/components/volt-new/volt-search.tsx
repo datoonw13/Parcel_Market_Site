@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+
 "use client";
 
 import { FaCircleInfo } from "react-icons/fa6";
@@ -251,8 +253,14 @@ const VoltSearch: FC<VoltSearchProps> = ({
             </div>
           </div>
           <div className="rounded-2xl space-y-3 md:hidden">
-            <div className="bg-grey-50 rounded-2xl" style={{ aspectRatio: "3/1.5" }}>
-              VIDEO
+            <div className=" rounded-2xl" style={{ aspectRatio: "3/1.5" }}>
+              <video controls width="100%" height="100%" className="w-full h-full" poster="/subnail.png" preload="metadata">
+                <source
+                  src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4"
+                  type="vihttps://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4deo/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
             </div>
             <h2 className="text-sm px-2">
               To see the full capabilities of the Parcel Market visit the website with a{" "}

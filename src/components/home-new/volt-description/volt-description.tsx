@@ -16,7 +16,7 @@ import styles from "./styles.module.css";
 import { breakPoints } from "../../../../tailwind.config";
 
 // import required modules
-const images = ["home-slide-1.png", "home-slide-1.png", "home-slide-1.png"];
+const images = ["1.webp", "2.webp", "3.webp"];
 
 const VoltDescription = () => {
   const { targetReached: isSm } = useMediaQuery(parseFloat(breakPoints.md));
@@ -36,7 +36,7 @@ const VoltDescription = () => {
           </h2>
         </div>
 
-        <div className="relative h-48 sm:h-96 lg:h-[450px] xl:h-[578px] w-full lg:bg-white lg:p-5 lg:pb-9 lg:shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] lg:border rounded-2xl">
+        <div className="relative  h-[660px] max-h-[51vw] w-full lg:bg-white lg:p-5 lg:pb-9 lg:shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] lg:border rounded-2xl">
           <button
             type="button"
             onClick={() => {
@@ -63,10 +63,10 @@ const VoltDescription = () => {
               setActiveIndex(e.realIndex);
             }}
             ref={swiperRef}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
+            // autoplay={{
+            //   delay: 2500,
+            //   disableOnInteraction: false,
+            // }}
             spaceBetween={30}
             effect="fade"
             navigation={{
@@ -86,9 +86,16 @@ const VoltDescription = () => {
             )}
           >
             {images.map((el, elI) => (
-              <SwiperSlide key={el + elI.toString()}>
-                <div className="w-full h-full rounded-2xl">
-                  <Image alt="" src={`/home-slides/${el}`} fill loading="eager" className="w-full h-full !object-fill rounded-2xl" />
+              <SwiperSlide key={el + elI.toString()} className="">
+                <div className="rounded-2xl relative w-full aspect-[968/535]">
+                  <Image
+                    alt=""
+                    src={`/home-slides/desktop/${el}`}
+                    fill
+                    loading="lazy"
+                    className="w-full h-full !object-fill"
+                    quality={100}
+                  />
                 </div>
               </SwiperSlide>
             ))}

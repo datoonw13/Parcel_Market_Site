@@ -21,7 +21,7 @@ interface HomeMobileHeaderProps {
 
 const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, isAuthed } = useAuth();
 
   return (
     <Popover modal>
@@ -38,6 +38,7 @@ const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
           <PopoverTrigger className="absolute bg-black/50 w-screen h-screen left-0 -z-10" />
           <div className="bg-white shadow-md border-t rounded-b-2xl p-5">
             <PopoverClose>
+              {JSON.stringify({ user, isAuthed })}
               <Link href={routes.volt.fullUrl} className="text-sm hover:text-primary-main py-1.5 transition-all duration-100">
                 Value of land tool
               </Link>

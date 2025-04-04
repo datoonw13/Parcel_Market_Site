@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -165,8 +167,14 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         className="cursor-pointer min-w-5 w-5 min-h-5 h-5 text-grey-600 translate-y-1"
                       />
                     </div>
-                    <div className="bg-grey-50 rounded-b-2xl" style={{ aspectRatio: "3/1.5" }}>
-                      VIDEO
+                    <div className="rounded-b-2xl" style={{ aspectRatio: "3/1.5" }}>
+                      <video controls width="100%" height="100%" className="w-full h-full" poster="/subnail.png" preload="metadata">
+                        <source
+                          src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4"
+                          type="video/mp4"
+                        />
+                        Your browser does not support the video tag.
+                      </video>
                     </div>
                   </div>
                 )}

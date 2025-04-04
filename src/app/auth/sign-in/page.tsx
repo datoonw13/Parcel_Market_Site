@@ -44,14 +44,14 @@ const SignInPage = () => {
               remember: data.remember,
             },
           ]);
-          router.push(REDIRECT_URL);
+          // router.push(REDIRECT_URL);
           setRequestPending(false);
-          // await revalidateAllPath();
-          // startAuthTransition(() => {
-          //   setTimeout(() => {
-          //     // router.push(REDIRECT_URL);
-          //   }, 500);
-          // });
+          await revalidateAllPath();
+          startAuthTransition(() => {
+            setTimeout(() => {
+              router.push(REDIRECT_URL);
+            }, 500);
+          });
         }
       }}
       authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
@@ -90,9 +90,11 @@ const SignInPage = () => {
                     remember: false,
                   },
                 ]);
-                revalidateAllPath();
+                await revalidateAllPath();
                 startAuthTransition(() => {
-                  router.push(REDIRECT_URL);
+                  setTimeout(() => {
+                    router.push(REDIRECT_URL);
+                  }, 500);
                 });
               }
             }}
@@ -128,9 +130,11 @@ const SignInPage = () => {
                     remember: false,
                   },
                 ]);
-                revalidateAllPath();
+                await revalidateAllPath();
                 startAuthTransition(() => {
-                  router.push(REDIRECT_URL);
+                  setTimeout(() => {
+                    router.push(REDIRECT_URL);
+                  }, 500);
                 });
               }
             }}
