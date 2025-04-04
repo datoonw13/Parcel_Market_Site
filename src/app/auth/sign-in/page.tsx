@@ -47,7 +47,6 @@ const SignInPage = () => {
             },
           ]);
           // router.push(REDIRECT_URL);
-          setRequestPending(false);
           signIn(request.data!, () => {
             startAuthTransition(() => {
               router.push(routes.home.fullUrl);
