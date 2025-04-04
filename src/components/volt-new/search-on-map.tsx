@@ -453,7 +453,6 @@ const VoltSearchOnMap = ({
                         setAuthModal("sign-up");
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -471,8 +470,8 @@ const VoltSearchOnMap = ({
                         setTimeout(() => {
                           router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         }, 500);
-                        setRequestPending(false);
                       }
+                      setRequestPending(false);
                     }}
                   />
                   <FacebookAuthProvider
@@ -489,7 +488,6 @@ const VoltSearchOnMap = ({
                         router.push(`${pathname}?${params.toString()}`);
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -508,6 +506,7 @@ const VoltSearchOnMap = ({
                           router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         }, 500);
                       }
+                      setRequestPending(false);
                     }}
                   />
                 </div>
@@ -542,7 +541,6 @@ const VoltSearchOnMap = ({
                         setAuthModal("sign-up");
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -561,6 +559,7 @@ const VoltSearchOnMap = ({
                           router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         }, 500);
                       }
+                      setRequestPending(false);
                     }}
                   />
                   <FacebookAuthProvider
@@ -577,7 +576,6 @@ const VoltSearchOnMap = ({
                         router.push(`${pathname}?${params.toString()}`);
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
                       } else {
                         setAuthTokensAction([
                           {
@@ -596,6 +594,7 @@ const VoltSearchOnMap = ({
                           router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
                         }, 500);
                       }
+                      setRequestPending(false);
                     }}
                   />
                 </div>
