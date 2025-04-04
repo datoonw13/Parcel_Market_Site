@@ -276,7 +276,7 @@ const VoltLayout = ({
               email={signUpEmail}
               setEmail={setSignUpEmail}
               showSignIn={() => {
-                setAuthModal("sign-up");
+                setAuthModal("sign-in");
               }}
               authProviders={() => (
                 <div className="flex flex-col gap-3 w-full">
