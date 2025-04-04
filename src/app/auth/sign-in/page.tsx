@@ -49,9 +49,10 @@ const SignInPage = () => {
           // router.push(REDIRECT_URL);
           setRequestPending(false);
           signIn(request.data!, () => {
-            router.push(routes.home.fullUrl);
+            startAuthTransition(() => {
+              router.push(routes.home.fullUrl);
+            });
           });
-          // await revalidateAllPath();
         }
       }}
       authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
