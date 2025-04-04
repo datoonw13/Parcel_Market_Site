@@ -62,7 +62,7 @@ export default async function RootLayout({
   // const user = await getUserAction();
   // const userSubscriptions = user ? await getUserSubscriptions() : null;
   const authOption = await isAuthenticatedAction();
-  const tempUser = cookies().get("user")?.value;
+  // const tempUser = cookies().get("user")?.value;
 
   return (
     <>
@@ -130,9 +130,7 @@ export default async function RootLayout({
           <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-            <AuthContextProvide tempUser={tempUser ? JSON.parse(tempUser) : null} authOption={authOption}>
-              {children}
-            </AuthContextProvide>
+            <AuthContextProvide authOption={authOption}>{children}</AuthContextProvide>
           </Provider>
           <Chat />
         </body>

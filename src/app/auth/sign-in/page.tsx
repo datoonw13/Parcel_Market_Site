@@ -6,6 +6,7 @@ import GoogleAuthProvider from "@/components/auth/google-auth-provider/google-au
 import SignInForm from "@/components/auth/sign-in";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
+import { useAuth } from "@/lib/auth/auth-context";
 import { authWithCredentialsAction, authWithSocialNetworkAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPath } from "@/server-actions/subscription/actions";
 import { UserSource } from "@/types/common";
@@ -21,6 +22,7 @@ const SignInPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
+  const { signIn } = useAuth();
 
   return (
     <SignInForm
@@ -46,12 +48,10 @@ const SignInPage = () => {
           ]);
           // router.push(REDIRECT_URL);
           setRequestPending(false);
-          // await revalidateAllPath();
-          startAuthTransition(() => {
-            setTimeout(() => {
-              router.push(REDIRECT_URL);
-            }, 500);
+          signIn(request.data!, () => {
+            router.push(routes.home.fullUrl);
           });
+          // await revalidateAllPath();
         }
       }}
       authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}

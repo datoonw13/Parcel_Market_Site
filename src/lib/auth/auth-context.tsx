@@ -1,71 +1,105 @@
 "use client";
 
 import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { getAuthedUserDataAction, removeAuthTokensAction } from "@/server-actions/new-auth/new-auth";
+import {
+  getAuthedUserDataAction,
+  isAuthenticatedAction,
+  removeAuthTokensAction,
+  setAuthTokensAction,
+} from "@/server-actions/new-auth/new-auth";
 import moment from "moment";
 import { revalidateAllPathAction } from "@/server-actions/common-actions";
+import { ITokens } from "@/types/common";
+import { getUserAction } from "@/server-actions/user/actions";
 
 const AuthContext = createContext<{
   isAuthed: boolean;
   user: null | Awaited<ReturnType<typeof getAuthedUserDataAction>>;
   logOut: () => void;
+  signIn: (tokens: ITokens, cb?: () => void) => void;
 }>({
   isAuthed: false,
   user: null,
   logOut: () => {},
+  signIn: () => {},
 });
 
 const AuthContextProvide = ({
   children,
   authOption,
-  tempUser,
 }: {
   children: ReactNode;
   authOption: { isAuthed: boolean; expiresIn: number | null };
-  tempUser: null | Awaited<ReturnType<typeof getAuthedUserDataAction>>;
 }) => {
-  const [user, setUser] = useState<Awaited<ReturnType<typeof getAuthedUserDataAction>>>(authOption.isAuthed ? tempUser : null);
+  const [data, setData] = useState<{
+    isAuthed: boolean;
+    expiresIn: number | null;
+    user: Awaited<ReturnType<typeof getAuthedUserDataAction>>;
+  }>({
+    isAuthed: false,
+    user: null,
+    expiresIn: null,
+  });
 
   const timerRef = useRef<ReturnType<typeof setInterval>>();
 
-  const setAuthedUser = useCallback(async () => {
-    if (authOption.isAuthed) {
-      const authedUser = await getAuthedUserDataAction();
-      setUser(authedUser);
+  const signIn = useCallback(async (tokens: ITokens, cb?: () => void) => {
+    setAuthTokensAction([
+      {
+        token: tokens.access_token,
+        tokenName: "jwt",
+        remember: false,
+      },
+      {
+        token: tokens.refresh_token,
+        tokenName: "jwt-refresh",
+        remember: false,
+      },
+    ]);
+
+    const req = await isAuthenticatedAction();
+    const user = await getAuthedUserDataAction();
+
+    if (req.expiresIn && req.isAuthed && user) {
+      setData({ ...req, user });
     }
-  }, [authOption.isAuthed]);
+
+    if (cb) {
+      cb();
+    }
+  }, []);
 
   const logOut = useCallback(() => {
-    setUser(null);
+    setData({
+      isAuthed: false,
+      user: null,
+      expiresIn: null,
+    });
     removeAuthTokensAction();
     revalidateAllPathAction();
   }, []);
 
   useEffect(() => {
-    setAuthedUser();
-  }, [setAuthedUser]);
+    if (authOption.isAuthed) {
+      getAuthedUserDataAction().then((data) => {
+        setData({ ...authOption, user: data });
+      });
+    }
+  }, [authOption, authOption.isAuthed]);
 
   useEffect(() => {
-    if (authOption.isAuthed && authOption.expiresIn && user) {
-      const ms = moment.unix(authOption.expiresIn).diff(new Date());
+    if (data.isAuthed && data.expiresIn && data.user) {
+      const ms = moment.unix(data.expiresIn).diff(new Date());
       timerRef.current = setTimeout(() => {
-        setUser(null);
-        removeAuthTokensAction();
-        revalidateAllPathAction();
+        logOut();
       }, ms);
     }
     return () => {
       window.clearTimeout(timerRef.current);
     };
-  }, [authOption, user]);
+  }, [authOption, data.expiresIn, data.isAuthed, data.user, logOut]);
 
-  useEffect(() => {
-    if (user) {
-      document.cookie = `user=${JSON.stringify(user)}`;
-    }
-  }, [user]);
-
-  return <AuthContext.Provider value={{ isAuthed: authOption.isAuthed, user, logOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isAuthed: data.isAuthed, user: data.user, logOut, signIn }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContextProvide;
