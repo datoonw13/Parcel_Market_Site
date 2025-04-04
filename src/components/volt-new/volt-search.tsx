@@ -118,7 +118,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
               <p className="text-grey-800 text-sm font-medium">Search By</p>
               <Tooltip
                 renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
-                renderContent="What kind of criteria user needs to fill, or other info message"
+                renderContent="You can locate a property using one of the following methods:"
               />
             </div>
             <RadioGroup
@@ -167,7 +167,10 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 label={
                   <div className="flex items-center gap-2 w-ma">
                     <p>Search by Map</p>
-                    <Tooltip renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />} renderContent="Some info." />
+                    <Tooltip
+                      renderButton={<FaCircleInfo className="size-3.5 text-grey-200" />}
+                      renderContent="You can easily locate any piece of land directly on the map. Simply click on it to access the details."
+                    />
                   </div>
                 }
               />
