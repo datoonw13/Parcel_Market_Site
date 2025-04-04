@@ -20,6 +20,7 @@ import {
 } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPathAction } from "@/server-actions/common-actions";
 import { MdClear } from "react-icons/md";
+import { useAuth } from "@/lib/auth/auth-context";
 import { Button } from "../ui/button";
 import ResponsiveModal from "../ui/dialogs/responsive-dialog";
 import SignInForm from "../auth/sign-in";
@@ -78,6 +79,7 @@ const VoltSearchOnMap = ({
   user: IUserBaseInfo | null;
   selectedLayer: string;
 }) => {
+  const { signIn } = useAuth();
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const clickedFeatureProperty = useRef<string | number | null>(null);
   const hoveredFeatureProperty = useRef<string | number | null>(null);
@@ -412,23 +414,11 @@ const VoltSearchOnMap = ({
                   notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                   setRequestPending(false);
                 } else {
-                  setAuthTokensAction([
-                    {
-                      token: request.data!.access_token,
-                      tokenName: "jwt",
-                      remember: false,
-                    },
-                    {
-                      token: request.data!.refresh_token,
-                      tokenName: "jwt-refresh",
-                      remember: data.remember,
-                    },
-                  ]);
-                  await revalidateAllPathAction();
-                  setTimeout(() => {
-                    router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                  }, 500);
-                  setRequestPending(false);
+                  signIn(request.data!, () => {
+                    startTransition(() => {
+                      router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                    });
+                  });
                 }
               }}
               authWithCredentialsPending={userSource === UserSource.System && (isTransitioning || requestPending)}
@@ -453,25 +443,14 @@ const VoltSearchOnMap = ({
                         setAuthModal("sign-up");
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPathAction();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        signIn(request.data!, () => {
+                          startTransition(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          });
+                        });
                       }
-                      setRequestPending(false);
                     }}
                   />
                   <FacebookAuthProvider
@@ -488,25 +467,14 @@ const VoltSearchOnMap = ({
                         router.push(`${pathname}?${params.toString()}`);
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPathAction();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        signIn(request.data!, () => {
+                          startTransition(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          });
+                        });
                       }
-                      setRequestPending(false);
                     }}
                   />
                 </div>
@@ -541,25 +509,14 @@ const VoltSearchOnMap = ({
                         setAuthModal("sign-up");
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPathAction();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        signIn(request.data!, () => {
+                          startTransition(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          });
+                        });
                       }
-                      setRequestPending(false);
                     }}
                   />
                   <FacebookAuthProvider
@@ -576,25 +533,14 @@ const VoltSearchOnMap = ({
                         router.push(`${pathname}?${params.toString()}`);
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                        setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPathAction();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        signIn(request.data!, () => {
+                          startTransition(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          });
+                        });
                       }
-                      setRequestPending(false);
                     }}
                   />
                 </div>

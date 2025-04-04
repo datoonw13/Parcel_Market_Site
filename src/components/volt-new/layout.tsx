@@ -21,6 +21,7 @@ import {
   signUpUserAction,
 } from "@/server-actions/new-auth/new-auth";
 import { revalidateAllPath } from "@/server-actions/subscription/actions";
+import { useAuth } from "@/lib/auth/auth-context";
 import VoltDesktop from "./volt-desktop";
 import { breakPoints } from "../../../tailwind.config";
 import VoltMobile from "./volt-mobile";
@@ -77,6 +78,7 @@ const VoltLayout = ({
   user: IUserBaseInfo | null;
 }) => {
   const { targetReached: isSm, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
+  const { signIn } = useAuth();
   const [propertiesInteraction, setPropertiesInteraction] = useState<IPropertiesInteraction>({ hover: null, popup: null });
   const [authModal, setAuthModal] = useState<"sign-in" | "sign-up" | null>(null);
   const lastFetchedId = useRef<number | null>(null);
@@ -93,7 +95,6 @@ const VoltLayout = ({
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState("mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg");
-
   const form = useForm<VoltSearchModel>({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
@@ -101,27 +102,6 @@ const VoltLayout = ({
       searchType: initialParams?.searchType || "fullName",
     },
   });
-
-  useEffect(() => {
-    // if (initialParams) {
-    //   form.reset(initialParams);
-    //   // Manually mark all fields as dirty
-    //   Object.keys(initialParams).forEach((fieldName) => {
-    //     form.setValue(fieldName as keyof VoltSearchModel, initialParams[fieldName as keyof VoltSearchModel], { shouldDirty: true });
-    //   });
-    //   // Trigger validation if needed
-    //   form.trigger();
-    // } else {
-    //   const values = form.getValues();
-    //   form.reset();
-    //   // Manually mark all fields as dirty
-    //   Object.keys(values).forEach((fieldName) => {
-    //     form.setValue(fieldName as keyof VoltSearchModel, values[fieldName as keyof VoltSearchModel], { shouldDirty: true });
-    //   });
-    //   // Trigger validation if needed
-    //   form.trigger();
-    // }
-  }, [form, initialParams]);
 
   useEffect(() => {
     const isFromHome = params.get("fromHome");
@@ -174,13 +154,11 @@ const VoltLayout = ({
                       remember: data.remember,
                     },
                   ]);
-                  await revalidateAllPath();
-                  startAuthTransition(() => {
-                    setTimeout(() => {
+                  signIn(request.data!, () => {
+                    startAuthTransition(() => {
                       router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                    }, 500);
+                    });
                   });
-                  setRequestPending(false);
                 }
               }}
               authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
@@ -205,28 +183,14 @@ const VoltLayout = ({
                         setAuthModal("sign-up");
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(true);
+                        setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPath();
-                        startAuthTransition(() => {
-                          setTimeout(() => {
+                        signIn(request.data!, () => {
+                          startAuthTransition(() => {
                             router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                          }, 500);
+                          });
                         });
                       }
-                      setRequestPending(false);
                     }}
                   />
                   <FacebookAuthProvider
@@ -245,28 +209,14 @@ const VoltLayout = ({
                         });
                       } else if (request.errorMessage) {
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(true);
+                        setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPath();
-                        startAuthTransition(() => {
-                          setTimeout(() => {
+                        signIn(request.data!, () => {
+                          startAuthTransition(() => {
                             router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                          }, 500);
+                          });
                         });
                       }
-                      setRequestPending(true);
                     }}
                   />
                 </div>
@@ -303,22 +253,11 @@ const VoltLayout = ({
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                         setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPath();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        signIn(request.data!, () => {
+                          startAuthTransition(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          });
+                        });
                       }
                     }}
                   />
@@ -340,22 +279,11 @@ const VoltLayout = ({
                         notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                         setRequestPending(false);
                       } else {
-                        setAuthTokensAction([
-                          {
-                            token: request.data!.access_token,
-                            tokenName: "jwt",
-                            remember: false,
-                          },
-                          {
-                            token: request.data!.refresh_token,
-                            tokenName: "jwt-refresh",
-                            remember: false,
-                          },
-                        ]);
-                        revalidateAllPath();
-                        setTimeout(() => {
-                          router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        }, 500);
+                        signIn(request.data!, () => {
+                          startAuthTransition(() => {
+                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          });
+                        });
                       }
                     }}
                   />
