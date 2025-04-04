@@ -240,7 +240,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
                 error={!!errors.county}
               />
             </div>
-            <div className="w-full lg:mt-1 fixed bottom-0 left-0 border-t p-4 bg-grey-30 sm:border-0 sm:p-0 sm:bg-transparent sm:static">
+            <div className="w-full lg:mt-1 fixed bottom-0 left-0 border-t p-4 bg-grey-30 sm:border-0 sm:p-0 sm:bg-transparent sm:static z-10">
               <Button
                 id="volt-search-btn"
                 onClick={onSubmit}
