@@ -153,7 +153,7 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
                       disabled={data.assessments.data.length < 3}
                     />
                   }
-                  renderContent={data.assessments.data.length < 3 ? "VOLT works only for more than 2 properties." : ""}
+                  renderContent={data.assessments.data.length < 3 ? "3 or more comp. sales needed for VOLT to work" : ""}
                 />
               </div>
             </div>

@@ -88,7 +88,7 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
             className="[&:has([data-state=checked])]:bg-warning [&[data-state=checked]>span]:translate-x-4 h-4 w-8 [&>span]:w-3 [&>span]:h-3"
           />
         }
-        renderContent={data.assessments.data.length < 3 ? "VOLT works only for more than 2 properties." : ""}
+        renderContent={data.assessments.data.length < 3 ? "3 or more comp. sales needed for VOLT to work" : ""}
       />
     </div>
   </div>
