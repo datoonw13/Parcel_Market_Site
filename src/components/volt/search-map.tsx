@@ -7,15 +7,19 @@ import { IVoltPriceCalculationReqParams, VoltSteps, VoltWrapperValuesModel } fro
 import useStates from "@/hooks/useStates";
 import area from "@turf/area";
 import { polygon, convertArea } from "@turf/helpers";
-import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+
+import { calculateLandPriceAction, calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { getAdditionalSearchDetails } from "@/server-actions/user-searches/actions";
 import { swapPolygonCoordinates } from "@/lib/utils";
+// @ts-ignore
+import polylabel from "@mapbox/polylabel";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
+import { AutoComplete } from "../ui/autocomplete";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
-
 interface VoltSearchMapProps {
   data: VoltWrapperValuesModel["searchDetails"];
   setStep: Dispatch<SetStateAction<VoltSteps>>;
@@ -25,10 +29,11 @@ interface VoltSearchMapProps {
 
 const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, values }) => {
   const { notify } = useNotification();
-  const { getCounty, allStates, getState } = useStates();
+  const { getCounty, states, getState } = useStates({ hideBlackListedStated: false });
   const [mapRef, setMapRef] = useState<MapBoX | null>(null);
   const hoveredFeaturePropertyId = useRef<null | number>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [openParcelData, setOpenParcelData] = useState<{
     owner: string;
     acreage: number;
@@ -38,6 +43,8 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     county: string;
     parcelNumber: string;
     coordinates: string;
+    proeprtyType: string;
+    locality: string;
   } | null>(null);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
   const [calculationPending, setCalculationPending] = useState(false);
@@ -88,89 +95,106 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     [mapRef]
   );
 
-  const initializeMap = useCallback(() => {
+  const initializeMap = useCallback(async () => {
     if (mapRef) {
-      mapRef.on("load", async () => {
-        const parcelCreate = await fetch(`https://tiles.regrid.com/api/v1/parcels?format=mvt&token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
+      const createTiles = await fetch(`https://tiles.regrid.com/api/v1/sources?token=${process.env.NEXT_PUBLIC_REGRID_KEY}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: {
+            parcel: true,
           },
-        });
-        const parcelCreateData = await parcelCreate.json();
-
-        mapRef!.addSource(parcelCreateData.id, {
-          type: "vector",
-          tiles: parcelCreateData.tiles,
-          promoteId: "fid",
-        });
-        mapRef!.addLayer({
-          id: "parcels",
-          type: "line",
-          source: parcelCreateData.id,
-          "source-layer": parcelCreateData.id,
-          minzoom: 14,
-          maxzoom: 20,
-          layout: {
-            visibility: "visible",
-          },
-          paint: {
-            "line-color": "#649d8d",
-          },
-        });
-
-        mapRef!.addLayer({
-          id: "parcel-assist",
-          type: "fill",
-          source: parcelCreateData.id,
-          "source-layer": parcelCreateData.id,
-          minzoom: 14,
-          maxzoom: 20,
-          layout: {
-            visibility: "visible",
-          },
-          paint: {
-            "fill-color": [
-              "case",
-              ["boolean", ["feature-state", "selected"], false],
-              "#649d8d", // Turns parcel green when clicked
-              ["boolean", ["feature-state", "hover"], false],
-              "#649d8d", // Turns green when hovered
-              "#fff", // Default color
-            ],
-            "fill-opacity": [
-              "case",
-              ["boolean", ["feature-state", "selected"], false],
-              0.9, // Almost fully opaque when selected
-              ["boolean", ["feature-state", "hover"], false],
-              0.5, // Half transparent when hovered
-              0.1, // Default color
+          fields: {
+            parcel: [
+              "usedesc",
+              "parcelnumb_no_formatting",
+              "parcelnumb",
+              "state2",
+              "county",
+              "city",
+              "zoning_description",
+              "owner",
+              "lat",
+              "lon",
+              "gisacre",
+              "ll_gisacre",
             ],
           },
-        });
-
-        mapRef.on("mousemove", "parcel-assist", handleMouseMove);
+        }),
       });
+      const parcelCreateData = await createTiles.json();
+
+      mapRef!.addSource(parcelCreateData.id, {
+        type: "vector",
+        tiles: parcelCreateData.vector,
+        promoteId: "fid",
+      });
+      mapRef!.addLayer({
+        id: "parcels",
+        type: "line",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        minzoom: 14,
+        maxzoom: 20,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "line-color": "#649d8d",
+        },
+      });
+
+      mapRef!.addLayer({
+        id: "parcel-assist",
+        type: "fill",
+        source: parcelCreateData.id,
+        "source-layer": parcelCreateData.id,
+        minzoom: 14,
+        maxzoom: 20,
+        layout: {
+          visibility: "visible",
+        },
+        paint: {
+          "fill-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#649d8d", // Turns parcel green when clicked
+            ["boolean", ["feature-state", "hover"], false],
+            "#649d8d", // Turns green when hovered
+            "#fff", // Default color
+          ],
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            0.9, // Almost fully opaque when selected
+            ["boolean", ["feature-state", "hover"], false],
+            0.5, // Half transparent when hovered
+            0.1, // Default color
+          ],
+        },
+      });
+
+      mapRef.on("mousemove", "parcel-assist", handleMouseMove);
 
       mapRef.on("click", (e) => {
         const feature: any = mapRef!.queryRenderedFeatures(e.point, {
           layers: ["parcel-assist"],
         })?.[0];
 
-        const coordinates = feature.geometry?.coordinates;
-
         if (feature) {
-          // @ts-ignore
-          const acreage = convertArea(area(polygon(coordinates)), "meters", "acres").toFixed(2);
           setOpenParcelData({
             owner: feature?.properties?.owner || "",
-            acreage: Number(acreage),
-            county: feature?.properties?.path.split("/")[3] || "",
-            state: feature?.properties?.path.split("/")[2] || "",
+            acreage: Number(Number(feature.properties.gisacre || feature.properties.ll_gisacre).toFixed(2)),
+            county: feature?.properties?.county?.toLocaleLowerCase() || "",
+            state: feature?.properties?.state2.toLocaleLowerCase() || "",
             parcelNumber: feature?.properties?.parcelnumb,
-            lat: e.lngLat.lat,
-            lng: e.lngLat.lng,
+            lat: Number(feature.properties.lat),
+            lng: Number(feature.properties.lon),
             coordinates: JSON.stringify(swapPolygonCoordinates(feature.geometry?.coordinates)),
+            proeprtyType: feature?.properties.zoning_description || feature.properties.usedesc || "",
+            locality: feature.properties.city || "",
           });
 
           if (popupRef.current) {
@@ -188,39 +212,34 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
     if (!openParcelData) {
       return;
     }
-    const reqData: IVoltPriceCalculationReqParams = {
-      body: {
-        county: openParcelData.county,
-        state: openParcelData.state,
-        parcelNumber: openParcelData.parcelNumber,
-        owner: openParcelData.owner,
-        propertyType: "",
-        coordinates: openParcelData.coordinates,
-        locality: "",
-      },
-      queryParams: {
-        acre: openParcelData.acreage.toString(),
-        lat: openParcelData.lat.toString(),
-        lon: openParcelData.lng.toString(),
-      },
-    };
     setCalculationPending(true);
 
-    const res = await calculateLandPriceAction(reqData);
+    const res = await calculateLandPriceAction2({
+      county: openParcelData.county,
+      state: openParcelData.state,
+      parcelNumber: openParcelData.parcelNumber,
+      owner: openParcelData.owner,
+      propertyType: openParcelData.proeprtyType,
+      coordinates: openParcelData.coordinates,
+      locality: "",
+      acrage: openParcelData.acreage.toString(),
+      lat: openParcelData.lat.toString(),
+      lon: openParcelData.lng.toString(),
+    });
+
+    if (res.data) {
+      router.push(`/volt/${res.data}`);
+    }
 
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    } else {
-      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(res.data!.id));
-      setStep(VoltSteps.CALCULATION);
-      setValues((prev) => ({ ...prev, calculation: res.data, additionalDataResult }));
     }
     setCalculationPending(false);
   };
 
   useEffect(() => {
     if (mapRef) {
-      toggleMapOptions();
+      // toggleMapOptions();
       initializeMap();
     }
   }, [initializeMap, mapRef, toggleMapOptions]);
@@ -230,13 +249,44 @@ const VoltSearchMap: FC<VoltSearchMapProps> = ({ data, setValues, setStep, value
       const county = getCounty(data.state, data.county);
       if (county) {
         mapRef.flyTo({ center: [county.full.lng, county.full.lat], zoom: 14 });
-        toggleMapOptions();
+        // toggleMapOptions();
       }
     }
   }, [data, getCounty, mapRef, toggleMapOptions]);
 
+  const styles = [
+    "mapbox://styles/mapbox/standard",
+    "mapbox://styles/mapbox/standard-satellite",
+    "mapbox://styles/mapbox/streets-v12",
+    "mapbox://styles/mapbox/outdoors-v12",
+    "mapbox://styles/mapbox/light-v11",
+    "mapbox://styles/mapbox/dark-v11",
+    "mapbox://styles/mapbox/satellite-v9",
+    "mapbox://styles/mapbox/satellite-streets-v12",
+    "mapbox://styles/mapbox/navigation-day-v1",
+    "mapbox://styles/mapbox/navigation-night-v1",
+  ];
+
   return (
     <>
+      <div className="fixed right-0 top-0 z-50">
+        <AutoComplete
+          selectedValue={null}
+          options={styles.map((el) => ({ label: el, value: el }))}
+          placeholder="State"
+          onValueChange={(value) => {
+            if (value) {
+              mapRef?.setStyle(value);
+              mapRef?.on("style.load", (e) => {
+                initializeMap();
+              });
+            }
+            // setValue("state", value || "", { shouldValidate: true });
+            // setValue("county", "", { shouldValidate: true });
+          }}
+          // disabled={disableSearch}
+        />
+      </div>
       <TermsConditionsDialog
         open={showCalculationTerms}
         closeModal={() => setShowCalculationTerms(false)}

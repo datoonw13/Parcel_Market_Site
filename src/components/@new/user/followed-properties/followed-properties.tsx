@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { IoAddOutline } from "react-icons/io5";
@@ -14,7 +14,7 @@ import SubscribeError from "../../shared/subscribe-error";
 import UserFollowerPropertiesFilter from "./filters/filters";
 
 interface FollowedPropertiesProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   totalItems: number;
   children: ReactNode;
   filters: z.infer<typeof userPropertiesFiltersValidations>;

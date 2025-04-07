@@ -8,9 +8,9 @@ const AccountActivationPage = async ({ searchParams }: { searchParams: { token?:
   if (!searchParams.email || !searchParams.token) {
     redirect(routes.auth.signIn.fullUrl);
   }
-  const { errorMessage } = await activateUserAccountAction(searchParams.token);
+  const { errorMessage, data } = await activateUserAccountAction(searchParams.token);
 
-  return <AccountActivation email={searchParams.email} errorMessage={errorMessage} />;
+  return <AccountActivation email={searchParams.email} errorMessage={errorMessage} data={data} />;
 };
 
 export default AccountActivationPage;

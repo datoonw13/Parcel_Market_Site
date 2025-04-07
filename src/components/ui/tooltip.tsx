@@ -23,32 +23,39 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 interface TooltipProps {
   renderButton: ReactElement;
-  renderContent: ReactElement | string;
+  renderContent: ReactElement | string | null;
   buttonClassName?: string;
   contentClasses?: string;
   id?: string;
+  sideOffset?: number;
+  alignOffset?: number;
 }
 
-const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses, id }) => {
+const Tooltip: FC<TooltipProps> = ({ renderButton, renderContent, buttonClassName, contentClasses, id, alignOffset, sideOffset }) => {
   const [open, setOpen] = useState(false);
   return (
-    <TooltipPrimitive.Provider delayDuration={300}>
+    <TooltipPrimitive.Provider delayDuration={0}>
       <TooltipPrimitive.Root open={open} onOpenChange={setOpen}>
         <TooltipPrimitive.Trigger
           id={id}
           onClick={(e) => {
             setOpen(!open);
           }}
-          asChild
           className={cn("cursor-pointer", buttonClassName)}
         >
           <div>{renderButton}</div>
         </TooltipPrimitive.Trigger>
-        <TooltipContent
-          className={cn("bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium", contentClasses)}
-        >
-          {renderContent}
-        </TooltipContent>
+        {renderContent && (
+          <TooltipPrimitive.Portal>
+            <TooltipContent
+              sideOffset={sideOffset}
+              alignOffset={alignOffset}
+              className={cn("bg-black rounded-md py-1.5 px-3 !text-xss text-white max-w-60 text-center font-medium", contentClasses)}
+            >
+              {renderContent}
+            </TooltipContent>
+          </TooltipPrimitive.Portal>
+        )}
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>
   );

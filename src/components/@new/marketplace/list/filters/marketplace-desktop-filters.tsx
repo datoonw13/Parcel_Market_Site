@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import MultiSelect from "@/components/@new/filters/desktop/multi-select";
-import { getAllStates, getCounties } from "@/helpers/states";
 import { uniqBy } from "lodash";
 import { acreagesFilters, getAcreageLabel, getMinMaxFilterLabel, priceFilters } from "@/components/@new/shared/filters/filters-utils";
 import { IMarketplaceFilters } from "@/types/lands";
@@ -17,14 +16,8 @@ const MarketplaceDesktopFilters = ({
   onChange: <T extends keyof IMarketplaceFilters>(data: { [key in T]: IMarketplaceFilters[T] }) => void;
   disabled?: boolean;
 }) => {
-  const states = useMemo(() => getAllStates(), []);
-  const counties = useMemo(() => {
-    const countiesList =
-      selectedFilters.states?.map((state) =>
-        getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))
-      ) || [];
-    return uniqBy(countiesList.flat(), "value");
-  }, [selectedFilters.states]);
+  const states: any = [];
+  const counties: any = [];
 
   return (
     <div className="grid w-full grid-cols-4 gap-3">

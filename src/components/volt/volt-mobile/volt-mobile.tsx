@@ -1,6 +1,6 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import VoltCalculation from "../volt-calculation";
 import VoltSearchMap from "../search-map";
 
 interface VoltMobileProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   step: VoltSteps;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;

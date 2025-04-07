@@ -2,7 +2,7 @@
 
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LuLoader2 } from "react-icons/lu";
@@ -12,7 +12,7 @@ import VoltMobile from "./volt-mobile/volt-mobile";
 import PropertyDetailWarningModal from "./property-detail-warning-modal";
 
 interface VoltWrapperProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }
 
 const initialValues = {

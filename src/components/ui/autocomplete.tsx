@@ -26,6 +26,7 @@ type AutoCompleteProps = {
   inputRootClassName?: string;
   clearable?: boolean;
   id?: string;
+  onOpenChange?: (value: boolean) => void;
 };
 
 const AutoComplete: FC<AutoCompleteProps> = ({
@@ -39,6 +40,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
   inputRootClassName,
   clearable,
   id,
+  onOpenChange,
 }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -60,18 +62,26 @@ const AutoComplete: FC<AutoCompleteProps> = ({
     };
   }, []);
 
-  // useEffect(() => {
-  //   setSearch(options.find((option) => option.value === selectedValue)?.label || "");
-  // }, [options, selectedValue]);
-
   useEffect(() => {
     if (!open) {
       setSearch("");
     }
   }, [open]);
 
+  useEffect(() => {
+    if (onOpenChange) {
+      onOpenChange(open);
+    }
+  }, [open, onOpenChange]);
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={(value) => {
+        onOpenChange && onOpenChange(value);
+        setOpen(value);
+      }}
+    >
       <Command
         filter={(value, key) => {
           const item = options.find((el) => el.value === value);
@@ -113,8 +123,10 @@ const AutoComplete: FC<AutoCompleteProps> = ({
               setOpen(false);
             }}
             value={search || ""}
+            autoComplete="one-time-code"
           >
             <Input
+              autoComplete="one-time-code"
               endIcon={
                 <>
                   <div className="flex items-center">
@@ -137,7 +149,7 @@ const AutoComplete: FC<AutoCompleteProps> = ({
               rootClassName={cn(
                 "w-full",
                 inputRootClassName,
-                open && "[&>.end-icon]:!pointer-events-none [&>.start-icon]:!pointer-events-none"
+                open && "[&>.end-icon]:!pointer-events-none [&>.start-icon]:!pointer-events-none  z-10 bg-white"
               )}
               ref={inputRef}
               placeholder={placeholder || ""}
@@ -168,7 +180,9 @@ const AutoComplete: FC<AutoCompleteProps> = ({
             }}
             transition={{ duration: 0.1 }}
             onAnimationStart={() => {
-              document.querySelector(`[data-value=${selectedValue}]`)?.scrollIntoView();
+              try {
+                document?.querySelector(`[data-value=${selectedValue}]`)?.scrollIntoView();
+              } catch (error) {}
             }}
           >
             <ScrollArea className="max-h-72 w-full">

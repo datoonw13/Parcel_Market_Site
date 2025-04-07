@@ -2,7 +2,7 @@
 
 import VoltPriceCalculationAxis from "@/components/volt/volt-calculation-axis";
 import { moneyFormatter } from "@/helpers/common";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import { IUserRecentSearches } from "@/types/user";
 import moment from "moment";
@@ -23,7 +23,7 @@ import SearchItemDetailsTable from "./calculation-table";
 interface SearchItemDetailsDesktopContentProps {
   data: IUserRecentSearches;
   additionalDataResult: IUserRecentSearches;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   openSubscriptionWarning: () => void;
   isUserSubscriptionTrial?: boolean;
 }

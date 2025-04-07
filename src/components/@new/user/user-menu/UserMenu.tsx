@@ -2,13 +2,12 @@
 
 import React from "react";
 import Avatar from "@/components/@new/shared/Avatar";
-import { IDecodedAccessToken, ISignInResponse } from "@/types/auth";
 import { cn } from "@/helpers/common";
 import Popper from "../../shared/Popper";
 import UserMenuList from "./UserMenuList";
 import { ArrowIconDown1 } from "../../icons/ArrowIcons";
 
-const UserMenu = ({ user }: { user: IDecodedAccessToken }) => (
+const UserMenu = ({ user }: { user: any }) => (
   <Popper
     placement="bottom"
     renderButton={(setReferenceElement, referenceElement) => (

@@ -4,8 +4,6 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { VoltWrapperValuesModel } from "@/types/volt";
 import { cn, isElementVisible } from "@/lib/utils";
 import { MapInteractionModel } from "@/types/common";
-import { removeParcelNumberFormatting } from "@/helpers/common";
-import VoltItem from "./volt-item";
 
 interface VoltSearchResultProps {
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
@@ -38,7 +36,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ setValues, values, classN
         <h1 className="font-semibold text-lg">Did we find your property?</h1>
         <h2 className="text-sm text-grey-800">Use the map or list below to select your property.</h2>
       </div>
-      <div className="flex flex-col gap-2">
+      {/* <div className="flex flex-col gap-2">
         {values.searchResult?.map((item) => (
           <VoltItem
             isSellingProperty
@@ -77,7 +75,7 @@ const VoltSearchResult: FC<VoltSearchResultProps> = ({ setValues, values, classN
             }
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

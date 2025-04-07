@@ -11,9 +11,14 @@ const useNotification = () => {
     if (!data.title && !data.description) {
       return;
     }
-    toast(<ToastNotification title={data.title || ""} description={data.description || ""} variant={options?.variant} />, {
-      autoClose: options?.duration || 3500,
-    });
+
+    const toastId = JSON.stringify((data?.title || "") + (data.description || ""));
+    if (!toast.isActive(toastId)) {
+      toast(<ToastNotification title={data.title || ""} description={data.description || ""} variant={options?.variant} />, {
+        autoClose: options?.duration || 3500,
+        toastId,
+      });
+    }
   };
 
   return { notify };

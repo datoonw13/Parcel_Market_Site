@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import { resumeSubscriptionAction } from "@/server-actions/subscription/actions";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { cn } from "@/lib/utils";
 import Button from "../../shared/forms/Button";
 import UpdatePlanDialog from "./update-plan-dialog";
 import CancelPlanDialog from "./cancel-plan-dialog";
@@ -22,28 +23,22 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
     case SubscriptionType.Monthly:
       return {
         title: "Monthly",
-        price: "$20.00",
+        price: "20.00",
         desc: "per month",
-      };
-    case SubscriptionType.Annual:
-      return {
-        title: "Annual",
-        price: "$215.00",
-        desc: "save 10% per month",
       };
     default:
       return {
-        title: "5 Days",
-        price: "Free",
-        desc: "Risk Free! No Payment Info Required",
+        title: "Annual",
+        price: "215.00",
+        desc: "save 10% per month",
       };
   }
 };
 
 const checkIsActive = (subscription: SubscriptionType, userActiveSubscription?: ISubscription) => {
-  if (subscription === SubscriptionType.Trial) {
-    return userActiveSubscription?.status === "trialing";
-  }
+  // if (subscription === SubscriptionType.Trial) {
+  //   return userActiveSubscription?.status === "trialing";
+  // }
   if (subscription === SubscriptionType.Monthly && userActiveSubscription?.status !== "trialing") {
     return userActiveSubscription?.type === SubscriptionType.Monthly;
   }
@@ -78,20 +73,34 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
       {openCancelModal && userActiveSubscription && (
         <CancelPlanDialog closeDialog={() => setOpenCancelModal(false)} userActiveSubscription={userActiveSubscription} />
       )}
-      <div className="bg-white rounded-2xl p-8 shadow-4 flex flex-col">
-        <div className="gap-3 font-semibold text-sm text-primary-main min-h-14 flex items-start">
+      <div className={cn("bg-white rounded-2xl p-8 flex flex-col border", isActive && "border-success")}>
+        <div className="gap-3 font-semibold text-sm text-primary-main flex items-start">
           {isActive ? (
             <div className="flex items-center gap-3">
               <div className="h-3 w-3 rounded-full bg-success" />{" "}
-              <span className="uppercase">active until: {moment(userActiveSubscription!.activeTo).format("MM/DD/YYYY")}</span>{" "}
+              <span className="uppercase text-success">active until: {moment(userActiveSubscription!.activeTo).format("MM/DD/YYYY")}</span>{" "}
             </div>
           ) : (
-            <span className="uppercase text-sm"> {desc}</span>
+            <span className="uppercase text-sm">{desc}</span>
           )}
         </div>
         <div className="flex items-baseline gap-1 mt-2 mb-8">
-          <p className="text-5xl font-bold">{price}</p>
-          <p>/ {title}</p>
+          <p className="text-5xl font-bold">
+            <span className="text-2xl">$</span>
+            {price}
+          </p>
+          <p className="font-normal">
+            / {title}{" "}
+            {type === SubscriptionType.Annual && (
+              <span>
+                (
+                <span className="font-semibold relative after:absolute after:bg-error after:h-0.5 after:w-full after:content-[''] after:left-0 after:top-[50%] after:translate-y-[-50%] after:-rotate-12">
+                  $300
+                </span>{" "}
+                Discount)
+              </span>
+            )}
+          </p>
         </div>
         {isActive && userActiveSubscription?.cancelAtPeriodEnd && (
           <Button
@@ -115,7 +124,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
             onClick={async () => {
               setOpenCancelModal(true);
             }}
-            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+            className="w-full mt-auto transition-none font-semibold group-hover:text-white text-start justify-between"
             loading={resumePending}
             variant="secondary"
             endIcon={FaArrowRightLong}
@@ -123,6 +132,15 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
             Cancel subscription
           </Button>
         )}
+        {/* {isActive && (
+          <Button
+            className="subscribed w-full mt-auto text-center  [&>div]:text-center flex items-center justify-center pointer-events-none"
+            loading={resumePending}
+            variant="secondary"
+          >
+            Subscribed
+          </Button>
+        )} */}
         {!isActive && (
           <Button
             onClick={async () => {
@@ -130,12 +148,12 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
               params.set("plan", type);
               router.push(`${routes.checkout.fullUrl}?${params.toString()}`);
             }}
-            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between bg-primary-main/10 hover:bg-primary-main/20 text-primary-main"
             loading={resumePending}
             variant="primary"
             endIcon={FaArrowRightLong}
           >
-            {price === "Free" ? "Try for free" : "Subscribe"}
+            Subscribe
           </Button>
         )}
       </div>

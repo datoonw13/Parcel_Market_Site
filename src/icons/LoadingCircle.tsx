@@ -14,7 +14,7 @@ const LoadingCircle = () => (
         repeatCount="indefinite"
       />
       <animate
-        attributeName="stroke-opacity"
+        attributeName="strokeOpacity"
         calcMode="spline"
         dur="2"
         values="1;0"

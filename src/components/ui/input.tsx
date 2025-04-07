@@ -33,7 +33,7 @@ const styles = {
   font-medium text-xs w-full border-none outline-none h-full bg-transparent placeholder-grey-800
   [&:not(:placeholder-shown)+p]:top-0 [&:not(:placeholder-shown)+p]:pt-7 [&:not(:placeholder-shown)+p]:!text-xss [&:not(:placeholder-shown)+p]:!font-normal [&:not(:placeholder-shown)+p]:text-grey-600
   `,
-  label: "text-grey-800 text-xs absolute top-1/2 left-0 transform -translate-y-1/2 transition-all transition-duration:100ms;",
+  label: "text-grey-800 font-medium text-xs absolute top-1/2 left-0 transform -translate-y-1/2 transition-all transition-duration:100ms;",
 };
 
 const TextInput = forwardRef<HTMLDivElement, InputGeneralProps>(({ className, type, ...props }, ref) => {

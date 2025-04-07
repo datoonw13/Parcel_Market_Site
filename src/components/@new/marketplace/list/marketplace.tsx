@@ -1,6 +1,6 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { SellingPropertyDetails } from "@/types/property";
 import { IPagination } from "@/types/common";
 import { FC, ReactNode } from "react";
@@ -14,7 +14,7 @@ import MarketPlaceFilters from "./filters/marketplace-filters";
 import { ArrowIconLeftFilled1 } from "../../icons/ArrowIcons";
 
 interface MarketplaceProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   initialData: ({ list: SellingPropertyDetails[] } & IPagination) | null;
   children: ReactNode;
   totalCount: number;

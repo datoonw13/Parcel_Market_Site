@@ -11,9 +11,11 @@ import routes from "@/helpers/routes";
 import { GiCheckMark } from "react-icons/gi";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+// import { useAuthUser } from "../shared/auth-session-provider";
 
 export default function Subscribe() {
   const { targetReached } = useMediaQuery(1024);
+  // const { user } = useAuthUser();
   const [activeSlide, setActiveSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
   const settings = {
@@ -44,6 +46,8 @@ export default function Subscribe() {
       },
     ],
   };
+
+  const user = null;
 
   return (
     <div className="space-y-6 md:space-y-8 lg:space-y-11" id="pricing">
@@ -79,17 +83,26 @@ export default function Subscribe() {
             <div className="h-full group">
               <div className="flex items-center h-full w-full md:scale-y-95 md:hover:scale-y-100 md:transition-all md:duration-100">
                 <div className="h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
-                  <h2 className="font-medium text-xs text-primary-main h-10 uppercase">Risk Free! No Payment Info Required</h2>
+                  {!user && <h2 className="font-medium text-xs text-primary-main h-10 uppercase">Risk Free! No Payment Info Required</h2>}
+                  {user && (
+                    <div className="flex items-center gap-2">
+                      <div className="size-5 rounded-full bg-success" />
+                      <p className="text-success font-medium">Active</p>
+                    </div>
+                  )}
                   <h1 className="text-[44px] font-bold mb-7 md:mb-8">
                     Free <span className="text-base font-normal">/ 5 Days</span>
                   </h1>
-                  <Link id="landing-subscription-try-free-btn" href={routes.user.subscription.fullUrl}>
+                  {/* <Link id="landing-subscription-try-free-btn" href={routes.user.subscription.fullUrl}>
                     <Button className="flex w-full [&>span]:w-full bg-primary-main-100 hover:bg-primary-main-200 group-hover:bg-primary-main">
                       <div className="flex items-center justify-between gap-2 w-full text-primary-main group-hover:text-white font-semibold">
                         Try For Free <FaArrowRightLong />
                       </div>
                     </Button>
-                  </Link>
+                  </Link> */}
+                  <ul className="list-disc list-inside">
+                    <li className="text-sm">included all except pricing and the data export</li>
+                  </ul>
                 </div>
               </div>
             </div>

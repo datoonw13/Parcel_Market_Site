@@ -8,6 +8,8 @@ export interface ResponseType<T> {
 export interface ResponseModel<T> {
   data: T;
   errorMessage: string | null;
+  statusCode?: number;
+  responseCreated?: Date;
 }
 
 export interface IPagination {
@@ -38,3 +40,15 @@ export interface MapInteractionModel {
 export type UnwrapArray<T> = T extends Array<infer R> ? R : never;
 
 export type AsyncReturnType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R> ? R : any;
+
+export enum UserSource {
+  Google = "google",
+  Facebook = "facebook",
+  System = "system",
+  Unknown = "unknown",
+}
+
+export interface ITokens {
+  access_token: string;
+  refresh_token: string;
+}

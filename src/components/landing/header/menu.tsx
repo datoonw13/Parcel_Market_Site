@@ -13,7 +13,6 @@ import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { CiUser } from "react-icons/ci";
 import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
-import { IDecodedAccessToken } from "@/types/auth";
 import { HiOutlineBell } from "react-icons/hi2";
 import { usePathname } from "next/navigation";
 import { breakPoints } from "../../../../tailwind.config";
@@ -21,10 +20,11 @@ import HeaderNotifications from "./notifications";
 import UserMenu from "./user-menu";
 
 interface HeaderMenuProps {
-  user: IDecodedAccessToken | null;
+  user: any | null;
+  onAnimationStart?: () => void;
 }
 
-const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
+const HeaderMenu: FC<HeaderMenuProps> = ({ user, onAnimationStart }) => {
   const burgerIconRef = useRef<HTMLButtonElement>(null);
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
   const pathname = usePathname();
@@ -46,7 +46,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                   e.preventDefault();
                 }
               }}
-              className="outline-none w-screen relative -translate-y-1 z-[9999]"
+              className="outline-none w-screen relative -translate-y-1"
             >
               <motion.div
                 initial={{ opacity: 0 }}
@@ -61,6 +61,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.1 }}
                 className="bg-white w-screen !outline-none p-5 border-t border-t-grey-100 flex flex-col rounded-b-xl"
+                onAnimationStart={onAnimationStart}
               >
                 <Link href={routes.volt.fullUrl} className="text-sm hover:text-primary-main py-1.5 transition-all duration-100">
                   Value of land tool
@@ -117,7 +118,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user }) => {
             {!!user && (
               <>
                 <Link id="header-recent-searches-button" href={routes.user.recentSearches.fullUrl} className="h-fit mr-4">
-                  <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">My Recent Searches</p>
+                  <p className="text-sm font-medium hover:text-primary-main transition-all duration-100">Data Dashboard</p>
                 </Link>
                 <HeaderNotifications />
                 <UserMenu user={user} />
@@ -157,7 +158,7 @@ const list = [
     path: routes.user.subscription.fullUrl,
   },
   {
-    label: "My Recent Searches",
+    label: "Data Dashboard",
     icon: PiClockCountdown,
     path: routes.user.recentSearches.fullUrl,
   },

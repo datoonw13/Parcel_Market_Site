@@ -73,7 +73,7 @@ const list = [
   //   path: routes.user.followedProperties.fullUrl,
   // },
   {
-    label: "My Recent Searches",
+    label: "Data Dashboard",
     icon: BsClockHistory,
     path: routes.user.recentSearches.fullUrl,
   },

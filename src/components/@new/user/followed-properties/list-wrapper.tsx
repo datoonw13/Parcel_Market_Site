@@ -13,7 +13,8 @@ const UserFollowedPropertiesListWrapper = async ({
   filters: z.infer<typeof userPropertiesFiltersValidations>;
 }) => {
   const { data } = await getUserFollowedListingAction(pageSize, filters);
-  return <UserFollowedPropertiesList pageSize={pageSize} data={data} filters={filters} totalItems={totalItems} />;
+  return null;
+  // return <UserFollowedPropertiesList pageSize={pageSize} data={data} filters={filters} totalItems={totalItems} />;
 };
 
 export default UserFollowedPropertiesListWrapper;

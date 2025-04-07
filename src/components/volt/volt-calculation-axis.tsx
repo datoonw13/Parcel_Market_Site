@@ -1,6 +1,6 @@
 import { moneyFormatter } from "@/helpers/common";
 import { cn } from "@/lib/utils";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { MapInteractionModel } from "@/types/common";
 import { Dispatch, SetStateAction } from "react";
 import { FaLocationDot } from "react-icons/fa6";
@@ -54,7 +54,7 @@ interface VoltPriceCalculationAxisProps {
     isMainLand: boolean;
   }[];
   setOpenPropertyDetailWarningModal: Dispatch<SetStateAction<boolean>>;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   voltValue: number;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;

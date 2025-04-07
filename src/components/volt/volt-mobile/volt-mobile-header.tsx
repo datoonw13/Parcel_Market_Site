@@ -1,13 +1,13 @@
 import HeaderMenu from "@/components/landing/header/menu";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import Logo from "@/icons/Logo";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { VoltSteps } from "@/types/volt";
 import Link from "next/link";
 import React from "react";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 
-const VoltMobileHeader = ({ step, user, goBack }: { goBack: () => void; step: VoltSteps; user: IDecodedAccessToken | null }) => (
+const VoltMobileHeader = ({ step, user, goBack }: { goBack: () => void; step: VoltSteps; user: IUserBaseInfo | null }) => (
   <Popover modal>
     <PopoverAnchor>
       <div className="w-full" id="volt-navbar">

@@ -1,0 +1,27 @@
+.swiper-bullet-custom {
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 0 4px; /* Adjust spacing between bullets */
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 1 !important;
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+    border: 0;
+    outline: 0;
+}
+.swiper-bullet-custom-active {
+    width: 30px; /* Increased width for active bullet */
+    border-radius: 8px; /* Rounded rectangle shape */
+    animation: bulletGrow 0.3s ease; /* Animation for active bullet */
+}
+
+/* Keyframes for the active bullet animation */
+@keyframes bulletGrow {
+    0% {
+        width: 8px; /* Start with default bullet size */
+    }
+    100% {
+        width: 30px; /* End with increased width */
+    }
+}

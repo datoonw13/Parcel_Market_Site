@@ -2,36 +2,61 @@
 
 import Button from "@/components/@new/shared/forms/Button";
 import routes from "@/helpers/routes";
-import { resendSignUpVerificationCodeAction } from "@/server-actions/user/actions";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import useNotification from "@/hooks/useNotification";
+import { getUserAction, resendSignUpVerificationCodeAction, signInUserManuallyAction } from "@/server-actions/user/actions";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const AccountActivation = ({ email, errorMessage }: { email: string; errorMessage?: string | null }) => {
+const AccountActivation = ({
+  email,
+  errorMessage,
+  data,
+}: {
+  email: string;
+  errorMessage?: string | null;
+  data: {
+    access_token: string;
+    refresh_token: string;
+  } | null;
+}) => {
   const router = useRouter();
-  const toastId = useRef(null);
   const [resendLoading, setResendLoading] = useState(false);
+  const { notify } = useNotification();
 
   const resendEmail = async () => {
     setResendLoading(true);
     const { errorMessage } = await resendSignUpVerificationCodeAction(email!);
     if (errorMessage) {
       toast.error(errorMessage);
+      notify({ title: "Error", description: errorMessage });
     } else {
-      toast.success("Verification code sent successfully");
+      notify({ title: "Success", description: "Verification code sent successfully" });
     }
     setResendLoading(false);
   };
 
-  useEffect(() => {
-    if (!errorMessage) {
-      toast.success("Your email address has been successfully confirmed, now sign into your account", {
-        duration: 3500,
-        id: "activation-toast",
-      });
-      router.push(routes.auth.signIn.fullUrl);
+  const redirectToParcel = useCallback(async () => {
+    const user = await getUserAction();
+    if (user) {
+      router.push(`${routes.volt.fullUrl}/${localStorage.getItem("voltLastFetchedId")}`);
+      localStorage.removeItem("voltLastFetchedId");
     }
-  }, []);
+  }, [router]);
+
+  useEffect(() => {
+    if (!errorMessage && data) {
+      notify({ title: "Success", description: "Your email address has been successfully activate. Now you are logged in." });
+
+      signInUserManuallyAction(data);
+      if (localStorage.getItem("voltLastFetchedId")) {
+        redirectToParcel();
+      } else {
+        router.push(routes.volt.fullUrl);
+      }
+    }
+  }, [data, errorMessage, notify, redirectToParcel, router]);
+
   return (
     errorMessage && (
       <div className="sm:p-16">

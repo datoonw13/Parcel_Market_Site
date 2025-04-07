@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { SubscriptionType } from "@/types/subscriptions";
-import { useAuth } from "@/components/shared/auth-session-provider";
 import ResponsiveWarningModal from "../../shared/modals/ResponsiveWarningModal";
 
 interface UpdatePlanDialogProps {
@@ -27,7 +26,7 @@ const planDescription = (subscription: SubscriptionType) => {
 };
 
 const UpdatePlanDialog: FC<UpdatePlanDialogProps> = ({ closeDialog, pending, onSubmit, subscription }) => {
-  const { subscriptions } = useAuth();
+  const subscriptions: any = [];
 
   return (
     <ResponsiveWarningModal

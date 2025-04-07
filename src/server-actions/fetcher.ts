@@ -1,7 +1,7 @@
 "use server";
 
 import { ErrorResponse } from "@/helpers/error-response";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 // https://api.parcelmarket.com
@@ -11,6 +11,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     ...options,
     headers: {
       "Content-Type": "application/json",
+      "X-Device-Type": cookies().get("device")?.value || "desktop",
       cookie: cookies().toString(),
     },
   });
@@ -21,6 +22,7 @@ export const fetcher = async <T>(url: string, options?: RequestInit): Promise<T>
     message: string;
     statusCode: number;
   };
+
   if (!response?.statusCode?.toString()?.startsWith("2")) {
     let errorMessage = "Something went wrong";
     if (response.message) {

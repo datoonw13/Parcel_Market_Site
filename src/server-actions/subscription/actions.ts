@@ -18,15 +18,14 @@ export const getStripeSessionAction = async (subscriptionType: SubscriptionType)
     const domain = headersList.get("host") || "";
     const fullUrl = headersList.get("referer") || "";
     const selectedPlan = new URL(fullUrl.toString()).searchParams.get("plan");
+    const redirectUrl = new URL(fullUrl.toString()).searchParams.get("redirectUrl") || routes.home.fullUrl;
     const date = moment().toISOString();
     const url = new URL(fullUrl);
-
     const data = await fetcher<{ clientSecret: string }>(`stripe/create-checkout-session-subscription`, {
       method: "POST",
       body: JSON.stringify({
         subscriptionType,
-        redirectUri: `${url.origin}${url.pathname}?&success=true&date=${date}&selectedType=${selectedPlan}&plan=${selectedPlan}`,
-        // redirectUri: `${fullUrl.split("://")[0]}://${domain}${routes.home.fullUrl}`,
+        redirectUri: `${url.origin}/subscription-update-success?&success=true&date=${date}&selectedType=${selectedPlan}&plan=${selectedPlan}&redirectUrl=${redirectUrl}`,
       }),
     });
 
@@ -221,6 +220,6 @@ export const updateSubscriptionAction = async (
   }
 };
 
-export const revalidateAllPath = () => {
-  revalidatePath("/");
+export const revalidateAllPath = async () => {
+  await revalidatePath("/");
 };

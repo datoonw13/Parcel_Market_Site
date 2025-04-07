@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import ResponsiveModal from "@/components/ui/dialogs/responsive-dialog";
 import { MinmaxDropdownContent } from "@/components/ui/minmax-dropdown";
 import { Checkbox } from "@/components/ui/checkbox";
-import { getAllStates, getCounties } from "@/helpers/states";
 import { cn, parseSearchParams, updateSearchParamsWithFilters } from "@/lib/utils";
 import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { uniqBy } from "lodash";
@@ -12,6 +11,7 @@ import { TransitionStartFunction, useEffect, useMemo, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { TbFilter } from "react-icons/tb";
 import { z } from "zod";
+import useStates from "@/hooks/useStates";
 
 const sortMultiSelectOptions = (options: { label: string; value: string }[], selectedValues: string[]) => {
   const checkedOptions = options.filter((el) => selectedValues.find((x) => x === el.value));
@@ -23,17 +23,20 @@ const SearchesMobileFilters = ({ startTransition }: { startTransition: Transitio
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const { states, counties, getCountiesByState } = useStates({ hideBlackListedStated: true });
+
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<typeof filters>(null);
   const filters = useMemo(() => parseSearchParams(userSearchesValidations, searchParams), [searchParams]);
-  const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => {
+
+  const countiesList = useMemo(() => {
     const countiesList =
       values?.states
         ?.split(",")
-        .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
+        .map((state) => getCountiesByState(state || "")?.map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` })) || []) ||
+      [];
     return uniqBy(countiesList.flat(), "value");
-  }, [values?.states]);
+  }, [values?.states, getCountiesByState]);
 
   const changeLocalFilter = <T extends keyof z.infer<typeof userSearchesValidations>>(
     data: Array<{
@@ -142,7 +145,7 @@ const SearchesMobileFilters = ({ startTransition }: { startTransition: Transitio
               >
                 <AccordionTrigger>Counties</AccordionTrigger>
                 <AccordionContent className="space-y-3">
-                  {sortMultiSelectOptions(counties, filters?.counties?.split(",") || []).map((county) => (
+                  {sortMultiSelectOptions(countiesList, filters?.counties?.split(",") || []).map((county) => (
                     <Checkbox
                       id={county.value}
                       key={county.value}
@@ -220,7 +223,7 @@ const SearchesMobileFilters = ({ startTransition }: { startTransition: Transitio
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="voltPrice">
-                <AccordionTrigger>VOLT Price</AccordionTrigger>
+                <AccordionTrigger>VOLT Value</AccordionTrigger>
                 <AccordionContent>
                   <MinmaxDropdownContent
                     error={voltPriceError}
@@ -329,7 +332,7 @@ const SearchesMobileFilters = ({ startTransition }: { startTransition: Transitio
             className={cn(
               "p-2.5 h-fit !bg-transparent text-grey-800 border border-grey-100 !rounded-xl relative",
               totalFiltersSelected &&
-                `border-primary-main !bg-primary-main-100 text-primary-main 
+                `border-primary-main !bg-primary-main-100 text-primary-main
               after:content-[attr(after-dynamic-value)] after:absolute after:bg-error after:rounded-full after:text-white after:size-5 after:text-xs after:right-0 after:top-0 after:translate-x-1/2 after:-translate-y-1/2`
             )}
             after-dynamic-value={totalFiltersSelected}

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/dialogs/drawer";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { VoltSteps } from "@/types/volt";
 import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 
@@ -21,7 +21,7 @@ const snapPointsEnum = {
 
 interface VoltMobileDrawerProps {
   step: VoltSteps;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   children: ReactNode;
   renderButton: ReactNode;
 }

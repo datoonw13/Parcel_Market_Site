@@ -8,15 +8,13 @@ import { updateUserInfoSchema } from "@/zod-validations/auth-validations";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getAllStates, getStateValue } from "@/helpers/states";
 import { updateUserInfoAction } from "@/server-actions/user/actions";
 import toast from "react-hot-toast";
 import useNotification from "@/hooks/useNotification";
 import { CiEdit } from "react-icons/ci";
-import { NumberInput, TextInput } from "@/components/ui/input";
+import { TextInput } from "@/components/ui/input";
 import Button from "../../shared/forms/Button";
 import UserProfileSection from "./UserProfileSection";
-import { AutoComplete } from "../../../ui/autocomplete";
 
 const PersonalInfoSection = ({ user }: { user: IUser }) => {
   const { notify } = useNotification();
@@ -30,27 +28,17 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
   } = useForm<z.infer<typeof updateUserInfoSchema>>({
     resolver: zodResolver(updateUserInfoSchema),
     defaultValues: {
-      city: "",
       firstName: "",
       lastName: "",
-      postalCode: "",
-      state: "",
-      streetName: "",
-      unitNumber: "",
     },
   });
 
   const resetForm = useCallback(() => {
     reset({
-      city: user.city,
       firstName: user.firstName,
       lastName: user.lastName,
-      postalCode: user.postalCode,
-      state: user.state,
-      streetName: user.streetName,
-      unitNumber: user.unitNumber || "",
     });
-  }, [reset, user.city, user.firstName, user.lastName, user.postalCode, user.state, user.streetName, user.unitNumber]);
+  }, [reset, user.firstName, user.lastName]);
 
   const onSubmit = handleSubmit(async (data) => {
     const { errorMessage } = await updateUserInfoAction(data);
@@ -104,67 +92,21 @@ const PersonalInfoSection = ({ user }: { user: IUser }) => {
       }
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:col-span-2 xl:col-span-1">
-          <TextInput
-            required
-            value={watch("firstName") || ""}
-            error={!!errors.firstName}
-            onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
-            disabled={!editMode}
-            label="First Name"
-          />
-          <TextInput
-            required
-            value={watch("lastName") || ""}
-            error={!!errors.lastName}
-            onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
-            disabled={!editMode}
-            label="Last Name"
-          />
-        </div>
         <TextInput
           required
-          value={watch("streetName") || ""}
-          error={!!errors.streetName}
-          onChange={(e) => setValue("streetName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
+          value={watch("firstName") || ""}
+          error={!!errors.firstName}
+          onChange={(e) => setValue("firstName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
-          label="Address"
-        />
-        <TextInput
-          value={watch("unitNumber") || ""}
-          error={!!errors.unitNumber}
-          onChange={(e) => setValue("unitNumber", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
-          disabled={!editMode}
-          label="Unit Number"
+          label="First Name"
         />
         <TextInput
           required
-          value={watch("city") || ""}
-          error={!!errors.city}
-          onChange={(e) => setValue("city", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
+          value={watch("lastName") || ""}
+          error={!!errors.lastName}
+          onChange={(e) => setValue("lastName", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
           disabled={!editMode}
-          label="City"
-        />
-        <AutoComplete
-          disabled={!editMode}
-          options={getAllStates({ filterBlackList: false }).map(({ counties, ...el }) => el)}
-          onValueChange={(item) => {
-            if (item) {
-              setValue("state", item, { shouldValidate: isSubmitted, shouldDirty: true });
-            }
-          }}
-          placeholder="State"
-          selectedValue={getStateValue(watch("state"))?.value || null}
-          error={!!errors.state}
-        />
-        <NumberInput
-          required
-          value={watch("postalCode") || ""}
-          error={!!errors.postalCode}
-          onChange={(e) => setValue("postalCode", e.target.value, { shouldValidate: isSubmitted, shouldDirty: true })}
-          disabled={!editMode}
-          label="Postal Code"
-          maxLength={5}
+          label="Last Name"
         />
       </div>
     </UserProfileSection>

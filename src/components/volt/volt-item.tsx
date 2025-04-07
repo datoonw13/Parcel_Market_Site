@@ -1,148 +1,164 @@
 "use client";
 
-import { moneyFormatter } from "@/helpers/common";
 import { cn } from "@/lib/utils";
-import { IPropertyBaseInfo, IPropertyOwner, IPropertyPricePerAcre, IPropertySaleHistory } from "@/types/property";
 import moment from "moment";
-import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
+import React, { Dispatch, FC, SetStateAction } from "react";
+import { PropertyDataSchema } from "@/zod-validations/volt-new";
+import { z } from "zod";
+import { IPropertiesInteraction } from "@/types/volt";
 
-type VoltItemData = IPropertyBaseInfo & Partial<IPropertySaleHistory> & Partial<IPropertyOwner> & Partial<IPropertyPricePerAcre>;
+type IItem = z.infer<typeof PropertyDataSchema>["assessments"]["data"][0] & { isBulked: false };
 
 interface VoltItemProps {
-  data: VoltItemData;
-  selected?: boolean;
-  onHover?: (property: VoltItemData) => void;
-  onMouseLeave?: (property: VoltItemData) => void;
-  onSelect?: (property: VoltItemData) => void;
-  id: string;
-  isHighlighted?: boolean;
-  map?: ReactElement;
-  isSellingProperty: boolean;
-  isAdditional?: boolean;
+  data: IItem;
+  setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
+  propertiesInteraction: IPropertiesInteraction;
+  isNonValidMedianHighlighted: boolean;
+  sellingPropertyId: string;
 }
 
-const VoltItem: FC<VoltItemProps> = ({
-  map,
-  data,
-  selected,
-  onHover,
-  onMouseLeave,
-  onSelect,
-  id,
-  isHighlighted,
-  isSellingProperty,
-  isAdditional,
+const generateClasses = (data: {
+  selected: boolean;
+  hovered: boolean;
+  isMedianValid: boolean;
+  hasSellingProperty: boolean;
+  isNonValidMedianHighlighted: boolean;
 }) => {
-  const [open, setOpen] = useState("");
+  const { hasSellingProperty, hovered, isMedianValid, isNonValidMedianHighlighted, selected } = data;
+  let classNames = "border";
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const handleClickOutside = (event: any) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setOpen("");
+  if (isMedianValid || (!isMedianValid && !isNonValidMedianHighlighted)) {
+    if (hovered) {
+      classNames = `${classNames} bg-grey-30/60`;
     }
-  };
+    if (selected) {
+      classNames = `${classNames} bg-grey-50`;
+    }
+  }
 
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside, true);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
-  }, []);
+  if (!isMedianValid && isNonValidMedianHighlighted) {
+    classNames = `${classNames} bg-[#FEFAEB]`;
+    if (hovered) {
+      classNames = `${classNames} bg-[#fdf5d8]`;
+    }
+    if (selected) {
+      classNames = `${classNames} bg-[#fdf5d8]`;
+    }
+  }
+
+  if (hasSellingProperty) {
+    classNames = `${classNames} outline outline-primary-main outline-1`;
+  }
+  return cn(classNames);
+};
+
+const getState = (id: string, propertiesInteraction: IPropertiesInteraction) => {
+  const hovered = propertiesInteraction.hover?.openId === id;
+  const popup = propertiesInteraction.popup?.openId === id;
+
+  return {
+    hovered,
+    popup,
+    isActive: hovered || popup,
+  };
+};
+
+const VoltItem: FC<VoltItemProps> = ({
+  data,
+  isNonValidMedianHighlighted,
+  propertiesInteraction,
+  setPropertiesInteraction,
+  sellingPropertyId,
+}) => {
+  const { hovered, popup } = getState(data.data.id, propertiesInteraction);
 
   return (
-    <Accordion
-      ref={ref}
-      type="single"
-      collapsible
-      value={open}
-      onValueChange={(value) => {
-        if (map) {
-          setOpen(value);
-        } else {
+    <div
+      className={cn(
+        "p-2 rounded-2xl",
+        generateClasses({
+          hasSellingProperty: data.data.isSellingProperty,
+          hovered,
+          selected: popup,
+          isMedianValid: data.data.isMedianValid,
+          isNonValidMedianHighlighted,
+        })
+      )}
+      onClick={() => {
+        setPropertiesInteraction((prev) => ({
+          ...prev,
+          popup:
+            prev.popup?.openId !== data.data.id
+              ? {
+                  clickId: data.data.id,
+                  isBulked: false,
+                  openId: data.data.id,
+                }
+              : null,
+        }));
+      }}
+      onMouseEnter={() => {
+        if (!popup) {
+          setPropertiesInteraction((prev) => ({
+            ...prev,
+            hover: {
+              clickId: data.data.id,
+              isBulked: false,
+              openId: data.data.id,
+            },
+          }));
         }
       }}
+      onMouseLeave={() => {
+        setPropertiesInteraction((prev) => ({ ...prev, hover: null }));
+      }}
+      id={data.data.id}
     >
-      <AccordionItem
-        value={data.id.toString()}
-        className={cn(
-          "p-5 rounded-2xl border  cursor-pointer transition-all duration-100",
-          isAdditional ? "border-[#fcedb6] bg-[#fef7dd99] hover:bg-[#fef7ddcc]" : "border-[#D5D3D3]",
-          selected && !isAdditional && " !border-primary-main-400 !bg-primary-main-50",
-          selected && isAdditional && " !bg-[#fef7dd]",
-          isHighlighted && !isAdditional && "bg-grey-50 border-[#D5D3D3]",
-          isHighlighted && isAdditional && "bg-[#f7edc6]",
-          isAdditional ? "" : "hover:bg-grey-50 hover:border-[#D5D3D3]"
-        )}
-        onMouseEnter={() => onHover && onHover(data)}
-        onMouseLeave={() => onMouseLeave && onMouseLeave(data)}
-        onClick={() => onSelect && onSelect(data)}
-        id={id}
-      >
-        <AccordionTrigger className="text-start [&>svg]:hidden py-0">
-          <div className="w-full space-y-2 ">
-            <div className="w-full flex justify-between items-center gap-6">
-              <div className="w-full space-y-0.5">
-                <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] justify-between items-center w-full gap-6">
-                  {data.owner ? (
-                    <p className="text-lg font-semibold truncate">{data.owner || "N/A"}</p>
-                  ) : (
-                    <p className="text-xs text-grey-600 font-medium">State/County</p>
-                  )}
-                  <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
-                </div>
-                <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] justify-between items-baseline w-full gap-6">
-                  <p className={data.owner ? "text-xs text-grey-600 font-medium" : "text-sm font-semibold"}>
-                    {data.state.label}/{data?.county?.label?.replace("County", "")}
-                  </p>
-                  <p className="text-sm font-medium truncate">{data.parcelNumberNoFormatting}</p>
-                </div>
+      <div className="text-start [&>svg]:hidden py-0">
+        <div className="w-full space-y-2 ">
+          <div className="w-full flex justify-between items-center gap-6">
+            <div className="w-full space-y-0.5">
+              <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] justify-between items-center w-full gap-6">
+                <p className="text-xs text-grey-600 font-medium">State/County</p>
+                <p className="text-sm text-grey-600 font-medium w-max">Parcel Number:</p>
               </div>
-            </div>
-            <hr className="bg-gray-100" />
-            <div className="flex gap-2 justify-between">
-              <div className="space-y-1">
-                <p className="text-xs text-grey-600">
-                  Acreage:{" "}
-                  <span className="text-black font-medium">
-                    {data.acreage.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
-                  </span>
+              <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] justify-between items-baseline w-full gap-6">
+                <p className="text-sm font-semibold">
+                  {data.data?.state.label}/{data.data?.county?.label?.replace("County", "")}
                 </p>
-                {data.lastSalePrice && (
-                  <p className="text-xs text-grey-600">
-                    Sold Price: <span className="text-black font-medium">{moneyFormatter.format(data.lastSalePrice)}</span>
-                  </p>
-                )}
-              </div>
-              <div className="space-y-1">
-                {data.pricePerAcreage && (
-                  <p className="text-xs text-grey-600">
-                    {isSellingProperty ? "VOLT Value Per Acreage" : "Sold Price Per Acre"}:{" "}
-                    <span className="text-black font-medium">{moneyFormatter.format(data.pricePerAcreage)}</span>
-                  </p>
-                )}
-                {data.lastSaleDate && (
-                  <p className="text-xs text-grey-600">
-                    Last Sale Date: <span className="text-black font-medium">{moment(data.lastSaleDate).format("MM/DD/YYYY")}</span>
-                  </p>
-                )}
+                <p className="text-sm font-medium truncate">{data.data.parcelNumber.formattedString}</p>
               </div>
             </div>
           </div>
-        </AccordionTrigger>
-        {map && (
-          <AccordionContent>
-            <div
-              style={{ aspectRatio: "3/1" }}
-              className="bg-primary-main-100 w-full h-52 sm:h-56 md:h-60 rounded-lg [&>div]:rounded-lg mt-8"
-            >
-              {map}
+          <hr className="bg-gray-100" />
+          <div className="flex gap-2 justify-between">
+            <div className="space-y-1">
+              <p className="text-xs text-grey-600">
+                Acreage: <span className="text-black font-medium">{data.data.acreage.formattedString}</span>
+              </p>
+              {data.data.lastSalePrice && (
+                <p className="text-xs text-grey-600">
+                  Sold Price: <span className="text-black font-medium">{data.data.lastSalePrice.formattedString}</span>
+                </p>
+              )}
             </div>
-          </AccordionContent>
-        )}
-      </AccordionItem>
-    </Accordion>
+            <div className="space-y-1">
+              {data.data.pricePerAcreage && (
+                <p className="text-xs text-grey-600">
+                  {data.data.isSellingProperty ? "VOLT Value Per Acreage" : "Sold Price Per Acre"}:{" "}
+                  <span className="text-black font-medium">{data.data.pricePerAcreage.formattedString}</span>
+                </p>
+              )}
+              {data.data.lastSaleDate && (
+                <p className="text-xs text-grey-600">
+                  Last Sale Date: <span className="text-black font-medium">{moment(data.data.lastSaleDate).format("MM/DD/YYYY")}</span>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

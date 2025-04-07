@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import area from "@turf/area";
 import { polygon, convertArea } from "@turf/helpers";
 
-mapboxgl.accessToken = "pk.eyJ1IjoibXJ6aXBwbzEyMyIsImEiOiJjbTRqazMzZGEwaTZiMmxzaGw5bmwxazhlIn0.kU8XbKNSEtMyNoAifLqbEQ";
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY || "";
 
 const MapboxComponent = () => {
   const hoveredFeaturePropertyId = useRef<null | number>(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { IVoltPriceCalculation, IVoltPriceCalculationReqParams, VoltSearchModel, VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import useMediaQuery from "@/hooks/useMediaQuery";
@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { MapInteractionModel } from "@/types/common";
 import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
-import { calculateLandPriceAction } from "@/server-actions/volt/actions";
+import { calculateLandPriceAction, calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { Button } from "@/components/ui/button";
 import routes from "@/helpers/routes";
 import { cn } from "@/lib/utils";
@@ -28,11 +28,12 @@ import VoltPriceCalculationAxis from "./volt-calculation-axis";
 import VoltMap from "./volt-map";
 import { TermsConditionsDialog } from "../shared/terms-conditions";
 import VoltSearchMap from "./search-map";
+import SearchItemDetailsDesktopMap from "../@new/user/searches/details/map-desktop";
 
 const MapBox = dynamic(() => import("./mapbox"), { ssr: false });
 
 interface VoltDesktopProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   step: VoltSteps;
   setStep: Dispatch<SetStateAction<VoltSteps>>;
   setValues: Dispatch<SetStateAction<VoltWrapperValuesModel>>;
@@ -87,44 +88,34 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
   const { notify } = useNotification();
   const [calculationPending, setCalculationPending] = useState(false);
   const [showCalculationTerms, setShowCalculationTerms] = useState(false);
-  const [selectedSearchType, setSearchType] = useState<VoltSearchModel["searchType"]>("fullName");
+  const [selectedSearchType, setSearchType] = useState<VoltSearchModel["searchType"]>(values.searchDetails?.searchType || "fullName");
   const [showAdditionalData, setShowAdditionalData] = useState(false);
 
   const calculatePrice = async () => {
     if (!values.selectedItem) {
       return;
     }
-    const reqData: IVoltPriceCalculationReqParams = {
-      body: {
-        county: values.selectedItem?.county.value,
-        state: values.selectedItem?.state.value,
-        parcelNumber: values.selectedItem?.parcelNumberNoFormatting,
-        owner: values.selectedItem.owner,
-        propertyType: values.selectedItem.propertyType || "",
-        coordinates: JSON.stringify(values.selectedItem.polygon),
-        locality: values.selectedItem.city,
-      },
-      queryParams: {
-        acre: values.selectedItem.acreage.toString(),
-        lat: values.selectedItem.lat.toString(),
-        lon: values.selectedItem.lon.toString(),
-      },
-    };
     setCalculationPending(true);
 
-    const res = await calculateLandPriceAction(reqData);
+    const res = await calculateLandPriceAction2({
+      county: values.selectedItem?.county.value || "",
+      state: values.selectedItem?.state.value,
+      parcelNumber: values.selectedItem?.parcelNumberNoFormatting,
+      owner: values.selectedItem.owner,
+      propertyType: values.selectedItem.propertyType || "",
+      coordinates: JSON.stringify(values.selectedItem.polygon),
+      locality: values.selectedItem.city,
+      acrage: values.selectedItem.acreage.toString(),
+      lat: values.selectedItem.lat.toString(),
+      lon: values.selectedItem.lon.toString(),
+    });
+
+    if (res.data) {
+      router.push(`/volt/${res.data}`);
+    }
 
     if (res?.errorMessage || !res?.data) {
       notify({ title: "Error", description: res?.errorMessage || "Unknown" }, { variant: "error" });
-    } else {
-      const { data: additionalDataResult, errorMessage: e } = await getAdditionalSearchDetails(Number(res.data!.id));
-      setStep(VoltSteps.CALCULATION);
-      setValues((prev) => ({ ...prev, calculation: res.data, additionalDataResult }));
-      setMpaInteraction({
-        hoveredParcelNumber: null,
-        openPopperParcelNumber: null,
-        zoom: false,
-      });
     }
     setCalculationPending(false);
   };
@@ -265,18 +256,30 @@ const VoltDesktop: FC<VoltDesktopProps> = ({ user, setStep, step, setValues, val
               </div>
             </td>
             <td rowSpan={1} className="bg-primary-main-100 h-full">
-              {selectedSearchType === "map" && !values.calculation ? (
+              {selectedSearchType === "map" && step === VoltSteps.SEARCH && (
                 <VoltSearchMap setStep={setStep} data={values.searchDetails} values={values} setValues={setValues} />
-              ) : (
+              )}
+              {step === VoltSteps.SEARCH_RESULTS && (
                 <VoltMap
                   step={step}
-                  user={user}
-                  setOpenPropertyDetailWarningModal={setOpenPropertyDetailWarningModal}
                   values={values}
                   setValues={setValues}
                   mapInteraction={mapInteraction}
                   setMpaInteraction={setMpaInteraction}
                   showAdditionalData={showAdditionalData}
+                  setOpenPropertyDetailWarningModal={() => {}}
+                  user={user}
+                />
+              )}
+
+              {step === VoltSteps.CALCULATION && values.calculation && (
+                <SearchItemDetailsDesktopMap
+                  data={values.calculation as any}
+                  mapInteraction={mapInteraction}
+                  setMpaInteraction={setMpaInteraction}
+                  additionalDataResult={values.additionalDataResult as any}
+                  user={user}
+                  openWarningModal={() => {}}
                 />
               )}
             </td>
