@@ -18,30 +18,11 @@ const VoltVideo = () => (
         <Button className="w-full">Try For Free</Button>
       </Link>
     </div>
-    <div className="w-full lg:order-1 shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] p-4 rounded-b-2xl lg:rounded-2xl h-52 md:h-64 lg:h-72 xl:h-80">
-      <div className="w-full h-full rounded-2xl">
-        <video
-          // onMouseEnter={(e) => {
-          //   e.currentTarget.setAttribute("controls", "controls");
-          // }}
-          // onClick={(e) => {
-          //   e.currentTarget.setAttribute("controls", "controls");
-          // }}
-          // onMouseLeave={(e) => {
-          //   e.currentTarget.removeAttribute("controls");
-          // }}
-          controls
-          width="100%"
-          height="100%"
-          className="w-full"
-          poster="/subnail.png"
-          preload="metadata"
-          playsInline
-        >
-          <source src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
+    <div className="flex w-full lg:order-1 lg:shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] p-4 rounded-b-2xl lg:rounded-2xl h-52 md:h-64 lg:h-72 xl:h-80">
+      <video controls width="100%" height="100%" className="w-full rounded-2xl" poster="/subnail.png" preload="metadata" playsInline>
+        <source src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </div>
     <Link className="w-full px-4 lg:hidden" href={routes.volt.fullUrl}>
       <Button className="w-full">Try For Free</Button>
