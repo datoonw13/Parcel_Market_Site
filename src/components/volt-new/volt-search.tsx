@@ -257,7 +257,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
               <video playsInline controls width="100%" height="100%" className="w-full" poster="/subnail.png" preload="metadata">
                 <source
                   src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4"
-                  type="vihttps://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4deo/mp4"
+                  type="video/mp4"
                 />
                 Your browser does not support the video tag.
               </video>
