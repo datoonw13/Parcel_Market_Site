@@ -127,9 +127,13 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                     lng: childEl.longitude,
                     lat: childEl.latitude,
                     type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
-                    markerIcon: `red-${el.data.group}`,
-                    hoveredMarkerIcon: `red-highlighted-${el.data.group}`,
-                    selectedMarkerIcon: `red-highlighted-${el.data.group}`,
+                    markerIcon: `${isNonValidMedianHighlighted && !el.data.isMedianValid ? "yellow" : "red"}-${el.data.group}`,
+                    hoveredMarkerIcon: `${isNonValidMedianHighlighted && !el.data.isMedianValid ? "yellow" : "red"}-highlighted-${
+                      el.data.group
+                    }`,
+                    selectedMarkerIcon: `${isNonValidMedianHighlighted && !el.data.isMedianValid ? "yellow" : "red"}-highlighted-${
+                      el.data.group
+                    }`,
                     markerSize: 1,
                     hoveredMarkerSize: 1,
                     selectedMarkerSize: 1,
@@ -160,9 +164,9 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
                 lng: el.data.longitude,
                 lat: el.data.latitude,
                 type: el.data.isMedianValid ? "calculation-valid" : "calculation-not-valid",
-                markerIcon: "red-default",
-                hoveredMarkerIcon: "red-highlighted-default",
-                selectedMarkerIcon: "red-highlighted-default",
+                markerIcon: `${isNonValidMedianHighlighted && !el.data.isMedianValid ? "yellow" : "red"}-default`,
+                hoveredMarkerIcon: `${isNonValidMedianHighlighted && !el.data.isMedianValid ? "yellow" : "red"}-highlighted-default`,
+                selectedMarkerIcon: `${isNonValidMedianHighlighted && !el.data.isMedianValid ? "yellow" : "red"}-highlighted-default`,
                 markerSize: 1,
                 hoveredMarkerSize: 1,
                 selectedMarkerSize: 1,
@@ -281,6 +285,7 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       data.acreage.formattedString,
       data.assessments.data,
@@ -439,6 +444,8 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [ref]);
 
   const updateMarkerColor = useCallback(() => {
+    console.log("aqaa", isNonValidMedianHighlighted);
+
     if (!ref) return;
     if (isNonValidMedianHighlighted) {
       const source = ref.getSource(mapData.sources.markersSource);
