@@ -1,7 +1,7 @@
 "use client";
 
 import { LocationIcon1 } from "@/components/@new/icons/LocationIcons";
-import { getCountyValue, getStateValue } from "@/helpers/states";
+import { getCounty, getState } from "@/helpers/states";
 import { OfferModel } from "@/types/offer";
 import { IdIcon1 } from "@/components/@new/icons/IdIcons";
 import { ResizeIcon1 } from "@/components/@new/icons/ResizeIcons";
@@ -19,8 +19,7 @@ const OfferDetail = ({ data }: { data: OfferModel }) => (
           <p className="font-semibold truncate">{data.sellingProperty.title}</p>
           <p className="flex items-center gap-1.5 text-grey-600 text-xs">
             <LocationIcon1 className="!w-3 !h-3.5" color="primary-main" />
-            {getStateValue(data.sellingProperty.state)?.label};{" "}
-            {getCountyValue(data.sellingProperty.county, data.sellingProperty.state)?.label}
+            {getState(data.sellingProperty.state)?.label}; {getCounty(data.sellingProperty.county, data.sellingProperty.state)?.short.label}
           </p>
         </div>
         <div className="flex sm:flex-col justify-between items-center sm:items-end">

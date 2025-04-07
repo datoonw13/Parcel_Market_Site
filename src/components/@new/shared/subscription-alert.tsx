@@ -1,10 +1,10 @@
 import { getUserAction } from "@/server-actions/user/actions";
 import Link from "next/link";
 import routes from "@/helpers/routes";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import Alert from "./Alert";
 
-const SubscriptionAlert = ({ user }: { user: IDecodedAccessToken | null }) =>
+const SubscriptionAlert = ({ user }: { user: IUserBaseInfo | null }) =>
   !user?.isSubscribed && (
     <Alert
       className="mb-6 md:mb-8"

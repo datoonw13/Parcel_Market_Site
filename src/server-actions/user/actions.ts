@@ -1,6 +1,6 @@
 "use server";
 
-import { updateUserInfoSchema, userSignInValidation } from "@/zod-validations/auth-validations";
+import { defaultSignInSchema, updateUserInfoSchema } from "@/zod-validations/auth-validations";
 import { ResponseModel, ResponseType } from "@/types/common";
 import { redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
 import { NextRequest } from "next/server";
-import { DeletionAccountReason, IDecodedAccessToken, ISignInResponse, IUser, IUserSignUp } from "../../types/auth";
+import { DeletionAccountReason, ISignInResponse, IUser, IUserBaseInfo, IUserSignUp } from "../../types/auth";
 import { fetcher } from "../fetcher";
 
 // export const setAuthToken = (token: string, remember?: boolean) => {
@@ -34,7 +34,7 @@ export const removeAccessToken = () => {
 
 export const generateAccessToken = async (): Promise<ResponseModel<string | null>> => {
   try {
-    const data = await fetcher<ISignInResponse>("user/token/refresh", { method: "POST" });
+    const data = await fetcher<ISignInResponse>("auth/token/refresh", { method: "POST" });
     return {
       data: data.access_token,
       errorMessage: null,
@@ -56,7 +56,7 @@ export const signInUserAction = async (
     email: formData.get("email"),
     password: formData.get("password"),
   };
-  const validations = userSignInValidation.safeParse(values);
+  const validations = defaultSignInSchema.safeParse(values);
   if (!validations.success) {
     return {
       errorMessage: "Unauthorized",
@@ -87,6 +87,36 @@ export const signInUserAction = async (
       secure: true,
     });
     return { data, errorMessage: null };
+  } catch (error) {
+    return {
+      errorMessage: (error as ErrorResponse).message,
+      data: null,
+    };
+  }
+};
+
+export const signInUserManuallyAction = async (
+  data: { access_token: string; refresh_token: string },
+  remember?: boolean
+): Promise<ResponseModel<null>> => {
+  try {
+    // set jwt tokens in cookie
+    const decodedToken = jwtDecode(data.refresh_token) as { exp: number };
+    const maxAgeInSeconds = moment.duration(moment.unix(decodedToken.exp).diff(moment(new Date()))).asSeconds();
+    cookies().set({
+      name: "jwt-refresh",
+      value: data.refresh_token,
+      httpOnly: true,
+      secure: true,
+      ...(remember && { maxAge: maxAgeInSeconds }),
+    });
+    cookies().set({
+      name: "jwt",
+      value: data.access_token,
+      httpOnly: true,
+      secure: true,
+    });
+    return { data: null, errorMessage: null };
   } catch (error) {
     return {
       errorMessage: (error as ErrorResponse).message,
@@ -187,8 +217,8 @@ export const logOutUserAction = async () => {
   redirect(fullUrl);
 };
 
-export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
-  const refreshToken = cookies().get("jwt-refresh");
+export const getUserAction = async (): Promise<IUserBaseInfo | null> => {
+  const refreshToken = cookies().get("jwt");
   let userString = cookies().get("jwt")?.value;
 
   if (refreshToken && !userString) {
@@ -201,8 +231,8 @@ export const getUserAction = async (): Promise<IDecodedAccessToken | null> => {
   if (userString) {
     try {
       const { id, sub, firstName, lastName, email, role, planSelected, isSubscribed, isGoogleUser, exp } = jwtDecode(
-        userString!
-      ) as IDecodedAccessToken & { exp: number };
+        refreshToken?.value!
+      ) as IUserBaseInfo & { exp: number };
       const user = {
         id,
         sub,
@@ -262,14 +292,24 @@ export const getUserChatInfo = async (
   }
 };
 
-export const activateUserAccountAction = async (token?: string): Promise<ResponseModel<null>> => {
+export const activateUserAccountAction = async (
+  token?: string
+): Promise<
+  ResponseModel<{
+    access_token: string;
+    refresh_token: string;
+  } | null>
+> => {
   if (!token) {
     redirect(`/${routes.home.url}`);
   }
   try {
-    await fetcher(`user/activate/${token}`, { method: "POST" });
+    const req = await fetcher<{
+      access_token: string;
+      refresh_token: string;
+    }>(`user/activate/${token}`, { method: "POST" });
     return {
-      data: null,
+      data: req,
       errorMessage: null,
     };
   } catch (error) {
@@ -330,10 +370,7 @@ export const setNewPasswordAction = async (values: { code: string; newPassword: 
   }
 };
 
-export const removeUserAccountAction = async (values: {
-  password: string;
-  deletionResult: DeletionAccountReason;
-}): Promise<ResponseModel<null>> => {
+export const removeUserAccountAction = async (values: { deletionResult: DeletionAccountReason }): Promise<ResponseModel<null>> => {
   try {
     await fetcher<ResponseType<null>>("user/profile", {
       method: "DELETE",

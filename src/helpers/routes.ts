@@ -32,6 +32,16 @@ const routes = {
       url: "sign-up",
       fullUrl: "/auth/sign-up",
       protected: false,
+      success: {
+        url: "success",
+        fullUrl: "/auth/sign-up/success",
+        protected: false,
+      },
+      activate: {
+        url: "activate",
+        fullUrl: "/auth/sign-up/activate",
+        protected: false,
+      },
     },
   },
   user: {
@@ -143,6 +153,16 @@ const routes = {
     url: "volt",
     protected: false,
     fullUrl: "/volt",
+    calculationTerms: {
+      url: ":id",
+      fullUrl: "/volt/:id",
+      protected: true,
+    },
+    voltDetail: {
+      url: ":id",
+      fullUrl: "/volt/:id",
+      protected: true,
+    },
   },
   privacyPolicy: {
     url: "privacy-policy",
@@ -164,12 +184,17 @@ const routes = {
     protected: false,
     fullUrl: "/investing",
   },
+  "subscription-update-success": {
+    url: "subscription-update-success",
+    protected: true,
+    fullUrl: "/subscription-update-success",
+  },
 };
 
 export const getAllRoutes = (
   obj?: { [key: string]: any },
   prevUrl: string = "",
-  prevUrls: { [key: string]: { protected: boolean } } = {}
+  prevUrls: { [key: string]: { protected: boolean; url: string } } = {}
 ) => {
   const urls = prevUrls;
   if (!obj) {
@@ -179,7 +204,7 @@ export const getAllRoutes = (
     let url = prevUrl;
     if (typeof obj[key] === "object" && obj[key] !== null) {
       url += `${url ? "/" : ""}${obj[key].url}`;
-      urls[`/${url}`] = { protected: obj[key].protected };
+      urls[`/${url}`] = { protected: obj[key].protected, url };
       return getAllRoutes(obj[key], url, prevUrls);
     }
     return null;

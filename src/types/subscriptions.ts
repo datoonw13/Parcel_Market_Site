@@ -1,7 +1,7 @@
 export enum SubscriptionType {
-  Trial = "Trial",
-  Monthly = "Monthly",
+  // Trial = "Trial",
   Annual = "Annual",
+  Monthly = "Monthly",
 }
 
 export type IStripeStatuses = "active" | "canceled" | "incomplete" | "incomplete_expired" | "past_due" | "paused" | "trialing" | "unpaid";

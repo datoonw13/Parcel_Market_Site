@@ -9,7 +9,7 @@ import { saveAs } from "file-saver";
 import XLSX from "sheetjs-style";
 import { IUserRecentSearches } from "@/types/user";
 import { PolygonProps } from "react-leaflet";
-import { Polygon } from "geojson";
+import { Polygon, Position } from "geojson";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -325,14 +325,63 @@ export const exportToExcel = (data: IUserRecentSearches, additionalDataResult?: 
   XLSX.writeFile(wb, `${data.state.label}/${data.county.label}/${data.acreage.toFixed(2)}/${moneyFormatter.format(data.price)}.xlsx`);
 };
 
-export function swapPolygonCoordinates(polygon: any) {
-  return polygon.map((item: any) => {
-    if (Array.isArray(item[0])) {
-      // If the first element is an array, recursively process it
-      return swapPolygonCoordinates(item);
-    }
-    // Otherwise, swap the coordinate pair
-    const [x, y] = item;
-    return [y, x];
-  });
+export function swapPolygonCoordinates(coords: Polygon["coordinates"]): Polygon["coordinates"] {
+  return coords.map(
+    (ring) => ring.map(([x, y]) => [y, x] as Position) // Swap X and Y in each position
+  );
 }
+
+export const hideNumber = (num: string): string => {
+  const value = num.split("");
+
+  let cnt = 0;
+
+  for (let i = 0; i < value.length; i += 1) {
+    if (!Number.isNaN(Number(value[i]))) {
+      value[i] = "*";
+      cnt += 1;
+    }
+    if (cnt > 2) {
+      return value.join("");
+    }
+  }
+  return value.join("");
+};
+
+export const hideString = (item: string): string => {
+  const value = item.split("");
+
+  const hideItemsCnt = item.length < 3 ? 2 : 3;
+
+  for (let i = 0; i < hideItemsCnt; i += 1) {
+    value[i] = "*";
+  }
+  return value.join("");
+};
+
+export const getBase64 = async (url: string) => {
+  function blobToBase64(blob: Blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const base64 = await blobToBase64(blob);
+  return base64;
+};
+
+export const isLowercase = (chat: string) => {
+  const lowercaseOnly = /^[a-z]+$/g;
+  return lowercaseOnly.test(chat);
+};

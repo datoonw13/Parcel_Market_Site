@@ -1,7 +1,7 @@
 import { VoltSteps, VoltWrapperValuesModel } from "@/types/volt";
 import React, { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import Image from "next/image";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import routes from "@/helpers/routes";
 import { useRouter } from "next/navigation";
 import { MapInteractionModel } from "@/types/common";
@@ -15,7 +15,7 @@ import { breakPoints } from "../../../tailwind.config";
 
 interface VoltCalculationProps {
   values: VoltWrapperValuesModel;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
   showAdditionalData?: boolean;
@@ -78,7 +78,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
           <h2 className="text-sm text-grey-800">This is the parcel of land that you searched.</h2>
         </div>
         <div className="flex flex-col gap-2">
-          {values.calculation && (
+          {/* {values.calculation && (
             <VoltItem
               isSellingProperty
               onHover={(property) => {
@@ -121,7 +121,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                 mapInteraction.openPopperParcelNumber === values.calculation.parcelNumberNoFormatting
               }
             />
-          )}
+          )} */}
         </div>
       </div>
       <div className="space-y-3 lg:space-y-4">
@@ -172,7 +172,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              {data.map((property) => {
+              {/* {data.map((property) => {
                 if (property.isBulked) {
                   return (
                     <VoltItemMulti
@@ -239,7 +239,7 @@ const VoltCalculation: FC<VoltCalculationProps> = ({
                     selected={mapInteraction.openPopperParcelNumber === property.data.parcelNumberNoFormatting}
                   />
                 );
-              })}
+              })} */}
             </div>
           </>
         )}

@@ -7,7 +7,7 @@ import type { VariantProps } from "class-variance-authority";
 
 import { cn } from "../../lib/utils";
 
-const labelVariants = cva("peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
+const labelVariants = cva("peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer");
 
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,

@@ -1,41 +1,32 @@
 "use client";
 
-import { Icon, Map as LeafletMap, Marker } from "leaflet";
 import dynamic from "next/dynamic";
-import { Dispatch, FC, memo, ReactElement, SetStateAction, useCallback, useEffect, useMemo, useRef } from "react";
-import { moneyFormatter } from "@/helpers/common";
-import { IDecodedAccessToken } from "@/types/auth";
-import { MapInteractionModel } from "@/types/common";
-import moment from "moment";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { IUserRecentSearches } from "@/types/user";
-import { IPropertyUsedForCalculation } from "@/types/property";
-import { getCenter } from "geolib";
+import { IUserBaseInfo } from "@/types/auth";
+import { MapInteractionModel } from "@/types/common";
+import useMap from "@/hooks/useMap";
+import { GeoJSONFeature, Popup, Map as MapBoX } from "mapbox-gl";
+import moment from "moment";
+import { moneyFormatter } from "@/helpers/common";
+import { AutoComplete } from "@/components/ui/autocomplete";
+import { MapGeoJson } from "@/types/mapbox";
+import { FeatureCollection } from "geojson";
+import {
+  IBulkPropertiesUsedForCalculation,
+  IPropertyBaseInfo,
+  IPropertyCalculationOptions,
+  IPropertyPricePerAcre,
+  IPropertySaleHistory,
+  IPropertyUsedForCalculation,
+} from "@/types/property";
+import Divider from "@/components/@new/shared/Divider";
 
-const Map = dynamic(() => import("@/components/shared/map/Map"), { ssr: false });
-
-const markerDefault = new Icon({
-  iconUrl: "/map-default-icon.svg",
-  iconSize: [28, 36],
-});
-
-const markerDefaultYellow = new Icon({
-  iconUrl: "/map-default-orange-icon.svg",
-  iconSize: [28, 36],
-});
-
-const markerHighlighted = new Icon({
-  iconUrl: "/map-highlighted-icon.svg",
-  iconSize: [28, 36],
-});
-
-const markerHighlightedYellow = new Icon({
-  iconUrl: "/map-highlighted-orange-icon.svg",
-  iconSize: [28, 36],
-});
+const MapComponent = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
 interface VoltDesktopProps {
   data: IUserRecentSearches;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   openWarningModal: () => void;
   mapInteraction: MapInteractionModel;
   setMpaInteraction: Dispatch<SetStateAction<MapInteractionModel>>;
@@ -43,431 +34,547 @@ interface VoltDesktopProps {
 }
 
 const SearchItemDetailsDesktopMap: FC<VoltDesktopProps> = ({
-  user,
-  openWarningModal,
-  mapInteraction,
-  setMpaInteraction,
   data,
+  mapInteraction,
+  openWarningModal,
+  setMpaInteraction,
+  user,
   additionalDataResult,
 }) => {
-  const markerRefs = useRef<{ [key: string]: Marker }>();
-  const mapRef = useRef<LeafletMap | null>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
-  const mapData = useMemo(() => {
-    const mainLandSaleHistory: IPropertyUsedForCalculation["data"][] = [];
-    data.propertiesUsedForCalculation.forEach((property) => {
-      if (property.isBulked) {
-        property.data.properties.forEach((el) => {
-          if (el.parcelNumberNoFormatting === data.parcelNumberNoFormatting) {
-            mainLandSaleHistory.push(el);
-          }
-        });
-      } else if (property.data.parcelNumberNoFormatting === data.parcelNumberNoFormatting) {
-        mainLandSaleHistory.push(property.data);
+  const { ref, setRef, setGeoJson, showMarkers, highlightFeatures, showRegridTiles, openPopup, geoJson } = useMap();
+
+  function clearMap() {
+    if (!ref) return;
+    const x = ref.getStyle();
+    const layers = x?.layers;
+
+    if (layers) {
+      // eslint-disable-next-line no-plusplus
+      for (let i = layers.length - 1; i >= 0; i--) {
+        const layerId = layers[i].id;
+        if (ref.getLayer(layerId)) {
+          ref.removeLayer(layerId);
+        }
+      }
+    }
+
+    const soruces = ref.getStyle()?.sources;
+    const sourcesKeys = soruces && Object.keys(soruces);
+    sourcesKeys?.forEach((sourceId) => {
+      if (ref.getSource(sourceId)) {
+        ref.removeSource(sourceId);
       }
     });
+  }
 
-    const mainProperty = {
-      parcelNumber: data.parcelNumber || "",
-      parcelNumberNoFormatting: data.parcelNumberNoFormatting || "",
-      latitude: Number(data.lat),
-      longitude: Number(data.lon),
-      polygon: data.polygon,
-      markerType: "active" as const,
-      center: true,
-      popup: (
-        <div className="flex flex-col gap-1 space-y-2">
-          <p className="!p-0 !m-0">
-            Owner: <b>{data.owner}</b>
-          </p>
-          <p className="!p-0 !m-0">
-            Acreage: <b>{Number(data.acreage).toFixed(2)}</b>
-          </p>
-          <p className="!p-0 !m-0">
-            VOLT Value Per Acreage: <b>{moneyFormatter.format(data.pricePerAcreage)}</b>
-          </p>
-          {mainLandSaleHistory.length > 0 && (
-            <div className="flex flex-col gap-1">
-              <p className="!p-0 !m-0 !font-semibold">Sales History:</p>
-              {mainLandSaleHistory.map((history) => (
-                <div key={JSON.stringify(history)} className="!mb-1">
-                  <p className="!p-0 !m-0">
-                    Last Sale Date: <b>{moment(history.lastSaleDate).format("MM-DD-YYYY")}</b>
-                  </p>
-                  <p className="!p-0 !m-0">
-                    Sold Price Per Acre: <b>{moneyFormatter.format(history.pricePerAcreage)}</b>
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ),
-    };
-    let mapItems: Array<{
-      parcelNumber: string;
-      parcelNumberNoFormatting: string;
-      latitude: number;
-      longitude: number;
-      markerType: "highlighted" | "default" | "default-yellow";
-      popup?: ReactElement;
-    }> = [];
-    data.propertiesUsedForCalculation.forEach((property) => {
-      if (property.isBulked) {
-        property.data.properties.forEach((el) => {
-          mapItems.push({
-            parcelNumber: el.parcelNumberNoFormatting,
-            parcelNumberNoFormatting: el.parcelNumberNoFormatting,
-            latitude: el.lat,
-            longitude: el.lon,
-            markerType: "default" as const,
-            ...(user &&
-              user.isSubscribed && {
-                popup: (
-                  <div className="flex flex-col gap-1 space-y-2">
-                    <p className="!p-0 !m-0">
-                      Parcel Number: <b>{el.parcelNumberNoFormatting}</b>
-                    </p>
-                    <p className="!p-0 !m-0">
-                      Acreage: <b>{el.acreage.toFixed(2)}</b>
-                    </p>
-                    <p className="!p-0 !m-0">
-                      Last Sale Date: <b>{moment(el.lastSaleDate).format("MM-DD-YYYY")}</b>
-                    </p>
-                    <p className="!p-0 !m-0">
-                      Sold Price Per Acre: <b>{moneyFormatter.format(el.pricePerAcreage)}</b>
-                    </p>
-                  </div>
-                ),
-              }),
+  const initiateMap = useCallback(
+    async (styleChange?: boolean) => {
+      if (ref) {
+        const { lat, lon, parcelNumberNoFormatting, acreage, parcelNumber, price, pricePerAcreage } = data;
+        const geoJsonInit: any = {
+          type: "FeatureCollection",
+          features: [],
+        };
+
+        geoJsonInit.features.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [lon, lat],
+          },
+          properties: {
+            parcelNumberNoFormatting,
+            parcelNumber,
+            lng: lon,
+            lat,
+            type: "selling",
+            markerIcon: "selling",
+            hoveredMarkerIcon: "selling",
+            selectedMarkerIcon: "selling",
+            markerSize: 1.5,
+            hoveredMarkerSize: 1.5,
+            selectedMarkerSize: 1.5,
+            acreage,
+            price,
+            pricePerAcreage,
+            polygonLineColor: "#05471C",
+            polygonFillColor: "#05471C",
+          },
+        });
+
+        data.propertiesUsedForCalculation
+          .filter((el) => el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting)
+          .forEach((property) => {
+            if (property.isBulked) {
+              property.data.properties
+                .filter((bulkedPropertyFilter) => bulkedPropertyFilter.parcelNumberNoFormatting !== data.parcelNumberNoFormatting)
+                .forEach((bulkedProperty) => {
+                  geoJsonInit.features.push({
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [bulkedProperty.lon, bulkedProperty.lat],
+                    },
+                    properties: {
+                      // @ts-ignore
+
+                      state: bulkedProperty.state.value,
+                      county: bulkedProperty.county.label,
+                      parcelNumberNoFormatting: bulkedProperty.parcelNumberNoFormatting,
+                      parcelNumber: bulkedProperty.parcelNumber,
+                      lng: bulkedProperty.lon,
+                      lat: bulkedProperty.lat,
+                      type: "calculation-valid",
+                      acreage: bulkedProperty.acreage,
+                      price: bulkedProperty.lastSalePrice,
+                      pricePerAcreage: bulkedProperty.pricePerAcreage,
+                      bulkId: property.data.id,
+                      markerIcon: "red",
+                      hoveredMarkerIcon: "redHighlighted",
+                      selectedMarkerIcon: "redHighlighted",
+                      markerSize: 1,
+                      hoveredMarkerSize: 1.2,
+                      selectedMarkerSize: 1.2,
+                      polygonLineColor: "#F78290",
+                      polygonFillColor: "#F78290",
+                    },
+                  });
+                });
+            } else {
+              geoJsonInit.features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [property.data.lon, property.data.lat],
+                },
+                properties: {
+                  // @ts-ignore
+
+                  state: property.data.state.value,
+                  county: property.data.county.label,
+                  parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+                  parcelNumber: property.data.parcelNumber,
+                  lng: property.data.lon,
+                  lat: property.data.lat,
+                  type: "calculation-valid",
+                  acreage: property.data.acreage,
+                  price: property.data.lastSalePrice,
+                  pricePerAcreage: property.data.pricePerAcreage,
+                  markerIcon: "red",
+                  hoveredMarkerIcon: "redHighlighted",
+                  selectedMarkerIcon: "redHighlighted",
+                  markerSize: 1,
+                  hoveredMarkerSize: 1.2,
+                  selectedMarkerSize: 1.2,
+                  polygonLineColor: "#F78290",
+                  polygonFillColor: "#F78290",
+                },
+              });
+            }
           });
+
+        additionalDataResult?.propertiesUsedForCalculation
+          .filter((el) => el.data.parcelNumberNoFormatting !== data.parcelNumberNoFormatting)
+          .forEach((property) => {
+            if (property.isBulked) {
+              property.data.properties
+                .filter((bulkedPropertyFilter) => bulkedPropertyFilter.parcelNumberNoFormatting !== data.parcelNumberNoFormatting)
+                .forEach((bulkedProperty) => {
+                  geoJsonInit.features.push({
+                    type: "Feature",
+                    geometry: {
+                      type: "Point",
+                      coordinates: [bulkedProperty.lon, bulkedProperty.lat],
+                    },
+                    properties: {
+                      // @ts-ignore
+
+                      state: bulkedProperty.state.value,
+                      county: bulkedProperty.county.label,
+                      parcelNumberNoFormatting: bulkedProperty.parcelNumberNoFormatting,
+                      parcelNumber: bulkedProperty.parcelNumber,
+                      lng: bulkedProperty.lon,
+                      lat: bulkedProperty.lat,
+                      type: "calculation-not-valid",
+                      acreage: property.data.acreage,
+                      bulkId: property.data.id,
+                      markerIcon: "yellow",
+                      hoveredMarkerIcon: "yellowHighlighted",
+                      selectedMarkerIcon: "yellowHighlighted",
+                      markerSize: 1,
+                      hoveredMarkerSize: 1.2,
+                      selectedMarkerSize: 1.2,
+                      polygonLineColor: "#f5990e",
+                      polygonFillColor: "#f5990e",
+                    },
+                  });
+                });
+            } else {
+              geoJsonInit.features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [property.data.lon, property.data.lat],
+                },
+                properties: {
+                  // @ts-ignore
+                  state: property.data.state.value,
+                  county: property.data.county.label,
+                  parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
+                  parcelNumber: property.data.parcelNumber,
+                  lng: property.data.lon,
+                  lat: property.data.lat,
+                  type: "calculation-not-valid",
+                  markerIcon: "yellow",
+                  acreage: property.data.acreage,
+                  hoveredMarkerIcon: "yellowHighlighted",
+                  selectedMarkerIcon: "yellowHighlighted",
+                  markerSize: 1,
+                  hoveredMarkerSize: 30,
+                  selectedMarkerSize: 1.2,
+                  polygonLineColor: "#f5990e",
+                  polygonFillColor: "#f5990e",
+                },
+              });
+            }
+          });
+        setGeoJson(geoJsonInit);
+        showMarkers({
+          onMarkerMouseEnter: (parcelNumberNoFormatting) => {
+            // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
+          },
+          onMarkerMouseLeave: () => {
+            // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
+          },
+          onClick: (parcelNumberNoFormatting) => {
+            // setMpaInteraction((prev) => ({
+            //   ...prev,
+            //   openPopperParcelNumber: parcelNumberNoFormatting,
+            // }));
+          },
+          cluster: geoJsonInit.features.length > 100,
         });
-      } else {
-        mapItems.push({
-          parcelNumber: property.data.parcelNumberNoFormatting,
-          parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
-          latitude: property.data.lat,
-          longitude: property.data.lon,
-          markerType: "default" as const,
-          ...(user &&
-            user.isSubscribed && {
-              popup: (
-                <div className="flex flex-col gap-1 space-y-2">
-                  <p className="!p-0 !m-0">
-                    Parcel Number: <b>{property.data.parcelNumberNoFormatting}</b>
-                  </p>
-                  <p className="!p-0 !m-0">
-                    Acreage: <b>{property.data.acreage.toFixed(2)}</b>
-                  </p>
-                  <p className="!p-0 !m-0">
-                    Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
-                  </p>
-                  <p className="!p-0 !m-0">
-                    Sold Price Per Acre: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
-                  </p>
-                </div>
-              ),
-            }),
+        await showRegridTiles({
+          onMarkerMouseEnter: (parcelNumberNoFormatting) => {
+            // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: parcelNumberNoFormatting }));
+          },
+          onMarkerMouseLeave: () => {
+            // setMpaInteraction((prev) => ({ ...prev, hoveredParcelNumber: null }));
+          },
+          onClick: (parcelNumberNoFormatting) => {
+            // setMpaInteraction((prev) => ({
+            //   ...prev,
+            //   openPopperParcelNumber: parcelNumberNoFormatting,
+            // }));
+          },
         });
-      }
-    });
-    if (additionalDataResult) {
-      additionalDataResult?.propertiesUsedForCalculation.forEach((property) => {
-        if (!property.isBulked) {
-          mapItems.push({
-            parcelNumber: property.data.parcelNumberNoFormatting,
-            parcelNumberNoFormatting: property.data.parcelNumberNoFormatting,
-            latitude: property.data.lat,
-            longitude: property.data.lon,
-            markerType: "default-yellow" as const,
-            ...(user &&
-              user.isSubscribed && {
-                popup: (
-                  <div className="flex flex-col gap-1 space-y-2">
-                    <p className="!p-0 !m-0">
-                      Parcel Number: <b>{property.data.parcelNumberNoFormatting}</b>
-                    </p>
-                    <p className="!p-0 !m-0">
-                      Acreage: <b>{property.data.acreage.toFixed(2)}</b>
-                    </p>
-                    <p className="!p-0 !m-0">
-                      Last Sale Date: <b>{moment(property.data.lastSaleDate).format("MM-DD-YYYY")}</b>
-                    </p>
-                    <p className="!p-0 !m-0">
-                      Sold Price Per Acre: <b>{moneyFormatter.format(property.data.pricePerAcreage)}</b>
-                    </p>
-                  </div>
-                ),
-              }),
+
+        if (ref) {
+          ref.on("click", "markers-layer", (e) => {
+            const feature = ref.queryRenderedFeatures(e.point)[0];
+            const properties = feature.properties as MapGeoJson["features"][0]["properties"];
+            if (properties) {
+              const html = Object.keys(properties)
+                .filter((key) =>
+                  [
+                    "parcelNumberNoFormatting",
+                    "parcelNumber",
+                    "lng",
+                    "lat",
+                    "acreage",
+                    "price",
+                    "pricePerAcreage",
+                    "state",
+                    "county",
+                  ].includes(key)
+                )
+                .reduce(
+                  // @ts-ignore
+                  (acc, cur) => [
+                    ...acc,
+                    `
+                <li style="width: max-content;"">
+                    ${cur}: <span style="font-weight:600;">${(properties as any)?.[cur as any]}</span>
+                </li>
+                </br>
+               `,
+                  ],
+                  []
+                ) as any;
+              const history: any = [];
+
+              if (properties.type === "selling") {
+                data.propertiesUsedForCalculation.forEach((el) => {
+                  if (el.isBulked) {
+                    el.data.properties.flat().forEach((childEl) => {
+                      if ((childEl as any).isMainProperty) {
+                        history.push(el.data);
+                      }
+                    });
+                  }
+                  if (!el.isBulked) {
+                    if ((el.data as any)?.isMainProperty) {
+                      history.push(el.data);
+                    }
+                  }
+                });
+              }
+
+              const html2 = `<div><h1>History </h1> <br/> <br/> ${JSON.stringify(history) || "No History"} </div>`;
+              new Popup()
+                .setLngLat([properties.lng, properties.lat])
+                .setHTML(
+                  `<ul style="height: 350px; overflow:auto; max-width: 400px; width: 100%;"><h1>ATTOM</h1> <br/>${html.join(
+                    ""
+                  )} <br/> ${html2}</ul> `
+                )
+                .addTo(ref);
+            }
+          });
+
+          ref.on("click", "polygons-fill-layer-id", (e) => {
+            const feature = ref.queryRenderedFeatures(e.point)[0];
+
+            if (feature.properties && feature.layer?.id !== "markers-layer") {
+              const html = Object.keys(feature.properties).reduce(
+                // @ts-ignore
+                (acc, cur) => [
+                  ...acc,
+                  `
+                <li style="width: max-content;"">
+                    ${cur}: <span style="font-weight:600;">${feature?.properties?.[cur]}</span>
+                </li>
+                </br>
+               `,
+                ],
+                []
+              ) as any;
+              new Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(
+                  `<ul style="height: 350px; overflow:auto; max-width: 400px; width: 100%;"><h1>REGRID</h1> <br/>${html.join("")}</ul>`
+                )
+                .addTo(ref);
+            }
           });
         }
-      });
-    }
+        ref?.setCenter([data.lon, data.lat]);
+        ref?.setZoom(8);
+      }
+    },
+    [data, additionalDataResult?.propertiesUsedForCalculation, setGeoJson, showMarkers, showRegridTiles, ref]
+  );
 
-    data.propertiesUsedForCalculation
-      .filter((el) => el.isBulked)
-      .forEach((item) => {
-        mapItems.push({
-          parcelNumber: item.data.parcelNumber,
-          parcelNumberNoFormatting: item.data.parcelNumberNoFormatting,
-          latitude: item.data.properties[0].lat,
-          longitude: item.data.properties[0].lon,
-          markerType: "invisible" as any,
-          ...(user &&
-            user.isSubscribed && {
-              popup: (
-                <div className="flex flex-col gap-1 space-y-2">
-                  <h2 className="!font-semibold !mb-3 text-center">Bulk item</h2>
-                  <p className="!p-0 !m-0">
-                    Acreage: <b>{item.data.acreage.toFixed(2)}</b>
-                  </p>
-                  <p className="!p-0 !m-0">
-                    Last Sale Date: <b>{moment(item.data.properties[0].lastSaleDate).format("MM-DD-YYYY")}</b>
-                  </p>
-                  <p className="!p-0 !m-0">
-                    Sold Price Per Acre: <b>{moneyFormatter.format(item.data.pricePerAcreage)}</b>
-                  </p>
-                </div>
-              ),
-            }),
+  const handleMarkerInteractions = useCallback(() => {
+    if (ref) {
+      const data: any = [];
+
+      if (mapInteraction.hoveredParcelNumber) {
+        mapInteraction.hoveredParcelNumber.split("multiple").forEach((el) => {
+          data.push({ [el]: "hoveredMarkerIcon" });
         });
-      });
+      }
 
-    if (mainLandSaleHistory.length > 0) {
-      mapItems = mapItems.filter((el) => !mainLandSaleHistory.find((x) => el.parcelNumberNoFormatting === x.parcelNumberNoFormatting));
+      if (mapInteraction.openPopperParcelNumber) {
+        mapInteraction.openPopperParcelNumber.split("multiple").forEach((el) => {
+          data.push({ [el]: "selectedMarkerIcon" });
+        });
+        const feature = geoJson.features.find((el) =>
+          mapInteraction.openPopperParcelNumber!.includes("multiple")
+            ? el.properties.bulkId === mapInteraction.openPopperParcelNumber
+            : el.properties.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
+        );
+        if (feature) {
+          openPopup({
+            lat: feature.properties.lat,
+            lng: feature.properties.lng,
+            onClose: () => {
+              setMpaInteraction((prev) => ({ ...prev, openPopperParcelNumber: null }));
+            },
+            popupRef: popupRef.current,
+          });
+        }
+      }
+
+      highlightFeatures(data);
     }
-    return [mainProperty, ...mapItems];
   }, [
-    additionalDataResult,
+    geoJson.features,
+    highlightFeatures,
+    mapInteraction.hoveredParcelNumber,
+    mapInteraction.openPopperParcelNumber,
+    openPopup,
+    ref,
+    setMpaInteraction,
+  ]);
+  const openPopupDetails = useMemo(() => {
+    interface IBasePopupData {
+      parcelNumberNoFormatting: string;
+      acreage: number;
+    }
+
+    interface ISellingPropertyPopupData extends IBasePopupData {
+      type: "selling";
+      owner: string;
+      sales?: Array<{ lastSaleDate: Date; lastSalePrice: number; pricePerAcreage: number }>;
+    }
+
+    interface IOtherPropertyPopupData extends IBasePopupData {
+      type: "other";
+      lastSaleDate: Date;
+      lastSalePrice: number;
+      pricePerAcreage: number;
+      isBulked: boolean;
+    }
+
+    type IPropertyPopupDetails = ISellingPropertyPopupData | IOtherPropertyPopupData;
+
+    if (data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber) {
+      return {
+        type: "selling",
+        acreage: data.acreage,
+        owner: data.owner,
+        parcelNumberNoFormatting: data.parcelNumberNoFormatting,
+        sales: [
+          ...data.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)),
+          ...(additionalDataResult?.propertiesUsedForCalculation.map((el) => (el.isBulked ? el.data.properties : el.data)) || []),
+        ]
+          .flat()
+          .filter((el) => el.parcelNumberNoFormatting === data.parcelNumberNoFormatting)
+          .map((el) => ({ lastSaleDate: el.lastSaleDate, lastSalePrice: el.lastSalePrice, pricePerAcreage: el.pricePerAcreage })),
+      } as IPropertyPopupDetails;
+    }
+
+    const property = [...data.propertiesUsedForCalculation, ...(additionalDataResult?.propertiesUsedForCalculation || [])].find(
+      (el) => el.data.parcelNumberNoFormatting === mapInteraction.openPopperParcelNumber
+    );
+
+    return property
+      ? ({
+          type: "other",
+          acreage: property.data.acreage,
+          isBulked: property.isBulked,
+          lastSaleDate: property.isBulked ? property.data.properties[0].lastSaleDate : property.data.lastSaleDate,
+          parcelNumberNoFormatting: property.isBulked ? "Multiple" : property.data.parcelNumberNoFormatting,
+          lastSalePrice: property.isBulked ? property.data.price : property.data.lastSalePrice,
+          pricePerAcreage: property.data.pricePerAcreage,
+        } as IPropertyPopupDetails)
+      : null;
+  }, [
+    additionalDataResult?.propertiesUsedForCalculation,
     data.acreage,
-    data.lat,
-    data.lon,
     data.owner,
-    data.parcelNumber,
     data.parcelNumberNoFormatting,
-    data.polygon,
-    data.pricePerAcreage,
     data.propertiesUsedForCalculation,
-    user,
+    mapInteraction.openPopperParcelNumber,
   ]);
 
-  const canViewDetails = useCallback(
-    (parcelNumberNoFormatting: string) => {
-      if ((user && user.isSubscribed) || parcelNumberNoFormatting === data.parcelNumberNoFormatting) {
-        return true;
-      }
-      return false;
-    },
-    [data.parcelNumberNoFormatting, user]
-  );
-
-  const handleMapHoverInteraction = useCallback(() => {
-    if (mapRef.current && mapInteraction.hoveredParcelNumber) {
-      const currentZoom = mapRef.current.getZoom();
-      if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
-        const properties = data.propertiesUsedForCalculation
-          .filter((el) => el.isBulked)
-          .map((el) => el.data.properties)
-          .flat();
-
-        const items: IPropertyUsedForCalculation["data"][] = [];
-        mapInteraction.hoveredParcelNumber.split("multiple").forEach((el) => {
-          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
-          if (item) {
-            items.push(item);
-          }
-        });
-        const centerCoordinate = (getCenter(items.map((el) => ({ latitude: el.lat, longitude: el.lon }))) || {
-          latitude: 0,
-          longitude: 0,
-        }) as any;
-        if (mapInteraction.zoom) {
-          mapRef.current?.fitBounds(
-            [
-              {
-                lat: centerCoordinate.latitude,
-                lng: centerCoordinate.longitude,
-              },
-            ] as any,
-            { maxZoom: currentZoom }
-          );
-        }
-      } else {
-        const currentItemMarker = markerRefs.current?.[mapInteraction.hoveredParcelNumber];
-        if (currentItemMarker) {
-          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
-          if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: currentZoom });
-          }
-        }
-      }
-    }
-  }, [data.propertiesUsedForCalculation, mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
-
-  const handleMapPopperInteraction = useCallback(() => {
-    if (mapRef.current) {
-      if (mapInteraction.openPopperParcelNumber && !mapInteraction.openPopperParcelNumber.includes("multiple")) {
-        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
-        if (currentItemMarker && !currentItemMarker.isPopupOpen()) {
-          currentItemMarker.openPopup();
-          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
-          if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
-          }
-        }
-      }
-
-      if (mapInteraction.openPopperParcelNumber && mapInteraction.openPopperParcelNumber.includes("multiple")) {
-        const properties = data.propertiesUsedForCalculation
-          .filter((el) => el.isBulked)
-          .map((el) => el.data.properties)
-          .flat();
-        const items: IPropertyUsedForCalculation["data"][] = [];
-        mapInteraction.openPopperParcelNumber.split("multiple").forEach((el) => {
-          const item = properties?.find((x) => x.parcelNumberNoFormatting === el);
-          if (item) {
-            items.push(item);
-          }
-        });
-
-        const currentItemMarker = markerRefs.current?.[mapInteraction.openPopperParcelNumber];
-        if (currentItemMarker && !currentItemMarker.isPopupOpen()) {
-          currentItemMarker.openPopup();
-          const currentMarkerCoordinate = [currentItemMarker.getLatLng()] as any;
-          if (mapInteraction.zoom) {
-            mapRef.current?.fitBounds(currentMarkerCoordinate, { maxZoom: 14 });
-          }
-        }
-      }
-    }
-  }, [data.propertiesUsedForCalculation, mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
-
-  const setMapRef = useCallback((ref: LeafletMap) => {
-    mapRef.current = ref;
-  }, []);
-
-  const setMarkerRef = useCallback((parcelNumber: string, ref: any) => {
-    markerRefs.current = { ...markerRefs.current, [parcelNumber]: ref };
-  }, []);
-
-  const mapMarkerMouseEnter = useCallback(
-    (parcelNumberNoFormatting: string) => {
-      setMpaInteraction((prevData) => ({
-        ...prevData,
-        hoveredParcelNumber: parcelNumberNoFormatting,
-        zoom: false,
-      }));
-    },
-    [setMpaInteraction]
-  );
-
-  const mapMarkerMouseLeave = useCallback(() => {
-    setMpaInteraction((prevData) => ({
-      ...prevData,
-      hoveredParcelNumber: null,
-      zoom: false,
-    }));
-  }, [setMpaInteraction]);
-
-  const mapPopupOpen = useCallback(
-    (parcelNumberNoFormatting: string) => {
-      setMpaInteraction((prevData) => ({
-        ...prevData,
-        openPopperParcelNumber: parcelNumberNoFormatting,
-        zoom: false,
-      }));
-    },
-    [setMpaInteraction]
-  );
-
-  const mapPopupClose = useCallback(() => {
-    setMpaInteraction((prevData) => ({
-      ...prevData,
-      openPopperParcelNumber: null,
-      zoom: false,
-    }));
-  }, [setMpaInteraction]);
-
-  const onMapMarkerClick = useCallback(
-    (parcelNumberNoFormatting: string) => {
-      if (!canViewDetails(parcelNumberNoFormatting)) {
-        openWarningModal();
-      }
-    },
-    [canViewDetails, openWarningModal]
-  );
-
-  const setMarkerIcon = useCallback(() => {
-    const highlightedParcelNumbersSet = new Set();
-
-    if (mapInteraction.openPopperParcelNumber) {
-      if (mapInteraction.openPopperParcelNumber.includes("multiple")) {
-        mapInteraction.openPopperParcelNumber.split("multiple").forEach(highlightedParcelNumbersSet.add, highlightedParcelNumbersSet);
-      } else {
-        highlightedParcelNumbersSet.add(mapInteraction.openPopperParcelNumber);
-      }
-    }
-    if (mapInteraction.hoveredParcelNumber) {
-      if (mapInteraction.hoveredParcelNumber.includes("multiple")) {
-        mapInteraction.hoveredParcelNumber.split("multiple").forEach(highlightedParcelNumbersSet.add, highlightedParcelNumbersSet);
-      } else {
-        highlightedParcelNumbersSet.add(mapInteraction.hoveredParcelNumber);
-      }
-    }
-
-    if (highlightedParcelNumbersSet.has(data.parcelNumberNoFormatting)) {
-      highlightedParcelNumbersSet.delete(data.parcelNumberNoFormatting);
-    }
-
-    if (markerRefs.current) {
-      Object.keys(markerRefs.current).forEach((parcelNumberNoFormatting) => {
-        const marker = markerRefs.current?.[parcelNumberNoFormatting as keyof typeof markerRefs.current];
-        const markerIcon = marker?.getIcon().options;
-        if (
-          parcelNumberNoFormatting !== data.parcelNumberNoFormatting &&
-          !highlightedParcelNumbersSet.has(parcelNumberNoFormatting) &&
-          markerIcon?.iconUrl?.includes("highlighted")
-        ) {
-          marker?.setIcon(markerIcon?.iconUrl.includes("orange") ? markerDefaultYellow : markerDefault);
-        }
-      });
-    }
-
-    Array.from(highlightedParcelNumbersSet).forEach((el) => {
-      const marker = markerRefs.current?.[el as keyof typeof markerRefs.current];
-      const markerIcon = marker?.getIcon().options;
-      if (marker) {
-        marker.setIcon(markerIcon?.iconUrl?.includes("orange") ? markerHighlightedYellow : markerHighlighted);
-      }
-    });
-  }, [data.parcelNumberNoFormatting, mapInteraction.hoveredParcelNumber, mapInteraction.openPopperParcelNumber]);
+  useEffect(() => {
+    handleMarkerInteractions();
+  }, [handleMarkerInteractions]);
 
   useEffect(() => {
-    setMarkerIcon();
-  }, [mapInteraction, setMarkerIcon]);
+    initiateMap();
+  }, [initiateMap]);
 
-  useEffect(() => {
-    handleMapHoverInteraction();
-  }, [handleMapHoverInteraction, mapInteraction.hoveredParcelNumber, mapInteraction.zoom]);
-
-  useEffect(() => {
-    handleMapPopperInteraction();
-  }, [handleMapPopperInteraction, mapInteraction.openPopperParcelNumber, mapInteraction.zoom]);
+  const styles = [
+    "mapbox://styles/mapbox/standard",
+    "mapbox://styles/mapbox/standard-satellite",
+    "mapbox://styles/mapbox/streets-v12",
+    "mapbox://styles/mapbox/outdoors-v12",
+    "mapbox://styles/mapbox/light-v11",
+    "mapbox://styles/mapbox/dark-v11",
+    "mapbox://styles/mapbox/satellite-v9",
+    "mapbox://styles/mapbox/satellite-streets-v12",
+    "mapbox://styles/mapbox/navigation-day-v1",
+    "mapbox://styles/mapbox/navigation-night-v1",
+  ];
 
   return (
-    <Map
-      properties={mapData}
-      zoom={8}
-      dragging
-      setMarkerRef={setMarkerRef}
-      markerMouseEnter={mapMarkerMouseEnter}
-      markerMouseLeave={mapMarkerMouseLeave}
-      popupOpen={mapPopupOpen}
-      popupClose={mapPopupClose}
-      onMarkerClick={onMapMarkerClick}
-      setMapRef={setMapRef}
-    />
+    <>
+      <div ref={popupRef} />
+      <div className="fixed right-0 top-0 z-50">
+        <AutoComplete
+          selectedValue={null}
+          options={styles.map((el) => ({ label: el, value: el }))}
+          placeholder="State"
+          onValueChange={(value) => {
+            if (value) {
+              ref?.setStyle(value);
+              ref?.on("style.load", (e) => {
+                initiateMap();
+              });
+            }
+            // setValue("state", value || "", { shouldValidate: true });
+            // setValue("county", "", { shouldValidate: true });
+          }}
+          // disabled={disableSearch}
+        />
+      </div>
+      <div style={{ display: "none" }}>
+        <div ref={popupRef}>
+          {openPopupDetails && (
+            <ul className="">
+              {openPopupDetails.type === "selling" && (
+                <>
+                  <li className="text-xs text-grey-800 py-0.5">
+                    Parcel Number <span className="text-black font-semibold">{openPopupDetails.parcelNumberNoFormatting}</span>
+                  </li>
+                  <li className="text-xs text-grey-800 py-0.5">
+                    Owner <span className="text-black font-semibold">{openPopupDetails.owner}</span>
+                  </li>
+                  <li className="text-xs text-grey-800 py-0.5">
+                    Acreage <span className="text-black font-semibold">{openPopupDetails.acreage}</span>
+                  </li>
+                  {openPopupDetails.sales && openPopupDetails.sales.length > 0 && (
+                    <>
+                      <Divider className="my-2" />
+                      {openPopupDetails.sales.map((el) => (
+                        <ul key={el.lastSaleDate.toString()} className="py-2 border-b">
+                          <li className="text-xs text-grey-800 py-0.5">
+                            Sales Date <span className="text-black font-semibold">{moment(el.lastSaleDate).format("MM/DD/YYYY")}</span>
+                          </li>
+                          <li className="text-xs text-grey-800 py-0.5">
+                            Sales Price <span className="text-black font-semibold">{moneyFormatter.format(el.lastSalePrice)}</span>
+                          </li>
+                        </ul>
+                      ))}
+                    </>
+                  )}
+                </>
+              )}
+              {openPopupDetails.type === "other" && (
+                <>
+                  <li className="text-xs text-grey-800 py-0.5">
+                    Parcel Number <span className="text-black font-semibold">{openPopupDetails.parcelNumberNoFormatting}</span>
+                  </li>
+                  <li className="text-xs text-grey-800 py-0.5">
+                    Sales Date{" "}
+                    <span className="text-black font-semibold">{moment(openPopupDetails.lastSaleDate).format("MM/DD/YYYY")}</span>
+                  </li>
+                  <li className="text-xs text-grey-800 py-0.5">
+                    Sales Price <span className="text-black font-semibold">{moneyFormatter.format(openPopupDetails.lastSalePrice)}</span>
+                  </li>
+                </>
+              )}
+            </ul>
+          )}
+          {/* {openPopupDetails && openPopupDetails?.type === "other" && openPopupDetails. && (
+            <ul className="">
+              <li className="text-xs text-grey-800 py-0.5">
+                Parcel Number: <span className="text-black">{openPopupDetails.parcelNumberNoFormatting}</span>
+                Acreage: <span className="text-black">{openPopupDetails.acreage?.toFixed(2)}</span>
+                Price Per Acreage: <span className="text-black">{openPopupDetails.pri?.toFixed(2)}</span>
+              </li>
+            </ul>
+          )} */}
+        </div>
+      </div>
+      <MapComponent ref={ref} setRef={setRef} />
+    </>
   );
 };
 
-export default memo(SearchItemDetailsDesktopMap);
+export default SearchItemDetailsDesktopMap;

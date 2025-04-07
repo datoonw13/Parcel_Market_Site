@@ -1,13 +1,13 @@
 "use client";
 
 import { FC } from "react";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
 import ResponsiveDialog from "../ui/dialogs/responsive-alert-dialog";
 
 interface PropertyDetailWarningModalProps {
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   open: boolean;
   closeModal: () => void;
   onOK: () => void;

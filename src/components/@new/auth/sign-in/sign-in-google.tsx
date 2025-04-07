@@ -3,43 +3,35 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { cn } from "@/helpers/common";
-import { googleSignInUserAction } from "@/server-actions/user/actions";
-import { useRouter, useSearchParams } from "next/navigation";
-import routes from "@/helpers/routes";
-import { decode, JwtPayload } from "jsonwebtoken";
-import { IDecodedAccessToken } from "@/types/auth";
+import useAuth from "@/hooks/useAuth";
+import { thirdPartyAuthAction } from "@/server-actions/auth/auth";
+import { UserSource } from "@/types/common";
 import { GoogleIcon1 } from "../../icons/SocialNetworkIcons";
 
-const SignInGoogle = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams as any);
+const SignInGoogle = ({
+  onSuccess,
+}: {
+  onSuccess: (data: {
+    authAccessToken: string;
+    authFirstName: string;
+    authLastName: string;
+    authEmail: string;
+    userSource: UserSource;
+  }) => void;
+}) => {
   const [loading, setLoading] = useState(false);
+
   const login = useGoogleLogin({
     onSuccess: async (data) => {
-      const { data: requestData, errorMessage } = await googleSignInUserAction(data.access_token);
-      if (errorMessage) {
-        const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
-        const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
-        router.push(
-          `${routes.auth.signUp.fullUrl}?access_token=${data.access_token}&firstName=${googleCredentials.given_name}&lastName=${googleCredentials.family_name}&email=${googleCredentials.email}`
-        );
-      } else {
-        if (params.get("redirect_uri") && params.get("redirect_uri") === routes.volt.fullUrl) {
-          const redirectUri = params.get("from");
-          const newLocation = `${redirectUri}?resume=true`;
-          router.replace(newLocation);
-          return;
-        }
-
-        const decodeAccessToken = decode(requestData?.access_token || "");
-        const planSelected =
-          decodeAccessToken &&
-          typeof decodeAccessToken === "object" &&
-          (decodeAccessToken as JwtPayload & IDecodedAccessToken).planSelected;
-
-        router.replace(planSelected ? routes.home.fullUrl : routes.userSubscription.fullUrl);
-      }
+      const googleCredentialsReq = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${data.access_token}`);
+      const googleCredentials = (await googleCredentialsReq.json()) as { email: string; family_name: string; given_name: string };
+      onSuccess({
+        authAccessToken: data.access_token,
+        authFirstName: googleCredentials.given_name,
+        authLastName: googleCredentials.family_name,
+        authEmail: googleCredentials.email,
+        userSource: UserSource.Google,
+      });
     },
     onError: () => {
       setLoading(false);

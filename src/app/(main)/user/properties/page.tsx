@@ -33,7 +33,7 @@ const UserPropertiesPage = async ({ searchParams }: { searchParams: any }) => {
   return (
     <Listings filters={filters.data} user={user} totalItems={totalItems}>
       <Suspense key={JSON.stringify(filters.data)} fallback={<UserPropertiesListLoading />}>
-        <UserPropertiesList pageSize={PAGE_SIZE} totalItems={totalItems} filters={filters.data} />
+        {/* <UserPropertiesList pageSize={PAGE_SIZE} totalItems={totalItems} filters={filters.data} /> */}
       </Suspense>
     </Listings>
   );

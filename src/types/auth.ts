@@ -1,4 +1,4 @@
-import { userSignInValidation, userSignUpValidation } from "@/zod-validations/auth-validations";
+import { userSignUpValidation } from "@/zod-validations/auth-validations";
 import { z } from "zod";
 import { UsedForPriceCalculationItem } from "./property";
 
@@ -17,7 +17,7 @@ export interface IRegisterGoogleUser {
 }
 
 // new types
-export type IUserSignIn = z.infer<typeof userSignInValidation>;
+export type IUserSignIn = any;
 export type IUserSignUp = z.infer<ReturnType<typeof userSignUpValidation>>;
 export type IUser = Omit<z.infer<ReturnType<typeof userSignUpValidation>>, "agreeTerm" | "repeatPassword">;
 
@@ -30,7 +30,7 @@ export enum DeletionAccountReason {
   TooExpensive = "TooExpensive",
 }
 
-export interface IDecodedAccessToken {
+export interface IUserBaseInfo {
   email: string;
   firstName: string;
   lastName: string;

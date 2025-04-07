@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import PlanListLoading from "./subscription-loading";
 import PlanList from "./plan-list";
 
-const PlanListWrapper = () => (
+const PlanListWrapper = ({ className }: { className?: string }) => (
   <Suspense fallback={<PlanListLoading />}>
-    <PlanList />
+    <PlanList className={className} />
   </Suspense>
 );
 

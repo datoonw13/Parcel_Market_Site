@@ -80,6 +80,7 @@ export const breakPoints = {
   sm: "640px",
   md: "768px",
   lg: "1024px",
+  sxl: "1124px",
   xl: "1280px",
   "2xl": "1536px",
 };
@@ -100,6 +101,7 @@ const config: Config = {
         "3": "0px -8px 20px 0px #00000014",
         "4": "0px 0px 14px 0px rgba(0, 0, 0, 0.08)",
         "5": "0px 4px 20px 0px rgba(0, 0, 0, 0.08)",
+        "6": "0 4px 20px 0 rgba(0,0,0,.25)",
       },
       fontSize: {
         xss: ["0.625rem", "14px"],
@@ -141,10 +143,16 @@ const config: Config = {
             height: "0",
           },
         },
+        scroll: {
+          "0%": { height: "40px" },
+          "30%": { height: "70px" },
+          "60%": { height: "40px" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        scroll: "scroll 1.5s",
       },
     },
   },

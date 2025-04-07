@@ -3,16 +3,17 @@
 import { ResponseModel } from "@/types/common";
 import { ErrorResponse } from "@/helpers/error-response";
 import { z } from "zod";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { PropertySellReq, IMainPropertyBaseInfo } from "@/types/property";
 import { voltSearchSchema } from "@/zod-validations/volt";
 import { removeParcelNumberFormatting } from "@/helpers/common";
-import { getCountyValue, getStateValue } from "@/helpers/states";
+import { getCounty, getState } from "@/helpers/states";
 import { IVoltPriceCalculationReqParams, IVoltPriceCalculation, IVoltPriceCalculationResponse } from "@/types/volt";
 import { fetcher } from "../fetcher";
 import { userListingsTag } from "../user-listings/tags";
 import { marketplaceTag } from "../marketplace/tags";
 import { userSearchesTag } from "../user-searches/tags";
+import { isAuthenticatedAction } from "../new-auth/new-auth";
 
 export const getPropertiesAction = async (
   values: z.infer<typeof voltSearchSchema>
@@ -44,17 +45,19 @@ export const getPropertiesAction = async (
       parcelNumber: property.properties.fields.parcelnumb,
       parcelNumberNoFormatting: removeParcelNumberFormatting(property.properties.fields.parcelnumb),
       owner: property.properties.fields.owner,
-      acreage: Number(property.properties.fields.ll_gisacre),
+      acreage: Number(
+        new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(property.properties.fields.ll_gisacre)
+      ),
       city: property.properties.fields.city,
       county: {
         value: property.properties.fields.county.toLocaleLowerCase(),
         label:
-          getCountyValue(property.properties.fields.county, property.properties.fields.state2)?.label ||
+          getCounty(property.properties.fields.county, property.properties.fields.state2)?.short.label ||
           property.properties.fields.county.toLocaleLowerCase(),
       },
       state: {
         value: property.properties.fields.state2.toLocaleLowerCase(),
-        label: getStateValue(property.properties.fields.state2)?.label || property.properties.fields.state2.toLocaleLowerCase(),
+        label: getState(property.properties.fields.state2)?.label || property.properties.fields.state2.toLocaleLowerCase(),
       },
       lat: Number(property.properties.fields.lat),
       lon: Number(property.properties.fields.lon),
@@ -65,12 +68,14 @@ export const getPropertiesAction = async (
     return {
       data: formattedData,
       errorMessage: null,
+      responseCreated: new Date(),
     };
   } catch (error) {
     const errorData = error as ErrorResponse;
     return {
       data: null,
       errorMessage: errorData.message,
+      responseCreated: new Date(),
     };
   }
 };
@@ -78,6 +83,7 @@ export const getPropertiesAction = async (
 export const calculateLandPriceAction = async (
   payload: IVoltPriceCalculationReqParams
 ): Promise<ResponseModel<IVoltPriceCalculation | null>> => {
+  let x: any = null;
   try {
     const request = await fetcher<IVoltPriceCalculationResponse>(`properties/calculate/price?${new URLSearchParams(payload.queryParams)}`, {
       method: "POST",
@@ -86,6 +92,7 @@ export const calculateLandPriceAction = async (
         revalidate: 3600,
       },
     });
+    x = request;
 
     const formattedResponse: IVoltPriceCalculation = {
       id: request.id,
@@ -94,11 +101,11 @@ export const calculateLandPriceAction = async (
       acreage: Number(request.acrage),
       state: {
         value: request.state.toLocaleLowerCase() || "",
-        label: getStateValue(request.state)?.label || request.state.toLocaleLowerCase() || "",
+        label: getState(request.state)?.label || request.state.toLocaleLowerCase() || "",
       },
       county: {
         value: request.county.toLocaleLowerCase() || "",
-        label: getCountyValue(request.county, request.state)?.label || request.county.toLocaleLowerCase() || "",
+        label: getCounty(request.county, request.state)?.short.label || request.county.toLocaleLowerCase() || "",
       },
       city: request.locality,
       lat: Number(request.lat),
@@ -192,6 +199,37 @@ export const calculateLandPriceAction = async (
     revalidateTag(userSearchesTag);
     return {
       data: formattedResponse,
+      errorMessage: null,
+    };
+  } catch (error) {
+    const errorData = error as ErrorResponse;
+    return {
+      data: x,
+      errorMessage: errorData.message,
+    };
+  }
+};
+
+export const calculateLandPriceAction2 = async (payload: {
+  owner?: string;
+  parcelNumber: string;
+  propertyType: string;
+  state: string;
+  county: string;
+  coordinates: string;
+  locality: string;
+  lat: string;
+  lon: string;
+  acrage: string;
+}): Promise<ResponseModel<number | null>> => {
+  try {
+    const request = await fetcher<{ propertyId: number }>(`properties`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    return {
+      data: request.propertyId,
       errorMessage: null,
     };
   } catch (error) {

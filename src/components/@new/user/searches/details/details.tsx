@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FC, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import ResponsiveAlertDialog from "@/components/ui/dialogs/responsive-alert-dialog";
 import routes from "@/helpers/routes";
 import { breakPoints } from "../../../../../../tailwind.config";
@@ -17,7 +17,7 @@ import SearchItemDetailsMobileMapFull from "./mobile-full";
 interface SearchItemDetailsProps {
   data: IUserRecentSearches;
   additionalDataResult: IUserRecentSearches;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
   isUserSubscriptionTrial: boolean;
 }
 

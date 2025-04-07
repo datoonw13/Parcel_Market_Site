@@ -33,7 +33,7 @@ const ReceivedOffersMobileFilters = () => {
       options: priceFilters,
     },
     voltPrice: {
-      label: "VOLT Price",
+      label: "VOLT Value",
       type: "minmax" as const,
       renderLabel: getMinMaxFilterLabel,
       options: priceFilters,
@@ -44,7 +44,7 @@ const ReceivedOffersMobileFilters = () => {
     getParcelNumbers();
   }, []);
 
-  return <FiltersDrawer data={filters} />;
+  return null;
 };
 
 export default ReceivedOffersMobileFilters;

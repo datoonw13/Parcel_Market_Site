@@ -5,7 +5,7 @@ import { z } from "zod";
 import { emailSchema } from "@/zod-validations/auth-validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { useEffect } from "react";
 import { userFeedbackAction } from "@/server-actions/common-actions";
 import useNotification from "@/hooks/useNotification";
@@ -19,7 +19,7 @@ export const formSchema = z.object({
   comment: z.string().trim().min(1),
 });
 
-const InvestingPageWrapper = ({ user }: { user: IDecodedAccessToken | null }) => {
+const InvestingPageWrapper = ({ user }: { user: IUserBaseInfo | null }) => {
   const { notify } = useNotification();
   const {
     handleSubmit,

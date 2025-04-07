@@ -1,7 +1,7 @@
 "use client";
 
 import { SortEnum } from "@/types/common";
-import { IDecodedAccessToken } from "@/types/auth";
+import { IUserBaseInfo } from "@/types/auth";
 import { FC, useEffect, useState } from "react";
 import Sort from "@/components/@new/filters/sort";
 import SelectButton from "@/components/@new/shared/forms/Button/SelectButton";
@@ -21,7 +21,7 @@ interface UserFollowerPropertiesFilterProps {
   selectedFilters: Filters;
   onChange: <T extends keyof Filters>(data: { [key in T]: Filters[T] }) => void;
   totalItems: number;
-  user: IDecodedAccessToken | null;
+  user: IUserBaseInfo | null;
 }
 const UserFollowerPropertiesFilter: FC<UserFollowerPropertiesFilterProps> = ({ totalItems, user, selectedFilters, onChange }) => {
   const { notify } = useNotification();
@@ -89,11 +89,11 @@ const UserFollowerPropertiesFilter: FC<UserFollowerPropertiesFilterProps> = ({ t
         okLabel="Unfollow"
       />
       <div className="hidden lg:flex">
-        <UserFollowedPropertiesDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} />
+        {/* <UserFollowedPropertiesDesktopFilters onChange={onChange} selectedFilters={selectedFilters} disabled={!user?.isSubscribed} /> */}
       </div>
       <div className="flex items-center lg:justify-between gap-3">
         <div className="flex lg:hidden mr-auto">
-          <UserFollowedPropertiesMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} />
+          {/* <UserFollowedPropertiesMobileFilters disabled={!user?.isSubscribed} onChange={onChange} selectedFilters={selectedFilters} /> */}
         </div>
         <SelectButton
           selecting={userFollowedPropertiesOptions.selecting}

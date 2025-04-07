@@ -3,7 +3,8 @@
 import { AutoComplete } from "@/components/ui/autocomplete";
 import AutoCompleteMulti from "@/components/ui/autocomplete-multi";
 import MinmaxDropdown from "@/components/ui/minmax-dropdown";
-import { getAllStates, getCounties, getStateValue } from "@/helpers/states";
+import { getCountiesByState } from "@/helpers/states";
+import useStates from "@/hooks/useStates";
 import { updateSearchParamsWithFilters, parseSearchParams } from "@/lib/utils";
 import { userSearchesValidations } from "@/zod-validations/filters-validations";
 import { uniqBy } from "lodash";
@@ -16,12 +17,14 @@ const SearchesDesktopFilters = ({ startTransition }: { startTransition: Transiti
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const filters = useMemo(() => parseSearchParams(userSearchesValidations, searchParams), [searchParams]);
-  const states = useMemo(() => getAllStates({ filterBlackList: true }).map(({ counties, ...rest }) => rest), []);
-  const counties = useMemo(() => {
+  const { states } = useStates({ hideBlackListedStated: true });
+
+  const countiesList = useMemo(() => {
     const countiesList =
       filters?.states
         ?.split(",")
-        .map((state) => getCounties(state).map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` }))) || [];
+        .map((state) => getCountiesByState(state || "")?.map((x) => ({ ...x, label: `${x.label}(${state.toLocaleUpperCase()})` })) || []) ||
+      [];
     return uniqBy(countiesList.flat(), "value");
   }, [filters?.states]);
 
@@ -65,7 +68,7 @@ const SearchesDesktopFilters = ({ startTransition }: { startTransition: Transiti
         <AutoCompleteMulti
           clearable
           selectedValues={filters.counties?.split(",") || []}
-          options={counties}
+          options={countiesList}
           placeholder="County"
           inputRootClassName="h-9 rounded-2xl"
           disabled={!filters?.states}
@@ -142,7 +145,7 @@ const SearchesDesktopFilters = ({ startTransition }: { startTransition: Transiti
         />
         <MinmaxDropdown
           inputPrefix="$"
-          placeholder="VOLT Price"
+          placeholder="VOLT Value"
           selectedValue={{
             min: filters.voltPriceMin === null ? null : filters.voltPriceMin,
             max: filters.voltPriceMax === null ? null : filters.voltPriceMax,

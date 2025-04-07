@@ -1,5 +1,4 @@
 import { getMarketplaceListAction } from "@/server-actions/marketplace/action";
-import { getAllStates } from "@/helpers/states";
 import { getUserAction } from "@/server-actions/user/actions";
 import { moneyFormatter } from "@/helpers/common";
 import { z } from "zod";
@@ -28,9 +27,10 @@ const MarketplaceList = async ({
   return (
     <div className="mt-6 md:mt-10">
       <div className="space-y-10 md:space-y-12">
-        <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
+        {/* <div className="grid grid-cols-1 gap-6 md:gap-8 md:grid-cols-2">
           {data?.list.map((land) => {
-            const state = getAllStates({ filterBlackList: true }).find((el) => el.value === land.state.toLocaleLowerCase());
+            const states: any = [];
+            const counties: any = [];
             const county = state?.counties?.find((el) => el.split(" ")[0].toLocaleLowerCase() === land.county.toLocaleLowerCase()) || "";
             return (
               <LandListItem
@@ -81,7 +81,7 @@ const MarketplaceList = async ({
               />
             );
           })}
-        </div>
+        </div> */}
         {data?.pagination && data.pagination.totalCount > 0 && (
           <TablePagination
             rowsPerPage={pageSize}

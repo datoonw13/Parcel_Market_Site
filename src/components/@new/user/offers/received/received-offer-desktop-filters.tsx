@@ -24,7 +24,7 @@ const ReceivedOffersDesktopFilters = () => {
 
   return (
     <div className="gap-3 mb-6 grid grid-cols-4">
-      <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={parcelNumbers || []} loading={!parcelNumbers} />
+      {/* <AutoCompleteDesktopFilters filterKey="parcelNumber" placeholder="Parcel ID" options={parcelNumbers || []} loading={!parcelNumbers} />
       <AutoCompleteDesktopFilters
         filterKey="status"
         placeholder="Status"
@@ -32,7 +32,7 @@ const ReceivedOffersDesktopFilters = () => {
           value: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
           label: OfferStatusEnum[key as keyof typeof OfferStatusEnum],
         }))}
-      />
+      /> */}
       <MinMaxDesktopFilters
         filterKey="offerPrice"
         options={priceFilters}
@@ -42,7 +42,7 @@ const ReceivedOffersDesktopFilters = () => {
       <MinMaxDesktopFilters
         filterKey="voltPrice"
         options={priceFilters}
-        placeHolder="VOLT Price"
+        placeHolder="VOLT Value"
         getOptionLabel={(item) => getMinMaxFilterLabel(item.min, item.max)}
       />
     </div>

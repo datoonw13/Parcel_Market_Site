@@ -5,6 +5,7 @@ import { revalidatePath as revalidate, revalidateTag as revalidateByTag } from "
 import { fetcher } from "./fetcher";
 
 export const revalidatePath = (path: string) => revalidate(path);
+export const revalidateAllPathAction = () => revalidate("/");
 export const revalidateTag = (tag: string) => revalidateByTag(tag);
 
 export const subscribeAction = async (email: string): Promise<ResponseModel<null>> => {

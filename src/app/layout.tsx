@@ -1,13 +1,9 @@
 import { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
-// eslint-disable-next-line camelcase
 import { Inter, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { ThemeProvider } from "@mui/material";
-import theme from "@/theme";
 import NextTopLoader from "nextjs-toploader";
 import { Provider } from "jotai";
 import "simplebar-react/dist/simplebar.min.css";
@@ -15,12 +11,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserAction } from "@/server-actions/user/actions";
 import ChatSession from "@/components/@new/chat/chat-session";
-import AuthSessionProvider from "@/components/shared/auth-session-provider";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import Chat from "@/components/shared/chat";
-import { getUserSubscriptions } from "@/server-actions/subscription/actions";
+import { getUserSubscriptions, revalidateAllPath } from "@/server-actions/subscription/actions";
 import Script from "next/script";
 import Image from "next/image";
+import DeviceDetect from "@/components/shared/DeviceDetect";
+import AuthContextProvide from "@/lib/auth/auth-context";
+import { getAuthedUserDataAction, isAuthenticatedAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
+import { fetcher } from "@/server-actions/fetcher";
+import { ISignInResponse } from "@/types/auth";
+import { cookies } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -58,15 +59,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const user = await getUserAction();
-  const userSubscriptions = user ? await getUserSubscriptions() : null;
+  // const user = await getUserAction();
+  // const userSubscriptions = user ? await getUserSubscriptions() : null;
+  const authOption = await isAuthenticatedAction();
+  // const tempUser = cookies().get("user")?.value;
 
   return (
     <>
       <html lang="en">
         {process.env.NODE_ENV === "production" && (
-          <Script id="fb-pixel" strategy="afterInteractive">
-            {`
+          <>
+            <Script id="fb-pixel" strategy="afterInteractive">
+              {`
                !function(f,b,e,v,n,t,s)
                 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
                 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -78,9 +82,19 @@ export default async function RootLayout({
                 fbq('init', '567998256023099');
                 fbq('track', 'PageView');
               `}
-          </Script>
+            </Script>
+            <Script id="twitter-tracking" strategy="afterInteractive">
+              {`
+            !function(e,t,n,s,u,a){
+              e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);},
+              s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+              a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))
+            }(window,document,'script');
+            twq('config','oz2z7');
+          `}
+            </Script>
+          </>
         )}
-
         <GoogleTagManager gtmId="GTM-P59N8LFM" />
         <GoogleAnalytics gaId="G-SBBPRZKYR6" />
         <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-dvh")}>
@@ -95,7 +109,6 @@ export default async function RootLayout({
               />
             </noscript>
           )}
-
           <noscript>
             <iframe
               src="https://www.googletagmanager.com/ns.html?id=GTM-P2BZG9G9"
@@ -114,16 +127,11 @@ export default async function RootLayout({
             closeOnClick
             closeButton={false}
           />
-          <AppRouterCacheProvider>
-            <Provider>
-              <ThemeProvider theme={theme}>
-                <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-                <AuthSessionProvider user={user} userSubscriptions={userSubscriptions?.data || null}>
-                  <ChatSession user={user}>{children}</ChatSession>
-                </AuthSessionProvider>
-              </ThemeProvider>
-            </Provider>
-          </AppRouterCacheProvider>
+          <DeviceDetect />
+          <Provider>
+            <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
+            <AuthContextProvide authOption={authOption}>{children}</AuthContextProvide>
+          </Provider>
           <Chat />
         </body>
       </html>
