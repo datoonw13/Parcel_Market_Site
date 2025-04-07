@@ -254,7 +254,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
           </div>
           <div className="rounded-2xl space-y-3 md:hidden">
             <div className=" rounded-2xl" style={{ aspectRatio: "3/1.5" }}>
-              <video controls width="100%" height="100%" className="w-full h-full" poster="/subnail.png" preload="metadata">
+              <video playsInline controls width="100%" height="100%" className="w-full h-full" poster="/subnail.png" preload="metadata">
                 <source
                   src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4"
                   type="vihttps://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4deo/mp4"

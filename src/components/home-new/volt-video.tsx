@@ -33,9 +33,10 @@ const VoltVideo = () => (
           controls
           width="100%"
           height="100%"
-          className="w-full h-full"
+          className="w-full"
           poster="/subnail.png"
           preload="metadata"
+          playsInline
         >
           <source src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4" type="video/mp4" />
           Your browser does not support the video tag.
