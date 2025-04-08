@@ -9,19 +9,13 @@ import { Provider } from "jotai";
 import "simplebar-react/dist/simplebar.min.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserAction } from "@/server-actions/user/actions";
-import ChatSession from "@/components/@new/chat/chat-session";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
 import Chat from "@/components/shared/chat";
-import { getUserSubscriptions, revalidateAllPath } from "@/server-actions/subscription/actions";
 import Script from "next/script";
 import Image from "next/image";
 import DeviceDetect from "@/components/shared/DeviceDetect";
 import AuthContextProvide from "@/lib/auth/auth-context";
-import { getAuthedUserDataAction, isAuthenticatedAction, setAuthTokensAction } from "@/server-actions/new-auth/new-auth";
-import { fetcher } from "@/server-actions/fetcher";
-import { ISignInResponse } from "@/types/auth";
-import { cookies } from "next/headers";
+import { isAuthenticatedAction } from "@/server-actions/new-auth/new-auth";
 
 const inter = Inter({
   subsets: ["latin"],
