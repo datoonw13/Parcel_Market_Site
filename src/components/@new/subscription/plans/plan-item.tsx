@@ -103,20 +103,27 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
           </p>
         </div>
         {isActive && userActiveSubscription?.cancelAtPeriodEnd && (
+          // <Button
+          //   onClick={async () => {
+          //     setResumePending(true);
+          //     const req = await resumeSubscriptionAction(userActiveSubscription.id);
+          //     setResumePending(false);
+          //     if (!req.errorMessage) {
+          //       router.push(`${routes.user.subscription.fullUrl}?success=true`);
+          //     }
+          //   }}
+          //   className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
+          //   loading={resumePending}
+          //   variant="primary"
+          // >
+          //   Resume subscription
+          // </Button>
           <Button
-            onClick={async () => {
-              setResumePending(true);
-              const req = await resumeSubscriptionAction(userActiveSubscription.id);
-              setResumePending(false);
-              if (!req.errorMessage) {
-                router.push(`${routes.user.subscription.fullUrl}?success=true`);
-              }
-            }}
-            className="w-full mt-auto  font-semibold group-hover:text-white text-start justify-between"
-            loading={resumePending}
-            variant="primary"
+            disabled
+            className="w-full mt-auto transition-none font-semibold group-hover:text-white text-start justify-between"
+            variant="secondary"
           >
-            Resume subscription
+            Canceled
           </Button>
         )}
         {isActive && !userActiveSubscription?.cancelAtPeriodEnd && (

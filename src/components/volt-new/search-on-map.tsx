@@ -184,15 +184,15 @@ const VoltSearchOnMap = ({
         tiles: data.vector,
         promoteId: "parcelnumb",
       })
-      .on("idle", () => {
+      .on("zoom", () => {
         if (mapRef.getZoom() >= 11) {
+          setPolygonPending(true);
+        } else {
           setPolygonPending(false);
         }
       })
-      .on("moveend", () => {
-        if (mapRef.getZoom() >= 11) {
-          setPolygonPending(true);
-        }
+      .on("idle", () => {
+        setPolygonPending(false);
       });
 
     const layers = mapRef.getStyle()?.layers;
@@ -384,7 +384,6 @@ const VoltSearchOnMap = ({
   useEffect(() => {
     if (mapRef) {
       mapRef.on("style.load", () => {
-        setPolygonPending(true);
         showRegridTiles();
       });
     }
