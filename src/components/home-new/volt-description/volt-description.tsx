@@ -87,7 +87,7 @@ const VoltDescription = () => {
           >
             {images.map((el, elI) => (
               <SwiperSlide key={el + elI.toString()} className="">
-                <div className="rounded-2xl relative w-full aspect-[968/535]">
+                <div className="relative w-full aspect-[1075/596]">
                   <Image
                     alt=""
                     src={`/home-slides/desktop/${el}`}
