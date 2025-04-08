@@ -38,20 +38,20 @@ const SlideShow = () => {
   return (
     <div className="relative h-full w-full">
       <Swiper
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
+        // autoplay={{
+        //   delay: 2500,
+        //   disableOnInteraction: false,
+        // }}
         spaceBetween={30}
         effect="fade"
         navigation
-        {...(!isSm && {
-          pagination: {
-            clickable: true,
-            bulletClass: styles["swiper-bullet-custom"],
-            bulletActiveClass: styles["swiper-bullet-custom-active"],
-          },
-        })}
+        // {...(!isSm && {
+        //   pagination: {
+        //     clickable: true,
+        //     bulletClass: styles["swiper-bullet-custom"],
+        //     bulletActiveClass: styles["swiper-bullet-custom-active"],
+        //   },
+        // })}
         modules={isSm ? [EffectFade, Autoplay] : [EffectFade, Autoplay, Pagination]}
         className={cn(
           "mySwiper [&>.swiper-pagination]:!absolute [&>.swiper-pagination]:justify-center [&>.swiper-pagination]:!bottom-10 [&>.swiper-pagination]:flex"
