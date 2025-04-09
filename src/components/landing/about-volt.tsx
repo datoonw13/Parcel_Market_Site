@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import routes from "@/helpers/routes";
 import { Button } from "../ui/button";
+import IntroVideo from "../shared/intro-video";
 
 const AboutVolt = () => (
   <div
@@ -24,10 +25,11 @@ const AboutVolt = () => (
 
     <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] items-center gap-6 md:gap-10 lg:gap-16 xl:gap-24">
       <div className="h-56 sm:h-60 md:h-72 lg:h-80 xl:h-[400px] rounded-2xl">
-        <video playsInline width="100%" height="100%" className="w-full h-full" poster="/subnail.png" controls preload="metadata">
+        {/* <video playsInline width="100%" height="100%" className="w-full h-full" poster="/subnail.png" controls preload="metadata">
           <source src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4" type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </video> */}
+        <IntroVideo />
       </div>
       <div className="h-fit space-y-2 md:space-y-3">
         <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:font-extrabold lg:text-4xl xl:text-5xl">How Does Volt work?</h1>

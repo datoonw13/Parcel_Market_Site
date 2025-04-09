@@ -20,6 +20,7 @@ import { TextInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { AutoComplete } from "../ui/autocomplete";
 import VoltSearchAlerts from "./volt-search-alerts";
+import IntroVideo from "../shared/intro-video";
 
 interface VoltSearchProps {
   className?: string;
@@ -253,14 +254,15 @@ const VoltSearch: FC<VoltSearchProps> = ({
             </div>
           </div>
           <div className="rounded-2xl space-y-3 md:hidden">
-            <div className="flex rounded-2xl" style={{ aspectRatio: "3/1.5" }}>
-              <video playsInline controls width="100%" height="100%" className="w-full" poster="/subnail.png" preload="metadata">
+            <div className="grid rounded-2xl h-56">
+              {/* <video playsInline controls width="100%" height="100%" className="w-full" poster="/subnail.png" preload="metadata">
                 <source
                   src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4"
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
-              </video>
+              </video> */}
+              <IntroVideo />
             </div>
             <h2 className="text-sm px-2">
               To see the full capabilities of the Parcel Market visit the website with a{" "}

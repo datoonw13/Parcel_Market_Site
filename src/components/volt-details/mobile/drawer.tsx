@@ -10,12 +10,11 @@ import { z } from "zod";
 import { IPropertiesInteraction } from "@/types/volt";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import moment from "moment";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { SubscriptionType } from "@/types/subscriptions";
 import { usePathname } from "next/navigation";
+import IntroVideo from "@/components/shared/intro-video";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
 import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
@@ -168,7 +167,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                       />
                     </div>
                     <div className="rounded-b-2xl" style={{ aspectRatio: "3/1.5" }}>
-                      <video
+                      {/* <video
                         playsInline
                         controls
                         width="100%"
@@ -182,7 +181,8 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
-                      </video>
+                      </video> */}
+                      <IntroVideo />
                     </div>
                   </div>
                 )}
