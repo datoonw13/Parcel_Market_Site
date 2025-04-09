@@ -66,6 +66,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   const timeRef = useRef<ReturnType<typeof setTimeout>>();
   const sortedAssessments = useRef<z.infer<typeof PropertyDataSchema>["assessments"]["data"]>([]);
   const [exportMapPending, setExportMapPending] = useState(false);
+  const [scrollAnimationEnd, setScrollAnimationEnd] = useState(false);
   const pathname = usePathname();
 
   const mapPopupRef = useRef<HTMLDivElement>(null);
@@ -336,6 +337,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
+      {!scrollAnimationEnd && <div className="fixed top-0 w-full h-full bg-black/20 z-30 !m-0" />}
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
         <div>
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
@@ -415,20 +417,34 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
             </div>
           </div>
         </div>
-        <div ref={tableRef} className="h-screen overflow-hidden">
-          <ScrollArea className="h-full [&>div>div:first-child]:h-full">
-            <VoltDetailsCalculationTable
-              data={data}
-              propertiesInteraction={propertiesInteraction}
-              setPropertiesInteraction={setPropertiesInteraction}
-              isNonValidMedianHighlighted={isNonValidMedianHighlighted}
-              isSubscribed={isSubscribed}
-              onSortChange={(data) => {
-                sortedAssessments.current = data;
-              }}
-            />
-          </ScrollArea>
-        </div>
+        <motion.div
+          className="relative bg-white"
+          initial={{ y: "-30%", zIndex: 9999 }}
+          animate={{ y: 0, zIndex: 9999 }}
+          exit={{ y: 0, zIndex: 0 }}
+          transition={{
+            duration: 0.6,
+            delay: 3,
+          }}
+          onAnimationComplete={(e) => {
+            setScrollAnimationEnd(true);
+          }}
+        >
+          <div ref={tableRef} className="h-screen overflow-hidden">
+            <ScrollArea className="h-full [&>div>div:first-child]:h-full">
+              <VoltDetailsCalculationTable
+                data={data}
+                propertiesInteraction={propertiesInteraction}
+                setPropertiesInteraction={setPropertiesInteraction}
+                isNonValidMedianHighlighted={isNonValidMedianHighlighted}
+                isSubscribed={isSubscribed}
+                onSortChange={(data) => {
+                  sortedAssessments.current = data;
+                }}
+              />
+            </ScrollArea>
+          </div>
+        </motion.div>
       </div>
       <div className="h-full flex flex-col py-6 pt-1.5 justify-between overflow-auto  shadow-2 relative z-10">
         <div id="map-options" className="flex flex-col gap-4 px-4">
@@ -493,10 +509,22 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               <div className="flex sticky top-0 h-full items-center justify-center">
                 <div className="flex flex-col items-center gap-5">
                   <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:rotate-180 after:-translate-y-full after:block after:absolute after:top-0 after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
-                  <p className="text-grey-800 text-center px-4 mx-auto">
-                    Place your cursor here and <span className="font-bold">Scroll Up</span> or{" "}
-                    <span className="font-bold">Scroll Down</span>
-                  </p>
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.1, 1], // Scale up to 1.05 and back to 1
+                    }}
+                    transition={{
+                      duration: 1.3, // Duration of one pulse cycle
+                      repeat: 2,
+                      ease: "linear", // Smooth easing
+                      delay: 2,
+                    }}
+                  >
+                    <p className={cn("text-center px-4 mx-auto", scrollAnimationEnd && "text-grey-800")}>
+                      Place your cursor here and <span className="font-bold">Scroll Up</span> or{" "}
+                      <span className="font-bold">Scroll Down</span>
+                    </p>
+                  </motion.div>
                   <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:block after:absolute after:top-[100%] after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
                 </div>
               </div>
