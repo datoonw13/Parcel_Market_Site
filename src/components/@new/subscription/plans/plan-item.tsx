@@ -23,22 +23,19 @@ const subscriptionDetail = (subscription: SubscriptionType) => {
     case SubscriptionType.Monthly:
       return {
         title: "Monthly",
-        price: "20.00",
+        price: "29.00",
         desc: "per month",
       };
     default:
       return {
         title: "Annual",
-        price: "215.00",
+        price: "299.00",
         desc: "save 10% per month",
       };
   }
 };
 
 const checkIsActive = (subscription: SubscriptionType, userActiveSubscription?: ISubscription) => {
-  // if (subscription === SubscriptionType.Trial) {
-  //   return userActiveSubscription?.status === "trialing";
-  // }
   if (subscription === SubscriptionType.Monthly && userActiveSubscription?.status !== "trialing") {
     return userActiveSubscription?.type === SubscriptionType.Monthly;
   }
@@ -53,23 +50,11 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
 
   const { price, title, desc } = subscriptionDetail(type);
   const isActive = checkIsActive(type, userActiveSubscription);
-  // const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const [resumePending, setResumePending] = useState(false);
 
   return (
     <>
-      {/* {openUpgradeModal && (
-        <UpdatePlanDialog
-          closeDialog={() => setOpenUpgradeModal(false)}
-          onSubmit={() => {
-            params.set("plan", type);
-            router.push(`${routes.checkout.fullUrl}?${params.toString()}`);
-          }}
-          pending={false}
-          subscription={type}
-        />
-      )} */}
       {openCancelModal && userActiveSubscription && (
         <CancelPlanDialog closeDialog={() => setOpenCancelModal(false)} userActiveSubscription={userActiveSubscription} />
       )}
@@ -95,7 +80,7 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
               <span>
                 (
                 <span className="font-semibold relative after:absolute after:bg-error after:h-0.5 after:w-full after:content-[''] after:left-0 after:top-[50%] after:translate-y-[-50%] after:-rotate-12">
-                  $300
+                  $348
                 </span>{" "}
                 Discount)
               </span>
