@@ -35,7 +35,8 @@ const bricolage = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   title: "Parcel Market",
-  description: "Value, buy, and sell vacant land",
+  description:
+    "Easily evaluate vacant land with instant comparable sales data, automated price calculations, and powerful analytics. Make confident buying and selling decisions with Parcel Market.",
   other: {
     ...(process.env.NODE_ENV === "production" && { "facebook-domain-verification": "ioj6davcfxs2k7yp656xaihld7114b" }),
   },
