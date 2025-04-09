@@ -254,7 +254,7 @@ const VoltSearch: FC<VoltSearchProps> = ({
             </div>
           </div>
           <div className="rounded-2xl space-y-3 md:hidden">
-            <div className="grid rounded-2xl h-56">
+            <div className="grid rounded-2xl aspect-[16/9] h-fit">
               {/* <video playsInline controls width="100%" height="100%" className="w-full" poster="/subnail.png" preload="metadata">
                 <source
                   src="https://hjpblcir9dyus8x7.public.blob.vercel-storage.com/video-QpygzeA5DFEAdEKsmJD9zdki3xxwSe.mp4"

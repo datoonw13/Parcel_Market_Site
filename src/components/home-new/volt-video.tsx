@@ -22,7 +22,7 @@ const VoltVideo = () => (
         <Button className="w-full">Try For Free</Button>
       </Link>
     </div>
-    <div className="flex w-full lg:order-1 lg:shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] p-4 rounded-b-2xl lg:rounded-2xl h-52 md:h-64 lg:h-72 xl:h-80">
+    <div className="aspect-[16/9] h-fit flex w-full lg:order-1 lg:shadow-[0px_17.56px_42.15px_0px_rgba(0,0,0,0.08)] p-4 rounded-b-2xl lg:rounded-2xl md:h-96 lg:w-fit">
       <Suspense fallback={<div className="w-full h-full animate-pulse bg-primary-main-100" />}>
         <IntroVideo />
       </Suspense>
