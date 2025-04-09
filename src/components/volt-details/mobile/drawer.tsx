@@ -166,7 +166,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         className="cursor-pointer min-w-5 w-5 min-h-5 h-5 text-grey-600 translate-y-1"
                       />
                     </div>
-                    <div className="rounded-b-2xl border border-primary-main border-t-0 aspect-[16/9] w-fit">
+                    <div className="rounded-b-2xl border border-primary-main border-t-0 aspect-[16/9] h-fit">
                       {/* <video
                         playsInline
                         controls
