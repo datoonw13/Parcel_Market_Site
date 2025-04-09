@@ -50,7 +50,6 @@ const VoltDetailsMobileHeader: FC<VoltDetailsMobileHeaderProps> = ({
           </div>
         }
       />
-      {/* <Tooltip renderButton={<IoInformationCircleOutline className="size-4 text-grey-600" />} renderContent="Some text." /> */}
     </div>
     <div className="border rounded-xl py-2 px-1.5 h-9 bg-white text-xs font-medium flex items-center justify-between gap-0.5">
       <div className="flex items-center gap-1 justify-between border-r pr-1 mr-1">
