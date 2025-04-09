@@ -493,7 +493,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
               <div className="flex sticky top-0 h-full items-center justify-center">
                 <div className="flex flex-col items-center gap-5">
                   <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:rotate-180 after:-translate-y-full after:block after:absolute after:top-0 after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
-                  <p className="text-grey-800">scroll area</p>
+                  <p className="text-grey-800 text-center px-4 mx-auto">Place your cursor here and scroll up and scroll down</p>
                   <div className="scroll-arrow w-0 h-10 border border-grey-800 relative after:content-[''] after:block after:absolute after:top-[100%] after:-left-[5px] after:w-[1px] after:h-2.5 after:border-t-[10px] after:border-t-grey-800 after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent" />
                 </div>
               </div>
