@@ -166,7 +166,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         className="cursor-pointer min-w-5 w-5 min-h-5 h-5 text-grey-600 translate-y-1"
                       />
                     </div>
-                    <div className="rounded-b-2xl" style={{ aspectRatio: "3/1.5" }}>
+                    <div className="rounded-b-2xl border border-primary-main border-t-0" style={{ aspectRatio: "3/1.5" }}>
                       {/* <video
                         playsInline
                         controls
@@ -182,7 +182,7 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         />
                         Your browser does not support the video tag.
                       </video> */}
-                      <IntroVideo />
+                      <IntroVideo className="[&>*]:rounded-none [&>*]:rounded-b-2xl [&>div]:after:rounded-none [&>div]:after:rounded-b-2xl" />
                     </div>
                   </div>
                 )}
