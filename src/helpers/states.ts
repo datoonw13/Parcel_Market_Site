@@ -6,13 +6,11 @@ export const statesBlackList = [
   "Texas",
   "Idaho",
   "Mississippi",
-  "New",
-  "Mexico",
+  "New Mexico",
   "Utah",
   "Kansas",
   "Missouri",
-  "North",
-  "Dakota",
+  "North Dakota",
   "Wyoming",
 ];
 
