@@ -337,7 +337,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
 
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
-      {!scrollAnimationEnd && <div className="fixed top-0 w-full h-full bg-black/20 z-30 !m-0" />}
+      {!scrollAnimationEnd && !localStorage.getItem("tip") && <div className="fixed top-0 w-full h-full bg-black/20 z-30 !m-0" />}
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
         <div>
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
@@ -419,14 +419,19 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
         </div>
         <motion.div
           className="relative bg-white"
-          initial={{ y: "-30%", zIndex: 9999 }}
-          animate={{ y: 0, zIndex: 9999 }}
-          exit={{ y: 0, zIndex: 0 }}
-          transition={{
-            duration: 0.6,
-            delay: 3,
-          }}
+          initial={localStorage.getItem("tip") ? false : { y: "-30%", zIndex: 9999 }}
+          animate={localStorage.getItem("tip") ? false : { y: 0, zIndex: 9999 }}
+          exit={localStorage.getItem("tip") ? undefined : { y: 0, zIndex: 0 }}
+          transition={
+            localStorage.getItem("tip")
+              ? undefined
+              : {
+                  duration: 0.6,
+                  delay: 3,
+                }
+          }
           onAnimationComplete={(e) => {
+            localStorage.setItem("tip", "true");
             setScrollAnimationEnd(true);
           }}
         >
