@@ -55,7 +55,7 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   return (
     <>
       {isFetching && (
-        <div className="fixed z-[99] w-full h-full top-0 left-0 bg-black-1000/70 flex items-center justify-center">
+        <div className={cn("fixed z-[99] w-full h-full top-0 left-0 flex items-center justify-center", "bg-black-1000/40")}>
           <div className="rounded-2xl bg-white p-6 shadow-3 space-y-4 max-w-[90%] lg:max-w-md w-full">
             <div className="relative w-fit mx-auto">
               <svg
