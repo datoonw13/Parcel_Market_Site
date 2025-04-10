@@ -10,8 +10,8 @@ const LoadingText = ({ initialText, className }: { initialText: string | ReactNo
   const messages = useRef([
     initialText,
     "Processing the land data.",
-    "Finalizing the calculation.",
-    "It seems like a very active area. Wait just a bit more.",
+    "Finalizing the calculations.",
+    "Wait just a bit more.",
     "It's almost done.",
   ]);
 
