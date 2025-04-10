@@ -71,7 +71,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const isAuthed = !!refreshToken;
+  let isAuthed = !!refreshToken;
 
   let accessToken = request.cookies.get("jwt")?.value;
   if (accessToken) {
@@ -99,8 +99,12 @@ export async function middleware(request: NextRequest) {
 
   if (newAccessToken) {
     response.cookies.set("jwt", newAccessToken, { secure: true });
+    response.headers.set("cookie", `${response.cookies.toString()} jwt=${newAccessToken}`);
     newAccessToken = null;
+    isAuthed = true;
   }
+
+  console.log(request.nextUrl.pathname);
 
   if (routeDetails?.protected && !isAuthed) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));

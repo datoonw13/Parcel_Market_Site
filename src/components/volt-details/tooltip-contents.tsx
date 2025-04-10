@@ -1,8 +1,8 @@
 export const AvgDescription = () => (
   <ul className="py-3 flex flex-col gap-2">
     <li className="text-black text-start text-xs px-4">
-      <span className="font-bold">Avg (Estimated Parcel Price):</span> Represents the estimated value of the subject parcel based on recent
-      sales. It is calculated by multiplying the Average PPA by the subject parcel’s acreage.
+      <span className="font-bold">Avg</span> is determined by multiplying the Average Price Per Acre (PPA) by the acreage of the subject
+      parcel.
     </li>
     <li className="text-black text-start text-xs px-4">
       <span className="font-bold">Average PPA (Price Per Acre):</span> This is determined by dividing the total sum of all parcel prices per
@@ -26,13 +26,13 @@ export const AvgDescription = () => (
 export const VoltDescription = () => (
   <ul className="py-3 flex flex-col gap-2">
     <li className="text-black text-start text-xs px-4">
-      <span className="font-bold">VOLT (Estimated Parcel Price):</span> Represents the estimated value of the subject parcel, based on
-      recent sales. It is calculated by multiplying the VOLT PPA by the subject parcel’s acreage.
+      <span className="font-bold">VOLT</span> VOLT is calculated by multiplying the VOLT Price Per Acre (VOLT PPA) by the acreage of the
+      subject parcel.
     </li>
     <div className="space-y-1">
       <p className="text-black text-start text-xs px-4 font-bold">Formula:</p>
       <li className="text-black text-start text-xs px-4 ml-6">
-        📌 <span className="font-bold pl-1">VOLT (Estimated Parcel Price) </span> = VOLT PPA × Subject Parcel Acreage
+        📌 <span className="font-bold pl-1">VOLT </span> = VOLT PPA × Subject Parcel Acreage
       </li>
     </div>
     <li className="text-black text-start text-xs px-4">

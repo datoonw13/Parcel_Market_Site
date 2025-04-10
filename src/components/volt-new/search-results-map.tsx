@@ -26,7 +26,9 @@ import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { IUserBaseInfo } from "@/types/auth";
 import { useRouter } from "next/navigation";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { Button } from "../ui/button";
+import { breakPoints } from "../../../tailwind.config";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -65,6 +67,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
 }) => {
   const router = useRouter();
   const [ref, setRef] = useState<MapBoX | null>(null);
+  const { targetReached: isSmallDevice } = useMediaQuery(parseFloat(breakPoints.sm));
   const [isGetDataPending, startGetDataTransition] = useTransition();
   const [isImagesLoaded, setImagesLoaded] = useState(false);
   const [calculationPending, setCalculationPending] = useState(false);
@@ -74,8 +77,6 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
     () => data.find((el) => el.id === propertiesInteraction.popup?.openId),
     [data, propertiesInteraction.popup]
   );
-
-  console.log(selectedLayer, 22);
 
   const setInitialData = useCallback(async () => {
     if (ref) {
@@ -248,7 +249,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
         if (popup) {
           popup.setLngLat([lng, lat]);
         } else {
-          new Popup({
+          const addPopup = new Popup({
             closeButton: false,
             className: "[&>div:last-child]:rounded-xl [&>div:last-child]:shadow-5 [&>div:last-child]:p-3 tooltip",
             closeOnClick: data.length > 1,
@@ -259,14 +260,17 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
               onMarkerInteraction({ popup: null });
             })
             .setLngLat([lng, lat])
-            .setDOMContent(tooltipRef.current!)
-            .setMaxWidth("max-content")
-            .addTo(ref);
+            .setDOMContent(tooltipRef.current!);
+
+          if (!isSmallDevice) {
+            addPopup.setMaxWidth("max-content");
+          }
+          addPopup.addTo(ref);
         }
       }
     },
 
-    [data.length, isImagesLoaded, onMarkerInteraction, ref]
+    [data.length, isImagesLoaded, onMarkerInteraction, ref, isSmallDevice]
   );
 
   const handleMarkerInteraction = useCallback(() => {
@@ -446,7 +450,7 @@ const VoltSearchResultsMap: FC<VoltSearchResultsMapProps> = ({
       <div style={{ display: "none" }}>
         <div ref={tooltipRef}>
           {openPropertyDetails && (
-            <ul className="blur-0">
+            <ul className="blur-0 max-w-sm">
               <>
                 <li className="text-xs text-grey-800 py-0.5">
                   Parcel Number <span className="text-black font-semibold">{openPropertyDetails.parcelNumberNoFormatting}</span>

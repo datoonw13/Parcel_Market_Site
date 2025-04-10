@@ -341,7 +341,7 @@ export const sendPasswordResetCodeAction = async (values: { oldPassword: string;
       errorMessage = "Current password is incorrect";
     }
     if (errorData.statusCode === 400) {
-      errorMessage = "New password validation failed";
+      errorMessage = errorData.message;
     }
     return {
       errorMessage,

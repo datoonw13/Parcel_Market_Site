@@ -12,6 +12,7 @@ import VoltDetailsDesktop from "./desktop/details-desktop";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 import { breakPoints } from "../../../tailwind.config";
 import VoltDetailsMobile from "./mobile/details-mobile";
+import LoadingText from "../shared/loading-texts";
 
 interface VoltDetailsLayoutProps {
   data: z.infer<typeof PropertyDataSchema>;
@@ -26,28 +27,12 @@ const mapLayers = [
     value: "mapbox://styles/parcelmarket/cm86y2kkf008k01sb2993ex03",
   },
   {
-    label: "Navigation Night",
-    value: "mapbox://styles/parcelmarket/cm86y2rmn008j01s99rkha0en",
-  },
-  {
-    label: "Navigation Day",
-    value: "mapbox://styles/parcelmarket/cm86y2ytc008u01qzf3ltegnv",
-  },
-  {
     label: "Satellite Streets",
     value: "mapbox://styles/parcelmarket/cm86y2bl6008t01seee1m3bov",
   },
   {
     label: "Streets",
     value: "mapbox://styles/parcelmarket/cm86y0uao006h01s8dx4060pg",
-  },
-  {
-    label: "Monochrome Light",
-    value: "mapbox://styles/parcelmarket/cm86y32m8008w01sievakedk8",
-  },
-  {
-    label: "Monochrome Dark",
-    value: "mapbox://styles/parcelmarket/cm86y36bq006i01s8hbp4hv5h",
   },
 ];
 
@@ -70,8 +55,8 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
   return (
     <>
       {isFetching && (
-        <div className="fixed z-[99] w-full h-full top-0 left-0 bg-black-1000/70 flex items-center justify-center">
-          <div className="rounded-2xl bg-white p-6 shadow-3 space-y-4 max-w-[90%] lg:max-w-md">
+        <div className={cn("fixed z-[99] w-full h-full top-0 left-0 flex items-center justify-center", "bg-black-1000/40")}>
+          <div className="rounded-2xl bg-white p-6 shadow-3 space-y-4 max-w-[90%] lg:max-w-md w-full">
             <div className="relative w-fit mx-auto">
               <svg
                 className="absolute -top-[-50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
@@ -96,16 +81,21 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               </svg>
               <LoadingIcon2 className="animate-spin size-12 text-primary-main" />
             </div>
-            <p className="text-grey-800 text-center">
-              Fetching{" "}
-              {(filters.acreageMin || filters.acreageMax) && (
-                <>
-                  <span className="font-bold">{`[${filters.acreageMin || "N/A"}, ${filters.acreageMax || "N/A"}]`}</span> acre
-                </>
-              )}{" "}
-              lands sold in last <span className="font-bold">{filters.soldWithin}</span> years in{" "}
-              <span className="font-bold">{filters.radius}</span> mile radius
-            </p>
+            <LoadingText
+              className="text-grey-800 text-center"
+              initialText={
+                <p className="text-grey-800 text-center">
+                  Fetching{" "}
+                  {(filters.acreageMin || filters.acreageMax) && (
+                    <>
+                      <span className="font-bold">{`[${filters.acreageMin || "N/A"}, ${filters.acreageMax || "N/A"}]`}</span> acre
+                    </>
+                  )}{" "}
+                  lands sold in last <span className="font-bold">{filters.soldWithin}</span> years in{" "}
+                  <span className="font-bold">{filters.radius}</span> mile radius
+                </p>
+              }
+            />
           </div>
         </div>
       )}

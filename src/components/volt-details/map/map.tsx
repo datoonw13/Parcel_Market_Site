@@ -444,8 +444,6 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
   }, [ref]);
 
   const updateMarkerColor = useCallback(() => {
-    console.log("aqaa", isNonValidMedianHighlighted);
-
     if (!ref) return;
     if (isNonValidMedianHighlighted) {
       const source = ref.getSource(mapData.sources.markersSource);

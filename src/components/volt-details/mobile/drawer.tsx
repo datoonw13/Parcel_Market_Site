@@ -10,12 +10,11 @@ import { z } from "zod";
 import { IPropertiesInteraction } from "@/types/volt";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import moment from "moment";
 import routes from "@/helpers/routes";
 import Link from "next/link";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { SubscriptionType } from "@/types/subscriptions";
 import { usePathname } from "next/navigation";
+import IntroVideo from "@/components/shared/intro-video";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
 import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
@@ -167,8 +166,8 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                         className="cursor-pointer min-w-5 w-5 min-h-5 h-5 text-grey-600 translate-y-1"
                       />
                     </div>
-                    <div className="rounded-b-2xl" style={{ aspectRatio: "3/1.5" }}>
-                      <video
+                    <div className="rounded-b-2xl border border-primary-main border-t-0 aspect-[16/9] h-fit">
+                      {/* <video
                         playsInline
                         controls
                         width="100%"
@@ -182,7 +181,8 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
-                      </video>
+                      </video> */}
+                      <IntroVideo className="[&>*]:rounded-none [&>*]:rounded-b-2xl [&>div]:after:rounded-none [&>div]:after:rounded-b-2xl" />
                     </div>
                   </div>
                 )}
