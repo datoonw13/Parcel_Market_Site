@@ -403,7 +403,7 @@ const VoltSearchOnMap = ({
           setStep(SignUpSteps.SELECT_REASONS);
         }}
       >
-        <div className="py-5">
+        <div className="py-5 grid">
           {authModal === "sign-in" ? (
             <SignInForm
               defaultSignIn={async (data) => {
