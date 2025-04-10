@@ -1,6 +1,6 @@
 import data from "../../public/files/states_counties.json";
 
-export const statesBlackList = [
+export const statesBlackList: string[] = [
   // "Louisiana",
   // "Montana",
   // "Texas",
