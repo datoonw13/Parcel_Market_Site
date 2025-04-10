@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { Box, Container, Divider, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import React from "react";
@@ -55,13 +56,14 @@ const AboutUs = () => {
                 color: "primary.main",
               }}
             />
-            <Typography sx={{ fontSize: 14, color: "grey.800" }}>
+
+            <p className="text-grey-800 text-sm space-y-3 md:text-base">
               Parcel Market was created by a team of seasoned real estate professionals and skilled software developers who share a deep
               understanding of the land industry and a passion for building intuitive technology. Frustrated by the inefficiencies and lack
               of reliable land sales data from county sources, our founders set out to solve a major challenge faced by real estate
               professionals and investors: getting accurate, affordable, and accessible data on vacant land sales—beyond what’s available
               through traditional MLS systems.
-            </Typography>
+            </p>
           </Box>
           <Box
             sx={{
@@ -82,11 +84,11 @@ const AboutUs = () => {
                 color: "primary.main",
               }}
             />
-            <Typography sx={{ fontSize: 14, color: "grey.800" }}>
+            <p className="text-grey-800 text-sm space-y-3 md:text-base">
               We believe land data should be straightforward, easy to access, and focused on what truly drives land value. Instead of
               overwhelming users with unnecessary features and inflated pricing, we’ve built a platform that delivers only what
               matters—reliable data, user-friendly tools, and insights that help professionals make informed decisions without the noice.
-            </Typography>
+            </p>
           </Box>
           <Box
             sx={{
@@ -107,11 +109,11 @@ const AboutUs = () => {
                 color: "primary.main",
               }}
             />
-            <Typography sx={{ fontSize: 14, color: "grey.800" }}>
+            <p className="text-grey-800 text-sm space-y-3 md:text-base">
               At Parcel Market, we stand by our core values: integrity, transparency, and community. As a dedicated team, we’re committed to
               building a trusted, easy-to-use platform that empowers land professionals and investors nationwide. We continuously refine our
               tools to enhance accuracy, usability, and overall experience—while keeping our subscription pricing accessible.
-            </Typography>
+            </p>
           </Box>
           <Box
             sx={{
@@ -132,10 +134,10 @@ const AboutUs = () => {
                 color: "primary.main",
               }}
             />
-            <Typography sx={{ fontSize: 14, color: "grey.800" }}>
+            <p className="text-grey-800 text-sm space-y-3 md:text-base">
               We’re excited about the road ahead as we keep growing and evolving Parcel Market into the essential resource for anyone
               looking to understand and invest in vacant land.
-            </Typography>
+            </p>
           </Box>
         </Box>
       </Container>

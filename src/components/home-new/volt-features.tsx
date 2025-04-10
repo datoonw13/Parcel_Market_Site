@@ -428,8 +428,8 @@ const list = [
     title: "Automated Price Calculations",
     description: (
       <p className="md:text-sm text-black text-start">
-        VOLT automatically <span className="font-extrabold">calculates comparable sales averages,</span> or by searching directly on an
-        accounting for bulk sales and outliers to ensure accuracy.
+        VOLT <span className="font-extrabold">automatically calculates comparable sales averages</span> even accounting for bulk sales and
+        outliers to deliver more accurate.
       </p>
     ),
     icon: LuCalculator,

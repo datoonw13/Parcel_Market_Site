@@ -54,7 +54,7 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
               className="items-start [&>button]:mt-1"
               onCheckedChange={handleSelectAllChange}
               checked={selectAllState()}
-              label={<span className="font-medium text-xs">Select All</span>}
+              label={<span className="font-semibold text-xs tracking-wide">Select All</span>}
               id="selectAll"
             />
             {filteredPropertyTypes.map((propertyType) => (
@@ -78,7 +78,11 @@ const VoltDetailsPropertyTypeFilters: FC<VoltDetailsPropertyTypeFiltersProps> = 
                   onChange(newSelected.length ? newSelected : null);
                 }}
                 checked={!!filteredSelected?.includes(propertyType.id)}
-                label={<span className="font-medium text-xs">{propertyType.value}</span>}
+                label={
+                  <span className="font-medium text-xs">{`${propertyType.value[0].toLocaleUpperCase()}${propertyType.value
+                    .slice(1)
+                    .toLocaleLowerCase()}`}</span>
+                }
                 key={propertyType.id}
                 id={propertyType.id.toString()}
               />

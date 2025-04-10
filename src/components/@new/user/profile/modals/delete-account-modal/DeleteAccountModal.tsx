@@ -106,18 +106,6 @@ const DeleteAccountModalContent: FC<Pick<DeleteAccountModalProps, "handleClose">
         {step === AccountRemoveSteps.SELECT_REASON && (
           <div className="border border-grey-100 rounded-xl p-6 space-y-4">
             <RadioButton
-              name={DeletionAccountReason.SoldLand}
-              checked={values.deletionResult === DeletionAccountReason.SoldLand}
-              onChange={() => setValues({ ...values, deletionResult: DeletionAccountReason.SoldLand })}
-              label="Already sold on Parcel Marketplace"
-            />
-            <RadioButton
-              name={DeletionAccountReason.SoldLandOutsideMarket}
-              checked={values.deletionResult === DeletionAccountReason.SoldLandOutsideMarket}
-              onChange={() => setValues({ ...values, deletionResult: DeletionAccountReason.SoldLandOutsideMarket })}
-              label="I have sold my land somewhere else"
-            />
-            <RadioButton
               name={DeletionAccountReason.NotUseful}
               checked={values.deletionResult === DeletionAccountReason.NotUseful}
               onChange={() => setValues({ ...values, deletionResult: DeletionAccountReason.NotUseful })}

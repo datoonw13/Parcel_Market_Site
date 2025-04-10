@@ -164,7 +164,30 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
             }}
           />
           <p className="text-primary-main text-xs font-medium">Subject Land</p>
-          <Tooltip renderButton={<IoInformationCircleOutline className="size-6 text-primary-dark" />} renderContent="Some text." />
+          <Tooltip
+            contentClasses="bg-transparent p-0 border-0 w-max max-w-2xl"
+            renderButton={<IoInformationCircleOutline className="size-5 text-grey-600" />}
+            renderContent={
+              <div
+                className="p-0.5"
+                style={{
+                  background: "linear-gradient(98.26deg, #FA98A3 12.83%, #FF001F 138.73%)",
+                  borderRadius: 12,
+                  boxShadow: "0px 4px 12px 0px #0000001F",
+                }}
+              >
+                <div style={{ borderRadius: 10 }} className="bg-white">
+                  <p className="text-black text-start text-xs p-4 max-w-xs">
+                    The <span className="font-bold">subject land</span> refers to the{" "}
+                    <span className="font-bold">parcel you are analyzing</span>, marked with the{" "}
+                    <span className="font-bold">green pin </span>for easy identification. To view detailed information,{" "}
+                    <span className="font-bold">click on the “Subject Parcel” drop-down</span> located in the{" "}
+                    <span className="font-bold">top right corner</span>.
+                  </p>
+                </div>
+              </div>
+            }
+          />
         </div>
       </div>
 

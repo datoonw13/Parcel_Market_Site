@@ -46,7 +46,9 @@ export const getPropertiesAction = async (
       parcelNumberNoFormatting: removeParcelNumberFormatting(property.properties.fields.parcelnumb),
       owner: property.properties.fields.owner,
       acreage: Number(
-        new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(property.properties.fields.ll_gisacre)
+        new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 3 })
+          .format(property.properties.fields.ll_gisacre)
+          .replace(/,/g, "")
       ),
       city: property.properties.fields.city,
       county: {

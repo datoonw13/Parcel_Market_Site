@@ -277,10 +277,10 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               alignment: {
                 horizontal: "left",
               },
-              numFmt: "   0.000",
+              numFmt: "    0.000",
             },
             t: "n", // Explicitly set type to number
-            v: `    ${Number(childProperty.acreage.value)}`,
+            v: Number(childProperty.acreage.value),
           },
           "Sold price": {
             s: {
@@ -312,7 +312,6 @@ export const exportToExcel = (data: z.infer<typeof PropertyDataSchema>, isNonVal
               },
               numFmt: "   $#,##0",
             },
-            t: "n", // Explicitly set type to number
             v: "",
           },
           "Last sale date": {
