@@ -593,8 +593,13 @@ const VoltSearchOnMap = ({
                   Acreage <span className="text-black font-semibold">{openProperty.acreage}</span>
                 </li>
                 <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
-                  Get Data
+                  {user ? "Get Data" : "Login And Get Data"}
                 </Button>
+                {!user && (
+                  <p className="text-xs font-medium mt-2 text-grey-800">
+                    Part of the data is <span className="font-bold">Free</span>
+                  </p>
+                )}
               </>
             </ul>
           )}
