@@ -430,10 +430,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                   delay: 3,
                 }
           }
-          onAnimationComplete={(e) => {
-            localStorage.setItem("tip", "true");
-            setScrollAnimationEnd(true);
-          }}
         >
           <div ref={tableRef} className="h-screen overflow-hidden">
             <ScrollArea className="h-full [&>div>div:first-child]:h-full">
@@ -506,6 +502,7 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                 const scrollRatio =
                   (container.scrollHeight - container.clientHeight) / (e.currentTarget.scrollHeight - e.currentTarget.clientHeight);
                 container.scrollTop = e.currentTarget.scrollTop * scrollRatio;
+                localStorage.setItem("tip", "true");
               }
             }}
             className="overflow-y-auto w-[calc(100%+18px)] h-full overflow-x-hidden cursor-n-resize"
