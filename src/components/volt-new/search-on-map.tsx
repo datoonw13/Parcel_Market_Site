@@ -27,6 +27,7 @@ import SignInForm from "../auth/sign-in";
 import FacebookAuthProvider from "../auth/facebook-auth-provider";
 import GoogleAuthProvider from "../auth/google-auth-provider/google-auth-provider";
 import ForgotPasswordButton from "../@new/user/profile/modals/forgot-password/forgot-password-button";
+import { LoadingIcon1, LoadingIcon2 } from "../@new/icons/LoadingIcons";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -597,17 +598,17 @@ const VoltSearchOnMap = ({
           )}
         </div>
       </div>
-      {isPolygonPending && (
-        <div className="bg-white rounded-xl py-2 px-3 absolute top-2 left-2 z-10">
+      {!isPolygonPending && (
+        <div style={{ boxShadow: "0 6px 18px rgba(0, 0, 0, 0.7)" }} className="bg-white rounded-xl py-2 px-3 absolute top-2 left-2 z-10">
           <p
             style={{
               backgroundImage: "linear-gradient(90deg, #05471C 0%, #16DB65 100%)",
               color: "transparent",
               backgroundClip: "text",
             }}
-            className="text-xs font-bold"
+            className="text-xs font-bold flex items-center gap-2"
           >
-            Land polygons are loading
+            Land polygons are loading <LoadingIcon1 color="primary-main" className="animate-spin size-3" />
           </p>
         </div>
       )}
