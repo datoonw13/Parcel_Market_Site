@@ -104,8 +104,6 @@ export async function middleware(request: NextRequest) {
     isAuthed = true;
   }
 
-  console.log(request.nextUrl.pathname);
-
   if (routeDetails?.protected && !isAuthed) {
     response = NextResponse.redirect(new URL(`${routes.auth.url}/${routes.auth.signIn.url}`, request.nextUrl.origin));
   }
