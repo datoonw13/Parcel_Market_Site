@@ -80,12 +80,12 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
   return (
     <div id="volt-progress-line" className="border border-primary-main-400 bg-[#FAFFFB] p-3 space-y-8 relative z-10 rounded-2xl">
       <div className="grid grid-cols-2 items-center justify-between gap-2.5 border-b border-b-[#C3EBD3] pb-3">
-        <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-1">
+        <div className="flex items-center gap-1">
           <div className={cn(`bg-white min-w-3.5 w-3.5 min-h-3.5 h-3.5 rounded-full flex items-center justify-center relative`)}>
             <div className="min-w-3 w-3 min-h-3 h-3 border-2 rounded-full border-primary-main" />
             <div className="min-w-1 w-1 min-h-1 h-1 bg-primary-main rounded-full absolute" />
           </div>
-          <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-1">
+          <div className="flex items-center gap-1">
             <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
               <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]", "text-[11px]")}>
                 {data.assessments.data.length <= 1 ? "$ NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
@@ -112,12 +112,12 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             />
           </div>
         </div>
-        <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-1 justify-end">
+        <div className="flex items-center justify-end gap-1">
           <div className={cn(`bg-white min-w-3.5 w-3.5 min-h-3.5 h-3.5 rounded-full flex items-center justify-center relative`)}>
             <div className="min-w-3 w-3 min-h-3 h-3 border-2 rounded-full border-warning" />
             <div className="min-w-1 w-1 min-h-1 h-1 bg-warning rounded-full absolute" />
           </div>
-          <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-1">
+          <div className="flex items-center gap-1">
             <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
               <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]", "text-[11px]")}>
                 {data.assessments.data.length < 3 ? "$ NaN " : data.voltPricePerAcreage.formattedString}
