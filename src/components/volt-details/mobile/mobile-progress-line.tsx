@@ -86,7 +86,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             <div className="min-w-1 w-1 min-h-1 h-1 bg-primary-main rounded-full absolute" />
           </div>
           <div className="flex items-center gap-1">
-            <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
+            <p className="font-semibold text-xs text-grey-600 w-fit">
               <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]", "text-[11px]")}>
                 {data.assessments.data.length <= 1 ? "$ NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
               </span>{" "}
@@ -112,13 +112,13 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             />
           </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center justify-end gap-1">
           <div className={cn(`bg-white min-w-3.5 w-3.5 min-h-3.5 h-3.5 rounded-full flex items-center justify-center relative`)}>
             <div className="min-w-3 w-3 min-h-3 h-3 border-2 rounded-full border-warning" />
             <div className="min-w-1 w-1 min-h-1 h-1 bg-warning rounded-full absolute" />
           </div>
           <div className="flex items-center gap-1">
-            <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
+            <p className="font-semibold text-xs text-grey-600 w-fit">
               <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]", "text-[11px]")}>
                 {data.assessments.data.length < 3 ? "$ NaN " : data.voltPricePerAcreage.formattedString}
               </span>{" "}

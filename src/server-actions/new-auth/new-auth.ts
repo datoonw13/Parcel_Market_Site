@@ -41,7 +41,7 @@ export const setAuthTokensAction = (data: Array<{ token: string; tokenName: stri
       value: token,
       httpOnly: true,
       secure: true,
-      ...(remember && { maxAge: maxAgeInSeconds }),
+      maxAge: maxAgeInSeconds,
     });
   });
 };

@@ -27,6 +27,7 @@ import SignInForm from "../auth/sign-in";
 import FacebookAuthProvider from "../auth/facebook-auth-provider";
 import GoogleAuthProvider from "../auth/google-auth-provider/google-auth-provider";
 import ForgotPasswordButton from "../@new/user/profile/modals/forgot-password/forgot-password-button";
+import { LoadingIcon1, LoadingIcon2 } from "../@new/icons/LoadingIcons";
 
 const Map = dynamic(() => import("@/components/maps/mapbox/mapbox-base"), { ssr: false });
 
@@ -391,180 +392,186 @@ const VoltSearchOnMap = ({
 
   return (
     <>
-      <ResponsiveModal
-        dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
-        drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
-        open={!!authModal}
-        closeModal={() => {
-          setAuthModal(null);
-          setSignUpEmail(null);
-          setSignUpErrorMessage(null);
-          setStep(SignUpSteps.SELECT_REASONS);
-        }}
-      >
-        <div className="py-5 grid">
-          {authModal === "sign-in" ? (
-            <SignInForm
-              defaultSignIn={async (data) => {
-                setUserSource(UserSource.System);
-                setRequestPending(true);
-                const request = await authWithCredentialsAction(data);
-                if (request.errorMessage) {
-                  notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                  setRequestPending(false);
-                } else {
-                  signIn(request.data!, () => {
-                    startTransition(() => {
-                      router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+      {authModal && (
+        <ResponsiveModal
+          dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
+          drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
+          open={!!authModal}
+          closeModal={() => {
+            setAuthModal(null);
+            setSignUpEmail(null);
+            setSignUpErrorMessage(null);
+            setStep(SignUpSteps.SELECT_REASONS);
+          }}
+        >
+          <div className="py-5">
+            {authModal === "sign-in" ? (
+              <SignInForm
+                defaultSignIn={async (data) => {
+                  setUserSource(UserSource.System);
+                  setRequestPending(true);
+                  const request = await authWithCredentialsAction(data);
+                  if (request.errorMessage) {
+                    notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                    setRequestPending(false);
+                  } else {
+                    signIn(request.data!, () => {
+                      startTransition(() => {
+                        router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                      });
                     });
-                  });
-                }
-              }}
-              authWithCredentialsPending={userSource === UserSource.System && (isTransitioning || requestPending)}
-              onSignUp={() => {
-                setAuthModal("sign-up");
-              }}
-              forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={null} />}
-              authProviders={() => (
-                <div className="flex flex-col gap-3 w-full">
-                  <GoogleAuthProvider
-                    pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
-                    onSuccess={async (token) => {
-                      setUserSource(UserSource.Google);
-                      setRequestPending(true);
-                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-                      if (request.errorMessage === "Invalid credentials") {
-                        const newParams = new URLSearchParams(params.toString());
-                        newParams.set("userSource", UserSource.Google);
-                        newParams.set("accessToken", token);
-                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        router.push(`${pathname}?${newParams.toString()}`);
-                        setAuthModal("sign-up");
-                      } else if (request.errorMessage) {
-                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
-                      } else {
-                        signIn(request.data!, () => {
-                          startTransition(() => {
-                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                  }
+                }}
+                authWithCredentialsPending={userSource === UserSource.System && (isTransitioning || requestPending)}
+                onSignUp={() => {
+                  setAuthModal("sign-up");
+                }}
+                forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={null} />}
+                authProviders={() => (
+                  <div className="flex flex-col gap-3 w-full">
+                    <GoogleAuthProvider
+                      pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
+                      onSuccess={async (token) => {
+                        setUserSource(UserSource.Google);
+                        setRequestPending(true);
+                        const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+                        if (request.errorMessage === "Invalid credentials") {
+                          const newParams = new URLSearchParams(params.toString());
+                          newParams.set("userSource", UserSource.Google);
+                          newParams.set("accessToken", token);
+                          newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          router.push(`${pathname}?${newParams.toString()}`);
+                          setAuthModal("sign-up");
+                        } else if (request.errorMessage) {
+                          notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                          setRequestPending(false);
+                        } else {
+                          signIn(request.data!, () => {
+                            startTransition(() => {
+                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            });
                           });
-                        });
-                      }
-                    }}
-                  />
-                  <FacebookAuthProvider
-                    pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
-                    onSuccess={async (token) => {
-                      setUserSource(UserSource.Facebook);
-                      setRequestPending(true);
-                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-                      if (request.errorMessage === "Invalid credentials") {
-                        const newParams = new URLSearchParams(params.toString());
-                        newParams.set("userSource", UserSource.Google);
-                        newParams.set("accessToken", token);
-                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        router.push(`${pathname}?${params.toString()}`);
-                      } else if (request.errorMessage) {
-                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
-                      } else {
-                        signIn(request.data!, () => {
-                          startTransition(() => {
-                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                        }
+                      }}
+                    />
+                    <FacebookAuthProvider
+                      pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
+                      onSuccess={async (token) => {
+                        setUserSource(UserSource.Facebook);
+                        setRequestPending(true);
+                        const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+                        if (request.errorMessage === "Invalid credentials") {
+                          const newParams = new URLSearchParams(params.toString());
+                          newParams.set("userSource", UserSource.Google);
+                          newParams.set("accessToken", token);
+                          newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                          router.push(`${pathname}?${params.toString()}`);
+                        } else if (request.errorMessage) {
+                          notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                          setRequestPending(false);
+                        } else {
+                          signIn(request.data!, () => {
+                            startTransition(() => {
+                              router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            });
                           });
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              )}
-              className="sm:py-10 md:py-12 lg:py-14 xl:py-16 max-w-72 mx-auto"
-            />
-          ) : (
-            <SignUp
-              step={step}
-              setStep={setStep}
-              errorMessage={signUpErrorMessage}
-              setErrorMessage={setSignUpErrorMessage}
-              email={signUpEmail}
-              setEmail={setSignUpEmail}
-              showSignIn={() => {
-                setAuthModal("sign-up");
-              }}
-              authProviders={() => (
-                <div className="flex flex-col gap-3 w-full">
-                  <GoogleAuthProvider
-                    pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
-                    onSuccess={async (token) => {
-                      setUserSource(UserSource.Google);
-                      setRequestPending(true);
-                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-                      if (request.errorMessage === "Invalid credentials") {
-                        const newParams = new URLSearchParams(params.toString());
-                        newParams.set("userSource", UserSource.Google);
-                        newParams.set("accessToken", token);
-                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        router.push(`${pathname}?${newParams.toString()}`);
-                        setAuthModal("sign-up");
-                      } else if (request.errorMessage) {
-                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
-                      } else {
-                        signIn(request.data!, () => {
-                          startTransition(() => {
-                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                          });
-                        });
-                      }
-                    }}
-                  />
-                  <FacebookAuthProvider
-                    pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
-                    onSuccess={async (token) => {
-                      setUserSource(UserSource.Facebook);
-                      setRequestPending(true);
-                      const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-                      if (request.errorMessage === "Invalid credentials") {
-                        const newParams = new URLSearchParams(params.toString());
-                        newParams.set("userSource", UserSource.Google);
-                        newParams.set("accessToken", token);
-                        newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                        router.push(`${pathname}?${params.toString()}`);
-                      } else if (request.errorMessage) {
-                        notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                        setRequestPending(false);
-                      } else {
-                        signIn(request.data!, () => {
-                          startTransition(() => {
-                            router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                          });
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              )}
-              onSubmit={async (data) => {
-                const request = await signUpUserAction({ ...data, redirectUrl: `${routes.volt.fullUrl}/${lastFetchedId.current}` });
-                if (request.errorMessage) {
-                  setSignUpErrorMessage(request.errorMessage);
-                  setStep(SignUpSteps.FINISH);
-                } else if (data.userSource === UserSource.Google || data.userSource === UserSource.Facebook) {
-                  const params = new URLSearchParams();
-                  params.set("jwt", request.data!.access_token);
-                  params.set("jwtRefresh", request.data!.refresh_token);
-                  params.set("redirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
-                  router.push(`${routes.auth.signUp.success.fullUrl}?${params.toString()}`);
-                } else {
-                  setStep(SignUpSteps.FINISH);
-                }
-              }}
-              isTransitioning={false}
-              className="m-auto sm:p-10 md:p-12 lg:p-14 xl:p-16"
-            />
-          )}
-        </div>
-      </ResponsiveModal>
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+                className="sm:py-10 md:py-12 lg:py-14 xl:py-16 max-w-72 mx-auto"
+              />
+            ) : (
+              <SignUp
+                step={step}
+                setStep={setStep}
+                errorMessage={signUpErrorMessage}
+                setErrorMessage={setSignUpErrorMessage}
+                email={signUpEmail}
+                setEmail={setSignUpEmail}
+                showSignIn={() => {
+                  setAuthModal("sign-up");
+                }}
+                authProviders={() => (
+                  <div className="flex flex-col gap-3 w-full">
+                    {userSource !== UserSource.Facebook && (
+                      <GoogleAuthProvider
+                        pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
+                        onSuccess={async (token) => {
+                          setUserSource(UserSource.Google);
+                          setRequestPending(true);
+                          const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+                          if (request.errorMessage === "Invalid credentials") {
+                            const newParams = new URLSearchParams(params.toString());
+                            newParams.set("userSource", UserSource.Google);
+                            newParams.set("accessToken", token);
+                            newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            router.push(`${pathname}?${newParams.toString()}`);
+                            setAuthModal("sign-up");
+                          } else if (request.errorMessage) {
+                            notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                            setRequestPending(false);
+                          } else {
+                            signIn(request.data!, () => {
+                              startTransition(() => {
+                                router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                              });
+                            });
+                          }
+                        }}
+                      />
+                    )}
+                    {userSource !== UserSource.Google && (
+                      <FacebookAuthProvider
+                        pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
+                        onSuccess={async (token) => {
+                          setUserSource(UserSource.Facebook);
+                          setRequestPending(true);
+                          const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+                          if (request.errorMessage === "Invalid credentials") {
+                            const newParams = new URLSearchParams(params.toString());
+                            newParams.set("userSource", UserSource.Google);
+                            newParams.set("accessToken", token);
+                            newParams.set("onSuccessRedirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                            router.push(`${pathname}?${params.toString()}`);
+                          } else if (request.errorMessage) {
+                            notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                            setRequestPending(false);
+                          } else {
+                            signIn(request.data!, () => {
+                              startTransition(() => {
+                                router.push(`${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                              });
+                            });
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+                onSubmit={async (data) => {
+                  const request = await signUpUserAction({ ...data, redirectUrl: `${routes.volt.fullUrl}/${lastFetchedId.current}` });
+                  if (request.errorMessage) {
+                    setSignUpErrorMessage(request.errorMessage);
+                    setStep(SignUpSteps.FINISH);
+                  } else if (data.userSource === UserSource.Google || data.userSource === UserSource.Facebook) {
+                    const params = new URLSearchParams();
+                    params.set("jwt", request.data!.access_token);
+                    params.set("jwtRefresh", request.data!.refresh_token);
+                    params.set("redirectUrl", `${routes.volt.fullUrl}/${lastFetchedId.current}`);
+                    router.push(`${routes.auth.signUp.success.fullUrl}?${params.toString()}`);
+                  } else {
+                    setStep(SignUpSteps.FINISH);
+                  }
+                }}
+                isTransitioning={false}
+                className="m-auto sm:p-10 md:p-12 lg:p-14 xl:p-16"
+              />
+            )}
+          </div>
+        </ResponsiveModal>
+      )}
       <div style={{ display: "none" }}>
         <div ref={tooltipRef}>
           {openProperty && (
@@ -586,24 +593,29 @@ const VoltSearchOnMap = ({
                   Acreage <span className="text-black font-semibold">{openProperty.acreage}</span>
                 </li>
                 <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
-                  Get Data
+                  {user ? "Get Data" : "Login And Get Data"}
                 </Button>
+                {!user && (
+                  <p className="text-xs font-medium mt-2 text-grey-800">
+                    Part of the data is <span className="font-bold">Free</span>
+                  </p>
+                )}
               </>
             </ul>
           )}
         </div>
       </div>
       {isPolygonPending && (
-        <div className="bg-white rounded-xl py-2 px-3 absolute top-2 left-2 z-10">
+        <div style={{ boxShadow: "0 6px 18px rgba(0, 0, 0, 0.7)" }} className="bg-white rounded-xl py-2 px-3 absolute top-2 left-2 z-10">
           <p
             style={{
               backgroundImage: "linear-gradient(90deg, #05471C 0%, #16DB65 100%)",
               color: "transparent",
               backgroundClip: "text",
             }}
-            className="text-xs font-bold"
+            className="text-xs font-bold flex items-center gap-2"
           >
-            Land polygons are loading
+            Property boundaries are loading <LoadingIcon1 color="primary-main" className="animate-spin size-3" />
           </p>
         </div>
       )}

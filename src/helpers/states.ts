@@ -1,17 +1,17 @@
 import data from "../../public/files/states_counties.json";
 
 export const statesBlackList: string[] = [
-  // "Louisiana",
-  // "Montana",
-  // "Texas",
-  // "Idaho",
-  // "Mississippi",
-  // "New Mexico",
-  // "Utah",
-  // "Kansas",
-  // "Missouri",
-  // "North Dakota",
-  // "Wyoming",
+  "Louisiana",
+  "Montana",
+  "Texas",
+  "Idaho",
+  "Mississippi",
+  "New Mexico",
+  "Utah",
+  "Kansas",
+  "Missouri",
+  "North Dakota",
+  "Wyoming",
 ];
 
 export const states = Object.keys(data)
