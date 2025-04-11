@@ -598,7 +598,7 @@ const VoltSearchOnMap = ({
           )}
         </div>
       </div>
-      {!isPolygonPending && (
+      {isPolygonPending && (
         <div style={{ boxShadow: "0 6px 18px rgba(0, 0, 0, 0.7)" }} className="bg-white rounded-xl py-2 px-3 absolute top-2 left-2 z-10">
           <p
             style={{
