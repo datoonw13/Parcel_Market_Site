@@ -112,7 +112,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             />
           </div>
         </div>
-        <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-1">
+        <div className="grid grid-cols-[minmax(0,_max-content)_minmax(0,_max-content)_minmax(0,_max-content)] items-center gap-1 justify-end">
           <div className={cn(`bg-white min-w-3.5 w-3.5 min-h-3.5 h-3.5 rounded-full flex items-center justify-center relative`)}>
             <div className="min-w-3 w-3 min-h-3 h-3 border-2 rounded-full border-warning" />
             <div className="min-w-1 w-1 min-h-1 h-1 bg-warning rounded-full absolute" />

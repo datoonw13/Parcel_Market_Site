@@ -44,60 +44,64 @@ const SignUpPage = () => {
       }}
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">
-          <GoogleAuthProvider
-            pending={userSource === UserSource.Google && (authPending || requestPending)}
-            onSuccess={async (token) => {
-              setUserSource(UserSource.Google);
-              setRequestPending(true);
-              const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
-              if (request.errorMessage === "Invalid credentials") {
-                startAuthTransition(() => {
-                  const params = new URLSearchParams({
-                    userSource: UserSource.Google,
-                    accessToken: token,
-                    onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
-                  });
-                  router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
-                });
-              } else if (request.errorMessage) {
-                notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                setRequestPending(false);
-              } else {
-                signIn(request.data!, () => {
+          {userSource !== UserSource.Facebook && (
+            <GoogleAuthProvider
+              pending={userSource === UserSource.Google && (authPending || requestPending)}
+              onSuccess={async (token) => {
+                setUserSource(UserSource.Google);
+                setRequestPending(true);
+                const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Google });
+                if (request.errorMessage === "Invalid credentials") {
                   startAuthTransition(() => {
-                    router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                    const params = new URLSearchParams({
+                      userSource: UserSource.Google,
+                      accessToken: token,
+                      onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
+                    });
+                    router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                   });
-                });
-              }
-            }}
-          />
-          <FacebookAuthProvider
-            pending={userSource === UserSource.Facebook && (authPending || requestPending)}
-            onSuccess={async (token) => {
-              setUserSource(UserSource.Facebook);
-              setRequestPending(true);
-              const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
-              if (request.errorMessage === "Invalid credentials") {
-                startAuthTransition(() => {
-                  const params = new URLSearchParams({
-                    userSource: UserSource.Facebook,
-                    accessToken: token,
-                    onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
+                } else if (request.errorMessage) {
+                  notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                  setRequestPending(false);
+                } else {
+                  signIn(request.data!, () => {
+                    startAuthTransition(() => {
+                      router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                    });
                   });
-                  router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
-                });
-              } else if (request.errorMessage) {
-                notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
-                setRequestPending(false);
-              } else {
-                signIn(request.data!, () => {
+                }
+              }}
+            />
+          )}
+          {userSource !== UserSource.Google && (
+            <FacebookAuthProvider
+              pending={userSource === UserSource.Facebook && (authPending || requestPending)}
+              onSuccess={async (token) => {
+                setUserSource(UserSource.Facebook);
+                setRequestPending(true);
+                const request = await authWithSocialNetworkAction({ token, userSource: UserSource.Facebook });
+                if (request.errorMessage === "Invalid credentials") {
                   startAuthTransition(() => {
-                    router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                    const params = new URLSearchParams({
+                      userSource: UserSource.Facebook,
+                      accessToken: token,
+                      onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
+                    });
+                    router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                   });
-                });
-              }
-            }}
-          />
+                } else if (request.errorMessage) {
+                  notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
+                  setRequestPending(false);
+                } else {
+                  signIn(request.data!, () => {
+                    startAuthTransition(() => {
+                      router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
+                    });
+                  });
+                }
+              }}
+            />
+          )}
         </div>
       )}
       onSubmit={async (data) => {
