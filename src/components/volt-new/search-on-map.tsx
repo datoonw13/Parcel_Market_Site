@@ -595,11 +595,6 @@ const VoltSearchOnMap = ({
                 <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
                   {user ? "Get Data" : "Login And Get Data"}
                 </Button>
-                {!user && (
-                  <p className="text-xs font-medium mt-2 text-grey-800">
-                    Part of the data is <span className="font-bold">Free</span>
-                  </p>
-                )}
               </>
             </ul>
           )}

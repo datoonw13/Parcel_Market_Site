@@ -172,7 +172,7 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
                     disabled={!propertiesInteraction.popup}
                     className="w-full"
                   >
-                    Get part of the data <span className="font-extrabold">For Free</span>
+                    {user ? "Get Data" : "Log In And Get Data"}
                   </Button>
                 </div>
               </div>
