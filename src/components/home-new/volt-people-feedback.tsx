@@ -53,8 +53,8 @@ const VoltPeopleFeedback = () => (
                 </AvatarFallback>
               </Avatar>
               <div className="mt-1">
-                <p className="font-medium text-lg">{el.userName}</p>
-                <p className="text-grey-600 font-medium text-xs">Business owner</p>
+                <p className="font-medium text-lg">{el.userName.split("-")[0]}</p>
+                <p className="text-grey-600 font-medium text-xs">{el.userName.split("-")[1]}</p>
               </div>
             </div>
             <p className="text-grey-600 text-sm line-clamp-4">{el.bio}</p>
@@ -75,12 +75,12 @@ accurate valuations, saving me time and providing reliable data to better serve 
 clients.`,
   },
   {
-    userName: "Dustin G. – Land Investor",
+    userName: "Dustin G. - Land Investor",
     bio: `Parcel Market has drastically cut my research time, allowing me to review 10 
 properties in the time it previously took to research just one.`,
   },
   {
-    userName: "Micheal D. – Real Estate Agent",
+    userName: "Micheal D. - Real Estate Agent",
     bio: `Parcel Market’s data saves me hours, letting me research multiple properties 
 faster and with confidence—an essential tool in my real estate work.`,
   },
@@ -90,7 +90,7 @@ faster and with confidence—an essential tool in my real estate work.`,
 comprehensive data enables quick and reliable land evaluations.`,
   },
   {
-    userName: "Conor M. – Real Estate Agent",
+    userName: "Conor M. - Real Estate Agent",
     bio: `Parcel Market has transformed my workflow. The platform’s ease and accuracy let 
 me complete thorough property research in a fraction of the time`,
   },
