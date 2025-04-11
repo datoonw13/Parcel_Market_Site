@@ -608,7 +608,7 @@ const VoltSearchOnMap = ({
             }}
             className="text-xs font-bold flex items-center gap-2"
           >
-            Land polygons are loading <LoadingIcon1 color="primary-main" className="animate-spin size-3" />
+            Property boundaries are loading <LoadingIcon1 color="primary-main" className="animate-spin size-3" />
           </p>
         </div>
       )}
