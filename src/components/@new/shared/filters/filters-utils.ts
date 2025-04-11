@@ -19,7 +19,7 @@ export const getMinMaxFilterLabel = (priceMin: number | null, priceMax: number |
 
 export const getAcreageLabel = (acreageMin: number | null, acreageMax: number | null) => {
   if (!acreageMin && !acreageMax) {
-    return "qwd";
+    return "";
   }
 
   if (acreageMax && !acreageMin) {
