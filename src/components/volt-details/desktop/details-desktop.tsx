@@ -335,9 +335,15 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
     }
   }, [data.id, propertiesInteraction]);
 
+  useEffect(() => {
+    if (localStorage.getItem("tip")) {
+      setScrollAnimationEnd(true);
+    }
+  }, []);
+
   return (
     <div className={cn("w-full h-full grid grid-cols-[1fr_min(20vw,_260px)] overflow-hidden relative")}>
-      {!scrollAnimationEnd && !localStorage.getItem("tip") && <div className="fixed top-0 w-full h-full bg-black/20 z-30 !m-0" />}
+      {!scrollAnimationEnd && <div className="fixed top-0 w-full h-full bg-black/20 z-30 !m-0" />}
       <div className={cn("overflow-hidden space-y-4")} ref={setContainer}>
         <div>
           <div className="w-full h-screen grid grid-rows-[1fr_minmax(0,_max-content)]" id="map">
@@ -430,6 +436,10 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                   delay: 3,
                 }
           }
+          onAnimationStart={() => {
+            setScrollAnimationEnd(false);
+          }}
+          onAnimationComplete={() => setScrollAnimationEnd(true)}
         >
           <div ref={tableRef} className="h-screen overflow-hidden">
             <ScrollArea className="h-full [&>div>div:first-child]:h-full">
