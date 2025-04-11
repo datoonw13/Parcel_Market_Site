@@ -189,7 +189,7 @@ const VoltDesktop: FC<VoltDesktopProps> = ({
                       disabled={!propertiesInteraction.popup}
                       className="w-full"
                     >
-                      Get Data
+                      Get part of the data <span className="font-extrabold">For Free</span>
                     </Button>
                   </div>
                 )}

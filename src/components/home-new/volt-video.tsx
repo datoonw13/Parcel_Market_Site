@@ -15,7 +15,7 @@ const VoltVideo = () => (
     <div className="mx-4 px-2 space-y-3 lg:order-2">
       <h1 className="text-center lg:text-start font-extrabold text-2xl">How Does Volt work?</h1>
       <h2 className="text-center lg:text-start font-light">
-        Instantly access comparable sales around your property and visualize them in multiple formats. Get automated price calculations,
+        Instantly access comparable sales around your property and visualize them in multiple formats. Get automated value calculations,
         generate detailed insights, and seamlessly export data in various formats—all in just seconds
       </h2>
       <Link className="w-full hidden lg:block !mt-6" href={routes.volt.fullUrl}>

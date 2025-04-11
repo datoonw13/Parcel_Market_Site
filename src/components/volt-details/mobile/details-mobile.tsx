@@ -68,7 +68,7 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
     <>
       <div className="flex flex-col h-dvh" id="mobile-root" ref={setContainerRef}>
         <Popover>
-          <PopoverAnchor className="qdqwdqwd">
+          <PopoverAnchor className="">
             <div className="h-14 flex items-center justify-between px-5" id="header">
               <Link href={routes.volt.fullUrl}>
                 <IoChevronBack className="size-6" />
