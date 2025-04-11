@@ -86,7 +86,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             <div className="min-w-1 w-1 min-h-1 h-1 bg-primary-main rounded-full absolute" />
           </div>
           <div className="flex items-center gap-1">
-            <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
+            <p className="font-semibold text-xs text-grey-600 w-fit">
               <span className={cn(!isSubscribed && !(data.assessments.data.length <= 1) && "blur-[2px]", "text-[11px]")}>
                 {data.assessments.data.length <= 1 ? "$ NaN" : data.assessments.calculations.avgPriceOfAssessments.all.formattedString}
               </span>{" "}
@@ -118,7 +118,7 @@ const VoltDetailsMobileProgressLine: FC<VoltDetailsMobileProgressLineProps> = ({
             <div className="min-w-1 w-1 min-h-1 h-1 bg-warning rounded-full absolute" />
           </div>
           <div className="flex items-center gap-1">
-            <p className="font-semibold text-xs text-grey-600 table-fixed table w-fit">
+            <p className="font-semibold text-xs text-grey-600 w-fit">
               <span className={cn(!isSubscribed && !(data.assessments.data.length < 3) && "blur-[2px]", "text-[11px]")}>
                 {data.assessments.data.length < 3 ? "$ NaN " : data.voltPricePerAcreage.formattedString}
               </span>{" "}
