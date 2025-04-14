@@ -227,6 +227,7 @@ const SignUpForm: FC<SignUpFormProps> = ({
                 <span onClick={() => setPrivacyDialog(true)} className="underline text-primary-main cursor-pointer px-1">
                   Privacy Policy.
                 </span>
+                <span className="text-error">*</span>
               </p>
             }
             className="col-span-2"
