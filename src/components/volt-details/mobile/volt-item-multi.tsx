@@ -173,12 +173,11 @@ const VoltItemMulti: FC<VoltItemMultiProps> = ({
         </ul>
       </div>
       <div
-        style={{ gridTemplateColumns: `repeat(${data.data.properties.length === 2 ? 2 : 12}, 1fr)` }}
+        style={{ gridTemplateColumns: `repeat(${data.data.properties.length === 2 ? 2 : 8}, 1fr)` }}
         className={cn(
-          `p-3 gap-1 grid  rounded-b-2xl bg-grey-100 h-full py-3 `,
+          `p-3 gap-1 grid rounded-b-2xl bg-grey-100 h-full py-3 `,
           data.data.properties.length > 2 && "[&>div]:col-[span_4/auto]",
-          data.data.properties.length > 3 && data.data.properties.length % 3 === 1 && "[&>*:nth-last-child(-n+1)]:col-[span_12/auto]",
-          data.data.properties.length > 3 && data.data.properties.length % 3 === 2 && "[&>*:nth-last-child(-n+2)]:col-[span_6/auto]"
+          data.data.properties.length >= 3 && data.data.properties.length % 2 === 1 && "[&>*:nth-last-child(-n+1)]:col-[span_8/auto]"
         )}
       >
         {data.data.properties.map((item, itemI) => (
