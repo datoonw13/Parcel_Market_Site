@@ -3,21 +3,24 @@
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { AnimatePresence, motion } from "framer-motion";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 import VoltDetailsFiltersDropDown from "./dropdown";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
 import VoltDetailsAcreageFilters from "./acreage";
 import VoltDetailsPropertyTypeFilters from "./property-type";
 
-type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
-
 interface IVoltDetailsDesktopFilters {
-  filters: IFilters;
-  setFilters: Dispatch<SetStateAction<IFilters>>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
   onSubmit: () => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
 }
@@ -35,13 +38,29 @@ const getAcreageLabel = (min: number | null, max: number | null) => {
   return "N/A";
 };
 
-const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, setFilters, onSubmit, propertyTypes }) => {
-  const [localFilters, setLocalFilters] = useState(filters);
+const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, onSubmit, propertyTypes }) => {
+  const [localFilters, setLocalFilters] = useState(filters.values);
   const [backDrop, setBackDrop] = useState(false);
+  const [animateButton, setAnimateButton] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    setLocalFilters(filters);
+    setLocalFilters(filters.values);
   }, [filters]);
+
+  useEffect(() => {
+    if (filters.isDirty) {
+      window.clearTimeout(timerRef.current);
+      setAnimateButton(true);
+      timerRef.current = setTimeout(() => {
+        setAnimateButton(false);
+      }, 600);
+    }
+
+    return () => {
+      window.clearTimeout(timerRef.current);
+    };
+  }, [filters.isDirty]);
 
   return (
     <>
@@ -56,10 +75,10 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         <VoltDetailsFiltersDropDown
           buttonClassName="shadow-6 border-0"
           onToggle={setBackDrop}
-          value={`${filters.radius} Mile`}
+          value={`${filters.values.radius} Mile`}
           label="Radius"
           onClose={() => {
-            setLocalFilters((prev) => ({ ...prev, radius: filters.radius }));
+            setLocalFilters((prev) => ({ ...prev, radius: filters.values.radius }));
           }}
           renderContent={() => (
             <>
@@ -74,7 +93,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                   <Button
                     className="w-full"
                     onClick={() => {
-                      setFilters((prev) => ({ ...prev, radius: localFilters.radius }));
+                      filters.setValue("radius", localFilters.radius, { shouldDirty: true, shouldValidate: true });
                     }}
                   >
                     Done
@@ -87,10 +106,10 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         <VoltDetailsFiltersDropDown
           buttonClassName="shadow-6 border-0"
           onToggle={setBackDrop}
-          value={`${filters.soldWithin} Year`}
+          value={`${filters.values.soldWithin} Year`}
           label="Sold Within"
           onClose={() => {
-            setLocalFilters((prev) => ({ ...prev, soldWithin: filters.soldWithin }));
+            setLocalFilters((prev) => ({ ...prev, soldWithin: filters.values.soldWithin }));
           }}
           renderContent={() => (
             <>
@@ -105,7 +124,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                   <Button
                     className="w-full"
                     onClick={() => {
-                      setFilters((prev) => ({ ...prev, soldWithin: localFilters.soldWithin }));
+                      filters.setValue("soldWithin", localFilters.soldWithin, { shouldDirty: true, shouldValidate: true });
                     }}
                   >
                     Done
@@ -118,10 +137,10 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         <VoltDetailsFiltersDropDown
           buttonClassName="shadow-6 border-0"
           onToggle={setBackDrop}
-          value={getAcreageLabel(filters.acreageMin || null, filters.acreageMax || null)}
+          value={getAcreageLabel(filters.values.acreageMin || null, filters.values.acreageMax || null)}
           label="Acreage"
           onClose={() => {
-            setLocalFilters((prev) => ({ ...prev, acreageMin: filters.acreageMin, acreageMax: filters.acreageMax }));
+            setLocalFilters((prev) => ({ ...prev, acreageMin: filters.values.acreageMin, acreageMax: filters.values.acreageMax }));
           }}
           renderContent={() => (
             <>
@@ -150,7 +169,8 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                   <Button
                     className="w-full"
                     onClick={() => {
-                      setFilters((prev) => ({ ...prev, acreageMin: localFilters.acreageMin, acreageMax: localFilters.acreageMax }));
+                      filters.setValue("acreageMin", localFilters.acreageMin, { shouldDirty: true, shouldValidate: true });
+                      filters.setValue("acreageMax", localFilters.acreageMax, { shouldDirty: true, shouldValidate: true });
                     }}
                   >
                     Done
@@ -163,10 +183,10 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
         <VoltDetailsFiltersDropDown
           buttonClassName="shadow-6 border-0"
           onToggle={setBackDrop}
-          value={`Selected (${filters.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
+          value={`Selected (${filters.values.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
           label="Property Type"
           onClose={() => {
-            setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
+            setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.values.propertyTypes }));
           }}
           renderContent={(close) => (
             <>
@@ -186,7 +206,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                     className="w-full max-w-[150px]"
                     variant="secondary"
                     onClick={() => {
-                      setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.propertyTypes }));
+                      setLocalFilters((prev) => ({ ...prev, propertyTypes: filters.values.propertyTypes }));
                     }}
                   >
                     Clear
@@ -196,7 +216,7 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
                   <Button
                     className="w-full max-w-[150px]"
                     onClick={() => {
-                      setFilters((prev) => ({ ...prev, propertyTypes: localFilters.propertyTypes }));
+                      filters.setValue("propertyTypes", localFilters.propertyTypes, { shouldDirty: true, shouldValidate: true });
                     }}
                   >
                     Done
@@ -206,7 +226,13 @@ const VoltDetailsDesktopFilters: FC<IVoltDetailsDesktopFilters> = ({ filters, se
             </>
           )}
         />
-        <Button className="size-12 shadow-6" onClick={onSubmit}>
+
+        <Button
+          style={{ animation: animateButton ? "shake 0.6s cubic-bezier(.36,.07,.19,.97) both" : "" }}
+          disabled={!filters.isDirty}
+          className="size-12 shadow-6 disabled:bg-primary-main-600"
+          onClick={onSubmit}
+        >
           <LuSearch className="text-white size-5" />
         </Button>
       </div>

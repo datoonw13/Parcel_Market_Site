@@ -14,8 +14,8 @@ import { IUserBaseInfo } from "@/types/auth";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { exportToExcel, exportToKml } from "@/lib/volt";
 import { Tooltip } from "@/components/ui/tooltip";
-import { SubscriptionType } from "@/types/subscriptions";
 import { usePathname } from "next/navigation";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 import { Button } from "../../ui/button";
 import VoltDetailsDrawer from "./drawer";
 import VoltDetailsMobileHeader from "./mobile-header";
@@ -28,8 +28,12 @@ interface VoltDetailsMobileProps {
   isNonValidMedianHighlighted: boolean;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
-  filters: z.infer<typeof voltDetailsFiltersValidations>;
-  setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
   isSubscribed: boolean;
   mapLayers: {
     label: string;
@@ -46,7 +50,6 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
   isNonValidMedianHighlighted,
   isSubscribed,
   propertyTypes,
-  setFilters,
   setNonValidMedianHighlighted,
   startFetchingTransition,
   mapLayers,
@@ -119,7 +122,6 @@ const VoltDetailsMobile: FC<VoltDetailsMobileProps> = ({
                   mapLayers={mapLayers}
                   propertyTypes={propertyTypes}
                   selectedLayer={selectedLayer}
-                  setFilters={setFilters}
                   setSelectedLayer={setSelectedLayer}
                   startFetchingTransition={startFetchingTransition}
                   isDataEmpty={data.assessments.data.length === 0}

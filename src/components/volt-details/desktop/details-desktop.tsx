@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, TransitionStartFunction, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cn, hideNumber } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { RiExternalLinkFill } from "react-icons/ri";
 import { IoCloudDownloadOutline, IoEarthSharp } from "react-icons/io5";
 import { PropertyDataSchema } from "@/zod-validations/volt-new";
@@ -17,7 +17,7 @@ import { IUserBaseInfo } from "@/types/auth";
 import { exportToExcel, exportToKml } from "@/lib/volt";
 import routes from "@/helpers/routes";
 import { usePathname } from "next/navigation";
-import { SubscriptionType } from "@/types/subscriptions";
+import { UseFormSetValue, UseFormReset } from "react-hook-form";
 import { AutoComplete } from "../../ui/autocomplete";
 import { Button } from "../../ui/button";
 import VoltDetailsDesktopProgressLine from "./desktop-progress-line";
@@ -34,8 +34,12 @@ interface VoltDetailsDesktopProps {
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   startFetchingTransition: TransitionStartFunction;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
-  filters: z.infer<typeof voltDetailsFiltersValidations>;
-  setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
   isSubscribed: boolean;
   mapLayers: {
     label: string;
@@ -53,7 +57,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
   setNonValidMedianHighlighted,
   startFetchingTransition,
   filters,
-  setFilters,
   isSubscribed,
   mapLayers,
   selectedLayer,
@@ -356,7 +359,6 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
                   setNonValidMedianHighlighted={setNonValidMedianHighlighted}
                   propertyTypes={propertyTypes}
                   filters={filters}
-                  setFilters={setFilters}
                   isSubscribed={isSubscribed}
                   mapLayers={mapLayers}
                   selectedLayer={selectedLayer}

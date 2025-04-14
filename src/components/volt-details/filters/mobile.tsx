@@ -5,7 +5,6 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/dialogs/drawer";
 import { Dialog, DialogContent } from "@/components/ui/dialogs/dialog";
-import { AlertDialog } from "@/components/ui/dialogs/alert-dialog";
 import { cn } from "@/lib/utils";
 import { LuSearch } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
@@ -14,16 +13,19 @@ import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validat
 import { MdArrowForwardIos } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IoFilterOutline } from "react-icons/io5";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
 import VoltDetailsAcreageFilters from "./acreage";
 import VoltDetailsPropertyTypeFilters from "./property-type";
 
-type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
-
 interface VoltMobileFiltersProps {
-  filters: IFilters;
-  setFilters: Dispatch<SetStateAction<IFilters>>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
   onSubmit: () => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   mapLayers: {
@@ -37,7 +39,6 @@ interface VoltMobileFiltersProps {
 
 const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
   filters,
-  setFilters,
   onSubmit,
   propertyTypes,
   mapLayers,
@@ -47,8 +48,8 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState<"filters" | "property-types" | "basemap" | "layovers">("filters");
-  const initialFilters = useRef(filters);
-  const [localFilters, setLocalFilters] = useState(filters);
+  const initialFilters = useRef(filters.values);
+  const [localFilters, setLocalFilters] = useState(filters.values);
   const [localSelectedLayer, setLocalSelectedLayer] = useState(selectedLayer);
   const [showWarningModal, setShowWarningModal] = useState(false);
 
@@ -100,7 +101,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
         <DrawerContent
           onInteractOutside={(e) => {
             if (visible === "filters") {
-              setFilters(initialFilters.current);
+              filters.reset(initialFilters.current);
               setLocalFilters(initialFilters.current);
               setLocalSelectedLayer(selectedLayer);
             } else {
@@ -123,36 +124,34 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                   rootClassName="space-y-4"
                   itemClassName="py-3 px-5"
                   labelClassName="text-base"
-                  value={filters.radius}
-                  onChange={(radius) => setFilters((prev) => ({ ...prev, radius }))}
+                  value={filters.values.radius}
+                  onChange={(radius) => {
+                    filters.setValue("radius", radius, { shouldDirty: true, shouldValidate: true });
+                  }}
                 />
                 <VoltDetailsSoldWithinFilters
                   rootClassName="space-y-4"
                   labelClassName="text-base"
                   itemClassName="py-3 px-5"
                   showLabel
-                  value={filters.soldWithin}
-                  onChange={(soldWithin) => setFilters((prev) => ({ ...prev, soldWithin }))}
+                  value={filters.values.soldWithin}
+                  onChange={(soldWithin) => {
+                    filters.setValue("soldWithin", soldWithin, { shouldDirty: true, shouldValidate: true });
+                  }}
                 />
                 <VoltDetailsAcreageFilters
                   rootClassName="max-w-full"
                   labelClassName="max-w-full text-base"
                   inputsWrapperClassName="max-w-full"
                   inputClassName="h-[44px]"
-                  min={filters.acreageMin || null}
-                  max={filters.acreageMax || null}
+                  min={filters.values.acreageMin || null}
+                  max={filters.values.acreageMax || null}
                   onChange={(key, value) => {
                     if (key === "min") {
-                      setFilters((prev) => ({
-                        ...prev,
-                        acreageMin: value,
-                      }));
+                      filters.setValue("acreageMin", value, { shouldDirty: true, shouldValidate: true });
                     }
                     if (key === "max") {
-                      setFilters((prev) => ({
-                        ...prev,
-                        acreageMax: value,
-                      }));
+                      filters.setValue("acreageMax", value, { shouldDirty: true, shouldValidate: true });
                     }
                   }}
                 />
@@ -165,7 +164,9 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                   >
                     <div>
                       <p className="text-start leading-none text-primary-main font-medium text-xs">
-                        {`Selected (${filters.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
+                        {`Selected (${
+                          filters.values.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length
+                        })`}
                       </p>
                       <p className="text-start leading-none text-black font-medium text-sm pt-1">Property Type</p>
                     </div>
@@ -202,7 +203,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                 <DrawerClose asChild>
                   <Button
                     onClick={() => {
-                      setFilters(initialFilters.current);
+                      filters.reset(initialFilters.current);
                     }}
                     className="w-full"
                     variant="secondary"
@@ -212,6 +213,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                 </DrawerClose>
                 <DrawerClose asChild>
                   <Button
+                    disabled={!filters.isDirty}
                     onClick={() => {
                       onSubmit();
                       setSelectedLayer(localSelectedLayer);
@@ -232,7 +234,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                 <IoMdClose
                   className="size-6 text-grey-600"
                   onClick={() => {
-                    setLocalFilters({ ...localFilters, propertyTypes: filters.propertyTypes });
+                    setLocalFilters({ ...localFilters, propertyTypes: filters.values.propertyTypes });
                     setVisible("filters");
                   }}
                 />
@@ -250,7 +252,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
               <DrawerFooter className="flex flex-row w-full gap-3 border-t  bg-white mt-0 sticky bottom-0">
                 <Button
                   onClick={() => {
-                    setLocalFilters({ ...localFilters, propertyTypes: filters.propertyTypes });
+                    setLocalFilters({ ...localFilters, propertyTypes: filters.values.propertyTypes });
                     setVisible("filters");
                   }}
                   className="w-full"
@@ -260,7 +262,7 @@ const VoltMobileFilters: FC<VoltMobileFiltersProps> = ({
                 </Button>
                 <Button
                   onClick={() => {
-                    setFilters({ ...filters, propertyTypes: localFilters.propertyTypes });
+                    filters.reset({ ...filters.values, propertyTypes: localFilters.propertyTypes });
                     setVisible("filters");
                   }}
                   className="w-full"

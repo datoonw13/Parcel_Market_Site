@@ -15,6 +15,7 @@ import Link from "next/link";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import { usePathname } from "next/navigation";
 import IntroVideo from "@/components/shared/intro-video";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 import VoltDetailsMobileProgressLine from "./mobile-progress-line";
 import { Button } from "../../ui/button";
 import VoltItem from "./volt-item";
@@ -29,7 +30,12 @@ interface VoltDetailsDrawerProps {
   setPropertiesInteraction: Dispatch<SetStateAction<IPropertiesInteraction>>;
   propertiesInteraction: IPropertiesInteraction;
   contentClassName?: string;
-  filters: z.infer<typeof voltDetailsFiltersValidations>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
 }
 
 const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
@@ -234,8 +240,8 @@ const VoltDetailsDrawer: FC<VoltDetailsDrawerProps> = ({
                   <div>
                     <h1 className="text-lg font-semibold">Recent Sales</h1>
                     <h2 className="text-grey-800 text-sm">
-                      These are vacant land parcels that have sold in the past {filters.soldWithin} years, within {filters.radius} miles of
-                      the subject parcel and are of similar acreage.
+                      These are vacant land parcels that have sold in the past {filters.values.soldWithin} years, within{" "}
+                      {filters.values.radius} miles of the subject parcel and are of similar acreage.
                     </h2>
                   </div>
                   <div className="flex flex-col gap-2">

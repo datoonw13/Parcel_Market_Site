@@ -3,40 +3,35 @@
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
-import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { IoFilter } from "react-icons/io5";
 import { MdArrowForwardIos } from "react-icons/md";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 import VoltDetailsFiltersDropDown from "./dropdown";
 import VoltDetailsRadiusFilters from "./radius";
 import VoltDetailsSoldWithinFilters from "./sold-within";
 import VoltDetailsAcreageFilters from "./acreage";
 import VoltDetailsPropertyTypeFilters from "./property-type";
 
-type IFilters = z.infer<typeof voltDetailsFiltersValidations>;
-
 interface IVoltDetailsTabletFilters {
-  filters: IFilters;
-  setFilters: Dispatch<SetStateAction<IFilters>>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
   onSubmit: () => void;
   resetFilters: () => void;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
   selectedFilters: number;
 }
 
-const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
-  filters,
-  setFilters,
-  onSubmit,
-  resetFilters,
-  propertyTypes,
-  selectedFilters,
-}) => {
+const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({ filters, onSubmit, resetFilters, propertyTypes, selectedFilters }) => {
   const [showPropertyFilters, setPropertyFilter] = useState(false);
-  const [propertyLocalFilter, setPropertyLocalFilter] = useState(filters.propertyTypes);
+  const [propertyLocalFilter, setPropertyLocalFilter] = useState(filters.values.propertyTypes);
   const [backDrop, setBackDrop] = useState(false);
 
   return (
@@ -63,31 +58,32 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
           <div className="flex flex-col justify-between h-full">
             <div className="bg-white py-5 space-y-5 rounded-t-2xl">
               <div className="px-5">
-                <VoltDetailsRadiusFilters value={filters.radius} onChange={(radius) => setFilters((prev) => ({ ...prev, radius }))} />
+                <VoltDetailsRadiusFilters
+                  value={filters.values.radius}
+                  onChange={(radius) => {
+                    filters.setValue("radius", radius, { shouldDirty: true, shouldValidate: true });
+                  }}
+                />
               </div>
               <div className="px-5">
                 <VoltDetailsSoldWithinFilters
                   showLabel
-                  value={filters.soldWithin}
-                  onChange={(soldWithin) => setFilters((prev) => ({ ...prev, soldWithin }))}
+                  value={filters.values.soldWithin}
+                  onChange={(soldWithin) => {
+                    filters.setValue("soldWithin", soldWithin, { shouldDirty: true, shouldValidate: true });
+                  }}
                 />
               </div>
               <div className="px-5">
                 <VoltDetailsAcreageFilters
-                  min={filters.acreageMin || null}
-                  max={filters.acreageMax || null}
+                  min={filters.values.acreageMin || null}
+                  max={filters.values.acreageMax || null}
                   onChange={(key, value) => {
                     if (key === "min") {
-                      setFilters((prev) => ({
-                        ...prev,
-                        acreageMin: value,
-                      }));
+                      filters.setValue("acreageMin", value, { shouldDirty: true, shouldValidate: true });
                     }
                     if (key === "max") {
-                      setFilters((prev) => ({
-                        ...prev,
-                        acreageMax: value,
-                      }));
+                      filters.setValue("acreageMax", value, { shouldDirty: true, shouldValidate: true });
                     }
                   }}
                 />
@@ -96,13 +92,15 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
                 <div
                   onClick={() => {
                     setPropertyFilter(!showPropertyFilters);
-                    setPropertyLocalFilter(filters.propertyTypes);
+                    setPropertyLocalFilter(filters.values.propertyTypes);
                   }}
                   className="border border-grey-100 bg-white px-3 py-2 flex justify-between items-center rounded-xl gap-4 cursor-pointer"
                 >
                   <div>
                     <p className="text-start leading-none text-primary-main font-medium text-xs">
-                      {`Selected (${filters.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length})`}
+                      {`Selected (${
+                        filters.values.propertyTypes?.length || propertyTypes.filter((el) => el.group === "vacant-land").length
+                      })`}
                     </p>
                     <p className="text-start leading-none text-black font-medium text-sm pt-1">Property Type</p>
                   </div>
@@ -124,6 +122,7 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
               </PopoverClose>
               <PopoverClose>
                 <Button
+                  disabled={!filters.isDirty}
                   className="w-full"
                   onClick={() => {
                     onSubmit();
@@ -155,7 +154,7 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
                       variant="secondary"
                       onClick={() => {
                         setPropertyFilter(false);
-                        setPropertyLocalFilter(filters.propertyTypes);
+                        setPropertyLocalFilter(filters.values.propertyTypes);
                       }}
                     >
                       Close
@@ -164,7 +163,7 @@ const VoltDetailsTabletFilters: FC<IVoltDetailsTabletFilters> = ({
                       className="w-full max-w-[150px]"
                       onClick={() => {
                         setPropertyFilter(false);
-                        setFilters((prev) => ({ ...prev, propertyTypes: propertyLocalFilter }));
+                        filters.setValue("propertyTypes", propertyLocalFilter, { shouldDirty: true, shouldValidate: true });
                       }}
                     >
                       Done

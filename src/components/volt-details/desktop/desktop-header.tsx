@@ -15,6 +15,7 @@ import { BiSearch } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 import VoltDetailsFiltersWrapper from "../filters/wrapper";
 import { Tooltip } from "../../ui/tooltip";
 import { Switch } from "../../ui/switch";
@@ -26,8 +27,12 @@ interface VoltDetailsDesktopHeaderProps {
   isNonValidMedianHighlighted: boolean;
   setNonValidMedianHighlighted: Dispatch<SetStateAction<boolean>>;
   propertyTypes: Array<{ id: number; group: "vacant-land" | "other"; value: string }>;
-  filters: z.infer<typeof voltDetailsFiltersValidations>;
-  setFilters: Dispatch<SetStateAction<z.infer<typeof voltDetailsFiltersValidations>>>;
+  filters: {
+    values: z.infer<typeof voltDetailsFiltersValidations>;
+    setValue: UseFormSetValue<z.infer<typeof voltDetailsFiltersValidations>>;
+    reset: UseFormReset<z.infer<typeof voltDetailsFiltersValidations>>;
+    isDirty: boolean;
+  };
   isSubscribed: boolean;
   mapLayers: {
     label: string;
@@ -44,7 +49,6 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
   setNonValidMedianHighlighted,
   propertyTypes,
   filters,
-  setFilters,
   isSubscribed,
   mapLayers,
   selectedLayer,
@@ -81,7 +85,6 @@ const VoltDetailsDesktopHeader: FC<VoltDetailsDesktopHeaderProps> = ({
         <VoltDetailsFiltersWrapper
           startFetchingTransition={startFetchingTransition}
           filters={filters}
-          setFilters={setFilters}
           propertyTypes={propertyTypes}
           mapLayers={mapLayers}
           selectedLayer={selectedLayer}

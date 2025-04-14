@@ -8,6 +8,8 @@ import { useSearchParams } from "next/navigation";
 import { voltDetailsFiltersValidations } from "@/zod-validations/filters-validations";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { IUserBaseInfo } from "@/types/auth";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import VoltDetailsDesktop from "./desktop/details-desktop";
 import { LoadingIcon2 } from "../@new/icons/LoadingIcons";
 import { breakPoints } from "../../../tailwind.config";
@@ -44,13 +46,34 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
 
   const [isNonValidMedianHighlighted, setNonValidMedianHighlighted] = useState(false);
   const validatedFilters = voltDetailsFiltersValidations.safeParse(Object.fromEntries(params));
-  const [filters, setFilters] = useState<z.infer<typeof voltDetailsFiltersValidations>>({
-    acreageMin: data.filters.acreageMin,
-    acreageMax: data.filters.acreageMax,
-    radius: data.filters.radius || (10 as any),
-    soldWithin: data.filters.soldWithin || (2 as any),
-    ...validatedFilters.data!,
+
+  const {
+    formState: { isDirty },
+    setValue,
+    watch,
+    reset,
+  } = useForm<z.infer<typeof voltDetailsFiltersValidations>>({
+    resolver: zodResolver(voltDetailsFiltersValidations),
+    defaultValues: {
+      acreageMin: data.filters.acreageMin,
+      acreageMax: data.filters.acreageMax,
+      radius: data.filters.radius || (10 as any),
+      soldWithin: data.filters.soldWithin || (2 as any),
+      ...validatedFilters.data!,
+    },
   });
+  const filters = watch();
+
+  useEffect(() => {
+    reset({
+      acreageMin: data.filters.acreageMin,
+      acreageMax: data.filters.acreageMax,
+      radius: data.filters.radius || (10 as any),
+      soldWithin: data.filters.soldWithin || (2 as any),
+      ...validatedFilters.data!,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <>
@@ -108,8 +131,12 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               isNonValidMedianHighlighted={isNonValidMedianHighlighted}
               startFetchingTransition={startFetchingTransition}
               setNonValidMedianHighlighted={setNonValidMedianHighlighted}
-              filters={filters}
-              setFilters={setFilters}
+              filters={{
+                values: filters,
+                setValue,
+                reset,
+                isDirty,
+              }}
               isSubscribed={isSubscribed}
               mapLayers={mapLayers}
               selectedLayer={selectedLayer}
@@ -123,8 +150,12 @@ const VoltDetailsLayout: FC<VoltDetailsLayoutProps> = ({ data, propertyTypes, is
               isNonValidMedianHighlighted={isNonValidMedianHighlighted}
               startFetchingTransition={startFetchingTransition}
               setNonValidMedianHighlighted={setNonValidMedianHighlighted}
-              filters={filters}
-              setFilters={setFilters}
+              filters={{
+                values: filters,
+                setValue,
+                reset,
+                isDirty,
+              }}
               isSubscribed={isSubscribed}
               mapLayers={mapLayers}
               selectedLayer={selectedLayer}
