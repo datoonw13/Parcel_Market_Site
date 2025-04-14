@@ -132,7 +132,7 @@ const VoltSubscription = ({
                 `}
         >
           {list.map((item) => (
-            <li key={item} className="text-sm md:text-base font-medium flex items-start gap-2 text-start ">
+            <li key={item} className="text-sm  font-medium flex items-start gap-2 text-start ">
               <GiCheckMark className="mt-[4px] text-primary-main" /> {item}
             </li>
           ))}
@@ -146,12 +146,13 @@ export default VoltSubscription;
 
 const list = [
   "Evaluate And 90% Faster",
-  "Satellite View Mapping",
-  "Export Sales Data to KML or XML",
-  "Multiple Data Display Formats",
-  "Powerful Filtering Options",
   "Quickly Filter Out Outlier Sales",
-  "Powerful Sales Analysis in 15-Mile Radius",
+  "Satellite View Mapping",
+  "Multiple Data Display Formats",
+  "Quickly identify properties sold together",
   "The Data Directly From County Accessors",
+  "Powerful Sales Analysis in 15-Mile Radius",
+  "Export Sales Data to KML or XML",
   "Sales Data is Updated Weekly",
+  "Powerful Filtering Options",
 ];
