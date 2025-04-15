@@ -122,21 +122,49 @@ const VoltSubscription = ({
             />
           ))}
         </ul>
-        <ul
+        <ol
           className={`
-                relative
-                border border-primary-main rounded-2xl 
-                bg-[#ECF6F0]
-                p-5
-                grid grid-cols-1 md:grid-cols-2 lg:xl:grid-cols-3 gap-y-4 gap-x-8 mr-4 lg:mr-0 mt-8 md:mt-10 lg:mt-14
-                `}
+    relative
+    border border-primary-main rounded-2xl 
+    bg-[#ECF6F0]
+    p-5
+    columns-1 md:columns-2 lg:columns-3 
+    gap-8
+    mr-4 lg:mr-0 
+    mt-8 md:mt-10 lg:mt-14
+  `}
         >
-          {list.map((item) => (
-            <li key={item} className="text-sm  font-medium flex items-start gap-2 text-start ">
-              <GiCheckMark className="mt-[4px] text-primary-main" /> {item}
-            </li>
-          ))}
-        </ul>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Evaluate And 90% Faster
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Multiple Data Display Formats
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Powerful Sales Analysis in 15-Mile Radius
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Powerful Filtering Options
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Quickly Filter Out Outlier Sales
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Quickly identify properties sold together
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Export Sales Data to KML or XML
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Satellite View Mapping
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> The Data Directly From County Accessors
+          </li>
+          <li className="text-sm font-medium flex items-start gap-2 text-start mb-4 break-inside-avoid">
+            <GiCheckMark className="mt-[4px] text-primary-main" /> Sales Data is Updated Weekly
+          </li>
+        </ol>
       </div>
     </div>
   );
