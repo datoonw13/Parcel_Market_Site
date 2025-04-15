@@ -6,10 +6,9 @@ import SignUp from "@/components/auth/sign-up/sign-up";
 import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { useAuth } from "@/lib/auth/auth-context";
-import { authWithSocialNetworkAction, setAuthTokensAction, signUpUserAction } from "@/server-actions/new-auth/new-auth";
-import { revalidateAllPath } from "@/server-actions/subscription/actions";
+import { authWithSocialNetworkAction, signUpUserAction } from "@/server-actions/new-auth/new-auth";
 import { UserSource } from "@/types/common";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 
 enum SignUpSteps {
@@ -18,18 +17,18 @@ enum SignUpSteps {
   FINISH,
 }
 
-const REDIRECT_URL_AFTER_SUCCESS_PAGE = routes.volt.fullUrl;
-
 const SignUpPage = () => {
   const router = useRouter();
   const { notify } = useNotification();
   const { signIn } = useAuth();
   const [step, setStep] = useState(SignUpSteps.SELECT_REASONS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const params = useSearchParams();
   const [email, setEmail] = useState<string | null>(null);
   const [authPending, startAuthTransition] = useTransition();
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
+  const REDIRECT_URL_AFTER_SUCCESS_PAGE = params.get("onSuccessRedirectUrl") || routes.volt.fullUrl;
 
   return (
     <SignUp
@@ -40,7 +39,7 @@ const SignUpPage = () => {
       email={email}
       setEmail={setEmail}
       showSignIn={() => {
-        router.push(routes.auth.signIn.fullUrl);
+        router.push(`${routes.auth.signIn.fullUrl}?onSuccessRedirectUrl=${REDIRECT_URL_AFTER_SUCCESS_PAGE}`);
       }}
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">
@@ -105,7 +104,7 @@ const SignUpPage = () => {
         </div>
       )}
       onSubmit={async (data) => {
-        const request = await signUpUserAction({ ...data, redirectUrl: routes.volt.fullUrl });
+        const request = await signUpUserAction({ ...data, redirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE });
         if (request.errorMessage) {
           setErrorMessage(request.errorMessage);
           setStep(SignUpSteps.FINISH);

@@ -9,19 +9,19 @@ import useNotification from "@/hooks/useNotification";
 import { useAuth } from "@/lib/auth/auth-context";
 import { authWithCredentialsAction, authWithSocialNetworkAction } from "@/server-actions/new-auth/new-auth";
 import { UserSource } from "@/types/common";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
-
-const REDIRECT_URL = routes.volt.fullUrl;
 
 const SignInPage = () => {
   const router = useRouter();
+  const params = useSearchParams();
   const { notify } = useNotification();
   const [authPending, startAuthTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
   const { signIn } = useAuth();
+  const REDIRECT_URL = params.get("onSuccessRedirectUrl") || routes.volt.fullUrl;
 
   return (
     <SignInForm
@@ -35,13 +35,21 @@ const SignInPage = () => {
         } else {
           signIn(request.data!, () => {
             startAuthTransition(() => {
-              router.push(REDIRECT_URL);
+              setTimeout(() => {
+                router.push(REDIRECT_URL);
+              }, 1000);
             });
           });
         }
       }}
       authWithCredentialsPending={userSource === UserSource.System && (authPending || requestPending)}
-      onSignUp={() => router.push(routes.auth.signUp.fullUrl)}
+      onSignUp={() => {
+        const newSearchParams = new URLSearchParams();
+        if (params.get("onSuccessRedirectUrl")) {
+          newSearchParams.append("onSuccessRedirectUrl", params.get("onSuccessRedirectUrl") as string);
+        }
+        router.push(`${routes.auth.signUp.fullUrl}?${newSearchParams.toString()}`);
+      }}
       forgotPasswordButton={() => <ForgotPasswordButton openModal={openModal} setOpenModal={setOpenModal} user={null} />}
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">

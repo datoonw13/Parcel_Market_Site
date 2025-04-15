@@ -309,8 +309,9 @@ const VoltLayout = ({
           propertiesInteraction={propertiesInteraction}
           setPropertiesInteraction={setPropertiesInteraction}
           setAuthModal={(id) => {
-            setAuthModal("sign-in");
+            // setAuthModal("sign-in");
             lastFetchedId.current = id;
+            router.push(`${routes.auth.signIn.fullUrl}?onSuccessRedirectUrl=/volt/${id}`);
           }}
           selectedLayer={selectedLayer}
         />
@@ -322,8 +323,9 @@ const VoltLayout = ({
           propertiesInteraction={propertiesInteraction}
           setPropertiesInteraction={setPropertiesInteraction}
           setAuthModal={(id) => {
-            setAuthModal("sign-in");
+            // setAuthModal("sign-in");
             lastFetchedId.current = id;
+            router.push(`${routes.auth.signIn.fullUrl}?onSuccessRedirectUrl=/volt/${id}`);
           }}
           mapLayers={mapLayers}
           selectedLayer={selectedLayer}

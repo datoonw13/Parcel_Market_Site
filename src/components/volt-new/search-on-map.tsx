@@ -359,7 +359,10 @@ const VoltSearchOnMap = ({
         });
       } else {
         lastFetchedId.current = res.data;
-        setAuthModal("sign-in");
+        // setAuthModal("sign-in");
+        // lastFetchedId.current = id;
+        router.push(`${routes.auth.signIn.fullUrl}?onSuccessRedirectUrl=/volt/${res.data}`);
+        // setAuthModal("sign-in");
       }
     }
 
