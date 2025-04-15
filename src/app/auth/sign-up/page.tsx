@@ -127,6 +127,7 @@ const SignUpPage = () => {
                     notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                     setRequestPending(false);
                   } else {
+                    setShowLoader(true);
                     signIn(request.data!, () => {
                       startAuthTransition(() => {
                         router.push(REDIRECT_URL_AFTER_SUCCESS_PAGE);
