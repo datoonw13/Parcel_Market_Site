@@ -4,8 +4,10 @@ import Draggable from "react-draggable";
 import React, { useEffect, useRef } from "react";
 // @ts-ignore
 import TawkMessengerReact from "@tawk.to/tawk-messenger-react";
+import { useAuth } from "@/lib/auth/auth-context";
 
 const Chat = () => {
+  const { isAuthed } = useAuth();
   const isDragging = useRef(false);
   const dragItemRef = useRef<HTMLDivElement>(null);
   const tawkMessengerRef = useRef<any>();
@@ -49,7 +51,16 @@ const Chat = () => {
           style={{ background: `url(/chat-icon.svg)` }}
         />
       </Draggable>
-      <TawkMessengerReact propertyId="6716e2212480f5b4f59106ac" widgetId="1iaom6lak" ref={tawkMessengerRef} />
+      <TawkMessengerReact
+        onLoad={() => {
+          if (!isAuthed) {
+            tawkMessengerRef.current.maximize();
+          }
+        }}
+        propertyId="6716e2212480f5b4f59106ac"
+        widgetId="1iaom6lak"
+        ref={tawkMessengerRef}
+      />
     </>
   );
 };

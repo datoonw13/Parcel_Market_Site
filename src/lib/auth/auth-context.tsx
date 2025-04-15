@@ -36,9 +36,9 @@ const AuthContextProvide = ({
     expiresIn: number | null;
     user: Awaited<ReturnType<typeof getAuthedUserDataAction>>;
   }>({
-    isAuthed: false,
+    isAuthed: authOption.isAuthed,
     user: null,
-    expiresIn: null,
+    expiresIn: authOption.expiresIn,
   });
 
   const timerRef = useRef<ReturnType<typeof setInterval>>();

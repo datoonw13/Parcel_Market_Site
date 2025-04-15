@@ -10,12 +10,14 @@ import "simplebar-react/dist/simplebar.min.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
-import Chat from "@/components/shared/chat";
 import Script from "next/script";
 import Image from "next/image";
 import DeviceDetect from "@/components/shared/DeviceDetect";
 import AuthContextProvide from "@/lib/auth/auth-context";
 import { isAuthenticatedAction } from "@/server-actions/new-auth/new-auth";
+import dynamic from "next/dynamic";
+
+const Chat = dynamic(() => import("@/components/shared/chat"), { ssr: false });
 
 const inter = Inter({
   subsets: ["latin"],
@@ -122,9 +124,11 @@ export default async function RootLayout({
           <DeviceDetect />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
-            <AuthContextProvide authOption={authOption}>{children}</AuthContextProvide>
+            <AuthContextProvide authOption={authOption}>
+              {children}
+              <Chat />
+            </AuthContextProvide>
           </Provider>
-          <Chat />
         </body>
       </html>
     </>
