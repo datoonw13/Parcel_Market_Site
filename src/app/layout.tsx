@@ -60,7 +60,7 @@ export default async function RootLayout({
 
   return (
     <>
-      <html lang="en" className="h-full">
+      <html lang="en">
         {process.env.NODE_ENV === "production" && (
           <>
             <Script id="fb-pixel" strategy="afterInteractive">
@@ -91,7 +91,7 @@ export default async function RootLayout({
         )}
         <GoogleTagManager gtmId="GTM-P59N8LFM" />
         <GoogleAnalytics gaId="G-SBBPRZKYR6" />
-        <body className={clsx(inter.className, inter.variable, bricolage.variable, "min-h-full flex flex-col")}>
+        <body className={clsx(inter.className, inter.variable, bricolage.variable, "h-dvh")}>
           {process.env.NODE_ENV === "production" && (
             <noscript>
               <Image

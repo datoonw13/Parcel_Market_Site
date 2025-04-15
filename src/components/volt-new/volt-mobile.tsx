@@ -88,7 +88,7 @@ const VoltMobile: FC<VoltMobileProps> = ({
 
   return (
     <>
-      <div className="grid grid-rows-[minmax(0,_max-content)_1fr] overflow-auto w-full relative" ref={setContainerRef}>
+      <div className="grid grid-rows-[minmax(0,_max-content)_1fr] overflow-auto w-full h-dvh relative" ref={setContainerRef}>
         <Popover>
           <PopoverAnchor className="h-fit">
             <div className="h-14 flex items-center justify-between px-5 border-b" id="header">
@@ -138,7 +138,7 @@ const VoltMobile: FC<VoltMobileProps> = ({
           </ScrollArea>
         )}
         {data?.data && !isPending && (
-          <div className="w-full h-[calc(100dvh-56px)]">
+          <div className="w-full">
             {drawerInitialHeight && (
               <div className="map-wrapper relative w-full" style={{ height: `calc(103% - ${drawerInitialHeight}px)` }}>
                 <VoltSearchResultsMap
@@ -163,7 +163,7 @@ const VoltMobile: FC<VoltMobileProps> = ({
             />
           </div>
         )}
-        <div className={cn("absolute bottom-0 w-full invisible h-[calc(100dvh-56px)]", showMap && "visible")}>
+        <div className={cn("absolute bottom-0 w-full invisible h-[calc(100%-56px)]", showMap && "visible")}>
           <VoltSearchOnMap selectedLayer={selectedLayer} user={user} mapRef={searchMapRef} setMapRef={setSearchMapRef} />
         </div>
       </div>
