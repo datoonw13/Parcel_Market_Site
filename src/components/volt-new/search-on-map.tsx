@@ -402,6 +402,7 @@ const VoltSearchOnMap = ({
             setSignUpEmail(null);
             setSignUpErrorMessage(null);
             setStep(SignUpSteps.SELECT_REASONS);
+            setRequestPending(false);
           }}
         >
           <div className="py-5">
