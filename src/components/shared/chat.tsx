@@ -9,8 +9,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { breakPoints } from "../../../tailwind.config";
 
 const Chat = () => {
-  const { targetReached: isSm } = useMediaQuery(parseFloat(breakPoints.md));
-
+  const { detecting, targetReached: isSm } = useMediaQuery(parseFloat(breakPoints.md));
   const { isAuthed } = useAuth();
   const isDragging = useRef(false);
   const dragItemRef = useRef<HTMLDivElement>(null);
@@ -35,37 +34,39 @@ const Chat = () => {
   );
 
   return (
-    <>
-      <Draggable
-        axis="y"
-        nodeRef={dragItemRef}
-        bounds="parent"
-        defaultClassName=""
-        onDrag={() => {
-          isDragging.current = true;
-        }}
-        onStop={() => {
-          isDragging.current = false;
-        }}
-        onMouseDown={onClick}
-      >
-        <div
-          ref={dragItemRef}
-          className="size-16 cursor-pointer !bg-contain fixed bottom-0 right-0 z-50"
-          style={{ background: `url(/chat-icon.svg)` }}
+    !detecting && (
+      <>
+        <Draggable
+          axis="y"
+          nodeRef={dragItemRef}
+          bounds="parent"
+          defaultClassName=""
+          onDrag={() => {
+            isDragging.current = true;
+          }}
+          onStop={() => {
+            isDragging.current = false;
+          }}
+          onMouseDown={onClick}
+        >
+          <div
+            ref={dragItemRef}
+            className="size-16 cursor-pointer !bg-contain fixed bottom-0 right-0 z-50"
+            style={{ background: `url(/chat-icon.svg)` }}
+          />
+        </Draggable>
+        <TawkMessengerReact
+          onLoad={() => {
+            if (!isAuthed && !isSm) {
+              tawkMessengerRef.current.maximize();
+            }
+          }}
+          propertyId="6716e2212480f5b4f59106ac"
+          widgetId="1iaom6lak"
+          ref={tawkMessengerRef}
         />
-      </Draggable>
-      <TawkMessengerReact
-        onLoad={() => {
-          if (!isAuthed && !isSm) {
-            tawkMessengerRef.current.maximize();
-          }
-        }}
-        propertyId="6716e2212480f5b4f59106ac"
-        widgetId="1iaom6lak"
-        ref={tawkMessengerRef}
-      />
-    </>
+      </>
+    )
   );
 };
 
