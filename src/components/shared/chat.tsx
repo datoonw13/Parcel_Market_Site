@@ -5,8 +5,12 @@ import React, { useEffect, useRef } from "react";
 // @ts-ignore
 import TawkMessengerReact from "@tawk.to/tawk-messenger-react";
 import { useAuth } from "@/lib/auth/auth-context";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { breakPoints } from "../../../tailwind.config";
 
 const Chat = () => {
+  const { targetReached: isSm } = useMediaQuery(parseFloat(breakPoints.md));
+
   const { isAuthed } = useAuth();
   const isDragging = useRef(false);
   const dragItemRef = useRef<HTMLDivElement>(null);
@@ -53,7 +57,7 @@ const Chat = () => {
       </Draggable>
       <TawkMessengerReact
         onLoad={() => {
-          if (!isAuthed) {
+          if (!isAuthed && !isSm) {
             tawkMessengerRef.current.maximize();
           }
         }}
