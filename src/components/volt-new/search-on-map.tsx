@@ -394,7 +394,7 @@ const VoltSearchOnMap = ({
     <>
       {authModal && (
         <ResponsiveModal
-          dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
+          dialogContentClassName="max-w-2xl w-full max-h-[70vh] [&>div>div:last-child]:py-2"
           drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
           open={!!authModal}
           closeModal={() => {

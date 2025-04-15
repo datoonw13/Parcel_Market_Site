@@ -105,8 +105,8 @@ const VoltLayout = ({
     <>
       {authModal && (
         <ResponsiveModal
-          dialogContentClassName="max-w-2xl w-full max-h-70vh [&>div>div:last-child]:py-2"
-          drawerContentClassName="max-h-[90vh] flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
+          dialogContentClassName="max-w-2xl w-full max-h-[70dvh] [&>div>div:last-child]:py-2"
+          drawerContentClassName="max-h-[90svh] grid flex px-0 [&>div:last-child]:px-5 [&>div:last-child]:overflow-auto"
           open={!!authModal}
           closeModal={() => {
             setAuthModal(null);
@@ -117,7 +117,7 @@ const VoltLayout = ({
             setRequestPending(false);
           }}
         >
-          <div className="py-5 grid">
+          <div className="py-5">
             {authModal === "sign-in" ? (
               <SignInForm
                 defaultSignIn={async (data) => {
