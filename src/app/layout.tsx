@@ -16,6 +16,7 @@ import DeviceDetect from "@/components/shared/DeviceDetect";
 import AuthContextProvide from "@/lib/auth/auth-context";
 import { isAuthenticatedAction } from "@/server-actions/new-auth/new-auth";
 import dynamic from "next/dynamic";
+import MsClarity from "@/hooks/useClarity";
 
 const Chat = dynamic(() => import("@/components/shared/chat"), { ssr: false });
 
@@ -122,6 +123,7 @@ export default async function RootLayout({
             closeButton={false}
           />
           <DeviceDetect />
+          <MsClarity />
           <Provider>
             <Toaster position="top-right" toastOptions={{ duration: 5000 }} />
             <AuthContextProvide authOption={authOption}>
