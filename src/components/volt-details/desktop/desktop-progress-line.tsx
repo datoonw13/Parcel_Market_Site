@@ -142,26 +142,46 @@ const VoltDetailsDesktopProgressLine: FC<VoltDetailsDesktopProgressLineProps> = 
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <FaLocationDot
-            className="text-primary-dark size-5 cursor-pointer"
-            onClick={() => {
-              const bulkId = data.assessments.data.find((el) => el.data.hasSellingProperty)?.data.id;
-              setPropertiesInteraction((prev) => ({
-                ...prev,
-                popup: {
-                  clickId: "data.id",
-                  isBulked: !!bulkId,
-                  openId: bulkId || data.id,
-                },
-              }));
-              window.map.setZoom(10);
-              window.map.setCenter([data.lon, data.lat]);
-              window.subjectParcelPopupToggle(true);
-            }}
-            onDoubleClick={() => {
-              window.map.setZoom(16);
-              window.map.setCenter([data.lon, data.lat]);
-            }}
+          <Tooltip
+            sideOffset={10}
+            contentClasses="bg-transparent rounded-2xl shadow-5 bg-white p-0 border-0 w-max max-w-2xl"
+            renderButton={
+              <FaLocationDot
+                className="text-primary-dark size-5 cursor-pointer hover:scale-150 transition-all duration-100"
+                onClick={() => {
+                  const bulkId = data.assessments.data.find((el) => el.data.hasSellingProperty)?.data.id;
+                  setPropertiesInteraction((prev) => ({
+                    ...prev,
+                    popup: {
+                      clickId: "data.id",
+                      isBulked: !!bulkId,
+                      openId: bulkId || data.id,
+                    },
+                  }));
+                  window.map.setZoom(10);
+                  window.map.setCenter([data.lon, data.lat]);
+                  if (bulkId) {
+                    window.subjectParcelPopupToggle(true);
+                  }
+                }}
+                onDoubleClick={() => {
+                  window.map.setZoom(16);
+                  window.map.setCenter([data.lon, data.lat]);
+                }}
+              />
+            }
+            renderContent={
+              <ul className="px-4 py-2 rounded-2xl">
+                <li className="flex items-center gap-2">
+                  <div className="rounded-full size-1.5 bg-primary-main-400" />
+                  <p className="text-grey-600 font-medium text-sm max-w-40">Click to get info</p>
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="rounded-full size-1.5 bg-primary-main-400" />
+                  <p className="text-grey-600 font-medium text-sm max-w-40">Double click to zoom in</p>
+                </li>
+              </ul>
+            }
           />
           <p className="text-primary-main text-xs font-medium">Subject Land</p>
           <Tooltip
