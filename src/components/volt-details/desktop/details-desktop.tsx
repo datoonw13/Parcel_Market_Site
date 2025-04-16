@@ -332,11 +332,11 @@ const VoltDetailsDesktop: FC<VoltDetailsDesktopProps> = ({
     []
   );
 
-  useEffect(() => {
-    if (propertiesInteraction.popup?.openId === data.id || propertiesInteraction.popup?.clickId === data.id) {
-      window.subjectParcelPopupToggle(true);
-    }
-  }, [data.id, propertiesInteraction]);
+  // useEffect(() => {
+  //   if (propertiesInteraction.popup?.openId === data.id || propertiesInteraction.popup?.clickId === data.id) {
+  //     window.subjectParcelPopupToggle(true);
+  //   }
+  // }, [data.id, propertiesInteraction]);
 
   useEffect(() => {
     if (localStorage.getItem("tip")) {

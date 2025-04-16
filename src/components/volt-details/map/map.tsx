@@ -513,6 +513,10 @@ const VoltDetailsMap: FC<VoltDetailsMapProps> = ({
     ref?.on("click", mapData.layers.markersLayer, (e) => {
       const feature = ref.queryRenderedFeatures(e.point)[0].properties as MapGeoJson["features"][0]["properties"];
       if (feature) {
+        if (feature.id === data.id && feature.bulkId) {
+          window.subjectParcelPopupToggle(true);
+        }
+
         onMarkerInteraction({
           popup: { clickId: feature.id, isBulked: !!feature.bulkId, openId: feature.bulkId ? feature.bulkId : feature.id },
         });
