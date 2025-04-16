@@ -219,6 +219,7 @@ const SignUpForm: FC<SignUpFormProps> = ({
             onChange={() => setValue("agreeTerm", !watch("agreeTerm"), { shouldValidate: isSubmitted })}
             label={
               <p>
+                <span className="text-error mr-0.5">*</span>
                 Yes, I understand and agree to the Parcel Market
                 <span onClick={() => setTermsDialog(true)} className="underline text-primary-main cursor-pointer px-1">
                   Terms of Service
@@ -227,7 +228,6 @@ const SignUpForm: FC<SignUpFormProps> = ({
                 <span onClick={() => setPrivacyDialog(true)} className="underline text-primary-main cursor-pointer px-1">
                   Privacy Policy.
                 </span>
-                <span className="text-error">*</span>
               </p>
             }
             className="col-span-2"
