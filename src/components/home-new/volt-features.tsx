@@ -425,11 +425,11 @@ const list = [
   },
   {
     id: 5,
-    title: "Automated Price Calculations",
+    title: "Automated Value Calculations",
     description: (
       <p className="md:text-sm text-black text-start">
         VOLT <span className="font-extrabold">automatically calculates comparable sales averages</span> even accounting for bulk sales and
-        outliers to deliver more accurate.
+        outliers to deliver more accurate results.
       </p>
     ),
     icon: LuCalculator,
