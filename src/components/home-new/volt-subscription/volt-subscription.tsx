@@ -177,7 +177,7 @@ const list = [
   "Quickly Filter Out Outlier Sales",
   "Satellite View Mapping",
   "Multiple Data Display Formats",
-  "Quickly identify properties sold together",
+  "Quickly Identify Properties Sold Together",
   "The Data Directly From County Accessors",
   "Powerful Sales Analysis in 15-Mile Radius",
   "Export Sales Data to KML or XML",
