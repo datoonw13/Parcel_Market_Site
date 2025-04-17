@@ -155,6 +155,7 @@ const VoltLayout = ({
                 authProviders={() => (
                   <div className="flex flex-col gap-3 w-full">
                     <GoogleAuthProvider
+                      label="Sign in with Google"
                       pending={userSource === UserSource.Google && (authPending || requestPending)}
                       onSuccess={async (token) => {
                         setUserSource(UserSource.Google);
@@ -180,6 +181,7 @@ const VoltLayout = ({
                       }}
                     />
                     <FacebookAuthProvider
+                      label="Sign in with Facebook"
                       pending={userSource === UserSource.Facebook && (authPending || requestPending)}
                       onSuccess={async (token) => {
                         setUserSource(UserSource.Facebook);
@@ -224,6 +226,7 @@ const VoltLayout = ({
                   <div className="flex flex-col gap-3 w-full">
                     {userSource !== UserSource.Facebook && (
                       <GoogleAuthProvider
+                        label="Sign up with Google"
                         pending={userSource === UserSource.Google && (authPending || requestPending)}
                         onSuccess={async (token) => {
                           setUserSource(UserSource.Google);
@@ -251,6 +254,7 @@ const VoltLayout = ({
                     )}
                     {userSource !== UserSource.Google && (
                       <FacebookAuthProvider
+                        label="Sign up with Facebook"
                         pending={userSource === UserSource.Facebook && (authPending || requestPending)}
                         onSuccess={async (token) => {
                           setUserSource(UserSource.Facebook);

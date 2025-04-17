@@ -54,6 +54,7 @@ const SignInPage = () => {
       authProviders={() => (
         <div className="flex flex-col gap-3 w-full">
           <GoogleAuthProvider
+            label="Sign in with Google"
             pending={userSource === UserSource.Google && (authPending || requestPending)}
             onSuccess={async (token) => {
               setUserSource(UserSource.Google);
@@ -81,6 +82,7 @@ const SignInPage = () => {
             }}
           />
           <FacebookAuthProvider
+            label="Sign in with Facebook"
             pending={userSource === UserSource.Facebook && (authPending || requestPending)}
             onSuccess={async (token) => {
               setUserSource(UserSource.Facebook);

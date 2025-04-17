@@ -434,6 +434,7 @@ const VoltSearchOnMap = ({
                 authProviders={() => (
                   <div className="flex flex-col gap-3 w-full">
                     <GoogleAuthProvider
+                      label="Sign in with Google"
                       pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
                       onSuccess={async (token) => {
                         setUserSource(UserSource.Google);
@@ -459,6 +460,7 @@ const VoltSearchOnMap = ({
                       }}
                     />
                     <FacebookAuthProvider
+                      label="Sign in with Facebook"
                       pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
                       onSuccess={async (token) => {
                         setUserSource(UserSource.Facebook);
@@ -501,6 +503,7 @@ const VoltSearchOnMap = ({
                   <div className="flex flex-col gap-3 w-full">
                     {userSource !== UserSource.Facebook && (
                       <GoogleAuthProvider
+                        label="Sign up with Google"
                         pending={userSource === UserSource.Google && (isTransitioning || requestPending)}
                         onSuccess={async (token) => {
                           setUserSource(UserSource.Google);
@@ -528,6 +531,7 @@ const VoltSearchOnMap = ({
                     )}
                     {userSource !== UserSource.Google && (
                       <FacebookAuthProvider
+                        label="Sign up with Facebook"
                         pending={userSource === UserSource.Facebook && (isTransitioning || requestPending)}
                         onSuccess={async (token) => {
                           setUserSource(UserSource.Facebook);

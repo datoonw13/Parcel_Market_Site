@@ -79,6 +79,7 @@ const SignUpPage = () => {
           <div className="flex flex-col gap-3 w-full">
             {userSource !== UserSource.Facebook && (
               <GoogleAuthProvider
+                label="Sign up with Google"
                 pending={userSource === UserSource.Google && (authPending || requestPending)}
                 onSuccess={async (token) => {
                   setUserSource(UserSource.Google);
@@ -109,6 +110,7 @@ const SignUpPage = () => {
             )}
             {userSource !== UserSource.Google && (
               <FacebookAuthProvider
+                label="Sign up with Facebook"
                 pending={userSource === UserSource.Facebook && (authPending || requestPending)}
                 onSuccess={async (token) => {
                   setUserSource(UserSource.Facebook);
