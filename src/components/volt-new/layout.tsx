@@ -12,7 +12,7 @@ import { z } from "zod";
 import SignUp from "@/components/auth/sign-up/sign-up";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
-import { IUserBaseInfo } from "@/types/auth";
+import { IUserBaseInfo, IUserSignUp } from "@/types/auth";
 import useNotification from "@/hooks/useNotification";
 import {
   authWithCredentialsAction,
@@ -74,6 +74,7 @@ const VoltLayout = ({
   const [signUpErrorMessage, setSignUpErrorMessage] = useState<string | null>(null);
   const [signUpEmail, setSignUpEmail] = useState<string | null>(null);
   const [signUTokens, setSignUpTokens] = useState<ITokens | null>(null);
+  const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
   const [authPending, startAuthTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
   const [userSource, setUserSource] = useState(UserSource.System);
@@ -222,6 +223,8 @@ const VoltLayout = ({
                 showSignIn={() => {
                   setAuthModal("sign-in");
                 }}
+                registrationReasons={registrationReasons}
+                setRegistrationReasons={setRegistrationReasons}
                 authProviders={() => (
                   <div className="flex flex-col gap-3 w-full">
                     {userSource !== UserSource.Facebook && (

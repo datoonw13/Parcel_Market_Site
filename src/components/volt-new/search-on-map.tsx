@@ -9,7 +9,7 @@ import useNotification from "@/hooks/useNotification";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import routes from "@/helpers/routes";
-import { IUserBaseInfo } from "@/types/auth";
+import { IUserBaseInfo, IUserSignUp } from "@/types/auth";
 import { ITokens, UserSource } from "@/types/common";
 import SignUp from "@/components/auth/sign-up/sign-up";
 import {
@@ -101,6 +101,7 @@ const VoltSearchOnMap = ({
   const [isPolygonPending, setPolygonPending] = useState(false);
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
+  const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
 
   const openPopup = useCallback(
     ({ lat, lng }: { lng: number; lat: number }) => {
@@ -499,6 +500,8 @@ const VoltSearchOnMap = ({
                 showSignIn={() => {
                   setAuthModal("sign-up");
                 }}
+                registrationReasons={registrationReasons}
+                setRegistrationReasons={setRegistrationReasons}
                 authProviders={() => (
                   <div className="flex flex-col gap-3 w-full">
                     {userSource !== UserSource.Facebook && (
