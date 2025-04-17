@@ -133,7 +133,7 @@ const VoltMobile: FC<VoltMobileProps> = ({
                 </div>
               </div>
 
-              <VoltFooter className="flex-col mt-auto pb-20 sm:pb-0 pt-6 justify-center gap-6" />
+              <VoltFooter className="flex-col mt-auto pt-6 justify-center gap-6" />
             </div>
           </ScrollArea>
         )}

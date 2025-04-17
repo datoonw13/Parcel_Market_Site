@@ -83,7 +83,7 @@ const VoltLayout = ({
     resolver: zodResolver(voltSearchSchema),
     defaultValues: {
       ...initialParams,
-      searchType: initialParams?.searchType || "fullName",
+      searchType: initialParams?.searchType || "map",
     },
   });
 
