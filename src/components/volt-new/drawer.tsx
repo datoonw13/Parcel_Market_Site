@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import useNotification from "@/hooks/useNotification";
 import { IUserBaseInfo } from "@/types/auth";
+import routes from "@/helpers/routes";
 import VoltSearchResult from "./volt-search-result";
 import { Button } from "../ui/button";
 
@@ -95,7 +96,8 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
           router.push(`/volt/${res.data}`);
         });
       } else {
-        setAuthModal(res.data);
+        router.push(`${routes.auth.signUp.fullUrl}?onSuccessRedirectUrl=/volt/${res.data}`);
+        // setAuthModal(res.data);
       }
     }
 
@@ -172,8 +174,9 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
                     disabled={!propertiesInteraction.popup}
                     className="w-full"
                   >
-                    {user ? "Get Data" : "Log In And Get Data"}
+                    {user ? "Get Data" : "Sign Up And Get Cops"}
                   </Button>
+                  <li className="text-grey-800 font-medium text-sm mt-2 list-disc text-center ">Cops - Comparable sales</li>
                 </div>
               </div>
               <div />

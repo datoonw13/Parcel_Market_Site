@@ -361,7 +361,7 @@ const VoltSearchOnMap = ({
         lastFetchedId.current = res.data;
         // setAuthModal("sign-in");
         // lastFetchedId.current = id;
-        router.push(`${routes.auth.signIn.fullUrl}?onSuccessRedirectUrl=/volt/${res.data}`);
+        router.push(`${routes.auth.signUp.fullUrl}?onSuccessRedirectUrl=/volt/${res.data}`);
         // setAuthModal("sign-in");
       }
     }
@@ -597,8 +597,9 @@ const VoltSearchOnMap = ({
                   Acreage <span className="text-black font-semibold">{openProperty.acreage}</span>
                 </li>
                 <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
-                  {user ? "Get Data" : "Login And Get Data"}
+                  {user ? "Get Data" : "Sign Up And Get Cops"}
                 </Button>
+                <li className="text-grey-800 font-medium text-sm mt-2 list-disc list-inside">Cops - Comparable sales</li>
               </>
             </ul>
           )}

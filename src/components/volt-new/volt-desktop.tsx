@@ -18,6 +18,7 @@ import { calculateLandPriceAction2 } from "@/server-actions/volt/actions";
 import { useRouter } from "next/navigation";
 import useNotification from "@/hooks/useNotification";
 import { IUserBaseInfo } from "@/types/auth";
+import routes from "@/helpers/routes";
 import { breakPoints } from "../../../tailwind.config";
 import VoltFooter from "./volt-footer";
 import VoltSearch from "./volt-search";
@@ -101,7 +102,8 @@ const VoltDesktop: FC<VoltDesktopProps> = ({
           router.push(`/volt/${res.data}`);
         });
       } else {
-        setAuthModal(res.data);
+        router.push(`${routes.auth.signUp.fullUrl}?onSuccessRedirectUrl=/volt/${res.data}`);
+        // setAuthModal(res.data);
       }
     }
     setCalculationPending(false);
@@ -189,8 +191,9 @@ const VoltDesktop: FC<VoltDesktopProps> = ({
                       disabled={!propertiesInteraction.popup}
                       className="w-full"
                     >
-                      {user ? "Get Data" : "Log In And Get Data"}
+                      {user ? "Get Data" : "Sign Up And Get Cops"}
                     </Button>
+                    <li className="text-grey-800 font-medium text-sm mt-2 list-disc">Cops - Comparable sales</li>
                   </div>
                 )}
               </div>
