@@ -26,6 +26,8 @@ interface SignUpProps {
   setErrorMessage: Dispatch<SetStateAction<string | null>>;
   email: string | null;
   setEmail: Dispatch<SetStateAction<string | null>>;
+  registrationReasons: IUserSignUp["registrationReasons"] | null;
+  setRegistrationReasons: Dispatch<SetStateAction<IUserSignUp["registrationReasons"] | null>>;
 }
 
 const SignUp: FC<SignUpProps> = ({
@@ -40,9 +42,9 @@ const SignUp: FC<SignUpProps> = ({
   setErrorMessage,
   setStep,
   step,
+  registrationReasons,
+  setRegistrationReasons,
 }) => {
-  const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
-
   useEffect(() => {
     if (step === SignUpSteps.SELECT_REASONS) {
       setErrorMessage(null);

@@ -8,6 +8,7 @@ import routes from "@/helpers/routes";
 import useNotification from "@/hooks/useNotification";
 import { useAuth } from "@/lib/auth/auth-context";
 import { authWithSocialNetworkAction, signUpUserAction } from "@/server-actions/new-auth/new-auth";
+import { IUserSignUp } from "@/types/auth";
 import { UserSource } from "@/types/common";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -30,6 +31,8 @@ const SignUpPage = () => {
   const [userSource, setUserSource] = useState(UserSource.System);
   const [requestPending, setRequestPending] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+  const [registrationReasons, setRegistrationReasons] = useState<IUserSignUp["registrationReasons"] | null>(null);
+
   const REDIRECT_URL_AFTER_SUCCESS_PAGE = params.get("onSuccessRedirectUrl") || routes.volt.fullUrl;
 
   return (
@@ -75,11 +78,14 @@ const SignUpPage = () => {
         showSignIn={() => {
           router.push(`${routes.auth.signIn.fullUrl}?onSuccessRedirectUrl=${REDIRECT_URL_AFTER_SUCCESS_PAGE}`);
         }}
+        registrationReasons={registrationReasons}
+        setRegistrationReasons={setRegistrationReasons}
         authProviders={() => (
           <div className="flex flex-col gap-3 w-full">
             {userSource !== UserSource.Facebook && (
               <GoogleAuthProvider
                 label="Sign up with Google"
+                disabled={userSource === UserSource.Google}
                 pending={userSource === UserSource.Google && (authPending || requestPending)}
                 onSuccess={async (token) => {
                   setUserSource(UserSource.Google);
@@ -94,6 +100,7 @@ const SignUpPage = () => {
                       });
                       router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
                     });
+                    setRequestPending(false);
                   } else if (request.errorMessage) {
                     notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
                     setRequestPending(false);
@@ -111,6 +118,7 @@ const SignUpPage = () => {
             {userSource !== UserSource.Google && (
               <FacebookAuthProvider
                 label="Sign up with Facebook"
+                disabled={userSource === UserSource.Facebook}
                 pending={userSource === UserSource.Facebook && (authPending || requestPending)}
                 onSuccess={async (token) => {
                   setUserSource(UserSource.Facebook);
@@ -124,6 +132,7 @@ const SignUpPage = () => {
                         onSuccessRedirectUrl: REDIRECT_URL_AFTER_SUCCESS_PAGE,
                       });
                       router.push(`${routes.auth.signUp.fullUrl}?${params.toString()}`);
+                      setRequestPending(false);
                     });
                   } else if (request.errorMessage) {
                     notify({ title: "Error", description: request.errorMessage }, { variant: "error" });
@@ -151,7 +160,13 @@ const SignUpPage = () => {
             params.set("jwt", request.data!.access_token);
             params.set("jwtRefresh", request.data!.refresh_token);
             params.set("redirectUrl", REDIRECT_URL_AFTER_SUCCESS_PAGE);
-            router.push(`${routes.auth.signUp.success.fullUrl}?${params.toString()}`);
+            router.push(
+              `${
+                registrationReasons?.length === 1 && registrationReasons[0] === ("LandOwner" as any)
+                  ? routes.auth.signUp.successLandOwner.fullUrl
+                  : routes.auth.signUp.success.fullUrl
+              }?${params.toString()}`
+            );
           } else {
             setEmail(data.email);
             setStep(SignUpSteps.FINISH);

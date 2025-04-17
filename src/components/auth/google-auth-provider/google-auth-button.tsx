@@ -3,7 +3,17 @@ import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from "@react-oauth/google";
 import { AiOutlineGooglePlus } from "react-icons/ai";
 
-const GoogleAuthButton = ({ onSuccess, pending, label }: { onSuccess: (token: string) => void; pending: boolean; label: string }) => {
+const GoogleAuthButton = ({
+  onSuccess,
+  pending,
+  label,
+  disabled,
+}: {
+  disabled?: boolean;
+  onSuccess: (token: string) => void;
+  pending: boolean;
+  label: string;
+}) => {
   const [loading, setLoading] = useState(false);
 
   const login = useGoogleLogin({
@@ -20,6 +30,7 @@ const GoogleAuthButton = ({ onSuccess, pending, label }: { onSuccess: (token: st
 
   return (
     <Button
+      disabled={disabled}
       onClick={() => {
         login();
         setLoading(true);

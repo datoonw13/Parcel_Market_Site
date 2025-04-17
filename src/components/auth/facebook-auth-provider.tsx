@@ -6,7 +6,17 @@ import FacebookLogin, { ProfileSuccessResponse, SuccessResponse } from "@greatsu
 import { FaFacebookF } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
-const FacebookAuthProvider = ({ onSuccess, pending, label }: { label: string; pending: boolean; onSuccess: (token: string) => void }) => {
+const FacebookAuthProvider = ({
+  onSuccess,
+  pending,
+  label,
+  disabled,
+}: {
+  disabled?: boolean;
+  label: string;
+  pending: boolean;
+  onSuccess: (token: string) => void;
+}) => {
   const [successData, setSuccessData] = useState<SuccessResponse | null>(null);
   const [profileSuccess, setProfileSuccess] = useState<ProfileSuccessResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,6 +47,7 @@ const FacebookAuthProvider = ({ onSuccess, pending, label }: { label: string; pe
       fields="name,email"
       render={(onClick) => (
         <Button
+          disabled={disabled}
           onClick={() => {
             setLoading(true);
             onClick.onClick && onClick.onClick();
