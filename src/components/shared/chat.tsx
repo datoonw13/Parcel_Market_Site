@@ -58,7 +58,7 @@ const Chat = () => {
         <TawkMessengerReact
           onLoad={() => {
             if (!isAuthed && !isSm) {
-              tawkMessengerRef.current.maximize();
+              // tawkMessengerRef.current.maximize();
             }
           }}
           propertyId="6716e2212480f5b4f59106ac"
