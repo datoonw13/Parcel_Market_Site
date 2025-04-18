@@ -70,14 +70,21 @@ const PlanItem: FC<PlanItemProps> = ({ className, userActiveSubscription, type }
           )}
         </div>
         <div className="flex items-baseline gap-1 mt-2 mb-8">
-          <p className="text-5xl font-bold">
+          <p className={cn("text-5xl font-bold relative", type === SubscriptionType.Annual && "mr-12")}>
             <span className="text-2xl">$</span>
             {price}
+            {type === SubscriptionType.Annual && (
+              <span className="absolute top-0 -translate-y-4">
+                <span className=" text-xl font-semibold relative after:absolute after:bg-error after:h-0.5 after:w-full after:content-[''] after:left-0 after:top-[50%] after:translate-y-[-50%] after:-rotate-12">
+                  $348
+                </span>
+              </span>
+            )}
           </p>
           <p className="font-normal">
             / {title}{" "}
             {type === SubscriptionType.Annual && (
-              <span>
+              <span className="hidden ">
                 (
                 <span className="font-semibold relative after:absolute after:bg-error after:h-0.5 after:w-full after:content-[''] after:left-0 after:top-[50%] after:translate-y-[-50%] after:-rotate-12">
                   $348
