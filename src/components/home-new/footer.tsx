@@ -57,10 +57,10 @@ const HomeFooterSection = ({ className }: { className?: string }) => (
       <Link href={routes.termsConditions.fullUrl}>
         <li>Terms of use</li>
       </Link>
-      <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
+      {/* <hr className="hidden lg:block bg-grey-50 w-[1px] h-5" />
       <Link href="/">
         <li>New Feature requests</li>
-      </Link>
+      </Link> */}
     </ul>
     <div className="flex items-center flex-col gap-6 sm:flex-row justify-between pb-7">
       <Link className="text-sm font-medium text-grey-600" href="mailto:customerservice@parcelmarket.com" target="_blank">
