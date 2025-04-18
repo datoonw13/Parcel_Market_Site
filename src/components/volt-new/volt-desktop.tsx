@@ -191,9 +191,9 @@ const VoltDesktop: FC<VoltDesktopProps> = ({
                       disabled={!propertiesInteraction.popup}
                       className="w-full"
                     >
-                      {user ? "Get Data" : "Sign Up And Get Cops"}
+                      {user ? "Get Data" : "Sign Up And Get Comps"}
                     </Button>
-                    <li className="text-grey-800 font-medium text-sm mt-2 list-disc">Cops - Comparable sales</li>
+                    <li className="text-grey-800 font-medium text-sm mt-2 list-disc">Comps - Comparable sales</li>
                   </div>
                 )}
               </div>

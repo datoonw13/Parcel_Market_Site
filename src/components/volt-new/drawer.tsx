@@ -174,9 +174,9 @@ const VoltDrawer: FC<VoltDrawerProps> = ({
                     disabled={!propertiesInteraction.popup}
                     className="w-full"
                   >
-                    {user ? "Get Data" : "Sign Up And Get Cops"}
+                    {user ? "Get Data" : "Sign Up And Get Comps"}
                   </Button>
-                  <li className="text-grey-800 font-medium text-sm mt-2 list-disc text-center ">Cops - Comparable sales</li>
+                  <li className="text-grey-800 font-medium text-sm mt-2 list-disc text-center ">Comps - Comparable sales</li>
                 </div>
               </div>
               <div />

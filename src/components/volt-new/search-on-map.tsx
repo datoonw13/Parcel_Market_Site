@@ -604,9 +604,9 @@ const VoltSearchOnMap = ({
                   Acreage <span className="text-black font-semibold">{openProperty.acreage}</span>
                 </li>
                 <Button className="w-full mt-6" loading={calculationPending || isTransitioning} onClick={calculatePrice}>
-                  {user ? "Get Data" : "Sign Up And Get Cops"}
+                  {user ? "Get Data" : "Sign Up And Get Comps"}
                 </Button>
-                <li className="text-grey-800 font-medium text-sm mt-2 list-disc list-inside">Cops - Comparable sales</li>
+                <li className="text-grey-800 font-medium text-sm mt-2 list-disc list-inside">Comps - Comparable sales</li>
               </>
             </ul>
           )}
