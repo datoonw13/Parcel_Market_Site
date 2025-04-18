@@ -49,6 +49,7 @@ const VoltSubscription = ({
             setActiveIndex(e.realIndex);
           }}
           spaceBetween={30}
+          wrapperClass="[&>div:nth-child(2)]:order-[-1] [&>div:nth-child(3)]:order-[-2] xl:[&>div:nth-child(2)]:order-[0] xl:[&>div:nth-child(3)]:order-[0]"
           effect="fade"
           navigation
           modules={[Autoplay, Pagination]}
@@ -77,7 +78,7 @@ const VoltSubscription = ({
             },
           }}
         >
-          <SwiperSlide className="[&>*]:text-black group !h-[249px]">
+          <SwiperSlide className="[&>*]:text-black group !h-[249px] ">
             <div className="h-full">
               <div className="flex items-center h-full w-full md:transition-all md:duration-100">
                 <div className="flex flex-col h-full bg-white p-6 md:p-8 rounded-2xl border border-grey-100 text-black w-full group-hover:h-full transition-all duration-100">
@@ -99,7 +100,7 @@ const VoltSubscription = ({
             </div>
           </SwiperSlide>
           {Object.keys(SubscriptionType).map((type) => (
-            <SwiperSlide className="[&>*]:text-black !h-[249px] [&>div]:h-full" key={type}>
+            <SwiperSlide className="[&>*]:text-black !h-[249px] [&>div]:h-full " key={type}>
               <PlanItem key={type} type={type as SubscriptionType} userActiveSubscription={subscriptionType || undefined} />
             </SwiperSlide>
           ))}
