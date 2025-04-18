@@ -9,7 +9,6 @@ import PlanItem from "@/components/@new/subscription/plans/plan-item";
 import { GiCheckMark } from "react-icons/gi";
 import Image from "next/image";
 import { IUserBaseInfo } from "@/types/auth";
-import PlanList from "../../@new/subscription/plans/plan-list";
 import styles from "./styles.module.css";
 
 const VoltSubscription = ({

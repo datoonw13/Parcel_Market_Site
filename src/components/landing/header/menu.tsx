@@ -15,6 +15,7 @@ import { CiUser } from "react-icons/ci";
 import { PiBellRingingThin, PiClockCountdown } from "react-icons/pi";
 import { HiOutlineBell } from "react-icons/hi2";
 import { usePathname } from "next/navigation";
+import { PopoverClose } from "@radix-ui/react-popover";
 import { breakPoints } from "../../../../tailwind.config";
 import HeaderNotifications from "./notifications";
 import UserMenu from "./user-menu";
@@ -28,6 +29,7 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user, onAnimationStart }) => {
   const burgerIconRef = useRef<HTMLButtonElement>(null);
   const { targetReached: isSmallDevice, detecting } = useMediaQuery(parseFloat(breakPoints.lg));
   const pathname = usePathname();
+  const isActive = (path: string) => pathname === path;
 
   return (
     !detecting && (
@@ -60,12 +62,50 @@ const HeaderMenu: FC<HeaderMenuProps> = ({ user, onAnimationStart }) => {
                 initial={{ opacity: 0, y: "-100%" }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.1 }}
-                className="bg-white w-screen !outline-none p-5 border-t border-t-grey-100 flex flex-col rounded-b-xl"
+                className="bg-white w-screen !outline-none p-5 border-t border-t-grey-100 flex flex-col rounded-b-xl items-start"
                 onAnimationStart={onAnimationStart}
               >
-                <Link href={routes.volt.fullUrl} className="text-sm hover:text-primary-main py-1.5 transition-all duration-100">
-                  Value of land tool
-                </Link>
+                <PopoverClose className="py-0.5">
+                  <Link
+                    href={routes.home.fullUrl}
+                    className={cn(
+                      "text-sm hover:text-primary-main transition-all duration-100",
+                      isActive(routes.home.fullUrl) && "text-primary-main"
+                    )}
+                  >
+                    Home
+                  </Link>
+                </PopoverClose>
+                <PopoverClose className="py-0.5">
+                  <Link
+                    href={routes.volt.fullUrl}
+                    className={cn(
+                      "text-sm hover:text-primary-main transition-all duration-100",
+                      isActive(routes.volt.fullUrl) && "text-primary-main"
+                    )}
+                  >
+                    Value of land tool
+                  </Link>
+                </PopoverClose>
+                <PopoverClose className="py-0.5">
+                  <Link
+                    href={routes.aboutUs.fullUrl}
+                    className={cn(
+                      "text-sm hover:text-primary-main transition-all duration-100",
+                      isActive(routes.aboutUs.fullUrl) && "text-primary-main"
+                    )}
+                  >
+                    About us
+                  </Link>
+                </PopoverClose>
+                <PopoverClose className="py-0.5">
+                  <Link
+                    href={`${routes.home.fullUrl}?scrollIntoPricing=true`}
+                    className={cn("text-sm hover:text-primary-main transition-all duration-100")}
+                  >
+                    Pricing
+                  </Link>
+                </PopoverClose>
                 <div>
                   <p className="text-grey-600 text-xs py-4">Personal</p>
                   {!user && (

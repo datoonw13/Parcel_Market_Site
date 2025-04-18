@@ -27,7 +27,6 @@ import { breakPoints } from "../../../tailwind.config";
 
 const VoltFeatures = () => {
   const { targetReached: isSm } = useMediaQuery(parseFloat(breakPoints.md));
-  console.log(isSm, 22);
 
   const [activeSlide, setActiveSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);

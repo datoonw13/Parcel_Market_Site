@@ -8,12 +8,13 @@ import Link from "next/link";
 import routes from "@/helpers/routes";
 import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { logOutUserAction } from "@/server-actions/user/actions";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { IconType } from "react-icons/lib";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useAuth } from "@/lib/auth/auth-context";
+import useOnScreen from "@/hooks/useOnScreen";
 
 interface HomeMobileHeaderProps {
   menuList: Array<{ label: string; icon: IconType; path: string }>;
@@ -22,6 +23,8 @@ interface HomeMobileHeaderProps {
 const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
   const pathname = usePathname();
   const { user, isAuthed } = useAuth();
+  const router = useRouter();
+  const isActive = (path: string) => pathname === path;
 
   return (
     <Popover modal>
@@ -36,11 +39,49 @@ const HomeMobileHeader: FC<HomeMobileHeaderProps> = ({ menuList }) => {
       <PopoverContent sideOffset={0} className="w-screen rounded-b-2xl">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.1 }} className="!outline-none">
           <PopoverTrigger className="absolute bg-black/50 w-screen h-screen left-0 -z-10" />
-          <div className="bg-white shadow-md border-t rounded-b-2xl p-5">
-            <PopoverClose>
-              <Link href={routes.volt.fullUrl} className="text-sm hover:text-primary-main py-1.5 transition-all duration-100">
+          <div className="bg-white shadow-md border-t rounded-b-2xl p-5 flex flex-col items-start">
+            <PopoverClose className="py-0.5">
+              <Link
+                href={routes.home.fullUrl}
+                className={cn(
+                  "text-sm hover:text-primary-main transition-all duration-100",
+                  isActive(routes.home.fullUrl) && "text-primary-main"
+                )}
+              >
+                Home
+              </Link>
+            </PopoverClose>
+            <PopoverClose className="py-0.5">
+              <Link
+                href={routes.volt.fullUrl}
+                className={cn(
+                  "text-sm hover:text-primary-main transition-all duration-100",
+                  isActive(routes.volt.fullUrl) && "text-primary-main"
+                )}
+              >
                 Value of land tool
               </Link>
+            </PopoverClose>
+            <PopoverClose className="py-0.5">
+              <Link
+                href={routes.aboutUs.fullUrl}
+                className={cn(
+                  "text-sm hover:text-primary-main transition-all duration-100",
+                  isActive(routes.aboutUs.fullUrl) && "text-primary-main"
+                )}
+              >
+                About us
+              </Link>
+            </PopoverClose>
+            <PopoverClose className="py-0.5">
+              <p
+                onClick={(e) => {
+                  router.push(`${routes.home.fullUrl}?scrollIntoPricing=true`);
+                }}
+                className={cn("text-sm hover:text-primary-main transition-all duration-100")}
+              >
+                Pricing
+              </p>
             </PopoverClose>
             <div>
               <p className="text-grey-600 text-xs py-4">Personal</p>
