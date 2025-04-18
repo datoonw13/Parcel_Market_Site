@@ -16,14 +16,19 @@ import { LuCalculator } from "react-icons/lu";
 import { MdCloudDownload } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
 import Link from "next/link";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import routes from "@/helpers/routes";
 import Slider from "react-slick";
 import { useRef, useState } from "react";
 import { Button } from "../ui/button";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { breakPoints } from "../../../tailwind.config";
 
 const VoltFeatures = () => {
+  const { targetReached: isSm } = useMediaQuery(parseFloat(breakPoints.md));
+  console.log(isSm, 22);
+
   const [activeSlide, setActiveSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
   const settings = {
@@ -326,7 +331,7 @@ const VoltFeatures = () => {
       <h1 className="font-extrabold text-2xl text-start md:text-center max-w-7xl mx-auto px-5 lg:px-10 xl:px-[96px] relative">
         Supercharge Your Productivity with These Features
       </h1>
-      <div className="px-5 lg:px-10 xl:px-[96px] lg:hidden relative">
+      <div className="px-5 lg:px-10 xl:px-[96px] lg:hidden relative space-y-6">
         <Slider
           onInit={() => {
             // if (targetReached && sliderRef.current) {
@@ -338,10 +343,27 @@ const VoltFeatures = () => {
           className="overflow-hidden [&_.slick-track]:!grid [&_.slick-track]:grid-flow-col"
           afterChange={(e) => setActiveSlide(Math.ceil(e))}
         >
-          {list.map((el) => (
+          {[...(isSm ? list.slice(0, 4) : list)].map((el) => (
             <Item item={el} key={el.id} />
           ))}
         </Slider>
+        {isSm && (
+          <Slider
+            onInit={() => {
+              // if (targetReached && sliderRef.current) {
+              //   sliderRef.current?.slickGoTo(0);
+              // }
+            }}
+            ref={sliderRef}
+            {...settings}
+            className="overflow-hidden [&_.slick-track]:!grid [&_.slick-track]:grid-flow-col"
+            afterChange={(e) => setActiveSlide(Math.ceil(e))}
+          >
+            {list.slice(4, 8).map((el) => (
+              <Item item={el} key={el.id} />
+            ))}
+          </Slider>
+        )}
       </div>
       <div className="hidden lg:flex flex-col space-y-5 max-w-7xl mx-auto px-5 lg:px-10 xl:px-[96px] relative">
         <div className=" lg:grid grid-cols-4 gap-4 justify-items-center">
